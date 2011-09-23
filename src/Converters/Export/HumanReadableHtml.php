@@ -1,0 +1,80 @@
+<?php
+
+
+final class HumanReadableHtml extends ExportConverter {
+
+	private static function escape($string){
+  	return str_replace(
+  		array('&','>','<','"'),
+  		array('&amp;','&gt;','&lt;','&quot;'),
+  		$string);
+	}
+
+	public function Export(){
+	  if (is_null($this->value)) {
+		  $r = '';
+		  return $r;
+	  }
+
+	  if ( is_string($this->value) ) {
+	    $r = self::escape( $this->value );
+		  return $r;
+	  }
+
+	  if ( is_bool($this->value) ) {
+		  $r = self::escape( strval ($this->value ? Lemma::Retrieve('Yes') : Lemma::Retrieve('No')));
+		  return $r;
+	  }
+
+	  if ( is_int($this->value) ) {
+		  $r = sprintf('%d',$this->value);
+		  return $r;
+	  }
+
+	  if ( is_float($this->value) ) {
+	  	$r = Language::FormatDecimal($this->value);
+		  return $r;
+	  }
+
+	  if ($this->value instanceof Lemma) {
+		  $r = self::escape( strval($this->value) );
+		  return $r;
+	  }
+
+
+		if ($this->value instanceof XDate) {
+			$r = Language::FormatDate($this->value);
+			return $r;
+		}
+
+		if ($this->value instanceof DateTime)
+			$this->value = new XDateTime($this->value);
+	  if ( $this->value instanceof XDateTime ) {
+		  $r = Language::FormatDateTime($this->value);
+		  return $r;
+	  }
+
+//	  if ($this->value instanceof DateInterval)
+//		  $this->value = new XTimeSpan($this->value);
+    if ( $this->value instanceof XTimeSpan ){
+    	$d = $this->value->GetDays();
+    	$h = $this->value->GetHours();
+    	$m = $this->value->GetMinutes();
+    	$s = $this->value->GetSeconds();
+    	$r = ($d==0?'':$d.Lemma::Retrieve('d.'))
+    			 . ($h==0?'':$h.Lemma::Retrieve('h.'))
+    			 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
+    			 ;
+	    return $r;
+		}
+	  $r = self::escape( strval($this->value) );
+		return $r;
+	}
+
+
+
+}
+
+
+
+?>
