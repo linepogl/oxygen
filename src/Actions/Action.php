@@ -253,18 +253,14 @@ abstract class Action {
 		else
 			return 'window.location.href='.new Js($this->GetHrefPlain($args)).';';
 	}
-	protected function GetUrlArgs(){ return array(); }
-	protected function GetDefaultUrlArgs(){
-		$r = $this->GetUrlArgs();
-		$r['action'] = $this->GetName();
-		if ($this->mode != self::NORMAL) $r['mode'] = $this->mode;
-		return $r;
-	}
+	protected function GetUrlArgs(){ $r = array(); return $r; }
 	public final function GetHrefPlain($args=array()){
-		$a = $this->GetDefaultUrlArgs();
+		$a = $this->GetUrlArgs();
+		$a['action'] = $this->GetName();
+		if ($this->mode != self::NORMAL) $a['mode'] = $this->mode;
 		foreach ($args as $key=>$value)
 			$a[$key] = $value;
-		return Oxygen::MakeHrefFromUrlArgs($a);
+		return Oxygen::MakeHref($a);
 	}
 	public function GetForm($name=null){
 		if ($this->IsAjaxDialog())

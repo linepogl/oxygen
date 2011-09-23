@@ -208,18 +208,18 @@ class Database {
 	}
 
 
-
-	/** @return array */
-	public static function ExecuteArrayX($sql){ return self::ExecuteArrayX($sql,array_slice(func_get_args(),1)); }
-	/** @return array */
-	public static function ExecuteArray($sql,$params=array()){
-		$dr = self::ExecuteX($sql,$params);
-		$r = array();
-		while ($dr->Read())
-			$r[] = $dr->GetRecord();
-		$dr->Close();
-		return $r;
-	}
+// buggy!
+//	/** @return array */
+//	public static function ExecuteArrayX($sql){ return self::ExecuteArrayX($sql,array_slice(func_get_args(),1)); }
+//	/** @return array */
+//	public static function ExecuteArray($sql,$params=array()){
+//		$dr = self::ExecuteX($sql,$params);
+//		$r = array();
+//		while ($dr->Read())
+//			$r[] = $dr->GetRecord();
+//		$dr->Close();
+//		return $r;
+//	}
 
 	/** @return array */
 	public static function ExecuteListOf($xtype,$sql){ return self::ExecuteListOfX($xtype,$sql,array_slice(func_get_args(),2)); }

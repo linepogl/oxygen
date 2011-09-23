@@ -317,39 +317,23 @@ class Oxygen {
 	public static function AddUrlPin($key) { self::$url_pins[$key] = null; }
 	public static function GetUrlPin($key) { return self::$url_pins[$key]; }
 	public static function SetUrlPin($key,$value) { self::$url_pins[$key] = $value; }
-	public static function &GetUrlArgs($url_args){
+
+	public static function MakeHrefPreservingValues(array $params = array()){
+		$url_args = array();
+		foreach ($_GET as $key=>$value) $url_args[$key] = $value;
+		foreach ($params as $key=>$value) $url_args[$key] = $value;
+		return self::MakeHref($url_args);
+	}
+	public static function MakeHref(array $url_args){
 		$a = array();
 		foreach (self::$url_pins as $key=>$value) $a[$key] = $value;
 		foreach ($url_args as $key=>$value) $a[$key] = $value;
-		return $a;
-	}
-
-	public static function MakeHref(){ $a = func_get_args(); return self::MakeHrefX($a); }
-	public static function MakeHrefX($params){
-		$z = count($params);
-		$url_args = array();
-		if ($z%2==1) $url_args['action'] = $params[0];
-		for ($i = $z%2; $i<$z; $i+=2) $url_args[$params[$i]] = $params[$i+1];
-		return self::MakeHrefFromUrlArgs($url_args);
-	}
-	public static function MakeHrefPreservingValues(){ $a = func_get_args(); return self::MakeHrefPreservingValuesX($a); }
-	public static function MakeHrefPreservingValuesX($params){
-		$z = count($params);
-		$url_args = array();
-		foreach ($_GET as $key=>$value) $url_args[$key] = $value;
-		if ($z%2==1) $url_args['action'] = $params[0];
-		for ($i = $z%2; $i<$z; $i+=2) $url_args[$params[$i]] = $params[$i+1];
-		return self::MakeHrefFromUrlArgs($url_args);
-	}
-	public static function MakeHrefFromUrlArgs($url_args){
-		$a = self::GetUrlArgs($url_args);
 		$s = '';
 		foreach ($a as $key=>$value) {
 			if (is_null($value)) continue;
 			$s .= $s == '' ? '?' : '&';
-			$s .= new Url( $key ) .'='. new Url( $value );
+			$s .= new Url( $key ) .'='. new Url( $value );  // <---- this one costs a lot!
 		}
-//		$s .= ($s == '' ? '?' : '&') . ID::Random()->AsHex();
 		return self::$php_script.'.php' . $s;
 	}
 
@@ -463,7 +447,7 @@ class Oxygen {
 			$new_window_id = new ID();
 			echo "if(window.name!=".new Js(self::$idWindow->AsHex())."){";
 			echo "  window.name=".new Js($new_window_id).";";
-			echo "  window.location.href=".new Js(self::MakeHrefPreservingValues('window',$new_window_id));
+			echo "  window.location.href=".new Js(self::MakeHrefPreservingValues(array('window',$new_window_id)));
 			echo "}";
 		}
 
@@ -531,6 +515,8 @@ class Oxygen {
 	public static function Hash($that){
 		return strtoupper(md5(str_rot13(md5( sha1($that)))));
 	}
+	public static function Hash8($value){ return substr(md5(strval($value)),0,8); }
+
 	public static function SplitSearchString($searchstring){
 		return preg_split('/[\\s,]*\\"([^\\"]+)\\"[\\s,]*|[\\s,]*\'([^\']+)\'[\\s,]*|[\\s,]+/', $searchstring, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 	}

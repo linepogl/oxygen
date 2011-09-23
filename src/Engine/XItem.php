@@ -544,7 +544,7 @@ abstract class XItem implements Serializable {
 	
 	/** @return XWrap */
 	public final function Wrap($name=null){
-		if (is_null($name)) $name = 'x'.ID::Hash($this->GetClassName().$this->id->AsHex())->AsHex();
+		if (is_null($name)) $name = 'x'.Oxygen::Hash8($this->GetClassName().$this->id->AsHex());
 		return new XWrap($this->Meta(),$this,$name);
 	}
 

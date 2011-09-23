@@ -162,7 +162,7 @@ class ApplicationScope extends ExternalScope  {
 	protected function Hash($name){ return 'app_'.(
 		$this->use_apc
 		? self::$base.'_'.$name
-		: ID::Hash($name)->AsHex()
+		: Oxygen::Hash8($name)
 		);
 	}
 }
@@ -170,7 +170,7 @@ class DatabaseScope extends ExternalScope  {
 	protected function Hash($name){ return 'dat_'.(
 		$this->use_apc
 		? self::$base.'_'.Database::GetServer() . '_' .Database::GetSchema() . '_' .$name
-		: ID::Hash($name.Database::GetServer().Database::GetSchema())->AsHex()
+		: Oxygen::Hash8($name.Database::GetServer().Database::GetSchema())
 		);
 	}
 }
@@ -178,7 +178,7 @@ class SessionScope extends ExternalScope {
 	protected function Hash($name){ return 'ses_'.(
 		$this->use_apc
 		?	self::$base.'_'.Oxygen::GetSessionID()->AsHex().'_'.$name
-		:	ID::Hash($name.Oxygen::GetSessionID()->AsHex())->AsHex()
+		:	Oxygen::Hash8($name.Oxygen::GetSessionID()->AsHex())
 		);
 	}
 }
@@ -186,7 +186,7 @@ class WindowScope extends ExternalScope {
 	protected function Hash($name){ return 'win_'.(
 		$this->use_apc
 		? self::$base.'_'.Oxygen::GetWindowID()->AsHex() . '_' . $name
-		: ID::Hash( $name.Oxygen::GetWindowID()->AsHex())->AsHex()
+		: Oxygen::Hash8( $name.Oxygen::GetWindowID()->AsHex() )
 		);
 	}
 }

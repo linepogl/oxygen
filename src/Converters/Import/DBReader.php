@@ -25,22 +25,32 @@ class DBReader implements ArrayAccess {
 	public function Close(){
 	}
 
-	public function &GetRecord(){ return $this->record; }
+	// buggy and slow
+	//public function &GetRecord(){ return $this->record; }
 
 	public function offsetExists($offset) {
-		// if (is_null($this->record)) throw new Exception('DBReader is not initialised');  // remarked out for speed
+		try {
 		return array_key_exists($offset,$this->record);
+		}
+		catch (Exception $ex){
+			if (is_null($this->record)) throw new Exception('DBReader is not initialised');  // remarked out for speed
+		}
 	}
 	/** @return DBValue */
 	public function offsetGet($offset) {
-		// if (is_null($this->record)) throw new Exception('DBReader is not initialised');  // remarked out for speed
-		// if (!array_key_exists($offset,$this->record)) throw new Exception('Field '.$offset.' not found.');
-		$r = $this->record[$offset];
-		if (!($r instanceof DBValue)) { $r = new DBValue($r); $this->record[$offset] = $r; }
-		return $r;
+		try {
+			$r = $this->record[$offset];
+			if (!($r instanceof DBValue)) { $r = new DBValue($r); $this->record[$offset] = $r; }
+			return $r;
+		}
+		catch (Exception $ex){
+			if (is_null($this->record)) throw new Exception('DBReader is not initialised');
+			if (!array_key_exists($offset,$this->record)) throw new Exception('Field '.$offset.' not found.');
+		}
 	}
   public function offsetSet($offset, $value) {	throw new Exception('DBReader is readonly.'); }
 	public function offsetUnset($offset) { throw new Exception('DBReader is readonly.'); }
+
 }
 
 ?>

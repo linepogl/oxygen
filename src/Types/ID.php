@@ -37,7 +37,6 @@ class ID implements Serializable {
 	}
 
 	public static function Random(){ return new ID(); }
-	public static function Hash($value){ return new ID(substr(md5(strval($value)),0,8)); }
 
 	public function AsInt(){
 		return $this->value;

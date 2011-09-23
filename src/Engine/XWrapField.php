@@ -33,7 +33,7 @@ class XWrapField {
 		$o->$f = $value;	
 	}
 	public function GetName(){
-		return 'x'.ID::Hash($this->wrap->GetName().$this->field->GetName())->AsHex();
+		return 'x'.Oxygen::Hash8($this->wrap->GetName().$this->field->GetName());
 	}
 	public function GetLabel(){
 		return $this->field->GetLabel();
