@@ -3,6 +3,11 @@
 final class Language {
 
 	/** @return string */
+	public static function MakeHref($lang){
+		return Oxygen::MakeHrefPreservingValues(array('lang'=>$lang));
+	}
+
+	/** @return string */
 	public static function GetDecimalSeparator(){
 		switch (Oxygen::$lang) {
 			case 'fr': case 'el': return ',';

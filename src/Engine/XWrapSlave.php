@@ -33,7 +33,7 @@ class XWrapSlave {
 		$o->$f = $value;	
 	}
 	public function GetName(){
-		return 'x'.Oxygen::Hash8($this->wrap->GetName().$this->slave->GetName());
+		return 'x'.Oxygen::Hash32($this->wrap->GetName().$this->slave->GetName());
 	}
 	public function GetLabel(){
 		return $this->slave->GetLabel();

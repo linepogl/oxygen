@@ -319,20 +319,16 @@ class Oxygen {
 	public static function SetUrlPin($key,$value) { self::$url_pins[$key] = $value; }
 
 	public static function MakeHrefPreservingValues(array $params = array()){
-		$url_args = array();
-		foreach ($_GET as $key=>$value) $url_args[$key] = $value;
-		foreach ($params as $key=>$value) $url_args[$key] = $value;
-		return self::MakeHref($url_args);
+		return self::MakeHref( $params + $_GET );    // <-- array + operator.
 	}
-	public static function MakeHref(array $url_args){
-		$a = array();
-		foreach (self::$url_pins as $key=>$value) $a[$key] = $value;
-		foreach ($url_args as $key=>$value) $a[$key] = $value;
+	public static function MakeHref(array $url_args = array()){
 		$s = '';
-		foreach ($a as $key=>$value) {
+		foreach ( ($url_args + self::$url_pins) as $key=>$value) { // <-- array + operator here again.
 			if (is_null($value)) continue;
-			$s .= $s == '' ? '?' : '&';
-			$s .= new Url( $key ) .'='. new Url( $value );  // <---- this one costs a lot!
+			$s .= ($s===''?'?':'&');
+			$s .= new Url( $key );
+			$s .= '=';
+			$s .= new Url( $value );  // <---- this one costs a lot!
 		}
 		return self::$php_script.'.php' . $s;
 	}
@@ -447,7 +443,7 @@ class Oxygen {
 			$new_window_id = new ID();
 			echo "if(window.name!=".new Js(self::$idWindow->AsHex())."){";
 			echo "  window.name=".new Js($new_window_id).";";
-			echo "  window.location.href=".new Js(self::MakeHrefPreservingValues(array('window',$new_window_id)));
+			echo "  window.location.href=".new Js(self::MakeHrefPreservingValues(array('window'=>$new_window_id)));
 			echo "}";
 		}
 
@@ -461,15 +457,13 @@ class Oxygen {
 		echo "var oxygen_lang = ".new Js(Oxygen::$lang).";";
 		echo Js::END;
 
-
 		echo '<script type="text/javascript" src="oxy/jsc/prototype.js"></script>';
-		echo '<script type="text/javascript" src="oxy/jsc/effects.js"></script>';
-		//echo '<script type="text/javascript" src="oxy/jsc/scriptaculous.js"></script>';
+		echo '<script type="text/javascript" src="oxy/jsc/scriptaculous-effects.js"></script>';
 		echo '<script type="text/javascript" src="oxy/jsc/date.js"></script>';
+		echo '<script type="text/javascript" src="oxy/jsc/jquery.js"></script>';
+		echo '<script type="text/javascript" src="oxy/jsc/jquery-ui.js"></script>';
+		echo '<script type="text/javascript" src="oxy/jsc/fix.js"></script>';
 
-
-
-		echo '<script type="text/javascript" src="oxy/fix/fix.js"></script>';
 		if (Browser::IsIE6()){
 			echo '<link href="oxy/fix/ie6-fixcsshover.css" rel="stylesheet" type="text/css" />';
 			echo '<link href="oxy/fix/ie6-fixpng.css" rel="stylesheet" type="text/css" />';
@@ -513,9 +507,9 @@ class Oxygen {
 	//
 	//
 	public static function Hash($that){
-		return strtoupper(md5(str_rot13(md5( sha1($that)))));
+		return strtoupper(md5(str_rot13(md5(sha1($that)))));
 	}
-	public static function Hash8($value){ return substr(md5(strval($value)),0,8); }
+	public static function Hash32($value){ return substr(md5(strval($value)),0,8); }
 
 	public static function SplitSearchString($searchstring){
 		return preg_split('/[\\s,]*\\"([^\\"]+)\\"[\\s,]*|[\\s,]*\'([^\']+)\'[\\s,]*|[\\s,]+/', $searchstring, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);

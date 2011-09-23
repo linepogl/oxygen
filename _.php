@@ -7,10 +7,6 @@ require_once('oxy/src/Utils/Scope.php');
 function __autoload($class) {
 	$f = Oxygen::FindClassFile($class);
 	if (is_null($f)) return;
-//	exec('php -l "'.$f.'"',$o,$r);
-//	if ($r){
-//		throw new Exception('dede');
-//	}
 	require_once($f);
 }
 

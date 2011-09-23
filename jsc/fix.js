@@ -1,5 +1,3 @@
-
-
 // fix for ie <= 7
 if(typeof String.prototype.trim !== 'function') {
   String.prototype.trim = function() {
@@ -14,3 +12,7 @@ document.viewport.getWidth = function(){
 document.viewport.getHeight = function(){
 	return window.innerHeight ? window.innerHeight: document.documentElement.clientHeight;
 };
+
+
+// fix for jQuery
+jQuery.noConflict();

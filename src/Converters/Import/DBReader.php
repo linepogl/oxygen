@@ -16,6 +16,7 @@ class DBReader implements ArrayAccess {
 			$this->columns = array_keys( $this->data[0] );
 		}
 	}
+
   public function Read(){
 	  if ($this->index >= $this->max_index) return false;
 	  $this->index++;
@@ -26,7 +27,7 @@ class DBReader implements ArrayAccess {
 	}
 
 	// buggy and slow
-	//public function &GetRecord(){ return $this->record; }
+	public function &GetRecord(){ return $this->record; }
 
 	public function offsetExists($offset) {
 		try {
