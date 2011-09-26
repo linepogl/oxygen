@@ -262,12 +262,12 @@
 		<fr>Action invalide.</fr>
 		<el>Εσφαλμένη εντολή.</el>
 	</lemma>
-	<lemma name="MsgCannotConnectToLdapServer">
-		<en>Cannot connect to LDAP server</en>
-		<fr>Erreur à la connexion au serveur LDAP.</fr>
-		<el>Σφάλμα σύνδεσης με τον διακομιστή LDAP.</el>
-	</lemma>
 
+	<lemma name="MsgCannotConnectToLdapServer">
+		<en>Cannot connect to the database.</en>
+		<fr>Erreur à la connexion à la base de données.</fr>
+		<el>Σφάλμα σύνδεσης με την βάση δεδομένων.</el>
+	</lemma>
 
 
 	<lemma name="ThousandsSeparator"><en>,</en><fr> </fr><el>.</el></lemma>

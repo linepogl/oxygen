@@ -4,14 +4,14 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 	protected static $is_apc_available = false;
 	protected static $base = '';
 
-	public static $APPLICATION;
-	public static $APPLICATION_HARD;
-	public static $DATABASE;
-	public static $DATABASE_HARD;
-	public static $SESSION;
-	public static $SESSION_HARD;
-	public static $WINDOW;
-	public static $REQUEST;
+	/** @var Scope */ public static $APPLICATION;
+	/** @var Scope */ public static $APPLICATION_HARD;
+	/** @var Scope */ public static $DATABASE;
+	/** @var Scope */ public static $DATABASE_HARD;
+	/** @var Scope */ public static $SESSION;
+	/** @var Scope */ public static $SESSION_HARD;
+	/** @var Scope */ public static $WINDOW;
+	/** @var Scope */ public static $REQUEST;
 
 	public static function InitScopes(){
 		self::$is_apc_available = function_exists('apc_add') && function_exists('apc_exists'); // because apc_exists was added later on in 3.1.something
@@ -111,6 +111,9 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 
 
 
+	public function Contains($key){
+		return $this->offsetExists($key);
+	}
 
 
 

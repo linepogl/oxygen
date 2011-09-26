@@ -12,30 +12,46 @@ final class Html extends ExportConverter {
 
 	public function Export(){
 
+		if ( $this->value instanceof Action) {
+			$r = self::escape( $this->value->GetHref() );
+			return $r;
+		}
+
+		if ( is_string($this->value) ) {
+			$r = self::escape( $this->value );
+			return $r;
+		}
+
+		if ( $this->value instanceof ID ) {
+			if ( $this->value instanceof GenericID ) {
+			  $r = $this->value->Encode();
+				return $r;
+			}
+		  $r = $this->value->AsHex();
+			return $r;
+		}
+
+		if ( $this->value instanceof XItem ) {
+		  $r = $this->value->id->AsHex();
+			return $r;
+		}
+
+		if ( is_int($this->value) ) {
+		  $r = sprintf('%d',$this->value);
+			return $r;
+		}
+
 		if (is_null($this->value)) {
 		  $r = '';
 			return $r;
 		}
 
-	  if ( is_string($this->value) ) {
-		  $r = self::escape( $this->value );
-		  return $r;
-	  }
-
-    if ( $this->value instanceof Action) {
-	    $r = self::escape( $this->value->GetHref() );
-	    return $r;
-    }
 
 	  if ( is_bool($this->value) ) {
 	    $r = $this->value ? 'true' : 'false';
 		  return $r;
 	  }
 
-	  if ( is_int($this->value) ) {
-	    $r = sprintf('%d',$this->value);
-		  return $r;
-	  }
 
 
 	  if ( is_float($this->value) ) {
@@ -43,16 +59,6 @@ final class Html extends ExportConverter {
 		  return $r;
 	  }
 
-
-	  if ( $this->value instanceof GenericID ) {
-	    $r = $this->value->Encode();
-		  return $r;
-	  }
-
-	  if ( $this->value instanceof ID ) {
-	    $r = $this->value->AsHex();
-		  return $r;
-	  }
 
 	  if ($this->value instanceof Lemma) {
 		  $r = self::escape( strval($this->value) );
@@ -73,11 +79,6 @@ final class Html extends ExportConverter {
 		  return $r;
 	  }
 
-
-	  if ( $this->value instanceof XItem ) {
-	    $r = $this->value->id->AsHex();
-		  return $r;
-	  }
 
 	  if ( is_array($this->value) || $this->value instanceof Traversable ) {
 		  $a = array();

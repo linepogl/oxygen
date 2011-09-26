@@ -20,14 +20,14 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable{
 
 	public function serialize(){
 		$a = array();
-		$a['name'] =& $this->name;
-		$a['data'] =& $this->data;
+		$a['name'] = $this->name;
+		$a['data'] = $this->data;
 		return serialize($a);
 	}
 	public function unserialize($data){
 		$a = unserialize($data);
-		$this->name =& $a['name'];
-		$this->data =& $a['data'];
+		$this->name = $a['name'];
+		$this->data = $a['data'];
 	}
 
 

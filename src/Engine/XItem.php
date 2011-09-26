@@ -52,6 +52,7 @@ abstract class XItem implements Serializable {
 	public function serialize(){
 		$a = array();
 		$meta = $this->Meta();
+		$a['id'] = serialize($this->id);
 		/** @var $f XField */
 		foreach ($meta->GetFields() as $f){
 			$n = $f->GetName();
@@ -60,8 +61,8 @@ abstract class XItem implements Serializable {
 		return serialize($a);
 	}
 	public function unserialize($data){
-		$this->Init();
 		$a = unserialize($data);
+		$this->Init();
 		foreach ($a as $key=>$value)
 			$this->$key = unserialize($value);
 		$this->OnLoad();
@@ -704,28 +705,25 @@ abstract class XItem implements Serializable {
 	public static final function ResetRequestScopeCache(){ self::$request_scope_item_cache = array(); }
 	private static function ExistsInCache($classname,$idi){
 		if (!array_key_exists($classname,self::$request_scope_item_cache)) self::$request_scope_item_cache[$classname] = array();
-		return array_key_exists($idi,self::$request_scope_item_cache[$classname]) || (Oxygen::IsItemCacheEnabled() && array_key_exists('XItem::Cache::'.$classname.$idi,Scope::$DATABASE));
+		return array_key_exists($idi,self::$request_scope_item_cache[$classname]) || (Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains('XItem::Cache::'.$classname.$idi));
 	}
 	private static function RetrieveFromCache($classname,$idi){
-		if (!array_key_exists($classname,self::$request_scope_item_cache))
-			self::$request_scope_item_cache[$classname] = array();
-		if (!array_key_exists($idi,self::$request_scope_item_cache[$classname]))
-			self::$request_scope_item_cache[$classname][$idi] = Oxygen::IsItemCacheEnabled() ? Scope::$DATABASE['XItem::Cache::'.$classname.$idi] : null;
+		if (!array_key_exists($classname,self::$request_scope_item_cache)) self::$request_scope_item_cache[$classname] = array();
+		if (!array_key_exists($idi,self::$request_scope_item_cache[$classname])) self::$request_scope_item_cache[$classname][$idi] = Oxygen::IsItemCacheEnabled() ? Scope::$DATABASE['XItem::Cache::'.$classname.$idi] : null;
 		return self::$request_scope_item_cache[$classname][$idi];
 	}
 	private static function SaveInCache($classname,$idi,$item){
-		if (!array_key_exists($classname,self::$request_scope_item_cache))
-			self::$request_scope_item_cache[$classname] = array();
+		if (!array_key_exists($classname,self::$request_scope_item_cache)) self::$request_scope_item_cache[$classname] = array();
 		self::$request_scope_item_cache[$classname][$idi] = $item;
-        if (Oxygen::IsItemCacheEnabled())
-		    Scope::$DATABASE['XItem::Cache::'.$classname.$idi] = $item;
+		if (Oxygen::IsItemCacheEnabled())
+			Scope::$DATABASE['XItem::Cache::'.$classname.$idi] = $item;
 	}
 	private static function DeleteFromCache($classname,$idi){
 		if (!array_key_exists($classname,self::$request_scope_item_cache))
 			self::$request_scope_item_cache[$classname] = array();
 		self::$request_scope_item_cache[$classname][$idi] = null;
-        if (Oxygen::IsItemCacheEnabled())
-		    Scope::$DATABASE['XItem::Cache::'.$classname.$idi] = null;
+    if (Oxygen::IsItemCacheEnabled())
+			Scope::$DATABASE['XItem::Cache::'.$classname.$idi] = null;
 	}
 
 }

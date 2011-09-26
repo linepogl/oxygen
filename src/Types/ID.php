@@ -4,8 +4,8 @@ class ID implements Serializable {
 	protected $value;
 	private $hex = null;
 
-	public function serialize(){ return serialize(array('value'=>$this->value)); }
-	public function unserialize($data){ $a = unserialize($data); $this->value=$a['value']; $this->hex = null; }
+	public function serialize(){ return serialize($this->value); }
+	public function unserialize($data){ $this->value = unserialize($data); $this->hex = null; }
 
 	public static function GetNextFor($tablename,$primarykey='id'){ return Database::ExecuteGetNextIDFor($tablename,$primarykey); }
 
