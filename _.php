@@ -1,13 +1,13 @@
 <?php
-require_once('oxy/src/Types/ID.php');
-require_once('oxy/src/Oxygen.php');
-require_once('oxy/src/Utils/Scope.php');
+require('oxy/src/Types/ID.php');
+require('oxy/src/Oxygen.php');
+require('oxy/src/Utils/Scope.php');
 
 
 function __autoload($class) {
 	$f = Oxygen::FindClassFile($class);
 	if (is_null($f)) return;
-	require_once($f);
+	require($f);
 }
 
 

@@ -58,13 +58,21 @@ abstract class XItem implements Serializable {
 			$n = $f->GetName();
 			$a[$n] = serialize($this->$n);
 		}
-		return serialize($a);
+		return json_encode($a);
 	}
 	public function unserialize($data){
-		$a = unserialize($data);
-		$this->Init();
+		$a = json_decode($data,true);
 		foreach ($a as $key=>$value)
 			$this->$key = unserialize($value);
+		$c = $this->Meta();
+		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+			$slaves = $cx->GetDBSlaves();
+			/** @var $sl XSlave */
+			foreach ($slaves as $sl) {
+				$n = $sl->GetName();
+				$this->$n = new XList($sl->GetHookMeta());
+			}
+		}
 		$this->OnLoad();
 	}
 

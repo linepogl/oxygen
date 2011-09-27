@@ -30,7 +30,7 @@ class Database {
 			if ($needs_upgrade || $force){
 				set_time_limit(0);
 				Database::ClearPatchingSystem();
-				require_once($filename);
+				require($filename);
 				Scope::$DATABASE[$key] = time();
 				if (Database::IsPatchingSystemDirty()) $needs_refresh = true;
 			}
