@@ -7,9 +7,8 @@ abstract class ExportConverter {
 	}
 
   public abstract function Export();
-  public final function & __toString(){
-		$x = $this->Export();
-		return $x;
+  public final function __toString(){
+		return $this->Export();
   }
 
 

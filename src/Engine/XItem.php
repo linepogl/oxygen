@@ -569,28 +569,32 @@ abstract class XItem implements Serializable {
 		if (is_null($id) || is_null($classname)) return null;
 		if (!($id instanceof ID)) $id = new ID($id);
 		$idi = $id->AsInt();
-		if (self::ExistsInCache($classname,$idi))
-			return self::RetrieveFromCache($classname,$idi);
-		$c = XMeta::Pick($classname);
-		$tablename = $c->GetDBTableName();
-		$primarykey = $c->id->GetDBName();
-
-		if ($c->IsAbstract()){
-			if (!array_key_exists($tablename,self::$abstract_classnames)) self::$abstract_classnames[$tablename] = array();
-			if (!array_key_exists($idi,self::$abstract_classnames[$tablename])) {
-				self::$abstract_classnames[$tablename][$idi] = Database::ExecuteScalar('SELECT '.$c->GetAbstractDBFieldName().' FROM '.$tablename.' WHERE '.$primarykey.'=?',$id)->AsString();
-			}
-			$classname = self::$abstract_classnames[$tablename][$idi];
-			$x = self::RetrieveGeneric($classname,$id);
-		}
+		if (self::ExistsInLocalCache($classname,$idi))
+			return self::RetrieveFromLocalCache($classname,$idi);
+		elseif (self::ExistsInRemoteCache($classname,$idi))
+			return self::RetrieveFromRemoteCache($classname,$idi);
 		else {
-			/** @var $x XItem */
-			$x = new $classname($idi);
-			$found = $x->Load($dr);
-			if (!$found)
-				return null;
+			$c = XMeta::Pick($classname);
+			$tablename = $c->GetDBTableName();
+			$primarykey = $c->id->GetDBName();
+
+			if ($c->IsAbstract()){
+				if (!array_key_exists($tablename,self::$abstract_classnames)) self::$abstract_classnames[$tablename] = array();
+				if (!array_key_exists($idi,self::$abstract_classnames[$tablename])) {
+					self::$abstract_classnames[$tablename][$idi] = Database::ExecuteScalar('SELECT '.$c->GetAbstractDBFieldName().' FROM '.$tablename.' WHERE '.$primarykey.'=?',$id)->AsString();
+				}
+				$classname = self::$abstract_classnames[$tablename][$idi];
+				$x = self::RetrieveGeneric($classname,$id);
+			}
+			else {
+				/** @var $x XItem */
+				$x = new $classname($idi);
+				$found = $x->Load($dr);
+				if (!$found)
+					$x = null;
+			}
+			self::SaveInCache($classname,$idi,$x);
 		}
-		self::SaveInCache($classname,$idi,$x);
 		return $x;
 	}
 
@@ -711,14 +715,20 @@ abstract class XItem implements Serializable {
 	private static $request_scope_item_cache = array();
 	private static $abstract_classnames = array();
 	public static final function ResetRequestScopeCache(){ self::$request_scope_item_cache = array(); }
-	private static function ExistsInCache($classname,$idi){
-		if (!array_key_exists($classname,self::$request_scope_item_cache)) self::$request_scope_item_cache[$classname] = array();
-		return array_key_exists($idi,self::$request_scope_item_cache[$classname]) || (Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains('XItem::Cache::'.$classname.$idi));
+	private static function ExistsInLocalCache($classname,$idi){
+		return isset(self::$request_scope_item_cache[$classname][$idi]); //<-- this works!
 	}
-	private static function RetrieveFromCache($classname,$idi){
-		if (!array_key_exists($classname,self::$request_scope_item_cache)) self::$request_scope_item_cache[$classname] = array();
-		if (!array_key_exists($idi,self::$request_scope_item_cache[$classname])) self::$request_scope_item_cache[$classname][$idi] = Oxygen::IsItemCacheEnabled() ? Scope::$DATABASE['XItem::Cache::'.$classname.$idi] : null;
+	private static function ExistsInRemoteCache($classname,$idi){
+		return Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains('XItem::Cache::'.$classname.$idi);
+	}
+	private static function RetrieveFromLocalCache($classname,$idi){
 		return self::$request_scope_item_cache[$classname][$idi];
+	}
+	private static function RetrieveFromRemoteCache($classname,$idi){
+		$r = Scope::$DATABASE['XItem::Cache::'.$classname.$idi];
+		if (!array_key_exists($classname,self::$request_scope_item_cache)) self::$request_scope_item_cache[$classname] = array();
+		self::$request_scope_item_cache[$classname][$idi] = $r;
+		return $r;
 	}
 	private static function SaveInCache($classname,$idi,$item){
 		if (!array_key_exists($classname,self::$request_scope_item_cache)) self::$request_scope_item_cache[$classname] = array();
@@ -727,9 +737,7 @@ abstract class XItem implements Serializable {
 			Scope::$DATABASE['XItem::Cache::'.$classname.$idi] = $item;
 	}
 	private static function DeleteFromCache($classname,$idi){
-		if (!array_key_exists($classname,self::$request_scope_item_cache))
-			self::$request_scope_item_cache[$classname] = array();
-		self::$request_scope_item_cache[$classname][$idi] = null;
+		unset(self::$request_scope_item_cache[$classname][$idi]); //<-- this works!
     if (Oxygen::IsItemCacheEnabled())
 			Scope::$DATABASE['XItem::Cache::'.$classname.$idi] = null;
 	}

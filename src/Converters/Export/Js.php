@@ -5,13 +5,13 @@ final class Js extends ExportConverter {
 
 	public function Export(){
 
-		if ( $this->value instanceof Action) {
-			$r = "'".str_replace("'","\\'",$this->value->GetHref())."'";
+		if ( is_string($this->value) ) {
+			$r = "'".str_replace(array("\\","'","\n"),array("\\\\","\\'","\\n"),$this->value)."'";
 			return $r;
 		}
 
-		if ( $this->value instanceof XItem ) {
-			$r = "'" . $this->value->id->AsHex() . "'";
+		if ( is_int($this->value) ) {
+			$r = sprintf('%d',$this->value);
 			return $r;
 		}
 
@@ -24,16 +24,21 @@ final class Js extends ExportConverter {
 			return $r;
 		}
 
-		if ( is_string($this->value) ) {
+		if ( $this->value instanceof Action) {
+			$r = "'".str_replace("'","\\'",$this->value->GetHref())."'";
+			return $r;
+		}
+
+		if ( $this->value instanceof XItem ) {
+			$r = "'" . $this->value->id->AsHex() . "'";
+			return $r;
+		}
+
+		if ( $this->value instanceof Lemma ) {
 			$r = "'".str_replace(array("\\","'","\n"),array("\\\\","\\'","\\n"),$this->value)."'";
 			return $r;
 		}
 
-
-		if ( is_int($this->value) ) {
-			$r = sprintf('%d',$this->value);
-			return $r;
-		}
 
 		if ( is_null($this->value) ) {
 			$r = 'null';

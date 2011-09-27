@@ -319,14 +319,14 @@ class Oxygen {
 	public static function SetUrlPin($key,$value) { self::$url_pins[$key] = $value; }
 
 	public static function MakeHrefPreservingValues(array $params = array()){
-		return self::MakeHref( $params + $_GET );    // <-- array + operator.
+		return self::MakeHref( $params + $_GET );    // <-- array + operator is a better array_merge($b,$a)...
 	}
 	public static function MakeHref(array $url_args = array()){
 		$s = '';
 		foreach ( ($url_args + self::$url_pins) as $key=>$value) { // <-- array + operator here again.
 			if (is_null($value)) continue;
 			$s .= ($s===''?'?':'&');
-			$s .= new Url( $key );
+			$s .= rawurlencode( $key ); /// <-- huge savings by using this directly here...
 			$s .= '=';
 			$s .= new Url( $value );  // <---- this one costs a lot!
 		}

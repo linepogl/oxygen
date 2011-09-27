@@ -7,8 +7,7 @@ abstract class Action {
 		//$this->name = 'a'.ID::Random()->AsHex();
 	}
 	public static function Make() { return new static(); }
-
-	public final function GetName() { return substr(get_class($this),6); }
+	public final static function GetName() { return substr(get_called_class(),6); }
 	public function IsActive(){ return Oxygen::GetActionName() == $this->GetName(); }
 
 
@@ -255,12 +254,18 @@ abstract class Action {
 	}
 	protected function GetUrlArgs(){ $r = array(); return $r; }
 	public final function GetHrefPlain($args=array()){
-		$a = $this->GetUrlArgs();
-		$a['action'] = $this->GetName();
-		if ($this->mode != self::NORMAL) $a['mode'] = $this->mode;
-		foreach ($args as $key=>$value)
-			$a[$key] = $value;
-		return Oxygen::MakeHref($a);
+		return Oxygen::MakeHref(
+			$args
+			+ array('action'=>$this->GetName(),'mode'=> $this->mode==self::NORMAL ? null : $this->mode)
+			+ $this->GetUrlArgs()
+			);
+
+//		$a = $this->GetUrlArgs();
+//		$a['action'] = $this->GetName();         // <----------- this one also causes an array copy...
+//		if ($this->mode != self::NORMAL) $a['mode'] = $this->mode;
+//		foreach ($args as $key=>$value)
+//			$a[$key] = $value;
+//		return Oxygen::MakeHref($a);
 	}
 	public function GetForm($name=null){
 		if ($this->IsAjaxDialog())
