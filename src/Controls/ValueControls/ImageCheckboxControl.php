@@ -80,4 +80,3 @@ class ImageCheckboxControl extends ValueControl {
 
 }
 
-?>

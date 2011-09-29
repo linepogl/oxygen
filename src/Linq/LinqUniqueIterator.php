@@ -37,4 +37,3 @@ class LinqUniqueIterator extends LinqIterator {
 
 }
 
-?>

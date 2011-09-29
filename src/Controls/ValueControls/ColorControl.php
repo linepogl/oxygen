@@ -76,4 +76,3 @@ class ColorControl extends ValueControl {
 		}
 	}
 }
-?>

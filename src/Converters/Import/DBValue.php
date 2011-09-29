@@ -23,4 +23,3 @@ class DBValue extends ImportConverter {
 
 
 }
-?>

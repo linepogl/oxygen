@@ -71,4 +71,3 @@ function from($whatever){
 //ini_set('error_append_string','</div>');
 
 
-?>

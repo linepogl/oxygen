@@ -42,4 +42,4 @@ class ActionUpdateProgress extends Action{
 		echo Js::END;
 	}
 }
-?>
+

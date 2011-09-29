@@ -9,6 +9,7 @@ class LinqSelectManyIterator extends LinqIterator {
 	public function rewind(){
 		$this->nested_iterator = null;
 		for($this->iterator->rewind(); $this->iterator->valid(); $this->iterator->next()) {
+			/** @var $f closure */
 			$f = $this->function_select_many;
 			$this->nested_iterator = from($f($this->iterator->current(),$this->iterator->key()));
 			$this->nested_iterator->rewind();
@@ -22,6 +23,7 @@ class LinqSelectManyIterator extends LinqIterator {
 		if (!$this->nested_iterator->valid()){
 			$this->nested_iterator = null;
 			for($this->iterator->next(); $this->iterator->valid(); $this->iterator->next()) {
+				/** @var $f closure */
 				$f = $this->function_select_many;
 				$this->nested_iterator = from($f($this->iterator->current(),$this->iterator->key()));
 				$this->nested_iterator->rewind();
@@ -36,4 +38,3 @@ class LinqSelectManyIterator extends LinqIterator {
 	public function key(){ return $this->index; }
 
 }
-?>

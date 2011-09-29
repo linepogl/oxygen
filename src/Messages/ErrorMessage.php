@@ -7,4 +7,4 @@ final class ErrorMessage extends Message {
 	public function GetBorderColor() { return '#ffcccc'; }
 }
 
-?>
+

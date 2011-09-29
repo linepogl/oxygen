@@ -19,4 +19,4 @@ class ActionCancelProgress extends Action{
 
 	}
 }
-?>
+

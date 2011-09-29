@@ -16,4 +16,4 @@ class LiteralControl extends ValueControl {
 	}
 }
 
-?>
+

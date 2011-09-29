@@ -32,4 +32,4 @@ class MessageControl extends Control {
 	}
 }
 
-?>
+

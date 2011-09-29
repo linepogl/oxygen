@@ -65,4 +65,4 @@ class LemmaControl extends ValueControl {
 }
 
 
-?>
+

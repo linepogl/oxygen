@@ -75,4 +75,3 @@ class MessageList implements IteratorAggregate,ArrayAccess,Countable{
 
 }
 
-?>

@@ -48,4 +48,3 @@ class Menu implements IteratorAggregate, ArrayAccess, Countable {
   }
 }
 
-?>

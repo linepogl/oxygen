@@ -9,4 +9,3 @@ class LinqTakeIterator extends LinqIterator {
 	public function valid(){ return $this->iterator->valid() && $this->now_at < $this->how_many; }
 }
 
-?>

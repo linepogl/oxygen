@@ -6,7 +6,7 @@ final class Js extends ExportConverter {
 	public function Export(){
 
 		if ( is_string($this->value) ) {
-			$r = "'".str_replace(array("\\","'","\n"),array("\\\\","\\'","\\n"),$this->value)."'";
+			$r = '\''.str_replace(array('\\','\'',"\n"),array('\\\\','\\\'','\\n'),$this->value).'\'';
 			return $r;
 		}
 
@@ -35,7 +35,7 @@ final class Js extends ExportConverter {
 		}
 
 		if ( $this->value instanceof Lemma ) {
-			$r = "'".str_replace(array("\\","'","\n"),array("\\\\","\\'","\\n"),$this->value)."'";
+			$r = '\''.str_replace(array('\\','\'',"\n"),array('\\\\','\\\'','\\n'),$this->value).'\'';
 			return $r;
 		}
 
@@ -79,7 +79,7 @@ final class Js extends ExportConverter {
 
 
 
-		$r = "'".str_replace(array("\\","'","\n"),array("\\\\","\\'","\\n"),$this->value)."'";
+		$r = '\''.str_replace(array('\\','\'',"\n"),array('\\\\','\\\'','\\n'),$this->value).'\'';
 		return $r;
 	}
 
@@ -91,4 +91,4 @@ final class Js extends ExportConverter {
 
 
 
-?>
+

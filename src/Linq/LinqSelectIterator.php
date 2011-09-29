@@ -10,4 +10,3 @@ class LinqSelectIterator extends LinqIterator {
 	}
 }
 
-?>

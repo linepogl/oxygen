@@ -19,4 +19,4 @@ abstract class XWrapControl extends Control {
 	}
 }
 
-?>
+

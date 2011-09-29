@@ -49,4 +49,4 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 
 }
 
-?>
+

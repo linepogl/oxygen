@@ -8,4 +8,3 @@ class ActionResetOxygen extends Action {
 		Log::Write('Done.');
 	}
 }
-?>

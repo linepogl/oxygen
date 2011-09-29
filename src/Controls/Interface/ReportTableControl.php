@@ -521,4 +521,4 @@ class ReportTableControl extends ValueControl {
 	}
 }
 
-?>
+

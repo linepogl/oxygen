@@ -56,4 +56,3 @@ final class HttpAny extends Http {
 Http::$POST = new HttpPost();
 Http::$GET = new HttpGet();
 Http::$ANY = new HttpAny();
-?>

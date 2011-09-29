@@ -54,4 +54,3 @@ class DBReader implements ArrayAccess {
 
 }
 
-?>

@@ -60,4 +60,3 @@ class LinqOrderByIterator extends LinqIterator {
 	public function key(){ return $this->pairs[$this->index][1]; }
 }
 
-?>

@@ -7,4 +7,4 @@ final class QuestionMessage extends Message {
 	public function GetBorderColor() { return '#ccccff'; }
 }
 
-?>
+

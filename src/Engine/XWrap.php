@@ -60,4 +60,3 @@ class XWrap extends stdClass {
 }
 
 
-?>

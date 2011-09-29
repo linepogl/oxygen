@@ -119,11 +119,15 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 
 	public function offsetExists($offset) {
 		$key = $this->Hash($offset);
-		return isset($this->data[$key]) ? true : ( $this->UseExternalStorage() ? $this->object_exists_in_external_storage($key) : false );
+		if (isset($this->data[$key])) return true;
+		if ($this->UseExternalStorage()) return $this->object_exists_in_external_storage($key);
+		return false;
 	}
 	public function offsetGet($offset) {
 		$key = $this->Hash($offset);
-		return isset($this->data[$key]) ? $this->data[$key] : ( $this->UseExternalStorage() ? $this->load_object_from_external_storage($key) : null );
+		if (isset($this->data[$key])) return $this->data[$key];
+		if ($this->UseExternalStorage()) return $this->load_object_from_external_storage($key);
+		return null;
 	}
 	public function offsetSet($offset, $value) {
 		if ($offset == null) throw new Exception('All variables should be named.');
@@ -139,7 +143,9 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 
 	public function ForceGet($offset){
 		$key = $this->Hash($offset);
-		return $this->UseExternalStorage() ? $this->load_object_from_external_storage($key) : (isset($this->data[$key]) ? $this->data[$key] : null);
+		if ($this->UseExternalStorage()) return $this->load_object_from_external_storage($key);
+		if (isset($this->data[$key])) return $this->data[$key];
+		return null;
 	}
 }
 
@@ -201,4 +207,4 @@ class RequestScope extends MemoryScope {
 }
 
 Scope::InitScopes();
-?>
+

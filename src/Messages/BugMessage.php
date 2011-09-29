@@ -7,4 +7,4 @@ final class BugMessage extends Message {
 	public function GetBorderColor() { return '#999999'; }
 }
 
-?>
+

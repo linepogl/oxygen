@@ -71,4 +71,3 @@ class ProgressControl extends Control {
 
 }
 
-?>

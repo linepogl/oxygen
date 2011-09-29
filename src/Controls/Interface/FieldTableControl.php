@@ -131,4 +131,3 @@ class FieldTableControl extends Control {
 }
 
 
-?>

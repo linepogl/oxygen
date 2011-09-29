@@ -10,4 +10,3 @@ class LinqSkipIterator extends LinqIterator {
 	}
 }
 
-?>

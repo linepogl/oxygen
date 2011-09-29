@@ -39,4 +39,4 @@ class Enum implements ArrayAccess,Countable,IteratorAggregate {
 
 }
 
-?>
+

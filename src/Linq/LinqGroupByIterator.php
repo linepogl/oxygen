@@ -36,4 +36,3 @@ class LinqGroupByIterator extends LinqIterator {
 	public function key(){ return $this->inner_iterator->key(); }
 
 }
-?>

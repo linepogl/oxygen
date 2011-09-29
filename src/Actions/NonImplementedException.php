@@ -5,4 +5,4 @@ class NonImplementedException extends Exception {
 		parent::__construct(is_null($message) ? Lemma::Retrieve('MsgNonImplemented') : $message);
 	}
 }
-?>
+

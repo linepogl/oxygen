@@ -5,4 +5,4 @@ class UnderConstructionException extends ApplicationException {
 		parent::__construct(is_null($message) ? Lemma::Retrieve('MsgUnderConstruction') : $message);
 	}
 }
-?>
+

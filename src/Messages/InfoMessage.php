@@ -7,4 +7,4 @@ final class InfoMessage extends Message {
 	public function GetBorderColor() { return '#cccccc'; }
 }
 
-?>
+

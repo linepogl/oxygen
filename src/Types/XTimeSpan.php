@@ -71,4 +71,4 @@ class XTimeSpan {
 		return $this->value;
 	}
 }
-?>
+

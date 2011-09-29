@@ -7,4 +7,4 @@ final class SuccessMessage extends Message {
 	public function GetBorderColor() { return '#ccffcc'; }
 }
 
-?>
+

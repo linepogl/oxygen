@@ -36,4 +36,3 @@ class XmlValue extends ImportConverter {
 
 
 }
-?>
