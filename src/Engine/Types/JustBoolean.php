@@ -1,125 +1,133 @@
 <?php
 
-class JustString extends OmniType {
+class JustBoolean extends OmniType {
 
 	/**
-	 * @return string
+	 * @return boolean
 	 */
 	public function GetDefaultValue() {
-		return '';
+		return false;
 	}
 
 	/**
-	 * @param $address string
+	 * @param $address boolean
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public function Assign(&$address,$value) {
-		if (!is_string($value)) throw new ValidationException();
-		$address = $value;
+		if (is_bool($value)) $address = $value;
+		throw new ValidationException();
 	}
 
 	/**
 	 * @return int
 	 */
 	public function GetPdoType() {
-		return PDO::PARAM_STR;
+		return PDO::PARAM_BOOL;
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value boolean
 	 * @param $platform int
-	 * @return string
+	 * @return mixed
 	 */
 	public function ExportPdoValue($value, $platform) {
 		return $value;
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value boolean
 	 * @param $platform int
 	 * @return string
 	 */
 	public function ExportSqlLiteral($value, $platform) {
-		return $this->GetSqlStringLiteral($value,$platform);
+		if ($value) return '1';
+		return '0';
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value boolean
 	 * @param $platform int
 	 * @return string
 	 */
 	public function ExportSqlIdentifier($value, $platform) {
-		if ($value === '') throw new ConvertionException();
-		return $this->GetSqlIdentifier($value,$platform);
+		throw new ConvertionException();
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value boolean
 	 * @return string
 	 */
 	public function ExportJsLiteral($value) {
-		return $this->GetJsStringLiteral($value);
+		if ($value) return 'true';
+		return 'false';
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value boolean
 	 * @return string
 	 */
 	public function ExportXmlString($value) {
-		return $this->EncodeToXmlString($value);
+		if ($value) return 'true';
+		return 'false';
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value boolean
 	 * @return string
 	 */
 	public function ExportHtmlString($value) {
-		return $this->EncodeToHtmlString($value);
+		if ($value) return 'true';
+		return 'false';
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value boolean
 	 * @return string
 	 */
 	public function ExportHumanReadableHtmlString($value) {
-		return $this->EncodeToHtmlString($value);
+		if ($value) return (string)Lemma::Retrieve('Yes');
+		return (string)Lemma::Retrieve('No');
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value boolean
 	 * @return string
 	 */
 	public function ExportUrlString($value) {
-		return $this->EncodeToUrlString($value);
+		if ($value) return 'true';
+		return 'false';
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return string
+	 * @return boolean
 	 */
 	public function ImportDBValue($value) {
-		if (is_null($value)) return '';
-		return $value;
+		if (is_null($value)) return false;
+		if ($value === '1') return true; /// TODO: this needs testing
+		return false;
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return string
+	 * @return boolean
 	 */
 	public function ImportDOMValue($value) {
-		if (is_null($value)) return '';
-		return $this->DecodeFromXmlString($value);
+		if (is_null($value)) return false;
+		if ($value === 'true') return true;
+		return false;
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return string
+	 * @return boolean
 	 */
 	public function ImportHttpValue($value) {
-		if (is_null($value)) return '';
-		if (is_array($value)) return $this->DecodeFromHtmlString($this->DecodeFromUrlString( implode(',',$value) ) );
-		return $this->DecodeFromHtmlString( $this->DecodeFromUrlString( $value ) );
+		if (is_null($value)) return false;
+		if (is_array($value)) throw new ConvertionException();
+		if ($value === 'true') return true;
+		return false;
 	}
 }

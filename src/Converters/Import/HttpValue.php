@@ -24,7 +24,7 @@ class HttpValue extends ImportConverter {
 
   public function AsInteger() { return is_null($this->value) ? 0 : intval($this->value); }
   public function AsBoolean() { return $this->value=='true'; }
-  public function AsFloat() { return is_null($this->value) ? 0.0 : floatval( str_replace( Language::GetDecimalSeparator() , '.' , $this->value ) ); }
+  public function AsFloat() { return is_null($this->value) ? 0.0 : floatval( str_replace( Language::GetDecimalSeparator() , '.' , str_replace( Language::GetThousandsSeparator() , '' , $this->value ) ) ); }
 
 	public function AsStringArray(){
 		if (empty($this->value))

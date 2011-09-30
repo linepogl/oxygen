@@ -48,4 +48,7 @@ if (Database::BeginPatch('v',11,'E-mails')) {
 	Database::ExecuteDelete('oxy_ids','TableName='.new Sql('oxy_emails'));
 	Database::ApplyPatch();
 }
-
+if (Database::BeginPatch('v',12,'Remove unhandled exceptions')) {
+	Database::ExecuteDropTable('oxy_unhandled_exceptions');
+	Database::ApplyPatch();
+}

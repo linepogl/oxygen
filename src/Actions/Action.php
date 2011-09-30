@@ -191,7 +191,7 @@ abstract class Action {
 					echo '</td></tr></table>';
 				}
 			}
-			try{ if (!Oxygen::IsLocalhost()) UnhandledException::Record($ex); }catch(Exception $exx){}
+			// try{ Log::Record($ex); }catch(Exception $exx){}
 		}
 		$result = ob_get_clean();
 		return $result;

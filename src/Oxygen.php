@@ -180,8 +180,8 @@ class Oxygen {
 	private static $temp_folder = 'tmp';
 	public static function GetTempFolder(){ return self::$temp_folder; }
 	public static function SetTempFolder($value) { self::$temp_folder = $value; }
-	public static function HasTempFolder(){return is_dir(self::GetTempFolder()); }
-	public static function MakeTempFolder(){ mkdir(self::GetTempFolder(),0777,true); }
+	public static function HasTempFolder(){return is_dir(self::$temp_folder); }
+	public static function MakeTempFolder(){ mkdir(self::$temp_folder,0777,true); }
 	public static function ClearTempFolderFromOldFiles(){
 		$last_time = Scope::$APPLICATION['Oxygen::ClearTempFolderFromOldFiles'];
 		$now = time();
@@ -214,15 +214,46 @@ class Oxygen {
 	private static $data_folder = 'dat';
 	public static function GetDataFolder(){ return self::$data_folder; }
 	public static function SetDataFolder($value) { self::$data_folder = $value; }
-	public static function HasDataFolder(){return is_dir(self::GetDataFolder()); }
-	public static function MakeDataFolder(){ mkdir(self::GetDataFolder(),0777,true); }
+	public static function HasDataFolder(){return is_dir(self::$data_folder); }
+	public static function MakeDataFolder(){ mkdir(self::$data_folder,0777,true); }
 
 
-    private static $item_cache_enabled = true;
-    public static function SetItemCacheEnabled($value){ self::$item_cache_enabled = $value;  }
-    public static function IsItemCacheEnabled(){ return self::$item_cache_enabled; }
+
+	//
+	//
+	// Profiler folder
+	//
+	//
+	private static $profiler_folder = 'prf';
+	public static function GetProfilerFolder(){ return self::$profiler_folder; }
+	public static function SetProfilerFolder($value) { self::$profiler_folder = $value; }
+	public static function HasProfilerFolder(){return is_dir(self::$profiler_folder); }
+	public static function MakeProfilerFolder(){ mkdir(self::$profiler_folder,0777,true); }
 
 
+
+	//
+	//
+	// Log folder
+	//
+	//
+	private static $log_folder = 'log';
+	public static function GetLogFolder(){ return self::$log_folder; }
+	public static function SetLogFolder($value) { self::$log_folder = $value; }
+	public static function HasLogFolder(){return is_dir(self::$logr_folder); }
+	public static function MakeLogFolder(){ mkdir(self::$log_folder,0777,true); }
+
+
+
+
+	//
+	//
+	// Item cache
+	//
+	//
+	private static $item_cache_enabled = true;
+	public static function SetItemCacheEnabled($value){ self::$item_cache_enabled = $value;  }
+	public static function IsItemCacheEnabled(){ return self::$item_cache_enabled; }
 
 
 
@@ -232,11 +263,8 @@ class Oxygen {
 	//
 	//
 	private static $code_folders = array('oxy/src');
-	private static $test_folders = array('oxy/tst');
 	public static function GetCodeFolders(){ return self::$code_folders; }
 	public static function AddCodeFolder($folder) { if (!in_array($folder,self::$code_folders)) self::$code_folders[] = $folder; }
-	public static function GetTestFolders(){ return self::$test_folders; }
-	public static function AddTestFolder($folder) { if (!in_array($folder,self::$test_folders)) self::$test_folders[] = $folder; }
 	private static $class_files = null;
 	private static $just_loaded_class_files = false;
 	private static function ReloadClassFiles(){
@@ -277,7 +305,7 @@ class Oxygen {
 		$b = isset(self::$class_files[$class]); if ($b) $r = self::$class_files[$class];
 		if (!self::$just_loaded_class_files) {
 			if ($b) {
-				if (!file_exists($r)) { //<-- TODO: this is slow, optimize it
+				if (!file_exists($r)) {
 					self::ReloadClassFiles();
 					if (isset(self::$class_files[$class])) $r = self::$class_files[$class];
 				}
@@ -302,6 +330,10 @@ class Oxygen {
 
 
 
+	private static $idSession;
+	private static $idWindow;
+	private static $window_scoping_enabled = true;
+	public static function SetWindowScopingEnabled($value){ self::$window_scoping_enabled = $value; }
 
 	//
 	//
@@ -309,15 +341,10 @@ class Oxygen {
 	//
 	//
 	private static $php_script;
-	private static $idSession;
-	private static $idWindow;
-	private static $window_scoping_enabled = true;
 	private static $url_pins = array('action'=>null,'lang'=>null,'window'=>null);
-	public static function SetWindowScopingEnabled($value){ self::$window_scoping_enabled = $value; }
 	public static function AddUrlPin($key) { self::$url_pins[$key] = null; }
 	public static function GetUrlPin($key) { return self::$url_pins[$key]; }
 	public static function SetUrlPin($key,$value) { self::$url_pins[$key] = $value; }
-
 	public static function MakeHrefPreservingValues(array $params = array()){
 		return self::MakeHref( $params + $_GET );    // <-- array + operator is a better array_merge($b,$a)...
 	}
@@ -326,17 +353,19 @@ class Oxygen {
 		foreach ( ($url_args + self::$url_pins) as $key=>$value) { // <-- array + operator here again.
 			if (is_null($value)) continue;
 			$s .= ($s===''?'?':'&');
-			$s .= rawurlencode( $key ); /// <-- huge savings by using this directly here...
+			$s .= rawurlencode( $key ); /// <-- huge savings by using this directly here... CORRECTION: this is not true, it was because of false info from XDebug
 			$s .= '=';
 			$s .= new Url( $value );  // <---- this one costs a lot!
 		}
 		return self::$php_script.'.php' . $s;
 	}
 
+
+
+
 	public static function IsPostback(){
 		return strtolower($_SERVER['REQUEST_METHOD'])=='post';
 	}
-
 	public static function Redirect(Action $action) {
 		while (ob_get_level()>0) ob_end_clean();
 		self::SendHttpHeaders();
@@ -361,7 +390,6 @@ class Oxygen {
 		echo Js::BEGIN."parent.location.href=parent.location.href;".Js::END;
 		exit();
 	}
-
 	public static function IsLocalhost(){
 		return $_SERVER["SERVER_NAME"] == 'localhost';
 	}
@@ -369,7 +397,8 @@ class Oxygen {
 		return isset($_SERVER["HTTPS"]);
 	}
 	public static function GetBaseHref($protocol = null,$port = null){
-		if (is_null($protocol)) $protocol = self::IsHttps() ? 'https' : 'http';
+		$old_protocol = self::IsHttps() ? 'https' : 'http';
+		if (is_null($protocol)) $protocol = $old_protocol;
 		$r = $protocol . '://' . $_SERVER["SERVER_NAME"];
 		if ($port == null) {
 			if ($protocol == 'http' && $_SERVER["SERVER_PORT"] != '80') $r .= ":".$_SERVER["SERVER_PORT"];

@@ -1,22 +1,22 @@
 <?php
 
-class JustString extends OmniType {
+class NullableInteger extends OmniType {
 
 	/**
-	 * @return string
+	 * @return int|null
 	 */
 	public function GetDefaultValue() {
-		return '';
+		return null;
 	}
 
 	/**
-	 * @param $address string
+	 * @param $address int|null
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public function Assign(&$address,$value) {
-		if (!is_string($value)) throw new ValidationException();
+		if (!is_null($value) && !is_int($value)) throw new ValidationException();
 		$address = $value;
 	}
 
@@ -24,102 +24,108 @@ class JustString extends OmniType {
 	 * @return int
 	 */
 	public function GetPdoType() {
-		return PDO::PARAM_STR;
+		return PDO::PARAM_INT;
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value int|null
 	 * @param $platform int
-	 * @return string
+	 * @return mixed
 	 */
 	public function ExportPdoValue($value, $platform) {
 		return $value;
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value int|null
 	 * @param $platform int
 	 * @return string
 	 */
 	public function ExportSqlLiteral($value, $platform) {
-		return $this->GetSqlStringLiteral($value,$platform);
+		if (is_null($value)) return $this->GetSqlNullLiteral();
+		return sprintf('%d',$value);
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value int|null
 	 * @param $platform int
 	 * @return string
 	 */
 	public function ExportSqlIdentifier($value, $platform) {
-		if ($value === '') throw new ConvertionException();
-		return $this->GetSqlIdentifier($value,$platform);
+		throw new ConvertionException();
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value int|null
 	 * @return string
 	 */
 	public function ExportJsLiteral($value) {
-		return $this->GetJsStringLiteral($value);
+		if (is_null($value)) return $this->GetJsNullLiteral();
+		return sprintf('%d',$value);
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value int|null
 	 * @return string
 	 */
 	public function ExportXmlString($value) {
-		return $this->EncodeToXmlString($value);
+		if (is_null($value)) return '';
+		return sprintf('%d',$value);
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value int|null
 	 * @return string
 	 */
 	public function ExportHtmlString($value) {
-		return $this->EncodeToHtmlString($value);
+		if (is_null($value)) return '';
+		return sprintf('%d',$value);
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value int|null
 	 * @return string
 	 */
 	public function ExportHumanReadableHtmlString($value) {
-		return $this->EncodeToHtmlString($value);
+		if (is_null($value)) return '';
+		return sprintf('%d',$value);
 	}
 
 	/**
-	 * @param $value string
+	 * @param $value int|null
 	 * @return string
 	 */
 	public function ExportUrlString($value) {
-		return $this->EncodeToUrlString($value);
+		if (is_null($value)) return '';
+		return sprintf('%d',$value);
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return string
+	 * @return int|null
 	 */
 	public function ImportDBValue($value) {
-		if (is_null($value)) return '';
-		return $value;
+		if (is_null($value)) return null;
+		return intval($value);
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return string
+	 * @return int|null
 	 */
 	public function ImportDOMValue($value) {
-		if (is_null($value)) return '';
-		return $this->DecodeFromXmlString($value);
+		if (is_null($value)) return null;
+		if ($value === '') return null;
+		return intval($value);
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return string
+	 * @return int|null
 	 */
 	public function ImportHttpValue($value) {
-		if (is_null($value)) return '';
-		if (is_array($value)) return $this->DecodeFromHtmlString($this->DecodeFromUrlString( implode(',',$value) ) );
-		return $this->DecodeFromHtmlString( $this->DecodeFromUrlString( $value ) );
+		if (is_null($value)) return null;
+		if (is_array($value)) throw new ConvertionException();
+		return intval($value);
 	}
 }

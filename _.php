@@ -1,4 +1,14 @@
 <?php
+if ($_SERVER["SERVER_NAME"] == 'localhost') {
+	define('DEBUG',true);
+	define('PROFILE',false); // for the time being
+}
+else {
+	define('DEBUG',false);
+	define('PROFILE',false);
+}
+
+if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }
 require('oxy/src/Types/ID.php');
 require('oxy/src/Oxygen.php');
 require('oxy/src/Utils/Scope.php');
@@ -34,15 +44,16 @@ function user_exception_handler($ex) {
 	echo '</div>';
 	echo '</div>';
 	//	echo '</body></html>';
-	try{ if (!Oxygen::IsLocalhost()) UnhandledException::Record($ex); }catch(Exception $exx){}
+	// try{ Log::Record($ex); }catch(Exception $exx){}
 }
 set_exception_handler("user_exception_handler");
 
 
 function user_shutdown_function() {
-	chdir(dirname(__FILE__));chdir('..');
+	chdir(dirname(__FILE__));
+	chdir('..');
 	Progress::Shutdown();
-	//if (Database::IsConnected()) Database::TransactionRollback();
+	if (PROFILE) Profiler::Stop();
 }
 register_shutdown_function('user_shutdown_function');
 
@@ -66,8 +77,5 @@ function from($whatever){
 	if ($whatever instanceof Traversable) return new LinqIterator(new IteratorIterator($whatever));
 	return new LinqIterator(new ArrayIterator(array($whatever)));
 }
-
-//ini_set('error_prepend_string','<div style="display:none;">');
-//ini_set('error_append_string','</div>');
 
 

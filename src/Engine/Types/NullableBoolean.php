@@ -1,22 +1,22 @@
 <?php
 
-class NullableID extends OmniType {
+class NullableBoolean extends OmniType {
 
 	/**
-	 * @return ID|null
+	 * @return boolean|null
 	 */
 	public function GetDefaultValue() {
 		return null;
 	}
 
 	/**
-	 * @param $address ID|null
+	 * @param $address boolean|null
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public function Assign(&$address,$value) {
-		if (!is_null($value) && !($value instanceof ID)) throw new ValidationException();
+		if (!is_null($value) && !is_bool($value)) throw new ValidationException();
 		$address = $value;
 	}
 
@@ -24,31 +24,31 @@ class NullableID extends OmniType {
 	 * @return int
 	 */
 	public function GetPdoType() {
-		return PDO::PARAM_INT;
+		return PDO::PARAM_BOOL;
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value boolean|null
 	 * @param $platform int
 	 * @return mixed
 	 */
 	public function ExportPdoValue($value, $platform) {
-		if (is_null($value)) return null;
-		return $value->AsInt();
+		return $value;
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value boolean|null
 	 * @param $platform int
 	 * @return string
 	 */
 	public function ExportSqlLiteral($value, $platform) {
 		if (is_null($value)) return $this->GetSqlNullLiteral();
-		return strval($value->AsInt());
+		if ($value) return '1';
+		return '0';
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value boolean|null
 	 * @param $platform int
 	 * @return string
 	 */
@@ -57,76 +57,85 @@ class NullableID extends OmniType {
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value boolean|null
 	 * @return string
 	 */
 	public function ExportJsLiteral($value) {
 		if (is_null($value)) return $this->GetJsNullLiteral();
-		return '\''.$value->AsHex().'\'';
+		if ($value) return 'true';
+		return 'false';
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value boolean|null
 	 * @return string
 	 */
 	public function ExportXmlString($value) {
 		if (is_null($value)) return '';
-		return $value->AsHex();
+		if ($value) return 'true';
+		return 'false';
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value boolean|null
 	 * @return string
 	 */
 	public function ExportHtmlString($value) {
 		if (is_null($value)) return '';
-		return $value->AsHex();
+		if ($value) return 'true';
+		return 'false';
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value boolean|null
 	 * @return string
 	 */
 	public function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
-		return $value->AsHex();
+		if ($value) return (string)Lemma::Retrieve('Yes');
+		return (string)Lemma::Retrieve('No');
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value boolean|null
 	 * @return string
 	 */
 	public function ExportUrlString($value) {
 		if (is_null($value)) return '';
-		return $value->AsHex();
+		if ($value) return 'true';
+		return 'false';
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return ID|null
+	 * @return boolean|null
 	 */
 	public function ImportDBValue($value) {
 		if (is_null($value)) return null;
-		return new ID(intval($value));
+		if ($value === '1') return true; /// TODO: this needs testing
+		return false;
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return ID|null
+	 * @return boolean|null
 	 */
 	public function ImportDOMValue($value) {
 		if (is_null($value)) return null;
-		if ($value === '') return null;
-		return new ID($value);
+		if ($value === 'true') return true;
+		if ($value === 'false') return false;
+		return null;
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return ID|null
+	 * @return boolean|null
 	 */
 	public function ImportHttpValue($value) {
 		if (is_null($value)) return null;
 		if (is_array($value)) throw new ConvertionException();
-		return new ID($value);
+		if ($value === 'true') return true;
+		if ($value === 'false') return false;
+		return null;
 	}
 }

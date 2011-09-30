@@ -16,7 +16,7 @@ class XmlValue extends ImportConverter {
 
 
 	public function AsString(){ return is_null($this->value) ? null : strval($this->value); }
-	public function AsID(){ return is_null($this->value) ? null : new ID(intval($this->value)); }
+	public function AsID(){ return is_null($this->value) ? null : new ID(strval($this->value)); }
   public function AsDateTime(){
   	return empty($this->value) ? null : XDateTime::Parse($this->value,'Y-m-d\TH:i:s');
   }
