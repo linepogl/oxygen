@@ -15,7 +15,7 @@ class NullableBoolean extends OmniType {
 	/**
 	 * @return boolean|null
 	 */
-	public function GetDefaultValue() {
+	public static function GetDefaultValue() {
 		return null;
 	}
 
@@ -25,7 +25,7 @@ class NullableBoolean extends OmniType {
 	 * @throws ValidationException
 	 * @return void
 	 */
-	public function Assign(&$address,$value) {
+	public static function Assign(&$address,$value) {
 		if (!is_null($value) && !is_bool($value)) throw new ValidationException();
 		$address = $value;
 	}
@@ -33,7 +33,7 @@ class NullableBoolean extends OmniType {
 	/**
 	 * @return int
 	 */
-	public function GetPdoType() {
+	public static function GetPdoType() {
 		return PDO::PARAM_BOOL;
 	}
 
@@ -49,7 +49,7 @@ class NullableBoolean extends OmniType {
 	 * @param $platform int
 	 * @return mixed
 	 */
-	public function ExportPdoValue($value, $platform) {
+	public static function ExportPdoValue($value, $platform) {
 		return $value;
 	}
 
@@ -58,7 +58,7 @@ class NullableBoolean extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlLiteral($value, $platform) {
+	public static function ExportSqlLiteral($value, $platform) {
 		if (is_null($value)) return Sql::Null;
 		if ($value) return '1';
 		return '0';
@@ -69,7 +69,7 @@ class NullableBoolean extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlIdentifier($value, $platform) {
+	public static function ExportSqlIdentifier($value, $platform) {
 		throw new ConvertionException();
 	}
 
@@ -77,7 +77,7 @@ class NullableBoolean extends OmniType {
 	 * @param $value boolean|null
 	 * @return string
 	 */
-	public function ExportJsLiteral($value) {
+	public static function ExportJsLiteral($value) {
 		if (is_null($value)) return Js::Null;
 		if ($value) return 'true';
 		return 'false';
@@ -87,7 +87,7 @@ class NullableBoolean extends OmniType {
 	 * @param $value boolean|null
 	 * @return string
 	 */
-	public function ExportXmlString($value) {
+	public static function ExportXmlString($value) {
 		if (is_null($value)) return '';
 		if ($value) return 'true';
 		return 'false';
@@ -97,7 +97,7 @@ class NullableBoolean extends OmniType {
 	 * @param $value boolean|null
 	 * @return string
 	 */
-	public function ExportHtmlString($value) {
+	public static function ExportHtmlString($value) {
 		if (is_null($value)) return '';
 		if ($value) return 'true';
 		return 'false';
@@ -107,7 +107,7 @@ class NullableBoolean extends OmniType {
 	 * @param $value boolean|null
 	 * @return string
 	 */
-	public function ExportHumanReadableHtmlString($value) {
+	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		if ($value) return (string)Lemma::Retrieve('Yes');
 		return (string)Lemma::Retrieve('No');
@@ -117,7 +117,7 @@ class NullableBoolean extends OmniType {
 	 * @param $value boolean|null
 	 * @return string
 	 */
-	public function ExportUrlString($value) {
+	public static function ExportUrlString($value) {
 		if (is_null($value)) return '';
 		if ($value) return 'true';
 		return 'false';
@@ -127,7 +127,7 @@ class NullableBoolean extends OmniType {
 	 * @param $value string|null
 	 * @return boolean|null
 	 */
-	public function ImportDBValue($value) {
+	public static function ImportDBValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '1') return true; /// TODO: this needs testing
 		return false;
@@ -137,7 +137,7 @@ class NullableBoolean extends OmniType {
 	 * @param $value string|null
 	 * @return boolean|null
 	 */
-	public function ImportDOMValue($value) {
+	public static function ImportDomValue($value) {
 		if (is_null($value)) return null;
 		if ($value === 'true') return true;
 		if ($value === 'false') return false;
@@ -148,7 +148,7 @@ class NullableBoolean extends OmniType {
 	 * @param $value string|null|array
 	 * @return boolean|null
 	 */
-	public function ImportHttpValue($value) {
+	public static function ImportHttpValue($value) {
 		if (is_null($value)) return null;
 		if (is_array($value)) throw new ConvertionException();
 		if ($value === 'true') return true;

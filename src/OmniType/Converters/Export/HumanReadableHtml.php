@@ -41,15 +41,17 @@ final class HumanReadableHtml extends ExportConverter {
 		  return $r;
 	  }
 
-
-		if ($this->value instanceof XDate) {
-			$r = Language::FormatDate($this->value);
-			return $r;
-		}
-
-		if ($this->value instanceof DateTime)
-			$this->value = new XDateTime($this->value);
+	  if ($this->value instanceof DateTime)
+		  $this->value = new XDateTime($this->value);
 	  if ( $this->value instanceof XDateTime ) {
+	    if ($this->value instanceof XDate) {
+				$r = Language::FormatDate($this->value);
+				return $r;
+			}
+			if ($this->value instanceof XTime) {
+				$r = Language::FormatTime($this->value);
+				return $r;
+			}
 		  $r = Language::FormatDateTime($this->value);
 		  return $r;
 	  }

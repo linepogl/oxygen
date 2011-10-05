@@ -4,21 +4,12 @@ class JustBoolean extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
-
-	/**
-	 * @return OmniBoolean
-	 */
-	public static function Type(){
-		return self::$instance;
-	}
+	/** @return JustBoolean */ public static function Type(){ return self::$instance; }
+	/** @return boolean */ public static function GetDefaultValue() { return false; }
 
 
-	/**
-	 * @return boolean
-	 */
-	public function GetDefaultValue() {
-		return false;
-	}
+
+
 
 	/**
 	 * @param $address boolean
@@ -124,19 +115,15 @@ class JustBoolean extends OmniType {
 	 * @return boolean
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return false;
-		if ($value === '1') return true; /// TODO: this needs testing
-		return false;
+		return $value === '1'; // TODO: this needs testing
 	}
 
 	/**
 	 * @param $value string|null
 	 * @return boolean
 	 */
-	public static function ImportDOMValue($value) {
-		if (is_null($value)) return false;
-		if ($value === 'true') return true;
-		return false;
+	public static function ImportDomValue($value) {
+		return $value === 'true';
 	}
 
 	/**
@@ -144,14 +131,12 @@ class JustBoolean extends OmniType {
 	 * @return boolean
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return false;
 		if (is_array($value)) throw new ConvertionException();
-		if ($value === 'true') return true;
-		return false;
+		return $value === 'true';
 	}
 }
 
-OmniBoolean::Init();
+JustBoolean::Init();
 
 
 

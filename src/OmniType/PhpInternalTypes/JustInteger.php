@@ -4,21 +4,13 @@ class JustInteger extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
+	/** @return JustInteger */ public static function Type(){ return self::$instance; }
+	/** @return int */ public static function GetDefaultValue() { return 0; }
 
-	/**
-	 * @return JustInteger
-	 */
-	public static function Type(){
-		return self::$instance;
-	}
 
-	/**
-	 * @return int
-	 */
-	public static function GetDefaultValue() {
-		return 0;
-	}
 
+
+	
 	/**
 	 * @param $address int
 	 * @param $value mixed
@@ -119,7 +111,6 @@ class JustInteger extends OmniType {
 	 * @return int
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return 0;
 		return intval($value);
 	}
 
@@ -127,8 +118,7 @@ class JustInteger extends OmniType {
 	 * @param $value string|null
 	 * @return int
 	 */
-	public static function ImportDOMValue($value) {
-		if (is_null($value)) return 0;
+	public static function ImportDomValue($value) {
 		return intval($value);
 	}
 
@@ -137,7 +127,6 @@ class JustInteger extends OmniType {
 	 * @return int
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return 0;
 		if (is_array($value)) throw new ConvertionException();
 		return intval($value);
 	}

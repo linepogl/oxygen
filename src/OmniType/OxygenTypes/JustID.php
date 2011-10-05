@@ -124,8 +124,9 @@ class JustID extends OmniType {
 	 * @param $value string|null
 	 * @return ID
 	 */
-	public static function ImportDOMValue($value) {
+	public static function ImportDomValue($value) {
 		if (is_null($value)) return self::GetDefaultValue();
+		if ($value === '') return self::GetDefaultValue();
 		return new ID($value);
 	}
 
@@ -135,6 +136,7 @@ class JustID extends OmniType {
 	 */
 	public static function ImportHttpValue($value) {
 		if (is_null($value)) return self::GetDefaultValue();
+		if ($value === '') return self::GetDefaultValue();
 		if (is_array($value)) throw new ConvertionException();
 		return new ID($value);
 	}

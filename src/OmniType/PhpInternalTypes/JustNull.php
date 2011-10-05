@@ -4,20 +4,12 @@ class JustNull extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
+	/** @return JustNull */ public static function Type(){ return self::$instance; }
+	/** @return null */ public static function GetDefaultValue() { return null; }
 
-	/**
-	 * @return JustNull
-	 */
-	public static function Omni(){
-		return self::$instance;
-	}
 
-	/**
-	 * @return null
-	 */
-	public function GetDefaultValue() {
-		return null;
-	}
+
+
 
 	/**
 	 * @param $address null
@@ -25,7 +17,7 @@ class JustNull extends OmniType {
 	 * @throws ValidationException
 	 * @return void
 	 */
-	public function Assign(&$address,$value) {
+	public static function Assign(&$address,$value) {
 		if (!is_null($value)) throw new ValidationException();
 		$address = $value;
 	}
@@ -33,14 +25,14 @@ class JustNull extends OmniType {
 	/**
 	 * @return int
 	 */
-	public function GetPdoType() {
+	public static function GetPdoType() {
 		return PDO::PARAM_NULL;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function GetXsdType() {
+	public static function GetXsdType() {
 		return 'xs:string';
 	}
 
@@ -50,7 +42,7 @@ class JustNull extends OmniType {
 	 * @param $platform int
 	 * @return null
 	 */
-	public function ExportPdoValue($value, $platform) {
+	public static function ExportPdoValue($value, $platform) {
 		return null;
 	}
 
@@ -59,7 +51,7 @@ class JustNull extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlLiteral($value, $platform) {
+	public static function ExportSqlLiteral($value, $platform) {
 		return 'NULL';
 	}
 
@@ -68,7 +60,7 @@ class JustNull extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlIdentifier($value, $platform) {
+	public static function ExportSqlIdentifier($value, $platform) {
 		throw new ConvertionException();
 	}
 
@@ -76,7 +68,7 @@ class JustNull extends OmniType {
 	 * @param $value null
 	 * @return string
 	 */
-	public function ExportJsLiteral($value) {
+	public static function ExportJsLiteral($value) {
 		return 'null';
 	}
 
@@ -84,7 +76,7 @@ class JustNull extends OmniType {
 	 * @param $value null
 	 * @return string
 	 */
-	public function ExportXmlString($value) {
+	public static function ExportXmlString($value) {
 		return '';
 	}
 
@@ -92,7 +84,7 @@ class JustNull extends OmniType {
 	 * @param $value null
 	 * @return string
 	 */
-	public function ExportHtmlString($value) {
+	public static function ExportHtmlString($value) {
 		return '';
 	}
 
@@ -100,7 +92,7 @@ class JustNull extends OmniType {
 	 * @param $value null
 	 * @return string
 	 */
-	public function ExportHumanReadableHtmlString($value) {
+	public static function ExportHumanReadableHtmlString($value) {
 		return '';
 	}
 
@@ -108,7 +100,7 @@ class JustNull extends OmniType {
 	 * @param $value null
 	 * @return string
 	 */
-	public function ExportUrlString($value) {
+	public static function ExportUrlString($value) {
 		return '';
 	}
 
@@ -116,7 +108,7 @@ class JustNull extends OmniType {
 	 * @param $value string|null
 	 * @return null
 	 */
-	public function ImportDBValue($value) {
+	public static function ImportDBValue($value) {
 		return null;
 	}
 
@@ -124,7 +116,7 @@ class JustNull extends OmniType {
 	 * @param $value string|null
 	 * @return null
 	 */
-	public function ImportDOMValue($value) {
+	public static function ImportDomValue($value) {
 		return null;
 	}
 
@@ -132,7 +124,7 @@ class JustNull extends OmniType {
 	 * @param $value string|null|array
 	 * @return null
 	 */
-	public function ImportHttpValue($value) {
+	public static function ImportHttpValue($value) {
 		return null;
 	}
 }

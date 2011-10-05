@@ -1,10 +1,11 @@
 <?php
 
 class XSlave {
-	private $metaclass;
+	/** @var XMeta */
+	private $meta;
 	/** @return XMeta */
-	public function GetMeta(){ return $this->metaclass; }
-	public function SetMeta(XMeta $value){ $this->metaclass = $value; }
+	public function GetMeta(){ return $this->meta; }
+	public function SetMeta(XMeta $value){ $this->meta = $value; }
 
 	private $name;
 	public function GetName(){ return $this->name; }

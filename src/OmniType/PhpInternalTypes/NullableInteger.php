@@ -15,7 +15,7 @@ class NullableInteger extends OmniType {
 	/**
 	 * @return int|null
 	 */
-	public function GetDefaultValue() {
+	public static function GetDefaultValue() {
 		return null;
 	}
 
@@ -25,7 +25,7 @@ class NullableInteger extends OmniType {
 	 * @throws ValidationException
 	 * @return void
 	 */
-	public function Assign(&$address,$value) {
+	public static function Assign(&$address,$value) {
 		if (!is_null($value) && !is_int($value)) throw new ValidationException();
 		$address = $value;
 	}
@@ -33,7 +33,7 @@ class NullableInteger extends OmniType {
 	/**
 	 * @return int
 	 */
-	public function GetPdoType() {
+	public static function GetPdoType() {
 		return PDO::PARAM_INT;
 	}
 
@@ -49,7 +49,7 @@ class NullableInteger extends OmniType {
 	 * @param $platform int
 	 * @return mixed
 	 */
-	public function ExportPdoValue($value, $platform) {
+	public static function ExportPdoValue($value, $platform) {
 		return $value;
 	}
 
@@ -58,7 +58,7 @@ class NullableInteger extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlLiteral($value, $platform) {
+	public static function ExportSqlLiteral($value, $platform) {
 		if (is_null($value)) return Sql::Null;
 		return sprintf('%d',$value);
 	}
@@ -68,7 +68,7 @@ class NullableInteger extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlIdentifier($value, $platform) {
+	public static function ExportSqlIdentifier($value, $platform) {
 		throw new ConvertionException();
 	}
 
@@ -76,7 +76,7 @@ class NullableInteger extends OmniType {
 	 * @param $value int|null
 	 * @return string
 	 */
-	public function ExportJsLiteral($value) {
+	public static function ExportJsLiteral($value) {
 		if (is_null($value)) return Js::Null;
 		return sprintf('%d',$value);
 	}
@@ -85,7 +85,7 @@ class NullableInteger extends OmniType {
 	 * @param $value int|null
 	 * @return string
 	 */
-	public function ExportXmlString($value) {
+	public static function ExportXmlString($value) {
 		if (is_null($value)) return '';
 		return sprintf('%d',$value);
 	}
@@ -94,7 +94,7 @@ class NullableInteger extends OmniType {
 	 * @param $value int|null
 	 * @return string
 	 */
-	public function ExportHtmlString($value) {
+	public static function ExportHtmlString($value) {
 		if (is_null($value)) return '';
 		return sprintf('%d',$value);
 	}
@@ -103,7 +103,7 @@ class NullableInteger extends OmniType {
 	 * @param $value int|null
 	 * @return string
 	 */
-	public function ExportHumanReadableHtmlString($value) {
+	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		return sprintf('%d',$value);
 	}
@@ -112,7 +112,7 @@ class NullableInteger extends OmniType {
 	 * @param $value int|null
 	 * @return string
 	 */
-	public function ExportUrlString($value) {
+	public static function ExportUrlString($value) {
 		if (is_null($value)) return '';
 		return sprintf('%d',$value);
 	}
@@ -121,7 +121,7 @@ class NullableInteger extends OmniType {
 	 * @param $value string|null
 	 * @return int|null
 	 */
-	public function ImportDBValue($value) {
+	public static function ImportDBValue($value) {
 		if (is_null($value)) return null;
 		return intval($value);
 	}
@@ -130,7 +130,7 @@ class NullableInteger extends OmniType {
 	 * @param $value string|null
 	 * @return int|null
 	 */
-	public function ImportDOMValue($value) {
+	public static function ImportDomValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
 		return intval($value);
@@ -140,7 +140,7 @@ class NullableInteger extends OmniType {
 	 * @param $value string|null|array
 	 * @return int|null
 	 */
-	public function ImportHttpValue($value) {
+	public static function ImportHttpValue($value) {
 		if (is_null($value)) return null;
 		if (is_array($value)) throw new ConvertionException();
 		return intval($value);

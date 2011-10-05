@@ -4,20 +4,8 @@ class JustLemma extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
-
-	/**
-	 * @return OmniType
-	 */
-	public static function Type() {
-		return self::$instance;
-	}
-
-	/**
-	 * @return Lemma
-	 */
-	public static function GetDefaultValue() {
-		return new Lemma();
-	}
+	/** @return JustLemma */ public static function Type() { return self::$instance; }
+	/** @return Lemma */ public static function GetDefaultValue() { return new Lemma(); }
 
 
 
@@ -126,7 +114,7 @@ class JustLemma extends OmniType {
 	 * @param $value string|null
 	 * @return Lemma
 	 */
-	public static function ImportDOMValue($value) {
+	public static function ImportDomValue($value) {
 		if (is_null($value)) return self::GetDefaultValue();
 		return Lemma::Decode($value);
 	}

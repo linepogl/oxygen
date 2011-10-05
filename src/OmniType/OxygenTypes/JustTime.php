@@ -1,11 +1,14 @@
 <?php
 
-class JustGenericID extends OmniType {
+class JustTime extends OmniType {
 
+	private static $default;
 	private static $instance;
-	public static function Init(){ self::$instance = new self(); }
-	/** @return JustGenericID */ public static function Type() { return self::$instance; }
-	/** @return GenericID */ public static function GetDefaultValue() { return new GenericID('XItem',0); }
+	public static function Init(){ self::$instance = new self(); self::$default = new XTime(); }
+	/** @return JustTime */ public static function Type() { return self::$instance; }
+	/** @return XTime */ public static function GetDefaultValue() { return self::$default; }
+	
+
 
 
 
@@ -13,42 +16,52 @@ class JustGenericID extends OmniType {
 	public static function GetPdoType() { return PDO::PARAM_STR; }
 
 	/** @return string */
-	public static function GetXsdType() { return 'xs:string'; }
+	public static function GetXsdType() { return 'xs:time'; }
 
 
 
 	/**
-	 * @param $address GenericID
+	 * @param $address XTime
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if ($value instanceof GenericID) { $address = $value; return; }
+		if ($value instanceof XTime) { $address = $value; return; }
 		throw new ValidationException();
 	}
 
 
 	/**
-	 * @param $value GenericID
+	 * @param $value XTime
 	 * @param $platform int
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		return $value->Encode();
+		switch ($platform) {
+			default:
+			case Database::MYSQL:   return $value->Format('Y-m-d H:i:s');
+			case Database::ORACLE:  return $value->Format('Y-m-d H:i:s');
+		}
+		throw new ConvertionException();
 	}
 
 	/**
-	 * @param $value GenericID
+	 * @param $value XTime
 	 * @param $platform int
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		return self::EncodeAsSqlStringLiteral( $value->Encode() , $platform );
+		switch ($platform) {
+			default:
+			case Database::MYSQL:   return '\''.$value->Format('Y-m-d H:i:s').'\'';
+			case Database::ORACLE:  return '\''.$value->Format('Y-m-d H:i:s').'\'';
+		}
+		throw new ConvertionException();
 	}
 
 	/**
-	 * @param $value GenericID
+	 * @param $value XTime
 	 * @param $platform int
 	 * @return string
 	 */
@@ -57,74 +70,75 @@ class JustGenericID extends OmniType {
 	}
 
 	/**
-	 * @param $value GenericID
+	 * @param $value XTime
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		return self::EncodeAsJsStringLiteral( $value->Encode() );
+		return 'new Date('.$value->GetYear().','.($value->GetMonth()-1).','.$value->GetDay().','.$value->GetHours().','.$value->GetMinutes().','.$value->GetSeconds().')';
 	}
 
 	/**
-	 * @param $value GenericID
+	 * @param $value XTime
 	 * @return string
 	 */
 	public static function ExportXmlString($value) {
-		return self::EncodeAsXmlString( $value->Encode() );
+		return $value->Format('H:i:s');
 	}
 
 	/**
-	 * @param $value GenericID
+	 * @param $value XTime
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return self::EncodeAsHtmlString( $value->Encode() );
+		return $value->Format('YmdHis');
 	}
 
 	/**
-	 * @param $value GenericID
+	 * @param $value XTime
 	 * @return string
 	 */
 	public static function ExportHumanReadableHtmlString($value) {
-		return self::EncodeAsHtmlString( $value->Encode() );
+		return self::EncodeAsHtmlString( Language::FormatTime($value) );
 	}
 
 	/**
-	 * @param $value GenericID
+	 * @param $value XTime
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		return self::EncodeAsUrlString( $value->Encode() );
+		return $value->Format('YmdHis');
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return GenericID
+	 * @return XTime
 	 */
 	public static function ImportDBValue($value) {
 		if (is_null($value)) return self::GetDefaultValue();
-		return GenericID::Decode($value);
+		if ($value == '0000-00-00 00:00:00') return self::GetDefaultValue();
+		return XTime::Parse($value,'Y-m-d H:i:s');
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return GenericID
+	 * @return XTime
 	 */
 	public static function ImportDomValue($value) {
 		if (is_null($value)) return self::GetDefaultValue();
 		if ($value === '') return self::GetDefaultValue();
-		return GenericID::Decode($value);
+		return XTime::Parse($value,'H:i:s');
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return GenericID
+	 * @return XTime
 	 */
 	public static function ImportHttpValue($value) {
 		if (is_null($value)) return self::GetDefaultValue();
 		if ($value === '') return self::GetDefaultValue();
 		if (is_array($value)) throw new ConvertionException();
-		return GenericID::Decode($value);
+		return XTime::Parse($value,'YmdHis');
 	}
 }
 
-JustGenericID::Init();
+JustTime::Init();

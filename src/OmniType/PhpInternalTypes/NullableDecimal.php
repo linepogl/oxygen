@@ -15,7 +15,7 @@ class NullableDecimal extends OmniType {
 	/**
 	 * @return float|null
 	 */
-	public function GetDefaultValue() {
+	public static function GetDefaultValue() {
 		return null;
 	}
 
@@ -25,7 +25,7 @@ class NullableDecimal extends OmniType {
 	 * @throws ValidationException
 	 * @return void
 	 */
-	public function Assign(&$address,$value) {
+	public static function Assign(&$address,$value) {
 		if (is_null($value)) $address = $value;
 		if (is_float($value)) $address = $value;
 		if (is_int($value)) $address = $value; // implicit casting!!!
@@ -35,14 +35,14 @@ class NullableDecimal extends OmniType {
 	/**
 	 * @return int
 	 */
-	public function GetPdoType() {
+	public static function GetPdoType() {
 		return PDO::PARAM_STR;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function GetXsdType() {
+	public static function GetXsdType() {
 		return 'xs:decimal';
 	}
 
@@ -51,7 +51,7 @@ class NullableDecimal extends OmniType {
 	 * @param $platform int
 	 * @return mixed
 	 */
-	public function ExportPdoValue($value, $platform) {
+	public static function ExportPdoValue($value, $platform) {
 		return $value;
 	}
 
@@ -60,7 +60,7 @@ class NullableDecimal extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlLiteral($value, $platform) {
+	public static function ExportSqlLiteral($value, $platform) {
 		if (is_null($value)) return Sql::Null;
 		return sprintf('%F',$value);
 	}
@@ -70,7 +70,7 @@ class NullableDecimal extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlIdentifier($value, $platform) {
+	public static function ExportSqlIdentifier($value, $platform) {
 		throw new ConvertionException();
 	}
 
@@ -78,7 +78,7 @@ class NullableDecimal extends OmniType {
 	 * @param $value float|null
 	 * @return string
 	 */
-	public function ExportJsLiteral($value) {
+	public static function ExportJsLiteral($value) {
 		if (is_null($value)) return Js::Null;
 		return sprintf('%F',$value);
 	}
@@ -87,7 +87,7 @@ class NullableDecimal extends OmniType {
 	 * @param $value float|null
 	 * @return string
 	 */
-	public function ExportXmlString($value) {
+	public static function ExportXmlString($value) {
 		if (is_null($value)) return '';
 		return sprintf('%F',$value);
 	}
@@ -96,7 +96,7 @@ class NullableDecimal extends OmniType {
 	 * @param $value float|null
 	 * @return string
 	 */
-	public function ExportHtmlString($value) {
+	public static function ExportHtmlString($value) {
 		if (is_null($value)) return '';
 		return sprintf('%F',$value);
 	}
@@ -105,7 +105,7 @@ class NullableDecimal extends OmniType {
 	 * @param $value float|null
 	 * @return string
 	 */
-	public function ExportHumanReadableHtmlString($value) {
+	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		return Language::FormatDecimal($value);
 	}
@@ -114,7 +114,7 @@ class NullableDecimal extends OmniType {
 	 * @param $value float|null
 	 * @return string
 	 */
-	public function ExportUrlString($value) {
+	public static function ExportUrlString($value) {
 		if (is_null($value)) return '';
 		return sprintf('%F',$value);
 	}
@@ -123,7 +123,7 @@ class NullableDecimal extends OmniType {
 	 * @param $value string|null
 	 * @return float|null
 	 */
-	public function ImportDBValue($value) {
+	public static function ImportDBValue($value) {
 		if (is_null($value)) return null;
 		return floatval($value);
 	}
@@ -132,7 +132,7 @@ class NullableDecimal extends OmniType {
 	 * @param $value string|null
 	 * @return float|null
 	 */
-	public function ImportDOMValue($value) {
+	public static function ImportDomValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
 		return floatval($value);
@@ -142,7 +142,7 @@ class NullableDecimal extends OmniType {
 	 * @param $value string|null|array
 	 * @return float|null
 	 */
-	public function ImportHttpValue($value) {
+	public static function ImportHttpValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();

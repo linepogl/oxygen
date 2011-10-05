@@ -1,72 +1,70 @@
 <?php
 
-class NullableLemma extends OmniType {
+class NullableTime extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
+	/** @return NullableTime */ public static function Type() { return self::$instance; }
+	/** @return XTime|null */ public static function GetDefaultValue() { return null; }
+
+
+
+
+
+
+	/** @return int */
+	public static function GetPdoType() { return PDO::PARAM_STR; }
+
+	/** @return string */
+	public static function GetXsdType() { return 'xs:time'; }
+
+
 
 	/**
-	 * @return OmniType
-	 */
-	public static function Type() {
-		return self::$instance;
-	}
-
-	/**
-	 * @return Lemma|null
-	 */
-	public static function GetDefaultValue() {
-		return null;
-	}
-
-	/**
-	 * @param $address Lemma|null
+	 * @param $address XTime|null
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (is_null($value)) $address = $value;
-		if ($value instanceof Lemma) $address = $value;
+		if (is_null($value)) { $address = $value; return; }
+		if ($value instanceof XTime) { $address = $value; return; }
 		throw new ValidationException();
 	}
 
-	/**
-	 * @return int
-	 */
-	public static function GetPdoType() {
-		return PDO::PARAM_INT;
-	}
 
 	/**
-	 * @return string
-	 */
-	public static function GetXsdType() {
-		return 'xs:string';
-	}
-
-	/**
-	 * @param $value Lemma|null
+	 * @param $value XTime|null
 	 * @param $platform int
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
 		if (is_null($value)) return null;
-		return $value->Encode();
+		switch ($platform) {
+			default:
+			case Database::MYSQL:   return $value->Format('Y-m-d H:i:s');
+			case Database::ORACLE:  return $value->Format('Y-m-d H:i:s');
+		}
+		throw new ConvertionException();
 	}
 
 	/**
-	 * @param $value Lemma|null
+	 * @param $value XTime|null
 	 * @param $platform int
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
 		if (is_null($value)) return Sql::Null;
-		return self::EncodeAsSqlStringLiteral( $value->Encode() , $platform );
+		switch ($platform) {
+			default:
+			case Database::MYSQL:   return '\''.$value->Format('Y-m-d H:i:s').'\'';
+			case Database::ORACLE:  return '\''.$value->Format('Y-m-d H:i:s').'\'';
+		}
+		throw new ConvertionException();
 	}
 
 	/**
-	 * @param $value Lemma|null
+	 * @param $value XTime|null
 	 * @param $platform int
 	 * @return string
 	 */
@@ -75,80 +73,80 @@ class NullableLemma extends OmniType {
 	}
 
 	/**
-	 * @param $value Lemma|null
+	 * @param $value XTime|null
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
 		if (is_null($value)) return Js::Null;
-		return self::EncodeAsJsStringLiteral( $value->Translate() ); /// ?
+		return 'new Date('.$value->GetYear().','.($value->GetMonth()-1).','.$value->GetDay().','.$value->GetHours().','.$value->GetMinutes().','.$value->GetSeconds().')';
 	}
 
 	/**
-	 * @param $value Lemma|null
+	 * @param $value XTime|null
 	 * @return string
 	 */
 	public static function ExportXmlString($value) {
 		if (is_null($value)) return '';
-		return self::EncodeAsXmlString( $value->Encode() );
+		return $value->Format('H:i:s');
 	}
 
 	/**
-	 * @param $value Lemma|null
+	 * @param $value XTime|null
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
 		if (is_null($value)) return '';
-		return self::EncodeAsHtmlString( $value->Translate() );
+		return $value->Format('YmdHis');
 	}
 
 	/**
-	 * @param $value Lemma|null
+	 * @param $value XTime|null
 	 * @return string
 	 */
 	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
-		return self::EncodeAsHtmlString( $value->Translate() );
+		return self::EncodeAsHtmlString( Language::FormatTime($value) );
 	}
 
 	/**
-	 * @param $value Lemma|null
+	 * @param $value XTime|null
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
 		if (is_null($value)) return '';
-		return self::EncodeAsUrlString( $value->Encode() );
+		return $value->Format('YmdHis');
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return Lemma|null
+	 * @return XTime|null
 	 */
 	public static function ImportDBValue($value) {
 		if (is_null($value)) return null;
-		return Lemma::Decode($value);
+		if ($value == '0000-00-00 00:00:00') return null;
+		return XTime::Parse($value,'Y-m-d H:i:s');
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return Lemma|null
+	 * @return XTime|null
 	 */
 	public static function ImportDomValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
-		return Lemma::Decode($value);
+		return XDateTime::Parse($value,'H:i:s');
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return Lemma|null
+	 * @return XTime|null
 	 */
 	public static function ImportHttpValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();
-		return Lemma::Decode($value);
+		return XTime::Parse($value,'YmdHis');
 	}
 }
 
-
-NullableLemma::Init();
+NullableTime::Init();

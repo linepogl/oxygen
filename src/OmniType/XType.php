@@ -50,14 +50,14 @@ class XType {
   	if (is_null($x1)) {
   		return is_null($x2) ? 0 : -1;
 		}
-	  elseif (is_string($x1)) { // <-- Unbelievable php stupidity: is_numeric('111') is true, so the check for is_string('111') *has* to come first
+	  elseif (is_string($x1)) {
 		  if (is_null($x2)) return 1;
 		  if (is_string($x2)) return strcmp($x1,$x2);
 		  if ($x2 instanceof Lemma) return strcmp($x1,strval($x2));
 	  }
-		elseif (is_numeric($x1)) {
+		elseif (is_int($x1)||is_float($x1)) {
 			if (is_null($x2)) return 1;
-			if (is_numeric($x2)) return $x1 - $x2;
+			if (is_int($x2)||is_float($x2)) return $x1 - $x2;
 			if ($x2 instanceof ID) return $x1 - $x2->AsInt();
 			if ($x2 instanceof XItem) return $x1 - $x2->id->AsInt();
 		}
@@ -67,7 +67,7 @@ class XType {
 		}
 		elseif ($x1 instanceof GenericID){
 			if (is_null($x2)) return 1;
-			if (is_numeric($x2)) return $x1->AsInt() - $x2;
+			if (is_int($x2)||is_float($x2)) return $x1->AsInt() - $x2;
 			if ($x2 instanceof GenericID) {
 				//$r = $x1->GetClassOrder() - $x2->GetClassOrder(); if ($r != 0) return $r;
 				$r = strcmp($x1->GetClassName(),$x2->GetClassName()); if ($r != 0) return $r;
@@ -82,13 +82,13 @@ class XType {
 		}
 		elseif ($x1 instanceof ID){
 			if (is_null($x2)) return 1;
-			if (is_numeric($x2)) return $x1->AsInt() - $x2;
+			if (is_int($x2)||is_float($x2)) return $x1->AsInt() - $x2;
 			if ($x2 instanceof ID) return $x1->AsInt() - $x2->AsInt();
 			if ($x2 instanceof XItem) return $x1->AsInt() - $x2->id->AsInt();
 		}
 		elseif ($x1 instanceof XItem){
 			if (is_null($x2)) return 1;
-			if (is_numeric($x2)) return $x1->id->AsInt() - $x2;
+			if (is_int($x2)||is_float($x2)) return $x1->id->AsInt() - $x2;
 			if ($x2 instanceof GenericID) {
 				//$r = $x1->GetClassOrder() - $x2->GetClassOrder(); if ($r != 0) return $r;
 				$r = strcmp($x1->GetClassName(),$x2->GetClassName()); if ($r != 0) return $r;

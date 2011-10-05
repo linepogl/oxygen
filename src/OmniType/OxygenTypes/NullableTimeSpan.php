@@ -1,57 +1,62 @@
 <?php
 
-class NullableGenericID extends OmniType {
+class NullableTimeSpan extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
-	/** @return NullableGenericID */ public static function Type() { return self::$instance; }
-	/** @return GenericID|null */ public static function GetDefaultValue() { return null; }
+	/** @return NullableTimeSpan */ public static function Type() { return self::$instance; }
+	/** @return XTimeSpan|null */ public static function GetDefaultValue() { return null; }
 
 
-
-	/** @return int */
-	public static function GetPdoType() { return PDO::PARAM_STR; }
-
-	/** @return string */
-	public static function GetXsdType() { return 'xs:string'; }
 
 
 
 	/**
-	 * @param $address GenericID|null
+	 * @param $address XTimeSpan|null
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
 		if (is_null($value)) { $address = $value; return; }
-		if ($value instanceof GenericID) { $address = $value; return; }
+		if ($value instanceof XTimeSpan) { $address = $value; return; }
 		throw new ValidationException();
 	}
 
 
+
+
+
+	//
+	//
+	// Database round-trip
+	//
+	//
+	/** @return int */
+	public static function GetPdoType() { return PDO::PARAM_INT; }
+
 	/**
-	 * @param $value GenericID|null
+	 * @param $value XTimeSpan|null
 	 * @param $platform int
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
 		if (is_null($value)) return null;
-		return $value->Encode();
+		return $value->GetTotalMilliSeconds();
 	}
 
 	/**
-	 * @param $value GenericID|null
+	 * @param $value XTimeSpan|null
 	 * @param $platform int
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
 		if (is_null($value)) return Sql::Null;
-		return self::EncodeAsSqlStringLiteral( $value->Encode() , $platform );
+		return strval($value->GetTotalMilliSeconds());
 	}
 
 	/**
-	 * @param $value GenericID|null
+	 * @param $value XTimeSpan|null
 	 * @param $platform int
 	 * @return string
 	 */
@@ -60,79 +65,106 @@ class NullableGenericID extends OmniType {
 	}
 
 	/**
-	 * @param $value GenericID|null
+	 * @param $value string|null
+	 * @return XTimeSpan|null
+	 */
+	public static function ImportDBValue($value) {
+		if (is_null($value)) return null;
+		return new XTimeSpan(intval($value));
+	}
+
+
+
+
+
+	//
+	//
+	// Interface round-trip
+	//
+	//
+	/** @return string */
+	public static function GetXsdType() { return 'xs:duration'; }
+
+
+
+
+
+
+
+
+	/**
+	 * @param $value XTimeSpan|null
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
 		if (is_null($value)) return Js::Null;
-		return self::EncodeAsJsStringLiteral( $value->Encode() );
+		return strval($value->GetTotalMilliseconds());
 	}
 
 	/**
-	 * @param $value GenericID|null
+	 * @param $value XTimeSpan|null
 	 * @return string
 	 */
 	public static function ExportXmlString($value) {
 		if (is_null($value)) return '';
-		return self::EncodeAsXmlString( $value->Encode() );
+		return $value->AsString();
 	}
 
 	/**
-	 * @param $value GenericID|null
+	 * @param $value XTimeSpan|null
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
 		if (is_null($value)) return '';
-		return self::EncodeAsHtmlString( $value->Encode() );
+		return strval($value->GetTotalMilliseconds());
 	}
 
 	/**
-	 * @param $value GenericID|null
+	 * @param $value XTimeSpan|null
 	 * @return string
 	 */
 	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
-		return self::EncodeAsHtmlString( $value->Encode() );
+		$d = $value->GetDays();
+		$h = $value->GetHours();
+		$m = $value->GetMinutes();
+		$s = $value->GetSeconds();
+		return ($d==0?'':$d.Lemma::Retrieve('d.'))
+				 . ($h==0?'':$h.Lemma::Retrieve('h.'))
+				 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
+				 ;
 	}
 
 	/**
-	 * @param $value GenericID|null
+	 * @param $value XTimeSpan|null
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
 		if (is_null($value)) return '';
-		return self::EncodeAsUrlString( $value->Encode() );
+		return strval($value->GetTotalMilliseconds());
 	}
+
 
 	/**
 	 * @param $value string|null
-	 * @return GenericID|null
-	 */
-	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
-		return GenericID::Decode($value);
-	}
-
-	/**
-	 * @param $value string|null
-	 * @return GenericID|null
+	 * @return XTimeSpan|null
 	 */
 	public static function ImportDomValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
-		return GenericID::Decode($value);
+		return new XTimeSpan(intval($value));
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return GenericID|null
+	 * @return XTimeSpan|null
 	 */
 	public static function ImportHttpValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();
-		return GenericID::Decode($value);
+		return new XTimeSpan(intval($value));
 	}
 }
 
-NullableGenericID::Init();
+NullableTimeSpan::Init();

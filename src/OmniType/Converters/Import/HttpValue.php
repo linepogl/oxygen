@@ -65,6 +65,12 @@ class HttpValue extends ImportConverter {
 		}
 	}
 
+
+
+	public function CastTo(OmniType $type) {
+		return $type->ImportHttpValue($this->value);
+	}
+
 }
 
 

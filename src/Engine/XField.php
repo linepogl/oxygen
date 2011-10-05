@@ -1,22 +1,26 @@
 <?php
 
 class XField {
-	private $metaclass;
-	public function SetMeta(XMeta $value){ $this->metaclass = $value; }
+	/** @var XMeta */
+	private $meta;
 	/** @return XMeta */
-	public function GetMeta(){ return $this->metaclass; }
+	public function GetMeta(){ return $this->meta; }
+	public function SetMeta(XMeta $value){ $this->meta = $value; }
 
 	private $name;
 	public function GetName(){ return $this->name; }
 	public function SetName($value){ $this->name = $value; if (is_null($this->db_alias)) $this->db_alias = $value; if (is_null($this->xml_alias)) $this->xml_alias = $value; }
 
+	/** @var OmniType */
 	private $type;
-	public function __construct($type){ $this->type = $type; }
+	public function __construct(OmniType $type){ $this->type = $type; }
+	/** @return OmniType */
 	public function GetType(){ return $this->type; }
 	public function GetXsdType(){
 		return is_null($this->xml_foreign_field)
-			? XType::ConvertToXsdType($this->type)
-			: XType::ConvertToXsdType($this->xml_foreign_field->type);
+			? $this->type->GetXsdType()
+			: $this->xml_foreign_field->type->GetXsdType()
+			;
 	}
 
 	public function __toString(){
@@ -108,7 +112,7 @@ class XField {
 	public function GetXmlImportPhase(){ return $this->xml_import_phase; }
 
 	public function IsEqualTo(XField $f){
-		return $this->name == $f->GetName() && $this->metaclass->IsEqualTo($f->GetMeta());
+		return $this->name == $f->GetName() && $this->meta->IsEqualTo($f->GetMeta());
 	}
 
 

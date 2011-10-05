@@ -10,20 +10,11 @@ class JustDecimal extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
+	/** @return JustDecimal */ public static function Type(){ return self::$instance; }
+	/** @return float */ public static function GetDefaultValue() { return 0.0; }
 
-	/**
-	 * @return JustDecimal
-	 */
-	public static function Omni(){
-		return self::$instance;
-	}
 
-	/**
-	 * @return float
-	 */
-	public function GetDefaultValue() {
-		return 0.0;
-	}
+
 
 	/**
 	 * @param $address float
@@ -31,7 +22,7 @@ class JustDecimal extends OmniType {
 	 * @throws ValidationException
 	 * @return void
 	 */
-	public function Assign(&$address,$value) {
+	public static function Assign(&$address,$value) {
 		if (is_float($value)) $address = $value;
 		if (is_int($value)) $address = $value; // implicit casting!!!
 		throw new ValidationException();
@@ -40,14 +31,14 @@ class JustDecimal extends OmniType {
 	/**
 	 * @return int
 	 */
-	public function GetPdoType() {
+	public static function GetPdoType() {
 		return PDO::PARAM_STR;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function GetXsdType() {
+	public static function GetXsdType() {
 		return 'xs:decimal';
 	}
 
@@ -56,7 +47,7 @@ class JustDecimal extends OmniType {
 	 * @param $platform int
 	 * @return mixed
 	 */
-	public function ExportPdoValue($value, $platform) {
+	public static function ExportPdoValue($value, $platform) {
 		return $value;
 	}
 
@@ -65,7 +56,7 @@ class JustDecimal extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlLiteral($value, $platform) {
+	public static function ExportSqlLiteral($value, $platform) {
 		return sprintf('%F',$value);
 	}
 
@@ -74,7 +65,7 @@ class JustDecimal extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlIdentifier($value, $platform) {
+	public static function ExportSqlIdentifier($value, $platform) {
 		throw new ConvertionException();
 	}
 
@@ -82,17 +73,17 @@ class JustDecimal extends OmniType {
 	 * @param $value float
 	 * @return string
 	 */
-	public function ExportJsLiteral($value) {
+	public static function ExportJsLiteral($value) {
 		return sprintf('%F',$value);
 	}
 
 	/** @return string */
-	public function GetJsFunctionImportHtmlValue(){
+	public static function GetJsFunctionImportHtmlValue(){
 		echo "function(value){ return decimal.parse(value); }";
 	}
 
 	/** @return string */
-	public function GetJsFunctionExportHtmlString(){
+	public static function GetJsFunctionExportHtmlString(){
 		echo "function(value){ return decimal.parse(value); }";
 	}
 
@@ -100,7 +91,7 @@ class JustDecimal extends OmniType {
 	 * @param $value float
 	 * @return string
 	 */
-	public function ExportXmlString($value) {
+	public static function ExportXmlString($value) {
 		return sprintf('%F',$value);
 	}
 
@@ -108,7 +99,7 @@ class JustDecimal extends OmniType {
 	 * @param $value float
 	 * @return string
 	 */
-	public function ExportHtmlString($value) {
+	public static function ExportHtmlString($value) {
 		return sprintf('%F',$value);
 	}
 
@@ -116,7 +107,7 @@ class JustDecimal extends OmniType {
 	 * @param $value float
 	 * @return string
 	 */
-	public function ExportHumanReadableHtmlString($value) {
+	public static function ExportHumanReadableHtmlString($value) {
 		return Language::FormatDecimal($value);
 	}
 
@@ -124,7 +115,7 @@ class JustDecimal extends OmniType {
 	 * @param $value float
 	 * @return string
 	 */
-	public function ExportUrlString($value) {
+	public static function ExportUrlString($value) {
 		return sprintf('%F',$value);
 	}
 
@@ -132,8 +123,7 @@ class JustDecimal extends OmniType {
 	 * @param $value string|null
 	 * @return float
 	 */
-	public function ImportDBValue($value) {
-		if (is_null($value)) return 0.0;
+	public static function ImportDBValue($value) {
 		return floatval($value);
 	}
 
@@ -141,8 +131,7 @@ class JustDecimal extends OmniType {
 	 * @param $value string|null
 	 * @return float
 	 */
-	public function ImportDOMValue($value) {
-		if (is_null($value)) return 0.0;
+	public static function ImportDomValue($value) {
 		return floatval($value);
 	}
 
@@ -150,8 +139,7 @@ class JustDecimal extends OmniType {
 	 * @param $value string|null|array
 	 * @return float
 	 */
-	public function ImportHttpValue($value) {
-		if (is_null($value)) return 0.0;
+	public static function ImportHttpValue($value) {
 		if (is_array($value)) throw new ConvertionException();
 		return floatval($value);
 	}

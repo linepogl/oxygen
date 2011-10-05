@@ -28,25 +28,27 @@ abstract class ImportConverter {
   /** @return XItem */ public function AsGenericXItem(){ return is_null($this->value) ? null : GenericID::Decode($this->value)->ToXItem(); }
 
 
-  public final function CastTo($type){
-    switch($type){
-      case XType::String: return $this->AsString();
-      case XType::ID: return $this->AsID();
-      case XType::Date: return $this->AsDate();
-      case XType::DateTime: return $this->AsDateTime();
-      case XType::TimeSpan: return $this->AsTimeSpan();
-      case XType::Time: return $this->AsTime();
-      case XType::Lemma: return $this->AsLemma();
+  public abstract function CastTo(OmniType $type);
 
-	    case XType::Integer: return $this->AsInteger();
-      case XType::Boolean: return $this->AsBoolean();
-      case XType::Float: return $this->AsFloat();
-
-      case XType::NullableInteger: return $this->AsNullableInteger();
-      case XType::NullableBoolean: return $this->AsNullableBoolean();
-      case XType::NullableFloat: return $this->AsNullableFloat();
-    }
-  }
+//  public final function CastTo($type){
+//    switch($type){
+//      case XType::String: return $this->AsString();
+//      case XType::ID: return $this->AsID();
+//      case XType::Date: return $this->AsDate();
+//      case XType::DateTime: return $this->AsDateTime();
+//      case XType::TimeSpan: return $this->AsTimeSpan();
+//      case XType::Time: return $this->AsTime();
+//      case XType::Lemma: return $this->AsLemma();
+//
+//	    case XType::Integer: return $this->AsInteger();
+//      case XType::Boolean: return $this->AsBoolean();
+//      case XType::Float: return $this->AsFloat();
+//
+//      case XType::NullableInteger: return $this->AsNullableInteger();
+//      case XType::NullableBoolean: return $this->AsNullableBoolean();
+//      case XType::NullableFloat: return $this->AsNullableFloat();
+//    }
+//  }
 
 }
 

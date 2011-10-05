@@ -241,19 +241,19 @@ class XMeta extends stdClass {
 
 
 
-	/** @return XField */ public static function ID() { return new XField(XType::ID); }
-	/** @return XField */ public static function String() { return new XField(XType::String); }
-	/** @return XField */ public static function Integer() { return new XField(XType::Integer); }
-	/** @return XField */ public static function NullableInteger() { return new XField(XType::NullableInteger); }
-	/** @return XField */ public static function Float() { return new XField(XType::Float); }
-	/** @return XField */ public static function NullableFloat() { return new XField(XType::NullableFloat); }
-	/** @return XField */ public static function Boolean() { return new XField(XType::Boolean); }
-	/** @return XField */ public static function NullableBoolean() { return new XField(XType::NullableBoolean); }
-	/** @return XField */ public static function Date() { return new XField(XType::Date); }
-	/** @return XField */ public static function DateTime() { return new XField(XType::DateTime); }
-	/** @return XField */ public static function Time() { return new XField(XType::Time); }
-	/** @return XField */ public static function TimeSpan() { return new XField(XType::TimeSpan); }
-	/** @return XField */ public static function Lemma() { return new XField(XType::Lemma); }
+	/** @return XField */ public static function ID() { return new XField( NullableID::Type() ); }
+	/** @return XField */ public static function String() { return new XField( NullableString::Type() ); }
+	/** @return XField */ public static function Integer() { return new XField( JustInteger::Type() ); }
+	/** @return XField */ public static function NullableInteger() { return new XField( NullableInteger::Type() ); }
+	/** @return XField */ public static function Float() { return new XField( JustDecimal::Type() ); }
+	/** @return XField */ public static function NullableFloat() { return new XField( NullableDecimal::Type() ); }
+	/** @return XField */ public static function Boolean() { return new XField( JustBoolean::Type() ); }
+	/** @return XField */ public static function NullableBoolean() { return new XField( NullableBoolean::Type() ); }
+	/** @return XField */ public static function Date() { return new XField( NullableDate::Type() ); }
+	/** @return XField */ public static function DateTime() { return new XField( NullableDateTime::Type() ); }
+	/** @return XField */ public static function Time() { return new XField( NullableTime::Type() ); }
+	/** @return XField */ public static function TimeSpan() { return new XField( NullableTimeSpan::Type() ); }
+	/** @return XField */ public static function Lemma() { return new XField( NullableLemma::Type() ); }
 
 	/** @return XSlave */ public static function Slave(XField $hook_meta_field){ return new XSlave($hook_meta_field); }
 }

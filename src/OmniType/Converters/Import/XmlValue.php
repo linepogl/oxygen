@@ -35,4 +35,7 @@ class XmlValue extends ImportConverter {
   public function AsFloat(){ return is_null($this->value) ? 0.0 : floatval($this->value); }
 
 
+	public function CastTo(OmniType $type) {
+		return $type->ImportDomValue($this->value);
+	}
 }

@@ -1,12 +1,12 @@
 <?php
 
-class OmniStringOrNull extends OmniType {
+class NullableString extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 
 	/**
-	 * @return OmniStringOrNull
+	 * @return NullableString
 	 */
 	public static function Type(){
 		return self::$instance;
@@ -15,7 +15,7 @@ class OmniStringOrNull extends OmniType {
 	/**
 	 * @return string|null
 	 */
-	public function GetDefaultValue() {
+	public static function GetDefaultValue() {
 		return null;
 	}
 
@@ -25,7 +25,7 @@ class OmniStringOrNull extends OmniType {
 	 * @throws ValidationException
 	 * @return void
 	 */
-	public function Assign(&$address,$value) {
+	public static function Assign(&$address,$value) {
 		if (!is_null($value) && !is_string($value)) throw new ValidationException();
 		$address = $value;
 	}
@@ -33,14 +33,14 @@ class OmniStringOrNull extends OmniType {
 	/**
 	 * @return int
 	 */
-	public function GetPdoType() {
+	public static function GetPdoType() {
 		return PDO::PARAM_STR;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function GetXsdType() {
+	public static function GetXsdType() {
 		return 'xs:string';
 	}
 
@@ -49,7 +49,7 @@ class OmniStringOrNull extends OmniType {
 	 * @param $platform int
 	 * @return mixed
 	 */
-	public function ExportPdoValue($value, $platform) {
+	public static function ExportPdoValue($value, $platform) {
 		return $value;
 	}
 
@@ -58,9 +58,9 @@ class OmniStringOrNull extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlLiteral($value, $platform) {
+	public static function ExportSqlLiteral($value, $platform) {
 		if (is_null($value)) return Sql::Null;
-		return $this->EncodeAsSqlStringLiteral($value,$platform);
+		return self::EncodeAsSqlStringLiteral($value,$platform);
 	}
 
 	/**
@@ -68,62 +68,62 @@ class OmniStringOrNull extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlIdentifier($value, $platform) {
+	public static function ExportSqlIdentifier($value, $platform) {
 		if (is_null($value)) throw new ConvertionException();
 		if ($value === '') throw new ConvertionException();
-		return $this->EncodeAsSqlIdentifier($value,$platform);
+		return self::EncodeAsSqlIdentifier($value,$platform);
 	}
 
 	/**
 	 * @param $value string|null
 	 * @return string
 	 */
-	public function ExportJsLiteral($value) {
+	public static function ExportJsLiteral($value) {
 		if (is_null($value)) return Js::Null;
-		return $this->EncodeAsJsStringLiteral($value);
+		return self::EncodeAsJsStringLiteral($value);
 	}
 
 	/**
 	 * @param $value string|null
 	 * @return string
 	 */
-	public function ExportXmlString($value) {
+	public static function ExportXmlString($value) {
 		if (is_null($value)) return '';
-		return $this->EncodeAsHtmlString($value);
+		return self::EncodeAsHtmlString($value);
 	}
 
 	/**
 	 * @param $value string|null
 	 * @return string
 	 */
-	public function ExportHtmlString($value) {
+	public static function ExportHtmlString($value) {
 		if (is_null($value)) return '';
-		return $this->EncodeAsHtmlString($value);
+		return self::EncodeAsHtmlString($value);
 	}
 
 	/**
 	 * @param $value string|null
 	 * @return string
 	 */
-	public function ExportHumanReadableHtmlString($value) {
+	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
-		return $this->EncodeAsHtmlString($value);
+		return self::EncodeAsHtmlString($value);
 	}
 
 	/**
 	 * @param $value string|null
 	 * @return string
 	 */
-	public function ExportUrlString($value) {
+	public static function ExportUrlString($value) {
 		if (is_null($value)) return '';
-		return $this->EncodeAsUrlString($value);
+		return self::EncodeAsUrlString($value);
 	}
 
 	/**
 	 * @param $value string|null
 	 * @return string|null
 	 */
-	public function ImportDBValue($value) {
+	public static function ImportDBValue($value) {
 		return $value;
 	}
 
@@ -131,20 +131,20 @@ class OmniStringOrNull extends OmniType {
 	 * @param $value string|null
 	 * @return string|null
 	 */
-	public function ImportDOMValue($value) {
+	public static function ImportDomValue($value) {
 		if (is_null($value)) return null;
-		return $this->DecodeXmlString($value);
+		return self::DecodeXmlString($value);
 	}
 
 	/**
 	 * @param $value string|null|array
 	 * @return string|null
 	 */
-	public function ImportHttpValue($value) {
+	public static function ImportHttpValue($value) {
 		if (is_null($value)) return null;
-		if (is_array($value)) return $this->DecodeHtmlString($this->DecodeUrlString( implode(',',$value) ) );
-		return $this->DecodeHtmlString( $this->DecodeUrlString( $value ) );
+		if (is_array($value)) return self::DecodeHtmlString(self::DecodeUrlString( implode(',',$value) ) );
+		return self::DecodeHtmlString( self::DecodeUrlString( $value ) );
 	}
 }
 
-OmniStringOrNull::Init();
+NullableString::Init();

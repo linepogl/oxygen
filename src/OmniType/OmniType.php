@@ -83,33 +83,7 @@ abstract class OmniType implements _OmniType {
 		throw new ConvertionException();
 	}
 
-	/**
-	 * @param $datetime XDateTime
-	 * @param $platform int
-	 * @return string
-	 */
-	protected static function EncodeAsPdoDateTimeValue($datetime,$platform){
-		switch ($platform) {
-			default:
-			case Database::MYSQL:   return $datetime->Format('Y-m-d H:i:s');
-			case Database::ORACLE:  return $datetime->Format('Y-m-d H:i:s');
-		}
-		throw new ConvertionException();
-	}
 
-	/**
-	 * @param $datetime XDateTime
-	 * @param $platform int
-	 * @return string
-	 */
-	protected static function EncodeAsSqlDateTimeLiteral($datetime,$platform){
-		switch ($platform) {
-			default:
-			case Database::MYSQL:   return '\''.$datetime->Format('Y-m-d H:i:s').'\'';
-			case Database::ORACLE:  return '\''.$datetime->Format('Y-m-d H:i:s').'\'';
-		}
-		throw new ConvertionException();
-	}
 
 	/**
 	 * @param $string string
@@ -132,14 +106,6 @@ abstract class OmniType implements _OmniType {
 	 */
 	protected static function EncodeAsJsStringLiteral($string){
 		return '\''.str_replace(array('\\','\'',"\n"),array('\\\\','\\\'','\\n'),$string).'\'';
-	}
-
-	/**
-	 * @param $datetime XDateTime
-	 * @return string
-	 */
-	protected static function EncodeAsJsDateTimeLiteral($datetime){
-		return 'new Date('.$datetime->GetYear().','.($datetime->GetMonth()-1).','.$datetime->GetDay().','.$datetime->GetHours().','.$datetime->GetMinutes().','.$datetime->GetSeconds().')';
 	}
 
 

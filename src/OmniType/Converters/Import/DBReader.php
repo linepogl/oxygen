@@ -31,10 +31,10 @@ class DBReader implements ArrayAccess {
 
 	public function offsetExists($offset) {
 		try {
-		return array_key_exists($offset,$this->record);
+			return array_key_exists($offset,$this->record);
 		}
 		catch (Exception $ex){
-			if (is_null($this->record)) throw new Exception('DBReader is not initialised');  // remarked out for speed
+			if (is_null($this->record)) throw new Exception('DBReader is not initialised');
 		}
 	}
 	/** @return DBValue */

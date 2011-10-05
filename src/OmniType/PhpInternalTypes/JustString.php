@@ -4,20 +4,12 @@ class JustString extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
+	/** @return JustString */ public static function Type(){ return self::$instance; }
+	/** @return string */ public static function GetDefaultValue() { return ''; }
 
-	/**
-	 * @return OmniString
-	 */
-	public static function Type(){
-		return self::$instance;
-	}
 
-	/**
-	 * @return string
-	 */
-	public static function GetDefaultValue() {
-		return '';
-	}
+
+
 
 	/**
 	 * @param $address string
@@ -125,7 +117,7 @@ class JustString extends OmniType {
 	 * @param $value string|null
 	 * @return string
 	 */
-	public static function ImportDOMValue($value) {
+	public static function ImportDomValue($value) {
 		if (is_null($value)) return '';
 		return self::DecodeXmlString($value);
 	}
@@ -141,4 +133,4 @@ class JustString extends OmniType {
 	}
 }
 
-OmniString::Init();
+JustString::Init();

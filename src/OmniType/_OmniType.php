@@ -107,7 +107,7 @@ interface _OmniType {
 	 * @param $value string|null
 	 * @return mixed <T>
 	 */
-	public static function ImportDOMValue($value);
+	public static function ImportDomValue($value);
 
 
 	/**
