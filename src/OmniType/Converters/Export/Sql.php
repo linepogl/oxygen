@@ -102,6 +102,8 @@ class Sql extends ExportConverter {
 		return self::GetPDOValueStatic($this->value);
 	}
 
+	const Null = 'NULL';
+
 
 
 	const ID = 'INT';

@@ -31,9 +31,9 @@ class XType {
 		  case XType::Time: return 'xs:time';
 		  case XType::TimeSpan: return 'xs:duration';
 		  case XType::Lemma: return 'xs:string';
-			case XType::Integer: return 'xs:integer';
+			case XType::Integer: return 'xs:integer';//
 			case XType::Boolean: return 'xs:boolean';
-		  case XType::Float: return 'xs:decimal';
+		  case XType::Float: return 'xs:decimal';//
 			case XType::NullableInteger: return 'xs:integer';
 			case XType::NullableBoolean: return 'xs:boolean';
 		  case XType::NullableFloat: return 'xs:decimal';
@@ -114,14 +114,8 @@ class XType {
 		}
 		elseif ($x1 instanceof XTimeSpan){
 			if (is_null($x2)) return 1;
-//			if ($x2 instanceof DateInterval) $x2 = new XTimeSpan($x2);
 			if ($x2 instanceof XTimeSpan) return $x1->AsInt() - $x2->AsInt();
 		}
-//		elseif ($x1 instanceof DateInterval){
-//			if (is_null($x2)) return 1;
-//			if ($x2 instanceof DateInterval) $x2 = new XTimeSpan($x2);
-//			if ($x2 instanceof XTimeSpan) { $x1 = new XTimeSpan($x1); return $x1->AsInt() - $x2->AsInt(); }
-//		}
 		elseif ($x1 instanceof Lemma){
 			if (is_null($x2)) return 1;
 			if (is_string($x2)) return strcmp(strval($x1),$x2);

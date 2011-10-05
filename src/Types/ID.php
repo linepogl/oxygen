@@ -1,9 +1,10 @@
 <?php
 
-class ID implements Serializable {
+class ID implements Serializable, OmniValue {
 	protected $value;
 	private $hex = null;
 
+	public function OmniType(){ return OmniID::Type(); }
 	public function serialize(){ return serialize($this->value); }
 	public function unserialize($data){ $this->value = unserialize($data); $this->hex = null; }
 

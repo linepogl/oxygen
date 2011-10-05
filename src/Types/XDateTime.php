@@ -10,8 +10,8 @@ class XDateTime implements Serializable {
 		$this->timestamp = is_null($timestamp) ? time() : $timestamp;
 	}
 
-	public function serialize(){ return serialize(array('timestamp'=>$this->timestamp)); }
-	public function unserialize($data){ $a = unserialize($data); $this->timestamp=$a['timestamp']; }
+	public function serialize(){ return serialize($this->timestamp); }
+	public function unserialize($data){ $this->timestamp = unserialize($data); }
 
 	public static function Now(){ return new XDateTime(); }
 

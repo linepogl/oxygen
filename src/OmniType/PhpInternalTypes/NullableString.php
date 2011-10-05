@@ -1,6 +1,16 @@
 <?php
 
-class NullableString extends OmniType {
+class OmniStringOrNull extends OmniType {
+
+	private static $instance;
+	public static function Init(){ self::$instance = new self(); }
+
+	/**
+	 * @return OmniStringOrNull
+	 */
+	public static function Type(){
+		return self::$instance;
+	}
 
 	/**
 	 * @return string|null
@@ -28,6 +38,13 @@ class NullableString extends OmniType {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function GetXsdType() {
+		return 'xs:string';
+	}
+
+	/**
 	 * @param $value string|null
 	 * @param $platform int
 	 * @return mixed
@@ -42,8 +59,8 @@ class NullableString extends OmniType {
 	 * @return string
 	 */
 	public function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return $this->GetSqlNullLiteral();
-		return $this->GetSqlStringLiteral($value,$platform);
+		if (is_null($value)) return Sql::Null;
+		return $this->EncodeAsSqlStringLiteral($value,$platform);
 	}
 
 	/**
@@ -54,7 +71,7 @@ class NullableString extends OmniType {
 	public function ExportSqlIdentifier($value, $platform) {
 		if (is_null($value)) throw new ConvertionException();
 		if ($value === '') throw new ConvertionException();
-		return $this->GetSqlIdentifier($value,$platform);
+		return $this->EncodeAsSqlIdentifier($value,$platform);
 	}
 
 	/**
@@ -62,8 +79,8 @@ class NullableString extends OmniType {
 	 * @return string
 	 */
 	public function ExportJsLiteral($value) {
-		if (is_null($value)) return $this->GetJsNullLiteral();
-		return $this->GetJsStringLiteral($value);
+		if (is_null($value)) return Js::Null;
+		return $this->EncodeAsJsStringLiteral($value);
 	}
 
 	/**
@@ -72,7 +89,7 @@ class NullableString extends OmniType {
 	 */
 	public function ExportXmlString($value) {
 		if (is_null($value)) return '';
-		return $this->EncodeToHtmlString($value);
+		return $this->EncodeAsHtmlString($value);
 	}
 
 	/**
@@ -81,7 +98,7 @@ class NullableString extends OmniType {
 	 */
 	public function ExportHtmlString($value) {
 		if (is_null($value)) return '';
-		return $this->EncodeToHtmlString($value);
+		return $this->EncodeAsHtmlString($value);
 	}
 
 	/**
@@ -90,7 +107,7 @@ class NullableString extends OmniType {
 	 */
 	public function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
-		return $this->EncodeToHtmlString($value);
+		return $this->EncodeAsHtmlString($value);
 	}
 
 	/**
@@ -99,7 +116,7 @@ class NullableString extends OmniType {
 	 */
 	public function ExportUrlString($value) {
 		if (is_null($value)) return '';
-		return $this->EncodeToUrlString($value);
+		return $this->EncodeAsUrlString($value);
 	}
 
 	/**
@@ -116,7 +133,7 @@ class NullableString extends OmniType {
 	 */
 	public function ImportDOMValue($value) {
 		if (is_null($value)) return null;
-		return $this->DecodeFromXmlString($value);
+		return $this->DecodeXmlString($value);
 	}
 
 	/**
@@ -125,7 +142,9 @@ class NullableString extends OmniType {
 	 */
 	public function ImportHttpValue($value) {
 		if (is_null($value)) return null;
-		if (is_array($value)) return $this->DecodeFromHtmlString($this->DecodeFromUrlString( implode(',',$value) ) );
-		return $this->DecodeFromHtmlString( $this->DecodeFromUrlString( $value ) );
+		if (is_array($value)) return $this->DecodeHtmlString($this->DecodeUrlString( implode(',',$value) ) );
+		return $this->DecodeHtmlString( $this->DecodeUrlString( $value ) );
 	}
 }
+
+OmniStringOrNull::Init();

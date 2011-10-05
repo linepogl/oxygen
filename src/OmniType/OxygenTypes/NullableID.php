@@ -1,23 +1,34 @@
 <?php
 
-class NullableInteger extends OmniType {
+class NullableID extends OmniType {
+
+	private static $instance;
+	public static function Init(){ self::$instance = new self(); }
 
 	/**
-	 * @return int|null
+	 * @return OmniType
+	 */
+	public static function Type() {
+		return self::$instance;
+	}
+
+	/**
+	 * @return ID|null
 	 */
 	public function GetDefaultValue() {
 		return null;
 	}
 
 	/**
-	 * @param $address int|null
+	 * @param $address ID|null
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public function Assign(&$address,$value) {
-		if (!is_null($value) && !is_int($value)) throw new ValidationException();
-		$address = $value;
+		if (is_null($value)) $address = $value;
+		if ($value instanceof ID) $address = $value;
+		throw new ValidationException();
 	}
 
 	/**
@@ -28,26 +39,34 @@ class NullableInteger extends OmniType {
 	}
 
 	/**
-	 * @param $value int|null
+	 * @return string
+	 */
+	public static function GetXsdType() {
+		return 'xs:string';
+	}
+
+	/**
+	 * @param $value ID|null
 	 * @param $platform int
 	 * @return mixed
 	 */
 	public function ExportPdoValue($value, $platform) {
-		return $value;
+		if (is_null($value)) return null;
+		return $value->AsInt();
 	}
 
 	/**
-	 * @param $value int|null
+	 * @param $value ID|null
 	 * @param $platform int
 	 * @return string
 	 */
 	public function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return $this->GetSqlNullLiteral();
-		return sprintf('%d',$value);
+		if (is_null($value)) return Sql::Null;
+		return strval($value->AsInt());
 	}
 
 	/**
-	 * @param $value int|null
+	 * @param $value ID|null
 	 * @param $platform int
 	 * @return string
 	 */
@@ -56,76 +75,78 @@ class NullableInteger extends OmniType {
 	}
 
 	/**
-	 * @param $value int|null
+	 * @param $value ID|null
 	 * @return string
 	 */
 	public function ExportJsLiteral($value) {
-		if (is_null($value)) return $this->GetJsNullLiteral();
-		return sprintf('%d',$value);
+		if (is_null($value)) return Js::Null;
+		return '\''.$value->AsHex().'\'';
 	}
 
 	/**
-	 * @param $value int|null
+	 * @param $value ID|null
 	 * @return string
 	 */
 	public function ExportXmlString($value) {
 		if (is_null($value)) return '';
-		return sprintf('%d',$value);
+		return $value->AsHex();
 	}
 
 	/**
-	 * @param $value int|null
+	 * @param $value ID|null
 	 * @return string
 	 */
 	public function ExportHtmlString($value) {
 		if (is_null($value)) return '';
-		return sprintf('%d',$value);
+		return $value->AsHex();
 	}
 
 	/**
-	 * @param $value int|null
+	 * @param $value ID|null
 	 * @return string
 	 */
 	public function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
-		return sprintf('%d',$value);
+		return $value->AsHex();
 	}
 
 	/**
-	 * @param $value int|null
+	 * @param $value ID|null
 	 * @return string
 	 */
 	public function ExportUrlString($value) {
 		if (is_null($value)) return '';
-		return sprintf('%d',$value);
+		return $value->AsHex();
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return int|null
+	 * @return ID|null
 	 */
 	public function ImportDBValue($value) {
 		if (is_null($value)) return null;
-		return intval($value);
+		return new ID(intval($value));
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return int|null
+	 * @return ID|null
 	 */
 	public function ImportDOMValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
-		return intval($value);
+		return new ID($value);
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return int|null
+	 * @return ID|null
 	 */
 	public function ImportHttpValue($value) {
 		if (is_null($value)) return null;
 		if (is_array($value)) throw new ConvertionException();
-		return intval($value);
+		return new ID($value);
 	}
 }
+
+NullableID::Init();

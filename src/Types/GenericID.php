@@ -2,6 +2,8 @@
 
 class GenericID extends ID {
 	private $classname;
+
+	public function GetOmniType(){ return JustGenericID::GetOmniType(); }
 	public function serialize(){ return serialize(array('classname'=>$this->classname,'value'=>$this->value)); }
 	public function unserialize($data){ $a = unserialize($data); $this->classname=$a['classname']; $this->value=$a['value']; }
 

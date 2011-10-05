@@ -7,8 +7,10 @@ else {
 	define('DEBUG',false);
 	define('PROFILE',false);
 }
-
 if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }
+require('oxy/src/OmniType/_OmniType.php');
+require('oxy/src/OmniType/OmniType.php');
+require('oxy/src/OmniType/OmniValue.php');
 require('oxy/src/Types/ID.php');
 require('oxy/src/Oxygen.php');
 require('oxy/src/Utils/Scope.php');

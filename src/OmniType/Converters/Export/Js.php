@@ -70,8 +70,6 @@ final class Js extends ExportConverter {
 		}
 
 
-//    if ($this->value instanceof DateInterval)
-//    	$this->value = new XTimeSpan($this->value);
 		if ( $this->value instanceof XTimeSpan ) {
 			$r = strval($this->value->GetTotalMilliseconds());
 			return $r;
@@ -83,6 +81,8 @@ final class Js extends ExportConverter {
 		return $r;
 	}
 
+
+	const Null = 'null';
 
 	const BEGIN = "<script type=\"text/javascript\">\n//<![CDATA[\n";
 	const END = "\n//]]>\n</script>";

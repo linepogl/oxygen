@@ -8,6 +8,16 @@
 
 class JustDecimal extends OmniType {
 
+	private static $instance;
+	public static function Init(){ self::$instance = new self(); }
+
+	/**
+	 * @return JustDecimal
+	 */
+	public static function Omni(){
+		return self::$instance;
+	}
+
 	/**
 	 * @return float
 	 */
@@ -32,6 +42,13 @@ class JustDecimal extends OmniType {
 	 */
 	public function GetPdoType() {
 		return PDO::PARAM_STR;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function GetXsdType() {
+		return 'xs:decimal';
 	}
 
 	/**
@@ -140,3 +157,5 @@ class JustDecimal extends OmniType {
 	}
 
 }
+
+JustDecimal::Init();

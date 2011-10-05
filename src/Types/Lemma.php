@@ -54,19 +54,18 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable{
 	 */
 	public function __construct(){
 		$a = func_get_args();
-		$z = func_num_args();
-		if ($z==1) {
-			if (is_array($a[0])) { $a = $a[0]; $z = count($a); }
-			elseif (is_string($a[0])) {
-				$a = explode(self::DELIMETER,$a[0]);
-				$z = count($a);
-				for ($i = $z%2; $i < $z; $i+=2) $a[$i+1] = self::unescape($a[$i+1]);
-			}
+		$z = count($a);
+		if ($z==1 && is_array($a[0])) {
+			$a = $a[0];
+			$z = count($a);
 		}
 		$this->name = $z%2 == 0 ? self::DEFAULT_NAME : $a[0];
 		for ($i = $z%2; $i < $z; $i+=2) $this->data[$a[$i]] = $a[$i+1];
 	}
 
+	/**
+	 * @return string
+	 */
 	public function Encode(){
 		$r = '';
 		if ($this->name != self::DEFAULT_NAME) $r .= $this->name;
@@ -75,6 +74,17 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable{
 			$r.=$lang.self::DELIMETER.self::escape($value);
 		}
 		return $r;
+	}
+
+	/**
+	 * @param $string string
+	 * @return Lemma
+	 */
+	public static function Decode($string){
+		$a = explode(self::DELIMETER,$string);
+		$z = count($a);
+		for ($i = $z%2; $i < $z; $i+=2) $a[$i+1] = self::unescape($a[$i+1]);
+		return new static($a);
 	}
 
 

@@ -2,6 +2,17 @@
 
 class JustBoolean extends OmniType {
 
+	private static $instance;
+	public static function Init(){ self::$instance = new self(); }
+
+	/**
+	 * @return OmniBoolean
+	 */
+	public static function Type(){
+		return self::$instance;
+	}
+
+
 	/**
 	 * @return boolean
 	 */
@@ -15,7 +26,7 @@ class JustBoolean extends OmniType {
 	 * @throws ValidationException
 	 * @return void
 	 */
-	public function Assign(&$address,$value) {
+	public static function Assign(&$address,$value) {
 		if (is_bool($value)) $address = $value;
 		throw new ValidationException();
 	}
@@ -23,8 +34,15 @@ class JustBoolean extends OmniType {
 	/**
 	 * @return int
 	 */
-	public function GetPdoType() {
+	public static function GetPdoType() {
 		return PDO::PARAM_BOOL;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function GetXsdType(){
+		return 'xs:boolean';
 	}
 
 	/**
@@ -32,8 +50,9 @@ class JustBoolean extends OmniType {
 	 * @param $platform int
 	 * @return mixed
 	 */
-	public function ExportPdoValue($value, $platform) {
-		return $value;
+	public static function ExportPdoValue($value, $platform) {
+		if ($value) return 1;
+		return 0;
 	}
 
 	/**
@@ -41,7 +60,7 @@ class JustBoolean extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlLiteral($value, $platform) {
+	public static function ExportSqlLiteral($value, $platform) {
 		if ($value) return '1';
 		return '0';
 	}
@@ -51,7 +70,7 @@ class JustBoolean extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlIdentifier($value, $platform) {
+	public static function ExportSqlIdentifier($value, $platform) {
 		throw new ConvertionException();
 	}
 
@@ -59,7 +78,7 @@ class JustBoolean extends OmniType {
 	 * @param $value boolean
 	 * @return string
 	 */
-	public function ExportJsLiteral($value) {
+	public static function ExportJsLiteral($value) {
 		if ($value) return 'true';
 		return 'false';
 	}
@@ -68,7 +87,7 @@ class JustBoolean extends OmniType {
 	 * @param $value boolean
 	 * @return string
 	 */
-	public function ExportXmlString($value) {
+	public static function ExportXmlString($value) {
 		if ($value) return 'true';
 		return 'false';
 	}
@@ -77,7 +96,7 @@ class JustBoolean extends OmniType {
 	 * @param $value boolean
 	 * @return string
 	 */
-	public function ExportHtmlString($value) {
+	public static function ExportHtmlString($value) {
 		if ($value) return 'true';
 		return 'false';
 	}
@@ -86,7 +105,7 @@ class JustBoolean extends OmniType {
 	 * @param $value boolean
 	 * @return string
 	 */
-	public function ExportHumanReadableHtmlString($value) {
+	public static function ExportHumanReadableHtmlString($value) {
 		if ($value) return (string)Lemma::Retrieve('Yes');
 		return (string)Lemma::Retrieve('No');
 	}
@@ -95,7 +114,7 @@ class JustBoolean extends OmniType {
 	 * @param $value boolean
 	 * @return string
 	 */
-	public function ExportUrlString($value) {
+	public static function ExportUrlString($value) {
 		if ($value) return 'true';
 		return 'false';
 	}
@@ -104,7 +123,7 @@ class JustBoolean extends OmniType {
 	 * @param $value string|null
 	 * @return boolean
 	 */
-	public function ImportDBValue($value) {
+	public static function ImportDBValue($value) {
 		if (is_null($value)) return false;
 		if ($value === '1') return true; /// TODO: this needs testing
 		return false;
@@ -114,7 +133,7 @@ class JustBoolean extends OmniType {
 	 * @param $value string|null
 	 * @return boolean
 	 */
-	public function ImportDOMValue($value) {
+	public static function ImportDOMValue($value) {
 		if (is_null($value)) return false;
 		if ($value === 'true') return true;
 		return false;
@@ -124,10 +143,15 @@ class JustBoolean extends OmniType {
 	 * @param $value string|null|array
 	 * @return boolean
 	 */
-	public function ImportHttpValue($value) {
+	public static function ImportHttpValue($value) {
 		if (is_null($value)) return false;
 		if (is_array($value)) throw new ConvertionException();
 		if ($value === 'true') return true;
 		return false;
 	}
 }
+
+OmniBoolean::Init();
+
+
+

@@ -1,7 +1,7 @@
 <?php
 
 
-class XTimeSpan {
+class XTimeSpan implements Serializable {
 	private $value;
 
 	public static function Make($days,$hours,$minutes,$seconds=0,$milliseconds=0,$sign=1){
@@ -11,6 +11,9 @@ class XTimeSpan {
 		$this->value = $total_milliseconds;
 	}
 
+	public function serialize(){ return serialize($this->value); }
+	public function unserialize($data){ $this->value = unserialize($data); }
+	
 	const MILLISECONDS_IN_DAY = 86400000;
 	const MILLISECONDS_IN_HOUR = 3600000;
 	const MILLISECONDS_IN_MINUTE = 60000;
@@ -70,5 +73,7 @@ class XTimeSpan {
 	public function AsInt(){
 		return $this->value;
 	}
+
+
 }
 

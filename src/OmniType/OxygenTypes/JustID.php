@@ -2,10 +2,20 @@
 
 class JustID extends OmniType {
 
+	private static $instance;
+	public static function Init(){ self::$instance = new self(); }
+
+	/**
+	 * @return OmniType
+	 */
+	public static function Type() {
+		return self::$instance;
+	}
+
 	/**
 	 * @return ID
 	 */
-	public function GetDefaultValue() {
+	public static function GetDefaultValue() {
 		return new ID(0);
 	}
 
@@ -15,16 +25,23 @@ class JustID extends OmniType {
 	 * @throws ValidationException
 	 * @return void
 	 */
-	public function Assign(&$address,$value) {
-		if (!($value instanceof ID)) throw new ValidationException();
-		$address = $value;
+	public static function Assign(&$address,$value) {
+		if ($value instanceof ID) { $address = $value; return; }
+		throw new ValidationException();
 	}
 
 	/**
 	 * @return int
 	 */
-	public function GetPdoType() {
+	public static function GetPdoType() {
 		return PDO::PARAM_INT;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function GetXsdType() {
+		return 'xs:string';
 	}
 
 	/**
@@ -32,7 +49,7 @@ class JustID extends OmniType {
 	 * @param $platform int
 	 * @return mixed
 	 */
-	public function ExportPdoValue($value, $platform) {
+	public static function ExportPdoValue($value, $platform) {
 		return $value->AsInt();
 	}
 
@@ -41,7 +58,7 @@ class JustID extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlLiteral($value, $platform) {
+	public static function ExportSqlLiteral($value, $platform) {
 		return strval($value->AsInt());
 	}
 
@@ -50,7 +67,7 @@ class JustID extends OmniType {
 	 * @param $platform int
 	 * @return string
 	 */
-	public function ExportSqlIdentifier($value, $platform) {
+	public static function ExportSqlIdentifier($value, $platform) {
 		throw new ConvertionException();
 	}
 
@@ -58,7 +75,7 @@ class JustID extends OmniType {
 	 * @param $value ID
 	 * @return string
 	 */
-	public function ExportJsLiteral($value) {
+	public static function ExportJsLiteral($value) {
 		return '\''.$value->AsHex().'\'';
 	}
 
@@ -66,7 +83,7 @@ class JustID extends OmniType {
 	 * @param $value ID
 	 * @return string
 	 */
-	public function ExportXmlString($value) {
+	public static function ExportXmlString($value) {
 		return $value->AsHex();
 	}
 
@@ -74,7 +91,7 @@ class JustID extends OmniType {
 	 * @param $value ID
 	 * @return string
 	 */
-	public function ExportHtmlString($value) {
+	public static function ExportHtmlString($value) {
 		return $value->AsHex();
 	}
 
@@ -82,7 +99,7 @@ class JustID extends OmniType {
 	 * @param $value ID
 	 * @return string
 	 */
-	public function ExportHumanReadableHtmlString($value) {
+	public static function ExportHumanReadableHtmlString($value) {
 		return $value->AsHex();
 	}
 
@@ -90,7 +107,7 @@ class JustID extends OmniType {
 	 * @param $value ID
 	 * @return string
 	 */
-	public function ExportUrlString($value) {
+	public static function ExportUrlString($value) {
 		return $value->AsHex();
 	}
 
@@ -98,8 +115,8 @@ class JustID extends OmniType {
 	 * @param $value string|null
 	 * @return ID
 	 */
-	public function ImportDBValue($value) {
-		if (is_null($value)) return new ID(0);
+	public static function ImportDBValue($value) {
+		if (is_null($value)) return self::GetDefaultValue();
 		return new ID(intval($value));
 	}
 
@@ -107,8 +124,8 @@ class JustID extends OmniType {
 	 * @param $value string|null
 	 * @return ID
 	 */
-	public function ImportDOMValue($value) {
-		if (is_null($value)) return new ID(0);
+	public static function ImportDOMValue($value) {
+		if (is_null($value)) return self::GetDefaultValue();
 		return new ID($value);
 	}
 
@@ -116,9 +133,12 @@ class JustID extends OmniType {
 	 * @param $value string|null|array
 	 * @return ID
 	 */
-	public function ImportHttpValue($value) {
-		if (is_null($value)) return new ID(0);
+	public static function ImportHttpValue($value) {
+		if (is_null($value)) return self::GetDefaultValue();
 		if (is_array($value)) throw new ConvertionException();
 		return new ID($value);
 	}
 }
+
+
+JustID::Init();
