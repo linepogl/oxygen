@@ -39,7 +39,7 @@ interface _OmniType {
 
 	/**
 	 * @param $value mixed <T>
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value,$platform);
@@ -47,7 +47,7 @@ interface _OmniType {
 
 	/**
 	 * @param $value mixed <T>
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value,$platform);
@@ -55,7 +55,7 @@ interface _OmniType {
 
 	/**
 	 * @param $value mixed <T>
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value,$platform);

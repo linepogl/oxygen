@@ -1,33 +1,31 @@
 <?php
 
-class NullableID extends OmniType {
+class JustStringable extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
-	/** @return NullableID */ public static function Type() { return self::$instance; }
-	/** @return ID|null */ public static function GetDefaultValue() { return null; }
+	/** @return JustStringable */ public static function Type() { return self::$instance; }
+	/** @return mixed */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 
 
 
 	
 	/**
-	 * @param $address ID|null
+	 * @param $address mixed
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (is_null($value)) $address = $value;
-		if ($value instanceof ID) $address = $value;
-		throw new ValidationException();
+		$address = $value;
 	}
 
 	/**
 	 * @return int
 	 */
 	public static function GetPdoType() {
-		return PDO::PARAM_INT;
+		throw new ConvertionException();
 	}
 
 	/**
@@ -38,108 +36,95 @@ class NullableID extends OmniType {
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value mixed
 	 * @param $platform int|null
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		if (is_null($value)) return null;
-		return $value->AsInt();
-	}
-
-	/**
-	 * @param $value ID|null
-	 * @param $platform int|null
-	 * @return string
-	 */
-	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
-		return strval($value->AsInt());
-	}
-
-	/**
-	 * @param $value ID|null
-	 * @param $platform int|null
-	 * @return string
-	 */
-	public static function ExportSqlIdentifier($value, $platform) {
 		throw new ConvertionException();
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value mixed
+	 * @param $platform int|null
+	 * @return string
+	 */
+	public static function ExportSqlLiteral($value, $platform) {
+		return JustString::ExportSqlLiteral(strval($value),$platform);
+	}
+
+	/**
+	 * @param $value mixed
+	 * @param $platform int|null
+	 * @return string
+	 */
+	public static function ExportSqlIdentifier($value, $platform) {
+		return JustString::ExportSqlIdentifier(strval($value),$platform);
+	}
+
+	/**
+	 * @param $value mixed
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
-		return '\''.$value->AsHex().'\'';
+		return JustString::ExportJsLiteral(strval($value));
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value mixed
 	 * @return string
 	 */
 	public static function ExportXmlString($value) {
-		if (is_null($value)) return '';
-		return $value->AsHex();
+		return JustString::ExportXmlString(strval($value));
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value mixed
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		return $value->AsHex();
+		return JustString::ExportHtmlString(strval($value));
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value mixed
 	 * @return string
 	 */
 	public static function ExportHumanReadableHtmlString($value) {
-		if (is_null($value)) return '';
-		return $value->AsHex();
+		return JustString::ExportHumanReadableHtmlString(strval($value));
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value mixed
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
-		return $value->AsHex();
+		return JustString::ExportUrlString(strval($value));
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return ID|null
+	 * @return Traversable
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
-		return new ID(intval($value));
+		throw new ConvertionException();
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return ID|null
+	 * @return Traversable
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
-		if ($value === '') return null;
-		return new ID($value);
+		throw new ConvertionException();
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return ID|null
+	 * @return Traversable
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
-		if ($value === '') return null;
-		if (is_array($value)) throw new ConvertionException();
-		return new ID($value);
+		throw new ConvertionException();
 	}
 }
 
-NullableID::Init();
+JustStringable::Init();

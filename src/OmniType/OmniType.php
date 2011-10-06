@@ -19,7 +19,9 @@ abstract class OmniType implements _OmniType {
 		if (is_int($value)) return JustInteger::Type();
 		if (is_float($value)) return JustDecimal::Type();
 		if (is_bool($value)) return JustBoolean::Type();
-		throw new ConvertionException();
+		if (is_array($value)) return JustArray::Type();
+		if ($value instanceof Traversable) return JustTraversable::Type();
+		return JustStringable::Type();
 	}
 
 
@@ -71,7 +73,7 @@ abstract class OmniType implements _OmniType {
 
 	/**
 	 * @param $string string
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	protected static function EncodeAsSqlStringLiteral($string,$platform){
@@ -87,7 +89,7 @@ abstract class OmniType implements _OmniType {
 
 	/**
 	 * @param $string string
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	protected static function EncodeAsSqlIdentifier($string,$platform){

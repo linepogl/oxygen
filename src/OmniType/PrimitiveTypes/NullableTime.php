@@ -35,7 +35,7 @@ class NullableTime extends OmniType {
 
 	/**
 	 * @param $value XTime|null
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
@@ -50,7 +50,7 @@ class NullableTime extends OmniType {
 
 	/**
 	 * @param $value XTime|null
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
@@ -65,7 +65,7 @@ class NullableTime extends OmniType {
 
 	/**
 	 * @param $value XTime|null
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value, $platform) {

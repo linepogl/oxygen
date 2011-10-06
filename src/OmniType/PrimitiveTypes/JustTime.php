@@ -34,7 +34,7 @@ class JustTime extends OmniType {
 
 	/**
 	 * @param $value XTime
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
@@ -48,7 +48,7 @@ class JustTime extends OmniType {
 
 	/**
 	 * @param $value XTime
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
@@ -62,7 +62,7 @@ class JustTime extends OmniType {
 
 	/**
 	 * @param $value XTime
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value, $platform) {

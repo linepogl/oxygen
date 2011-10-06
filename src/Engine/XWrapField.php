@@ -1,6 +1,6 @@
 <?php
 
-class XWrapField {
+class XWrapField implements OmniValue {
 
 	/** @var XWrap */
 	private $wrap;
@@ -12,6 +12,8 @@ class XWrapField {
 		$this->wrap = $wrap;
 		$this->field = $field;
 	}
+
+	public function OmniType(){ return JustWrapField::Type(); }
 
 	/** @return XWrap */
 	public function GetWrap(){ return $this->wrap; }

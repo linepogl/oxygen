@@ -1,6 +1,6 @@
 <?php
 
-abstract class Action {
+abstract class Action implements OmniValue {
 	//protected $name = null;
 	public function __construct(){
 		$this->mode = $this->GetDefaultMode();
@@ -14,6 +14,7 @@ abstract class Action {
 
 
 
+	public function OmniType(){ return JustAction::Type(); }
 
 
 

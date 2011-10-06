@@ -39,7 +39,7 @@ class JustNull extends OmniType {
 
 	/**
 	 * @param $value null
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return null
 	 */
 	public static function ExportPdoValue($value, $platform) {
@@ -48,7 +48,7 @@ class JustNull extends OmniType {
 
 	/**
 	 * @param $value null
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
@@ -57,7 +57,7 @@ class JustNull extends OmniType {
 
 	/**
 	 * @param $value null
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value, $platform) {

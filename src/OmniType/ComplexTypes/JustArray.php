@@ -1,25 +1,24 @@
 <?php
 
-class NullableID extends OmniType {
+class JustArray extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
-	/** @return NullableID */ public static function Type() { return self::$instance; }
-	/** @return ID|null */ public static function GetDefaultValue() { return null; }
+	/** @return JustArray */ public static function Type() { return self::$instance; }
+	/** @return array */ public static function GetDefaultValue() { return array(); }
 
 
 
 
 	
 	/**
-	 * @param $address ID|null
+	 * @param $address array
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (is_null($value)) $address = $value;
-		if ($value instanceof ID) $address = $value;
+		if (is_array($value)) $address = $value;
 		throw new ValidationException();
 	}
 
@@ -27,7 +26,7 @@ class NullableID extends OmniType {
 	 * @return int
 	 */
 	public static function GetPdoType() {
-		return PDO::PARAM_INT;
+		throw new ConvertionException();
 	}
 
 	/**
@@ -38,27 +37,27 @@ class NullableID extends OmniType {
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value array
 	 * @param $platform int|null
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		if (is_null($value)) return null;
-		return $value->AsInt();
+		throw new ConvertionException();
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value array
 	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
-		return strval($value->AsInt());
+		if (count($value) == 0)
+			return '(-11111111)';
+		return '('.implode(',',array_map(function($x)use($platform){ return OmniType::Of($x)->ExportSqlLiteral($x,$platform); },$value)).')';
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value array
 	 * @param $platform int|null
 	 * @return string
 	 */
@@ -67,79 +66,68 @@ class NullableID extends OmniType {
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value array
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
-		return '\''.$value->AsHex().'\'';
+		return '['.implode(',',array_map(function($x){ return OmniType::Of($x)->ExportJsLiteral($x); },$value)).']';
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value array
 	 * @return string
 	 */
 	public static function ExportXmlString($value) {
-		if (is_null($value)) return '';
-		return $value->AsHex();
+		return implode(',',array_map(function($x){ return OmniType::Of($x)->ExportXmlString($x); },$value));
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value array
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		return $value->AsHex();
+		return implode(',',array_map(function($x){ return OmniType::Of($x)->ExportHtmlString($x); },$value));
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value array
 	 * @return string
 	 */
 	public static function ExportHumanReadableHtmlString($value) {
-		if (is_null($value)) return '';
-		return $value->AsHex();
+		throw new ConvertionException();
 	}
 
 	/**
-	 * @param $value ID|null
+	 * @param $value array
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
-		return $value->AsHex();
+		return implode(',',array_map(function($x){ return OmniType::Of($x)->ExportUrlString($x); },$value));
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return ID|null
+	 * @return array
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
-		return new ID(intval($value));
+		throw new ConvertionException();
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return ID|null
+	 * @return array
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
-		if ($value === '') return null;
-		return new ID($value);
+		throw new ConvertionException();
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return ID|null
+	 * @return array
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
-		if ($value === '') return null;
-		if (is_array($value)) throw new ConvertionException();
-		return new ID($value);
+		throw new ConvertionException();
 	}
 }
 
-NullableID::Init();
+JustArray::Init();

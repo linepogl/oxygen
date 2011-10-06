@@ -47,7 +47,7 @@ class NullableLemma extends OmniType {
 
 	/**
 	 * @param $value Lemma|null
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
@@ -57,7 +57,7 @@ class NullableLemma extends OmniType {
 
 	/**
 	 * @param $value Lemma|null
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
@@ -67,7 +67,7 @@ class NullableLemma extends OmniType {
 
 	/**
 	 * @param $value Lemma|null
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value, $platform) {

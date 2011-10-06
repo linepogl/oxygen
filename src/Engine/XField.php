@@ -1,6 +1,6 @@
 <?php
 
-class XField {
+class XField implements OmniValue {
 	/** @var XMeta */
 	private $meta;
 	/** @return XMeta */
@@ -23,6 +23,7 @@ class XField {
 			;
 	}
 
+	public function OmniType(){ return JustField::Type(); }
 	public function __toString(){
 		return strval($this->GetLabel());
 	}

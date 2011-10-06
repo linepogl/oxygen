@@ -38,7 +38,7 @@ class JustItem extends OmniType {
 
 	/**
 	 * @param $value XItem
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
@@ -47,7 +47,7 @@ class JustItem extends OmniType {
 
 	/**
 	 * @param $value XItem
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
@@ -56,7 +56,7 @@ class JustItem extends OmniType {
 
 	/**
 	 * @param $value XItem
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value, $platform) {
@@ -121,7 +121,7 @@ class JustItem extends OmniType {
 
 	/**
 	 * @param $value string|null|array
-	 * @return ID
+	 * @return XItem
 	 */
 	public static function ImportHttpValue($value) {
 		throw new ConvertionException();

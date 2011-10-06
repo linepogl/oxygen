@@ -1,7 +1,7 @@
 <?php
 if ($_SERVER["SERVER_NAME"] == 'localhost') {
 	define('DEBUG',true);
-	define('PROFILE',false); // for the time being
+	define('PROFILE',true); // for the time being
 }
 else {
 	define('DEBUG',false);

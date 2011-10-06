@@ -41,7 +41,7 @@ class JustInteger extends OmniType {
 
 	/**
 	 * @param $value int
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
@@ -50,7 +50,7 @@ class JustInteger extends OmniType {
 
 	/**
 	 * @param $value int
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
@@ -59,7 +59,7 @@ class JustInteger extends OmniType {
 
 	/**
 	 * @param $value int
-	 * @param $platform int
+	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value, $platform) {

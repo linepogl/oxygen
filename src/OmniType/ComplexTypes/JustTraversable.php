@@ -1,24 +1,24 @@
 <?php
 
-class JustList extends OmniType {
+class JustTraversable extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
-	/** @return JustList */ public static function Type() { return self::$instance; }
-	/** @return XList */ public static function GetDefaultValue() { return new XList(); }
+	/** @return JustTraversable */ public static function Type() { return self::$instance; }
+	/** @return Traversable */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 
 
 
 	
 	/**
-	 * @param $address XList
+	 * @param $address Traversable
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if ($value instanceof XList) $address = $value;
+		if ($value instanceof Traversable) $address = $value;
 		throw new ValidationException();
 	}
 
@@ -37,7 +37,7 @@ class JustList extends OmniType {
 	}
 
 	/**
-	 * @param $value XList
+	 * @param $value Traversable
 	 * @param $platform int|null
 	 * @return mixed
 	 */
@@ -46,18 +46,21 @@ class JustList extends OmniType {
 	}
 
 	/**
-	 * @param $value XList
+	 * @param $value Traversable
 	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		$ids = $value->ToIDList();
-		if (count($ids) == 0) $ids[] = new ID(-11111111);
-		return '('.implode(',',array_map(function($id){ return strval($id->AsInt()); },$ids)).')';
+		if (count($value) == 0)
+			return '(-11111111)';
+		$a = array();
+		foreach ($value as $x)
+			$a[] = OmniType::Of($x)->ExportSqlLiteral($x,$platform);
+		return '('.implode(',',$a).')';
 	}
 
 	/**
-	 * @param $value XList
+	 * @param $value Traversable
 	 * @param $platform int|null
 	 * @return string
 	 */
@@ -66,52 +69,63 @@ class JustList extends OmniType {
 	}
 
 	/**
-	 * @param $value XList
+	 * @param $value Traversable
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		$ids = $value->ToIDList();
-		return '['.implode(',',array_map(function($id){ return JustID::ExportJsLiteral($id); },$ids)).']';
+		$a = array();
+		foreach ($value as $x)
+			$a[] = OmniType::Of($x)->ExportJsLiteral($x);
+		return '['.implode(',',$a).']';
 	}
 
 	/**
-	 * @param $value XList
+	 * @param $value Traversable
 	 * @return string
 	 */
 	public static function ExportXmlString($value) {
-		$ids = $value->ToIDList();
-		return implode(',',array_map(function($id){ return JustID::ExportXmlString($id); },$ids));
+		$a = array();
+		foreach ($value as $x)
+			$a[] = OmniType::Of($x)->ExportXmlString($x);
+		return implode(',',$a);
 	}
 
 	/**
-	 * @param $value XList
+	 * @param $value Traversable
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		$ids = $value->ToIDList();
-		return implode(',',array_map(function($id){ return JustID::ExportHtmlString($id); },$ids));
+		$a = array();
+		foreach ($value as $x)
+			$a[] = OmniType::Of($x)->ExportHtmlString($x);
+		return implode(',',$a);
 	}
 
 	/**
-	 * @param $value XList
+	 * @param $value Traversable
 	 * @return string
 	 */
 	public static function ExportHumanReadableHtmlString($value) {
-		throw new ConvertionException();
+		$a = array();
+		foreach ($value as $x)
+			$a[] = OmniType::Of($x)->ExportHumanReadableHtmlString($x);
+		return implode(', ',$a);
 	}
 
 	/**
-	 * @param $value XList
+	 * @param $value Traversable
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		$ids = $value->ToIDList();
-		return implode(',',array_map(function($id){ return JustID::ExportUrlString($id); },$ids));
+		$a = array();
+		foreach ($value as $x)
+			$a[] = OmniType::Of($x)->ExportUrlString($x);
+		return implode(',',$a);
 	}
 
 	/**
 	 * @param $value string|null
-	 * @return XList
+	 * @return Traversable
 	 */
 	public static function ImportDBValue($value) {
 		throw new ConvertionException();
@@ -119,28 +133,19 @@ class JustList extends OmniType {
 
 	/**
 	 * @param $value string|null
-	 * @return XList
+	 * @return Traversable
 	 */
 	public static function ImportDomValue($value) {
-		$r = new XList();
-		foreach (explode(',',$value) as $sid) $r[] = JustID::ImportDomValue($sid);
-		return $r;
+		throw new ConvertionException();
 	}
 
 	/**
 	 * @param $value string|null|array
-	 * @return XList
+	 * @return Traversable
 	 */
 	public static function ImportHttpValue($value) {
-		$r = new XList();
-		if (is_array($value)) {
-			foreach ($value as $sid) $r[] = JustID::ImportHttpValue($sid);
-		}
-		else {
-			foreach (explode(',',$value) as $sid) $r[] = JustID::ImportHttpValue($sid);
-		}
-		return $r;
+		throw new ConvertionException();
 	}
 }
 
-JustList::Init();
+JustTraversable::Init();
