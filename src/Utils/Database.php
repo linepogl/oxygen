@@ -171,18 +171,18 @@ class Database {
 	public static function ExecuteX($sql,$params=array()){
 		$q = self::Prepare($sql);
 		$z = count($params);
-		if ($z > 0){ for($i = 0; $i < $z; $i++) $q->bindValue($i+1, Sql::GetPDOValueStatic($params[$i]) ); }
+		if ($z > 0){ for($i = 0; $i < $z; $i++) $q->bindValue($i+1, OmniType::Of($params[$i])->ExportPdoValue( $params[$i] , self::$type ) ); }
 		try {
 			$q->execute();
 		}
 		catch (Exception $ex) {
 			$m = $ex->getMessage().'<br/><br/>'.$sql;
-			foreach ($params as $p) $m .= '<br/>&bull; '.Log::GetVariableAsString(Sql::GetPDOValueStatic($p));
+			foreach ($params as $p) $m .= '<br/>&bull; '.Log::GetVariableAsString(  OmniType::Of($p)->ExportPdoValue( $p , self::$type ) );
 			throw new Exception($m);
 		}
 		if ( $q->errorCode() !== '00000' ) {
 			$info = $q->errorInfo(); $m = $info[2].'<br/><br/>'.$sql;
-			foreach ($params as $p) $m .= '<br/>&bull; '.Log::GetVariableAsString(Sql::GetPDOValueStatic($p));
+			foreach ($params as $p) $m .= '<br/>&bull; '.Log::GetVariableAsString( OmniType::Of($p)->ExportPdoValue( $p , self::$type ) );
 			throw new Exception($m);
 		}
 		if ($q->columnCount() > 0) return new DBReader($q);
@@ -190,18 +190,18 @@ class Database {
 	/** @return DBReader */
 	public static function Execute($sql){
 		$q = self::Prepare($sql);
-		$z = func_num_args(); if ($z > 1){ $a = func_get_args(); for($i = 1; $i < $z; $i++) $q->bindValue($i, Sql::GetPDOValueStatic($a[$i]) ); }
+		$z = func_num_args(); if ($z > 1){ $a = func_get_args(); for($i = 1; $i < $z; $i++) $q->bindValue($i, OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) ); }
 		try {
 			$q->execute();
 		}
 		catch (Exception $ex) {
 			$m = $ex->getMessage().'<br/><br/>'.$sql;
-			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Log::GetVariableAsString(Sql::GetPDOValueStatic($a[$i]));
+			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Log::GetVariableAsString( OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
 			throw new Exception($m);
 		}
 		if ( $q->errorCode() !== '00000' ) {
 			$info = $q->errorInfo(); $m = $info[2].'<br/><br/>'.$sql;
-			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Log::GetVariableAsString(Sql::GetPDOValueStatic($a[$i]));
+			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Log::GetVariableAsString( OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
 			throw new Exception($m);
 		}
 		if ($q->columnCount() > 0) return new DBReader($q);

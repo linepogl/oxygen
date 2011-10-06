@@ -13,12 +13,12 @@ abstract class OmniType implements _OmniType {
 	 * @return OmniType
 	 */
 	public final static function Of($value){
-		if (is_string($value)) return OmniString::Type();
+		if (is_string($value)) return JustString::Type();
+		if (is_null($value)) return JustNull::Type();
 		if ($value instanceof OmniValue) /** @var $value OmniValue */ return $value->OmniType();
-		if (is_int($value)) return OmniInteger::Type();
-		if (is_float($value)) return OmniDecimal::Type();
-		if (is_bool($value)) return OmniBoolean::Type();
-		if (is_null($value)) return OmniNull::Type();
+		if (is_int($value)) return JustInteger::Type();
+		if (is_float($value)) return JustDecimal::Type();
+		if (is_bool($value)) return JustBoolean::Type();
 		throw new ConvertionException();
 	}
 

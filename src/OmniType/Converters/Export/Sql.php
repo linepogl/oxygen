@@ -8,6 +8,10 @@ class Sql extends ExportConverter {
 			case Database::ORACLE:  return str_replace('\'','\'\'',$value);
 		}
 	}
+
+//	public function Export(){
+//		return OmniType::Of($this->value)->ExportSqlLiteral($this->value,Database::GetType());
+//	}
 	public function Export(){
 		if ( is_null($this->value) ) {
 			$r = 'NULL';
@@ -87,20 +91,20 @@ class Sql extends ExportConverter {
 	}
 
 
-	public static function GetPDOValueStatic(&$value){
-		if (is_bool($value)) { $r = $value ? 1 : 0; return $r; }
-		if ($value instanceof ID) { $r = $value->AsInt(); return $r; }
-		if ($value instanceof XItem) { $r = $value->id->AsInt(); return $r; }
-    if ($value instanceof DateTime) $value = new XDateTime($value);
-		if ($value instanceof XDateTime) { $r = $value->Format('Y-m-d H:i:s'); return $r; }
-    //if ($value instanceof DateInterval) $value = new XTimeSpan($value);
-		if ($value instanceof XTimeSpan) { $r = $value->GetTotalMilliseconds(); return $r; }
-		if ($value instanceof Lemma) { $r = $value->Encode(); return $r; }
-		return $value;
-	}
-	public function GetPDOValue(){
-		return self::GetPDOValueStatic($this->value);
-	}
+//	public static function GetPDOValueStatic(&$value){
+//		if (is_bool($value)) { $r = $value ? 1 : 0; return $r; }
+//		if ($value instanceof ID) { $r = $value->AsInt(); return $r; }
+//		if ($value instanceof XItem) { $r = $value->id->AsInt(); return $r; }
+//    if ($value instanceof DateTime) $value = new XDateTime($value);
+//		if ($value instanceof XDateTime) { $r = $value->Format('Y-m-d H:i:s'); return $r; }
+//    //if ($value instanceof DateInterval) $value = new XTimeSpan($value);
+//		if ($value instanceof XTimeSpan) { $r = $value->GetTotalMilliseconds(); return $r; }
+//		if ($value instanceof Lemma) { $r = $value->Encode(); return $r; }
+//		return $value;
+//	}
+//	public function GetPDOValue(){
+//		return self::GetPDOValueStatic($this->value);
+//	}
 
 	const Null = 'NULL';
 
