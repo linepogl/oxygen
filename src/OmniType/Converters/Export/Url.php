@@ -4,7 +4,7 @@
 final class Url extends ExportConverter {
 
 	public function Export(){
-		return OmniType::Of($this->value)->ExportUrlString($this->value,Database::GetType());
+		return $this->omnitype->ExportUrlString($this->value,Database::GetType());
 	}
 
 //  public function Export(){

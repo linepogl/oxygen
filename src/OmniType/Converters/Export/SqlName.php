@@ -3,7 +3,7 @@
 class SqlName extends ExportConverter {
 
 	public function Export(){
-		return OmniType::Of($this->value)->ExportSqlIdentifier($this->value,Database::GetType());
+		return $this->omnitype->ExportSqlIdentifier($this->value,Database::GetType());
 	}
 //	private static function escape($value){
 //		switch (Database::GetType()) {

@@ -4,7 +4,7 @@
 class Xml extends ExportConverter {
 
 	public function Export(){
-		return OmniType::Of($this->value)->ExportXmlString($this->value,Database::GetType());
+		return $this->omnitype->ExportXmlString($this->value,Database::GetType());
 	}
 
 //	private static function escape($string){

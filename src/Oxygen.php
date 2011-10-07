@@ -19,6 +19,10 @@ class Oxygen {
 			setcookie(self::GetSessionCookieName(),self::$idSession->AsHex(), time()+90*24*3600 ); // 90 days
 		}
 
+
+		if (DEBUG) { if ($_GET['debug']=='pin') self::SetUrlPin('debug','pin'); }
+		if (PROFILE) { if ($_GET['profile']=='pin') self::SetUrlPin('profile','pin'); }
+
 		if (!self::HasTempFolder()) self::MakeTempFolder();
 		if (!self::HasDataFolder()) self::MakeDataFolder();
 		self::ClearTempFolderFromOldFiles();

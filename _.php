@@ -1,12 +1,8 @@
 <?php
-if ($_SERVER["SERVER_NAME"] == 'localhost') {
-	define('DEBUG',true);
-	define('PROFILE',true); // for the time being
-}
-else {
-	define('DEBUG',false);
-	define('PROFILE',false);
-}
+
+define('DEBUG',array_key_exists('debug',$_GET));
+define('PROFILE',array_key_exists('profile',$_GET));
+
 if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }
 require('oxy/src/OmniType/_OmniType.php');
 require('oxy/src/OmniType/OmniType.php');

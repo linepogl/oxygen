@@ -4,7 +4,7 @@
 final class HumanReadableHtml extends ExportConverter {
 
 	public function Export(){
-		return OmniType::Of($this->value)->ExportHumanReadableHtmlString($this->value);
+		return $this->omnitype->ExportHumanReadableHtmlString($this->value);
 	}
 
 //

@@ -10,7 +10,7 @@ class Sql extends ExportConverter {
 //	}
 
 	public function Export(){
-		return OmniType::Of($this->value)->ExportSqlLiteral($this->value,Database::GetType());
+		return $this->omnitype->ExportSqlLiteral($this->value,Database::GetType());
 	}
 //	public function Export(){
 //		if ( is_null($this->value) ) {

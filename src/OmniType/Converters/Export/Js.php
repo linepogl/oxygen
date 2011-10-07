@@ -3,7 +3,7 @@
 final class Js extends ExportConverter {
 
 	public function Export(){
-		return OmniType::Of($this->value)->ExportJsLiteral($this->value);
+		return $this->omnitype->ExportJsLiteral($this->value);
 	}
 
 //	public function Export(){

@@ -4,7 +4,7 @@
 final class Html extends ExportConverter {
 
 	public function Export(){
-		return OmniType::Of($this->value)->ExportHtmlString($this->value);
+		return $this->omnitype->ExportHtmlString($this->value);
 	}
 
 //	private static function escape($string){
