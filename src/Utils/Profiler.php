@@ -109,11 +109,18 @@ class Profiler {
 
 
 		echo '<style>';
-		echo 'table.system td, table.system th { font:11px/12px monospace; padding:2px 4px; }';
+		echo 'table.system td, table.system th { font:11px/12px monospace; padding:2px 24px 2px 4px; border-bottom:1px solid #cccccc; color:#333333; }';
 		echo '</style>';
 
 		echo '<div style="position:fixed;top:30px;left:30px;right:30px;bottom:30px;;overflow:auto;z-index:10000;white-space:pre;background:#f4f4f4;border:6px solid #333333;padding:10px;">';
-    echo '<table class="system" cellpadding="0" cellspacing="0" border="0">';
+    echo '<table class="system" width="100%" cellpadding="0" cellspacing="0" border="0">';
+    echo '<tr>';
+    echo '<th class="expand">&nbsp;</th>';
+    echo '<th colspan="2" class="hcenter">Total calls</th>';
+    echo '<th colspan="2" class="hcenter">Total time</th>';
+    echo '<th colspan="2" class="hcenter">Exclusive time</th>';
+    echo '</tr>';
+
 		$i = 0;
 		foreach ($a as $key=>$aa){
 			if ($i++>100) break;

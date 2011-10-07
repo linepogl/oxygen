@@ -1547,18 +1547,40 @@ void hp_mode_hier_endfn_cb(hp_entry_t **entries  TSRMLS_DC) {
   long int         mu_end;
   long int         pmu_end;
 
-  /* Get the stat array */
 
-  /* Changed by linepogl for the needs of Oxygen. The profiler now returns the full call stack for each function call. */
+  /* *** Changed by linepogl for the needs of Oxygen. The profiler stops the clock immediately. */
+  uint64   tsc_end;
+  double gtod_value, rdtsc_value;
+
+  /* Get the stat array */
+  /* *** Changed by linepogl for the needs of Oxygen. The profiler now returns the full call stack for each function call. */
   //old: hp_get_function_stack(top, 2, symbol, sizeof(symbol));
   hp_get_function_stack(top, INT_MAX, symbol, sizeof(symbol));
   /* End of change */
 
+  /* Get end tsc counter */
+  tsc_end = cycle_timer();
 
-  if (!(counts = hp_mode_shared_endfn_cb(top,
-                                         symbol  TSRMLS_CC))) {
+  /* Get the stat array */
+  if (!(counts = hp_hash_lookup(symbol TSRMLS_CC))) {
     return;
   }
+
+
+  /* Bump stats in the counts hashtable */
+  hp_inc_count(counts, "ct", 1  TSRMLS_CC);
+
+  hp_inc_count(counts, "wt", get_us_from_tsc(tsc_end - top->tsc_start,
+        hp_globals.cpu_frequencies[hp_globals.cur_cpu_id]) TSRMLS_CC);
+
+
+
+  /* *** Changed by linepogl for the needs of Oxygen. The profiler stops the clock immediately. */
+  //if (!(counts = hp_mode_shared_endfn_cb(top,
+  //                                       symbol  TSRMLS_CC))) {
+  //  return;
+  //}
+
 
   if (hp_globals.xhprof_flags & XHPROF_FLAGS_CPU) {
     /* Get CPU usage */
