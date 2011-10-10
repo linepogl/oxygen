@@ -62,7 +62,7 @@ DateControl extends ValueControl {
 		echo "var s = '<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">';";
 
 		echo "var d = ".$this->name."_date;";
-		echo "var cm = x==null ? ".new Js(new DateTime())." : x;";
+		echo "var cm = x==null ? ".new Js(new XDateTime())." : x;";
 		echo "cm = new Date(cm.getFullYear(),cm.getMonth(),1);";
 		echo "var dp = new Date(cm.getFullYear(),cm.getMonth(),1).add({months:-1});";
 		echo "var dn = new Date(cm.getFullYear(),cm.getMonth(),1).add({months:1});";
