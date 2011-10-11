@@ -309,6 +309,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	public function GetLastOr($default){ $this->Load(); return count($this)>0 ? $this[count($this)-1] : $default; }
 
 
+	public function AsIDList(){ return $this->ToIDList(); }
 	public function ToIDList(){
 		$this->Load();
 		$r = array();
@@ -321,6 +322,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		return $r;
 	}
 
+	public function AsGenericIDList(){ return $this->AsGenericIDList(); }
 	public function ToGenericIDList(){
 		$this->Load();
 		$r = array();
