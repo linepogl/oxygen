@@ -222,12 +222,12 @@ class Database {
 //	}
 
 	/** @return array */
-	public static function ExecuteListOf($xtype,$sql){ return self::ExecuteListOfX($xtype,$sql,array_slice(func_get_args(),2)); }
+	public static function ExecuteListOf(OmniType $omnitype,$sql){ return self::ExecuteListOfX($omnitype,$sql,array_slice(func_get_args(),2)); }
 	/** @return array */
-	public static function ExecuteListOfX($xtype,$sql,$params=array()){
+	public static function ExecuteListOfX(OmniType $omnitype,$sql,$params=array()){
 		$dr = self::ExecuteX($sql,$params);
 		$r = array();
-		while ($dr->Read())	$r[] = $dr[0]->CastTo($xtype);
+		while ($dr->Read())	$r[] = $dr[0]->CastTo($omnitype);
 		$dr->Close();
 		return $r;
 	}

@@ -3,7 +3,7 @@
 class GenericID extends ID implements OmniValue {
 	private $classname;
 
-	public function OmniType(){ return JustGenericID::Type(); }
+	public function OmniType(){ return OmniGenericID::Type(); }
 	public function serialize(){ return serialize(array('classname'=>$this->classname,'value'=>$this->value)); }
 	public function unserialize($data){ $a = unserialize($data); $this->classname=$a['classname']; $this->value=$a['value']; }
 

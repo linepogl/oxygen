@@ -23,8 +23,8 @@ class Oxygen {
 		if (DEBUG) { if ($_GET['debug']=='pin') self::SetUrlPin('debug','pin'); }
 		if (PROFILE) { if ($_GET['profile']=='pin') self::SetUrlPin('profile','pin'); }
 
+		//if (!self::HasDataFolder()) self::MakeDataFolder();
 		if (!self::HasTempFolder()) self::MakeTempFolder();
-		if (!self::HasDataFolder()) self::MakeDataFolder();
 		self::ClearTempFolderFromOldFiles();
 		Log::Init();
 		Lemma::LoadBasicDictionary();

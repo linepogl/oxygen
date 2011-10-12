@@ -15,16 +15,16 @@ class HttpValue extends ImportConverter {
   }
 
 
-  public function AsString() { return $this->value;  }
-  public function AsID() { return is_null($this->value) || $this->value=='' ? null : new ID($this->value); }
-  public function AsDateTime() { return is_null($this->value) || $this->value=='' ? null : XDateTime::Parse($this->value,'YmdHis'); }
-  public function AsDate() { return is_null($this->value) || $this->value=='' ? null : XDate::Parse($this->value,'YmdHis'); }
-  public function AsTime() { return is_null($this->value) || $this->value=='' ? null : XTime::Parse($this->value,'YmdHis'); }
-  public function AsTimeSpan(){ return is_null($this->value) || $this->value=='' ? null : new XTimeSpan(intval($this->value)); }
-
-  public function AsInteger() { return is_null($this->value) ? 0 : intval($this->value); }
-  public function AsBoolean() { return $this->value=='true'; }
-  public function AsFloat() { return is_null($this->value) ? 0.0 : floatval( str_replace( Language::GetDecimalSeparator() , '.' , str_replace( Language::GetThousandsSeparator() , '' , $this->value ) ) ); }
+//  public function AsString() { return $this->value;  }
+//  public function AsID() { return is_null($this->value) || $this->value=='' ? null : new ID($this->value); }
+//  public function AsDateTime() { return is_null($this->value) || $this->value=='' ? null : XDateTime::Parse($this->value,'YmdHis'); }
+//  public function AsDate() { return is_null($this->value) || $this->value=='' ? null : XDate::Parse($this->value,'YmdHis'); }
+//  public function AsTime() { return is_null($this->value) || $this->value=='' ? null : XTime::Parse($this->value,'YmdHis'); }
+//  public function AsTimeSpan(){ return is_null($this->value) || $this->value=='' ? null : new XTimeSpan(intval($this->value)); }
+//
+//  public function AsInteger() { return is_null($this->value) ? 0 : intval($this->value); }
+//  public function AsBoolean() { return $this->value=='true'; }
+//  public function AsFloat() { return is_null($this->value) ? 0.0 : floatval( str_replace( Language::GetDecimalSeparator() , '.' , str_replace( Language::GetThousandsSeparator() , '' , $this->value ) ) ); }
 
 	public function AsStringArray(){
 		if (empty($this->value))

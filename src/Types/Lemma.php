@@ -5,7 +5,7 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 	private $name;
 	private $data = array();
 
-	public function OmniType(){ return JustLemma::Type(); }
+	public function OmniType(){ return OmniLemma::Type(); }
 	public function offsetExists($offset) { return isset($this->data[$offset]); }
 	public function offsetGet($offset) { return isset($this->data[$offset]) ? $this->data[$offset] : null; }
 	public function offsetSet($offset, $value) { throw new Exception('Lemmas are immutable.'); }

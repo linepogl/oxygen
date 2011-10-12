@@ -13,7 +13,7 @@ class XWrapField implements OmniValue {
 		$this->field = $field;
 	}
 
-	public function OmniType(){ return JustWrapField::Type(); }
+	public function OmniType(){ return OmniWrapField::Type(); }
 
 	/** @return XWrap */
 	public function GetWrap(){ return $this->wrap; }

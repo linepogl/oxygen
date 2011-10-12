@@ -2,47 +2,7 @@
 
 class XType {
 
-	const String = 'String';
-	const ID = 'ID';
-	const GenericID = 'GenericID';
-  const Date = 'Date';
-  const DateTime = 'DateTime';
-  const Time = 'Time';
-  const TimeSpan = 'TimeSpan';
-  const Lemma = 'Lemma';
 
-	const Integer = 'Integer';
-	const Boolean = 'Boolean';
-  const Float = 'Float';
-
-	const NullableInteger = 'NullableInteger';
-	const NullableBoolean = 'NullableBoolean';
-  const NullableFloat = 'NullableFloat';
-
-
-  public static function ConvertToXsdType($type){
-  	switch ($type) {
-  		default:
-  		case XType::String: return 'xs:string';
-			case XType::ID: return 'xs:string';
-			case XType::GenericID: return 'xs:string';
-		  case XType::Date: return 'xs:date';
-		  case XType::DateTime: return 'xs:dateTime';
-		  case XType::Time: return 'xs:time';
-		  case XType::TimeSpan: return 'xs:duration';
-		  case XType::Lemma: return 'xs:string';
-			case XType::Integer: return 'xs:integer';//
-			case XType::Boolean: return 'xs:boolean';
-		  case XType::Float: return 'xs:decimal';//
-			case XType::NullableInteger: return 'xs:integer';
-			case XType::NullableBoolean: return 'xs:boolean';
-		  case XType::NullableFloat: return 'xs:decimal';
-		}
-	}
-
-
-
-  private static function GetType($x){return is_object($x)?get_class($x):gettype($x);}
   public static function AreEqual($x1,$x2){
   	return 0 == self::Compare($x1,$x2);
 	}

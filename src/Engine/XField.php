@@ -23,7 +23,7 @@ class XField implements OmniValue {
 			;
 	}
 
-	public function OmniType(){ return JustField::Type(); }
+	public function OmniType(){ return OmniField::Type(); }
 	public function __toString(){
 		return strval($this->GetLabel());
 	}

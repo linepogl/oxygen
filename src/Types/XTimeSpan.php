@@ -11,7 +11,7 @@ class XTimeSpan implements Serializable,OmniValue {
 		$this->value = $total_milliseconds;
 	}
 
-	public function OmniType(){ return JustTimeSpan::Type(); }
+	public function OmniType(){ return OmniTimeSpan::Type(); }
 	public function serialize(){ return serialize($this->value); }
 	public function unserialize($data){ $this->value = unserialize($data); }
 	

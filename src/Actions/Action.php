@@ -14,7 +14,7 @@ abstract class Action implements OmniValue {
 
 
 
-	public function OmniType(){ return JustAction::Type(); }
+	public function OmniType(){ return OmniAction::Type(); }
 
 
 

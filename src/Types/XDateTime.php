@@ -10,7 +10,7 @@ class XDateTime implements Serializable, OmniValue {
 		$this->timestamp = is_null($timestamp) ? time() : $timestamp;
 	}
 
-	public function OmniType(){ return JustDateTime::Type(); }
+	public function OmniType(){ return OmniDateTime::Type(); }
 	public function serialize(){ return serialize($this->timestamp); }
 	public function unserialize($data){ $this->timestamp = unserialize($data); }
 

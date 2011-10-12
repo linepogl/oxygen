@@ -30,7 +30,7 @@ class XmlValue extends ImportConverter {
   	return empty($this->value) ? null : XTimeSpan::Parse($this->value);
 	}
 
-//	public function AsBoolean(){ return JustBoolean::ImportDomValue($this->value); }
+//	public function AsBoolean(){ return OmniBoolean::ImportDomValue($this->value); }
   public function AsBoolean(){ return is_null($this->value) ? false : $this->value=='true'; }
   public function AsInteger(){ return is_null($this->value) ? 0 : intval($this->value); }
   public function AsFloat(){ return is_null($this->value) ? 0.0 : floatval($this->value); }

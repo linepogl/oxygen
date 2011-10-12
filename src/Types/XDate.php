@@ -13,7 +13,7 @@ class XDate extends XDateTime {
 
 	public static function Today(){ return new XDate(); }
 
-	public function OmniType(){ return JustDate::Type(); }
+	public function OmniType(){ return OmniDate::Type(); }
 }
 
 

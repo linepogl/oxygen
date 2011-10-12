@@ -10,7 +10,7 @@ class XTime extends XDateTime {
 			);
 	}
 
-	public function OmniType(){ return JustTime::Type(); }
+	public function OmniType(){ return OmniTime::Type(); }
 }
 
 
