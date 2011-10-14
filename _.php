@@ -34,8 +34,14 @@ function user_exception_handler($ex) {
 	echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
 	echo '<div style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;overflow:auto;padding:30px;">';
 	echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
-	echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$ex->getMessage().'</div>';
-	if (!($ex instanceof ApplicationException || $ex instanceof SecurityException)){
+	if ($ex instanceof ApplicationException || $ex instanceof SecurityException) {
+		echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$ex->getMessage().'</div>';
+	}
+	elseif (!DEV){
+		echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Retrieve('MsgAnErrorOccurred').'</div>';
+	}
+	else {
+		echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$ex->getMessage().'</div>';
 		echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($ex)).'</div>';
 		echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
 	}
