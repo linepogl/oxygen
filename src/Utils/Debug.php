@@ -292,7 +292,7 @@ class Debug {
 		if (!DEV){
 			foreach (Oxygen::GetDeveloperEmails() as $email) {
 				try {
-					Oxygen::SendEmail( 'oxygen' , 'linepogl+oxygen@gmail.com' , $email , '['.Oxygen::GetApplicationName().'] Unhandled exception ' . $serial , $body );
+					Oxygen::SendEmail( 'oxygen' , $email , $email , '['.Oxygen::GetApplicationName().'] Unhandled exception ' . $serial , $body );
 				}
 				catch (Exception $ex) {}
 			}
