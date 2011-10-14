@@ -41,7 +41,8 @@ function user_exception_handler($ex) {
 		echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Retrieve('MsgAnErrorOccurred').'</div>';
 	}
 	else {
-		echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$ex->getMessage().'</div>';
+		echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Retrieve('MsgDevelopmentEnvironment').'</div>';
+		echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$ex->getMessage().'</div>';
 		echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($ex)).'</div>';
 		echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
 	}

@@ -137,7 +137,7 @@ abstract class Action implements OmniValue {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
-					Debug::WriteException($ex);
+					Debug::Write($ex->getMessage());
 				}
 				elseif ($this->IsAjax() && $this->IsDialog()){
 					echo new MessageControl($ex);

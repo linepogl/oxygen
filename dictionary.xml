@@ -272,7 +272,7 @@
 
 	<lemma name="MsgDevelopmentEnvironment">
 		<en>You are viewing this message because the application runs in DEVELOPMENT mode.</en>
-		<en>Ce message s'affiche parce que l'application est en mode DEVELOPPEMENT.</en>
+		<fr>Ce message s'affiche parce que l'application est en mode DEVELOPPEMENT.</fr>
 		<el>Το μήνυμα αυτό εμφανίζεται γιατί η εφαρμογή τρέχει σε περιβάλλον ανάπτυξης.</el>
 	</lemma>
 	<lemma name="MsgAnErrorOccurred">
