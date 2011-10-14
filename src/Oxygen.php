@@ -60,12 +60,13 @@ class Oxygen {
 	public static function Go(){
 		// retrieve the current action and GO!
 		$classname = 'Action'.self::$actionname;
-		try {
+//		try {
+			new ReflectionClass($classname); // <-- this is to prevent the nasty FATAL error of php if the class was not found.
 			self::$action = $classname::Make();
-		}
-		catch (Exception $ex){
-			throw new ApplicationException(Lemma::Retrieve('MsgInvalidAction'));
-		}
+//		}
+//		catch (Exception $ex){
+//			throw new ApplicationException(Lemma::Retrieve('MsgInvalidAction'));
+//		}
 		self::$action->WithMode(Http::$GET['mode']->AsInteger());
 		self::SetContentType(self::$action->GetContentType());
 		self::SetCharset(self::$action->GetCharset());
