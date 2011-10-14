@@ -3,26 +3,30 @@
 class Profiler {
 
 
+	private static $results = null;
+	private static $serial = null;
 	public static function Start(){
 		if (!function_exists('xhprof_enable')) return;
 		xhprof_enable(XHPROF_FLAGS_NO_BUILTINS);
 	}
 	
-	public static function Stop(){
+	public static function StopAndSave(){
 		if (!function_exists('xhprof_disable')) return;
-		$results = xhprof_disable();
-		$dir = Oxygen::GetProfilerFolder();
-		if (!file_exists($dir))
-			mkdir($dir,0777,true);
-		file_put_contents( $dir .'/'.str_replace(',','.',sprintf('%0.4f',microtime(true))).'.oxygen', serialize($results));
-
-
-		self::Analyse($results);
-
+		self::$results = xhprof_disable();
+		$f = Oxygen::GetLogFolder();
+		if (!is_dir($f)) Oxygen::MakeLogFolder();
+		self::$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
+		file_put_contents( $f .'/'.self::$serial.'.prf',
+			serialize(array( 'head' => Oxygen::GetInfo() , 'body' => self::$results ))
+		);
 	}
 
 
-
+	public static function ShowConsole(){
+		Console::BeginPopup('oxy/img/console_tab_prfs_active.png','Quick profiler','Quick profiler '.self::$serial);
+		self::Analyse(self::$results);
+		Console::EndPopup();
+	}
 
 
 
@@ -103,13 +107,8 @@ class Profiler {
 		$b[2] = array_sum(array_map( function($x){ return $x[2]; }, $a));
 
 
-		echo '<style>';
-		echo 'table.system td, table.system th { font:11px/12px monospace; padding:2px 24px 2px 4px; border-bottom:1px solid #cccccc; color:#333333; }';
-		echo 'table.system .alt { background:#eeeeee; }';
-		echo '</style>';
 
-		echo '<div style="position:fixed;top:30px;left:30px;right:30px;bottom:30px;;overflow:auto;z-index:10000;white-space:pre;background:#f4f4f4;border:6px solid #333333;padding:10px;">';
-    echo '<table class="system" width="100%" cellpadding="0" cellspacing="0" border="0">';
+    echo '<table class="console" width="100%" cellpadding="0" cellspacing="0" border="0">';
     echo '<tr>';
     echo '<th class="expand">&nbsp;</th>';
     echo '<th colspan="2" class="hcenter">Total calls</th>';
@@ -120,8 +119,8 @@ class Profiler {
 		$i = 0;
 		foreach ($a as $key=>$aa){
 			//if ($i++>100) break;
-			echo '<tr'.($i%2==0?' class="alt"':'').'>';
-			echo '<th class="hleft">'.$key.'</th>';
+			echo '<tr'.(++$i%2==0?' class="alt"':'').'>';
+			echo '<td class="hleft">'.$key.'</td>';
 			echo '<td class="hright">'.$aa[0].'</td>';
 			echo '<td class="hright">'.sprintf('%.2f',$aa[0]/$b[0]*100).'%</td>';
 			echo '<td class="hright">'.$aa[1].'</td>';
@@ -132,7 +131,6 @@ class Profiler {
 		}
 
 		echo '</table>';
-		echo '</div>';
 	}
 
 

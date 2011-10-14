@@ -2,6 +2,8 @@
 
 define('DEBUG',array_key_exists('debug',$_GET));
 define('PROFILE',array_key_exists('profile',$_GET));
+define('DEV',$_SERVER["SERVER_NAME"] == 'localhost');
+
 
 if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }
 require('oxy/src/OmniType/_OmniType.php');
@@ -34,7 +36,7 @@ function user_exception_handler($ex) {
 	echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
 	echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$ex->getMessage().'</div>';
 	if (!($ex instanceof ApplicationException || $ex instanceof SecurityException)){
-		echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Log::GetTraceAsString($ex)).'</div>';
+		echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($ex)).'</div>';
 		echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
 	}
 	echo '<div style="font:italic 11px/13px Trebuchet MS,sans-serif;color:#bbbbbb;margin-top:50px;">Oxygen</div>';
@@ -42,7 +44,9 @@ function user_exception_handler($ex) {
 	echo '</div>';
 	echo '</div>';
 	//	echo '</body></html>';
-	// try{ Log::Record($ex); }catch(Exception $exx){}
+	if (!($ex instanceof ApplicationException || $ex instanceof SecurityException)){
+		Debug::RecordException($ex);
+	}
 }
 set_exception_handler("user_exception_handler");
 
@@ -51,7 +55,10 @@ function user_shutdown_function() {
 	chdir(dirname(__FILE__));
 	chdir('..');
 	Progress::Shutdown();
-	if (PROFILE) Profiler::Stop();
+	if (PROFILE) Profiler::StopAndSave();
+	if (DEBUG) Debug::StopAndSave();
+	if (DEBUG) Debug::ShowConsole();
+	if (PROFILE) Profiler::ShowConsole();
 }
 register_shutdown_function('user_shutdown_function');
 
@@ -61,7 +68,7 @@ function dump($var){
 	list($callee) = debug_backtrace();
   echo '<div style="border:solid 1px #bbbbbb;">';
 	echo '<div style="color:#333333;background:#e8e8e8;padding:4px;font:bold italic 11px/13px Trebuchet MS;">' . str_replace("\\",'/',substr($callee['file'],strlen($root)+1)).'['.$callee['line'].']</div>';
-	echo '<div style="color:#777777;background:#f8f8f8;padding:9px 9px 0px 9px;font:11px/13px Courier New,monospace;white-space:pre;">'.new Html(Log::GetVariableAsString($var)).'</div>';
+	echo '<div style="color:#777777;background:#f8f8f8;padding:9px 9px 0px 9px;font:11px/13px Courier New,monospace;white-space:pre;">'.new Html(Debug::GetVariableAsString($var)).'</div>';
 	echo '<div style="color:#aaaaaa;background:#f8f8f8;padding:0 2px 2px 0;font:italic 9px/10px Trebuchet MS;text-align:right;">Oxygen</div>';
   echo '</div>';
 }

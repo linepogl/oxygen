@@ -19,14 +19,13 @@ class Oxygen {
 			setcookie(self::GetSessionCookieName(),self::$idSession->AsHex(), time()+90*24*3600 ); // 90 days
 		}
 
-
 		if (DEBUG) { if ($_GET['debug']=='pin') self::SetUrlPin('debug','pin'); }
 		if (PROFILE) { if ($_GET['profile']=='pin') self::SetUrlPin('profile','pin'); }
 
 		//if (!self::HasDataFolder()) self::MakeDataFolder();
 		if (!self::HasTempFolder()) self::MakeTempFolder();
 		self::ClearTempFolderFromOldFiles();
-		Log::Init();
+		Debug::Init();
 		Lemma::LoadBasicDictionary();
 
 
@@ -75,7 +74,7 @@ class Oxygen {
 		self::$content = self::$action->GetContent();
 
 
-		if (Log::IsImmediateFlushingEnabled()) exit();
+		if (Debug::IsImmediateFlushingEnabled()) exit();
 		self::SendHttpHeaders();
 		if (self::$action->IsAjax() ) { echo Oxygen::$content; exit(); }
 		if (self::$action->IsIFrame() ) {
@@ -99,6 +98,8 @@ class Oxygen {
 	public static $lang = null;
 	public static function AddLanguage($lang) { if (!in_array($lang,self::$langs)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
 	public static function SetLanguage($lang) { self::$lang = $lang; self::SetUrlPin('lang',$lang); }
+	public static function GetLang(){ return self::$lang; }
+	public static function GetLangs(){ return self::$langs; }
 
 
 
@@ -107,6 +108,7 @@ class Oxygen {
 	public static function ClearHttpHeaders(){
 		self::$http_headers = array();
 	}
+	public static function GetHttpHeaders(){ return self::$http_headers; }
 	public static function ResetHttpHeaders(){
 		self::$http_headers = array();
 		self::AddHttpHeader('HTTP/1.1 '.self::GetResponseCode());
@@ -186,10 +188,20 @@ class Oxygen {
 	public static function SetTempFolder($value) { self::$temp_folder = $value; }
 	public static function HasTempFolder(){return is_dir(self::$temp_folder); }
 	public static function MakeTempFolder(){ mkdir(self::$temp_folder,0777,true); }
-	public static function ClearTempFolderFromOldFiles(){
+	public static function ClearTempFolder(){
+		$tmp = self::GetTempFolder();
+		foreach (scandir($tmp) as $f){
+			if (is_dir($f)) continue;
+			try{
+				unlink($tmp.'/'.$f);
+			}
+			catch(Exception $ex){}
+		}
+	}
+	public static function ClearTempFolderFromOldFiles($force = false){
 		$last_time = Scope::$APPLICATION['Oxygen::ClearTempFolderFromOldFiles'];
 		$now = time();
-		if (is_null($last_time) || $now - $last_time > 3600) {
+		if ($force || is_null($last_time) || $now - $last_time > 3600) {
 			$one_day_time = 86400;
 
 			$tmp = self::GetTempFolder();
@@ -209,6 +221,17 @@ class Oxygen {
 
 
 
+	//
+	//
+	// Application environment
+	//
+	//
+	private static $developer_emails = array();
+	public static function GetDeveloperEmails(){ return self::$developer_emails; }
+	public static function AddDeveloperEmail($value) { self::$developer_emails[] = $value; }
+
+
+
 
 	//
 	//
@@ -220,19 +243,6 @@ class Oxygen {
 	public static function SetDataFolder($value) { self::$data_folder = $value; }
 	public static function HasDataFolder(){return is_dir(self::$data_folder); }
 	public static function MakeDataFolder(){ mkdir(self::$data_folder,0777,true); }
-
-
-
-	//
-	//
-	// Profiler folder
-	//
-	//
-	private static $profiler_folder = 'prf';
-	public static function GetProfilerFolder(){ return self::$profiler_folder; }
-	public static function SetProfilerFolder($value) { self::$profiler_folder = $value; }
-	public static function HasProfilerFolder(){return is_dir(self::$profiler_folder); }
-	public static function MakeProfilerFolder(){ mkdir(self::$profiler_folder,0777,true); }
 
 
 
@@ -338,6 +348,8 @@ class Oxygen {
 	private static $idWindow;
 	private static $window_scoping_enabled = true;
 	public static function SetWindowScopingEnabled($value){ self::$window_scoping_enabled = $value; }
+	public static function IsWindowScopingEnabled(){ return self::$window_scoping_enabled; }
+	
 
 	//
 	//
@@ -348,6 +360,7 @@ class Oxygen {
 	private static $url_pins = array('action'=>null,'lang'=>null,'window'=>null);
 	public static function AddUrlPin($key) { self::$url_pins[$key] = null; }
 	public static function GetUrlPin($key) { return self::$url_pins[$key]; }
+	public static function GetUrlPins() { return self::$url_pins; }
 	public static function SetUrlPin($key,$value) { self::$url_pins[$key] = $value; }
 	public static function MakeHrefPreservingValues(array $params = array()){
 		return self::MakeHref( $params + $_GET );    // <-- array + operator is a better array_merge($b,$a)...
@@ -399,6 +412,16 @@ class Oxygen {
 	}
 	public static function IsHttps(){
 		return isset($_SERVER["HTTPS"]);
+	}
+	public static function GetApplicationName(){
+		$r = $_SERVER["SERVER_NAME"];
+		$s = $_SERVER['SCRIPT_NAME'];
+		$r .= substr($s,0,strrpos($s,'/'));
+		return $r;
+	}
+	public static function GetCurrentPhpScript(){
+		$s = $_SERVER['SCRIPT_NAME'];
+		return substr($s,strrpos($s,'/')+1);
 	}
 	public static function GetBaseHref($protocol = null,$port = null){
 		$old_protocol = self::IsHttps() ? 'https' : 'http';
@@ -458,7 +481,8 @@ class Oxygen {
 	private static $action = null;
 	private static $content = '';
 	private static $default_actionname = 'Home';
-	/** @return void */ public static function SetDefaultAction($actionname) { self::$default_actionname = $actionname; }
+	/** @return void */ public static function SetDefaultActionName($actionname) { self::$default_actionname = $actionname; }
+	/** @return string */ public static function GetDefaultActionName() { return self::$default_actionname; }
 	/** @return string */ public static function GetActionName(){ return self::$actionname; }
 	/** @return Action */ public static function GetAction(){ return self::$action; }
 	/** @return string */ public static function GetContent() { return self::$content; }
@@ -529,7 +553,7 @@ class Oxygen {
 		}
 		return self::$login_control;
 	}
-	public static function SetLoginControl(LoginControlBase $value){ self::$liin_control = $value; }
+	public static function SetLoginControl(LoginControlBase $value){ self::$login_control = $value; }
 
 
 
@@ -573,6 +597,66 @@ class Oxygen {
 
 
 
+
+
+
+
+	
+
+	//
+	//
+	// Info
+	//
+	//
+	public static function GetInfo(){
+		$rr = array();
+
+		$r = array();
+		$r['Current action'] = Oxygen::GetActionName();
+		$r['Current language'] = Oxygen::GetLang();
+		$r['Session hash'] = Oxygen::GetSessionID()->AsHex();
+		$r['Window hash'] = Oxygen::GetWindowID()->AsHex() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scope is disabled ***');
+		$r['Variable persistence'] = Scope::IsAPCAvailable() ? 'APC' : 'Temp folder';
+		$r['ORM caching'] = Oxygen::IsItemCacheEnabled()?'Enabled':'Disabled';
+		$rr[] = $r;
+
+		$r = array();
+		$r['Application name'] = Oxygen::GetApplicationName();
+		$r['Entry PHP Script'] = Oxygen::GetCurrentPhpScript();
+		$a = Oxygen::GetDeveloperEmails();
+		$r['Developer e-mails'] = implode(', ',$a).(empty($a)?' *** NOT DEFINED ***':'');
+		$r['Environment'] = (DEV?'DEVELOPMENT':'PRODUCTION').(DEBUG?' DEBUG':'').(PROFILE?' PROFILE':'');
+		$f = Oxygen::GetTempFolder();
+		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
+		$r['Temp folder'] = $s;
+
+		$f = Oxygen::GetLogFolder();
+		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
+		$r['Log folder'] = $s;
+
+		$f = Oxygen::GetDataFolder();
+		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
+		$r['Data folder'] = $s;
+		$rr[] = $r;
+
+		$r = array();
+		$r['Charset'] = Oxygen::GetCharset();
+		$r['Languages'] = implode(', ',Oxygen::GetLangs());
+		$r['Default action name'] = Oxygen::GetDefaultActionName();
+		$r['Login control name'] = get_class(Oxygen::GetLoginControl());
+		$r['Url pins'] = implode(', ',array_keys(Oxygen::GetUrlPins()));
+		$r['Code folders'] = implode("\n",Oxygen::GetCodeFolders());
+		$r['Dictionaries'] = implode("\n",Oxygen::GetDictionaryFiles());
+		$r['Database upgrade scripts'] = implode("\n",Oxygen::GetDatabaseUpgradeFiles());
+		$rr[] = $r;
+
+		$r = array();
+		$r['Content type'] = Oxygen::GetContentType();
+		$r['HTTP headers'] = implode("\n",Oxygen::GetHttpHeaders());
+		$rr[] = $r;
+
+		return $rr;
+	}
 }
 
 

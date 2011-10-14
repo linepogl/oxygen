@@ -270,6 +270,18 @@
 	</lemma>
 
 
+	<lemma name="MsgDevelopmentEnvironment">
+		<en>You are viewing this message because the application runs in DEVELOPMENT mode.</en>
+		<en>Ce message s'affiche parce que l'application est en mode DEVELOPPEMENT.</en>
+		<el>Το μήνυμα αυτό εμφανίζεται γιατί η εφαρμογή τρέχει σε περιβάλλον ανάπτυξης.</el>
+	</lemma>
+	<lemma name="MsgAnErrorOccurred">
+		<en>An unexpected server error has occurred.</en>
+		<fr>Il y avait une erreur inattendue.</fr>
+		<el>Προέκυψε ένα σφάλμα στον διακομιστή.</el>
+	</lemma>
+
+
 	<lemma name="ThousandsSeparator"><en>,</en><fr> </fr><el>.</el></lemma>
 	<lemma name="DecimalPoint"><en>.</en><fr>,</fr><el>,</el></lemma>
 

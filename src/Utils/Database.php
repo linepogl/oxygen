@@ -36,7 +36,7 @@ class Database {
 			}
 		}
 		if ($needs_refresh){
-			Log::Write('Upgrade complete.<br/>Total queries: '.count(Database::GetQueries()).'.<br/><br/><br/>Please refresh.<br/><br/><br/><br/>');
+			Debug::Write('Upgrade complete.<br/>Total queries: '.count(Database::GetQueries()).'.<br/><br/><br/>Please refresh.<br/><br/><br/><br/>');
 			exit();
 		}
 	}
@@ -177,12 +177,12 @@ class Database {
 		}
 		catch (Exception $ex) {
 			$m = $ex->getMessage().'<br/><br/>'.$sql;
-			foreach ($params as $p) $m .= '<br/>&bull; '.Log::GetVariableAsString(  OmniType::Of($p)->ExportPdoValue( $p , self::$type ) );
+			foreach ($params as $p) $m .= '<br/>&bull; '.Debug::GetVariableAsString(  OmniType::Of($p)->ExportPdoValue( $p , self::$type ) );
 			throw new Exception($m);
 		}
 		if ( $q->errorCode() !== '00000' ) {
 			$info = $q->errorInfo(); $m = $info[2].'<br/><br/>'.$sql;
-			foreach ($params as $p) $m .= '<br/>&bull; '.Log::GetVariableAsString( OmniType::Of($p)->ExportPdoValue( $p , self::$type ) );
+			foreach ($params as $p) $m .= '<br/>&bull; '.Debug::GetVariableAsString( OmniType::Of($p)->ExportPdoValue( $p , self::$type ) );
 			throw new Exception($m);
 		}
 		if ($q->columnCount() > 0) return new DBReader($q);
@@ -196,12 +196,12 @@ class Database {
 		}
 		catch (Exception $ex) {
 			$m = $ex->getMessage().'<br/><br/>'.$sql;
-			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Log::GetVariableAsString( OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
+			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Debug::GetVariableAsString( OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
 			throw new Exception($m);
 		}
 		if ( $q->errorCode() !== '00000' ) {
 			$info = $q->errorInfo(); $m = $info[2].'<br/><br/>'.$sql;
-			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Log::GetVariableAsString( OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
+			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Debug::GetVariableAsString( OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
 			throw new Exception($m);
 		}
 		if ($q->columnCount() > 0) return new DBReader($q);
@@ -303,8 +303,8 @@ class Database {
 		}
 		if ($r){
 			self::$patching_system_dirty = true;
-			Log::EnableImmediateFlushing();
-			Log::Write('<b>Installing module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
+			Debug::EnableImmediateFlushing();
+			Debug::Write('<b>Installing module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
 		}
 		return $r;
 	}
@@ -313,13 +313,13 @@ class Database {
 		if (is_null($current) || $current < $patch) {
 			if (!self::IsPatchingSystemDirty()){
 				self::$patching_system_dirty = true;
-				Log::EnableImmediateFlushing();
-				Log::Write('<b>Upgrading module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
+				Debug::EnableImmediateFlushing();
+				Debug::Write('<b>Upgrading module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
 			}
 			if (is_null($description))
-				Log::Write('Applying patch {'.$patcher.':'.$patch.'}...');
+				Debug::Write('Applying patch {'.$patcher.':'.$patch.'}...');
 			else
-				Log::Write('Applying patch {'.$patcher.':'.$patch.'}: '.$description.'...');
+				Debug::Write('Applying patch {'.$patcher.':'.$patch.'}: '.$description.'...');
 			self::$patching_system_open_patcher = $patcher;
 			self::$patching_system_open_patch = $patch;
 			return true;
@@ -328,7 +328,7 @@ class Database {
 	}
 	public static function ApplyPatch(){
 		self::SetPatch(self::$patching_system_open_patcher,self::$patching_system_open_patch);
-		Log::Write('Patch {'.self::$patching_system_open_patcher.':'.self::$patching_system_open_patch.'} applied.');
+		Debug::Write('Patch {'.self::$patching_system_open_patcher.':'.self::$patching_system_open_patch.'} applied.');
 		self::$patching_system_open_patcher = null;
 		self::$patching_system_open_patch = null;
 	}

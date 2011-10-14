@@ -98,8 +98,8 @@ abstract class Action implements OmniValue {
 			else {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
-				if (Log::IsImmediateFlushingEnabled()) {
-					Log::WriteException($ex);
+				if (Debug::IsImmediateFlushingEnabled()) {
+					Debug::WriteException($ex);
 				}
 				else {
 					$c = Oxygen::GetLoginControl()->WithMessage($ex->getMessage())->WithRedirectOnSuccess($this);
@@ -136,8 +136,8 @@ abstract class Action implements OmniValue {
 			else {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
-				if (Log::IsImmediateFlushingEnabled()) {
-					Log::WriteException($ex);
+				if (Debug::IsImmediateFlushingEnabled()) {
+					Debug::WriteException($ex);
 				}
 				elseif ($this->IsAjax() && $this->IsDialog()){
 					echo new MessageControl($ex);
@@ -170,29 +170,47 @@ abstract class Action implements OmniValue {
 				Oxygen::SetResponseCode(500); // internal server error
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				echo Log::GetExceptionReportAsText($ex);
+				if (DEV)
+					echo '['.Lemma::Retrieve('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
+				else
+					echo Lemma::Retrieve('MsgAnErrorOccurred');
 			}
 			else {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
-				if (Log::IsImmediateFlushingEnabled()) {
-					Log::WriteException($ex);
+				if (Debug::IsImmediateFlushingEnabled()) {
+					if (DEV)
+						Debug::Write( '['.Lemma::Retrieve('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) );
+					else
+						Debug::Write( Lemma::Retrieve('MsgAnErrorOccurred') );
 				}
 				else {
 					echo '<table class="center"><tr><td>';
 					echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
 					echo '<table cellspacing="0" cellpadding="15" border="0"><tr>';
 					echo '<td class="vtop hright">'.new Spacer(50,30).'<br/>'.new Icon('oxy/ico/Bug',32).'</td>';
-					echo '<td>'.new Spacer(1,150).'</td>';
-					echo '<td style="border-left:1px solid #dddddd;text-align:left;">'.new Spacer(350).'<br/><br/><br/>';
-					echo Log::GetExceptionReportAsHtml($ex);
+					echo '<td>'.new Spacer(1,100).'</td>';
+					echo '<td class="vtop" style="border-left:1px solid #dddddd;text-align:left;">';
+
+					if (DEV) {
+						echo new Spacer(350,12);
+						echo '<div style="font-weight:normal;font-style:italic;color:#cccccc;font-size:90%;">'.Lemma::Retrieve('MsgDevelopmentEnvironment').'</div><br/>';
+						echo Debug::GetExceptionReportAsHtml($ex);
+						echo new Spacer(350);
+					}
+					else {
+						echo new Spacer(350,33);
+						echo new MessageControl( new ErrorMessage( Lemma::Retrieve('MsgAnErrorOccurred') ) );
+						echo new Spacer(350);
+					}
+
 					echo '</td>';
 					echo '</tr></table>';
 					echo '</td></tr></table>';
 					echo '</td></tr></table>';
 				}
 			}
-			// try{ Log::Record($ex); }catch(Exception $exx){}
+			Debug::RecordException($ex);
 		}
 		$result = ob_get_clean();
 		return $result;

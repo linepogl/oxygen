@@ -13,8 +13,11 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 	/** @var Scope */ public static $WINDOW;
 	/** @var Scope */ public static $REQUEST;
 
+	public static function IsAPCAvailable(){
+		return function_exists('apc_add') && function_exists('apc_exists'); // because apc_exists was added later on in 3.1.something
+	}
 	public static function InitScopes(){
-		self::$is_apc_available = function_exists('apc_add') && function_exists('apc_exists'); // because apc_exists was added later on in 3.1.something
+		self::$is_apc_available = self::IsAPCAvailable();
 		self::$base = $_SERVER["SERVER_NAME"].':'.$_SERVER["SERVER_PORT"].substr($_SERVER['SCRIPT_NAME'],0,strrpos($_SERVER['SCRIPT_NAME'],'/'));
 		Scope::$APPLICATION = new ApplicationScope();
 		Scope::$APPLICATION_HARD = new ApplicationScope(false);
@@ -27,13 +30,13 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 	}
 	public static function ResetScopes(){
 		if (self::$is_apc_available){
-			Log::Write('Cleaning APC user cache...');
+			Debug::Write('Cleaning APC user cache...');
 			apc_clear_cache('user');
-			Log::Write('Cleaning APC system cache...');
+			Debug::Write('Cleaning APC system cache...');
 			apc_clear_cache();
 		}
-		Log::Write('Cleaning Oxygen temp folder...');
-		Oxygen::ClearTempFolderFromOldFiles();
+		Debug::Write('Cleaning Oxygen temp folder...');
+		Oxygen::ClearTempFolder();
 		self::InitScopes();
 	}
 

@@ -86,7 +86,7 @@ final class Progress {
 	}
 
 	public static function Dump($var){
-		self::Write(new InfoMessage('<pre>'.Log::GetVariableAsString($var).'</pre>','oxy/ico/Bug'));
+		self::Write(new InfoMessage('<pre>'.Debug::GetVariableAsString($var).'</pre>','oxy/ico/Bug'));
 	}
 
 	public static function Update($absolute_progress,Message $message = null){

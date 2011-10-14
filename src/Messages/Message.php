@@ -20,7 +20,7 @@ abstract class Message {
 		,self::WARNING => 'warning'
 		,self::QUESTION => 'question'
 		,self::ERROR => 'error'
-		,self::ERROR => 'bug'
+		,self::BUG => 'bug'
 		);
 	public static function ConvertTypeToCode($type){ return Enum::From(self::$EnumType)->AsString($type); }
 	public static function ConvertCodeToType($code){ return Enum::From(self::$EnumType)->AsNumber($code); }
@@ -68,7 +68,7 @@ abstract class Message {
 			return new ErrorMessage($value->getMessage());
 
 		if ($value instanceof Exception)
-			return new BugMessage( Log::GetExceptionReportAsHtml($value) );
+			return new BugMessage( DEV ? Debug::GetExceptionReportAsHtml($value) : Lemma::Retrieve('MsgAnErrorOccurred') );
 
 		if (is_array($value))
 			return new MultiMessage($value);
