@@ -1,0 +1,227 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8" />
+<title>Oxygen documentation</title>
+<link rel="stylesheet" type="text/css" href="index.css" />
+</head><body>
+
+
+<h1>Variable scoping and persistence</h1>
+
+<p>
+One of the main characteristics of the HTTP protocol is that it is stateless. Every request is completely independent from the others.
+Web programming is directly affected by this attribute, because in order to build a complete application and not just a bunch of
+responders, one needs to maintain some internal application state.
+</p>
+
+<p>
+There are several ways to do this. For example, the state can be stored in the memory, in the disk as a file, in a database etc. Every
+web platform (like PHP, ASP, JSP etc) offers the required tools. However, PHP's tools are very poor, limited and not very convenient.
+</p>
+
+<p>
+Oxygen offers a streamlined way to maintain the internal state between requests.
+</p>
+
+<h2>Variable lifecycle</h2>
+
+<p>
+In programming, every variable belongs has a scope which directly affects its life time. For example, a variable declared inside a
+function lives up to the end of that function. After that, it becomes out of scope and it is no longer accessible from the rest of
+the code. On the other hand, it the variable is declared as static, it lives up to the end of the application process and therefore
+it becomes out of scope only when the process is unloaded by the operating system.
+</p>
+
+<p>
+In PHP, the application process process begins upon the reception of an HTTP request and ends when the response is sent back. There
+is no way to prolong this time. In addition, there is no way to open background processes that could live longer than that. What's
+more, there is absolutely no direct communication between the response processes or any way to directly share portions of memory.
+Therefore, it is not possible for a PHP variable to live longer than one request, unless it is copied somewhere else.
+</p>
+
+<p>
+The faster way is to copy the variables to a part of memory which is marked as shared. PHP does not support this directly, however,
+this becomes possible with the installation of the extension APC (<a class="external" href="http://php.net/manual/en/book.apc.php"
+>http://php.net/manual/en/book.apc.php</a>). It this extension is installed, Oxygen will use it by default.
+</p>
+
+<p>
+Another way is to store the variable in some file in the hard disk. This is not as fast as the memory, but still fast enough for most
+of the cases. Oxygen uses this mode if APC is not available. The files for the variables are stored in Oxygen's temp folder. See <a
+href="setup.html">Seting up Oxygen</a> for more info.
+</p>
+
+<h2>Serialization</h2>
+
+<p>
+In order to copy a variable to an external means, either the shared memory or the disk, it has to be serialized first, which means
+that it has to be converted to a string.
+
+<p>
+Most of PHP internal data types can be serialized automatically by the language itself. That includes the data types of <span
+class="code">string</span>, <span class="code">int</span>, <span class="code">float</span>,	<span class="code">boolean</span>, <span
+class="code">null</span> and <span class="code">array</span>. However, the data types <span class="code">resource</span> and <span
+class="code">callable</span> cannot be serialized. Finally, the data type <span class="code">object</span> can be serialized when
+the class provides the magic methods <span class="code">__sleep()</span> and <span class="code">__wakeup()</span> or by implementing
+the interface <span class="code">Serializable</span>. Most of Oxygen's classes implement <span class="code">Serializable</span> for
+this reason. See <a class="external" href="http://www.php.net/manual/en/language.oop5.serialization.php">http://www.php.net/manual/en/language.oop5.serialization.php</a>.
+</p>
+
+
+<h2>The scopes</h2>
+
+<p>
+Oxygen provides five scopes and the variables stored to each of them have different life times. 
+</p>
+
+<h3>Application scope</h3>
+
+<p>
+A variable stored in the application scope theoretically lives up to the end of the web application (which is forever). In practice,
+however, this is much shorter, as every file in the temp folder is removed after one day. Yet, this is still very useful for
+caching data that takes long to be generated from scratch or from sharing data between all PHP processes of the web application.
+</p>
+
+<p class="code">
+// storing a variable to the application scope
+$x = 'Hello!';
+Scope::$APPLICATION['my_shared_variable'] = $x;
+
+// reading a variable from the application scope
+$x = Scope::$APPLICATION['my_shared_variable'];
+echo $x; // output: Hello!
+</p>
+
+
+<h3>Database scope</h3>
+
+<p>
+A variable stored in the database scope is shared among all the processes that are connected to the same database schema. This
+scope is very useful for caching database operations. For more information on database connections see <a href="database.html">Connecting to databases</a>.
+</p>
+
+<p class="code">
+// storing a variable to the database scope
+$x = 'Hello!';
+Scope::$DATABASE['my_shared_variable'] = $x;
+
+// reading a variable from the database scope
+$x = Scope::$DATABASE['my_shared_variable'];
+echo $x; // output: Hello!
+</p>
+
+
+
+<h3>Session scope</h3>
+
+<p>
+A session is the group of all requests coming from the same browser. The identification of the brower is done with a cookie and
+therefore cookies must be enabled in order to make this scope work.
+</p>
+
+<p>
+Unlike PHP's $_SESSION array, Oxygen's session scope (similar to all its scope constructs) uses a separate entry for every variable
+and does not need to load it unless been asked to. Therefore, it is possible to store variables with a big size without problem.
+</p>
+
+<p class="code">
+// storing a variable to the session scope
+$x = 'Hello!';
+Scope::$SESSION['my_shared_variable'] = $x;
+
+// reading a variable from the session scope
+$x = Scope::$SESSION['my_shared_variable'];
+echo $x; // output: Hello!
+</p>
+
+
+<h3>Window scope</h3>
+
+<p>
+Many users use multiple tabs in the same browser in order to access different parts of a web application simultaneously. Variables
+strored to the window scope can be shared between all requests coming from the same browser tab. This is useful in order to share
+data between different ajax calls.
+</p>
+
+<p>
+The identification of the browser tab is done with an extra argument in the query string. If Oxygen's action controller is used, this
+argument is automatically generated. However, this causes one extra HTTP request the first time each new tab is opened. If window
+scope is not used, it can be deactivated.
+<p>
+
+<p class="code">
+// deactivating window scope
+Oxygen::SetWindowScopingEnabled(false);
+</p>
+
+<p>
+Storing a variable to the window scope and reading it back is no different:
+</p>
+
+<p class="code">
+// storing a variable to the window scope
+$x = 'Hello!';
+Scope::$WINDOW['my_shared_variable'] = $x;
+
+// reading a variable from the window scope
+$x = Scope::$WINDOW['my_shared_variable'];
+echo $x; // output: Hello!
+</p>
+
+
+<h3>Request scope</h3>
+
+<p>
+The request scope is equivalent to PHP's static scope. It is offered here only for completeness and uniformity.
+</p>
+
+<p class="code">
+// storing a variable to the request scope
+$x = 'Hello!';
+Scope::$REQUEST['my_shared_variable'] = $x;
+
+// reading a variable from the request scope
+$x = Scope::$REQUEST['my_shared_variable'];
+echo $x; // output: Hello!
+</p>
+
+
+
+<h2>Hard scopes</h2>
+
+<p>
+By default, all variables stored to one of the Oxygen's scopes will be put in the APC shared memory, if this is available. However, a
+variable put in the shared memory is not guaranteed to stay there. If memory is needed, some variables may be deleted. This is no problem
+if the data can be regenerated automatically.
+</p>
+
+<p>
+However, there are some cases that the data cannot be regenerated. For instance, it is common practice to store the identification of the current
+user of a web application in the session scope. If this data is erased, it cannot be regenerated automatically; the user will have to log-in
+again.
+<p>
+
+<p>
+To force a variable be kept in the disk, Oxygen offers the alternative scopes <span class="code">Scope::$APPLICATION_HARD</span>,
+<span class="code">Scope::$DATABASE_HARD</span> and <span class="code">Scope::$SESSION_HARD</span>.
+</p>
+
+<p class="code">
+// storing a variable to the session scope, forced to be kept in the disk.
+Scope::$SESSION_HARD['idUser'] = $idUser;
+
+// reading a variable from the hard session scope
+$idUser = Scope::$SESSION_HARD['idUser'];
+</p>
+
+
+
+
+
+
+
+
+<footer>
+<a href="index.html">&larr; Table of contents</a>
+</footer>
+
+
+</body></html>

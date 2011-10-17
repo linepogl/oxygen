@@ -16,7 +16,8 @@ class ActionOxygenDocs extends ConsoleAction {
 	public function Render(){
 
 
-		echo $this->GetName();
+		$f = file_get_contents('oxy/hlp/index.html');
+		echo $f;
 
 
 	}
