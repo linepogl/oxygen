@@ -1,0 +1,103 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8" />
+<title>Oxygen documentation</title>
+<link rel="stylesheet" type="text/css" href="index.css" />
+</head><body>
+
+
+
+<h1>Object meta data</h1>
+
+<p>
+In class-based object oriented programming, classes act as templates for the creation of object instances. They describe the what members each object will have, how these
+members will be initialized, where they will be visible from. In strictly typed languages it is also possible to define the type of each member. All this information, is
+essentially meta data for the objects, because it describes the object itself. Therefore, a class contains the meta data of its objects.
+</p>
+
+<p>
+Yet, with the use of the few available keywords (<span class="code">public</span>, <span class="code">private</span>, <span class="code">static</span>, <span class="code">abstract</span>
+etc., we can only describe just a few aspects of an object. It would be nice if we could describe more details. Many languages, including C# and Java, offer this option through the use
+of compile time attributes on each member of a class. So, putting attributes on a class and its members gives a way to further describe the behaviour of the objects.
+</p>
+
+<p>
+In PHP, things are much more limited. First of all, it is not possible to define the type of each field. In addition, there is no standard way to put attributes. Many frameworks
+provide this by using special tags in documentation comments, but this is not supported directly by the language and therefore it is non-standard and limited. In order to
+provide this functionality, Oxygen relies on standard PHP features like abstraction, inheritance, and late static binding.
+</p>
+
+<h2>The XItem and the XMeta</h2>
+
+<p>
+The ability to describe with meta data an object is very useful when it come to the central business objects of an application, which is usually called "The Model". In Oxygen
+the basic abstract class <span class="code">XItem</span> provides this ability to all the objects that extend it. Every <span class="code">XItem</span> class is linked with
+an <span class="code">XMeta</span> object that contains all the extra information about the objects. All one has to do is to extend the <span class="code">XItem</span> class
+and fill the extra information in the <span class="code">XMeta</span> object.
+</p>
+
+<p>
+Imagine a simple bookstore application, that has a class <span class="code">Book</span>. To keep things simple, let's say that each book has only one field witht the name "Title".
+An implementation of this concept in PHP could be like this:
+</p>
+
+<p class="code">
+class Book {
+	public $Title;
+}
+</p>
+
+<p>
+That's pretty much everything we can say about the book in the class definition. However there are a lot of extra information that we would like to put here. For example, all
+books are stored in the table "book" of a database. The title of the book is actually a string, which can be empty but not null. When print in the
+user interface, the title should go under the label "Title" in English but "Titre" in French. I can continue forever with such requirements. My point is that all this info
+does not change during the application and describe all book instances. Therefore, we are talking about meta-data of a book which have to be coded in the class of book.
+</p>
+
+<p>
+Here is the code to do this in Oxygen:
+</p>
+
+<p class="code">
+class Book extends XItem {
+	public $Title;
+	public static function FillMeta(XMeta $m){
+		$m->SetDBTableName('book');
+		$m->Title = OmniString::Field()->WithLabel( new Lemma('en','Title','fr','Titre') );
+	}
+}
+</p>
+
+<p>
+By overriding the static function <span class="code">FillMeta</span> (with late static binding), we put all the meta-data in an <span class="code">XMeta</span> object. This
+object is used by Oxygen for many things, including loading from a database, exporting to XML, reading from an HTTP POST request etc.. However, the <span class="code">XMeta</span>
+object can be used for a variety of other things, so here is an easy way to retrieve it:
+</p>
+
+<p class="code">
+$meta = Book::Meta();
+echo $meta->Title->GetName()    // output: Title
+echo $meta->Title->GetLabel()   // output: Title in English or Titre in French
+</p>
+
+
+<h2>The surrogate primary key</h2>
+
+<p>
+Each instance of an <span class="code">XItem</span> has a unique identifier under the field <span class="code">id</span>. This identifier is used by Oxygen as a key to the
+objects. Essentially, if two objects of the same type have the same id, they are considered equal. In addition, there is an id-based central repository of all objects that
+make it easy to keep just one instance of each object in memory. In other words, if two objects of the same type have the same id, they should be loaded only once.
+</p>
+
+<p>
+The id field is also used as the primary key for database operations. For more info about this see <a href="orm.html">Object Relational Mapping</a>.
+</p>
+
+
+
+
+
+
+<footer>
+<a href="index.html">&larr; Table of contents</a>
+</footer>
+
+</body></html>
