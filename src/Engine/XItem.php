@@ -564,13 +564,13 @@ abstract class XItem implements Serializable,OmniValue {
 
 	/** @return XList */ public static final function Seek(){ return static::Meta()->SeekItems(); }
 	/** @return XList */ public static final function SeekAggressively(){ return static::Meta()->SeekItems()->Aggressively(); }
-//	/** @return XList */ public static final function SeekGeneric($classname){ return XMeta::Of($classname)->SeekItems(); }
+	/** @return XList */ public static final function SeekGeneric($classname){ return XMeta::Of($classname)->SeekItems(); }
 
 	/** @return XItem|null */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
-//	/** @return XItem|null */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
+	/** @return XItem|null */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
 
-	/** @return XItem */ public static function Make(){ return self::Meta()->MakeItem(); }
-//	/** @return XItem */ public static function MakeGeneric($classname){ return self::Meta()->MakeItem(); }
+	/** @return XItem */ public static final function Make(){ return static::Meta()->MakeItem(); }
+	/** @return XItem */ public static final function MakeGeneric($classname){ return XMeta::Of($classname)->MakeItem(); }
 
 
 	/** @return ID */ public static function GetNextID(){ return static::Meta()->GetNextID(); }
