@@ -7,6 +7,7 @@ abstract class XItem implements Serializable,OmniValue {
 		$this->id = is_null($id) ? self::GetNextID() : ($id instanceof ID ? $id : new ID($id));
 		$this->Init();
 	}
+	public static function FillMeta(XMeta $m){}
 	public function __toString(){
 		return $this->id->AsHex();
 	}
@@ -283,16 +284,8 @@ abstract class XItem implements Serializable,OmniValue {
 		return $r;
 	}
 
-	/** @return XItem */
-	public static function Create(){
-		return self::CreateGeneric(get_called_class());
-	}
-	/** @return XItem */
-	public static function CreateGeneric($classname){
-		$r = new $classname();
-		self::SaveInCache($classname,$r->id->AsInt(),$r);
-		return $r;
-	}
+
+
 
 
 
@@ -326,7 +319,7 @@ abstract class XItem implements Serializable,OmniValue {
 				$foreign_field = $f->GetXmlForeignField();
 				if (!is_null($foreign_field)) {
 					$nn = $foreign_field->GetName();
-					$x = XItem::RetrieveGeneric($foreign_field->GetMeta()->GetClassName(),$value);
+					$x = $foreign_field->GetMeta()->Pick($value);
 					$value = is_null($x) ? null : $x->$nn;
 				}
 
@@ -540,16 +533,6 @@ abstract class XItem implements Serializable,OmniValue {
 
 
 
-	public static function GetNextID(){
-		return self::Meta()->GetNextID();
-	}
-
-
-	public static function NewList(){ return new XList(self::Meta()); }
-
-
-	public static function FillMeta(XMeta $m) { }
-	/** @return XMeta */ public static final function Meta(){ return XMeta::Pick(get_called_class()); }
 
 	
 	/** @return XWrap */
@@ -563,52 +546,38 @@ abstract class XItem implements Serializable,OmniValue {
 	}
 
 
-	/** @return XItem|null */
-	public static final function Retrieve($id,DBReader $dr=null){ return self::RetrieveGeneric(get_called_class(),$id,$dr); }
-	/** @return XItem|null */
-	public static final function RetrieveGeneric($classname,$id,DBReader $dr=null) {
-		if (is_null($id) || is_null($classname)) return null;
-		if (!($id instanceof ID)) $id = new ID($id);
-		$idi = $id->AsInt();
-		if (self::ExistsInLocalCache($classname,$idi))
-			return self::RetrieveFromLocalCache($classname,$idi);
-		elseif (self::ExistsInRemoteCache($classname,$idi))
-			return self::RetrieveFromRemoteCache($classname,$idi);
-		else {
-			$c = XMeta::Pick($classname);
-			$tablename = $c->GetDBTableName();
-			$primarykey = $c->id->GetDBName();
-
-			if ($c->IsAbstract()){
-				if (!array_key_exists($tablename,self::$abstract_classnames)) self::$abstract_classnames[$tablename] = array();
-				if (!array_key_exists($idi,self::$abstract_classnames[$tablename])) {
-					self::$abstract_classnames[$tablename][$idi] = Database::ExecuteScalar('SELECT '.$c->GetAbstractDBFieldName().' FROM '.$tablename.' WHERE '.$primarykey.'=?',$id)->AsString();
-				}
-				$classname = self::$abstract_classnames[$tablename][$idi];
-				$x = self::RetrieveGeneric($classname,$id);
-			}
-			else {
-				/** @var $x XItem */
-				$x = new $classname($idi);
-				$found = $x->Load($dr);
-				if (!$found)
-					$x = null;
-			}
-			self::SaveInCache($classname,$idi,$x);
-		}
-		return $x;
-	}
 
 
 
-	/** @return XList */ public static final function MakeList(){ return static::Meta()->MakeList(); }
-	/** @return XList */ public static final function MakeListFromDB(){ return static::Meta()->MakeListFromDB(); }
 
-	/** @return XList */ public static final function Find(XPred $where = null){ return static::Meta()->MakeListFromDB()->Where($where); }
-	/** @return XList */ public static final function FindGeneric($classname, XPred $where = null){ return XMeta::Pick($classname)->MakeListFromDB()->Where($where); }
 
-	/** @return XList */ public static final function Select(XPred $where = null){ return static::Meta()->MakeListFromDB()->Where($where); }
-	/** @return XList */ public static final function SelectGeneric($classname, XPred $where = null){ return XMeta::Pick($classname)->MakeListFromDB()->Where($where); }
+
+
+	//
+	//
+	// Meta
+	//
+	//
+	/** @return XMeta */ public static final function Meta(){ return XMeta::Of(get_called_class()); }
+
+	/** @return XList */ public static final function MakeList(){ return static::Meta()->MakeItemList(); }
+
+	/** @return XList */ public static final function Seek(){ return static::Meta()->SeekItems(); }
+	/** @return XList */ public static final function SeekAggressively(){ return static::Meta()->SeekItems()->Aggressively(); }
+	/** @return XList */ public static final function SeekGeneric($classname){ return XMeta::Of($classname)->SeekItems(); }
+
+	/** @return XItem|null */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
+	/** @return XItem|null */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
+
+	/** @return XItem */ public final function Make(){ return self::Meta()->MakeItem(); }
+	/** @return XItem */ public final function MakeGeneric($classname){ return self::Meta()->MakeItem(); }
+
+
+	/** @return ID */ public static function GetNextID(){ return static::Meta()->GetNextID(); }
+
+
+
+
 
 
 
@@ -708,40 +677,6 @@ abstract class XItem implements Serializable,OmniValue {
 
 
 
-	//
-	//
-	// Cache
-	//
-	//
-	private static $request_scope_item_cache = array();
-	private static $abstract_classnames = array();
-	public static final function ResetRequestScopeCache(){ self::$request_scope_item_cache = array(); }
-	private static function ExistsInLocalCache($classname,$idi){
-		return isset(self::$request_scope_item_cache[$classname][$idi]); //<-- this works!
-	}
-	private static function ExistsInRemoteCache($classname,$idi){
-		return Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains('XItem::Cache::'.$classname.$idi);
-	}
-	private static function RetrieveFromLocalCache($classname,$idi){
-		return self::$request_scope_item_cache[$classname][$idi];
-	}
-	private static function RetrieveFromRemoteCache($classname,$idi){
-		$r = Scope::$DATABASE['XItem::Cache::'.$classname.$idi];
-		if (!array_key_exists($classname,self::$request_scope_item_cache)) self::$request_scope_item_cache[$classname] = array();
-		self::$request_scope_item_cache[$classname][$idi] = $r;
-		return $r;
-	}
-	private static function SaveInCache($classname,$idi,$item){
-		if (!array_key_exists($classname,self::$request_scope_item_cache)) self::$request_scope_item_cache[$classname] = array();
-		self::$request_scope_item_cache[$classname][$idi] = $item;
-		if (Oxygen::IsItemCacheEnabled())
-			Scope::$DATABASE['XItem::Cache::'.$classname.$idi] = $item;
-	}
-	private static function DeleteFromCache($classname,$idi){
-		unset(self::$request_scope_item_cache[$classname][$idi]); //<-- this works!
-    if (Oxygen::IsItemCacheEnabled())
-			Scope::$DATABASE['XItem::Cache::'.$classname.$idi] = null;
-	}
 
 }
 

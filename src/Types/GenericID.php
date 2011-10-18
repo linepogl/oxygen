@@ -13,10 +13,10 @@ class GenericID extends ID implements OmniValue {
 	}
 
 	public function ToXItem(){
-		return XItem::RetrieveGeneric($this->classname,$this);
+		return XItem::PickGeneric($this->classname,$this);
 	}
-	public function RetrieveXItem(){
-		return XItem::RetrieveGeneric($this->classname,$this);
+	public function PickXItem(){
+		return XItem::PickGeneric($this->classname,$this);
 	}
 	public function GetClassName(){
 		return $this->classname;

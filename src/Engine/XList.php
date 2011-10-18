@@ -33,7 +33,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	//
 	private $is_aggressive = false;
 	/** @return XList */
-	public function SetIsAggressive($value){ $this->is_aggressive = $value; return $this; }
+	public function Aggressively($value = true){ $this->is_aggressive = $value; return $this; }
 
 
 
@@ -49,7 +49,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		if ($this->is_aggressive) {
 			$dr = Database::ExecuteX($sql,$params);
 			while ($dr->Read())
-				$this->data[] = XItem::RetrieveGeneric($this->meta->GetClassName(),$dr[0]->AsID(),$dr);
+				$this->data[] = XItem::PickGeneric($this->meta->GetClassName(),$dr[0]->AsID(),$dr);
 			$dr->Close();
 		}
 		else {
@@ -170,8 +170,8 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 			if (count($ids) > 0){
 				$a = new XList($this->meta,true);
-				$a->SetIsAggressive(true);
-				$a->Where( $this->meta->id->In($ids) );
+				$a->is_aggressive = true;
+				$a->where = XPred::All( $this->meta->id->In($ids) );
 				$b = array();
 				foreach ($a as $x)
 					$b[$x->id->AsInt()] = $x;
@@ -274,7 +274,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	public function offsetGet($offset) {
 		$this->Load();
 		if (!array_key_exists($offset,$this->data)) throw new Exception('Offset '.$offset.' not found.');
-		if ($this->data[$offset] instanceof ID) $this->data[$offset] = XItem::RetrieveGeneric($this->meta->GetClassName(),$this->data[$offset]);
+		if ($this->data[$offset] instanceof ID) $this->data[$offset] = XItem::PickGeneric($this->meta->GetClassName(),$this->data[$offset]);
 		return $this->data[$offset];
 	}
 	public function offsetSet($offset, $value) {

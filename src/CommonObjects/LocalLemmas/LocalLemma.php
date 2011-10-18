@@ -12,8 +12,8 @@ class LocalLemma extends XItem {
 	
 		
 		
-	public static function RetrieveByName($name){
-		return self::Select( self::Meta()->Name->Eq($name) )->GetFirst();
+	public static function PickByName($name){
+		return self::Seek()->Where( self::Meta()->Name->Eq($name) )->GetFirst();
 	}
 
 

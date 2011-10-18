@@ -114,7 +114,7 @@ class Database {
 		self::$type = array_pop(self::$stack_type);
 	}
 	private static function ResetCaches(){
-		XItem::ResetRequestScopeCache();
+		XMeta::ResetItemCaches();
 		Scope::$DATABASE = new DatabaseScope();
 		Scope::$DATABASE_HARD = new DatabaseScope(false);
 	}

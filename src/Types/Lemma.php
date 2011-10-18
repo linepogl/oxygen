@@ -126,9 +126,6 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 	public static function GetBasicDictionary(){ return self::$basic_dictionary; }
 	public static function GetLocalDictionary(){ return self::$local_dictionary; }
 
-	public static function Pick($name){
-		return isset(self::$current_dictionary[$name]) ? self::$current_dictionary[$name] : new Lemma($name);
-	}
 	public static function Retrieve($name){
 		return isset(self::$current_dictionary[$name]) ? self::$current_dictionary[$name] : new Lemma($name);
 	}
@@ -224,7 +221,7 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 			foreach (self::$basic_dictionary as $key=>$value)
 				self::$local_dictionary[$key] = $value;
 	    /** @var $local_lemma LocalLemma */
-			foreach (LocalLemma::Select()->SetIsAggressive(true) as $local_lemma){
+			foreach (LocalLemma::SeekAggressively() as $local_lemma){
 				$key = $local_lemma->Name;
 				if (array_key_exists($key,self::$local_dictionary))
 					self::$local_dictionary[$key] = self::Merge(self::$local_dictionary[$key],$local_lemma->Overlap);

@@ -3,9 +3,9 @@
 class XMeta extends stdClass {
 	public $id;
 	private $__classname;
-	protected function __construct($classname){
+	private function __construct($classname){
 		$this->__classname=$classname;
-		$this->id = XMeta::ID();
+		$this->id = OmniID::Field();
 	}
 	public function GetClassName(){ return $this->__classname; }
 
@@ -47,11 +47,6 @@ class XMeta extends stdClass {
 	/** @return XMeta */ public function GetRoot(){ return is_null($this->__parent) ? $this : $this->GetParent()->GetRoot(); }
 
 
-	/** @return XList */
-	public function MakeListFromDB(){ return new XList($this,true); }
-
-	/** @return XList */
-	public function MakeList(){ return new XList($this,false); }
 
 
 	public function Compile(){
@@ -131,19 +126,124 @@ class XMeta extends stdClass {
 
 
 
-	private static $cache = array();
-	/** @deprecated @return XMeta */
-	public static function Retrieve($classname){ return self::Pick($classname); }
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	//
+	//
+	// Singleton
+	//
+	//
+	private static $__cache = array();
 	/** @return XMeta */
-	public static function Pick($classname){
-		if (!array_key_exists($classname,self::$cache)) {
-			self::$cache[$classname] = new XMeta($classname);
+	public static function Of($classname){
+		if (!isset(self::$__cache[$classname])) {
+			self::$__cache[$classname] = new XMeta($classname);
 			$m = new ReflectionMethod($classname,'FillMeta');
-			$m->invoke(null,self::$cache[$classname]);
-			self::$cache[$classname]->Compile();
+			$m->invoke(null,self::$__cache[$classname]);
+			self::$__cache[$classname]->Compile();
 		}
-		return self::$cache[$classname];
+		return self::$__cache[$classname];
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//
+	//
+	// Items
+	//
+	//
+	/** @return XList */
+	public function MakeItemList(){ return new XList($this); }
+
+	/** @return XList */
+	public function SeekItems(){ return new XList($this,true); }
+
+	/** @return XItem */
+	public final function MakeItem(){
+		$classname = $this->__classname;
+		$r = new $classname();
+		$this->SaveInCache($r->id->AsInt(),$r);
+		return $r;
+	}
+
+	/** @return XItem|null */
+	public final function PickItem($id,DBReader $dr=null) {
+		if (is_null($id)) return null;
+		if (!($id instanceof ID)) $id = new ID($id);
+		$idi = $id->AsInt();
+		if ($this->ExistsInLocalCache($idi))
+			return $this->PickFromLocalCache($idi);
+		elseif ($this->ExistsInRemoteCache($idi))
+			return $this->PickFromRemoteCache($idi);
+		elseif ($this->IsAbstract()){
+			if (!array_key_exists($idi,$this->__item_concrete_meta_cache)) {
+				$this->__item_concrete_meta_cache[$idi] = XMeta::Of( Database::ExecuteScalar('SELECT '.$this->GetAbstractDBFieldName().' FROM '.$this->GetDBTableName().' WHERE '.$this->id->GetDBName().'=?',$id)->AsString() );
+			}
+			/** @var $m XMeta */
+			$m = $this->__item_concrete_meta_cache[$idi];
+			$x = $m->PickItem($id);
+			$this->SaveInCache($idi,$x);
+		}
+		else {
+			/** @var $x XItem */
+			$classname = $this->__classname;
+			$x = new $classname($idi);
+			$found = $x->Load($dr);
+			if (!$found)
+				$x = null;
+		}
+		$this->SaveInCache($idi,$x);
+		return $x;
+	}
+	
+	//
+	//
+	// Item Cache
+	//
+	//
+	private $__item_cache = array();
+	private $__item_concrete_meta_cache = array();
+	private function ExistsInLocalCache($idi)  { return array_key_exists($idi,$this->__item_cache); }
+	private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
+	private function ExistsInRemoteCache($idi) { return Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains('XMeta::ItemCache'.$this->__classname.$idi); }
+	private function PickFromRemoteCache($idi) { return $this->__item_cache[$idi] = Scope::$DATABASE['XMeta::ItemCache'.$this->__classname.$idi]; }
+	private function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE['XMeta::ItemCache'.$this->__classname.$idi] = $item; }
+	public function RemoveFromCache($idi) { unset($this->__item_cache[$idi]);  if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE['XMeta::ItemCache'.$this->__classname.$idi] = null; }
+	public static function ResetItemCaches() { /** @var $m XMeta */ foreach (self::$__cache as $m) { $m->__item_cache = array(); $m->__item_concrete_meta_cache = array(); } }
+
+
+
+
 
 
 

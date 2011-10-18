@@ -22,10 +22,10 @@ class XSlave {
 
 
 	/** @return XList */
-	public function MakeListFromDB(XItem $master_item){
+	public function Seek(XItem $master_item){
 		$hook_field = $this->GetHookField();
-		$a = $hook_field->GetMeta()->MakeListFromDB()
-			->SetIsAggressive($this->is_aggressive)
+		$a = $hook_field->GetMeta()->SeekItems()
+			->Aggressively($this->is_aggressive)
 			->Where($hook_field->Eq($master_item))
 			->Where($this->Where);
 		if (!is_null($this->OrderBy)) $a->OrderBy($this->OrderBy);
