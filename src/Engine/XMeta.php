@@ -83,41 +83,23 @@ class XMeta extends stdClass {
 
 	}
 
-	/** @return ID */
-	public function GetNextID(){
-		return Database::ExecuteGetNextIDFor($this->GetDBSequence(),$this->id->GetDBName());
-	}
-
-
 	private $__fields;
-	public function & GetFields(){
-		return $this->__fields;
-	}
+	public function GetFields(){ return $this->__fields; }
 
 	private $__dbfields;
-	public function & GetDBFields(){
-		return $this->__dbfields;
-	}
+	public function GetDBFields(){ return $this->__dbfields; }
 
 	private $__xmlfields;
-	public function & GetXmlFields(){
-		return $this->__xmlfields;
-	}
+	public function GetXmlFields(){ return $this->__xmlfields; }
 
 	private $__slaves;
-	public function & GetSlaves(){
-		return $this->__slaves;
-	}
+	public function GetSlaves(){ return $this->__slaves; }
 
 	private $__dbslaves;
-	public function & GetDBSlaves(){
-		return $this->__dbslaves;
-	}
+	public function GetDBSlaves(){ return $this->__dbslaves; }
 
 	private $__xmlslaves;
-	public function & GetXmlSlaves(){
-		return $this->__xmlslaves;
-	}
+	public function GetXmlSlaves(){ return $this->__xmlslaves; }
 
 
 	public function IsEqualTo(XMeta $c){
@@ -160,6 +142,11 @@ class XMeta extends stdClass {
 
 
 
+
+	/** @return ID */
+	public function GetNextID(){
+		return Database::ExecuteGetNextIDFor($this->GetDBSequence(),$this->id->GetDBName());
+	}
 
 
 
@@ -237,7 +224,7 @@ class XMeta extends stdClass {
 	private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
 	private function ExistsInRemoteCache($idi) { return Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains('XMeta::ItemCache'.$this->__classname.$idi); }
 	private function PickFromRemoteCache($idi) { return $this->__item_cache[$idi] = Scope::$DATABASE['XMeta::ItemCache'.$this->__classname.$idi]; }
-	private function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE['XMeta::ItemCache'.$this->__classname.$idi] = $item; }
+	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE['XMeta::ItemCache'.$this->__classname.$idi] = $item; }
 	public function RemoveFromCache($idi) { unset($this->__item_cache[$idi]);  if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE['XMeta::ItemCache'.$this->__classname.$idi] = null; }
 	public static function ResetItemCaches() { /** @var $m XMeta */ foreach (self::$__cache as $m) { $m->__item_cache = array(); $m->__item_concrete_meta_cache = array(); } }
 

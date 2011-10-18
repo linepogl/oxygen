@@ -49,7 +49,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		if ($this->is_aggressive) {
 			$dr = Database::ExecuteX($sql,$params);
 			while ($dr->Read())
-				$this->data[] = XItem::PickGeneric($this->meta->GetClassName(),$dr[0]->AsID(),$dr);
+				$this->data[] = $this->meta->PickItem($dr[0]->AsID(),$dr);
 			$dr->Close();
 		}
 		else {
@@ -274,7 +274,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	public function offsetGet($offset) {
 		$this->Load();
 		if (!array_key_exists($offset,$this->data)) throw new Exception('Offset '.$offset.' not found.');
-		if ($this->data[$offset] instanceof ID) $this->data[$offset] = XItem::PickGeneric($this->meta->GetClassName(),$this->data[$offset]);
+		if ($this->data[$offset] instanceof ID) $this->data[$offset] = $this->meta->PickItem( $this->data[$offset] );
 		return $this->data[$offset];
 	}
 	public function offsetSet($offset, $value) {

@@ -450,7 +450,7 @@ abstract class XItem implements Serializable,OmniValue {
 					foreach ($e->childNodes as $ee){
 						if (!($ee instanceof DOMElement)) continue;
 						if ($ee->tagName != $foreign_meta_class->GetXmlTagName()) continue;
-						$x = XItem::CreateGeneric($foreign_meta_class->GetClassName());
+						$x = $foreign_meta_class->MakeItem();
 						$nn = $foreign_meta_field->GetName();
 						$x->$nn = $this->id;
 						$v[] = $x->ImportXml($ee,$st,array($foreign_meta_field));
@@ -512,7 +512,7 @@ abstract class XItem implements Serializable,OmniValue {
 			}
 		}
 
-		self::SaveInCache(get_called_class(),$this->id->AsInt(),$this);
+		$m->SaveInCache( $this->id->AsInt(),$this );
 	}
 
 
@@ -564,13 +564,13 @@ abstract class XItem implements Serializable,OmniValue {
 
 	/** @return XList */ public static final function Seek(){ return static::Meta()->SeekItems(); }
 	/** @return XList */ public static final function SeekAggressively(){ return static::Meta()->SeekItems()->Aggressively(); }
-	/** @return XList */ public static final function SeekGeneric($classname){ return XMeta::Of($classname)->SeekItems(); }
+//	/** @return XList */ public static final function SeekGeneric($classname){ return XMeta::Of($classname)->SeekItems(); }
 
 	/** @return XItem|null */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
-	/** @return XItem|null */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
+//	/** @return XItem|null */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
 
-	/** @return XItem */ public final function Make(){ return self::Meta()->MakeItem(); }
-	/** @return XItem */ public final function MakeGeneric($classname){ return self::Meta()->MakeItem(); }
+	/** @return XItem */ public static function Make(){ return self::Meta()->MakeItem(); }
+//	/** @return XItem */ public static function MakeGeneric($classname){ return self::Meta()->MakeItem(); }
 
 
 	/** @return ID */ public static function GetNextID(){ return static::Meta()->GetNextID(); }
