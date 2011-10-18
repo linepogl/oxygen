@@ -72,7 +72,7 @@ abstract class XItem implements Serializable,OmniValue {
 			/** @var $sl XSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
-				$this->$n = new XList($sl->GetHookMeta());
+				$this->$n = $sl->MakeItemList();
 			}
 		}
 		$this->OnLoad();
@@ -85,7 +85,7 @@ abstract class XItem implements Serializable,OmniValue {
 			/** @var $sl XSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
-				$this->$n = new XList($sl->GetHookMeta());
+				$this->$n = $sl->MakeItemList();
 			}
 		}
 		$this->OnInit();
@@ -141,7 +141,7 @@ abstract class XItem implements Serializable,OmniValue {
 			/** @var $sl XSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
-				$this->$n = $sl->MakeListFromDB($this);
+				$this->$n = $sl->SeekItemsByMaster($this);
 			}
 		}
 
@@ -216,7 +216,7 @@ abstract class XItem implements Serializable,OmniValue {
 				// delete removed slaves
 				$hook_field = $sl->GetHookField();
 				$hook_class = $hook_field->GetMeta();
-				$to_be_deleted = $hook_class->MakeListFromDB()
+				$to_be_deleted = $hook_class->SeekItems()
 					->Where($hook_field->Eq($this))
 					->Where($hook_class->id->NotIn($a));
 				if (!is_null($sl->Where))
@@ -501,7 +501,7 @@ abstract class XItem implements Serializable,OmniValue {
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
 				$a = $this->$n;
-				$aa = new XList();
+				$aa = $sl->MakeItemList();
 				foreach ($a as $x) {
 					$xx = clone $x;
 					$nn = $sl->GetHookField()->GetName();

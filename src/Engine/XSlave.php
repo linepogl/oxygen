@@ -22,7 +22,12 @@ class XSlave {
 
 
 	/** @return XList */
-	public function Seek(XItem $master_item){
+	public function MakeItemList(){
+		return $this->GetMeta()->MakeItemList();
+	}
+
+	/** @return XList */
+	public function SeekItemsByMaster(XItem $master_item){
 		$hook_field = $this->GetHookField();
 		$a = $hook_field->GetMeta()->SeekItems()
 			->Aggressively($this->is_aggressive)
