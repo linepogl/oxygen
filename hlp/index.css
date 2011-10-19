@@ -1,15 +1,17 @@
 
 
-body, td, * { font:14px/20px Trebuchet MS, sans-serif; margin:0; padding:0; }
+body, td, * { font:14px/20px Trebuchet MS, sans-serif; margin:0; padding:0; color:#666666; }
 
 p,h1,h2,h3,footer { padding:0 35px; }
 h1     { font:bold 30px/38px Trebuchet MS, sans-serif; margin:70px 0 20px 0; color:#406a80 }
 h2     { font:bold 22px/26px Trebuchet MS, sans-serif; margin:45px 0 10px 0; color:#406a80 }
 h3     { font:bold 15px/20px Trebuchet MS, sans-serif; margin:20px 0 10px 0; color:#406a80 }
-p      { font:14px/20px Trebuchet MS, sans-serif; margin:10px 0; color:#666666; text-align:justify; }
+p      { font:14px/20px Trebuchet MS, sans-serif; margin:10px 0; text-align:justify; }
 footer { border-top:1px solid #eeeeee; background:#fafafa;  padding-top:20px; padding-bottom:100px;  margin-top:60px; }
 
-ul     { padding:0 65px; }
+ul, ol { padding:0 65px; }
+b      { font-weight:bold; color:#000000; }
+i      { font-style:italic; color:#333333; }
 
 a { color:#406a80; text-decoration:none; }
 a:hover { color:#478eb3; text-decoration:underline; }
@@ -17,5 +19,7 @@ a:hover { color:#478eb3; text-decoration:underline; }
 a.external:before { content:' ->'; }
 
 span.code { font:bold 14px/20px Andale Mono, Courier New, Courier, monospace; color:#800000; }
-p.code { font:14px/20px Andale Mono, Courier New, Courier, monospace; margin:25px 0; padding-top:10px; padding-bottom:30px; border-top:1px dashed #cccccc; border-bottom:1px dashed #cccccc; background:#fcfcf8; color:#333333; white-space:pre; }
+p.code    { font:14px/20px Andale Mono, Courier New, Courier, monospace; margin:25px 0; padding-top:10px; padding-bottom:30px; border-top:1px dashed #cccccc; border-bottom:1px dashed #cccccc; background:#fcfcf8; color:#333333; white-space:pre; }
+p.ascii   { font:14px/20px Andale Mono, Courier New, Courier, monospace; margin:25px 0; padding-top:10px; padding-bottom:30px; border-top:1px solid #ddddee; border-bottom:1px solid #ddddee; background:#fcfcff; color:#7777aa; white-space:pre; }
+p.warning { margin:25px 0; padding-top:20px; padding-bottom:20px; border-top:1px solid #eedddd; border-bottom:1px solid #eedddd; background:#fcf8f8; color:#333333; }
 

@@ -4,8 +4,64 @@
 </head><body>
 
 
+<h1>The type system</h1>
 
+<p>
+The type system is the central component of Oxygen.
+</p>
 
+<p>
+A great deal of work in web development is the conversion of data from one type to another. These conversions usually include parsing or escaping, both of which
+are a source of bugs. The role of the type system is to streamline the conversions so that the final code is easier to produce and less error prone.
+</p>
+
+<p>
+Let's have a simple example. A web application has a form to rename an item. This form contains a simple text box and a save button. Upon clicking save, the
+contents of the field are validated and saved in the database.
+</p>
+
+<p>
+This simple example, which is typical in web applications, involved a great deal of conversions:
+</p>
+<ul>
+	<li>In the beginning, the name exists in the database as a VARCHAR.</li>
+	<li>With a database library (such as PDO) the name is loaded in a PHP variable, as a PHP string.</li>
+	<li>From the results of the library, the name is assigned to a corresponding property of an object.</li>
+	<li>From the object, the name is HTML-escaped and put into an HTML property of an HTML textbox.</li>
+	<li>Upon submit, the browser escapes the content of the textbox and puts it into an HTTP POST request.</li>
+	<li>The server receives the request and PHP puts the name into as a PHP string in $_POST array.</li>
+	<li>The $_POST string is put back to name property of the object.</li>
+	<li>The name property is transformed either to an SQL string literal or to a parameter for an SQL prepared statement.</li>
+	<li>The name is stored back to the database as a VARCHAR.</li>
+</ul>
+
+<p>
+During this round-trip the name is converted 8 times. Still, one could argue that the type of the name is always a string, no matter the actual implementation.
+</p>
+
+<p>
+Oxygen introduces the idea of OmniType which represents the abstract Type of a value without taking into account where the variable is stored. A name is always
+of type OmniString, no matter if it is in the database as a VARCHAR, in memory as as PHP string, in code as a literal etc..
+</p>
+
+<h2>Other primitive data types</h2>
+
+<p>
+The following data types are supported by Oxygen.
+</p>
+
+<ul>
+	<li>OmniString</li>
+	<li>OmniInteger</li>
+	<li>OmniDecimal</li>
+	<li>OmniBoolean</li>
+	<li>OmniNull</li>
+	<li>OmniID</li>
+	<li>OmniDateTime</li>
+	<li>OmniDate</li>
+	<li>OmniTime</li>
+	<li>OmniTimeSpan</li>
+</ul>
 
 
 

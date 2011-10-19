@@ -19,6 +19,11 @@ class Database {
 	private static $stack_schema = array();
 	private static $stack_type = array();
 
+
+	public static function GetUpgradeFiles() { return Oxygen::GetDatabaseUpgradeFiles(); }
+	public static function AddUpgradeFile($filename) { Oxygen::AddDatabaseUpgradeFile($filename); }
+
+
 	public static function Upgrade($force=false){
 		$needs_refresh = false;
 		foreach (Oxygen::GetDatabaseUpgradeFiles() as $filename){

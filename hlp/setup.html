@@ -5,15 +5,319 @@
 
 
 
+<h1>Setup</h1>
+
+
+<p>
+Oxygen is a framework and not a library. It follows the Hollywood principle (<i>don't call us, we'll call you</i>). Therefore, it expects certain things to be
+in the right place. This approach might be less flexible, because it cannot easily cooperate with other frameworks, but it decreases significantly the overall
+development time, because many things are pre-configured.
+</p>
+
+<p>
+Oxygen consists of many layers and it is posible to be used partially. It is not necessary for an application to use every aspect, but to use, for example,
+just the basic infrastructure and ignore everything else. Or, use the MVC engine, which requires the existence of the basic infrastructure. The figure
+below gives a rough idea of the dependencies for each part of Oxygen.
+<p>
+
+<p class="ascii">
+                        |-----------|-----------|
+                        |    ORM    |           |
+            |-----------|-----------|    MVC    |
+            |          DAL          |           |
+|-----------|-----------------------|-----------|
+|                 Infrastructure                |
+|-----------------------------------------------|
+</p>
+
+
+<h2>Setting up the basics</h2>
+
+<p>
+The basic infrastructure is the minimal configuration for Oxygen. It offers all of the following:
+</p>
+
+<ul>
+	<li>Code autoloading</li>
+	<li>Type system</li>
+	<li>Variable persistence</li>
+	<li>Internationalization</li>
+	<li>LINQ-style iterators</li>
+	<li>Validation tools</li>
+	<li>Error and exception handling</li>
+	<li>Logging and profiling</li>
+</ul>
+
+<p>
+In order to use Oxygen in a PHP script, one has to do the following:
+</p>
+
+<ol>
+	<li>Place Oxygen in a folder named <b>oxy</b> in the same directory as the script.</li>
+	<li>Create the folders <b>tmp</b> and <b>log</b>, with read and right permissions, again in the same directory as the script.</li>
+	<li>Write the following code in the beggining of the script</li>
+</ol>
+
+<p class="code">
+require('oxy/_.php');
+Oxygen::Init();
+</p>
+
+<p class="warning">
+The position of the Oxygen folder is fixed and cannot be changed. This ensures that any resource of Oxygen can always be found under the <b>./oxy</b> relative
+directory.
+</p>
+
+<p>
+The temp folder and the log folder are essential for the fluent operation of Oxygen. Their position is not fixed, and it is adviced to be put in a place that
+is not published to the web. In order to do that, additional initialization instruction have to be written in the script:
+</p>
+
+<p class="code">
+require('oxy/_.php');
+Oxygen::SetTempFolder('../tmp');
+Oxygen::SetLogFolder('../log');
+Oxygen::Init();
+</p>
+
+<p>
+In general, all initialization instruction have to be placed <b>before</b> the call to <span class="code">Oxygen::Init()</span>. There are quite a few such
+instructions which will be presented later in this chapter.
+</p>
+
+<p>
+The temp folder keeps all temporary files that Oxygen generates for caching purposes. It can also be used by the final client code. To retrieve its position,
+use this function:
+</p>
+
+<p class="code">
+$temp_folder = Oxygen::GetTempFolder();
+</p>
+
+<p>
+On the other hand, the log folder keeps a report for each unhandled exception thrown in the application. It is also posible that these reports are sent by e-mail
+to the developer. To enable that, the developer's e-mail address has to be registered with an initialization instruction.
+</p>
+
+<p class="code">
+Oxygen::AddDeveloperEmail('developer@email.com');
+</p>
+
+
+<h2>Setting up code autoloading</h2>
+
+<p>
+Oxygen provides its own simple code autoloader which simplifies very much the development process. To autoload a class, it has to be placed in a file with the same
+name and the extension <b>.php</b>. Then the file has to be places inside one of the registered code folders. Oxygen will scan the code folders recursively, so the
+actual directory does not matter, as long as it is inside one of them.
+</p>
+
+<p>
+To register a code folder, use this initialization instruction, before calling <span class="code">Oxygen::Init()</span>:
+</p>
+
+<p class="code">
+Oxygen::AddCodeFolder('app/src');
+</p>
+
+<p>
+The code folders be anywhere in the disk and they do not have to be inside a published folder.
+</p>
+
+<p>
+Using the autoload mechanism of Oxygen makes it easy to organise the code in modules. Essentially, each module will have its own code folder. The organization of the
+files inside the code folder does not matter. The folder <b>oxy/src</b> is registered by default and, therefore, all classes of Oxygen will be autoloaded when needed.
+As a result, Oxygen itself can be considered as one of the modules of the final application.
+</p>
+
+<p>
+In case that two classes from different modules have the same name, then the class from the module which is register later will be used. This makes posible to override
+existing classes. It is even posible to override Oxygen's internal classes. However, this feature is not supported by the existing PHP IDEs and should be used with
+caution as it can lead to incomprehensible code. Furthermore, it is strongly disadviced to  have two classes with the same name in the same module, as it is not certain
+which one will be loaded.
+</p>
+
+<p class="warning">
+Oxygen does not support namespaces in autoloading. This may be added in a later version.
+</p>
+
+
+
+
+<h2>Setting up internationalization</h2>
+
+<p>
+Every Oxygen application can potentially support many languages. Each supported language has to be register by its 2-letter ISO code (<a class="external"
+href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes</a>) with an initialization instruction:
+</p>
+
+<p class="code">
+Oxygen::AddLanguage('en');
+Oxygen::AddLanguage('fr');
+</p>
+
+<p>
+To set the current working language, the following instruction can be used anywhere in the code. The current language affects many aspects of the interface, such as the
+language of the messages (obviously), but also the formatting of numbers, dates etc..
+</p>
+
+<p class="code">
+Oxygen::SetLanguage('fr');
+</p>
+
+<p>
+If no language is registered, Oxygen will assume by default that only <b>english</b> is going to be used. In addition, Oxygen will set the working language by reading
+the query string variable <b>lang</b>. If the variable is missing, or its value is not among the registered languages, then the first registered language is going to
+be used.
+</p>
+
+<p>
+Furthermore, Oxygen provides a flexible and modular dictionary system. The messages are placed as entries inside XML files. Each entry is called a dictionary lemma (lemmata
+in plural). All dictionary files should be registered with an initialization instruction.
+</p>
+
+<p class="code">
+Oxygen::AddDictionary('app/dictionary.xml');
+</p>
+
+<p>
+The file <b>oxy/dictionary.xml</b>, which contains the lemmata of Oxygen itself, is registed by default. Like code folders, if a lemma exists in more than one dictionaries,
+then the later is going to be used. This means that it is posible to override lemmata, even Oxygen's internal ones.
+</p>
+
+<p>
+The file oxy/dictionary.xml can be used as an example for building other dictionary files. As a convention, the translation of all lemmata begins with a capital letter.
+In addition, the lemmata whose name begins with <b>Msg</b>, should include the ending punctuation, like a period, an exclamation mark or a question mark.
+</p>
 
 
 
 
 
 
+<h2>Setting up the Database Abstraction Layer and the Object Relational Mapper</h2>
+
+<p>
+The Database Abstraction Layer (DAL) is a simple vendor-independent library which gives access to a database. In addition, it provides a simple upgrade mechanism, which help
+keeping the database in sync with the code. On the other hand the Object Relational Mapper (ORM), is built on top of the DAL and provides the automatical loading data from
+the database into objects and saving them back.
+</p>
+
+<p>
+To setup the DAL, without the upgrade mechanism, all one has to do is connect to a database with the following function, which has to come <b>after</b> <span class="code">Oxygen::Init()</span>.
+</p>
+
+<p class="code">
+Database::Connect('server','schema','username','password',Database::MYSQL);
+</p>
+
+<p>
+However, it is adviced to use the upgrade mechanism as well. It works with upgrade scripts that have to be registered before connecting to the database with a <b>managed</b>
+connection. Upon connecting to the database in a managed way, DAL will check it the database is up to date and will apply any upgrade scripts necessary.
+</p>
+
+<p class="code">
+Database::AddUpgradeFile('app/_upgrade.php');
+Database::ConnectManaged('server','schema','username','password',Database::MYSQL);
+</p>
+
+<p>
+The file <b>oxy/_upgrade.php</b> is registered by default. This file will create the tables used by Oxygen, if they don't exist, or it will upgrade them to match the version
+the code expects. This file can be used as a guideline in order to build other upgrade files. Keep in mind that these files have to be forward compatible. This means that they
+cannot depend on any code coming from the modules, because this is subject to change.
+</p>
+
+<p>
+Oxygen uses the prefix <b>oxy_</b> to all of its tables to avoid collisions and keep things modular. It is adviced to use a different prefix for each other module as well.
+</p>
+
+<p>
+For further info on the DAL part see that related chapter: <a href="dal.html">DAL</a>.
+</p>
+
+<p>
+The ORM needs little extra general configuration. Apart from the fields stored in the database, each object of the ORM has a folder in the hard disk to keep attached files
+such as images. All these folders are kept inside a central folder. By default, the data folder is <b>dat</b>. However, it is strongly adviced to be place in a position
+which is not published to the web, as this is a security threat. That can be done with an initialization instruction, <b>before</b> <span class="code">Oxygen::Init()</span>.
+</p>
+
+<p class="code">
+Oxygen::SetDataFolder('../dat');
+</p>
+
+<p>
+In general, ORM is a subset of the DAL and covers the majority of Data Manipulation Language (DML) commands. However, it does not cover the Data Definition Language (DDL)
+commands as well as some edge cases of DML. As a rule of thumb, DAL should only be used inside the database upgrade. For the rest of the code, relying only on ORM will make
+the code more maintainable.
+</p>
+
+<p>
+For further info on the ORM part see that related chapter: <a href="orm.html">ORM</a>.
+</p>
 
 
+<h2>Setting up the MVC</h2>
 
+<p>
+The Model-View-Controller pattern is quite a popular way to separate the concepts of an application. There are many alternative implementations, optimized for web or for
+desktop applications with various degrees of strictness. Oxygen uses an architecture that minimizes the development time, by sacrificing some flexibility.
+</p>
+
+<p>
+For Oxygen, all web requests should be handled by the one central PHP script. This is the main controller, which will assign the work to an <span class="code">Action</span>.
+The action to be used is determined from the query string variable <b>action</b>. The final actions are classes that extend the abstract class <span class="code">Action</span>
+by implementing the missing methods. The name of all final actions have to begin with <b>Action</b>. When the value of the query string variable is, for example, <b>Login</b>,
+then the <span class="code">ActionLogin</span> class is going to be used. If the query string variable is missing, a default action is going to be used. By default,
+this is <b>Home</b>, however, it can be changed with this initialization instruction:
+</p>
+
+<p class="code">
+Oxygen::SetDefaultActionName('MyHome');
+</p>
+
+<p>
+The actual execution of the controller and the actions is done with the function <span class="code">Oxygen::Go()</span> which has to be placed after all initialization is
+finished. The actions are divided into two big categories: those which use the entire browser page (called modal or normal actions) and the those who do not. Modal actions
+will be rendered inside a template which is also defined in the entry PHP script, after <span class="code">Oxygen::Go()</span>. If the current action is not a modal one,
+the execution of the script will stop at the end of <span class="code">Oxygen::Go()</span>. If it is a modal action, the script will continue with rendering the template.
+</p>
+
+<p>
+The template is nothing but regular HTML code with two extra intructions. <span class="code">Oxygen::GetHead()</span> will return all the necessary HTML code that has to be
+placed inside the header and <span class="code">Oxygen::GetContend()</span> will return the actual results of the action called.
+</p>
+
+<p>
+In general, the structure of the entry PHP script will look like this:
+</p>
+
+<p class="ascii"><![CDATA[
+|----------------|-------------------------------------------------------------------|
+|                | <?php                                                             |
+|                |   require('oxy/_.php');                                           |
+|                |   + Oxygen initialization instructions                            |
+| Initialization |   Oxygen::Init();                                                 |
+|                |   + Initialization of the other modules + Database connection     |
+|                |   Oxygen::Go();                                                   |
+|                | ?>                                                                |
+|----------------|-------------------------------------------------------------------|
+|                | <html>                                                            |
+|                |   <head>                                                          |
+|                |     <?php echo Oxygen::GetHead(); ?>                              |
+|                |     ...                                                           |
+|                |   </head>                                                         |
+|    Template    |   <body>                                                          |
+|                |     ...                                                           |
+|                |     <?php echo Oxygen::GetContent(); ?>                           |
+|                |     ...                                                           |
+|                |   </body>                                                         |
+|                | </html>                                                           |
+|----------------|-------------------------------------------------------------------|
+]]></p>
+
+<p>
+For further info on the MVC part see that related chapter: <a href="actions.html">Actions</a>.
+</p>
 
 <footer>
 <a href="index.html">&larr; Table of contents</a>
