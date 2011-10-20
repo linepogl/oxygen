@@ -4,6 +4,226 @@
 </head><body>
 
 
+<h2>LINQ</h2>
+
+
+<p>
+LINQ (Language Integrated Query) is a library from Microsoft for the .NET Framework. It is unique because it brought many nice features from the functional programming paradigm into
+the imperative object oriented world. The central element of LINQ, usually called LINQ-to-objects, is nothing but a set of higher order functions that operate on enumerations of objects,
+in a lazy fashion. Oxygen ports this part into PHP.
+</p>
+
+<p>
+In the following example (in C# code), if <span class="code">a</span> is an enumeration of integers, then the following code will return the sum of the squares of the first three even members:
+</p>
+
+<p class="code">
+// C# code
+a.Where( x => x % 2 == 0 )
+ .Take(3)
+ .Select( x => x ^ 2 )
+ .Sum();
+</p>
+
+<p>
+What is unique in the above code is that it says directly <b>what</b> we want as a result, and not <b>how</b> to produce it. It is simple: from the enumeration find the even numbers, take
+the first 3, square them, and add them. If we wanted to do the same thing in imperative fashion, that would look like this:
+</p>
+
+<p class="code">
+// PHP code
+$sum = 0;
+$count = 0;
+foreach ($a as $i) {
+	if ( $i % 2 == 0 ) {
+		$sum += $i * $i;
+		if (++$count == 3)
+			break;
+	}
+}
+</p>
+
+<p>
+The above code is typical and it is a mess. <b>What</b> we want to achieve is mixed with instructions of <b>how</b> to achieve it. In an analogy, it's like walking into a coffee shop
+and, instead of ordering a decaf caramel macchiato, say something like <i>"well, first empty a pot, heat up the milk, and while there is more milk add it to the pot, then... (etc)"</i>.
+</p>
+
+<p>
+Oxygen brings LINQ into PHP, by using native PHP constructs. Therefore, instead of enumerations, it uses the internal <span class="code">Traversable</span> interface (<span class="code">Iterator</span>
+and <span class="code">IteratorAggregate</span>) and instead of lambda functions, it uses PHP's closures. So, the above example becomes like this:
+</p>
+
+<p class="code">
+from($a)->Where( function($x){ return $x % 2 == 0; } )
+        ->Take(3)
+        ->Select( function($x){ return $x * $x; })
+        ->Sum();
+</p>
+
+<p>
+The <span class="code">from()</span> function wraps the traversable object into a <span class="code">LinqIterator</span> which offers all the extra methods. The code is longer from the
+C# version and not quite as nice, but it is because PHP has choosen a rather verbose way to represent lambda functions. However, it makes the code much cleaner and provides a standard
+way to handle object enumerations.
+</p>
+
+<p>
+Another feature unique in PHP, is that traversable objects always contain pairs of keys and values and the iteration is always done on both the value and the key. For this reason, all
+lambda functions passed to a <span class="code">LinqIterator</span> traversable accept the key as an optional second argument. As a result, the following code is valid:
+</p>
+
+<p class="code">
+$a = array( 'a' => 1, 'b' => 2 );
+echo from($a)->Select( function($value,$key){ return $key.'='.$value; } )->Implode(', ');    // output: a=1, b=2
+</p>
+
+
+
+<h2>LINQ Methods</h2>
+<p>
+The rest of this chapter contains a brief presentation of the the methods of LINQ.
+</p>
+
+<h3>Select</h3>
+
+<p>
+<span class="code">Select</span> is the projection method, equivalent to PHP's <span class="code">array_map</span>. For example, the following code selects all titles from an array containing
+book objects:
+</p>
+
+<p class="code">
+$titles = from($books)->Select( function($book){ return $book->Title; } );
+</p>
+ 
+
+<h3>SelectMany</h3>
+
+<p>
+<span class="code">SelectMany</span> is a projection method for sub-collections. The following code selects all chapters of all books in one joined traversable.
+</p>
+
+<p class="code">
+$chapters = from($books)->SelectMany( function($book){ return $book->Chapters; } );
+</p>
+
+
+<h3>Where</h3>
+
+<p>
+<span class="code">Where</span> is the filtering method, equivalent to PHP's <span class="code">array_filter</span>. The following code takes only the books by Tolkien:
+</p>
+
+<p class="code">
+$tolkien_books = from($books)->Select( function($book){ return $book->Author == 'Tolkien'; } );
+</p>
+
+<p>
+There are also the shortcut methods <span class="code">WhereNotNull()</span> and <span class="code">WhereKeyNotNull()</span> which take no argument.
+</p>
+
+
+<h3>Take and Skip</h3>
+
+<p>
+<span class="code">Take</span> and <span class="code">Skip</span> take an integer argument and can be used to iterate just portions of the collection.
+</p>
+
+<p class="code">
+from($books)
+	->Skip(20)
+	->Take(10);
+</p>
+
+
+<h3>OrderBy</h3>
+
+<p>
+<span class="code">OrderBy</span> and <span class="code">OrderByDesc</span> iterate the traversable sorted by the passed hashing function. The hashing function has to return either
+a string or a number. To sort which more than one criteria, use the methods <span class="code">ThenBy</span> and <span class="code">ThenByDesc</span>.
+</p>
+
+<p class="code">
+$books_sorted_by_author = from($books)
+	->OrderBy( function($book){ return $book->Author; } );
+
+$books_sorted_by_author_and_title = from($books)
+	->OrderBy( function($book){ return $book->Author; } )
+	->ThenBy( function($book){ return $book->Title; } );
+</p>
+
+
+
+<h3>GroupBy</h3>
+
+<p>
+<span class="code">GroupBy</span> returns a traversable of traversables grouped by the passed hashing function. The hashing function has to return either
+a string or a number. The following code returns a list of books for each author.
+</p>
+
+<p class="code">
+from($books)
+	->GroupBy(function($book){ return $book->Author; })
+	->Select(function($author_books,$author){ return $author.': '.$author_books->Implode(', '); });
+</p>
+
+
+<h3>Unique</h3>
+
+<p>
+<span class="code">Unique</span> returns a traversable containing only unique values. However, the values have to be strings or numbers. If this is not the case,
+if is also possible to pass a hashing function that produce a string or a number.
+</p>
+
+<p class="code">
+$all_authors = from($books)
+	->Select(function($book){ return $book->Author; })
+	->Unique();
+</p>
+
+
+<h3>Union</h3>
+
+<p>
+<span class="code">Union</span> joins together two traversables.
+<p>
+
+<p class="code">
+$history_and_fiction_books = from($books)
+	->Where( function($book){ return $book->Genre == 'History'; } )
+	->Union(
+		from($books)->Where( function($book){ return $book->Genre == 'Fiction'; } )
+		);
+</p>
+
+
+<h3>GetFirst and GetLast</h3>
+
+<p>
+These functions return the first and the last element of the traversable or null if there are no elements. There are also the similar functions <span class="code">GetFirstOr</span>
+and <span class="code">GetLastOr</span> that accept a default value, and the function <span class="code">GetFirstKey</span> and <span class="code">GetLastKey</span> that return
+the keys instead of the elements.
+</p>
+
+<p class="code">
+from($books)->GetFirst();
+</p>
+
+<h3>Aggregate functions</h3>
+
+<p>
+Aggregate functions reduce the traversable to a single value. There are the functions <span class="code">Count</span>, <span class="code">Sum</span>, <span class="code">Max</span>,
+<span class="code">Min</span>, <span class="code">Implode</span>, <span class="code">Exists</span> and <span class="code">ForAll</span>.
+</p>
+
+<p class="code">
+// returns a number
+$number_of_books = from($books)->Count();
+
+// returns a boolean
+$has_history_books = from($books)->Exists( function($book){ return $book->Genre == 'History'; });
+
+// returns a string
+$all_titles_string = from(books)->Select( function($book){ return $book->Title; } )->Implode(', ');
+</p>
 
 
 
