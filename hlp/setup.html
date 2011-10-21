@@ -15,7 +15,7 @@ development time, because many things are pre-configured.
 </p>
 
 <p>
-Oxygen consists of many layers and it is posible to be used partially. It is not necessary for an application to use every aspect, but to use, for example,
+Oxygen consists of many layers and it is possible to be used partially. It is not necessary for an application to use every aspect, but to use, for example,
 just the basic infrastructure and ignore everything else. Or, use the MVC engine, which requires the existence of the basic infrastructure. The figure
 below gives a rough idea of the dependencies for each part of Oxygen.
 <p>
@@ -95,7 +95,7 @@ $temp_folder = Oxygen::GetTempFolder();
 </p>
 
 <p>
-On the other hand, the log folder keeps a report for each unhandled exception thrown in the application. It is also posible that these reports are sent by e-mail
+On the other hand, the log folder keeps a report for each unhandled exception thrown in the application. It is also possible that these reports are sent by e-mail
 to the developer. To enable that, the developer's e-mail address has to be registered with an initialization instruction.
 </p>
 
@@ -131,8 +131,8 @@ As a result, Oxygen itself can be considered as one of the modules of the final 
 </p>
 
 <p>
-In case that two classes from different modules have the same name, then the class from the module which is register later will be used. This makes posible to override
-existing classes. It is even posible to override Oxygen's internal classes. However, this feature is not supported by the existing PHP IDEs and should be used with
+In case that two classes from different modules have the same name, then the class from the module which is register later will be used. This makes possible to override
+existing classes. It is even possible to override Oxygen's internal classes. However, this feature is not supported by the existing PHP IDEs and should be used with
 caution as it can lead to incomprehensible code. Furthermore, it is strongly disadviced to  have two classes with the same name in the same module, as it is not certain
 which one will be loaded.
 </p>
@@ -182,7 +182,7 @@ Oxygen::AddDictionary('app/dictionary.xml');
 
 <p>
 The file <b>oxy/dictionary.xml</b>, which contains the lemmata of Oxygen itself, is registed by default. Like code folders, if a lemma exists in more than one dictionaries,
-then the later is going to be used. This means that it is posible to override lemmata, even Oxygen's internal ones.
+then the later is going to be used. This means that it is possible to override lemmata, even Oxygen's internal ones.
 </p>
 
 <p>

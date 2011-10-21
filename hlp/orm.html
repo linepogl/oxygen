@@ -5,11 +5,233 @@
 
 
 
+<h1>Object Relational Mapping</h1>
+
+<p>
+With Object Relational Mapping, the enhanced XItem classes (see chapter <a href="meta.html">Object meta data</a>) can be automatically loaded from a database or saved back.
+</p>
+
+<p>
+The majority of the required information to make this happen is already in place. Let's see how the following classes can be automatically preserved in a database.
+</p>
+
+<p class="code">
+class Author extends XItem {
+	public $Name;
+	public static function FillMeta(XMeta $m){
+		$m->Name = OmniString::Field();
+	}
+}
+class Book extends XItem {
+	public $Title;
+	public $idAuthor;
+	public $NumberOfPages;
+	public static function FillMeta(XMeta $m){
+		$m->Title = OmniString::Field();
+		$m->idAuthor = OmniIDOrNull::Field();
+		$m->NumberOfPages = OmniIntegerOrNull::Field();
+	}
+}
+</p>
+
+<p>
+First of all, we have to define which database tables are going to be used. This can be done with the <span class="code">SetDBTableName</span> method. Then each field has
+to be linked to a table column, with the <span class="code">WithDBAlias</span> method. This is optional; if omitted, the field's name is going to be used. It is even possible
+to use an alias for the inherited <b>id</b> field.
+</p>
+
+<p class="code">
+class Author extends XItem {
+	public $Name;
+	public static function FillMeta(XMeta $m){
+		<b>$m->SetDBTableName('app_authors');</b>
+		$m->Name = OmniString::Field();
+	}
+}
+class Book extends XItem {
+	public $Title;
+	public $idAuthor;
+	public $NumberOfPages;
+	public static function FillMeta(XMeta $m){
+		<b>$m->SetDBTableName('app_books');</b>
+		<b>$m->id->WithDBAlias('book_id');</b>
+		$m->Title = OmniString::Field();
+		$m->idAuthor = OmniIDOrNull::Field();
+		$m->NumberOfPages = OmniIntegerOrNull::Field()<b>->WithDBAlias('NumPages')</b>;
+	}
+}
+</p>
+
+<p>
+That's all! The classes are now ready. All we need is a connection to the database (see the chapter <a href="setup.html">Setup</a>).
+</p>
+
+
+<h2>Loading and Saving</h2>
+
+<p>
+The easiest way to load an object from the database is the <span class="code">Pick</span> function, by passing its id.
+</p>
+
+<p class="code">
+$id = Http::$GET['id']->AsID();
+$book = Book::Pick( $id );
+echo $book->Title;
+</p>
+
+<p>
+The <span class="code">Pick</span> function will do a lot of things behind the scene. First of all, it will see in the cache if the object is already loaded and if so, it will save the query to the database.
+Then it will scan the fields of the meta object and will generate the required sql code. Finally, it will retrieve the columns from the result of the query, it will convert them to the appropriate type and
+it will assign them to a newly created Book object.
+</p>
+
+<p>
+If the book was not found it the database, the function will return <b>null</b>.
+</p>
+
+<p>
+Once loaded, the object can be modified by the code and saved back to the database, with the <span class="code">Save</span> method:
+</p>
+
+<p class="code">
+$book->Title = 'The old man and the sea';
+$book->Save();
+</p>
+
+<p>
+Or, it can be deleted, with the <span class="code">Kill</span> method:
+</p>
+
+<p class="code">
+$book->Kill();
+</p>
+
+<p>
+Once killed, the record from the database and the entry in the cache will be removed. However, the object itself will remain available and can be used:
+</p>
+
+<p class="code">
+$book->Kill();
+echo 'The book ' . $bool->Title . ' has been deleted';
+</p>
+
+
+<h2>Creating a new object</h2>
+
+<p>
+The <span class="code">Make</span> function creates new instances of an object:
+</p>
+
+<p class="code">
+$book = Book::Make();
+$book->Title = 'Alice in wonderland';
+$book->Save();
+</p>
+
+<p>
+The <span class="code">Make</span> function, behind the scenes, will reserve an id and an entry in the cache. Therefore, the object is ready to be used directly, even
+before saving, as the id will not change.
+</p>
+
+<p class="code">
+$author = Author::Make();
+$author->Name = 'Lewis Carroll';
+
+$book = Book::Make();
+$book->Title = 'Alice in wonderland';
+<b>$book->idAuthor = $author->id;</b>
+
+$author->Save();
+$book->Save();
+</p>
 
 
 
+<h2>Linking objects</h2>
+
+<p>
+The <span class="code">Pick</span> can also be used for linking objects together, as it is very cheap after the first call. To link a book to its author, it is sufficient
+to add a simple method in the Book class.
+</p>
+
+<p class="code">
+class Book extends XItem {
+	...
+	public function GetAuthor(){ return Author::Pick( $this->idAuthor ); }
+	...
+}
+</p>
+
+<p>
+With this method, the author of the book can be found naturally from the code. However, as the <span class="code">Pick</span> function may return null, an extra check must be placed:
+</p>
+
+<p class="code">
+$author = $book->GetAuthor();
+if (!is_null($author))
+	echo $author->Name;
+</p>
 
 
+
+<h2>Lists</h2>
+
+<p>
+As seen in the chapter <a href="meta.html">Object meta data</a>, the <span class="code">XList</span> class holds a list of <span class="code">XItem</span>s. Now, the <span class="code">Seek</span>
+function automatically fills a list from the database.
+</p>
+
+<p class="code">
+foreach (Book::Seek() as $book) {
+	echo '&lt;li&gt;'.$book->Title.'&lt;/li&gt';
+}
+</p>
+
+<p>
+The <span class="code">Seek</span> function also does many things behind the scenes. First of all, it acts lazily in the sense that it will not query the database unless really needed. Then, it
+creates the query but retrieves only the ids of the the objects without loading the objects themselves. Finally, it loads lazily every object needed, with a high possibility to load the object
+from the cache without hitting the database.
+</p>
+
+<p>
+The lazy approach comes with a cost if it is known that all the objects of the list will be loaded and that no object is already in the cache. This is because it will execute 1+N light queries: one
+query to retrieve the ids and one query for each of the objects. The alternative approach is to load everything at once in one big query with the cost of reloading data that may exist already in
+the cache. This is possible with the <span class="code">Aggressively</span> method:
+</p>
+
+<p class="code">
+foreach (Book::Seek()->Aggressively() as $book) {
+	echo '&lt;li&gt;'.$book->Title.'&lt;/li&gt';
+}
+</p>
+
+
+<h2>Predicates</h2>
+
+<p>
+...
+</p>
+
+
+<h2>Order</h2>
+
+<p>
+...
+</p>
+
+<h2>Events</h2>
+
+<p>
+...
+</p>
+
+
+
+<h2>Slaves</h2>
+
+<p>
+...
+</p>
 
 
 

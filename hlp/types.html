@@ -17,14 +17,24 @@ are a source of bugs. The role of the type system is to streamline the conversio
 
 <p>
 Let's have a simple example. A web application has a form to rename an item. This form contains a simple text box and a save button. Upon clicking save, the
-contents of the field are validated and saved in the database.
+contents of the field are validated and saved in the database. This simple example, which is typical in web applications, involves a great deal of conversions:
+</p>
+
+<p class="ascii">
+|------------|          |------------|              |-----------------|             |----------------|              |--------------------|
+|            | -(PDO)-> | PHP String | -(convert)-> | Object Property | -(escape)-> | HTML attribute | -(browser)-> |                    |
+|            |          |------------|              |-----------------|             |----------------|              |                    |
+| DB VARCHAR |                                                                                                      | HTTP POST argument |
+|            |          |-----------------|           |-----------------|              |---------------|            |                    |
+|            | <-(PDO)- | Bound Parameter | <-(bind)- | Object Property | <-(convert)- | $_POST string | <-(PHP)--- |                    |
+|------------|          |-----------------|           |-----------------|              |---------------|            |--------------------|
 </p>
 
 <p>
-This simple example, which is typical in web applications, involved a great deal of conversions:
+During this round-trip the name is converted 8 times.
 </p>
+
 <ul>
-	<li>In the beginning, the name exists in the database as a VARCHAR.</li>
 	<li>With a database library (such as PDO) the name is loaded in a PHP variable, as a PHP string.</li>
 	<li>From the results of the library, the name is assigned to a corresponding property of an object.</li>
 	<li>From the object, the name is HTML-escaped and put into an HTML property of an HTML textbox.</li>
@@ -36,38 +46,132 @@ This simple example, which is typical in web applications, involved a great deal
 </ul>
 
 <p>
-During this round-trip the name is converted 8 times. Still, one could argue that the type of the name is always a string, no matter the actual implementation.
+4 of the conversions are done by the existing infrastucture (the database, the database driver, PHP, Apache and the final browser). However, the other 4 are left to
+the programmer, and, arguably, this is a great source of bugs if not done in a systematic way.
 </p>
 
 <p>
-Oxygen introduces the idea of OmniType which represents the abstract Type of a value without taking into account where the variable is stored. A name is always
-of type OmniString, no matter if it is in the database as a VARCHAR, in memory as as PHP string, in code as a literal etc..
+Those conversions depend on the type of the variable. A string is parsed, assigned, converted and escaped in a different way than a boolean or a date. However,
+no matter how the variable is escaped or represented in all these places, one could argue that the overall abstract type does not change. A string is alweays a
+string no matter if it is stored as a VARCHAR in the database or as an attribute in HTML. An integer is always an integer, even if it is represented as a string
+inside the $_POST array.
 </p>
 
-<h2>Other primitive data types</h2>
+<p>
+Oxygen introduces the idea of OmniType which represents the abstract Type of a variable without taking into account where it is stored. The OmniType of a variable
+knows how to convert the variable from one type to another.
+</p>
+
+<h2>Primitive OmniTypes</h2>
 
 <p>
 The following data types are supported by Oxygen.
 </p>
 
-<ul>
-	<li>OmniString</li>
-	<li>OmniInteger</li>
-	<li>OmniDecimal</li>
-	<li>OmniBoolean</li>
-	<li>OmniNull</li>
-	<li>OmniID</li>
-	<li>OmniDateTime</li>
-	<li>OmniDate</li>
-	<li>OmniTime</li>
-	<li>OmniTimeSpan</li>
-</ul>
+<table>
+<tr><th>OmniType</th>      <th>PHP Type</th>   <th>Default value</th>    <th>SQL Type</th>  <th>PHP literal</th>                           <th>SQL literal (MySQL)</th>      <th>URL value (french)</th>      <th>HTML value (french)</th>           </tr>
+<tr><td>OmniString</td>    <td>string</td>     <td>''</td>               <td>VARCHAR</td>   <td>'It\'s me & you'</td>                      <td>'It\'s me & you'</td>         <td>It's%20me%20%26%20you</td>   <td>It&quot;s me &amp;amp; you</td>    </tr>
+<tr><td>OmniInteger</td>   <td>integer</td>    <td>0</td>                <td>INT</td>       <td>3</td>                                     <td>3</td>                        <td>3</td>                       <td>3</td>                             </tr>
+<tr><td>OmniDecimal</td>   <td>float</td>      <td>0.0</td>              <td>DECIMAL</td>   <td>3.14</td>                                  <td>3.14</td>                     <td>3,14</td>                    <td>3,14</td>                          </tr>
+<tr><td>OmniBoolean</td>   <td>boolean</td>    <td>false</td>            <td>TINYINT</td>   <td>true</td>                                  <td>1</td>                        <td>true</td>                    <td>true</td>                          </tr>
+<tr><td>OmniNull</td>      <td>null</td>       <td>null</td>             <td>*</td>         <td>null</td>                                  <td>NULL</td>                     <td></td>                        <td></td>                              </tr>
+<tr><td>OmniID</td>        <td>ID</td>         <td>new ID(0)</td>        <td>INT</td>       <td>new ID(3)</td>                             <td>3</td>                        <td>00000003</td>                <td>00000003</td>                      </tr>
+<tr><td>OmniLemma</td>     <td>Lemma</td>      <td>new Lemma()</td>      <td>VARCHAR</td>   <td>new Lemma('en','Title','fr','Titre')</td>  <td>'en~Title~fr~Titre'</td>      <td>en~Title~fr~Titre</td>       <td>en~Title~fr~Titre</td>             </tr>
+<tr><td>OmniDateTime</td>  <td>XDateTime</td>  <td>new XDateTime()</td>  <td>DATETIME</td>  <td>XDateTime::Make(2010,10,21,12,30,15)</td>  <td>'2010-10-21 12:30:15'</td>    <td>20101021123015</td>          <td>20101021123015</td>                </tr>
+<tr><td>OmniDate</td>      <td>XDate</td>      <td>new XDate()</td>      <td>DATETIME</td>  <td>XDate::Make(2010,10,21)</td>               <td>'2010-10-21 00:00:00'</td>    <td>20101021000000</td>          <td>20101021000000</td>                </tr>
+<tr><td>OmniTime</td>      <td>XTime</td>      <td>new XTime()</td>      <td>DATETIME</td>  <td>XDate::Make(12,30,15)</td>                 <td>'2000-01-01 12:30:15'</td>    <td>20000101123015</td>          <td>20000101123015</td>                </tr>
+<tr><td>OmniTimeSpan</td>  <td>XTimeSpan</td>  <td>new XTimeSpan()</td>  <td>INT</td>       <td>XTimeSpan::Make(1,30,20,324)</td>          <td>5420324</td>                  <td>5420324</td>                 <td>5420324</td>                       </tr>
+</table>
 
 
+<p>
+In addition, all of the above types have a nullable equivalent (except <span class="code">OmniNull</span> of course). The nullable type has the same name as the not
+nullable with the suffix -OrNull. So, the nullable <span class="code">OmniString</span> is the <span class="code">OmniStringOrNull</span> and the nullable
+<span class="code">OmniBoolean</span> is the <span class="code">OmniBooleanOrNull</span>. When using non-nullable data types, a <b>null</b> value automatically
+gets coverted to the default value. So, when an <span class="code">OmniBoolean</span> encounters a null value, it will convert it to <b>false</b>. On the contrary,
+the <span class="code">OmniBooleanOrNull</span> will return a null.
+</p>
+
+<p>
+The actual conversions are done by a set of functions that each OmniType has. Those functions are separated into two large groups, the exporters and the importers.
+The exporters convert a PHP value to an external form (such as an SQL literal), while the importers convert an external value (such as a database value) back into
+a PHP variable.
+</p>
+
+<p class="code">
+$sql_literal = OmniString::ExportSqlLiteral( 'This is a string', Database::MYSQL );
+$php_integer = OmniInteger::ImportHttpValue( '1' );
+</p>
+
+<p>
+Usually, the OmniType to be used can be inferred from the type of the PHP variable. The function <span class="code">OmniType::Of</span> returns the default OmniType of
+a variable. This comes with a little runtime overhead, but it is very convenient.
+</p>
+
+<p class="code">
+$s = 'This is a string';
+echo OmniType::Of($s)->ExportSqlLiteral( $s, Database::MYSQL );  // output: 'This is a string'
+$i = 5;
+echo OmniType::Of($i)->ExportSqlLiteral( $i, Database::MYSQL );  // output: 5
+</p>
+
+<p>
+As these functions are used very frequently, all exporters come with some helping wrapper classes, that will infer the OmniType and execute the exporting function in
+a lazy fashion. In addition, they will use the current open database connection to find the database type.
+</p>
+
+<p class="code">
+echo new Sql ('It\'s me & you');    // output: 'It\'s me & you'
+echo new Html('It\'s me & you');    // output: It's me &amp;amp; you
+echo new Js  ('It\'s me & you');    // output: 'It\'s me & you'
+echo new Url ('It\'s me & you');    // output: It's%20me%20%26%20you
+echo new Xml ('It\'s me & you');    // output: It's me &amp;amp; you
+</p>
+
+<p>
+In contrast, when importing a value, the type is not known unless told as PHP does not keep the type of uninitialised variables. As a result, importing a variable requres
+always to use the correct type.
+</p>
 
 
+<h2>Import sources</h2>
 
+<p>
+When exporting, the source is always some PHP variable. On the other hand, when importing the source has to be defined. Oxygen offers some standard sources to make
+things easier. These sources wrap the values to be imported in a structure that makes the conversion easier.
+</p>
 
+<p>
+One of the sources is the <span class="code">DBReader</span> class (see the chapter <a href="dal.html">Database Abstraction Layer</a>). Each field of the current record
+can be imported with the help of an OmniType.
+</p>
+
+<p class="code">
+$dr = Database::Execute('SELECT * FROM Book');
+while($dr->Read()) {
+	$id = $dr['id']->CastTo( OmniID::Type() );
+	$NumberOfPages = $dr['NumberOfPages']->CastTo( OmniInteger::Type() );
+	$Author = $dr['Author']->CastTo( OmniString::Type() )
+}
+$dr->Close();
+</p>
+
+<p>
+Another import source is the Http class with the arrays <span class="code">Http::$POST</span>, <span class="code">Http::$GET</span> and <span class="code">Http::$ANY</span>.
+</p>
+
+<p class="code">
+$id = Http::$GET['id']->CastTo( OmniID::Type() );
+$username = Http::$POST['username']->CastTo( OmniString::Type() );
+</p>
+
+<p>
+There are also some shortcut methods for the basic types, that can be used instead of <span class="code">CastTo</span>.
+</p>
+
+<p class="code">
+$offset = Http::$GET['offset']->AsInteger();
+</p>
 
 
 <footer>
