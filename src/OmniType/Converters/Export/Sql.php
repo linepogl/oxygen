@@ -3,7 +3,12 @@
 class Sql extends ExportConverter {
 
 	public function Export(){
-		return $this->omnitype->ExportSqlLiteral($this->value,Database::GetType());
+		try{
+			return $this->omnitype->ExportSqlLiteral($this->value,Database::GetType());
+		}
+		catch (Exception $ex){
+			echo '';
+		}
 	}
 
 	const Null = 'NULL';

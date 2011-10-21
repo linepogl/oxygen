@@ -60,7 +60,10 @@ class OmniField extends OmniType {
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value, $platform) {
-		return self::EncodeAsSqlIdentifier($value->GetDBName(),$platform);
+		if ($value->IsDBAliasComplex())
+			return $value->GetDBName();
+		else
+			return self::EncodeAsSqlIdentifier($value->GetDBName(),$platform);
 	}
 
 	/**

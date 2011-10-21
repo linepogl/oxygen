@@ -72,7 +72,7 @@ abstract class XItem implements Serializable,OmniValue {
 			/** @var $sl XSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
-				$this->$n = $sl->MakeItemList();
+				$this->$n = $sl->SeekItemsByMaster($this);
 			}
 		}
 		$this->OnLoad();
@@ -200,6 +200,7 @@ abstract class XItem implements Serializable,OmniValue {
 				Database::ExecuteX($sql,$params);
 			}
 		}
+		$c->SaveInCache($this->id->AsInt(),$this);
 
 		//
 		//
@@ -268,6 +269,7 @@ abstract class XItem implements Serializable,OmniValue {
 			$sql = 'DELETE FROM '.$cx->GetDBTableName().' WHERE '.$cx->id->GetDBName().'=?';
 			Database::Execute($sql,$this->id);
 		}
+		$c->RemoveFromCache($this->id->AsInt());
 
 		$this->OnAfterDelete();
 	}
