@@ -25,7 +25,7 @@ provide this by using special tags in documentation comments, but this is not su
 provide this functionality, Oxygen relies on standard PHP features like abstraction, inheritance, and late static binding.
 </p>
 
-<h2>The XItem and the XMeta</h2>
+<h2>Objects and meta objects</h2>
 
 <p>
 The ability to describe with meta data an object is very useful when it come to the central business objects of an application, which is usually called "The Model". In Oxygen
@@ -61,7 +61,7 @@ class Book extends XItem {
 	public $Title;
 	public static function FillMeta(XMeta $m){
 		$m->SetDBTableName('book');
-		$m->Title = OmniString::Field()->WithLabel( new Lemma('en','Title','fr','Titre') );
+		$m->Title = OmniString::Field()->WithLabel('en','Title','fr','Titre');
 	}
 }
 </p>
@@ -93,32 +93,274 @@ The id field is also used as the primary key for database operations. For more i
 
 
 
-<h2>XField</h2>
+<h2>Meta fields</h2>
 
 <p>
-Most of meta information regard the fields of an object. In a meta object, all fields are represented by instances of the class <span class="code">XField</span>. This class...
+Most of meta information regard the fields of an object. In a meta object, all fields are represented by instances of the class <span class="code">XField</span>. Every meta field
+is based on an OmniType which is responsible for the all the conversions, ie. importing a value into a field of an object and exporting the value from the field (see the chapter
+<a href="types">The type system</a>). The easiest way to create an XField is from its OmniType:
+</p>
+
+<p class="code">
+OmniString::Field();
+</p>
+
+<p>
+However, the class XField is designed to work in cooperation with the class XMeta. This is because, apart from the type, each field must also have a name. The name is automatically
+assigned by the XMeta class, after the call to <span class="code">FillMeta</span>, and it is equal to the name of the PHP field inside the final filled meta object.
+</p>
+
+<p class="code">
+$field = OmniString::Field();
+$name = $field->GetName();     // $name is null, because it is not filled in by any XMeta object.
+</p>
+
+<p>
+In addition, every field is automatically assigne a label, which is equal to the lemma with the same name in the dictionary (see the chapter on <a href="i18n.html">Internationalization</a>).
+The value of the label can be changed with the method <span class="code">WithLabel</span> which is overloaded.
+</p>
+
+<p class="code">
+// No call
+$m->Title = OmniString::Field();                                                          // label: Lemma::Retrieve('Title')
+
+// Call with one string argument
+$m->Title = OmniString::Field()->WithLabel('BookTitle');                                  // label: Lemma::Retrieve('BookTitle')
+
+// Call with one Lemma argument
+$m->Title = OmniString::Field()->WithLabel( Lemma::Retrieve('BookTitle') );               // label: Lemma::Retrieve('BookTitle')
+$m->Title = OmniString::Field()->WithLabel( new Lemma('en','Title','fr','Titre') );       // label: Lemma('en','Title','fr','Titre')
+
+// Call with two or more string arguments
+$m->Title = OmniString::Field()->WithLabel('en','Title','fr','Titre');                    // label: Lemma('en','Title','fr','Titre')
+</p>
+
+<p>
+Apart from these general properties, the field carries also specific information regarding the way it is going to be automatically loaded from a database of from an XML document. Here is
+an example of a field with database and XML mapping:
+</p>
+
+<p class="code">
+$m->Title = OmniString::Field()->WithLabel('BookTitle')->WithDBAlias('title')->WithXmlAlias('title')->WithXmlBehaviour(Xml::Element);
+</p>
+
+<p>
+These extra properties are presented in the chapters <a href="orm.html">Object Relational Mapping</a> and <a href="xml.html">XML mapping</a> respectively.
 </p>
 
 
-<h2>XList</h2>
+<h2>Lists</h2>
 
 <p>
-...
+Apart from the class <span class="code">XItem</span>, Oxygen has also the class <span class="code">XList</span> which can be seen as an array of such items. This array, however, is aware of
+the extra meta information. This fact will be used by the ORM module to automatically retrieve lists of items for example.
 </p>
 
-<h2>XPred</h2>
+<p>
+Each list is based on a meta object. For example, a list of books can be created from the book meta object of book:
+<p>
+
+<p class="code">
+// either
+$a = Book::Meta()->MakeList();
+// or
+$a = Book::MakeList();
+</p>
 
 <p>
-...
+The list object is used similar to a PHP array:
+</p>
+
+<p class="code">
+$a = Book::MakeList();
+$a[] = new Book();
+echo count($a);         // output: 1;
+</p>
+
+<p>
+In addition, the <span class="code">XList</span> implements the LINQ interface (see the chapter on <a class="linq.html">LINQ</a>) which means that all LINQ methods are directly available
+without wrapping with the <span class="code">from()</span> function.
+</p>
+
+<p class="code">
+$a = Book::MakeList();
+
+$x = new Book();
+$x->Title = 'Lord of the rings';
+$a[] = $x;
+
+$x = new Book();
+$x->Title = 'Alice in wonderland';
+$a[] = $x;
+
+foreach ($a->Skip(1) as $x)
+	echo $x->Title;               // output: Alice in wonderland
 </p>
 
 
-
-
-<h2>XSlave</h2>
+<h2>Predicates on meta fields</h2>
 
 <p>
-...
+It is now evident that there is a direct analogy between the field of an object and the fields of its meta object. the value of a field is a PHP variable while the value of the meta field
+is an <span class="code">XField</span> object.
+</p>
+
+<p class="code">
+$x = new Book();
+$x->Title = 'Alice in wonderland';
+$m = Book::Meta();
+echo gettype($x->Title);      // output: string
+echo gettype($m->Title);      // output: object
+echo get_class($m->Title);    // output: XField
+</p>
+
+<p>
+When working with the values of a field, we perform operation on the PHP variable. For example, to check whether the title is equal to 'Alice in wonderland', we have to go through an equality
+operation between the value of the variable and another string, like this:
+<p>
+
+<p class="code">
+$compare = $x->Title == 'Alice in wonderland';
+</p>
+
+<p>
+This operation compares the value of the specific book with a string. Shifting this operation to the meta object level would imply the comparison of the title any given book with a value.
+This can be expressed in PHP with a closure:
+</p>
+
+<p class="code">
+$compare = function($x){ return $x->Title == 'Alice in wonderland'; };
+</p>
+
+<p>
+This type of operation that returns a boolean value is called a predicate. In general, the predicates that operate on a field and a value are very useful. However, it is very common to be
+hard coded in another language, such as SQL:
+</p>
+
+<p class="code">
+SELECT * FROM Book WHERE <b>Title = 'Alice in wonderland'</b>           -- a predicate in SQL
+</p>
+
+<p>
+One of the main goals of Oxygen is to reduce the development time, which includes not only the time spent on the first version of an application but also the required time to make changes
+on top of the initial code. This time is directly linked to the modularity and the reusability of the code. In the above example, the query is not at all reusable. the predicate is encoded
+in SQL and rests inside a PHP string. This gives limited flexibility: there is no direct way to perform operations on predicates. So, if there is a query to find the books published in 2011
+and another query to find the books written in english, then there is no way to produce a query to find the english books of 2011. In order to to this, one have to extract the predicates
+from the initial queries and then perform operations on them. Yet, the predicates would be still strings, and there is no predefined operation to combine the two string predicates. So,
+the operation is defined ad-hoc: concatenate the two strings with an 'AND' in between.
+</p>
+
+<p>
+The other problem with the SQL statement is that it has to be executed in a database server. Once the data is retrieved from the server, the predicate is no longer valid. So, the code
+is required to check if the title is equal to 'Alice in wonderland' in the database level is different from the code in PHP level and probably the code in Javascript level. Yet, all three
+pieces do the same thing.
+</p>
+
+<p>
+From the above example, it becomes evident that it would be better to work with structures that support all the necessary operations and can be produce the code in any language. For this
+reason, Oxygen uses the class <span class="code">XPred</span>, which encapsulates an abstract predicate. Much emphasis is given to the predicates based on fields. These predicates can
+be created directly from the meta fields:
+</p>
+
+<p class="code">
+$m = Book::Meta();
+$pred = $m->Title->Eq( 'Alice in wonderland' );
+</p>
+
+<p>
+Apart from the equality, there are many other predicates based on fields that can be retrieved the same way. These include <span class="code">NotEq</span> (=not equal), <span class="code">IsNull</span>,
+<span class="code">IsNotNull</span>, <span class="code">Lt</span> (=less than), <span class="code">Le</span> (=less than or equal to), <span class="code">Gt</span> (=greater than), <span
+class="code">Ge</span> (=greater than or equal to), <span class="code">In</span> (=exists in), <span class="code">NotIn</span>, <span class="code">Like</span> and <span class="code">NotLike</span>.
+<p>
+
+<p class="code">
+$m = Book::Meta();
+$pred = $m->Year->Ge( 2000 );           // where the year is greater or equal to 2000
+</p>
+
+<p>
+It is possible to combine predicates with the boolean operations (AND, OR and NOT) in order to produce other more complex ones.
+</p>
+
+<p class="code">
+$m = Book::Meta();
+$pred_is_english = $m->Language == 'en';
+$pred_is_published_in_2010 = $m->Year->Eq(2010);
+$pred_is_published_in_2011 = $m->Year->Eq(2011);
+$pred_is_not_english = $pred_is_english->IsNotTrue();                                                          // NOT
+$pred_is_english_published_in_2011 = XPred::All( $pred_is_english , $pred_is_published_in_2011 );              // AND
+$pred_is_published_in_2010_or_2011 = XPred::Any( $pred_is_published_in_2010 , $pred_is_published_in_2011 );    // OR
+</p>
+
+<p>
+In addition, it is possible to have predicates with operations on two fields. This is not very often, but it is used in certain cases:
+</p>
+
+<p class="code">
+$m = Book::Meta();
+$pred_is_a_translation = $m->Language->NotEq( $m->OriginalLanguage );
+</p>
+
+
+<p>
+Predicates can be used directly on an <span class="code">XList</span>, instead of closures. For instance, the following two lists are equivalent:
+</p>
+
+<p class="code">
+$list1 = $list->Where( function($x){ return $x->Title == 'Alice in wonderland'; } );
+$list2 = $list->Where( Book::Meta()->Title->Eq( 'Alice in wonderland' ) );
+</p>
+
+<p>
+However, the first version is limited to be used only in PHP. It does not carry information about how to be converted to SQL or to Javascript code. On the other hand, the second version is linked with
+the meta object which provides all the information needed for the translation. This will be analysed further in the chapter on <a href="orm.html">Object Relational Mapping</a>.
+</p>
+
+
+<h2>Order by meta fields</h2>
+
+<p>
+Much like the predicates, sorting is another operation that is very often coded multiple times in the same application (in SQL, in PHP and in Javascript). Oxygen offers a similar solution with
+the class <span class="code">XOrderBy</span>. This can also be created from the meta field:
+</p>
+
+<p class="code">
+$m = Book::Meta();
+$order_by_title_asc = $m->Title->Asc();
+$order_by_year_desc = $m->Year->Desc();
+</p>
+
+<p>
+Ordering with more than one fields can be done with the method <span class="code">ThenBy</span>
+</p>
+
+<p class="code">
+$order_by_year_desc_and_title_asc = $order_by_year_desc->ThenBy( $order_by_title_asc );
+</p>
+
+<p>
+The <span class="code">XOrder</span> objects can be used in <span class="code">XList</span> instead of closures. The following two clauses are equivalent, but once again the first one can only be used
+in PHP, while the second is translatable to other languages.
+</p>
+
+<p class="code">
+$list1 = $list->OrderBy( function($x){ return $x->Title; } );
+$list2 = $list->OrderBy( Book::Meta()->Title->Asc() );
+</p>
+
+<p>
+Finally, it is possible to define a default sorting for items inside the meta class.
+</p>
+
+<p class="code">
+class Book extends XItem {
+	...
+	public static function FillMeta(XMeta $m){
+		$m->Title = OmniString::Field();
+		$m->OrderBy( $m->Title->Asc() );
+	}
+	...
+}
 </p>
 
 

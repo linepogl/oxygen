@@ -8,11 +8,9 @@
 <h1>Object Relational Mapping</h1>
 
 <p>
-With Object Relational Mapping, the enhanced XItem classes (see chapter <a href="meta.html">Object meta data</a>) can be automatically loaded from a database or saved back.
-</p>
-
-<p>
-The majority of the required information to make this happen is already in place. Let's see how the following classes can be automatically preserved in a database.
+With Object Relational Mapping, the enhanced XItem classes (see chapter <a href="meta.html">Object meta data</a>) can be automatically loaded from a database or saved back. The
+majority of the required information to make this happen is already in place. In the following example, the classes have been prepared with meta information. Let's see how they
+can be automatically preserved in a database.
 </p>
 
 <p class="code">
@@ -67,7 +65,7 @@ That's all! The classes are now ready. All we need is a connection to the databa
 </p>
 
 
-<h2>Loading and Saving</h2>
+<h2>Loading, saving and deleting</h2>
 
 <p>
 The easiest way to load an object from the database is the <span class="code">Pick</span> function, by passing its id.
@@ -194,6 +192,11 @@ from the cache without hitting the database.
 </p>
 
 <p>
+In addition, <span class="code">Seek</span> will take into account the default ordering specified in the meta object. So, if it is defined that the books are to be sorted by title by default,
+then the generated query will contain an <span class="code">ORDER BY</span> clause.
+</p>
+
+<p>
 The lazy approach comes with a cost if it is known that all the objects of the list will be loaded and that no object is already in the cache. This is because it will execute 1+N light queries: one
 query to retrieve the ids and one query for each of the objects. The alternative approach is to load everything at once in one big query with the cost of reloading data that may exist already in
 the cache. This is possible with the <span class="code">Aggressively</span> method:
@@ -206,32 +209,186 @@ foreach (Book::Seek()->Aggressively() as $book) {
 </p>
 
 
-<h2>Predicates</h2>
+<h2>LINQ and ORM</h2>
 
 <p>
-...
+It starts to become evident that lists have two distinct states. Either they are ready to be used directly, or there are pending queries the have to be executed before the list is ready to be used.
+If the list is ready, then it can be accessed as a traditional PHP array, or through the methods of LINQ. If, however, the list is in the pending state, any access to the array will automatically
+cause the execution of the queries.
+</p>
+
+<p>
+While the list rests in the pending state, it is possible to modify the enclosed query. This is done by calling the same LINQ methods. As the list is aware of its state, it is going to translate
+the calls in a diferrent way according to it.
+</p>
+
+<p>
+Let's see an example. The following code will find the first 10 books of 2001 when sorted by title.
+</p>
+
+<p class="code">
+$m = Book::Meta();
+$list = Book::Seek()
+	->Where( $m->Year->Eq( 2011 ) )
+	->OrderBy( $m->Title )
+	->Take( 10 );
+</p>
+
+<p>
+The rule of thumb here is that the list will not execute any query, unless it is needed to. So, the call to the function <span class="code">Book::Seek()</span> will create a list with a pending
+query, but it will not execute the query. Then, the <span class="code">Where()</span> method will add a predicate to that query. The predicate knows how it can be translated to SQL, but for
+the time being it is not necessary to. Then <span class="code">OrderBy()</span> method will add an ordering instruction and the <span class="code">Take()</span> will add a limit. None of these
+require the actual execution of the query.
+</p>
+
+<p>
+The query is going to be executed when there is access to the items of the list. This happens usually upon iteration with <span class="code">foreach</span>. Until then, the list is open to any
+manipulation and LINQ methods are translated as modification to the query. Any consequent call will be applied on the objects of the list in memory without hitting the database again.
+</p>
+
+<p class="code">
+foreach ($list as $book) {            // the SQL query is executed silently before the iteration.
+	echo $book->Title;
+}
+
+foreach ($list->Skip(5) as $book){    // no SQL query will be executed here. LINQ will be executed in memory.
+	echo $book->Title;
+}
+</p>
+
+<p>
+The smart predicates of the the meta model know how to translate themselfs into SQL so that they can postpone and transfer their execution to the database server. If we had used closures, the
+code would have worked without problem, however the execution time would be longer. Consider the following example, which is the same as the example above with the predicate object have been
+replaced by a predicate closure:
+</p>
+
+<p class="code">
+$m = Book::Meta();
+$list = Book::Seek()
+	->Where( function($book){ return $book->Year == 2011; } )
+	->OrderBy( $m->Title )
+	->Take( 10 );
+</p>
+
+<p>
+The predicate closure does not know how to translate itself in SQL and so it is bound to be executed in memory. That would mean that all books from the database will be first loaded in memory
+and then be filtered and ordered before the first 10 are taken. Apart from the fact that the loading of all books will take much time, even the queries in memory will take longer than the
+equivalent in database because the use no precalculated indices.
+</p>
+
+<p>
+The following example is the same as the first one, except that this time a closure is used for ordering. This is still slower that the first one, but faster that the second. This is because
+this time, the filtering predicate can be executed in the database. So, instead of loading every book in memory, only the books of 2011 will be loaded. The sorting, however, will be executed
+in memory.
+</p>
+
+<p class="code">
+$m = Book::Meta();
+$list = Book::Seek()
+	->Where( $m->Year->Eq( 2011 ) )
+	->OrderBy( function($book){ return $m->Title; } )
+	->Take( 10 );
+</p>
+
+<p>
+In general, although both approaches work, it is better to assign the execution of the queries to the database server because it is more optimised. Having said that, there are cases where the
+use of closures gives a flexibility that cannot be achieved with SQL. For instance, the following code will select the books of 2011 for which there exists a cover as a jpg file in the hard
+disk, ordered by title.
 </p>
 
 
-<h2>Order</h2>
+<p class="code">
+$m = Book::Meta();
+$list = Book::Seek()
+	->Where( $m->Year->Eq( 2011 ) )
+	->OrderBy( $m->Title; )
+	->Where( function($book){ return file_exists('covers/'.$book->id->AsHex().'.jpg'); } );
+</p>
 
 <p>
-...
+What is nice with the above code is that the form of the query is not changed. What can be executed in the database will be transferred there. The ordering of the calls here is important.
+Everything will be transferred to the database until something that cannot be transferred is encountered. In this case, the last filter function cannot be executed in the database. This
+is why, the ordering method is placed before it. Had it been placed after the filter, it would have been executed in memory instead.
 </p>
+
+
+<h2>Code organization</h2>
+
+<p>
+The predicates are essentially small elements of code with high reusability value because they can be easily combined together to create complex queries. Therefore, it is wise to structure
+the code around predicates. The other functions, which will give the final API, can combine predicates to produce the result. This approach have endless possibilities because it is expandable
+without having to rewrite the basic building blocks.
+</p>
+
+<p>
+In the following example, it is agreed that no book is deleted from the database and that searching with a string implies searching in the Title, the Author and the Summary fields of the book.
+These two facts are coded as predicates, and can be used anywhere in the code to filter books, instead of repeating them. What's more, if, sometime in the future, the definition of what is active
+changes, then it will be enough to change the predicate without having to touch every book query in the application.
+</p>
+
+<p class="code">
+class Book extends XItem {
+	...
+
+	//
+	// Predicates
+	//
+	public static function PredIsActive(){
+		return self::Meta()->DateDeleted->IsNotNull();
+	}
+	public static function PredBySearchString($search_string){
+		$m = self::Meta();
+		$s = '%'.$search_string.'%';
+		return XPred::Any( $m->Title->Like( $s )
+		                  ,$m->Author->Like( $s )
+		                  ,$m->Summary->Like( $s ) );
+	}
+	
+	//
+	// API functions
+	//
+	public static function SeekActive(){ return self::Seek()->Where( static::PredIsActive() ); }
+	public static function SearchActive($search_string){ return self::SeekActive()->Where( self::PredBySearchString($search_string) ); }
+
+	...
+}
+</p>
+
 
 <h2>Events</h2>
 
 <p>
-...
+It's often the case that a database contain triggers. Those triggers are necessary to maintain referencial integrity which is fine. However, they are usually misused it the sence that
+part of the application logic and the business intelligence is encoded there. This is simply not the right place for many reasons. First of all, it is easier to maintain the code if
+the logic is not scattered around. In addition, even if the trigger enforces referencial integrity, the messages returned to the user in case of breaking the integrity are part of the
+business logic because they should be handled and translated in a message meaningful to him.
 </p>
-
-
-
-<h2>Slaves</h2>
 
 <p>
-...
+For these reasons, Oxygen offers a set of object level events, which are to be executed in PHP. These events include <span class="code">OnInit</span>, <span class="code">OnLoad</span>
+<span class="code">OnBeforeSave</span>, <span class="code">OnAfterSave</span>, <span class="code">OnBeforeKill</span> and <span class="code">OnBeforeKill</span>. All events can be
+handled by overriding the protected method with the same name.
 </p>
+
+<p>
+<span class="code">OnInit</span> is very often used to provide default values for the objects fields, as PHP dows not allow field initializers to be anything else than scalar literals.
+</p>
+
+<p class="code">
+class Book extends XItem {
+	...
+	protected function OnInit(){
+		$this->DateCreated = XDateTime::Now();
+	}
+	...
+}
+</p>
+
+<p>
+The events on loading and saving can be used to calculate fields derived from other fields, usually for the shake of speed. Finally, the delete events can be used to enforce referencial
+integrity by throwing exceptions with meaningful messages.
+</p>
+
 
 
 

@@ -5,9 +5,92 @@
 
 
 
+<h1>Database abstraction layer</h1>
+
+<p>
+The database abstraction layer is a simple library built on top of PDO to simplify the access to the database and to provide database indepentence. The library consists of a single
+class, called <span class="code">Database</span> with many static functions and a global static state. Currently, it has been tested with MySql and Oracle databases, but it probably
+works with other vendors as well.
+</p>
+
+<p class="warning">
+The static architecture makes it hard sometimes to mock its operations for the shake of testing. It is planned that this will change into a dynamic extensible architecture in the
+future. However, the global state will be optionally used as it is very convenient for a good percentage of simple, single-database applications.
+</p>
+
+<p>
+The database layer maintains stack of active database connections. To open a connection, use the function <span class="code">Database::Connect()</span>. This will add the new connection
+to the top of the stack. <span class="code">Database::Disconnect()</span> on the other hand, will close the connection and remove it from the stack. The call of this function is
+not mandatory because it will be called automatically at the end of the script.
+</p>
+
+<p class="code">
+Database::Connect( $server1, $schema1, $username1, $password1, Database::MYSQL );
+
+	// we are now connected to a MySQL database
+
+Database::Connect( $server2, $schema2, $username2, $password2, Database::ORACLE );
+
+	// we are now connected to an Oracle database
+
+Database::Disconnect();
+
+	// we have been disconnected from Oracle, and returned to the MySql database.
+</p>
+
+<p>
+In addition to <span class="code">Database::Connect()</span>, there is also the function <span class="code">Database::ConnectManaged()</span> which will connect to a database and
+also run the database upgrade system to ensure that the schema is up to date. This system is presented at the end of this chapter.
+</p>
+
+<p>
+The details of the current active connection can be retrieved with the following set of functions:
+</p>
+
+<p class="code">
+Database::IsConnected();   // boolean
+Database::GetServer();     // string
+Database::GetSchema();     // string
+Database::GetType();       // int (Database::MYSQL or Database::ORACLE)
+</p>
+
+<h2>Excecute</h2>
+
+<p>
+All queries are handled by the function <span class="code">Database::Execute()</span>. This function takes an SQL query in as string form, plus a number of arguments to be bound
+to placeholders marked with <b>?</b>. The arguments can have be of any type supported by the OmniType system (see the chapter on the <a href="types.html">Type System</a>).
+</p>
+
+<p>
+Database::Execute('DELETE FROM Books WHERE id=?', $id);
+</p>
+
+
+<h2>DML functions</h2>
+
+<p>
+Data Manipulation Language (DML) functions are those functions that deal with the content of the tables. 
+</p>
 
 
 
+<h2>DDL functions</h2>
+
+<p>
+...
+</p>
+
+<h2>Transactions</h2>
+
+<p>
+...
+</p>
+
+<h2>Database upgrade system</h2>
+
+<p>
+...
+</p>
 
 
 
