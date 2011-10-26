@@ -172,16 +172,24 @@ abstract class XItem implements Serializable,OmniValue {
 			$fields = $cx->GetDBFields();
 			if (0==Database::ExecuteScalar('SELECT COUNT('.$cx->id->GetDBName().') FROM '.$cx->GetDBTableName().' WHERE '.$cx->id->GetDBName().'=?',$this->id)->AsInteger()){
 				$params = array();
-				$params[] =& $this->id;
+				$sql = 'INSERT INTO '.$cx->GetDBTableName().'(';
 
-				$sql = 'INSERT INTO '.$cx->GetDBTableName().'('.$cx->id->GetDBName();
+				$i = 0;
+				if (!$cx->id->IsDBAliasComplex()) {
+					$params[] =& $this->id;
+					$sql .= $cx->id->GetDBName();
+					$i++;
+				}
+
 				/** @var $f XField */
 				foreach ($fields as $f) {
-					$sql .= ','.$f->GetDBName();
+					if ($f->IsDBAliasComplex()) continue;
+					if ($i++ > 0) $sql .= ',';
+					$sql .= $f->GetDBName();
 					$n = $f->GetName();
 					$params[] =& $this->$n;
 				}
-				$sql .= ') VALUES (?' . str_repeat(',?',count($fields)).')';
+				$sql .= ') VALUES (?' . str_repeat(',?',$i-1).')';
 
 				Database::ExecuteX($sql,$params);
 			}
@@ -190,6 +198,7 @@ abstract class XItem implements Serializable,OmniValue {
 				$sql = 'UPDATE '.$cx->GetDBTableName().' SET ';
 				$i = 0;
 				foreach ($fields as $f) {
+					if ($f->IsDBAliasComplex()) continue;
 					if ($i++ > 0) $sql.=',';
 					$sql .= $f->GetDBName() . '=?';
 					$n = $f->GetName();

@@ -47,6 +47,16 @@ class Database {
 	}
 
 
+
+	/**
+	 * @api Since 1.3
+	 * @param $server string
+	 * @param $schema string
+	 * @param $username string
+	 * @param $password string
+	 * @param string $type int Possible values Database::MYSQL or Database::ORACLE
+	 * @return void
+	 */
 	public static function ConnectManaged($server,$schema,$username,$password,$type=self::MYSQL){
 		while(self::IsConnected()) self::Disconnect();
 		self::Connect($server,$schema,$username,$password,$type);
@@ -71,6 +81,16 @@ class Database {
 		}
 		else throw new NonImplementedException('CreateSchema is not implemented in for this database.');
 	}
+
+	/**
+	 * @api Since 1.3
+	 * @param $server string
+	 * @param $schema string
+	 * @param $username string
+	 * @param $password string
+	 * @param string $type int Possible values Database::MYSQL or Database::ORACLE
+	 * @return void
+	 */
 	public static function Connect($server,$schema,$username,$password,$type=self::MYSQL){
 		self::PushConnection();
 		try{
@@ -90,10 +110,15 @@ class Database {
 		}
 		catch (Exception $ex){
 			self::PopConnection();
-			throw new ApplicationException(Lemma::MsgCannotConnectToDatabase().'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
+			throw new ApplicationException(Lemma::Retrieve('MsgCannotConnectToDatabase').'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
 		}
 		self::ResetCaches();
 	}
+
+	/**
+	 * @api Since 1.3
+	 * @return void
+	 */
 	public static function Disconnect(){
 		self::PopConnection();
 		self::ResetCaches();
@@ -158,7 +183,10 @@ class Database {
 	}
 
 
-	/** @return PDOStatement */
+	/**
+	 * @param string $sql
+	 * @return PDOStatement
+	 */
 	private static function &Prepare(&$sql){
 		if (self::$type == self::ORACLE) { $r = self::$cn->prepare($sql); return $r; } // Oracle handles the caching by itself.
 		self::$queries[] =& $sql;
@@ -172,7 +200,11 @@ class Database {
 
 
 
-	/** @return DBReader */
+	/**
+	 * @param string $sql
+	 * @param array $params
+	 * @return DBReader
+	 */
 	public static function ExecuteX($sql,$params=array()){
 		$q = self::Prepare($sql);
 		$z = count($params);
@@ -192,7 +224,12 @@ class Database {
 		}
 		if ($q->columnCount() > 0) return new DBReader($q);
 	}
-	/** @return DBReader */
+
+	/**
+	 * @api Since 1.3
+	 * @param string $sql ... Pass the rest of the arguments after $sql
+	 * @return DBReader
+	 */
 	public static function Execute($sql){
 		$q = self::Prepare($sql);
 		$z = func_num_args(); if ($z > 1){ $a = func_get_args(); for($i = 1; $i < $z; $i++) $q->bindValue($i, OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) ); }
@@ -213,22 +250,22 @@ class Database {
 	}
 
 
-// buggy!
-//	/** @return array */
-//	public static function ExecuteArrayX($sql){ return self::ExecuteArrayX($sql,array_slice(func_get_args(),1)); }
-//	/** @return array */
-//	public static function ExecuteArray($sql,$params=array()){
-//		$dr = self::ExecuteX($sql,$params);
-//		$r = array();
-//		while ($dr->Read())
-//			$r[] = $dr->GetRecord();
-//		$dr->Close();
-//		return $r;
-//	}
 
-	/** @return array */
+
+	/**
+	 * @deprecated Since 1.3
+	 * @param OmniType $omnitype
+	 * @param string $sql ... Pass the rest of the arguments after $sql
+	 * @return array
+	 */
 	public static function ExecuteListOf(OmniType $omnitype,$sql){ return self::ExecuteListOfX($omnitype,$sql,array_slice(func_get_args(),2)); }
-	/** @return array */
+	/**
+	 * @deprecated Since 1.3
+	 * @param string $sql
+	 * @param OmniType $omnitype
+	 * @param array $params
+	 * @return array
+	 */
 	public static function ExecuteListOfX(OmniType $omnitype,$sql,$params=array()){
 		$dr = self::ExecuteX($sql,$params);
 		$r = array();
@@ -237,9 +274,42 @@ class Database {
 		return $r;
 	}
 
-	/** @return DBValue */
+
+
+	/**
+	 * @api
+	 * @param OmniType $omnitype
+	 * @param string $sql ... Pass the rest of the arguments after $sql
+	 * @return array
+	 */
+	public static function ExecuteColumnOf(OmniType $omnitype, $sql){ return self::ExecuteColumnOfX($omnitype,$sql,array_slice(func_get_args(),1)); }
+	/**
+	 * @param string $sql
+	 * @param OmniType $omnitype
+	 * @param array $params
+	 * @return array
+	 */
+	public static function ExecuteColumnOfX(OmniType $omnitype, $sql,$params=array()){
+		$dr = self::ExecuteX($sql,$params);
+		$r = array();
+		while ($dr->Read())	$r[] = $dr[0]->CastTo($omnitype);
+		$dr->Close();
+		return $r;
+	}
+
+
+
+	/**
+	 * @api
+	 * @param string $sql ... Pass the rest of the arguments after $sql
+	 * @return DBValue
+	 */
 	public static function ExecuteScalar($sql){ return self::ExecuteScalarX($sql,array_slice(func_get_args(),1)); }
-	/** @return DBValue */
+	/**
+	 * @param string $sql
+	 * @param array $params
+	 * @return DBValue
+	 */
 	public static function ExecuteScalarX($sql,$params=array()){
 		$dr = self::ExecuteX($sql,$params);
 		$r = $dr->Read() ? $dr[0] : new DBValue(null);
@@ -347,6 +417,11 @@ class Database {
 	// Advanced
 	//
 	//
+	/**
+	 * @api Since 1.3
+	 * @param string $tablename ... Pass the rest of the parameters as strings in name-value pairs
+	 * @return void
+	 */
 	public static function ExecuteInsert($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
@@ -367,6 +442,7 @@ class Database {
 	/**
 	 * ExecuteInsertNext( 'table_name' [ , 'field_name_1' , $field_value_1 [ , ... ] ] )
 	 * ExecuteInsertNext( 'table_name' , 'primary_key_name' [ , 'field_name_1' , $field_value_1 [ , ... ] ] )
+	 * @param $tablename
 	 * @return ID
 	 */
 	public static function ExecuteInsertNext($tablename){
@@ -386,6 +462,11 @@ class Database {
 		return $id;
 	}
 
+	/**
+	 * @api Since 1.3
+	 * @param string $tablename ... Pass the rest of the parameters as strings in name-value pairs
+	 * @return void
+	 */
 	public static function ExecuteUpdateAll($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
@@ -396,6 +477,12 @@ class Database {
 		}
 		self::Execute($sql);
 	}
+	/**
+	 * @api Since 1.3
+	 * @param string $tablename
+	 * @param string $where ... Pass the rest of the parameters as strings in name-value pairs
+	 * @return void
+	 */
 	public static function ExecuteUpdate($tablename,$where){
 		$a = func_get_args();
 		$z = func_num_args();
@@ -499,10 +586,21 @@ class Database {
 	}
 
 
+	/**
+	 * @api Since 1.3
+	 * @param string $tablename
+	 * @return void
+	 */
 	public static function ExecuteDeleteAll($tablename){
 		$sql = 'DELETE FROM '.new SqlName($tablename);
 		self::Execute($sql);
 	}
+	/**
+	 * @api Since 1.3
+	 * @param string $tablename
+	 * @param string $where
+	 * @return void
+	 */
 	public static function ExecuteDelete($tablename, $where){
 		$sql = 'DELETE FROM '.new SqlName($tablename).' WHERE '.$where;
 		self::Execute($sql);
