@@ -8,14 +8,142 @@
 
 <p>
 In PHP every script file may potentially be a receiver of an HTTP request. While this is convenient for simple applications, it is problematic for bigger ones. The reason is that many times the responses
-perform a similar set of operations, like initialisation, connecting to the database, handle the session, t 
+perform a similar set of operations, like initialisation, connecting to the database, handle the session etc or check the authorizations. It would be better if there was a standard interface that ensures
+that each of the responses comply to the same standard. For this reason, Oxygen requires that all responses begin from a single receiver (a controller) which will select one action to perform according
+to the arguments passed.
 </p>
 
 <p>
-The basic block of controlling a web application with Oxygen, is the action. An action is essentially a response to an HTTP request.
+Therefore, the basic block of controlling a web application with Oxygen, is the action. An action is essentially a response to an HTTP request. It has to extend the abstract class <span class="code">Action</span>
+and comply to its interface by overriding the abstract methods. There are two such methods, <span class="code">IsPermitted()</span> and <span class="code">Render()</span>. However, there are many other utility
+methods that can be overridden to change different properties of an action.
+</p>
+
+<p>
+The name of the action is important because this is how the controller will find it. In fact, the controller will check the query string for the value of the parameter <b>action</b>. If for example the query
+string is <b>?action=Login</b>, then the controller will select the class with name <span class="code">ActionLogin</span> to handle the request. Therefore, the name of the class has to begin
+with <b>Action</b>.
+</p>
+
+<p>
+Here is a very basic example:
+</p>
+
+<p class="code">
+class ActionHelloWorld extends Action {
+
+	public function IsPermitted(){
+		return true;
+	}
+
+	public function Render(){
+		echo 'Hello World';
+	}
+
+}
+</p>
+
+<p>
+To make this work, follow the instructions of the chapter <a href="setup.html">Setup</a>, and place the code into a file named <b>ActionHelloWorld.php</b> into one of the code folders. If your entry script is named
+<b>index.php</b>, then the action will be accessible from the address <b>index.php?action=HelloWorld</b>. If everything is fine, you will see a Hello World message in the page.
 </p>
 
 
+<h2>Links</h2>
+
+<p>
+The URL of an action should never be hard coded. It should always be taken from the method <span class="code">GetHref()</span>. Usually, the URL will be exported to HTML, so it will also have to be escaped.
+</p>
+
+<p class="code">
+$act = new ActionHelloWorld();
+echo '&lt;a href="'.new Html( $act->GetHref() ).'"&gt;'.new Html('Hello world').'&lt;/a&gt;';
+</p>
+
+<p>
+As this is quite common, there are a lot of helping functions. First of all, the <span class="code">Html</span> converter is overloaded so that <span class="code">new Html( $act->GetHref() )</span> is exactly equivalent
+to <span class="code">new Html( $act )</span>. In addition, by overriding the helping method <span class="code">GetTitle()</span>, you can keep everything related to the action in one place instead of repeating it everywhere.
+So, all the variations bellow do exactly the same thing:
+</p>
+
+<p class="code">
+$act = new ActionHelloWorld();
+echo '&lt;a href="'.new Html( $act ).'"&gt;'.new Html('Hello world').'&lt;/a&gt;';
+echo '&lt;a href="'.new Html( $act ).'"&gt;'.new Html($act->GetTitle()).'&lt;/a&gt;';
+echo $act->GetLinkedTitle();
+</p>
+
+<p>
+It becomes evident that the action serves in two different things. If called from the controller (by the query string), it is a handler for the request. If it is called from the code (by the constructor), the action behaves
+more like a link (although it is still possible to render it). This distinction is very important. First of all, as there are a lot of links in a typical web application, the action object should be lightweight, by avoiding
+having member variables other than the necessary, which are basically the arguments of the action. In example above, the action needs no arguments as its result depends on nothing. If, however, we wanted an action that shows
+a page with information on a book, we would want the book to be an argument. Therefore, we would like to pass the book either by the query string or by the constructor. In addition, we would like that the generated URL
+contained the extra argument. In order to do all these, we have to override three functions of the class (the constructor, a method and a static function). This is a little tricky, because of some peculiarities of PHP, but
+here it is:
+</p>
+
+<p class="code">
+class ActionDisplayBook extends Action {
+
+	private $book;
+
+	//
+	// Overriding the constructor.
+	//
+	public function __construct(Book $book){
+		parent::__construct();   // Always call the parent constructor because PHP will not do so!
+		$this->book = $book;
+	}
+
+	//
+	// Standard method overriding. This method will have to return a name-value array with the arguments
+	// which will be automatically escaped into URL encoding (escaping an XItem into URL, will actually
+	// escape just its id).
+	//
+	public function GetUrlArgs(){
+		return array( 'id' => $this->book ) + parent::GetUrlArgs(); // The + operator between arrays, merges the first array into the second.
+	}
+
+	//
+	// Overriding a static function, with late static binding. This function will be called
+	// by the controller, so it will have to retrieve the arguments from the query string.
+	//
+	public static function Make(){
+		return new static( Book::Pick( Http::$GET['id']->AsID() ) );   // call of the constructor.
+	}
+
+
+	public function IsPermitted(){
+		return true;
+	}
+
+	public function Render(){
+		echo $this->book->Title;
+		...
+	}
+}
+</p>
+
+<p>
+Now the action is ready to be used, either from a URL or from the code. The generated URL will be something like <b>index.php?action=DisplayBook&id=00000001</b>. On the other hand,
+to use the action inside the code as a link, simply call the constructor <span class="code">new ActionDisplayBook($book)</span>.
+</p>
+
+
+<h2>Types of actions</h2>
+
+<p>
+Apart from the standard actions that use the entire page and the template of the entry script (see the chapter on <a href="setup.html">Setup</a>), there are also some other types
+</p>
+
+
+<h2>Permissions</h2>
+
+
+<h2>Exceptions</h2>
+
+
+<h2>Menus</h2>
 
 
 
