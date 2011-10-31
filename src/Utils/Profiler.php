@@ -24,6 +24,7 @@ class Profiler {
 
 	public static function ShowConsole(){
 		Console::BeginPopup('oxy/img/console_tab_prfs_active.png','Quick profiler','Quick profiler '.self::$serial);
+		Console::RenderInfo( Oxygen::GetInfo() );
 		self::Analyse(self::$results);
 		Console::EndPopup();
 	}

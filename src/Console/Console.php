@@ -71,6 +71,10 @@ class Console {
 		echo '<img src="oxy/img/console_tab_home.png" /><br/>';
 		echo 'App Home';
 		echo '</a>';
+		echo '<a href="oxy/hlp" target="_blank" style="float:right;">';
+		echo '<img src="oxy/img/console_tab_docs.png" /><br/>';
+		echo 'Docs';
+		echo '</a>';
 		echo '<a href="'.new Html(new ActionOxygenReset()).'" style="float:right;">';
 		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
 		echo 'Reset';
@@ -88,6 +92,17 @@ class Console {
 
 
 
+	public static function RenderInfo( $info ){
+		echo '<div style="height:120px;overflow:auto;border:1px dotted #888888;background:#eeeeee;margin-bottom:10px;padding:5px;">';
+		foreach ($info as $a){
+			foreach ($a as $label=>$value){
+				echo '<div class="label">'.new Html($label).'</div><div class="value">'.new Html($value).'</div>';
+			}
+			echo '<br class="clear"/><br/>';
+		}
+		echo '</div>';
+	}
+	
 	public static function BeginPopup($tab_icon_src,$tab_title,$title){
 		$name = 'x'.ID::Random()->AsHex();
 		echo '<div id="'.$name.'">';
@@ -108,6 +123,10 @@ class Console {
 		echo '<a href="javascript:(function(){$('.new Js($name).').hide();})();" style="float:right;width:99px;border-top-right-radius:10px;">';
 		echo '<img src="oxy/img/console_tab_hide.png" /><br/>';
 		echo 'Hide';
+		echo '</a>';
+		echo '<a href="oxy/hlp" target="_blank" style="float:right;">';
+		echo '<img src="oxy/img/console_tab_docs.png" /><br/>';
+		echo 'Docs';
 		echo '</a>';
 		echo '<a href="'.new Html(new ActionOxygenReset()).'" style="float:right;">';
 		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';

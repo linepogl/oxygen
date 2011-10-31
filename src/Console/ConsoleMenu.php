@@ -7,7 +7,6 @@ class ConsoleMenu extends Menu {
 		$this[] = new ActionOxygenErrs();
 		$this[] = new ActionOxygenLogs();
 		$this[] = new ActionOxygenPrfs();
-		$this[] = new ActionOxygenDocs();
 
 
 

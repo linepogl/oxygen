@@ -58,6 +58,8 @@ abstract class Action implements OmniValue {
 	public function RequiresLogin(){ return true; }
 	public function IsTitleHidden(){ return false; }
 
+	public function IsMenuSeparator(){ return false; }
+
 	public abstract function Render();
 	public function OnBeforeRender() {}
 	public function OnAfterRender() {}

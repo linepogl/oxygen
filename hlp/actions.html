@@ -4,7 +4,7 @@
 </head><body>
 
 
-<h2>Actions</h2>
+<h1>Actions</h1>
 
 <p>
 In PHP every script file may potentially be a receiver of an HTTP request. While this is convenient for simple applications, it is problematic for bigger ones. The reason is that many times the responses
@@ -130,24 +130,172 @@ to use the action inside the code as a link, simply call the constructor <span c
 </p>
 
 
-<h2>Types of actions</h2>
+<h2>Action modes of rendering</h2>
 
 <p>
-Apart from the standard actions that use the entire page and the template of the entry script (see the chapter on <a href="setup.html">Setup</a>), there are also some other types
+The standard mode for an action is to use the entire page for rendering, with the help from the template of the entry script (see the chapter on <a href="setup.html">Setup</a>).
+This is the default behaviour and it is sufficient for the majority of actions. However, there are other modes:
 </p>
 
+<p>
+In the <b>AJAX</b> mode, the action is rendered bare, without the surrounding template. This is very useful for rendering parts of a page as a response to an AJAX call for example.
+</p>
 
-<h2>Permissions</h2>
+<p>
+In the <b>AJAX_BLIND</b> mode, the action does not even render HTML code. This is useful for those actions where the result of the request will not be displayed as HTML to the user.
+There are two kinds of such actions. First of all, there are the actions that do not return HTML at all, but other types of content such as binary files, XML, SVG etc. In addition,
+there are the actions that perform an operation after an AJAX call, but the result of the operation will not be displayed to the user, such as synchronization calls, variable
+setting calls, etc..
+</p>
+
+<p>
+In the <b>AJAX_DIALOG</b> mode, the action is rendered inside a predefined dialog box. This dialog box is modal, which means that the user has to close it before doing anything else on
+the page. The style of the dialog box can be changed with css.
+</p>
+
+<p>
+In the <b>IFRAME</b> mode, the action is rendered in the whole page but without using the template. In this mode, the action is expected to also render its own HTML header. This
+is useful for actions rendered inside frames. In addition, in the <b>IFRAME_DIALOG</b> mode, the frame will be placed inside a dialog box.
+</p>
+
+<p>
+The mode of an action is determined by the <span class="code">mode</span> protected member variable. The mode of the current action is retrieved by the query string variable <b>mode</b>.
+So, every action can be rendered in any mode depending on the query string parameter (although it does not always make sense). Each action has a default mode, which is defined by
+overriding the method <span class="code">GetDefaultMode</span>.
+</p>
+
+<p class="code">
+class ActionDeleteBook extends Action {
+	...
+	public function GetDefaultMode(){ return self::AJAX_DIALOG; }
+	...
+}
+</p>
 
 
 <h2>Exceptions</h2>
 
+<p>
+The actions serve also as an exception handler. This means that any exception thrown during the rendering of an action will be caught an displayed to the user in a nice way. There
+are three kinds of exceptions with a different treatment from the handler.
+<p>
+
+<p>
+Any <span class="code">ApplicationException</span> will be caught and the message of the exception will be shown to the user. Therefore, the messages in this kind of exceptions
+has to be friendly to the user. Furthermore, any <span class="code">SecurityException</span> will be caught, its message will be displayed to the user but along with a login form.
+Finally, all other kinds of exceptions will display a generic message to the user and an exception report will be send to the developer. So, unless a generic exception is wrapped
+inside one of the two other kinds, it is considered a bug.
+</p>
+
+<p>
+The rendering of the message of an exception depends on the mode of the current action. If the mode is BLIND, there will be no rendering as the result is not displayed to the user.
+So, BLIND actions should have their own exception handling mechanism. In any case, if there is an exception the actual content of the action will not be rendered. When this happens,
+the method <span class="code">ContentCompromised()</span> of the action returns <span class="code">false</span>.
+</p>
+
+
+
+<h2>Permissions</h2>
+
+<p>
+The permission system is built on top of the exception handling mechanism. When the <span class="code">IsPermitted</span> method returns false, a <span class="code">SecurityException</span>
+is thrown. This exception is caught by the system and the login form is displayed.
+</p>
+
+<p class="code">
+class ActionDeleteBook extends Action {
+	...
+	public function IsPermitted(){
+		return User::GetCurrent()->IsAdministrator();   // for example
+	}
+	...
+}
+</p>
+
+<p>
+If the user is not an administrator, he cannot delete a book. Instead, the login form will appear if the action is called. Remember that there is no actual user system in Oxygen, so the
+code in this method always depends on the business rules of the application.
+</p>
+
+<p>
+this kind of handling should be used when the action cannot be performed by the current user, but it can be performed by <i>some</i> user. If there is another reason to block the action,
+then the <span class="code">IsLogical</span> method should be used. This method tells that the action cannot be performed by <i>any</i> user, because it is not logical under the current
+state of the application. For example, there maybe a business rule that messages can only be sent once. Resending a message will always fail, and it logging in with another user account
+will not help:
+</p>
+
+<p class="code">
+class ActionSendMessage extends Action {
+	...
+	public function IsLogical(){
+		return !$this->message->IsSent;  // block the resending of a message
+	}
+	...
+}
+</p>
+
+
 
 <h2>Menus</h2>
 
+<p>
+Menus are arrays of actions. They behave very much like regular PHP arrays, with the exception that they reject any action that is not permitted or is not logical.
+</p>
 
+<p class="code">
+$m = new Menu();
+$m[] = new ActionEditBook( $book );
+$m[] = new ActionDeleteBook( $book );
 
+foreach ($m as $act)
+	echo $act->GetLinkedTitle();  // the menu contains only the actions that are permitted and logical, so no need for extra checking here
+</p>
 
+<p>
+The class <span class="code">Menu</span> can be extended to provide specialised menus.
+</p>
+
+<p class="code">
+class BookMenu extends Menu {
+	public function __construct(Book $book) {
+		$this[] = new ActionEditBook( $book );
+		$this[] = new ActionDeleteBook( $book );
+	}
+}
+
+$book_menu = new BookMenu( $book );
+foreach ($book_menu as $act)
+	echo $act->GetLinkedTitle();
+</p>
+
+<p>
+Menus also accept a special action called <span class="code">MenuSeparator</span>. This is very useful because the menu will automatically merge two separators in a series and also remove any leading
+or trailing separator.
+</p>
+
+<p class="code">
+class BookMenu extends Menu {
+	public function __construct(Book $book) {
+		$this[] = new ActionViewBook( $book );
+		$this[] = new MenuSeparator();              // if the user has read-only access to the book, this separator will
+		$this[] = new ActionEditBook( $book );      // be the last item on the list and will be automatically removed.
+		$this[] = new ActionDeleteBook( $book );
+	}
+}
+
+foreach (new BookMenu($book) as $act ){
+	if ($act->IsMenuSeparator())
+		echo '&lt;hr/&gt;';
+	else
+		echo $act->GetLinkedTitle();
+}
+</p>
+
+<p>
+From the above examples, it is clear that the <span class="code">IsPermitted</span> and the <span class="code">IsLogical</span> methods are called a lot of times throughout the applications. As
+a result, they should be executed quickly. If the application uses a complicated permissions mechanism, then this should be optimised so that the results of an authorisation query are returned in
+constant time.
+</p>
 
 
 

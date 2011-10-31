@@ -5,8 +5,172 @@
 
 
 
+<h1>Controls</h1>
+
+<p>
+Controls are fractions of HTML code. They can be used to encapsulate a part of a page that appears in many actions in the application, but it cannot be called directly as a stand alone action.
+Each control extends the <span class="code">Control</span> and must override the <span class="code">Render</span> method, just like in the actions.
+</p>
+
+<p class="code">
+class HelloWorldControl extends Control {
+	public function Render(){
+		echo 'Hello world!';
+	}
+}
+
+HelloWorldControl::Make()->Render();
+</p>
+
+<p>
+Each control has a unique name that can be used as a namespace for the ids of the HTML elements inside the rendering.
+</p>
+
+<p class="code">
+class MyControl extends Control {
+	public function Render(){
+		echo '&lt;div id="'.$this->name.'-first-div"&gt;Div 1&lt;/div&gt;';
+		echo '&lt;div id="'.$this->name.'-second-div"&gt;Div 2&lt;/div&gt;';
+	}
+}
+
+$c1 = MyContol::Make();
+$c2 = MyContol::Make();
+
+$c1->Render();
+$c2->Render();   // no id conflict because each control has a different name
+</p>
 
 
+<p>
+The <span class="code">Make</span> function is equivalent to the constructor, but it can be used for method chaining. It can accept an argument, which is the name of the control. If no
+argument is passed, then a random name is assigned.
+</p>
+
+<p class="code">
+MyContol::Make('my_control_1')->Render();
+</p>
+
+<h2>Value controls</h2>
+
+<p>
+Value controls are those controls that also have one value to be transferred through HTTP. These are controls that render an HTML form element. The value of the control is passed to the constructor
+along with the name. This time, the name of the control is important because this will be the name of the HTTP variable passed through the POST or GET request.
+</p>
+
+<p>
+There are several premade value controls, such as the <span class="code">TextboxControl</span>, the <span class="code">CheckboxControl</span>, the <span class="code">SelectControl</span> and others.
+</p>
+
+<p class="code">
+// This will create an HTML form text input with name "title", filled with the book's title. Several
+// attributes can be defined in a chained fashion.
+TextboxControl::Make( 'title' , $book->Title )
+	->WithWidth( '100px' )                          // width
+	->WithOnChange( 'CheckBookTitle();' )           // a Javascript event
+	->Render();
+</p>
+
+
+<p>
+The value of a control passed through HTTP, can be retrieved by the name:
+</p>
+
+<p class="code">
+$book->Title = Http::$POST[ 'title' ]->AsString();
+</p>
+
+<p>
+The conversion of the value to HTML is done according to the rules of the Oxygen's type system (the the chapter on <a href="types.html">The type system</a>).
+</p>
+
+<p class="code">
+TextboxControl::Make( 'NumberOfPages' , $book->NumberOfPages )->Render();
+...
+$book->NumberOfPages = Http::$POST['NumberOfPages']->AsIntegerOrNull();
+</p>
+
+
+<h2>Common value controls</h2>
+
+<p>
+The <span class="code">HiddenControl</span> renders a hidden HTML form element.
+</p>
+
+<p class="code">
+HiddenControl::Make( 'title' , $book->Title )->Render();
+</p>
+
+<p>
+The <span class="code">TextboxControl</span> renders a text or a textarea input.
+</p>
+
+<p class="code">
+HiddenControl::Make( 'description' , $book->Description )->WithRows(10)->Render();
+</p>
+
+<p>
+The <span class="code">PasswordControl</span> is for passwords.
+</p>
+
+<p class="code">
+PasswordControl::Make( 'password' , '' )->Render();    // pre-fill does not make sense here...
+</p>
+
+<p>
+The <span class="code">SelectControl</span> renders select input.
+</p>
+
+<p class="code">
+SelectControl::Make( 'author' , $book->Author )
+	->WithOption( 'Lewis Carol')
+	->WithOption( 'J.R.Tolkien')
+	->Render();
+</p>
+
+<p>
+This is a more complex, but more sane use of the select control:
+</p>
+
+<p class="code">
+// Select the id of the author in a list of XItems. Each option in the list will have
+// the the author's id as value and the author's GetTitle() as caption.
+SelectControl::Make( 'idAuthor' , $book->idAuthor )
+	->WithXList( Author::Seek() )
+	->Render();
+</p>
+
+<p>
+The <span class="code">DateControl</span>, the <span class="code">DateTimeControl</span>, <span class="code">TimeControl</span> and the <span class="code">TimeSpanControl</span> work on time
+related values.
+</p>
+
+<p class="code">
+DateControl::Make( 'DatePublished' , $book->DatePublished )->Render();
+</p>
+
+
+<p>
+The <span class="code">ButtonControl</span> makes buttons.
+</p>
+
+<p class="code">
+ButtonControl::Make()->WithValue('OK')->WithIsSubmit(true)->Render();
+ButtonControl::Make()->WithValue('Cancel')->WithIsReset(true)->Render();
+ButtonControl::Make()->WithValue('Click me!')->WithOnClick('Clicked();')->Render();
+</p>
+
+<p>
+The <span class="code">CheckboxControl</span> and the <span class="code">ImageCheckboxControl</span> is for boolean values.
+</p>
+
+<p class="code">
+// This will render a check box along with a label.
+CheckboxControl::Make( 'IsMagazine' , $book->IsMagazine )
+	->WithLabel('This is a magasine')
+	->WithShowLabel(true)
+	->Render();
+</p>
 
 
 

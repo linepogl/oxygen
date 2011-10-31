@@ -89,6 +89,7 @@ class Debug {
 	}
 	public static function ShowConsole(){
 		Console::BeginPopup('oxy/img/console_tab_logs_active.png','Quick log','Quick log '.self::$serial);
+		Console::RenderInfo( Oxygen::GetInfo() );
 		self::Render();
 		Console::EndPopup();
 	}

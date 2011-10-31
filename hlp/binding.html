@@ -1,0 +1,185 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8" />
+<title>Oxygen documentation</title>
+<link rel="stylesheet" type="text/css" href="index.css" />
+</head><body>
+
+
+
+<h1>Binding</h1>
+
+
+<p>
+Filling a form with values and reading it back after the HTTP POST request, is a process that is repetitive and error prone. However, it all boils down to filling named containers
+with values, retrieving the values back by these names and converting to the appropriate type.
+</p>
+
+<p>
+It is very usual for a form to be about a single object. In this case, the process is very similar to saving and loading from a database. We could say that filling a form is like
+saving the object into the form, while reading the form is like loading the object from the form. However, there are two differences. First of all, the form may contain only
+a portion of all the fields of the object. So, filling the form should only fill the fields that exist in the form, while reading the form should only change the values of the
+fields that exist as parameters in the HTTP request. Furthermore, in the database there is a predifined table with a fixed name that hosts the fields. In a form, there is no
+such thing, however, we can create something equivalent with the use of namespaces.
+</p>
+
+<p class="ascii">
+--------------------                  --------------------                  --------------------
+|                  |                  |                  |                  |                  |
+|                  | ----- Load ----> |                  | ----- Fill ----> |                  |
+|     Database     |                  |      Object      |                  |       Form       |
+|                  | <---- Save ----- |                  | <---- Read ----- |                  |
+|                  |                  |                  |                  |                  |
+--------------------                  --------------------                  --------------------
+</p>
+
+
+<h2>Wrapping objects</h2>
+
+<p>
+The namespace of a form that contains fields of an object can be anything. However, the name of each of the form elements depends only on the namespace of the form and the name of
+the field they represent. As a result, in order to fill a form with the data of an object, it is sufficient to provide a name and the object itself. Everything else can be extracted
+from this information. The name of the form element derives from the namespace and the name of the field. The value of the element is generated from the value of the field by
+following the conversion rules of the OmniType of the field. In reverse operation, reading from the HTTP parameters requires the same things.
+</p>
+
+<p>
+For this reason, there is the class <span class="code">XWrap</span>, which wraps an object with a namespace. By default the namespace of the object is a standard string derived from
+the name of the class and the id of the object. The <span class="code">XWrap</span> contain <span class="code">XWrapField</span>s and <span class="code">XWrapSlave</span>s
+in direct analogy with the <span class="code">XField</span>s and <span class="code">XSlave</span>s.
+</p>
+
+<p class="ascii">
+|---------------------|      |--------|      |---------------------|
+| XMeta            <---------- XItem <--------+              XWrap |
+|        |------------|      |--------|      |------------|        |
+|        | XField    <-------------------------XWrapField |        |
+|        |------------|                      |------------|        |
+|        | XField    <-------------------------XWrapField |        |
+|        |------------|                      |------------|        |
+|        | XSlave    <-------------------------XWrapSlave |      +--------------> name
+|--------|------------|                      |------------|--------|
+</p>
+
+
+<p>
+To get an <span class="code">XWrap</span> from an object, use the <span class="code">Wrap</span> method. There are two overloads, one for getting a wrap with a default name and one that
+expect the name to be passed as and argument. In is worth noting that the default name is not random and it is garanted to be the always the same for each call on the same object.
+</p>
+
+<p class="code">
+// To get a named wrap:
+$ui_new = $book->Wrap( 'new' );
+
+// To get a wrap with a default name
+$ui = $book->Wrap( );
+</p>
+
+<p>
+After retrieving the wrap, the form can be filled with the use of <span class="code">GetName()</span> and <span class="code">GetValue()</span> of the fields:
+</p>
+
+<p class="code">
+$ui = $book->Wrap();
+TextboxControl::Make( $ui->Title->GetName() , $ui->Title->GetValue() )->Render();
+TextboxControl::Make( $ui->Author->GetName() , $ui->Author->GetValue() )->Render();
+</p>
+
+<p>
+As this is quite ofter, all controls have another overload of their constructor that needs only the <span class="code">XWrapField</span> to be passed.
+</p>
+
+<p class="code">
+$ui = $book->Wrap();
+TextboxControl::Make( $ui->Title );
+TextboxControl::Make( $ui->Author );
+</p>
+
+<p>
+If a form is filled with this method, then the name of every form element is generated in a certain way and therefore depends only on the feeding <span class="code">XWrap</span>. As
+a result, it is easy to automatically read the form back.
+</p>
+
+<p class="code">
+$ui = $book->Wrap();
+$ui->Read( Http::$POST );   // this is enough!
+</p>
+
+<p>
+The above code will generate the name for each field of the book and will check the HTTP request if it contains parameters with this name. If so, it will extract these parameter
+by using the <span class="code">OmniType</span> of the field. As a result, the book will have its title and its author updated by the form, while the rest of the fields will
+remain unchanged.
+</p>
+
+<h2>Refactoring the complete typical form action example</h2>
+
+<p>
+This is the same form of the chapter on <a href="rendering.html">Rendering</a>, but this time automatic binding is used.
+</p>
+
+<p class="code">
+class ActionModifyBook extends Action {
+	public function GetDefaultMode(){ return self::AJAX_DIALOG; }
+
+	/** @var Book */
+	private $book;
+	public function __construct(Book $book){ parent::__construct(); $this->book = $book; }
+	public function GetUrlArgs(){ return array('id'=>$this->book) + parent::GetUrlArgs(); }
+	public static function Make(){ return new static(Book::Pick(Http::$GET['id']->AsID())); }
+
+	public function IsPermitted(){ return true; }
+
+	public function Render(){
+		$v = new ValidatorSet();
+		<b>$ui = $this->book->Wrap();</b>
+
+		if ($this->IsPostback()){
+			// Read the form
+			<b>$ui->Read( Http:$POST );</b>
+
+			// Validate the form
+			$v->Title->CheckMandatory( $this->book->Title );
+			$v->Author->CheckMandatory( $this->book->Author );
+			$v->Author->Check($this->book->Author==strtoupper($this->book->Author), Lemma::Retrieve('MsgUseCapitalLetters'));
+
+			// Process the form
+			if ($v->HasPassed()) {
+				$this->book->Save();
+				Oxygen::Refresh();
+			}
+		}
+
+		// Render the form
+		echo $this->GetForm();
+
+		echo <b>$ui->Title</b>->GetLabel();
+		echo '&lt;br/&gt;'
+		TextboxControl::Make( <b>$ui->Title</b> )->Render();
+		if (!$v->Title->HasPassed()) echo new MessageControl($v->Title);
+		echo '&lt;br/&gt;'
+
+		echo <b>$ui->Author</b>->GetLabel();
+		echo '&lt;br/&gt;'
+		TextboxControl::Make( <b>$ui->Author</b> )->Render();;
+		if (!$v->Author->HasPassed()) echo new MessageControl($v->Author);
+		echo '&lt;br/&gt;'
+
+		ButtonControl::Make()->WithValue( Lemma::Retrieve('OK') )->WithIsSubmit( true )->Render();
+		ButtonControl::Make()->WithValue( Lemma::Retrieve('Cancel') )->WithIsCancel( true )->Render();
+		echo $this->EndForm();
+	}
+}
+</p>
+
+
+
+
+
+
+
+
+
+
+<footer>
+<a href="index.html">&larr; Table of contents</a>
+</footer>
+
+</body></html>

@@ -19,7 +19,7 @@ class Menu implements IteratorAggregate, ArrayAccess, Countable {
 		$this->Add(new MenuSeparator());	
 	}
 	public function Add($item) {
-		if ($item instanceof MenuSeparator) {
+		if ($item->IsMenuSeparator()) {
 			if (count($this->items) > 0) {
 				$this->pending_separator = $item;
 			}

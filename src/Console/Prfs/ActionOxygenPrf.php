@@ -33,17 +33,7 @@ class ActionOxygenPrf extends ConsoleAction {
 
 		$data = unserialize( file_get_contents($ff) );
 
-
-		echo '<div style="height:120px;overflow:auto;border:1px dotted #888888;background:#eeeeee;margin-bottom:10px;padding:5px;">';
-		foreach ($data['head'] as $a){
-			foreach ($a as $label=>$value){
-				echo '<div class="label">'.new Html($label).'</div><div class="value">'.new Html($value).'</div>';
-			}
-			echo '<br class="clear"/><br/>';
-		}
-		echo '</div>';
-
-
+		Console::RenderInfo( $data['head'] );
 
 		Profiler::Analyse($data['body']);
 

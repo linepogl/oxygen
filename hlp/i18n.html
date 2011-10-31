@@ -5,12 +5,108 @@
 
 
 
+<h1>Internationalization</h1>
+
+<p>
+The most evident requirement for internationalization support is the ability to display messages in several languages. This is built into Oxygen and it is one of the core services.
+</p>
+
+<p>
+In every given moment an Oxygen application has a current language. This is the language of the interface, and all messages are automatically translated to this language. This is
+defined with the function <span class="code">Oxygen::SetLanguage()</span>, or, if Oxygen is used as a controller, by the <b>lang</b> query string parameter. See the chapter on
+<a href="setup.html">Setup</a> for more info on setting up the languages.
+</p>
+
+<p>
+All messages are served by the <span class="code">Lemma</span> class, which can retrieve the translation from the linked dictionaries (again, this is described in <a href="setup.html">Setup</a>).
+</p>
+
+<p>
+The constructor of the <span class="code">Lemma</span> is overloaded:
+</p>
+
+<p class="code">
+$lemma1 = new Lemma();                                    // anonynmous empty lemma
+$lemma2 = new Lemma('Title');                             // named empty lemma
+$lemma3 = new Lemma('en','Title','fr','Titre');           // anonymous lemma
+$lemma4 = new Lemma('Title','en','Title','fr','Titre');   // named lemma
+</p>
+
+<p>
+However, in the majority of the cases, the lemma is retrieved by the <span class="code">Lemma::Retrieve()</span> function:
+</p>
+
+<p class="code">
+$lemma = Lemma::Retrieve('Title');    // retrieves a lemma from the dictionaries
+</p>
+
+<p>
+The <span class="code">__toString()</span> method is overridden, and so each lemma can be directly reduced to a string which will be the translation to the current language. This is why the
+following code works:
+</p>
+
+<p class="code">
+echo Lemma::Retrieve('Title');  // Lemma will be converted to a string first. The conversion depends on the current language.
+</p>
+
+<p>
+In most of the cases a <span class="code">Lemma</span> can be used instead of a string. As a rule of thumb, there should be no hard codes string messages anywhere in the code. Instead, all
+messages should be stored in a dictionary and should be retrieved from there. This holds true even for single-language applications, because the dictionary serves as a centralised repository
+of all messages and makes review and editing easier.
+</p>
+
+<h2>The dictionary</h2>
+
+<p>
+The dictionary is built from a series of XML files (see the chapter on <a href="setup.html">Setup</a>). Each dictionary contains a number of lemmas. This is a simple example:
+</p>
+
+<p class="code"><![CDATA[
+<dictionary>
+	<lemma name="Title">
+		<en>Title</en>
+		<fr>Titre</fr>
+	</lemma>
+	<lemma name="Author">
+		<en>Author</en>
+		<fr>Auteur</fr>
+	</lemma>
+	<lemma name="MsgConfirmDeleteBook">
+		<en>Are you sure you want to delete this book?</en>
+		<fr>Voulez-vous vraiment supprimer ce livre ?</fr>
+	</lemma>
+</dictionary>
+]]></p>
+
+<p>
+As a conversion, all messages begin with a capital letter. In addition, all Msg* lemmas should contain the punctuation, such as the question mark in the above example.
+</p>
 
 
+<h2>Placeholders</h2>
+
+<p>
+Sometimes, it is necessary to use placeholders inside the translation of a message, because the value varies. This can be done with the use of <span class="code">sprintf</span>'s
+format specifiers.
+</p>
+
+<p class="code"><![CDATA[
+<dictionary>
+	<lemma name="MsgNumberOfBooksByAuthor">
+		<en>The author %s has written %d book(s).</en>
+		<fr>L'auteur %s a écrit %d livre(s).</fr>
+	</lemma>
+</dictionary>
+]]></p>
 
 
+<p>
+The translation of these lemmas should be done with the use of <span class="code">Lemma::Sprintf</span> function:
+</p>
 
-
+<p class="code">
+echo Lemma::Sprintf( 'MsgNumberOfBooksByAuthor' , $author , $number_of_books );
+</p>
 
 
 

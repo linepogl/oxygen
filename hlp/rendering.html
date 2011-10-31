@@ -1,0 +1,263 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8" />
+<title>Oxygen documentation</title>
+<link rel="stylesheet" type="text/css" href="index.css" />
+</head><body>
+
+
+
+
+<h1>Rendering</h1>
+
+
+<p>
+Rendering an action is simple. It is nothing more that a series of <span class="code">echo</span> commands, inside the overridden <span class="code">Render</span> method.
+</p>
+
+<p class="code">
+class ActionViewBook extends Action {
+	...
+	public function Render(){
+
+		echo '&lt;h2&gt;' . new Html($this->book->Title) . '&lt;/h2&gt;';
+		...
+
+	}
+	...
+}
+</p>
+
+
+<h2>Rendering forms</h2>
+
+<p>
+A form in Oxygen always posts its contents back to the same action. Therefore, rendering the form and handing its submissions should be done inside the same <span class="code">Render</span>
+method. In fact, handling the form should be done just before the rendering. If there is a validation error, then the code will continue to rendering the form again along with the validation
+messages.
+</p>
+
+<p class="code">
+class ActionViewBook extends Action {
+	...
+	public function Render(){
+
+		if ($this->IsPostback()) {  // this will check that this is a POST HTTP request coming from the same action.
+
+			// form handling here (validation and processing)
+
+			if ($everything_ok) {
+
+				// success message here maybe ?
+
+				<b>return;</b>
+			}
+		}
+
+
+		echo $this->GetForm();  // this will render the HTML form element with the correct action attribute
+
+		// form rendering here, along with any possible validation message generated above
+
+		echo $this->EndForm();
+
+	}
+	...
+}
+</p>
+
+
+
+<h2>Messages and Validators</h2>
+
+<p>
+A <span class="code">Message</span> is a text that should be displayed to the user, which is classified according to its importance. The importance of the message is defined only by how the
+used can respond to the message. There are 6 such levels.
+</p>
+
+<p>
+The <span class="code">InfoMessage</span> is just a piece of information that the user does not request anything from the user. The user may or may not read the message and continue his or her
+work. This is the lowest level.
+</p>
+
+<p>
+The <span class="code">SuccessMessage</span> is similar to the above because is just a piece of information. However, it is more important, because it gives the user the signal to continue his
+work.
+</p>
+
+<p>
+The <span class="code">WarningMessage</span> is a message that should be read by the user because it <i>may</i> affect its work. However, it is not blocking, and can be ignored.
+</p>
+
+<p>
+The <span class="code">QuestionMessage</span> is a message where the user has to respond to a question. It is blocking, because the user is obligated to respond to the question before continuing.
+</p>
+
+<p>
+The <span class="code">ErrorMessage</span> is a blocking message that the user cannot do anything to continue. He has to find another way around it.
+</p>
+
+<p>
+Finally, the <span class="code">BugMessage</span> is a blocking message that the user cannot even find a way around it because everything he did was correct, but there is some error in the code.
+This should never happen in a production environment (but it always does, doesn't it).
+</p>
+
+<p>
+The <span class="code">MessageControl</span> is a control that displays the message in a nice HTML box. The box will have an icon indicating the message severity, which also defines the color
+of the background and of the border.
+</p>
+
+<p class="code">
+$m = new QuestionMessage( new Lemma('en','Are you sure you want to delete this book?') );
+echo new MessageControl( $m );
+</p>
+
+<p>
+In addition, there is the <span class="code">MultiMessage</span>, which message consisting of other messages. The severity of a <span class="code">MultiMessage</span> is equal to the one of the
+most severe of its messages. For example, a message consisting of one info message, two warnings and one error is as severe as an error message. In this case, the <span class="code">MessageControl</span>
+will display all messages with their icons inside one big box. The color of the background and of the border is determined by the most severe message.
+</p>
+
+<p class="code">
+$m = new MultiMessage();
+$m[] = new InfoMessage( new Lemma('en','The book has 132 pages.') );
+$m[] = new WarningMessage( new Lemma('en','Please use capital letters for the author.') );
+$m[] = new ErrorMessage( new Lemma('en','The author of the book was not found in the database.') );
+echo new MessageControl( $m );
+</p>
+
+<p>
+A <span class="code">Validator</span> is also a <span class="code">MultiMessage</span>, that comes with additional helping methods. The <span class="code">HasPassed</span> method returns true
+if all the messages in the validator are either <span class="code">InfoMessage</span> or <span class="code">SuccessMessage</span>.
+</p>
+
+<p class="code">
+$v = new Validator();
+
+if (empty($book->Title))
+	$v[] = new WarningMessage( new Lemma('en','The title is a mandatory field.') );
+
+if ($v->HasPassed){
+	$book->Save();
+	return;
+}
+</p>
+
+<p>
+The <span class="code">Validator</span> has several methods to aumatically check a condition and add a message, such as <span class="code">Check</span>, <span class="code">CheckMandatory</span>
+of <span class="code">CheckEmail</span>.
+</p>
+
+<p class="code">
+$v_title = new Validator();
+$v_author = new Validator();
+
+$v_title->CheckMandatory( $book->Title );
+$v_author->CheckMandatory( $book->Author );
+$v_author->Check($book->Author==strtoupper($book->Author), new WarningMessage(new Lemma('en','Please use capital letters for the author.'));
+
+if ($v_title->HasPassed() && $v_author->HasPassed()) {
+	$book->Save();
+	return;
+}
+</p>
+
+<p>
+Finally, the <span class="code">ValidatorSet</span> is an array of validators, which is useful to group together all the validators of a form. It will automatically create validator objects
+as needed.
+</p>
+
+
+<p class="code">
+$v = new ValidatorSet();
+
+$v->Title->CheckMandatory( $book->Title );
+$v->Author->CheckMandatory( $book->Author );
+$v->Author->Check($book->Author==strtoupper($book->Author), new WarningMessage(new Lemma('en','Please use capital letters for the author.'));
+
+if ($v->HasPassed()) {
+	$book->Save();
+	return;
+}
+</p>
+
+
+<h2>A complete typical form action example</h2>
+
+<p>
+This is a typical edit form for a book. It is wrapped inside an AJAX dialog and it contains the form itself and the validation. This example will be refactored in the chapter on
+<a href="binding.html">Binding</a> to automatically fill and read the form, so it should be considered only as an intermediate step.
+</p>
+
+<p class="code">
+class ActionModifyBook extends Action {
+	public function GetDefaultMode(){ return self::AJAX_DIALOG; }
+
+	/** @var Book */
+	private $book;
+	public function __construct(Book $book){ parent::__construct(); $this->book = $book; }
+	public function GetUrlArgs(){ return array('id'=>$this->book) + parent::GetUrlArgs(); }
+	public static function Make(){ return new static(Book::Pick(Http::$GET['id']->AsID())); }
+
+	public function IsPermitted(){ return true; }
+
+	public function Render(){
+		$v = new ValidatorSet();
+		$m = Book::Meta();
+
+		if ($this->IsPostback()){
+			// Read the form
+			$this->book->Title = Http::$POST['title']->AsString();
+			$this->book->Author = Http::$POST['author']->AsString();
+
+			// Validate the form
+			$v->Title->CheckMandatory( $this->book->Title );
+			$v->Author->CheckMandatory( $this->book->Author );
+			$v->Author->Check($this->book->Author==strtoupper($this->book->Author), Lemma::Retrieve('MsgUseCapitalLetters'));
+
+			// Process the form
+			if ($v->HasPassed()) {
+				$this->book->Save();
+				Oxygen::Refresh();
+			}
+		}
+
+		// Render the form
+		echo $this->GetForm();
+
+		echo $m->Title->GetLabel();
+		echo '&lt;br/&gt;'
+		TextboxControl::Make( 'title', $this->book->Title )->Render();
+		if (!$v->Title->HasPassed()) echo new MessageControl($v->Title);
+		echo '&lt;br/&gt;'
+
+		echo $m->Author->GetLabel();
+		echo '&lt;br/&gt;'
+		TextboxControl::Make( 'author', $this->book->Author )->Render();;
+		if (!$v->Author->HasPassed()) echo new MessageControl($v->Author);
+		echo '&lt;br/&gt;'
+
+		ButtonControl::Make()->WithValue( Lemma::Retrieve('OK') )->WithIsSubmit( true )->Render();
+		ButtonControl::Make()->WithValue( Lemma::Retrieve('Cancel') )->WithIsCancel( true )->Render();
+		echo $this->EndForm();
+	}
+}
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer>
+<a href="index.html">&larr; Table of contents</a>
+</footer>
+
+</body></html>

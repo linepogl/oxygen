@@ -278,11 +278,125 @@ catch (Exception $ex){
 <h2>Database upgrade system</h2>
 
 <p>
-...
+One of the problems when working with databases is that they constantly need upgrading as the code changes. The database upgrade system tries to tie the version control of the database to the version control
+of the code. This is not perfect, as this tie is forward only. If the code is reverted to a previews version, then there is no way back for the database. In addition, there is no conflict resolution if two
+developers try to change simultaneously the same part of the database. Having said that, the database upgrade system is an adequate solution for most of the cases.
 </p>
 
+<p>
+The version of the database is just not one number. As in code version control, the changes are not linear because several developer work in parallel. Instead, each developer has its own separate versioning
+sequence. The actual version of the database is the concatenation of the version of each developer. These numbers are stored inside the database, in a dedicated table.
+</p>
 
+<p>
+The upgrade system is modular, in the sense that each module should have it own separate upgrade script. In addition, each module has its own developers and a completely independent versioning system.
+</p>
 
+<p>
+The upgrade script has this structure:
+</p>
+
+<p class="ascii">
+--------------------------------
+| Initialisation               |
+--------------------------------
+| Developer 1 patch 1          |
+--------------------------------
+| Developer 1 patch 2          |
+--------------------------------
+| Developer 2 patch 1          |
+--------------------------------
+| Developer 1 patch 3          |
+--------------------------------
+| Developer 2 patch 2          |
+--------------------------------
+</p>
+
+<p>
+Because the upgrade script is just plain code, the management of patches from different developers is done by using the merging features of the code versioning system.
+</p>
+
+<p>
+The initialisation block will check if the version tracking table exists, and if not it will try to create it. This is the initialisation block of a hypothetical module,
+called hydrogen:
+</p>
+
+<p class="code">
+Database::SetPatchingSystem( 'hydrogen' , 'hyd_settings' );  // the name of the module and the version tracking table
+Database::AddPatcher('li','VersionLi');  // developer 1
+Database::AddPatcher('rb','VersionRb');  // developer 2
+
+if (Database::BeginPatchingSystem()) {
+	// create the tracking table as it does not exist:
+	Database::ExecuteCreateStandardTable('hyd_settings','VersionLi',Sql::Integer,'VersionRb',Sql::Integer);
+	Database::ExecuteInsert('hyd_settings','id',new ID(0),'VersionLi',0,'VersionRb',0);
+}
+</p>
+
+<p>
+Then each of the patches section looks like this:
+</p>
+
+<p class="code">
+if (Database::BeginPatch('li', 1, 'Creating the first table')){    // developer - version - comment
+	Database::ExecuteCreateStandardTable('hyd_books'
+		,'Title',Sql::String255
+		,'Author',Sql::String255
+		);
+	Database::ApplyPatch();
+}
+
+if (Database::BeginPatch('li', 2, 'Author have their own table')){
+	Database::ExecuteCreateStandardTable('hyd_authors'
+		,'Name',Sql::String255
+		);
+	Database::ExecuteAddFields('hyd_books'
+		,'idAuthor',Sql::ID
+		);
+	Database::ExecuteDropFields('hyd_books'
+		,'Author'
+		);
+	Database::ApplyPatch();
+}
+</p>
+
+<p>
+If the second developer wants to make a change, he or she must use a separate numbering sequence.
+</p>
+
+<p class="code">
+...
+if (Database::BeginPatch('rb', 1, 'Adding a comments table')){
+	Database::ExecuteCreateStandardTable('hyd_comments'
+		,'Sender',Sql::String255
+		,'Message',Sql::Text
+		);
+	Database::ApplyPatch();
+}
+</p>
+
+<p>
+Adding another developer to the team is a patch by itself:
+</p>
+
+<p class="code">
+...
+if (Database::BeginPatch('li', 2, 'Adding jc as a developer')){
+	Database::ExecuteAddFields('hyd_settings','VersionJc',Sql::Integer);
+	Database::ExecuteUpdateAll('hyd_settings','VersionJc',0);
+	Database::ApplyPatch();
+}
+Database::AddPatcher('jc','VersionJc');  // The patcher command should come here, after the table is created.
+</p>
+
+<p class="warning">
+The upgrade script should be both backwards and forwards compatible. When executed on an old database it should bring it to date. On the other hand, anything that exists in the patches should
+not depend on any other part of the module, because this is not guarranded to exist in future versions, and the whole point of the system is to work inside future versions.
+</p>
+
+<p>
+The patches will be actually applied the first time the script is executed, when a managed connection is opened to the database. Then they wont be executed again unless they are changed.
+</p>
 
 
 
