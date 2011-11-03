@@ -246,6 +246,8 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
+	public function SaveAll(){ foreach ($this as $x) $x->Save(); }
+	public function KillAll(){ foreach ($this as $x) $x->Kill(); }
 
 
 

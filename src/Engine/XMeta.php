@@ -148,12 +148,8 @@ class XMeta extends stdClass {
 
 
 
-	/** @return ID */
-	public function GetNextID(){
-		return Database::ExecuteGetNextIDFor($this->GetDBSequence(),$this->id->GetDBName());
-	}
-
-
+	/** @return ID */ public function GetNextPermID(){ return ID::GetNextPermID($this->GetDBSequence(),$this->id->GetDBName()); }
+	/** @return ID */ public function GetNextTempID(){ return ID::GetNextTempID($this->GetDBSequence()); }
 
 
 
@@ -181,10 +177,26 @@ class XMeta extends stdClass {
 	public function SeekItems(){ return new XList($this,true); }
 
 	/** @return XItem */
-	public final function MakeItem(){
+	public final function MakeTempItem($id = null){
 		$classname = $this->__classname;
-		$r = new $classname();
-		$this->SaveInCache($r->id->AsInt(),$r);
+		if (is_null($id))
+			$id = $this->GetNextTempID();
+		elseif (!($id instanceof ID))
+			$id = new ID($id);
+		$r = new $classname($id,false);
+		//$this->SaveInCache($id->AsInt(),$r); // this is under question.
+		return $r;
+	}
+
+	/** @return XItem */
+	public final function MakePermItem(){
+		$classname = $this->__classname;
+		if ($this->id->IsDBAliasComplex())
+			$id = $this->GetNextTempID();
+		else
+			$id = $this->GetNextPermID();
+		$r = new $classname($id,true);
+		if (!$this->id->IsDBAliasComplex()) $this->SaveInCache($id->AsInt(),$r);
 		return $r;
 	}
 
@@ -209,7 +221,7 @@ class XMeta extends stdClass {
 		else {
 			/** @var $x XItem */
 			$classname = $this->__classname;
-			$x = new $classname($idi);
+			$x = new $classname($id,true);
 			$found = $x->Load($dr);
 			if (!$found)
 				$x = null;
@@ -217,7 +229,68 @@ class XMeta extends stdClass {
 		$this->SaveInCache($idi,$x);
 		return $x;
 	}
-	
+
+
+
+	/** @return XItem */
+	public function CopyItem( XItem $x, $with_a_perm_id = false ){
+		$r = clone $x;
+
+		if ( $with_a_perm_id )
+			$r->id = $this->GetNextPermID();
+		else
+			$r->id = $this->GetNextTempID();
+
+		// 1. Clone data folder
+		if ($with_a_perm_id && !$x->IsTemporary() && $x->HasDataFolder()) {
+			self::copy_folder_recursive($x->GetDataFolder(),$r->GetDataFolder());
+		}
+
+		// 2. Clone slaves
+		for ($mx = $this; !is_null($mx); $mx = $mx->GetParent()){
+			$slaves = $mx->GetSlaves();
+			/** @var $sl XSlave */
+			foreach ($slaves as $sl) {
+				$n = $sl->GetName();
+				$a = $x->$n;
+				$aa = $sl->MakeItemList();
+				foreach ($a as $x) {
+					$xx = $x->Copy($with_a_perm_id);
+					$nn = $sl->GetHookField()->GetName();
+					$xx->$nn = $r->id;
+					$aa[] = $xx;
+				}
+				$this->$r = $aa;
+			}
+		}
+
+		// 3. Save in cache
+		if ($with_a_perm_id) {
+			$this->SaveInCache( $r->id->AsInt(), $r );
+		}
+	}
+
+
+	private static function delete_folder_recursive($folder){
+		foreach (scandir($folder) as $f){
+			if ($f=='.'||$f=='..') continue;
+			if (is_dir("$folder/$f")) self::delete_folder_recursive("$folder/$f");
+			else unlink("$folder/$f");
+		}
+		rmdir($folder);
+	}
+	private static function copy_folder_recursive($src,$dst){
+		if (!is_dir($dst)) mkdir($dst,0777,true);
+		foreach (scandir($src) as $f){
+			if ($f=='.'||$f=='..') continue;
+			if (is_dir("$src/$f")) self::copy_folder_recursive("$src/$f","$dst/$f");
+			else copy("$src/$f","$dst/$f");
+		}
+	}
+
+
+
+
 	//
 	//
 	// Item Cache
@@ -229,7 +302,7 @@ class XMeta extends stdClass {
 	private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
 	private function ExistsInRemoteCache($idi) { return Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__classname.$this->__db_signature.'::'.$idi); }
 	private function PickFromRemoteCache($idi) { return $this->__item_cache[$idi] = Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi]; }
-	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = $item; }
+	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if (!$item->IsTemporary() && Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = $item; }
 	public function RemoveFromCache($idi) { unset($this->__item_cache[$idi]);  if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = null; }
 	public static function ResetItemCaches() { /** @var $m XMeta */ foreach (self::$__cache as $m) { $m->__item_cache = array(); $m->__item_concrete_meta_cache = array(); } }
 

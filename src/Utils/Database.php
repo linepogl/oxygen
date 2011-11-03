@@ -607,7 +607,7 @@ class Database {
 	}
 
 	/** @return ID */
-	public static function ExecuteGetNextIDFor($table_or_sequence_name,$primarykey='id'){
+	public static function ExecuteGetNextID($table_or_sequence_name,$primarykey='id') {
 		switch (self::$type){
 			case self::MYSQL:
 				$tablename = $table_or_sequence_name;

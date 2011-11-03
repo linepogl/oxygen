@@ -8,7 +8,16 @@ class ID implements Serializable, OmniValue {
 	public function serialize(){ return serialize($this->value); }
 	public function unserialize($data){ $this->value = unserialize($data); $this->hex = null; }
 
-	public static function GetNextFor($tablename,$primarykey='id'){ return Database::ExecuteGetNextIDFor($tablename,$primarykey); }
+
+	private static $temp_sequences = array();
+	public static function GetNextPermID($sequence,$primarykey='id') {
+		return Database::ExecuteGetNextID($sequence,$primarykey);
+	}
+	public static function GetNextTempID($sequence){
+		if (!isset(self::$temp_sequences[$sequence])) self::$temp_sequences[$sequence] = -0x7FFFFFF; else self::$temp_sequences[$sequence]++;
+		return new ID(self::$temp_sequences[$sequence]);
+	}
+
 
 	private function parse(&$string){
 		$s = strtoupper(trim($string));
@@ -42,14 +51,14 @@ class ID implements Serializable, OmniValue {
 	public function AsInt(){
 		return $this->value;
 	}
-	public function &AsHex(){
+	public function AsHex(){
 		if (is_null($this->hex)){
 			$this->hex = sprintf('%08X',$this->value);
 			$l = strlen($this->hex); if ( $l > 8 ) $this->hex = substr( $this->hex , $l - 8); // Stupid PHP might use 64bits for an integer in MacOS
 		}
 		return $this->hex;
 	}
-	public function &__toString(){
+	public function __toString(){
 		return $this->AsHex();
 	}
 

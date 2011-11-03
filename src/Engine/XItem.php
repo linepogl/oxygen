@@ -2,9 +2,23 @@
 
 abstract class XItem implements Serializable,OmniValue {
 	public $id;
-	private $is_temp = false;
-	public function __construct($id = null){
-		$this->id = is_null($id) ? self::GetNextID() : ($id instanceof ID ? $id : new ID($id));
+	private $has_temp_id = true;
+	public function IsTemporary(){ return $this->has_temp_id; }
+	/**
+	 * Do not use this function directly. Instead, use the static functions Make() and Temp()
+	 * @param null $id
+	 * @param bool $this_is_a_perm_id
+	 */
+	public function __construct($id = null, $this_is_a_perm_id = false){
+		if (is_null($id)) {
+			if ($this_is_a_perm_id) throw new Exception('Please provide a perm ID.');
+			$this->id = $this->GetNextTempID();
+		}
+		elseif ($id instanceof ID)
+			$this->id = $id;
+		else
+			$this->id = new ID($id);
+		$this->has_temp_id = !$this_is_a_perm_id;
 		$this->Init();
 	}
 	public static function FillMeta(XMeta $m){}
@@ -55,6 +69,7 @@ abstract class XItem implements Serializable,OmniValue {
 		$a = array();
 		$meta = $this->Meta();
 		$a['id'] = serialize($this->id);
+		$a['has_temp_id'] = serialize($this->has_temp_id);
 		/** @var $f XField */
 		foreach ($meta->GetFields() as $f){
 			$n = $f->GetName();
@@ -96,6 +111,7 @@ abstract class XItem implements Serializable,OmniValue {
 
 	protected function OnLoad() {}
 	public final function Load(DBReader $dr = null){
+		if ($this->has_temp_id) throw new Exception('Cannot load an XItem with a temporary ID.');
 		$c = $this->Meta();
 
 		//
@@ -157,8 +173,9 @@ abstract class XItem implements Serializable,OmniValue {
 	protected function OnBeforeSave(){}
 	protected function OnAfterSave(){}
 	public function Save(){
-		$this->OnBeforeSave();
 		$c = $this->Meta();
+		if ($this->has_temp_id) throw new Exception('Cannot save an XItem with a temporary ID.');
+		$this->OnBeforeSave();
 
 
 
@@ -232,9 +249,7 @@ abstract class XItem implements Serializable,OmniValue {
 				if (!is_null($sl->Where))
 					$to_be_deleted->Where($sl->Where);
 
-				/** @var $x XItem */
-				foreach ($to_be_deleted as $x)
-					$x->Delete();
+				$to_be_deleted->KillAll();
 
 				/** @var $x XItem */
 				foreach ($a as $x)
@@ -246,10 +261,13 @@ abstract class XItem implements Serializable,OmniValue {
 	}
 
 
-	protected function OnBeforeDelete(){}
-	protected function OnAfterDelete(){}
-	public function Delete(){
-		$this->OnBeforeDelete();
+
+
+	protected function OnBeforeKill(){}
+	protected function OnAfterKill(){}
+	public function Kill(){
+		if ($this->has_temp_id) throw new Exception('Cannot kill an XItem with a temporary ID.');
+		$this->OnBeforeKill();
 		$c = $this->Meta();
 
 
@@ -262,7 +280,7 @@ abstract class XItem implements Serializable,OmniValue {
 				$a = $this->$n;
 				/** @var $x XItem */
 				foreach ($a as $x)
-					$x->Delete();
+					$x->Kill();
 			}
 		}
 
@@ -280,20 +298,12 @@ abstract class XItem implements Serializable,OmniValue {
 		}
 		$c->RemoveFromCache($this->id->AsInt());
 
-		$this->OnAfterDelete();
+
+		$this->OnAfterKill();
 	}
 
 
 
-	/** @return XItem */
-	public static function Temp($id){
-		return self::TempGeneric(get_called_class(),$id);
-	}
-	/** @return XItem */
-	public static function TempGeneric($classname,$id){
-		$r = new $classname($id);
-		return $r;
-	}
 
 
 
@@ -494,48 +504,6 @@ abstract class XItem implements Serializable,OmniValue {
 
 
 
-	public function __clone() {
-		$m = $this->Meta();
-		$id = $m->GetNextID();
-		$old_data_folder = $this->HasDataFolder() ? $this->GetDataFolder() : null;
-		$this->id = $id;
-
-		// 1. Clone data folder
-		if (!is_null($old_data_folder)){
-			self::copy_folder_recursive($old_data_folder,$this->GetDataFolder());
-		}
-
-		// 2. Clone slaves
-		for ($mx = $m; !is_null($mx); $mx = $mx->GetParent()){
-			$slaves = $mx->GetSlaves();
-			/** @var $sl XSlave */
-			foreach ($slaves as $sl) {
-				$n = $sl->GetName();
-				$a = $this->$n;
-				$aa = $sl->MakeItemList();
-				foreach ($a as $x) {
-					$xx = clone $x;
-					$nn = $sl->GetHookField()->GetName();
-					$xx->$nn = $this->id;
-					$aa[] = $xx;
-				}
-				$this->$n = $aa;
-			}
-		}
-
-		$m->SaveInCache( $this->id->AsInt(),$this );
-	}
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -572,6 +540,14 @@ abstract class XItem implements Serializable,OmniValue {
 	/** @return XMeta */ public static final function Meta(){ return XMeta::Of(get_called_class()); }
 
 	/** @return XList */ public static final function MakeList(){ return static::Meta()->MakeItemList(); }
+	/** @return XList */ public static final function MakeListGeneric($classname){ return XMeta::Of($classname)->MakeItemList(); }
+
+	/** @return XList */ public static final function Temp($id=null){ return static::Meta()->MakeTempItem($id); }
+	/** @return XItem */ public static final function TempGeneric($classname,$id=null){ return XMeta::Of($classname)->MakeTempItem($id); }
+
+	/** @return XList */ public static final function Make(){ return static::Meta()->MakePermItem(); }
+	/** @return XItem */ public static final function MakeGeneric($classname){ return XMeta::Of($classname)->MakePermItem(); }
+
 
 	/** @return XList */ public static final function Seek(){ return static::Meta()->SeekItems(); }
 	/** @return XList */ public static final function SeekAggressively(){ return static::Meta()->SeekItems()->Aggressively(); }
@@ -580,13 +556,14 @@ abstract class XItem implements Serializable,OmniValue {
 	/** @return XItem|null */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
 	/** @return XItem|null */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
 
-	/** @return XItem */ public static final function Make(){ return static::Meta()->MakeItem(); }
-	/** @return XItem */ public static final function MakeGeneric($classname){ return XMeta::Of($classname)->MakeItem(); }
+
+	/** @return ID */ public static function GetNextPermID(){ return static::Meta()->GetNextPermID(); }
+	/** @return ID */ public static function GetNextTempID(){ return static::Meta()->GetNextTempID(); }
 
 
-	/** @return ID */ public static function GetNextID(){ return static::Meta()->GetNextID(); }
 
 
+	/** @return XItem */ public function Copy( $with_a_perm_id = false ){ return $this->Meta()->CopyItem($this,$with_a_perm_id); }
 
 
 

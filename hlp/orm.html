@@ -127,7 +127,7 @@ $book->Save();
 </p>
 
 <p>
-The <span class="code">Make</span> function, behind the scenes, will reserve an id and an entry in the cache. Therefore, the object is ready to be used directly, even
+The <span class="code">Make</span> function, behind the scenes, will reserve an id and will add an entry in the cache. Therefore, the object is ready to be used directly, even
 before saving, as the id will not change.
 </p>
 
@@ -143,6 +143,28 @@ $author->Save();
 $book->Save();
 </p>
 
+<p>
+If the object is temporary and you don't want to spend a permanent id for it, then you can use the function <span class="code">Temp</span>. This function will create
+an object and will assign an id to it, but the id is a temporary one. In addition, the new item will not be stored in the cache. The temporary id is guaranteed to
+be unique for the duration of the request.
+</p>
+
+<p class="code">
+$author = Author::Temp();
+$author->Name = 'Lewis Carroll';
+</p>
+
+<p class="code">
+Temporary object cannot be saved. If you want to save a temporary object, you have to get a copy with a permanent id.
+</p>
+
+<p class="code">
+$author = Author::Temp();
+$author->Name = 'Lewis Carroll';
+...
+$author_copy = $author->Copy(true);
+$author->Save();
+</p>
 
 
 <h2>Linking objects</h2>
