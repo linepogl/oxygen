@@ -236,10 +236,14 @@ class XMeta extends stdClass {
 	public function CopyItem( XItem $x, $with_a_perm_id = false ){
 		$r = clone $x;
 
-		if ( $with_a_perm_id )
+		if ( $with_a_perm_id ) {
 			$r->id = $this->GetNextPermID();
-		else
+			$r->has_temp_id = false;
+		}
+		else {
 			$r->id = $this->GetNextTempID();
+			$r->has_temp_id = true;
+		}
 
 		// 1. Clone data folder
 		if ($with_a_perm_id && !$x->IsTemporary() && $x->HasDataFolder()) {
@@ -268,6 +272,8 @@ class XMeta extends stdClass {
 		if ($with_a_perm_id) {
 			$this->SaveInCache( $r->id->AsInt(), $r );
 		}
+
+		return $r;
 	}
 
 

@@ -2,7 +2,7 @@
 
 abstract class XItem implements Serializable,OmniValue {
 	public $id;
-	private $has_temp_id = true;
+	public $has_temp_id = true;
 	public function IsTemporary(){ return $this->has_temp_id; }
 	/**
 	 * Do not use this function directly. Instead, use the static functions Make() and Temp()
@@ -111,7 +111,7 @@ abstract class XItem implements Serializable,OmniValue {
 
 	protected function OnLoad() {}
 	public final function Load(DBReader $dr = null){
-		if ($this->has_temp_id) throw new Exception('Cannot load an XItem with a temporary ID.');
+		if ($this->has_temp_id) throw new Exception('Cannot load an XItem('.$this->GetClassName().') with a temporary ID.');
 		$c = $this->Meta();
 
 		//
@@ -174,7 +174,7 @@ abstract class XItem implements Serializable,OmniValue {
 	protected function OnAfterSave(){}
 	public function Save(){
 		$c = $this->Meta();
-		if ($this->has_temp_id) throw new Exception('Cannot save an XItem with a temporary ID.');
+		if ($this->has_temp_id) throw new Exception('Cannot save an XItem('.$this->GetClassName().') with a temporary ID.');
 		$this->OnBeforeSave();
 
 
@@ -266,7 +266,7 @@ abstract class XItem implements Serializable,OmniValue {
 	protected function OnBeforeKill(){}
 	protected function OnAfterKill(){}
 	public function Kill(){
-		if ($this->has_temp_id) throw new Exception('Cannot kill an XItem with a temporary ID.');
+		if ($this->has_temp_id) throw new Exception('Cannot kill an XItem('.$this->GetClassName().') with a temporary ID.');
 		$this->OnBeforeKill();
 		$c = $this->Meta();
 
