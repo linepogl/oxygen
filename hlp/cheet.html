@@ -1,0 +1,48 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8" />
+<title>Oxygen documentation</title>
+<link rel="stylesheet" type="text/css" href="index.css" />
+</head><body>
+
+
+<h1>Cheat Sheet</h1>
+
+
+<p>
+The most common functions and methods of Oxygen use 4 letters. :-)
+</p>
+
+
+
+<table>
+<tr><th><span class="code">Pick</span></th><td>Retrieves a database bound item from the cache or from the database.</td></tr>
+<tr><th><span class="code">Seek</span></th><td>Retrieves a list of database bound items from the cache or from the database.</td></tr>
+<tr><th><span class="code">Make</span></th><td>Creates an database bound item in memory and in the cache with an ID taken from a database sequence (permanent ID).</td></tr>
+<tr><th><span class="code">Temp</span></th><td>Creates an item in memory only with an ID taken from a memory sequence (temporary ID).</td></tr>
+<tr><th><span class="code">Copy</span></th><td>Clones an item. The id of the new item can be taken either from a database or from a memory sequence.</td></tr>
+<tr><th><span class="code">Init</span></th><td>Procedure than runs when an item is created. It should never be called directly. An <span class="code">OnInit</span> event is fired each time <span class="code">Init</span> called.</td></tr>
+<tr><th><span class="code">Load</span></th><td>Procedure than runs when an item's fields are loaded from the database. It should never be called directly. An <span class="code">OnLoad</span> event is fired each time <span class="code">Load</span> called.</td></tr>
+<tr><th><span class="code">Save</span></th><td>Inserts or updates an item in the database (and in the cache).</td></tr>
+<tr><th><span class="code">Kill</span></th><td>Deletes an item from the database (and from the cache).</td></tr>
+<tr><th><span class="code">Meta</span></th><td>Gets the meta object of an item.</td></tr>
+<tr><th><span class="code">Wrap</span></th><td>Creates a named wrap from an item.</td></tr>
+<tr><th><span class="code">Fill</span></th><td>Fills a control with information from a wrap (or from an item).</td></tr>
+<tr><th><span class="code">Read</span></th><td>Updates a wrap (or an item) with data from the HTTP request parameters.</td></tr>
+</table>
+
+
+
+<p><br/></p>
+<p><br/></p>
+<p><br/></p>
+<p><br/></p>
+
+
+
+
+
+
+<footer>
+<a href="index.html">&larr; Table of contents</a>
+</footer>
+
+</body></html>
