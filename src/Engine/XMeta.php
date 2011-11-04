@@ -233,21 +233,18 @@ class XMeta extends stdClass {
 
 
 	/** @return XItem */
-	public function CopyItem( XItem $x, $with_a_perm_id = false ){
-		$r = clone $x;
+	public function CopyItem( XItem $item, $with_a_perm_id = false ){
+		$r = clone $item;
 
-		if ( $with_a_perm_id ) {
+		if ( $with_a_perm_id )
 			$r->id = $this->GetNextPermID();
-			$r->has_temp_id = false;
-		}
-		else {
+		else
 			$r->id = $this->GetNextTempID();
-			$r->has_temp_id = true;
-		}
+		$r->has_temp_id = !$with_a_perm_id;
 
 		// 1. Clone data folder
-		if ($with_a_perm_id && !$x->IsTemporary() && $x->HasDataFolder()) {
-			self::copy_folder_recursive($x->GetDataFolder(),$r->GetDataFolder());
+		if ($with_a_perm_id && !$item->IsTemporary() && $item->HasDataFolder()) {
+			self::copy_folder_recursive($item->GetDataFolder(),$r->GetDataFolder());
 		}
 
 		// 2. Clone slaves
@@ -256,15 +253,16 @@ class XMeta extends stdClass {
 			/** @var $sl XSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
-				$a = $x->$n;
+				$a = $item->$n;
 				$aa = $sl->MakeItemList();
+				/** @var $x XItem */
 				foreach ($a as $x) {
 					$xx = $x->Copy($with_a_perm_id);
 					$nn = $sl->GetHookField()->GetName();
 					$xx->$nn = $r->id;
 					$aa[] = $xx;
 				}
-				$this->$r = $aa;
+				$r->$n = $aa;
 			}
 		}
 

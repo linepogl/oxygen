@@ -542,7 +542,7 @@ abstract class XItem implements Serializable,OmniValue {
 	/** @return XList */ public static final function MakeList(){ return static::Meta()->MakeItemList(); }
 	/** @return XList */ public static final function MakeListGeneric($classname){ return XMeta::Of($classname)->MakeItemList(); }
 
-	/** @return XList */ public static final function Temp($id=null){ return static::Meta()->MakeTempItem($id); }
+	/** @return XItem */ public static final function Temp($id=null){ return static::Meta()->MakeTempItem($id); }
 	/** @return XItem */ public static final function TempGeneric($classname,$id=null){ return XMeta::Of($classname)->MakeTempItem($id); }
 
 	/** @return XList */ public static final function Make(){ return static::Meta()->MakePermItem(); }
