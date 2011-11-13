@@ -5,14 +5,212 @@
 
 
 
-<h1>Advanced meta</h1>
+<h1>Advanced patterns</h1>
+
+<p>
+In object oriented programming, there are three patterns which are
+fundamental. These are the inheritance (Is-A), the aggregation (Has-A)
+and the composition (Consists-Of). These patterns can be mapped
+to a relational database.
+</p>
+
+<p>
+In UML class diagrams (<a class="external" href="http://en.wikipedia.org/wiki/Class_diagram"
+>http://en.wikipedia.org/wiki/Class_diagram</a>), inheritance is represented with
+an empty triangle arrow, aggregation with an empty diamond arrow and composition with
+a filled diamond arrow.
+</p>
 
 
 <h2>Inheritance</h2>
 
+<p>
+In inheritance (Is-A), a base class that has some fields is extended by
+one or more other classes which add to those fields.
+</p>
+
+<p>
+In the following example the class Publication is extended by the class Book and the
+class Magazine. The field Title is common to all classes. However, the field Author is
+unique to a Book while the field Issue is unique to a Magazine.
+</p>
+
+<p class="code">
+abstract class Publication extends XItem {
+	public $Title;
+}
+class Book extends Publication {
+	public $Author;
+}
+class Magazine extends Publication {
+	public $Issue;
+}
+</p>
+
+<p>
+A simple way to map this pattern into a database is to create three tables, one for
+each class. Each table will have a primary key and there will be a one-to-one relation
+between the table of the base class and the tables of the extended classes.
+</p>
+
+<p class="ascii">
+publication          book                 magazine
+-------------------  -------------------  -------------------
+id                   id                   id
+Title                Author               Issue
+</p>
+
+<p>
+With this setup, each book and each magazine will have a row in the table of publications.
+As the table of publications contain both the books and the magazines, the id of a publication
+will be unique among all publications. In other words, it is not possible for a book to have
+an id equal to an id of a magazine.
+</p>
+
+<p>
+Therefore, given a book's id, we can find both the author from the table book and the Title
+from the table publication. However, given the id of a publication, it is not possible to
+find all the fields because we do not know the type. For this reason, we should add another
+column to the table of publications.
+</p>
+
+<p class="ascii">
+publication
+-------------------
+id
+ClassName   -- this field tell us the concrete type of the publication
+Title
+</p>
+
+<p>
+This pattern can be easily mapped with Oxygen, with the following code:
+</p>
+
+<p class="code">
+abstract class Publication extends XItem {
+	public $Title;
+	public static function FillMeta(XMeta $m){
+		$m->SetDBTableName('publication');
+		$m->SetAbstractDBFieldName('ClassName');
+		$m->Title = OmniString::Field();
+	}
+}
+class Book extends Publication {
+	public $Author;
+	public static function FillMeta(XMeta $m){
+		$m->SetParent(Publication::Meta());
+		$m->SetDBTableName('book');
+		$m->Author = OmniString::Field();
+	}
+}
+class Magazine extends Publication {
+	public $Issue;
+	public static function FillMeta(XMeta $m){
+		$m->SetParent(Publication::Meta());
+		$m->SetDBTableName('magazine');
+		$m->Issue = OmniInteger::Field();
+	}
+}
+</p>
+
+
+<p>
+Now, it is possible to load and save books and magazines directly.
+</p>
+
+<p class="code">
+
+// Pick a book. This will load data from both publication and book tables.
+$book = Book::Pick( 3 );
+
+// Pick a publication. This will first check the abstract field to find the
+// type of the publication and then will load the data from the appropriate
+// tables.
+$pub = Publication::Pick( 3 );
+
+
+// Save a book. This will save the data into both tables.
+$book->Save();
+</p>
+
+
+
+<h2>Aggregation</h2>
+
+<p>
+In aggregation one object points to another. In reverse, an object can be pointed by
+many objects. This is very similar to the concept of relational foreign keys and, as such,
+there is no need for special mapping. However, one can add specially tailored methods in
+order to provide shortcuts to using aggregation.
+</p>
+
+<p class="code">
+class Book extends XItem {
+	public $idAuthor;
+	...
+	/**
+	 * Shortcut to the author
+	 * @return Author
+	 */
+	public function GetAuthor(){
+		return Author::Pick( $this->idAuthor );
+	}
+}
+class Author extends XItem {
+	...
+	/**
+	 * Inverse shortcut to the books
+	 * @return XList
+	 */
+	public function GetBooks(){
+		return Book::Seek()->Where( Book::Meta()->idAuthor->Eq( $this ) );
+	}
+}
+</p>
+
+
+
 <h2>Composition</h2>
 
-<h2>Slaves</h2>
+<p>
+Composition is a stronger form of aggregation. For example we say that a book
+"Has-An" author (aggregation) or that the author "Has-Many" books (aggregation).
+However we also say that a book "Consists-Of" chapters (composition) or that
+a chapter "Belongs-To" a book (composition). In contrast to an author, a chapter
+of a book is not a stand-alone object. In addition, the chapter always belongs to
+one book; should the book be deleted, the chapter should be deleted as well.
+</p>
+
+<p>
+In Object-Relational mapping, it is important that an object is mapped as a whole.
+If an object consists of many other sub-objects, it would be nice to be able to
+load all of them or save them back in one step.
+</p>
+
+<p>
+In order to do this, we introduce the concept of slave objects which are mapped
+by slave fields.
+</p>
+
+<p class="code">
+class Book extends XItem {
+	public $Chapters;
+	public static function FillMeta(XMeta $m){
+		...
+		$m->Chapters = BookChapter::Meta()->idBook->Slave();
+	}
+}
+
+class BookChapter extends XItem {
+	public $idBook;
+	public static function FillMeta(XMeta $m){
+		...
+		$m->idBook = OmniID::Field();
+	}
+}
+</p>
+
+
 
 
 
