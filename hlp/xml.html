@@ -7,11 +7,186 @@
 
 
 
+<h1>XML Mapping</h1>
 
 
+<p>
+With XML mappling, it is possible to export an XItem to XML or import it back. The mechanism is similar to <a href="orm.html">O-R mapping</a>. By default, all
+fields of the XItem are exported as attributes of an XML element, which name is equal to the class name. However, there are some parameters to tweak the result.
+</p>
+
+<p>
+XML mapping works with PHP's DOM library (<a class="external" href="http://www.php.net/manual/en/book.dom.php">http://www.php.net/manual/en/book.dom.php</a>). There
+are 2 important methods, <span class="code">$item->Export( $parent_element )</span> and <span class="code">$item->Import( $element )</span>.
+</p>
+
+<h2>Exporting</h2>
+
+<p class="code">
+class Book extends XItem {
+	public $Title;
+	public $NumberOfPages;
+	public static function FillMeta(XMeta $m){
+		$m->Title = OmniString::Field();
+		$m->NumberOfPages = OmniIntegerOrNull::Field();
+	}
+}
+
+$x = Book::Temp();
+$x->Title = 'Test';
+$x->NumberOfPages = 100;
+$dom = new DOMDocument();
+$x->ExportXML($dom);
+
+echo $dom->SaveXML();
+
+//
+// output:
+//
+// &lt;?xml version="1.0" ?&gt;
+// &lt;Book id="FFFFFFFF" Title="Test" NumberOfPages="100" /&gt;
+//
+</p>
 
 
+<p>
+As with O-R mapping, there are some parameters to change the default XML mapping. First of all, use <span class="code">SetXmlTagName</span> of the <span class="code">XMeta</span>
+class to change the name of the element. In addition, you can use the <span class="code">WithXmlAlias</span> of the <span class="code">XField</span> to change the name of each attribute.
+Furthermore, use <span class="code">WithIsXmlBound</span> to remove the mapping of a field altogether.
+</p>
 
+
+<p class="code">
+class Book extends XItem {
+	public $Title;
+	public $NumberOfPages;
+	public static function FillMeta(XMeta $m){
+		<b>$m->SetXmlTagName('book');</b>
+		$m->Title = OmniString::Field()<b>->WithIsXmlBound(false)</b>;
+		$m->NumberOfPages = OmniIntegerOrNull::Field()<b>->WithXmlAlias('number-of-pages')</b>;
+	}
+}
+
+$x = Book::Temp();
+$x->Title = 'Test';
+$x->NumberOfPages = 100;
+$dom = new DOMDocument();
+$x->ExportXML($dom);
+
+echo $dom->SaveXML();
+
+//
+// output:
+//
+// &lt;?xml version="1.0" ?&gt;
+// &lt;book id="FFFFFFFF" number-of-pages="100" /&gt;
+//
+</p>
+
+<p>
+Sometimes, the use of attributes is not good enough, because the field contains a long text that would be better presented as a separate element. This can change with the <span class="code">WithXmlBehaviour</span>
+method:
+</p>
+
+
+<p class="code">
+class Book extends XItem {
+	public $Title;
+	public $NumberOfPages;
+	public static function FillMeta(XMeta $m){
+		$m->SetXmlTagName('book');
+		$m->Title = OmniString::Field()<b>->WithXmlAlias('title')->WithXmlBehaviour(Xml::Element)</b>;
+		$m->NumberOfPages = OmniIntegerOrNull::Field()->WithXmlAlias('number-of-pages');
+	}
+}
+
+$x = Book::Temp();
+$x->Title = 'Test';
+$x->NumberOfPages = 100;
+$dom = new DOMDocument();
+$x->ExportXML($dom);
+
+echo $dom->SaveXML();
+
+//
+// output:
+//
+// &lt;?xml version="1.0" ?&gt;
+// &lt;book id="FFFFFFFF" number-of-pages="100"&gt;
+//   &lt;title&gt;Test&lt;/title&gt;
+// &lt;/book&gt;
+//
+</p>
+
+<h2>Slaves</h2>
+
+<p>
+Slaves (see <a href="advanced.html">advanced patterns</a>) will be exported as sub-elements, unless they are opted out with <span class="code">WithIsXmlBound</span>.
+</p>
+
+<p class="code">
+class Book extends XItem {
+	public $Title;
+	public $Chapters;
+	public static function FillMeta(XMeta $m){
+		$m->Title = OmniString::Field();
+		$m->Chapters = BookChapter::Meta()->idBook->Slave();
+	}
+}
+class BookChapter extends XItem {
+	public $idBook;
+	public $Title;
+	public static function FillMeta(XMeta $m){
+		$m->idBook = OmniID::Field();
+		$m->Title = OmniString::Field();
+	}
+}
+
+$x = Book::Temp();
+$x->Title = 'Test';
+
+$c = BookChapter::Temp();
+$c->Title = 'Test chapter 1';
+$c->idBook = $x->id;
+$x->Chapters[] = $c;
+
+$dom = new DOMDocument();
+$x->ExportXML($dom);
+echo $dom->SaveXML();
+
+//
+// output:
+//
+// &lt;?xml version="1.0" ?&gt;
+// &lt;Book id="FFFFFFFF" Title="Test"&gt;
+//   &lt;BookChapter id="FFFFFFFE" Title="Test chapter 1" /&gt;
+// &lt;/Book&gt;
+//
+</p>
+
+
+<h2>Importing</h2>
+
+<p>
+Importing XML uses the same mapping and is also based on PHP's DOM.
+<p>
+
+<p class="code">
+$dom = new DOMDocument();
+$dom->loadXml('
+	&lt;?xml version="1.0" ?&gt;
+	&lt;Book id="FFFFFFFF" Title="Test"&gt;
+		&lt;BookChapter id="FFFFFFFE" Title="Test chapter 1" /&gt;
+	&lt;/Book&gt;
+	');
+
+$x = Book::Temp();
+$x->ImportXml( $dom->documentElement );
+</p>
+
+<p>
+Importing a DOMElement into an XItem will change only the fields that exist in the XML code and skip the rest.
+</p>
 
 
 
