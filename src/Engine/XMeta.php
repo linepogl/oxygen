@@ -420,7 +420,7 @@ class XMeta extends stdClass {
 	/** @return XField */ public static function NullableBoolean() { return new XField( OmniBooleanOrNull::Type() ); }
 	/** @return XField */ public static function Date() { return new XField( OmniDateOrNull::Type() ); }
 	/** @return XField */ public static function DateTime() { return new XField( OmniDateTimeOrNull::Type() ); }
-	/** @return XField */ public static function Time() { return new XField( OmniTimeTimeOrNull::Type() ); }
+	/** @return XField */ public static function Time() { return new XField( OmniTimeOrNull::Type() ); }
 	/** @return XField */ public static function TimeSpan() { return new XField( OmniTimeSpanOrNull::Type() ); }
 	/** @return XField */ public static function Lemma() { return new XField( OmniLemmaOrNull::Type() ); }
 
