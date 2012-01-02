@@ -143,6 +143,7 @@ class OmniIntegerOrNull extends OmniType {
 	public static function ImportHttpValue($value) {
 		if (is_null($value)) return null;
 		if (is_array($value)) throw new ConvertionException();
+        if (!is_numeric($value)) return null;
 		return intval($value);
 	}
 }
