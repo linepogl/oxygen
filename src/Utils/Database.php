@@ -96,12 +96,13 @@ class Database {
 		try{
 			switch ($type){
 				case self::MYSQL:
-					self::$cn = new PDO('mysql:host='.$server.';dbname='.$schema, $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
+					self::$cn = new PDO('mysql:host='.$server.';dbname='.$schema.';charset='.Oxygen::GetCharset(), $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
 					break;
 				case self::ORACLE:
 					//self::$cn = oci_pconnect($username,$password,'//'.$server.'/'.$schema);
 					self::$cn = new PDO('oci:dbname=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST='.$server.')(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME='.$schema.')))',$username,$password, array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-					self::$cn->exec('ALTER SESSION SET NLS_DATE_FORMAT=\'YYYY-MM-DD HH24:MI:SS\'');
+					self::$cn->exec('ALTER SESSION SET NLS_LANGUAGE=\'AMERICAN\' NLS_TERRITORY=\'AMERICA\' NLS_CURRENCY=\'$\' NLS_ISO_CURRENCY=\'AMERICA\' NLS_NUMERIC_CHARACTERS=\'.,\' NLS_CALENDAR=\'GREGORIAN\' NLS_DATE_FORMAT=\'YYYY-MM-DD HH24:MI:SS\' NLS_DATE_LANGUAGE=\'AMERICAN\' NLS_SORT=\'BINARY\'');
+					//self::$cn->exec('ALTER SESSION SET NLS_DATE_FORMAT=\'YYYY-MM-DD HH24:MI:SS\'');
 					break;
 			}
 			self::$server = $server;
