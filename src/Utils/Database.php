@@ -450,7 +450,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		$primarykey = $z%2 == 1 ? 'id' : $a[1];
-		$id = self::ExecuteGetNextIDFor($tablename,$primarykey);
+		$id = self::ExecuteGetNextID($tablename,$primarykey);
 		$sql = 'INSERT INTO '.$tablename.' ('.$primarykey;
 		for($i=2-$z%2;$i<$z;$i+=2)
 			$sql.=','.$a[$i];

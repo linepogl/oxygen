@@ -599,7 +599,7 @@ abstract class XItem implements Serializable,OmniValue {
 		if (!is_null($where)) $sql .= ' WHERE '.$where;
 		if (!is_null($orderby)) $sql .= ' ORDER BY '.$orderby;
 
-		return Database::ExecuteListOfX($meta_field->GetType(),$sql,$params);
+		return Database::ExecuteColumnOfX($meta_field->GetType(),$sql,$params);
 	}
 
 	/** @return GenericID */
