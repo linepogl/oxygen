@@ -527,7 +527,7 @@ class Oxygen {
 
 
 		echo '<script type="text/javascript" src="oxy/jsc/oxygen.js"></script>';
-		echo '<link href="oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
+		echo '<link href="oxy/css/oxygen.css?'.rand().'" rel="stylesheet" type="text/css" />';
 		echo '<link href="favicon.ico" rel="icon" type="image/x-icon" />';
 
 		$r = ob_get_clean();

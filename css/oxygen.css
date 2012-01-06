@@ -65,7 +65,24 @@ table.tab_buttons td.tab_button a:hover        { background:#fbfbfb; border:soli
 table.tab_buttons td.tab_button a.active:hover { background:#fdfdfd; border:solid #cccccc; border-width:1px 1px 0 1px; text-decoration:none; color:#666666; }
 
 div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 1px; padding:10px; }
+.buttons1 { margin-top:1em; }
 
+
+.message-panel          { border-style:solid; border-width:1px; padding:4px; margin:0; color:#000000; }
+.message-panel-bug      { background:#f4f4f4; border-color:#999999; }
+.message-panel-error    { background:#ffeeee; border-color:#ffcccc; }
+.message-panel-warning  { background:#fcfcf0; border-color:#e0e088; }
+.message-panel-question { background:#eeeeff; border-color:#ccccff; }
+.message-panel-success  { background:#eeffee; border-color:#ccffcc; }
+.message-panel-info     { background:#eeeeee; border-color:#cccccc; }
+
+.message          { padding:2px 2px 2px 19px; background-position:1px 50%; background-repeat:no-repeat;}
+.message-bug      { background-image:url(../ico/Bug16.gif); }
+.message-error    { background-image:url(../ico/Error16.gif); }
+.message-warning  { background-image:url(../ico/Warning16.gif); }
+.message-question { background-image:url(../ico/Question16.gif); }
+.message-success  { background-image:url(../ico/Success16.gif); }
+.message-info     { background-image:url(../ico/Info16.gif); }
 
 .reportmenupanel { /* background:url('oxy/skn/striped_bg.gif'); */ }
 

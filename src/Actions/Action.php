@@ -8,6 +8,7 @@ abstract class Action implements OmniValue {
 	}
 	public static function Make() { return new static(); }
 	public final static function GetName() { return substr(get_called_class(),6); }
+	public final static function GetClassName() { return get_called_class(); }
 	public function IsActive(){ return Oxygen::GetActionName() == $this->GetName(); }
 
 
@@ -43,9 +44,15 @@ abstract class Action implements OmniValue {
 	public function GetTitle(){ return Lemma::Retrieve($this->GetName()); }
 	public function GetPathTitle(){ return $this->GetTitle(); }
 	public function GetDescription(){ return ''; }
-	public function GetParentAction(){ return null; }
-	public function GetPath(){ $r = array(); for ($act = $this; !is_null($act); $act = $act->GetParentAction()) $r[] = $act; return array_reverse($r); }
-	public function GetMenu() { return new Menu(); }
+	/** @return Action */ public function GetParentAction(){ return null; }
+	public function GetPath() { $r = array(); for ($act = $this; !is_null($act); $act = $act->GetParentAction()) $r[] = $act; return array_reverse($r); }
+
+
+	/**
+	 * @deprecated
+	 * @return Menu
+	 */
+	public function GetMenu(){ return new Menu(); }
 
 
 	public function GetButtonTitle(){ return $this->GetTitle(); }
@@ -58,6 +65,7 @@ abstract class Action implements OmniValue {
 	public function RequiresLogin(){ return true; }
 	public function IsTitleHidden(){ return false; }
 
+	public function IsMenu(){ return false; }
 	public function IsMenuSeparator(){ return false; }
 
 	public abstract function Render();
