@@ -13,19 +13,17 @@ class CheckboxControl extends ValueControl {
 			echo new HiddenControl($this->name,$this->value);
 			echo Js::BEGIN;
 			echo $this->name . "_OnClick = function(){";
-			echo "\$(".new Js($this->name).").value = \$(".new Js($this->name.'_chk').").checked?'true':'false';";
+			echo "var x = \$(".new Js($this->name).");";
+			echo "x.value = x.value=='true'?'false':'true';";
 			echo $this->on_change;
 			echo "};";
 			echo Js::END;
 		}
 		echo '<input type="checkbox" id="'.$this->name.'_chk"';
-		if ($this->mode == UIMode::Edit)
-			echo ' name="'.$this->name.'"';
-		else
+		if ($this->mode != UIMode::Edit)
 			echo ' disabled="disabled"';
 		if ($this->value) echo ' checked="checked"';
 		echo ' onclick="'.$this->name.'_OnClick();"';
-		echo ' value="'.new Url(true).'" />';
 		if ($this->show_label)
 			echo '<label for="'.$this->name.'_chk">'.new Html($this->label).'</label>';
 	}

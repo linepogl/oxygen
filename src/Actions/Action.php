@@ -58,7 +58,7 @@ abstract class Action implements OmniValue {
 	public function GetButtonTitle(){ return $this->GetTitle(); }
 	public function GetButtonCssClass(){ return ''; }
 	/** @return ButtonControl */
-	public function GetButton() { return ButtonControl::Make()->WithValue($this->GetButtonTitle())->WithOnClick($this->GetHrefJavascript())->WithCssClass($this->GetButtonCssClass()); }
+	public function GetButton($args=array()) { return ButtonControl::Make()->WithValue($this->GetButtonTitle())->WithOnClick($this->GetJSCommand($args))->WithCssClass($this->GetButtonCssClass()); }
 
 	public abstract function IsPermitted();
 	public function IsLogical(){ return true; }

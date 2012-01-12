@@ -12,13 +12,25 @@ DateControl extends ValueControl {
 	private $on_change = '';
 	public function WithOnChange($value){ $this->on_change = $value; return $this; }
 
-	
+	private $is_readonly;
+	public function WithReadOnly($value){ $this->is_readonly = $value; return $this; }
+
 	public function Render(){
 		echo new HiddenControl($this->name,$this->value);
 
-		echo '<span class="formPane" style="white-space:nowrap;padding:1px 0;">';
-		echo '<input type="text" name="'.$this->name.'box" id="'.$this->name.'box" value="'.(is_null($this->value)?$this->null_caption:$this->value->GetDay().'/'.$this->value->GetMonth().'/'.$this->value->GetYear()).'" class="formPane" readonly="readonly" style="width:7em;padding:0;margin:0;text-align:center;border:0;" onclick="'.$this->name.'ToggleCalendar();" />';
-		if ($this->mode==UIMode::Edit){
+		echo '<span style="white-space:nowrap;"';
+		if ($this->mode==UIMode::Edit && !$this->is_readonly)
+			echo ' class="formPane"';
+		else
+			echo ' class="formLocked"';
+		echo '>';
+		echo '<input type="text" name="'.$this->name.'box" id="'.$this->name.'box" value="'.(is_null($this->value)?$this->null_caption:$this->value->GetDay().'/'.$this->value->GetMonth().'/'.$this->value->GetYear());
+		if ($this->mode==UIMode::Edit && !$this->is_readonly)
+			echo '" class="formPane" onclick="'.$this->name.'ToggleCalendar();"';
+		else
+			echo '" class="formLocked"';
+		echo ' readonly="readonly" style="width:7em;padding:0;margin:0;text-align:center;border:0;" />';
+		if ($this->mode==UIMode::Edit && !$this->is_readonly){
 			echo '<a href="javascript:'.$this->name.'ToggleCalendar();">';
 			echo '<img src="oxy/img/arrow_down.gif" alt="" style="vertical-align:middle;" />';
 			echo '</a>';

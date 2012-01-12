@@ -11,6 +11,9 @@ class TimeControl extends ValueControl {
 	private $on_change = '';
 	public function WithOnChange($value){ $this->on_change = $value; return $this; }
 
+	private $is_readonly;
+	public function WithReadOnly($value){ $this->is_readonly = $value; return $this; }
+
 	public function Render(){
 		$v = null;
 		if ($this->value instanceof DateTime)
@@ -34,20 +37,20 @@ class TimeControl extends ValueControl {
 		if (!is_null($s)) $s = ($s<10?'0':'').$s;
 
 		echo '<span class="nowrap">';
-		$c = SelectControl::Make($this->name.'_hours',$h)->WithOnChange($this->name.'_UpdateTime();')->WithAllowNull($this->allow_null)->WithWidth('3em')->WithStyle('text-align:center;')->WithMode($this->mode);
+		$c = SelectControl::Make($this->name.'_hours',$h)->WithOnChange($this->name.'_UpdateTime();')->WithAllowNull($this->allow_null)->WithWidth('3em')->WithStyle('text-align:center;')->WithMode($this->mode)->WithReadOnly($this->is_readonly);
 		for ($i = 0; $i<24; $i++)
 			$c->Add(($i<10?'0':'') . $i);
 		$c->Render();
 
 		echo ':';
-		$c = SelectControl::Make($this->name.'_minutes',$m)->WithOnChange($this->name.'_UpdateTime();')->WithAllowNull($this->allow_null)->WithWidth('3em')->WithStyle('text-align:center;')->WithMode($this->mode);
+		$c = SelectControl::Make($this->name.'_minutes',$m)->WithOnChange($this->name.'_UpdateTime();')->WithAllowNull($this->allow_null)->WithWidth('3em')->WithStyle('text-align:center;')->WithMode($this->mode)->WithReadOnly($this->is_readonly);
 		for ($i = 0; $i<60; $i++)
 			$c->Add(($i<10?'0':'') . $i);
 		$c->Render();
 
 		if ($this->show_seconds){
 			echo ':';
-			$c = SelectControl::Make($this->name.'_seconds',$s)->WithOnChange($this->name.'_UpdateTime();')->WithAllowNull($this->allow_null)->WithWidth('3em')->WithStyle('text-align:center;')->WithMode($this->mode);
+			$c = SelectControl::Make($this->name.'_seconds',$s)->WithOnChange($this->name.'_UpdateTime();')->WithAllowNull($this->allow_null)->WithWidth('3em')->WithStyle('text-align:center;')->WithMode($this->mode)->WithReadOnly($this->is_readonly);
 			for ($i = 0; $i<60; $i++)
 				$c->Add(($i<10?'0':'') . $i);
 			$c->Render();

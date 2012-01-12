@@ -126,7 +126,7 @@ abstract class XItem implements Serializable,OmniValue {
 				$sql = 'SELECT '.$cx->id->GetDBName();
 				/** @var $f XField */
 				foreach ($fields as $f)
-					$sql .= ',' . $f->GetDBName();
+					$sql .= ',' . new SqlName( $f->GetDBName() );
 				$sql .= ' FROM '.$cx->GetDBTableName();
 				$sql .= ' WHERE '.$cx->id->GetDBName().'=?';
 
