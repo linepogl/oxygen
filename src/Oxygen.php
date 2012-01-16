@@ -287,8 +287,11 @@ class Oxygen {
 		self::$class_files = Scope::$APPLICATION['Oxygen::ClassFiles'];
 		if (is_null(self::$class_files)) {
 			self::$class_files = array();
-			foreach (self::$code_folders as $folder)
-				self::LoadClassFilesRecursively($folder);
+			foreach (self::$code_folders as $folder) {
+				if (is_dir($folder)) { // important!
+					self::LoadClassFilesRecursively($folder);
+				}
+			}
 			Scope::$APPLICATION['Oxygen::ClassFiles'] = self::$class_files;
 			self::$just_loaded_class_files = true;
 		}
