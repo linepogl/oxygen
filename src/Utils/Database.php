@@ -96,7 +96,8 @@ class Database {
 		try{
 			switch ($type){
 				case self::MYSQL:
-					self::$cn = new PDO('mysql:host='.$server.';dbname='.$schema.';charset='.Oxygen::GetCharset(), $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
+					$a = explode(':',$server);
+					self::$cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';dbname='.$schema.';charset='.Oxygen::GetCharset(), $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
 					break;
 				case self::ORACLE:
 					//self::$cn = oci_pconnect($username,$password,'//'.$server.'/'.$schema);
