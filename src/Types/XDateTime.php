@@ -31,6 +31,14 @@ class XDateTime implements Serializable, OmniValue {
 	public function AsInt()  { return $this->timestamp; }
 
 
+	public function IsEqualTo(XDateTime $d = null){
+		return is_null($d) ? false :$this->timestamp == $d->GetTimestamp();
+	}
+	public function CompareTo(XDateTime $d = null){
+		return is_null($d) ? 1 : $this->timestamp - $d->GetTimestamp();
+	}
+
+
 	/** @return XTimeSpan */
 	public function Diff(XDateTime $value){
 		return new XTimeSpan($this->GetTimestamp() - $value->GetTimestamp());

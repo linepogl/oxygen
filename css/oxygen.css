@@ -24,7 +24,11 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 
 table.report    { width:100%; }
 table.report th { background:#e0e0e0; font:bold 11px/13px Trebuchet MS, sans-serif; color:#333333; padding:3px; border-right:1px solid #ffffff; border-bottom:1px solid #ffffff; }
-table.report td { background:#f0f0f0; font:bold 11px/13px Trebuchet MS, sans-serif; color:#555555; padding:3px; border-right:1px solid #ffffff; border-bottom:1px solid #ffffff; }
+table.report td { background:#f0f0f0; font:normal 11px/13px Trebuchet MS, sans-serif; color:#555555; padding:3px; border-right:1px solid #ffffff; border-bottom:1px solid #ffffff; }
+
+table.report .sub td { background:#e0e0e0; font:bold 11px/13px Trebuchet MS, sans-serif; color:#333333; padding:3px; border-right:1px solid #ffffff; border-bottom:1px solid #ffffff; }
+table.report .sum td { background:#e0e0e0; font:bold 11px/13px Trebuchet MS, sans-serif; color:#333333; padding:3px; border-right:1px solid #ffffff; border-bottom:1px solid #ffffff; }
+
 
 table.report .hover th { background:#d6d6d6; }
 table.report .hover td { background:#e6e6e6; }
