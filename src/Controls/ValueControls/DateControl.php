@@ -24,7 +24,7 @@ DateControl extends ValueControl {
 		else
 			echo ' class="formLocked"';
 		echo '>';
-		echo '<input type="text" name="'.$this->name.'box" id="'.$this->name.'box" value="'.(is_null($this->value)?$this->null_caption:$this->value->GetDay().'/'.$this->value->GetMonth().'/'.$this->value->GetYear());
+		echo '<input type="text" id="'.$this->name.'box" value="'.(is_null($this->value)?$this->null_caption:$this->value->GetDay().'/'.$this->value->GetMonth().'/'.$this->value->GetYear());
 		if ($this->mode==UIMode::Edit && !$this->is_readonly)
 			echo '" class="formPane" onclick="'.$this->name.'ToggleCalendar();"';
 		else

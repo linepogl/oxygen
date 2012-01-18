@@ -30,7 +30,7 @@ class Oxygen {
 
 
 		// init url handling
-		self::$php_script = basename( $_SERVER['SCRIPT_NAME'] , '.php' );
+		self::$php_script = basename( $_SERVER['SCRIPT_NAME'] );
 		foreach (self::$url_pins as $key=>$value)
 			self::$url_pins[$key] = Http::$GET[$key]->AsString();
 		self::$idWindow = Http::$GET['window']->AsID();
@@ -375,7 +375,7 @@ class Oxygen {
 			$s .= '=';
 			$s .= new Url( $value );  // <---- this one costs a lot!
 		}
-		return self::$php_script.'.php' . $s;
+		return self::$php_script . $s;
 	}
 
 

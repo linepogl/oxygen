@@ -322,6 +322,14 @@ abstract class Action implements OmniValue {
 
 
 
+	public function GetFilterForm($name) {
+		$r = '<form'.(is_null($name)?'':' id="'.$name.'"').' method="get" action="'.new Html(Oxygen::GetCurrentPhpScript()).'"><div class="inline">';
+		$a = func_get_args();
+		$a = array_splice($a,1);
+		foreach ($_GET as $key=>$value) if (!in_array($key,$a,true)) $r .= HiddenControl::Make($key,$value);
+		return $r;
+	}
+	public function EndFilterForm(){ return '</div></form>'; }
 
 }
 
