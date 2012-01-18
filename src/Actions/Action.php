@@ -112,23 +112,29 @@ abstract class Action implements OmniValue {
 					Debug::WriteException($ex);
 				}
 				else {
-					$c = Oxygen::GetLoginControl()->WithMessage($ex->getMessage())->WithRedirectOnSuccess($this);
-					if ($c->WrapAsException()){
-						echo '<table class="center"><tr><td>';
-						echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
-						echo '<table cellspacing="0" cellpadding="15" border="0"><tr>';
-						echo '<td style="text-align:right;vertical-align:top;padding-top:50px;"><img src="oxy/ico/Warning32.gif" /></td>';
-						echo '<td>'.new Spacer(1,150).'</td>';
-						echo '<td style="border-left:1px solid #dddddd;text-align:left;">';
-						echo new Spacer(350);
+					$c = Oxygen::GetLoginControl();
+					if (is_null($c)){
+						echo $ex->getMessage();
 					}
-					$c->Render();
-					if ($c->WrapAsException()){
-						echo new Spacer(350);
-						echo '</td>';
-						echo '</tr></table>';
-						echo '</td></tr></table>';
-						echo '</td></tr></table>';
+					else {
+						$c = $c->WithMessage($ex->getMessage())->WithRedirectOnSuccess($this);
+						if ($c->WrapAsException()){
+							echo '<table class="center"><tr><td>';
+							echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
+							echo '<table cellspacing="0" cellpadding="15" border="0"><tr>';
+							echo '<td style="text-align:right;vertical-align:top;padding-top:50px;"><img src="oxy/ico/Warning32.gif" /></td>';
+							echo '<td>'.new Spacer(1,150).'</td>';
+							echo '<td style="border-left:1px solid #dddddd;text-align:left;">';
+							echo new Spacer(350);
+						}
+						$c->Render();
+						if ($c->WrapAsException()){
+							echo new Spacer(350);
+							echo '</td>';
+							echo '</tr></table>';
+							echo '</td></tr></table>';
+							echo '</td></tr></table>';
+						}
 					}
 				}
 			}

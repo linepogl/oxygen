@@ -1,27 +1,47 @@
 <?php
 
+class DatabaseConnection {
+	/** @var PDO|null */
+	public $cn = null;
+	public $server = null;
+	public $schema = null;
+	public $username = null;
+	public $password = null;
+	public $type = null;
+	public $is_managed = false;
+	public function __construct($server,$schema,$username,$password,$type){
+		$this->server = $server;
+		$this->schema = $schema;
+		$this->username = $username;
+		$this->password = $password;
+		$this->type = $type;
+	}
+}
+
+
 class Database {
 	const MYSQL = 'mysql';
 	const ORACLE = 'oracle';
-	
-	/** @var PDO|null */
-	private static $cn = null;
-	private static $server = null;
-	private static $schema = null;
-	private static $type = null;
+
+	/** @var DatabaseConnection|null */
+	private static $cx = null;
+	private static $stack = array();
 
 	private static $queries = array();
 	private static $prepared = array();
 	private static $prepared_stats = array();
 
-	private static $stack_cn = array();
-	private static $stack_server = array();
-	private static $stack_schema = array();
-	private static $stack_type = array();
+	// duplicates, for speed:
+	private static $cn = null;
+	private static $server = null;
+	private static $schema = null;
+	private static $type = null;
+
 
 
 	public static function GetUpgradeFiles() { return Oxygen::GetDatabaseUpgradeFiles(); }
 	public static function AddUpgradeFile($filename) { Oxygen::AddDatabaseUpgradeFile($filename); }
+
 
 
 	public static function Upgrade($force=false){
@@ -48,6 +68,61 @@ class Database {
 
 
 
+	public static function CreateSchema($server,$schema,$username,$password,$type=self::MYSQL){
+		if ($type == self::MYSQL){
+			self::PushConnection();
+			self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
+			try{
+				$a = explode(':',$server);
+				self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';charset='.Oxygen::GetCharset(), $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
+				self::$cn = self::$cx->cn;
+			}
+			catch (Exception $ex){
+				self::PopConnection();
+				throw new ApplicationException(Lemma::MsgCannotConnectToDatabase().'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
+			}
+			try{
+				Database::Execute('CREATE DATABASE '.new SqlName($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
+			}
+			catch (Exception $ex){
+				self::PopConnection();
+				throw new ApplicationException(Lemma::MsgCannotCreateDatabase().'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
+			}
+			self::PopConnection();
+		}
+		else throw new NonImplementedException('CreateSchema is not implemented in for this database.');
+	}
+
+	private static function RequireConnection(){
+		if (is_null(self::$cn)){
+			if (is_null(self::$cx)) throw new ApplicationException(Lemma::Retrieve('MsgNoDatabaseConnectionSpecified'));
+			try{
+				switch (self::$cx->type){
+					case self::MYSQL:
+						$a = explode(':',self::$cx->server);
+						self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';dbname='.self::$cx->schema.';charset='.Oxygen::GetCharset(), self::$cx->username, self::$cx->password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
+						self::$cn = self::$cx->cn;
+						break;
+					case self::ORACLE:
+						$a = explode(':',self::$cx->server);
+						self::$cx->cn = new PDO('oci:dbname=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST='.$a[0].')(PORT='.(count($a)>1?$a[1]:'1521').')))(CONNECT_DATA=(SERVICE_NAME='.self::$cx->schema.')))',self::$cx->username,self::$cx->password, array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+						self::$cn = self::$cx->cn;
+						self::$cn->exec('ALTER SESSION SET NLS_LANGUAGE=\'AMERICAN\' NLS_TERRITORY=\'AMERICA\' NLS_CURRENCY=\'$\' NLS_ISO_CURRENCY=\'AMERICA\' NLS_NUMERIC_CHARACTERS=\'.,\' NLS_CALENDAR=\'GREGORIAN\' NLS_DATE_FORMAT=\'YYYY-MM-DD HH24:MI:SS\' NLS_DATE_LANGUAGE=\'AMERICAN\' NLS_SORT=\'BINARY\'');
+						break;
+				}
+			}
+			catch (Exception $ex){
+				throw new ApplicationException(Lemma::Retrieve('MsgCannotConnectToDatabase').'<br/><br/>'. self::$cx->server.'/'.self::$cx->schema. '<br/>'.$ex->getMessage());
+			}
+			if (self::$cx->is_managed){
+				self::Upgrade();
+				Lemma::LoadLocalDictionary();
+			}
+		}
+	}
+
+
+
 	/**
 	 * @api Since 1.3
 	 * @param $server string
@@ -59,27 +134,16 @@ class Database {
 	 */
 	public static function ConnectManaged($server,$schema,$username,$password,$type=self::MYSQL){
 		while(self::IsConnected()) self::Disconnect();
-		self::Connect($server,$schema,$username,$password,$type);
-		self::Upgrade();
-		Lemma::LoadLocalDictionary();
-	}
-	public static function CreateSchema($server,$schema,$username,$password,$type=self::MYSQL){
-		if ($type == self::MYSQL){
-			try{
-				self::$cn = new PDO('mysql:host='.$server, $username, $password, array(PDO::ATTR_PERSISTENT=>false));
-			}
-			catch (Exception $ex){
-				throw new ApplicationException(Lemma::MsgCannotConnectToDatabase().'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
-			}
-
-			try{
-				Database::Execute('CREATE DATABASE '.new SqlName($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
-			}
-			catch (Exception $ex){
-				throw new ApplicationException(Lemma::MsgCannotCreateDatabase().'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
-			}
+		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
+		self::$cx->is_managed = true;
+		try {
+			self::RequireConnection();
 		}
-		else throw new NonImplementedException('CreateSchema is not implemented in for this database.');
+		catch (Exception $ex){
+			self::PopConnection();
+			throw $ex;
+		}
+		self::ResetCaches();
 	}
 
 	/**
@@ -93,29 +157,32 @@ class Database {
 	 */
 	public static function Connect($server,$schema,$username,$password,$type=self::MYSQL){
 		self::PushConnection();
-		try{
-			switch ($type){
-				case self::MYSQL:
-					$a = explode(':',$server);
-					self::$cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';dbname='.$schema.';charset='.Oxygen::GetCharset(), $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
-					break;
-				case self::ORACLE:
-					//self::$cn = oci_pconnect($username,$password,'//'.$server.'/'.$schema);
-					self::$cn = new PDO('oci:dbname=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST='.$server.')(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME='.$schema.')))',$username,$password, array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-					self::$cn->exec('ALTER SESSION SET NLS_LANGUAGE=\'AMERICAN\' NLS_TERRITORY=\'AMERICA\' NLS_CURRENCY=\'$\' NLS_ISO_CURRENCY=\'AMERICA\' NLS_NUMERIC_CHARACTERS=\'.,\' NLS_CALENDAR=\'GREGORIAN\' NLS_DATE_FORMAT=\'YYYY-MM-DD HH24:MI:SS\' NLS_DATE_LANGUAGE=\'AMERICAN\' NLS_SORT=\'BINARY\'');
-					//self::$cn->exec('ALTER SESSION SET NLS_DATE_FORMAT=\'YYYY-MM-DD HH24:MI:SS\'');
-					break;
-			}
-			self::$server = $server;
-			self::$schema = $schema;
-			self::$type = $type;
+		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
+		try {
+			self::RequireConnection();
 		}
 		catch (Exception $ex){
 			self::PopConnection();
-			throw new ApplicationException(Lemma::Retrieve('MsgCannotConnectToDatabase').'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
+			throw $ex;
 		}
 		self::ResetCaches();
 	}
+
+	public static function ConnectLazily($server,$schema,$username,$password,$type=self::MYSQL){
+		self::PushConnection();
+		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
+		self::ResetCaches();
+	}
+
+	public static function ConnectLazilyManaged($server,$schema,$username,$password,$type=self::MYSQL){
+		while(self::IsConnected()) self::Disconnect();
+		self::PushConnection();
+		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
+		self::$cx->is_managed = true;
+		self::ResetCaches();
+	}
+
+
 
 	/**
 	 * @api Since 1.3
@@ -125,12 +192,25 @@ class Database {
 		self::PopConnection();
 		self::ResetCaches();
 	}
+	private static function SetConnection(DatabaseConnection $cx = null){
+		if (is_null($cx)){
+			self::$cx = null;
+			self::$cn = null;
+			self::$server = null;
+			self::$schema = null;
+			self::$type = null;
+		}
+		else {
+			self::$cx = $cx;
+			self::$cn = $cx->cn;
+			self::$server = $cx->server;
+			self::$schema = $cx->schema;
+			self::$type = $cx->type;
+		}
+	}
 	private static function PushConnection(){
-		if (!is_null(self::$cn)){
-			array_push(self::$stack_cn,self::$cn);
-			array_push(self::$stack_server,self::$server);
-			array_push(self::$stack_schema,self::$schema);
-			array_push(self::$stack_type,self::$type);
+		if (!is_null(self::$cx)){
+			array_push(self::$stack,self::$cx);
 			self::$queries = array();
 			self::$prepared = array();
 			self::$prepared_stats = array();
@@ -140,10 +220,7 @@ class Database {
 		self::$queries = array();
 		self::$prepared = array();
 		self::$prepared_stats = array();
-		self::$cn = array_pop(self::$stack_cn);
-		self::$server = array_pop(self::$stack_server);
-		self::$schema = array_pop(self::$stack_schema);
-		self::$type = array_pop(self::$stack_type);
+		self::SetConnection( array_pop(self::$stack) );
 	}
 	private static function ResetCaches(){
 		XMeta::ResetItemCaches();
@@ -151,9 +228,7 @@ class Database {
 		Scope::$DATABASE_HARD = new DatabaseScope(false);
 	}
 
-	public static function IsConnected(){
-		return !is_null(self::$cn);
-	}
+	public static function IsConnected(){ return !is_null(self::$cx); }
 	public static function GetServer(){ return self::$server; }
 	public static function GetSchema(){ return self::$schema; }
 	public static function GetType(){ return self::$type; }
@@ -208,6 +283,7 @@ class Database {
 	 * @return DBReader
 	 */
 	public static function ExecuteX($sql,$params=array()){
+		self::RequireConnection();
 		$q = self::Prepare($sql);
 		$z = count($params);
 		if ($z > 0){ for($i = 0; $i < $z; $i++) $q->bindValue($i+1, OmniType::Of($params[$i])->ExportPdoValue( $params[$i] , self::$type ) ); }
@@ -233,6 +309,7 @@ class Database {
 	 * @return DBReader
 	 */
 	public static function Execute($sql){
+		self::RequireConnection();
 		$q = self::Prepare($sql);
 		$z = func_num_args(); if ($z > 1){ $a = func_get_args(); for($i = 1; $i < $z; $i++) $q->bindValue($i, OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) ); }
 		try {
@@ -670,6 +747,7 @@ class Database {
 	}
 
 	public static function ExecuteSqlFile($filename) {
+		self::RequireConnection();
 		$queries=array();
 		$queries[0]='';
 		$sql=file($filename); // on charge le fichier SQL
@@ -697,12 +775,15 @@ class Database {
 
 
 	public static function TransactionBegin(){
+		self::RequireConnection();
 		self::$cn->beginTransaction();
 	}
 	public static function TransactionCommit(){
+		self::RequireConnection();
 		self::$cn->commit();
 	}
 	public static function TransactionRollback(){
+		self::RequireConnection();
 		self::$cn->rollBack();
 	}
 }

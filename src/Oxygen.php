@@ -550,6 +550,12 @@ class Oxygen {
 	/** @return LoginControlBase */
 	public static function GetLoginControl(){
 		if (is_null(self::$login_control)){
+			try {
+				new ReflectionClass('LoginControl'); // <-- this will throw a mere exception if the class is not found, which will prevent a nasty FATAL php error in the next line.
+			}
+			catch (Exception $ex){
+				return null;
+			}
 			self::$login_control = new LoginControl();
 		}
 		return self::$login_control;
