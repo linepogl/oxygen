@@ -285,7 +285,8 @@
 
 
 	<lemma name="ThousandsSeparator"><en>,</en><fr> </fr><el>.</el></lemma>
-	<lemma name="DecimalPoint"><en>.</en><fr>,</fr><el>,</el></lemma>
+	<lemma name="DecimalSeparator"><en>.</en><fr>,</fr><el>,</el></lemma>
+	<!-- deprecated --><lemma name="DecimalPoint"><en>.</en><fr>,</fr><el>,</el></lemma>
 
 	<lemma name="unit:byte"><en>B</en><fr>o</fr><el>B</el></lemma>
 

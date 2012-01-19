@@ -9,50 +9,149 @@ final class Language {
 
 	/** @return string */
 	public static function GetDecimalSeparator(){
-		switch (Oxygen::$lang) {
-			case 'fr': case 'el': return ',';
-			default: return '.';
-		}
+		$l = Lemma::Retrieve('DecimalSeparator');
+		return $l->HasLanguage() ? $l->Translate() : self::GetDecimalSeparatorInvariant();
 	}
 	/** @return string */
 	public static function GetThousandsSeparator(){
-		switch (Oxygen::$lang) {
-			case 'fr': case 'el': return '.';
-			default: return ',';
-		}
+		$l = Lemma::Retrieve('ThousandsSeparator');
+		return $l->HasLanguage() ? $l->Translate() : self::GetThousandsSeparatorInvariant();
 	}
 
 	/** @return string */
-	public static function FormatDecimal($value,$number_of_decimals=-1) {
-		if (is_numeric($value)){
-			$value = floatval($value);
-			if ($number_of_decimals < 0){
-				$s1 = strstr(''.$value,'.');
-				$s2 = strstr(''.$value,self::GetDecimalSeparator());
-				$number_of_decimals = 0;
-				if ($s1!==false) $number_of_decimals = strlen($s1)-1;
-				if ($s2!==false) $number_of_decimals = strlen($s2)-1;
-			}
-			return number_format($value, $number_of_decimals, self::GetDecimalSeparator(), '');
-		}
+	public static function GetDecimalSeparatorInvariant(){
+		return '.';
+	}
+	/** @return string */
+	public static function GetThousandsSeparatorInvariant(){
 		return '';
 	}
 
+
 	/** @return string */
-	public static function FormatNumber($value,$number_of_decimals=-1) {
-		if (is_numeric($value)){
-			$value = floatval($value);
-			if ($number_of_decimals < 0){
-				$s1 = strstr(''.$value,'.');
-				$s2 = strstr(''.$value,self::GetDecimalSeparator());
+	public static function FormatDecimal($value,$number_of_decimals=-1) {
+		if (is_int($value) || is_float($value)){
+			if ($number_of_decimals < 0) {
 				$number_of_decimals = 0;
-				if ($s1!==false) $number_of_decimals = strlen($s1)-1;
-				if ($s2!==false) $number_of_decimals = strlen($s2)-1;
+				$s = sprintf('%F',$value);
+				$x = strstr($s,self::GetDecimalSeparatorInvariant());
+				if ($x !== false) {
+					$s = rtrim($s,'0');
+					$x = strstr($s,self::GetDecimalSeparatorInvariant());
+					$number_of_decimals = strlen($x) - 1;
+				}
+				if ($number_of_decimals == 0) $number_of_decimals = 1;
 			}
 			return number_format($value, $number_of_decimals, self::GetDecimalSeparator(), self::GetThousandsSeparator());
 		}
 		return '';
 	}
+	/** @return float|null */
+	public static function ParseDecimal($string, $default = null) {
+		$string = strval($string);
+		$s = preg_replace('/[^1234567890\\'.self::GetDecimalSeparator().']/','',$string);
+		$s = str_replace( self::GetDecimalSeparator() , self::GetDecimalSeparatorInvariant() , $s );
+		$s_length = strlen($s);
+		$d_count = substr_count($s,self::GetDecimalSeparatorInvariant());
+		if ($d_count == $s_length || $d_count > 1 || $s_length == 0) return $default;
+		return floatval($s);
+	}
+
+	/** @return string */
+	public static function FormatDecimalInvariant($value,$number_of_decimals=-1) {
+		if (is_int($value) || is_float($value)){
+			if ($number_of_decimals < 0) {
+				$number_of_decimals = 0;
+				$s = sprintf('%F',$value);
+				$x = strstr($s,self::GetDecimalSeparatorInvariant());
+				if ($x !== false) {
+					$s = rtrim($s,'0');
+					$x = strstr($s,self::GetDecimalSeparatorInvariant());
+					$number_of_decimals = strlen($x) - 1;
+				}
+				if ($number_of_decimals == 0) $number_of_decimals = 1;
+			}
+			return number_format($value, $number_of_decimals, self::GetDecimalSeparatorInvariant(), self::GetThousandsSeparatorInvariant());
+		}
+		return '';
+	}
+	/** @return float|null */
+	public static function ParseDecimalInvariant($string, $default = null) {
+		$string = strval($string);
+		$s = preg_replace('/[^1234567890\\'.self::GetDecimalSeparatorInvariant().']/','',$string);
+		$s_length = strlen($s);
+		$d_count = substr_count($s,self::GetDecimalSeparatorInvariant());
+		if ($d_count == $s_length || $d_count > 1 || $s_length == 0) return $default;
+		return floatval($s);
+	}
+
+
+
+
+
+	/** @return string */
+	public static function FormatNumber($value,$number_of_decimals=-1) {
+		if (is_int($value) || is_float($value)){
+			if ($number_of_decimals < 0) {
+				$number_of_decimals = 0;
+				$s = sprintf('%F',$value);
+				$x = strstr($s,self::GetDecimalSeparatorInvariant());
+				if ($x !== false) {
+					$s = rtrim($s,'0');
+					$x = strstr($s,self::GetDecimalSeparatorInvariant());
+					$number_of_decimals = strlen($x) - 1;
+				}
+			}
+			return number_format($value, $number_of_decimals, self::GetDecimalSeparator(), self::GetThousandsSeparator());
+		}
+		return '';
+	}
+
+
+	/** @return float|int|null */
+	public static function ParseNumber($string, $default = null) {
+		$string = strval($string);
+		$s = preg_replace('/[^1234567890\\'.self::GetDecimalSeparator().']/','',$string);
+		$s = str_replace( self::GetDecimalSeparator() , self::GetDecimalSeparatorInvariant() , $s );
+		$s_length = strlen($s);
+		$d_count = substr_count($s,self::GetDecimalSeparatorInvariant());
+		if ($d_count == $s_length || $d_count > 1 || $s_length == 0) return $default;
+		$x1 = floatval($s);
+		$x2 = intval($x1);
+		return $x1 == $x2 ? $x2 : $x1;
+	}
+
+
+	/** @return string */
+	public static function FormatNumberInvariant($value,$number_of_decimals=-1) {
+		if (is_int($value) || is_float($value)){
+			if ($number_of_decimals < 0) {
+				$number_of_decimals = 0;
+				$s = sprintf('%F',$value);
+				$x = strstr($s,self::GetDecimalSeparatorInvariant());
+				if ($x !== false) {
+					$s = rtrim($s,'0');
+					$x = strstr($s,self::GetDecimalSeparatorInvariant());
+					$number_of_decimals = strlen($x) - 1;
+				}
+			}
+			return number_format($value, $number_of_decimals, self::GetDecimalSeparatorInvariant(), self::GetThousandsSeparatorInvariant());
+		}
+		return '';
+	}
+
+	/** @return float|int|null */
+	public static function ParseNumberInvariant($string, $default = null) {
+		$string = strval($string);
+		$s = preg_replace('/[^1234567890\\'.self::GetDecimalSeparatorInvariant().']/','',$string);
+		$s_length = strlen($s);
+		$d_count = substr_count($s,self::GetDecimalSeparatorInvariant());
+		if ($d_count == $s_length || $d_count > 1 || $s_length == 0) return $default;
+		$x1 = floatval($s);
+		$x2 = intval($x1);
+		return $x1 == $x2 ? $x2 : $x1;
+	}
+
 
 
 	/** @return string */
@@ -224,7 +323,7 @@ final class Language {
 		if ($size >= 1000) { $size /= 1000; $unit = 'G'.Lemma::Retrieve('unit:byte');	}
 		if ($size >= 1000) { $size /= 1000; $unit = 'T'.Lemma::Retrieve('unit:byte');	}
 		$size = round($size,1);
-		return Language::FormatDecimal($size).' '.$unit;
+		return Language::FormatNumber($size).' '.$unit;
 	}
 	public static function FormatSizeBinary($size){
 		$unit = Lemma::Retrieve('unit:byte');
@@ -233,7 +332,7 @@ final class Language {
 		if ($size >= 1024) { $size /= 1024; $unit = 'Gi'.Lemma::Retrieve('unit:byte');	}
 		if ($size >= 1024) { $size /= 1024; $unit = 'Ti'.Lemma::Retrieve('unit:byte');	}
 		$size = round($size,1);
-		return Language::FormatDecimal($size).' '.$unit;
+		return Language::FormatNumber($size).' '.$unit;
 	}
 
 	public static $EnumCommon = array (

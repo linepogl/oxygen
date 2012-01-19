@@ -62,7 +62,7 @@ class OmniDecimalOrNull extends OmniType {
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
 		if (is_null($value)) return Sql::Null;
-		return sprintf('%F',$value);
+		return Language::FormatDecimalInvariant($value);
 	}
 
 	/**
@@ -80,7 +80,7 @@ class OmniDecimalOrNull extends OmniType {
 	 */
 	public static function ExportJsLiteral($value) {
 		if (is_null($value)) return Js::Null;
-		return sprintf('%F',$value);
+		return Language::FormatDecimalInvariant($value);
 	}
 
 	/**
@@ -89,7 +89,7 @@ class OmniDecimalOrNull extends OmniType {
 	 */
 	public static function ExportXmlString($value) {
 		if (is_null($value)) return '';
-		return sprintf('%F',$value);
+		return Language::FormatDecimalInvariant($value);
 	}
 
 	/**
@@ -98,7 +98,7 @@ class OmniDecimalOrNull extends OmniType {
 	 */
 	public static function ExportHtmlString($value) {
 		if (is_null($value)) return '';
-		return sprintf('%F',$value);
+		return Language::FormatDecimal($value);
 	}
 
 	/**
@@ -116,7 +116,7 @@ class OmniDecimalOrNull extends OmniType {
 	 */
 	public static function ExportUrlString($value) {
 		if (is_null($value)) return '';
-		return sprintf('%F',$value);
+		return Language::FormatDecimal($value);
 	}
 
 	/**
@@ -125,7 +125,7 @@ class OmniDecimalOrNull extends OmniType {
 	 */
 	public static function ImportDBValue($value) {
 		if (is_null($value)) return null;
-		return floatval($value);
+		return Language::ParseDecimalInvariant($value);
 	}
 
 	/**
@@ -135,7 +135,7 @@ class OmniDecimalOrNull extends OmniType {
 	public static function ImportDomValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
-		return floatval($value);
+		return Language::ParseDecimalInvariant($value);
 	}
 
 	/**
@@ -144,10 +144,10 @@ class OmniDecimalOrNull extends OmniType {
 	 */
 	public static function ImportHttpValue($value) {
 		if (is_null($value)) return null;
-        if (!is_numeric($value)) return null;
+    if (!is_numeric($value)) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();
-		return floatval($value);
+		return Language::ParseDecimal($value);
 	}
 }
 
