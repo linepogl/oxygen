@@ -467,6 +467,12 @@ class Oxygen {
 
 
 
+	public static function SetDatabase($server,$schema,$username,$password,$type=Database::MYSQL) {
+		Database::ConnectLazily($server,$schema,$username,$password,$type=Database::MYSQL);
+	}
+	public static function SetDatabaseManaged($server,$schema,$username,$password,$type=Database::MYSQL) {
+		Database::ConnectLazilyManaged($server,$schema,$username,$password,$type=Database::MYSQL);
+	}
 
 
 
