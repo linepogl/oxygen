@@ -66,31 +66,41 @@ abstract class XItem implements Serializable,OmniValue {
 
 	public function OmniType(){ return OmniItem::Type(); }
 	public function serialize(){
-		$a = array();
-		$meta = $this->Meta();
-		$a['id'] = serialize($this->id);
-		$a['has_temp_id'] = serialize($this->has_temp_id);
-		/** @var $f XField */
-		foreach ($meta->GetFields() as $f){
-			$n = $f->GetName();
-			$a[$n] = serialize($this->$n);
+		try {
+			$a = array();
+			$meta = $this->Meta();
+			$a['id'] = serialize($this->id);
+			$a['has_temp_id'] = serialize($this->has_temp_id);
+			/** @var $f XField */
+			foreach ($meta->GetFields() as $f){
+				$n = $f->GetName();
+				$a[$n] = serialize($this->$n);
+			}
+			return json_encode($a);
 		}
-		return json_encode($a);
+		catch (Exception $ex){
+			Debug::RecordException($ex);
+		}
 	}
 	public function unserialize($data){
-		$a = json_decode($data,true);
-		foreach ($a as $key=>$value)
-			$this->$key = unserialize($value);
-		$c = $this->Meta();
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
-			$slaves = $cx->GetDBSlaves();
-			/** @var $sl XSlave */
-			foreach ($slaves as $sl) {
-				$n = $sl->GetName();
-				$this->$n = $sl->SeekItemsByMaster($this);
+		try {
+			$a = json_decode($data,true);
+			foreach ($a as $key=>$value)
+				$this->$key = unserialize($value);
+			$c = $this->Meta();
+			for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+				$slaves = $cx->GetDBSlaves();
+				/** @var $sl XSlave */
+				foreach ($slaves as $sl) {
+					$n = $sl->GetName();
+					$this->$n = $sl->SeekItemsByMaster($this);
+				}
 			}
+			$this->OnLoad();
 		}
-		$this->OnLoad();
+		catch (Exception $ex){
+			Debug::RecordException($ex);
+		}
 	}
 
 	private function Init(){
