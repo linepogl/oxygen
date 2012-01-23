@@ -66,21 +66,16 @@ abstract class XItem implements Serializable,OmniValue {
 
 	public function OmniType(){ return OmniItem::Type(); }
 	public function serialize(){
-		try {
-			$a = array();
-			$meta = $this->Meta();
-			$a['id'] = serialize($this->id);
-			$a['has_temp_id'] = serialize($this->has_temp_id);
-			/** @var $f XField */
-			foreach ($meta->GetFields() as $f){
-				$n = $f->GetName();
-				$a[$n] = serialize($this->$n);
-			}
-			return json_encode($a);
+		$a = array();
+		$meta = $this->Meta();
+		$a['id'] = serialize($this->id);
+		$a['has_temp_id'] = serialize($this->has_temp_id);
+		/** @var $f XField */
+		foreach ($meta->GetFields() as $f){
+			$n = $f->GetName();
+			$a[$n] = serialize($this->$n);
 		}
-		catch (Exception $ex){
-			Debug::RecordException($ex);
-		}
+		return json_encode($a);
 	}
 	public function unserialize($data){
 		try {
