@@ -103,6 +103,9 @@ class Debug {
 		if (is_float($value)) return '{float:'.$value.'}';
 		if (is_bool($value)) return '{bool:'.($value?'true':'false').'}';
 		if ($value instanceof ID) return '{id:'.$value->AsHex().'|'.$value->AsInt().'}';
+		if ($value instanceof XDate) return '{XDate:'.$value->Format('Y-m-d').'}';
+		if ($value instanceof XTime) return '{XDate:'.$value->Format('H:i:s').'}';
+		if ($value instanceof XDateTime) return '{XDate:'.$value->Format('Y-m-d H:i:s').'}';
 		if (is_array($value)) {
 			$r = '{array:'.count($value).':';
 			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }

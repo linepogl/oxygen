@@ -41,7 +41,7 @@ class XDateTime implements Serializable, OmniValue {
 
 	/** @return XTimeSpan */
 	public function Diff(XDateTime $value){
-		return new XTimeSpan($this->GetTimestamp() - $value->GetTimestamp());
+		return new XTimeSpan(($this->GetTimestamp() - $value->GetTimestamp())*1000);
 	}
 
 	/** @return XDateTime */

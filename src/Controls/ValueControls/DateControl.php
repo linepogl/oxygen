@@ -160,7 +160,8 @@ DateControl extends ValueControl {
 		echo "$('".$this->name."box').value=day+'/'+month+'/'+year;";
 		echo "$('".$this->name."').value=year+''+month+''+day+'000000';";
 		echo '}';
-		echo "$('".$this->name."calendar').hide();";
+		echo "var calendar = $('".$this->name."calendar');";
+		echo "if (calendar != null) calendar.hide();";
 		echo $this->on_change;
 		echo "};";
 

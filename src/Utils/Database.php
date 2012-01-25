@@ -9,12 +9,13 @@ class DatabaseConnection {
 	public $password = null;
 	public $type = null;
 	public $is_managed = false;
-	public function __construct($server,$schema,$username,$password,$type){
+	public function __construct($server,$schema,$username,$password,$type,$is_managed){
 		$this->server = $server;
 		$this->schema = $schema;
 		$this->username = $username;
 		$this->password = $password;
 		$this->type = $type;
+		$this->is_managed = $is_managed;
 	}
 }
 
@@ -71,7 +72,7 @@ class Database {
 	public static function CreateSchema($server,$schema,$username,$password,$type=self::MYSQL){
 		if ($type == self::MYSQL){
 			self::PushConnection();
-			self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
+			self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
 			try{
 				$a = explode(':',$server);
 				self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';charset='.Oxygen::GetCharset(), $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
@@ -134,8 +135,7 @@ class Database {
 	 */
 	public static function ConnectManaged($server,$schema,$username,$password,$type=self::MYSQL){
 		while(self::IsConnected()) self::Disconnect();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
-		self::$cx->is_managed = true;
+		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,true) );
 		try {
 			self::RequireConnection();
 		}
@@ -157,7 +157,7 @@ class Database {
 	 */
 	public static function Connect($server,$schema,$username,$password,$type=self::MYSQL){
 		self::PushConnection();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
+		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
 		try {
 			self::RequireConnection();
 		}
@@ -170,15 +170,14 @@ class Database {
 
 	public static function ConnectLazily($server,$schema,$username,$password,$type=self::MYSQL){
 		self::PushConnection();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
+		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
 		self::ResetCaches();
 	}
 
 	public static function ConnectLazilyManaged($server,$schema,$username,$password,$type=self::MYSQL){
 		while(self::IsConnected()) self::Disconnect();
 		self::PushConnection();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type) );
-		self::$cx->is_managed = true;
+		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,true) );
 		self::ResetCaches();
 	}
 
