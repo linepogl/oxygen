@@ -59,7 +59,7 @@ final class Html extends ExportConverter {
 //
 //
 //	  if ( is_float($this->value) ) {
-//	  	$r = Language::FormatDecimal($this->value);
+//	  	$r = Language::FormatNumber($this->value);
 //		  return $r;
 //	  }
 //

@@ -39,8 +39,10 @@
 	<lemma name="LockedAccount"><en>Locked account</en><fr>Compte bloqué</fr><el>Κλειδωμένος λογαριασμός</el></lemma>
 	<lemma name="File"><en>File</en><fr>Fichier</fr><el>Αρχείο</el></lemma>
 	<lemma name="Date"><en>Date</en><fr>Date</fr><el>Ημερομηνία</el></lemma>
+	<lemma name="Time"><en>Time</en><fr>Heure</fr><el>Ώρα</el></lemma>
 	<lemma name="Today"><en>Today</en><fr>Aujourd'hui</fr><el>Σήμερα</el></lemma>
 	<lemma name="Tomorrow"><en>Tomorrow</en><fr>Demain</fr><el>Αύριο</el></lemma>
+	<lemma name="Now"><en>Now</en><fr>Maintenant</fr><el>Τώρα</el></lemma>
 	<lemma name="xDays"><en>%s days</en><fr>%s jours</fr><el>%s jours</el></lemma>
 
 	<lemma name="Submit"><en>Submit</en><fr>Soumettre</fr><el>Αποστολή</el></lemma>
@@ -283,7 +285,8 @@
 
 
 	<lemma name="ThousandsSeparator"><en>,</en><fr> </fr><el>.</el></lemma>
-	<lemma name="DecimalPoint"><en>.</en><fr>,</fr><el>,</el></lemma>
+	<lemma name="DecimalSeparator"><en>.</en><fr>,</fr><el>,</el></lemma>
+	<!-- deprecated --><lemma name="DecimalPoint"><en>.</en><fr>,</fr><el>,</el></lemma>
 
 	<lemma name="unit:byte"><en>B</en><fr>o</fr><el>B</el></lemma>
 

@@ -57,7 +57,7 @@ class OmniDecimal extends OmniType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		return sprintf('%F',$value);
+		return Language::FormatDecimalInvariant($value);
 	}
 
 	/**
@@ -74,17 +74,17 @@ class OmniDecimal extends OmniType {
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		return sprintf('%F',$value);
+		return Language::FormatDecimalInvariant($value);
 	}
 
 	/** @return string */
 	public static function GetJsFunctionImportHtmlValue(){
-		echo "function(value){ return decimal.parse(value); }";
+		echo "function(value){ return decimal.parse(value); }";  // TODO: use language-specific conversion
 	}
 
 	/** @return string */
 	public static function GetJsFunctionExportHtmlString(){
-		echo "function(value){ return decimal.parse(value); }";
+		echo "function(value){ return decimal.parse(value); }";  // TODO: use language-specific conversion
 	}
 
 	/**
@@ -92,7 +92,7 @@ class OmniDecimal extends OmniType {
 	 * @return string
 	 */
 	public static function ExportXmlString($value) {
-		return sprintf('%F',$value);
+		return Language::FormatDecimalInvariant($value);
 	}
 
 	/**
@@ -100,7 +100,7 @@ class OmniDecimal extends OmniType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return sprintf('%F',$value);
+		return Language::FormatDecimal($value);
 	}
 
 	/**
@@ -116,7 +116,7 @@ class OmniDecimal extends OmniType {
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		return sprintf('%F',$value);
+		return self::EncodeAsUrlString(Language::FormatDecimal($value));
 	}
 
 	/**
@@ -124,7 +124,7 @@ class OmniDecimal extends OmniType {
 	 * @return float
 	 */
 	public static function ImportDBValue($value) {
-		return floatval($value);
+		return Language::ParseDecimalInvariant($value,0.0);
 	}
 
 	/**
@@ -132,7 +132,7 @@ class OmniDecimal extends OmniType {
 	 * @return float
 	 */
 	public static function ImportDomValue($value) {
-		return floatval($value);
+		return Language::ParseDecimalInvariant($value,0.0);
 	}
 
 	/**
@@ -141,7 +141,7 @@ class OmniDecimal extends OmniType {
 	 */
 	public static function ImportHttpValue($value) {
 		if (is_array($value)) throw new ConvertionException();
-		return floatval($value);
+		return Language::ParseDecimal($value,0.0);
 	}
 
 }

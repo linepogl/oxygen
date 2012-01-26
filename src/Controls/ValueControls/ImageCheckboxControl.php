@@ -29,36 +29,13 @@ class ImageCheckboxControl extends ValueControl {
 	private $style = '';
 	public function WithStyle($value){ $this->style=$value; return $this; }
 
-	public function Render(){
-		if ($this->mode == UIMode::Edit){
-			echo HiddenControl::Make($this->name,$this->value);
+	private $is_readonly = false;
+	public function WithReadOnly($value){ $this->is_readonly = $value; return $this; }
 
-			echo Js::BEGIN;
-			echo "var ".$this->name . "_is_dirty = ".new Js($this->is_dirty).";";
-			echo $this->name . "_SetValue = function(value){";
-			echo "changed = $(".new Js($this->name).").value != value;";
-			echo "$(".new Js($this->name).").value = value;";
-			echo "if (".$this->name."_is_dirty){";
-			echo "$(".new Js($this->name.'_img').").src= $(".new Js($this->name).").value=='true' ? ".new Js($this->checked_readonly_image)." : ".new Js($this->unchecked_readonly_image).";";
-			echo "}";
-			echo "else {";
-			echo "$(".new Js($this->name.'_img').").src= $(".new Js($this->name).").value=='true' ? ".new Js($this->checked_image)." : ".new Js($this->unchecked_image).";";
-			echo "}";
-			echo "if (changed){";
-			echo $this->on_change;
-			echo "}";
-			echo "};";
-			echo $this->name . "_IsDirty = function(){";
-			echo "return ".$this->name . "_is_dirty;";
-			echo "};";
-			echo $this->name . "_SetDirty = function(dirty){";
-			echo $this->name . "_is_dirty = dirty;";
-			echo $this->name."_SetValue(\$F(".new Js($this->name)."));";
-			echo "};";
-			echo $this->name . "_Toggle = function(){";
-			echo $this->name."_SetValue(\$F(".new Js($this->name).")=='true' ? 'false' : 'true');";
-			echo "};";
-			echo Js::END;
+	public function Render(){
+
+		echo HiddenControl::Make($this->name,$this->value);
+		if ($this->mode == UIMode::Edit && !$this->is_readonly){
 			echo '<a class="imagecheckbox" href="javascript:'.$this->name.'_Toggle();" style="white-space:nowrap;'.$this->style.'"><img id="'.$this->name.'_img" src="'.($this->is_dirty ? ($this->value ? $this->checked_readonly_image : $this->unchecked_readonly_image) : ($this->value ? $this->checked_image : $this->unchecked_image)) . '" alt="" />';
 			if ($this->show_label){
 				if (!is_null($this->icon)) echo $this->icon . new Spacer(3);
@@ -73,8 +50,37 @@ class ImageCheckboxControl extends ValueControl {
 				if (!is_null($this->icon)) echo $this->icon . new Spacer(3);
 				echo new Html($this->label);
 			}
-			echo '</style>';
+			echo '</span>';
 		}
+
+
+		echo Js::BEGIN;
+		echo "var ".$this->name . "_is_dirty = ".new Js($this->is_dirty).";";
+		echo $this->name . "_SetValue = function(value){";
+		echo "changed = $(".new Js($this->name).").value != value;";
+		echo "$(".new Js($this->name).").value = value;";
+		echo "if (".$this->name."_is_dirty){";
+		echo "$(".new Js($this->name.'_img').").src= $(".new Js($this->name).").value=='true' ? ".new Js($this->checked_readonly_image)." : ".new Js($this->unchecked_readonly_image).";";
+		echo "}";
+		echo "else {";
+		echo "$(".new Js($this->name.'_img').").src= $(".new Js($this->name).").value=='true' ? ".new Js($this->checked_image)." : ".new Js($this->unchecked_image).";";
+		echo "}";
+		echo "if (changed){";
+		echo $this->on_change;
+		echo "}";
+		echo "};";
+		echo $this->name . "_IsDirty = function(){";
+		echo "return ".$this->name . "_is_dirty;";
+		echo "};";
+		echo $this->name . "_SetDirty = function(dirty){";
+		echo $this->name . "_is_dirty = dirty;";
+		echo $this->name."_SetValue(\$F(".new Js($this->name)."));";
+		echo "};";
+		echo $this->name . "_Toggle = function(){";
+		echo $this->name."_SetValue(\$F(".new Js($this->name).")=='true' ? 'false' : 'true');";
+		echo "};";
+		echo Js::END;
+
 	}
 
 

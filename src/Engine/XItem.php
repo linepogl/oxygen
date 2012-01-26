@@ -78,19 +78,24 @@ abstract class XItem implements Serializable,OmniValue {
 		return json_encode($a);
 	}
 	public function unserialize($data){
-		$a = json_decode($data,true);
-		foreach ($a as $key=>$value)
-			$this->$key = unserialize($value);
-		$c = $this->Meta();
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
-			$slaves = $cx->GetDBSlaves();
-			/** @var $sl XSlave */
-			foreach ($slaves as $sl) {
-				$n = $sl->GetName();
-				$this->$n = $sl->SeekItemsByMaster($this);
+		try {
+			$a = json_decode($data,true);
+			foreach ($a as $key=>$value)
+				$this->$key = unserialize($value);
+			$c = $this->Meta();
+			for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+				$slaves = $cx->GetDBSlaves();
+				/** @var $sl XSlave */
+				foreach ($slaves as $sl) {
+					$n = $sl->GetName();
+					$this->$n = $sl->SeekItemsByMaster($this);
+				}
 			}
+			$this->OnLoad();
 		}
-		$this->OnLoad();
+		catch (Exception $ex){
+			Debug::RecordException($ex);
+		}
 	}
 
 	private function Init(){
@@ -126,7 +131,7 @@ abstract class XItem implements Serializable,OmniValue {
 				$sql = 'SELECT '.$cx->id->GetDBName();
 				/** @var $f XField */
 				foreach ($fields as $f)
-					$sql .= ',' . $f->GetDBName();
+					$sql .= ',' . new SqlName( $f->GetDBName() );
 				$sql .= ' FROM '.$cx->GetDBTableName();
 				$sql .= ' WHERE '.$cx->id->GetDBName().'=?';
 
@@ -599,7 +604,7 @@ abstract class XItem implements Serializable,OmniValue {
 		if (!is_null($where)) $sql .= ' WHERE '.$where;
 		if (!is_null($orderby)) $sql .= ' ORDER BY '.$orderby;
 
-		return Database::ExecuteListOfX($meta_field->GetType(),$sql,$params);
+		return Database::ExecuteColumnOfX($meta_field->GetType(),$sql,$params);
 	}
 
 	/** @return GenericID */

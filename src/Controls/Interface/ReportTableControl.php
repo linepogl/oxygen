@@ -203,6 +203,7 @@ class ReportTableControl extends ValueControl {
 		$count_rows = count($this->rows);
 		$count_cols = 0; foreach ($this->cells as &$a){ $x = count($a); if ($x > $count_cols) $count_cols = $x; }
 		$has_values = false; foreach ($this->row_has_value as &$b) if ($b) { $has_values = true; break; }
+		$displayed_row_number = $this->begin_numbering_from;
 
 		echo new HiddenControl($this->name,$this->value);
 
@@ -299,7 +300,7 @@ class ReportTableControl extends ValueControl {
 				if (!is_null($this->rows[$i]))
 					echo '<th class="number hright">' . $this->rows[$i] . '</th>';
 				elseif ($this->row_mode[$i] == self::NORMAL)
-					echo '<th class="number hright">'.($i+$this->begin_numbering_from).'.</th>';
+					echo '<th class="number hright">'.( $displayed_row_number++ ).'.</th>';
 				else
 					echo '<th class="number hright">' . new Spacer(). '</th>';
 			}

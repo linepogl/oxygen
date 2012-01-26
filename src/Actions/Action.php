@@ -8,6 +8,7 @@ abstract class Action implements OmniValue {
 	}
 	public static function Make() { return new static(); }
 	public final static function GetName() { return substr(get_called_class(),6); }
+	public final static function GetClassName() { return get_called_class(); }
 	public function IsActive(){ return Oxygen::GetActionName() == $this->GetName(); }
 
 
@@ -43,21 +44,28 @@ abstract class Action implements OmniValue {
 	public function GetTitle(){ return Lemma::Retrieve($this->GetName()); }
 	public function GetPathTitle(){ return $this->GetTitle(); }
 	public function GetDescription(){ return ''; }
-	public function GetParentAction(){ return null; }
-	public function GetPath(){ $r = array(); for ($act = $this; !is_null($act); $act = $act->GetParentAction()) $r[] = $act; return array_reverse($r); }
-	public function GetMenu() { return new Menu(); }
+	/** @return Action */ public function GetParentAction(){ return null; }
+	public function GetPath() { $r = array(); for ($act = $this; !is_null($act); $act = $act->GetParentAction()) $r[] = $act; return array_reverse($r); }
+
+
+	/**
+	 * @deprecated
+	 * @return Menu
+	 */
+	public function GetMenu(){ return new Menu(); }
 
 
 	public function GetButtonTitle(){ return $this->GetTitle(); }
 	public function GetButtonCssClass(){ return ''; }
 	/** @return ButtonControl */
-	public function GetButton() { return ButtonControl::Make()->WithValue($this->GetButtonTitle())->WithOnClick($this->GetHrefJavascript())->WithCssClass($this->GetButtonCssClass()); }
+	public function GetButton($args=array()) { return ButtonControl::Make()->WithValue($this->GetButtonTitle())->WithOnClick($this->GetJSCommand($args))->WithCssClass($this->GetButtonCssClass()); }
 
 	public abstract function IsPermitted();
 	public function IsLogical(){ return true; }
 	public function RequiresLogin(){ return true; }
 	public function IsTitleHidden(){ return false; }
 
+	public function IsMenu(){ return false; }
 	public function IsMenuSeparator(){ return false; }
 
 	public abstract function Render();
@@ -104,23 +112,29 @@ abstract class Action implements OmniValue {
 					Debug::WriteException($ex);
 				}
 				else {
-					$c = Oxygen::GetLoginControl()->WithMessage($ex->getMessage())->WithRedirectOnSuccess($this);
-					if ($c->WrapAsException()){
-						echo '<table class="center"><tr><td>';
-						echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
-						echo '<table cellspacing="0" cellpadding="15" border="0"><tr>';
-						echo '<td style="text-align:right;vertical-align:top;padding-top:50px;"><img src="oxy/ico/Warning32.gif" /></td>';
-						echo '<td>'.new Spacer(1,150).'</td>';
-						echo '<td style="border-left:1px solid #dddddd;text-align:left;">';
-						echo new Spacer(350);
+					$c = Oxygen::GetLoginControl();
+					if (is_null($c)){
+						echo $ex->getMessage();
 					}
-					$c->Render();
-					if ($c->WrapAsException()){
-						echo new Spacer(350);
-						echo '</td>';
-						echo '</tr></table>';
-						echo '</td></tr></table>';
-						echo '</td></tr></table>';
+					else {
+						$c = $c->WithMessage($ex->getMessage())->WithRedirectOnSuccess($this);
+						if ($c->WrapAsException()){
+							echo '<table class="center"><tr><td>';
+							echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
+							echo '<table cellspacing="0" cellpadding="15" border="0"><tr>';
+							echo '<td style="text-align:right;vertical-align:top;padding-top:50px;"><img src="oxy/ico/Warning32.gif" /></td>';
+							echo '<td>'.new Spacer(1,150).'</td>';
+							echo '<td style="border-left:1px solid #dddddd;text-align:left;">';
+							echo new Spacer(350);
+						}
+						$c->Render();
+						if ($c->WrapAsException()){
+							echo new Spacer(350);
+							echo '</td>';
+							echo '</tr></table>';
+							echo '</td></tr></table>';
+							echo '</td></tr></table>';
+						}
 					}
 				}
 			}
@@ -308,6 +322,14 @@ abstract class Action implements OmniValue {
 
 
 
+	public function GetFilterForm($name) {
+		$r = '<form'.(is_null($name)?'':' id="'.$name.'"').' method="get" action="'.new Html(Oxygen::GetCurrentPhpScript()).'"><div class="inline">';
+		$a = func_get_args();
+		$a = array_splice($a,1);
+		foreach ($_GET as $key=>$value) if (!in_array($key,$a,true)) $r .= HiddenControl::Make($key,$value);
+		return $r;
+	}
+	public function EndFilterForm(){ return '</div></form>'; }
 
 }
 

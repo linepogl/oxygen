@@ -1,20 +1,26 @@
 <?php
 
 
-class Menu implements IteratorAggregate, ArrayAccess, Countable {
+class Menu extends Action implements IteratorAggregate, ArrayAccess, Countable {
 	private $items = array();
 	private $pending_separator = null;
+
+	public function IsMenu(){ return true; }
+	public function Render() { }
 
 	private $Title;
 	public function WithTitle($value){ $this->Title = $value; return $this; }
 	public function GetTitle(){ return $this->Title; }
 
+	public function IsLogical(){
+		return count($this->items) > 0;
+	}
 	public function IsPermitted(){
-		foreach ($this->items as $item)
-			if (!$item->IsPermitted())
-				return false;
 		return true;
 	}
+
+
+
 	public function AddSeparator(){
 		$this->Add(new MenuSeparator());	
 	}

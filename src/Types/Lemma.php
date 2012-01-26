@@ -107,6 +107,9 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 				return false;
 		return true;
 	}
+	public function HasLanguage($lang = null){
+		return isset($this->data[  is_null($lang) ? Oxygen::$lang : $lang ]);
+	}
 	public function HasAllLanguages(){
 		foreach (Oxygen::$langs as $lang)
 			if (trim($this[$lang]) == '')

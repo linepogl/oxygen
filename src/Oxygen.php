@@ -30,7 +30,7 @@ class Oxygen {
 
 
 		// init url handling
-		self::$php_script = basename( $_SERVER['SCRIPT_NAME'] , '.php' );
+		self::$php_script = basename( $_SERVER['SCRIPT_NAME'] );
 		foreach (self::$url_pins as $key=>$value)
 			self::$url_pins[$key] = Http::$GET[$key]->AsString();
 		self::$idWindow = Http::$GET['window']->AsID();
@@ -287,8 +287,11 @@ class Oxygen {
 		self::$class_files = Scope::$APPLICATION['Oxygen::ClassFiles'];
 		if (is_null(self::$class_files)) {
 			self::$class_files = array();
-			foreach (self::$code_folders as $folder)
-				self::LoadClassFilesRecursively($folder);
+			foreach (self::$code_folders as $folder) {
+				if (is_dir($folder)) { // important!
+					self::LoadClassFilesRecursively($folder);
+				}
+			}
 			Scope::$APPLICATION['Oxygen::ClassFiles'] = self::$class_files;
 			self::$just_loaded_class_files = true;
 		}
@@ -372,7 +375,7 @@ class Oxygen {
 			$s .= '=';
 			$s .= new Url( $value );  // <---- this one costs a lot!
 		}
-		return self::$php_script.'.php' . $s;
+		return self::$php_script . $s;
 	}
 
 
@@ -464,6 +467,12 @@ class Oxygen {
 
 
 
+	public static function SetDatabase($server,$schema,$username,$password,$type=Database::MYSQL) {
+		Database::ConnectLazily($server,$schema,$username,$password,$type=Database::MYSQL);
+	}
+	public static function SetDatabaseManaged($server,$schema,$username,$password,$type=Database::MYSQL) {
+		Database::ConnectLazilyManaged($server,$schema,$username,$password,$type=Database::MYSQL);
+	}
 
 
 
@@ -527,7 +536,7 @@ class Oxygen {
 
 
 		echo '<script type="text/javascript" src="oxy/jsc/oxygen.js"></script>';
-		echo '<link href="oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
+		echo '<link href="oxy/css/oxygen.css?'.rand().'" rel="stylesheet" type="text/css" />';
 		echo '<link href="favicon.ico" rel="icon" type="image/x-icon" />';
 
 		$r = ob_get_clean();
@@ -547,6 +556,12 @@ class Oxygen {
 	/** @return LoginControlBase */
 	public static function GetLoginControl(){
 		if (is_null(self::$login_control)){
+			try {
+				new ReflectionClass('LoginControl'); // <-- this will throw a mere exception if the class is not found, which will prevent a nasty FATAL php error in the next line.
+			}
+			catch (Exception $ex){
+				return null;
+			}
 			self::$login_control = new LoginControl();
 		}
 		return self::$login_control;
