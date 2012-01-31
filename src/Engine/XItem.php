@@ -75,11 +75,11 @@ abstract class XItem implements Serializable,OmniValue {
 			$n = $f->GetName();
 			$a[$n] = serialize($this->$n);
 		}
-		return json_encode($a);
+		return serialize($a);
 	}
 	public function unserialize($data){
 		try {
-			$a = json_decode($data,true);
+			$a = unserialize($data);
 			foreach ($a as $key=>$value)
 				$this->$key = unserialize($value);
 			$c = $this->Meta();
