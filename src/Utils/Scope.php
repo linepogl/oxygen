@@ -14,7 +14,7 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 	/** @var Scope */ public static $REQUEST;
 
 	public static function IsAPCAvailable(){
-		return function_exists('apc_add') && function_exists('apc_exists'); // because apc_exists was added later on in 3.1.something
+		return function_exists('apc_add') && function_exists('apc_exists'); // because apc_exists was added later on, in 3.1.4
 	}
 	public static function InitScopes(){
 		self::$is_apc_available = self::IsAPCAvailable();
