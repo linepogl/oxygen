@@ -52,3 +52,7 @@ if (Database::BeginPatch('v',12,'Remove unhandled exceptions')) {
 	Database::ExecuteDropTable('oxy_unhandled_exceptions');
 	Database::ApplyPatch();
 }
+if (Database::BeginPatch('v',13,'Remove local lemmata')) {
+	Database::ExecuteDropTable('oxy_local_lemmas');
+	Database::ApplyPatch();
+}

@@ -26,7 +26,7 @@ class Oxygen {
 		if (!self::HasTempFolder()) self::MakeTempFolder();
 		self::ClearTempFolderFromOldFiles();
 		Debug::Init();
-		Lemma::LoadBasicDictionary();
+		Lemma::LoadDictionary();
 
 
 		// init url handling
@@ -278,7 +278,7 @@ class Oxygen {
 	public static function GetCodeFolders(){ return self::$code_folders; }
 	public static function AddCodeFolder($folder) { if (!in_array($folder,self::$code_folders)) self::$code_folders[] = $folder; }
 	private static $class_files = null;
-	private static $just_loaded_class_files = false;
+	private static $class_files_reloaded = false;
 	private static function ReloadClassFiles(){
 		Scope::$APPLICATION['Oxygen::ClassFiles'] = null;
 		self::LoadClassFiles();
@@ -293,7 +293,7 @@ class Oxygen {
 				}
 			}
 			Scope::$APPLICATION['Oxygen::ClassFiles'] = self::$class_files;
-			self::$just_loaded_class_files = true;
+			self::$class_files_reloaded = true;
 		}
 	}
 	private static function LoadClassFilesRecursively($folder){
@@ -316,9 +316,9 @@ class Oxygen {
 
 	public static function FindClassFile($class){
 		$r = null;
-		self::LoadClassFiles();
+		if (is_null(self::$class_files)) self::LoadClassFiles();
 		$b = isset(self::$class_files[$class]); if ($b) $r = self::$class_files[$class];
-		if (!self::$just_loaded_class_files) {
+		if (!self::$class_files_reloaded) {
 			if ($b) {
 				if (!file_exists($r)) {
 					self::ReloadClassFiles();
