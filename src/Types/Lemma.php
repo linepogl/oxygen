@@ -1,6 +1,11 @@
 <?php
 
 
+
+
+
+
+
 class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 	private $name;
 	private $data = array();
@@ -48,7 +53,7 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 	}
 
 
-	/*
+	/**
 	 * new Lemma($array)
 	 * new Lemma($encoded_string)
 	 * new Lemma($lang_value_pairs)
@@ -121,21 +126,36 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 
 
 
-	public static function __callStatic($name, $arguments) { return Lemma::Retrieve($name); }
 
-	private static $basic_dictionary = array();
-	private static $local_dictionary = array();
-	private static $current_dictionary = null;
-	public static function GetBasicDictionary(){ return self::$basic_dictionary; }
-	public static function GetLocalDictionary(){ return self::$local_dictionary; }
 
+
+
+
+
+
+
+
+	//
+	//
+	// Dictionary
+	//
+	//
+	private static $dictionary = null;          // $name => $lemma
+	private static $packed_dictionary = null;   // $name => serialize( $lemma->data )
 	public static function Retrieve($name){
-		return isset(self::$current_dictionary[$name]) ? self::$current_dictionary[$name] : new Lemma($name);
+		return isset(self::$dictionary[$name]) ? self::$dictionary[$name] : self::Unpack($name);
 	}
 	public static function Sprintf($name){
 		$a = func_get_args();
 		$a = array_splice($a,1);
 		return vsprintf(Lemma::Retrieve($name),$a);
+	}
+	private static function Unpack($name){
+		$l = new Lemma($name);
+		if (isset(self::$packed_dictionary[$name])) {
+			$l->data = unserialize(self::$packed_dictionary[$name]);
+		}
+		return $l;
 	}
 
 
@@ -146,98 +166,49 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 		foreach ($files as $f) if (file_exists($f)) $r .= $f . strval(filemtime($f));
 		return $r;
 	}
-
-	//
-	//
-	// Basic Dictionary
-	//
-	//
-	private static function IsBasicDictionaryLoaded($files){
-		if (!isset(Scope::$APPLICATION['Lemma::basic_dictionary'])) return false;
-		if (!isset(Scope::$APPLICATION['Lemma::basic_dictionary_filelist'])) return false;
-		return self::MakeFileList($files) == Scope::$APPLICATION['Lemma::basic_dictionary_filelist'];
+	private static function IsDictionaryLoaded($files){
+		if (!isset(Scope::$APPLICATION['Lemma::packed_dictionary'])) return false;
+		if (!isset(Scope::$APPLICATION['Lemma::dictionary_filelist'])) return false;
+		return self::MakeFileList($files) == Scope::$APPLICATION['Lemma::dictionary_filelist'];
 	}
-	private static function SaveBasicDictionary($files){
-		Scope::$APPLICATION['Lemma::basic_dictionary'] = self::$basic_dictionary;
-		Scope::$APPLICATION['Lemma::basic_dictionary_filelist'] = self::MakeFileList($files);
+	private static function SaveDictionary($files){
+		Scope::$APPLICATION['Lemma::packed_dictionary'] = self::$packed_dictionary;
+		Scope::$APPLICATION['Lemma::dictionary_filelist'] = self::MakeFileList($files);
 	}
-	public static function LoadBasicDictionary(){
+	public static function LoadDictionary(){
 		$files = Oxygen::GetDictionaryFiles();
-    if (self::IsBasicDictionaryLoaded($files))
-			self::$basic_dictionary = Scope::$APPLICATION['Lemma::basic_dictionary'];
+    if (self::IsDictionaryLoaded($files)) {
+	    self::$dictionary = array();
+	    self::$packed_dictionary = Scope::$APPLICATION['Lemma::packed_dictionary'];
+    }
     else {
-			self::$basic_dictionary = array();
+	    self::$dictionary = array();
+	    self::$packed_dictionary = array();
 			foreach ($files as $f) {
 				if (!file_exists($f)) continue;
 				$xml = new DOMDocument();
 				$xml->load($f);
 				foreach ($xml->getElementsByTagName('lemma') as $e) {
 					$name = $e->getAttribute('name');
-					if (!array_key_exists($name,self::$basic_dictionary)){
+					if (!array_key_exists($name,self::$dictionary)){
 						$x = new Lemma();
 						$x->name = $name;
-						self::$basic_dictionary[$name] = $x;
+						self::$dictionary[$name] = $x;
 					}
-					$l = self::$basic_dictionary[$name];
+					$l = self::$dictionary[$name];
 					foreach ($e->getElementsByTagName('*') as $ee){
 						$l->data[$ee->nodeName] = Oxygen::ReadUnicode( $ee->nodeValue );
 					}
+					self::$packed_dictionary[$name] = serialize($l->data);
 				}
 			}
-			self::SaveBasicDictionary($files);
+			self::SaveDictionary($files);
 		}
-		self::$current_dictionary =& self::$basic_dictionary;
 	}
 
 
 
 
-
-
-
-	//
-	//
-	// Local Dictionary
-	//
-	//
-	private static function IsLocalDictionaryLoaded($files){
-		if (!self::IsBasicDictionaryLoaded($files)) return false;
-		if (!isset(Scope::$DATABASE['Lemma::local_dictionary'])) return false;
-		if (!isset(Scope::$DATABASE['Lemma::local_dictionary_filelist'])) return false;
-		return self::MakeFileList($files) == Scope::$DATABASE['Lemma::local_dictionary_filelist'];
-	}
-	private static function SaveLocalDictionary($files){
-		Scope::$DATABASE['Lemma::local_dictionary'] = self::$local_dictionary;
-		Scope::$DATABASE['Lemma::local_dictionary_filelist'] = self::MakeFileList($files);
-	}
-	public static function ReloadLocalDictionary(){
-		Scope::$DATABASE['Lemma::local_dictionary'] = null;
-		Scope::$DATABASE['Lemma::local_dictionary_filelist'] = null;
-		self::LoadBasicDictionary();
-	}
-	public static function LoadLocalDictionary(){
-		$files = Oxygen::GetDictionaryFiles();
-    if (self::IsLocalDictionaryLoaded($files))
-			self::$local_dictionary = Scope::$DATABASE['Lemma::local_dictionary'];
-    else {
-			self::$local_dictionary = array();
-			foreach (self::$basic_dictionary as $key=>$value)
-				self::$local_dictionary[$key] = $value;
-	    /** @var $local_lemma LocalLemma */
-			foreach (LocalLemma::SeekAggressively() as $local_lemma){
-				$key = $local_lemma->Name;
-				if (array_key_exists($key,self::$local_dictionary))
-					self::$local_dictionary[$key] = self::Merge(self::$local_dictionary[$key],$local_lemma->Overlap);
-				else
-					self::$local_dictionary[$key] = $local_lemma->Overlap;
-			}
-			self::SaveLocalDictionary($files);
-		}
-		self::$current_dictionary =& self::$local_dictionary;
-	}
-	public static function UnloadLocalDictionary(){
-		self::$current_dictionary =& self::$basic_dictionary;
-	}
 
 
 

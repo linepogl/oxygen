@@ -117,7 +117,7 @@ class Database {
 			}
 			if (self::$cx->is_managed){
 				self::Upgrade();
-				Lemma::LoadLocalDictionary();
+				//Lemma::LoadLocalDictionary();
 			}
 		}
 	}

@@ -48,7 +48,7 @@ final class Progress {
 
 	}
 	public static function Finish(Message $m=null){
-		self::AddLogEntry(is_null($m) ? new SuccessMessage(Lemma::MsgProgressCompleted()) : $m);
+		self::AddLogEntry(is_null($m) ? new SuccessMessage(Lemma::Retrieve('MsgProgressCompleted')) : $m);
 		self::SetProgress(1.0);
 		self::SetFinished(true);
 	}
@@ -58,7 +58,7 @@ final class Progress {
 	private static function CheckCancelled(){
 		if(!self::HasFinished())
 			if (self::IsCancelled())
-				throw new MessageException(new ErrorMessage(Lemma::MsgProgressCancelled()));
+				throw new MessageException(new ErrorMessage(Lemma::Retrieve('MsgProgressCancelled')));
 	}
 
 
