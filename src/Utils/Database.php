@@ -80,14 +80,14 @@ class Database {
 			}
 			catch (Exception $ex){
 				self::PopConnection();
-				throw new ApplicationException(Lemma::MsgCannotConnectToDatabase().'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
+				throw new ApplicationException(Lemma::Retrieve('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
 			}
 			try{
 				Database::Execute('CREATE DATABASE '.new SqlName($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
 			}
 			catch (Exception $ex){
 				self::PopConnection();
-				throw new ApplicationException(Lemma::MsgCannotCreateDatabase().'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
+				throw new ApplicationException(Lemma::Retrieve('MsgCannotCreateDatabase').'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
 			}
 			self::PopConnection();
 		}

@@ -17,8 +17,7 @@ class ActionOxygenDeleteAllErrs extends Action {
 		if (!is_dir($f)) Oxygen::MakeLogFolder();
 		$a = glob("$f/*.err");
 
-		foreach ($a as $ff)
-			unlink($ff);
+		if (is_array($a)) foreach ($a as $ff) unlink($ff);
 
 		Oxygen::Refresh();
 

@@ -24,6 +24,7 @@ class ActionOxygenLogs extends ConsoleAction {
 		$f = Oxygen::GetLogFolder();
 		if (!is_dir($f)) Oxygen::MakeLogFolder();
 		$a = glob("$f/*.log");
+		if (!is_array($a)) $a = array();
 		rsort($a);
 
 

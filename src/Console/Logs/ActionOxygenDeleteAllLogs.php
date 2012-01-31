@@ -17,8 +17,7 @@ class ActionOxygenDeleteAllLogs extends Action {
 		if (!is_dir($f)) Oxygen::MakeLogFolder();
 		$a = glob("$f/*.log");
 
-		foreach ($a as $ff)
-			unlink($ff);
+		if (is_array($a)) foreach ($a as $ff) unlink($ff);
 
 		Oxygen::Refresh();
 
