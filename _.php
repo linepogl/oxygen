@@ -22,6 +22,7 @@ function __autoload($class) {
 
 
 function user_error_handler($severity, $msg, $filename, $linenum, $content) {
+	if (0 == (error_reporting() & $severity)) return; // for the silence operator
 	throw new ErrorException($msg, 0, $severity, $filename , $linenum);
 }
 set_error_handler("user_error_handler");
