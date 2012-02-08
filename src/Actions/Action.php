@@ -73,10 +73,7 @@ abstract class Action implements OmniValue {
 	public function OnAfterRender() {}
 
 	public function GetHead(){
-		return '<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />'
-					.'<script type="text/javascript" src="oxy/jsc/prototype.js"></script>'
-					.'<script type="text/javascript" src="oxy/jsc/scriptaculous.js?load=effects"></script>'
-					.'<link href="oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
+		return Oxygen::GetHead();
 	}
 
 	private $content_compromised = false;

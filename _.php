@@ -32,6 +32,7 @@ function user_exception_handler($ex) {
 	$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
 	try {
 		//	echo '<html><body>';
+		echo '</textarea></select></script></table></table></table></table></table></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
 		echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;background:#555577;">';
 		echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
