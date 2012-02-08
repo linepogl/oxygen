@@ -1,5 +1,4 @@
 <?php
-
 class Oxygen {
 
 	public static function GetSessionCookieName(){ return 'Oxygen::idSession'; }
@@ -33,11 +32,14 @@ class Oxygen {
 		self::$php_script = basename( $_SERVER['SCRIPT_NAME'] );
 		foreach (self::$url_pins as $key=>$value)
 			self::$url_pins[$key] = Http::$GET[$key]->AsString();
-		self::$idWindow = Http::$GET['window']->AsID();
-		if (is_null(self::$idWindow))
-			self::$idWindow = new ID();
+
 		if (self::$window_scoping_enabled){
+			self::$idWindow = Http::$GET['window']->AsID();
+			if (is_null(self::$idWindow)) self::$idWindow = new ID();
 			self::$url_pins['window'] = self::$idWindow->AsHex();
+		}
+		else {
+			self::$idWindow = new ID();
 		}
 
 
@@ -347,7 +349,7 @@ class Oxygen {
 
 	private static $idSession;
 	private static $idWindow;
-	private static $window_scoping_enabled = true;
+	private static $window_scoping_enabled = false;
 	public static function SetWindowScopingEnabled($value){ self::$window_scoping_enabled = $value; }
 	public static function IsWindowScopingEnabled(){ return self::$window_scoping_enabled; }
 	
