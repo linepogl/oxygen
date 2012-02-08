@@ -94,10 +94,12 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 	}
 
 
+	/** @return string */
 	public function TranslateTo($lang){
 		if (isset($this->data[$lang])) return $this->data[$lang];
-		//if (isset($this->data['en'])) return $this->data['en'];
-		return '['.$this->name.'.'.$lang.']';
+		$r = '['.$this->name.'.'.$lang.']';
+		Debug::RecordException(new Exception('Undefined lemma: '.$r));
+		return $r;
 	}
 	public function Translate(){ return $this->TranslateTo(Oxygen::$lang); }
 	public function __toString(){ return $this->TranslateTo(Oxygen::$lang); }
@@ -142,14 +144,18 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 	//
 	private static $dictionary = null;          // $name => $lemma
 	private static $packed_dictionary = null;   // $name => serialize( $lemma->data )
+
+	/** @return Lemma */
 	public static function Retrieve($name){
 		return isset(self::$dictionary[$name]) ? self::$dictionary[$name] : self::Unpack($name);
 	}
+	/** @return string */
 	public static function Sprintf($name){
 		$a = func_get_args();
 		$a = array_splice($a,1);
 		return vsprintf(Lemma::Retrieve($name),$a);
 	}
+	/** @return Lemma */
 	private static function Unpack($name){
 		$l = new Lemma($name);
 		if (isset(self::$packed_dictionary[$name])) {

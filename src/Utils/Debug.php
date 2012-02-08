@@ -217,8 +217,9 @@ class Debug {
 	}
 	public static function GetExceptionReportAsHtml(Exception $ex){
 		$r = '';
+		$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
 		for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()){
-			$r .= '<b>'.$exx->getMessage().'</b><br/><br/><i>'. basename($exx->getFile()).'['.$exx->getLine().']</i>';
+			$r .= '<b>'.$Q.$exx->getMessage().$Q.'</b><br/><br/><i>'.$Q. basename($exx->getFile()).'['.$exx->getLine().']'.$Q.'</i>';
 			$r .= '<div style="color:#aaaaaa;"><i>'.Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']</i></div>';
 			$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($exx)).'</div>';
 		}

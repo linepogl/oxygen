@@ -29,31 +29,39 @@ set_error_handler("user_error_handler");
 
 function user_exception_handler($ex) {
 	while ( ob_get_level() > 0 ) ob_end_clean();
-//	echo '<html><body>';
-	echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
-	echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;background:#555577;">';
-	echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
-	echo '<div style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;overflow:auto;padding:30px;">';
-	echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
-	if ($ex instanceof ApplicationException || $ex instanceof SecurityException) {
-		echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$ex->getMessage().'</div>';
+	$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
+	try {
+		//	echo '<html><body>';
+		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
+		echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;background:#555577;">';
+		echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
+		echo '<div style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;overflow:auto;padding:30px;">';
+		echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
+		if ($ex instanceof ApplicationException || $ex instanceof SecurityException) {
+			echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
+		}
+		elseif (!DEV){
+			echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Retrieve('MsgAnErrorOccurred').'</div>';
+		}
+		else {
+			echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Retrieve('MsgDevelopmentEnvironment').'</div>';
+			echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
+			echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($ex)).'</div>';
+			echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
+		}
+		echo '<div style="font:italic 11px/13px Trebuchet MS,sans-serif;color:#bbbbbb;margin-top:50px;">Oxygen</div>';
+		echo '</div>';
+		echo '</div>';
+		echo '</div>';
+		//	echo '</body></html>';
+		if (!($ex instanceof ApplicationException || $ex instanceof SecurityException)){
+			error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
+			Debug::RecordException($ex);
+		}
 	}
-	elseif (!DEV){
-		echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Retrieve('MsgAnErrorOccurred').'</div>';
-	}
-	else {
-		echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Retrieve('MsgDevelopmentEnvironment').'</div>';
-		echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$ex->getMessage().'</div>';
-		echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($ex)).'</div>';
-		echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
-	}
-	echo '<div style="font:italic 11px/13px Trebuchet MS,sans-serif;color:#bbbbbb;margin-top:50px;">Oxygen</div>';
-	echo '</div>';
-	echo '</div>';
-	echo '</div>';
-	//	echo '</body></html>';
-	if (!($ex instanceof ApplicationException || $ex instanceof SecurityException)){
-		Debug::RecordException($ex);
+	catch (Exception $ex){
+		error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
+		echo $Q.$ex->getMessage().'<br/><br/>'.$Q.$ex->getFile().'['.$ex->getLine().']';
 	}
 }
 set_exception_handler("user_exception_handler");
@@ -91,4 +99,11 @@ function from($whatever){
 	return new LinqIterator(new ArrayIterator(array($whatever)));
 }
 
+///** @return string */
+//function say($what){
+//	if (func_num_args() == 1)
+//		return strval(Lemma::Retrieve($what));
+//	else
+//		return vsprintf(Lemma::Retrieve($what),array_splice(func_get_args(),1));
+//}
 
