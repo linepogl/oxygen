@@ -3,10 +3,10 @@
 class Browser {
 
 	public static function GetUA(){
-		return $_SERVER['HTTP_USER_AGENT'];
+		return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
 	}
 	public static function GetIP(){
-		return $_SERVER['REMOTE_ADDR'];
+		return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
 	}
 	public static function GetName(){
 		if (self::IsIE()) return 'ie';
@@ -35,60 +35,60 @@ class Browser {
 
 
 	public static function IsWindows(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'windows') !== false;
+		return strpos(strtolower(self::GetUA()),'windows') !== false;
 	}
 	public static function IsWindows2000(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'windows nt 5.0') !== false;
+		return strpos(strtolower(self::GetUA()),'windows nt 5.0') !== false;
 	}
 	public static function IsWindowsXP(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'windows nt 5.1') !== false;
+		return strpos(strtolower(self::GetUA()),'windows nt 5.1') !== false;
 	}
 	public static function IsWindowsVista(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'windows nt 6.0') !== false;
+		return strpos(strtolower(self::GetUA()),'windows nt 6.0') !== false;
 	}
 	public static function IsWindows7(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'windows nt 7.0') !== false;
+		return strpos(strtolower(self::GetUA()),'windows nt 7.0') !== false;
 	}
 
 
 	public static function IsIE(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'msie') !== false;
+		return strpos(strtolower(self::GetUA()),'msie') !== false;
 	}
 	public static function IsIE5(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'msie 5') !== false;
+		return strpos(strtolower(self::GetUA()),'msie 5') !== false;
 	}
 	public static function IsIE6(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'msie 6') !== false;
+		return strpos(strtolower(self::GetUA()),'msie 6') !== false;
 	}
 	public static function IsIE7(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'msie 7') !== false;
+		return strpos(strtolower(self::GetUA()),'msie 7') !== false;
 	}
 	public static function IsIE8(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'msie 8') !== false;
+		return strpos(strtolower(self::GetUA()),'msie 8') !== false;
 	}
 	public static function IsIE9(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'msie 9') !== false;
+		return strpos(strtolower(self::GetUA()),'msie 9') !== false;
 	}
 	public static function IsOpera(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'opera') !== false;
+		return strpos(strtolower(self::GetUA()),'opera') !== false;
 	}
 	public static function IsChrome(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'chrome') !== false;
+		return strpos(strtolower(self::GetUA()),'chrome') !== false;
 	}
 	public static function IsFirefox(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'firefox') !== false;
+		return strpos(strtolower(self::GetUA()),'firefox') !== false;
 	}
 	public static function IsSafari(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'safari') !== false;
+		return strpos(strtolower(self::GetUA()),'safari') !== false;
 	}
 	public static function IsSafariIPad(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'ipad') !== false;
+		return strpos(strtolower(self::GetUA()),'ipad') !== false;
 	}
 	public static function IsSafariIPod(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'ipod') !== false;
+		return strpos(strtolower(self::GetUA()),'ipod') !== false;
 	}
 	public static function IsSafariIPhone(){
-		return strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'iphonesafari') !== false;
+		return strpos(strtolower(self::GetUA()),'iphonesafari') !== false;
 	}
 	public static function IsSafariIOS(){
 		return self::IsSafariIPad() || self::IsSafariIPhone() || self::IsSafariIPod();
