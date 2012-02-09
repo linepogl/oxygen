@@ -1,58 +1,56 @@
 <?php
 class Oxygen {
 
-	public static function GetSessionCookieName(){ return 'Oxygen::idSession'; }
-	public static function GetSessionCookieValue(){ return self::$idSession->AsHex(); }
 	public static function Init(){
-
-		if (array_key_exists(self::GetSessionCookieName(),$_POST)){
-			$key = $_POST[self::GetSessionCookieName()];
-			try{ self::$idSession = new ID($key); } catch(Exception $ex){}
+		// init session scoping
+		if (self::$session_scoping_enabled) {
+			if (array_key_exists(self::GetSessionCookieName(),$_POST)){
+				self::$session_hash = $_POST[self::GetSessionCookieName()];
+			}
+			elseif (array_key_exists(self::GetSessionCookieName(),$_COOKIE)){
+				self::$session_hash = $_COOKIE[self::GetSessionCookieName()];
+			}
+			if (is_null(self::$session_hash)){
+				self::$session_hash = Oxygen::HashRandom();
+				setcookie(self::GetSessionCookieName(),self::$session_hash, time()+90*24*3600 ); // 90 days
+			}
 		}
-		elseif (array_key_exists(self::GetSessionCookieName(),$_COOKIE)){
-			$key = $_COOKIE[self::GetSessionCookieName()];
-			try{ self::$idSession = new ID($key); } catch(Exception $ex){}
-		}
-		if (is_null(self::$idSession)){
-			self::$idSession = new ID();
-			setcookie(self::GetSessionCookieName(),self::$idSession->AsHex(), time()+90*24*3600 ); // 90 days
+		else {
+			self::$session_hash = Oxygen::HashRandom();
 		}
 
 		if (DEBUG) { if ($_GET['debug']=='pin') self::SetUrlPin('debug','pin'); }
 		if (PROFILE) { if ($_GET['profile']=='pin') self::SetUrlPin('profile','pin'); }
 
-		//if (!self::HasDataFolder()) self::MakeDataFolder();
 		if (!self::HasTempFolder()) self::MakeTempFolder();
 		self::ClearTempFolderFromOldFiles();
 		Debug::Init();
-		Lemma::LoadDictionary();
-
 
 		// init url handling
 		self::$php_script = basename( $_SERVER['SCRIPT_NAME'] );
 		foreach (self::$url_pins as $key=>$value)
 			self::$url_pins[$key] = Http::$GET[$key]->AsString();
 
+		// init window scoping
 		if (self::$window_scoping_enabled){
-			self::$idWindow = Http::$GET['window']->AsID();
-			if (is_null(self::$idWindow)) self::$idWindow = new ID();
-			self::$url_pins['window'] = self::$idWindow->AsHex();
+			self::$window_hash = Http::$GET['window']->AsString();
+			if (is_null(self::$window_hash)) self::$window_hash = Oxygen::HashRandom32();
+			self::$url_pins['window'] = self::$window_hash;
 		}
 		else {
-			self::$idWindow = new ID();
+			self::$window_hash = Oxygen::HashRandom32();
 		}
 
-
 		// set the current language
-		if (isset($_GET['lang'])) self::$lang = $_GET['lang'];
+		$lang = '';
+		if (isset($_GET['lang'])) $lang = $_GET['lang'];
 		$found = false;
 		if (count(self::$langs)==0) self::$langs[] = 'en';
-		foreach (self::$langs as $l=>$ll) if ($l == self::$lang) { $found = true;	break; }
-		if (!$found) self::$lang = self::$langs[0];
+		foreach (self::$langs as $l) if ($l == $lang) { $found = true;	break; }
+		if (!$found) $lang = self::$langs[0];
+		self::SetLanguage($lang);
 
-		//setlocale(LC_ALL,self::$lang);
-		setlocale(LC_ALL,Lemma::Retrieve('locale'));
-
+		// set the action
 		self::$actionname = Http::$GET['action']->AsString();
 		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
 	}
@@ -97,12 +95,17 @@ class Oxygen {
 	public static $langs = array();
 	public static $lang = null;
 	public static function AddLanguage($lang) { if (!in_array($lang,self::$langs)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
-	public static function SetLanguage($lang) { self::$lang = $lang; self::SetUrlPin('lang',$lang); }
+	public static function SetLanguage($lang) { self::$lang = $lang; self::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Retrieve('locale')); }
 	public static function GetLang(){ return self::$lang; }
 	public static function GetLangs(){ return self::$langs; }
 
 
 
+	//
+	//
+	// HTTP Headers
+	//
+	//
 	private static $http_headers_sent = false;
 	private static $http_headers = array();
 	public static function ClearHttpHeaders(){
@@ -240,8 +243,8 @@ class Oxygen {
 	//
 	private static $data_folder = 'dat';
 	public static function GetDataFolder(){ return self::$data_folder; }
-	public static function SetDataFolder($value) { self::$data_folder = $value; }
-	public static function HasDataFolder(){return is_dir(self::$data_folder); }
+	public static function SetDataFolder($value){ self::$data_folder = $value; }
+	public static function HasDataFolder(){ return is_dir(self::$data_folder); }
 	public static function MakeDataFolder(){ mkdir(self::$data_folder,0777,true); }
 
 
@@ -347,12 +350,19 @@ class Oxygen {
 
 
 
-	private static $idSession;
-	private static $idWindow;
+	private static $session_hash;
+	private static $session_scoping_enabled = false;
+	public static function SetSessionScopingEnabled($value){ self::$session_scoping_enabled = $value; }
+	public static function IsSessionScopingEnabled(){ return self::$session_scoping_enabled; }
+	public static function GetSessionHash(){ return self::$session_hash; }
+	public static function GetSessionCookieName(){ return 'Oxygen::SessionHash'; }
+
+	private static $window_hash;
 	private static $window_scoping_enabled = false;
 	public static function SetWindowScopingEnabled($value){ self::$window_scoping_enabled = $value; }
 	public static function IsWindowScopingEnabled(){ return self::$window_scoping_enabled; }
-	
+	public static function GetWindowHash(){ return self::$window_hash; }
+
 
 	//
 	//
@@ -495,8 +505,6 @@ class Oxygen {
 	/** @return string */ public static function GetActionName(){ return self::$actionname; }
 	/** @return Action */ public static function GetAction(){ return self::$action; }
 	/** @return string */ public static function GetContent() { return self::$content; }
-	/** @return ID */ public static function GetSessionID(){ return self::$idSession; }
-	/** @return ID */ public static function GetWindowID(){ return self::$idWindow; }
 	/** @return string */ public static function GetBody(){ return self::$content; }
 
 	/** @return string */
@@ -506,10 +514,10 @@ class Oxygen {
 
 		echo Js::BEGIN;
 		if (self::$window_scoping_enabled){
-			$new_window_id = new ID();
-			echo "if(window.name!=".new Js(self::$idWindow->AsHex())."){";
-			echo "  window.name=".new Js($new_window_id).";";
-			echo "  window.location.href=".new Js(self::MakeHrefPreservingValues(array('window'=>$new_window_id)));
+			$new_window_hash = Oxygen::HashRandom32();
+			echo "if(window.name!=".new Js(self::$window_hash)."){";
+			echo "  window.name=".new Js($new_window_hash).";";
+			echo "  window.location.href=".new Js(self::MakeHrefPreservingValues(array('window'=>$new_window_hash)));
 			echo "}";
 		}
 
@@ -578,10 +586,10 @@ class Oxygen {
 	// Misc
 	//
 	//
-	public static function Hash($that){
-		return strtoupper(md5(str_rot13(md5(sha1($that)))));
-	}
+	public static function Hash($that){ return strtoupper(md5(str_rot13(md5(sha1($that))))); }
 	public static function Hash32($value){ return substr(md5(strval($value)),0,8); }
+	public static function HashRandom(){ return ID::Random()->AsHex() . ID::Random()->AsHex() . ID::Random()->AsHex() . ID::Random()->AsHex(); }
+	public static function HashRandom32(){ return ID::Random()->AsHex(); }
 
 	public static function SplitSearchString($searchstring){
 		return preg_split('/[\\s,]*\\"([^\\"]+)\\"[\\s,]*|[\\s,]*\'([^\']+)\'[\\s,]*|[\\s,]+/', $searchstring, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
@@ -629,8 +637,8 @@ class Oxygen {
 		$r = array();
 		$r['Current action'] = Oxygen::GetActionName();
 		$r['Current language'] = Oxygen::GetLang();
-		$r['Session hash'] = Oxygen::GetSessionID()->AsHex();
-		$r['Window hash'] = Oxygen::GetWindowID()->AsHex() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scope is disabled ***');
+		$r['Session hash'] = Oxygen::GetSessionHash();
+		$r['Window hash'] = Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scope is disabled ***');
 		$r['Variable persistence'] = Scope::IsAPCAvailable() ? 'APC' : 'Temp folder';
 		$r['ORM caching'] = Oxygen::IsItemCacheEnabled()?'Enabled':'Disabled';
 		$rr[] = $r;

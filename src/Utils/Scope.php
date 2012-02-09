@@ -189,16 +189,16 @@ class DatabaseScope extends ExternalScope  {
 class SessionScope extends ExternalScope {
 	protected function Hash($name){ return 'ses_'.(
 		$this->use_apc
-		?	self::$base.'_'.Oxygen::GetSessionID()->AsHex().'_'.$name
-		:	Oxygen::Hash32($name.Oxygen::GetSessionID()->AsHex())
+		?	self::$base.'_'.Oxygen::GetSessionHash().'_'.$name
+		:	Oxygen::Hash32($name.Oxygen::GetSessionHash())
 		);
 	}
 }
 class WindowScope extends ExternalScope {
 	protected function Hash($name){ return 'win_'.(
 		$this->use_apc
-		? self::$base.'_'.Oxygen::GetWindowID()->AsHex() . '_' . $name
-		: Oxygen::Hash32( $name.Oxygen::GetWindowID()->AsHex() )
+		? self::$base.'_'.Oxygen::GetWindowHash() . '_' . $name
+		: Oxygen::Hash32( $name.Oxygen::GetWindowHash() )
 		);
 	}
 }

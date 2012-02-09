@@ -31,8 +31,7 @@ function user_exception_handler($ex) {
 	while ( ob_get_level() > 0 ) ob_end_clean();
 	$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
 	try {
-		//	echo '<html><body>';
-		echo '</textarea></select></script></table></table></table></table></table></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
+		echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
 		echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;background:#555577;">';
 		echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
@@ -54,15 +53,15 @@ function user_exception_handler($ex) {
 		echo '</div>';
 		echo '</div>';
 		echo '</div>';
-		//	echo '</body></html>';
 		if (!($ex instanceof ApplicationException || $ex instanceof SecurityException)){
 			error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
 			Debug::RecordException($ex);
 		}
 	}
-	catch (Exception $ex){
-		error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
-		echo $Q.$ex->getMessage().'<br/><br/>'.$Q.$ex->getFile().'['.$ex->getLine().']';
+	catch (Exception $ex2){
+		echo $Q.$ex2->getMessage().'<br/><br/>'.$Q.$ex2->getFile().'['.$ex2->getLine().']';
+		error_log($ex2->getMessage().' '.$ex2->getFile().'['.$ex2->getLine().']');
+		try{ Debug::RecordException($ex2); } catch(Exception $ex3){ }
 	}
 }
 set_exception_handler("user_exception_handler");

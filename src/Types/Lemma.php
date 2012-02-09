@@ -1,11 +1,5 @@
 <?php
 
-
-
-
-
-
-
 class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 	private $name;
 	private $data = array();
@@ -147,6 +141,7 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 
 	/** @return Lemma */
 	public static function Retrieve($name){
+		if (is_null(self::$dictionary)) self::LoadDictionary();
 		return isset(self::$dictionary[$name]) ? self::$dictionary[$name] : self::Unpack($name);
 	}
 	/** @return string */
@@ -172,18 +167,18 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 		foreach ($files as $f) if (file_exists($f)) $r .= $f . strval(filemtime($f));
 		return $r;
 	}
-	private static function IsDictionaryLoaded($files){
+	private static function IsDictionaryInCache($files){
 		if (!isset(Scope::$APPLICATION['Lemma::packed_dictionary'])) return false;
 		if (!isset(Scope::$APPLICATION['Lemma::dictionary_filelist'])) return false;
 		return self::MakeFileList($files) == Scope::$APPLICATION['Lemma::dictionary_filelist'];
 	}
-	private static function SaveDictionary($files){
+	private static function SaveDictionaryInCache($files){
 		Scope::$APPLICATION['Lemma::packed_dictionary'] = self::$packed_dictionary;
 		Scope::$APPLICATION['Lemma::dictionary_filelist'] = self::MakeFileList($files);
 	}
 	public static function LoadDictionary(){
 		$files = Oxygen::GetDictionaryFiles();
-    if (self::IsDictionaryLoaded($files)) {
+    if (self::IsDictionaryInCache($files)) {
 	    self::$dictionary = array();
 	    self::$packed_dictionary = Scope::$APPLICATION['Lemma::packed_dictionary'];
     }
@@ -208,7 +203,7 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 					self::$packed_dictionary[$name] = serialize($l->data);
 				}
 			}
-			self::SaveDictionary($files);
+			self::SaveDictionaryInCache($files);
 		}
 	}
 
