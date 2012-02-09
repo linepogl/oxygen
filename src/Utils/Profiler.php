@@ -13,8 +13,7 @@ class Profiler {
 	public static function StopAndSave(){
 		if (!function_exists('xhprof_disable')) return;
 		self::$results = xhprof_disable();
-		$f = Oxygen::GetLogFolder();
-		if (!is_dir($f)) Oxygen::MakeLogFolder();
+		$f = Oxygen::GetLogFolder(true);
 		self::$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
 		file_put_contents( $f .'/'.self::$serial.'.prf',
 			serialize(array( 'head' => Oxygen::GetInfo() , 'body' => self::$results ))

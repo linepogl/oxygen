@@ -22,7 +22,7 @@ class Oxygen {
 		if (DEBUG) { if ($_GET['debug']=='pin') self::SetUrlPin('debug','pin'); }
 		if (PROFILE) { if ($_GET['profile']=='pin') self::SetUrlPin('profile','pin'); }
 
-		if (!self::HasTempFolder()) self::MakeTempFolder();
+		self::MakeTempFolder();
 		self::ClearTempFolderFromOldFiles();
 		Debug::Init();
 
@@ -187,10 +187,10 @@ class Oxygen {
 	//
 	//
 	private static $temp_folder = 'tmp';
-	public static function GetTempFolder(){ return self::$temp_folder; }
+	public static function GetTempFolder($make = false){ if ($make) self::MakeTempFolder(); return self::$temp_folder; }
 	public static function SetTempFolder($value) { self::$temp_folder = $value; }
-	public static function HasTempFolder(){return is_dir(self::$temp_folder); }
-	public static function MakeTempFolder(){ mkdir(self::$temp_folder,0777,true); }
+	public static function HasTempFolder(){ return is_dir(self::$temp_folder); }
+	public static function MakeTempFolder(){ if (!file_exists(self::$temp_folder)) mkdir(self::$temp_folder,0777,true); }
 	public static function ClearTempFolder(){
 		$tmp = self::GetTempFolder();
 		foreach (scandir($tmp) as $f){
@@ -242,10 +242,10 @@ class Oxygen {
 	//
 	//
 	private static $data_folder = 'dat';
-	public static function GetDataFolder(){ return self::$data_folder; }
+	public static function GetDataFolder($make = false){ if ($make) self::MakeDataFolder(); return self::$data_folder; }
 	public static function SetDataFolder($value){ self::$data_folder = $value; }
 	public static function HasDataFolder(){ return is_dir(self::$data_folder); }
-	public static function MakeDataFolder(){ mkdir(self::$data_folder,0777,true); }
+	public static function MakeDataFolder(){ if(!file_exists(self::$data_folder)) mkdir(self::$data_folder,0777,true); }
 
 
 
@@ -255,10 +255,10 @@ class Oxygen {
 	//
 	//
 	private static $log_folder = 'log';
-	public static function GetLogFolder(){ return self::$log_folder; }
+	public static function GetLogFolder($make = false){ if ($make) self::MakeLogFolder(); return self::$log_folder; }
 	public static function SetLogFolder($value) { self::$log_folder = $value; }
-	public static function HasLogFolder(){return is_dir(self::$logr_folder); }
-	public static function MakeLogFolder(){ mkdir(self::$log_folder,0777,true); }
+	public static function HasLogFolder(){ return is_dir(self::$log_folder); }
+	public static function MakeLogFolder(){ if(!file_exists(self::$log_folder)) mkdir(self::$log_folder,0777,true); }
 
 
 

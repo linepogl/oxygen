@@ -82,8 +82,8 @@ class Debug {
 
 	public static function StopAndSave(){
 		if (empty(self::$entries)) return;
+		Oxygen::EnsureLogFolder();
 		$f = Oxygen::GetLogFolder();
-		if (!is_dir($f)) Oxygen::MakeLogFolder();
 		self::$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
 		file_put_contents( $f .'/'.self::$serial.'.log', serialize(array( 'head' => Oxygen::GetInfo() , 'body' => self::$entries )));
 	}
@@ -288,8 +288,7 @@ class Debug {
 		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
 
 		try {
-			$f = Oxygen::GetLogFolder();
-			if (!is_dir($f)) Oxygen::MakeLogFolder();
+			$f = Oxygen::GetLogFolder(true);
 			file_put_contents( $f .'/'.$serial.'.err', serialize(array( 'head' => Oxygen::GetInfo() , 'body' => $body )));
 		}
 		catch (Exception $ex) {}

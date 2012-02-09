@@ -13,8 +13,7 @@ class ActionOxygenDeleteAllLogs extends Action {
 
 	public function Render(){
 
-		$f = Oxygen::GetLogFolder();
-		if (!is_dir($f)) Oxygen::MakeLogFolder();
+		$f = Oxygen::GetLogFolder(true);
 		$a = glob("$f/*.log");
 
 		if (is_array($a)) foreach ($a as $ff) unlink($ff);

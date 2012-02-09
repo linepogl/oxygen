@@ -27,8 +27,7 @@ class ActionOxygenPrf extends ConsoleAction {
 
 	public function Render(){
 
-		$f = Oxygen::GetLogFolder();
-		if (!is_dir($f)) Oxygen::MakeLogFolder();
+		$f = Oxygen::GetLogFolder(true);
 		$ff = $f . '/' . $this->prf . '.prf';
 
 		$data = unserialize( file_get_contents($ff) );
