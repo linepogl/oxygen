@@ -351,7 +351,7 @@ class Oxygen {
 
 
 	private static $session_hash;
-	private static $session_scoping_enabled = false;
+	private static $session_scoping_enabled = true;
 	public static function SetSessionScopingEnabled($value){ self::$session_scoping_enabled = $value; }
 	public static function IsSessionScopingEnabled(){ return self::$session_scoping_enabled; }
 	public static function GetSessionHash(){ return self::$session_hash; }
