@@ -53,6 +53,8 @@ class Oxygen {
 		// set the action
 		self::$actionname = Http::$GET['action']->AsString();
 		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
+
+		Database::Upgrade();
 	}
 
 
@@ -364,6 +366,10 @@ class Oxygen {
 	public static function GetWindowHash(){ return self::$window_hash; }
 
 
+
+
+
+
 	//
 	//
 	// Http context
@@ -389,10 +395,6 @@ class Oxygen {
 		}
 		return self::$php_script . $s;
 	}
-
-
-
-
 	public static function IsPostback(){
 		return strtolower($_SERVER['REQUEST_METHOD'])=='post';
 	}
@@ -436,7 +438,11 @@ class Oxygen {
 		$s = $_SERVER['SCRIPT_NAME'];
 		return substr($s,strrpos($s,'/')+1);
 	}
-	public static function GetBaseHref($protocol = null,$port = null){
+	public static function GetHref(){
+		$s = $_SERVER['SCRIPT_NAME'];
+		return substr($s,strrpos($s,'/')+1) . '?' . $_SERVER['QUERY_STRING'];
+	}
+	public static function GetHrefServer($protocol = null,$port = null){
 		$old_protocol = self::IsHttps() ? 'https' : 'http';
 		if (is_null($protocol)) $protocol = $old_protocol;
 		$r = $protocol . '://' . $_SERVER["SERVER_NAME"];
@@ -444,20 +450,28 @@ class Oxygen {
 			if ($protocol == 'http' && $_SERVER["SERVER_PORT"] != '80') $r .= ":".$_SERVER["SERVER_PORT"];
 			if ($protocol == 'https' && $_SERVER["SERVER_PORT"] != '443') $r .= ":".$_SERVER["SERVER_PORT"];
 		}
-		$s = $_SERVER['SCRIPT_NAME'];
-		$r .= substr($s,0,strrpos($s,'/')+1);
 		return $r;
 	}
-	public static function GetHref(){
-		$s = $_SERVER['SCRIPT_NAME'];
-		return substr($s,strrpos($s,'/')+1) . '?' . $_SERVER['QUERY_STRING'];
+	public static function GetHrefBaseFull($protocol = null,$port = null){
+		return self::GetHrefServer($protocol,$port) . self::GetHrefBase() . '/';
 	}
 
+	private static $href_root = null;
+	private static $href_current_folder = '';
+	public static function SetRequestFolders( $absolute_initial_request_folder , $absolute_physical_root_folder ){
+		self::$href_current_folder = substr( $absolute_initial_request_folder, strlen($absolute_physical_root_folder) + 1 );
+		self::$href_root = substr( $_SERVER['SCRIPT_NAME'] , 0 , strpos( $_SERVER['SCRIPT_NAME'] , self::$href_current_folder ) - 1 );
+	}
+	public static function GetHrefCurrentFolder(){ return self::$href_current_folder; }
+	public static function GetHrefBase(){
+		if (is_null(self::$href_root)) {
+			$s = $_SERVER['SCRIPT_NAME'];
+			self::$href_root = substr($s,0,strrpos($s,'/'));
+		}
+		return self::$href_root;
+	}
 
-
-
-
-
+	
 
 
 
@@ -511,6 +525,10 @@ class Oxygen {
 	public static function GetHead(){
 		ob_start();
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
+
+		if (self::GetHrefCurrentFolder() != '') {
+			echo '<base href="'.new Html(Oxygen::GetHrefBase()).'" />';
+		}
 
 		echo Js::BEGIN;
 		if (self::$window_scoping_enabled){

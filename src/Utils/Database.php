@@ -46,6 +46,8 @@ class Database {
 
 
 	public static function Upgrade($force=false){
+		if (is_null(self::$cx) || !self::$cx->is_managed) return;
+
 		$needs_refresh = false;
 		foreach (Oxygen::GetDatabaseUpgradeFiles() as $filename){
 			$needs_upgrade = true;
@@ -54,6 +56,7 @@ class Database {
 			if (!is_null($time))
 				$needs_upgrade = filemtime($filename) > $time;
 			if ($needs_upgrade || $force){
+				Database::RequireConnection();
 				set_time_limit(0);
 				Database::ClearPatchingSystem();
 				require($filename);
