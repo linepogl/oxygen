@@ -460,13 +460,13 @@ class Oxygen {
 	private static $href_current_folder = '';
 	public static function SetRequestFolders( $absolute_initial_request_folder , $absolute_physical_root_folder ){
 		self::$href_current_folder = substr( $absolute_initial_request_folder, strlen($absolute_physical_root_folder) + 1 );
-		self::$href_root = substr( $_SERVER['SCRIPT_NAME'] , 0 , strpos( $_SERVER['SCRIPT_NAME'] , self::$href_current_folder ) - 1 );
+		self::$href_root = substr( $_SERVER['SCRIPT_NAME'] , 0 , strpos( $_SERVER['SCRIPT_NAME'] , self::$href_current_folder ) );
 	}
 	public static function GetHrefCurrentFolder(){ return self::$href_current_folder; }
 	public static function GetHrefBase(){
 		if (is_null(self::$href_root)) {
 			$s = $_SERVER['SCRIPT_NAME'];
-			self::$href_root = substr($s,0,strrpos($s,'/'));
+			self::$href_root = substr($s,0,strrpos($s,'/') + 1);
 		}
 		return self::$href_root;
 	}
@@ -494,10 +494,10 @@ class Oxygen {
 
 
 	public static function SetDatabase($server,$schema,$username,$password,$type=Database::MYSQL) {
-		Database::ConnectLazily($server,$schema,$username,$password,$type=Database::MYSQL);
+		Database::ConnectLazily($server,$schema,$username,$password,$type);
 	}
 	public static function SetDatabaseManaged($server,$schema,$username,$password,$type=Database::MYSQL) {
-		Database::ConnectLazilyManaged($server,$schema,$username,$password,$type=Database::MYSQL);
+		Database::ConnectLazilyManaged($server,$schema,$username,$password,$type);
 	}
 
 

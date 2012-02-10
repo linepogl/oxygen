@@ -2,7 +2,7 @@
 
 define('DEBUG',array_key_exists('debug',$_GET));
 define('PROFILE',array_key_exists('profile',$_GET));
-define('DEV',$_SERVER["SERVER_NAME"] == 'localhost');
+define('DEV',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
 
 
 if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }
