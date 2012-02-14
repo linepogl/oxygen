@@ -2,6 +2,16 @@
 class Oxygen {
 
 	public static function Init(){
+		set_exception_handler("Oxygen::UserExceptionHandler");
+		register_shutdown_function('user_shutdown_function');
+
+		// autoloading
+		spl_autoload_register(function($class){
+				$f = Oxygen::FindClassFile($class);
+				if (is_null($f)) return;
+				require($f);
+			});
+
 		// init session scoping
 		if (self::$session_scoping_enabled) {
 			if (array_key_exists(self::GetSessionCookieName(),$_POST)){
@@ -86,6 +96,59 @@ class Oxygen {
 	}
 
 
+
+	public static function AutoLoader($class){
+		$f = Oxygen::FindClassFile($class);
+		if (is_null($f)) return;
+		require($f);
+	}
+
+	public static function UserExceptionHandler($ex) {
+		while ( ob_get_level() > 0 ) ob_end_clean();
+		$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
+		try {
+			echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
+			echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
+			echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;background:#555577;">';
+			echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
+			echo '<div style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;overflow:auto;padding:30px;">';
+			echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
+			if ($ex instanceof ApplicationException || $ex instanceof SecurityException) {
+				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
+			}
+			elseif (!DEV){
+				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Retrieve('MsgAnErrorOccurred').'</div>';
+			}
+			else {
+				echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Retrieve('MsgDevelopmentEnvironment').'</div>';
+				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
+				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($ex)).'</div>';
+				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
+			}
+			echo '<div style="font:italic 11px/13px Trebuchet MS,sans-serif;color:#bbbbbb;margin-top:50px;">Oxygen</div>';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>';
+			if (!($ex instanceof ApplicationException || $ex instanceof SecurityException)){
+				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
+				Debug::RecordException($ex);
+			}
+		}
+		catch (Exception $ex2){
+			echo $Q.$ex2->getMessage().'<br/><br/>'.$Q.$ex2->getFile().'['.$ex2->getLine().']';
+			error_log($ex2->getMessage().' '.$ex2->getFile().'['.$ex2->getLine().']');
+			try{ Debug::RecordException($ex2); } catch(Exception $ex3){ }
+		}
+	}
+
+	function user_shutdown_function() {
+		chdir(Oxygen::GetRootFolder());
+		Progress::Shutdown();
+		if (PROFILE) Profiler::StopAndSave();
+		if (DEBUG) Debug::StopAndSave();
+		if (DEBUG) Debug::ShowConsole();
+		if (PROFILE) Profiler::ShowConsole();
+	}
 
 
 
@@ -501,6 +564,37 @@ class Oxygen {
 	}
 
 
+	public static function SetScoping( $mode = Scope::APC , $folder = null ){
+		Scope::$APPLICATION->SetMode($mode);
+		Scope::$APPLICATION->HARD->SetFolder($folder);
+		Scope::$DATABASE->SetMode($mode);
+		Scope::$DATABASE->HARD->SetFolder($folder);
+		Scope::$SESSION->SetMode($mode);
+		Scope::$SESSION->HARD->SetFolder($folder);
+		Scope::$WINDOW->SetMode($mode);
+		Scope::$WINDOW->HARD->SetFolder($folder);
+	}
+	public static function SetApplicationScoping( $mode = Scope::APC , $folder = null ){
+		Scope::$APPLICATION->SetMode($mode);
+		Scope::$APPLICATION->HARD->SetFolder($folder);
+	}
+	public static function SetDatabaseScoping( $mode = Scope::APC , $folder = null ){
+		Scope::$DATABASE->SetMode($mode);
+		Scope::$DATABASE->HARD->SetFolder($folder);
+	}
+	public static function SetSessionScoping( $mode = Scope::APC , $folder = null ){
+		Scope::$SESSION->SetMode($mode);
+		Scope::$SESSION->HARD->SetFolder($folder);
+	}
+	public static function SetWindowScoping( $mode = Scope::APC , $folder = null ){
+		Scope::$WINDOW->SetMode($mode);
+		Scope::$WINDOW->HARD->SetFolder($folder);
+	}
+
+
+
+
+
 
 
 
@@ -655,10 +749,8 @@ class Oxygen {
 		$r = array();
 		$r['Current action'] = Oxygen::GetActionName();
 		$r['Current language'] = Oxygen::GetLang();
-		$r['Session hash'] = Oxygen::GetSessionHash();
-		$r['Window hash'] = Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scope is disabled ***');
-		$r['Variable persistence'] = Scope::IsAPCAvailable() ? 'APC' : 'Temp folder';
-		$r['ORM caching'] = Oxygen::IsItemCacheEnabled()?'Enabled':'Disabled';
+		$r['Content type'] = Oxygen::GetContentType();
+		$r['HTTP headers'] = implode("\n",Oxygen::GetHttpHeaders());
 		$rr[] = $r;
 
 		$r = array();
@@ -681,6 +773,30 @@ class Oxygen {
 		$rr[] = $r;
 
 		$r = array();
+		$r['ORM caching'] = Oxygen::IsItemCacheEnabled() ? 'Enabled' : 'Disabled';
+		$r['APC available'] = Scope::IsAPCAvailable() ? 'Yes' : 'No';
+
+		$f = Scope::$APPLICATION->HARD->GetFolder();
+		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
+		$r['Application scoping'] = Scope::$APPLICATION->GetModeTranslated() . ' - '. $s;
+
+		$f = Scope::$DATABASE->HARD->GetFolder();
+		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
+		$r['Database scoping'] = Scope::$DATABASE->GetModeTranslated() . ' - '. $s;
+
+		$f = Scope::$SESSION->HARD->GetFolder();
+		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
+		$r['Session scoping'] = Scope::$SESSION->GetModeTranslated() . ' - '. $s . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scoping is disabled ***');
+
+		$f = Scope::$WINDOW->HARD->GetFolder();
+		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
+		$r['Window scoping'] = Scope::$WINDOW->GetModeTranslated() . ' - '. $s . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scoping is disabled ***');
+
+		$r['Session hash'] = Oxygen::GetSessionHash() . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scope is disabled ***');
+		$r['Window hash'] = Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scope is disabled ***');
+		$rr[] = $r;
+
+		$r = array();
 		$r['Charset'] = Oxygen::GetCharset();
 		$r['Languages'] = implode(', ',Oxygen::GetLangs());
 		$r['Default action name'] = Oxygen::GetDefaultActionName();
@@ -689,11 +805,6 @@ class Oxygen {
 		$r['Code folders'] = implode("\n",Oxygen::GetCodeFolders());
 		$r['Dictionaries'] = implode("\n",Oxygen::GetDictionaryFiles());
 		$r['Database upgrade scripts'] = implode("\n",Oxygen::GetDatabaseUpgradeFiles());
-		$rr[] = $r;
-
-		$r = array();
-		$r['Content type'] = Oxygen::GetContentType();
-		$r['HTTP headers'] = implode("\n",Oxygen::GetHttpHeaders());
 		$rr[] = $r;
 
 		return $rr;

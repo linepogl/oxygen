@@ -10,8 +10,10 @@ class ActionOxygenReset extends Action {
 	}
 
 	public function Render(){
-
+		Debug::Write('Cleaning Oxygen scopes...');
 		Scope::ResetScopes();
+		Debug::Write('Cleaning Oxygen temp folder...');
+		Oxygen::ClearTempFolder();
 		Oxygen::Refresh();
 
 	}

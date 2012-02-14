@@ -144,6 +144,7 @@ class XMeta extends stdClass {
 		return self::$__cache[$classname];
 	}
 
+	public static function SoftResetItemCaches() { /** @var $m XMeta */ foreach (self::$__cache as $m) $m->SoftResetItemCache(); }
 
 
 
@@ -302,13 +303,13 @@ class XMeta extends stdClass {
 	//
 	private $__item_cache = array();
 	private $__item_concrete_meta_cache = array();
+	private function SoftResetItemCache(){ $this->__item_cache = array(); $this->__item_concrete_meta_cache = array(); }
 	private function ExistsInLocalCache($idi)  { return array_key_exists($idi,$this->__item_cache); }
 	private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
 	private function ExistsInRemoteCache($idi) { return Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__classname.$this->__db_signature.'::'.$idi); }
 	private function PickFromRemoteCache($idi) { return $this->__item_cache[$idi] = Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi]; }
 	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if ((is_null($item) || !$item->IsTemporary()) && Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = $item; }
 	public function RemoveFromCache($idi) { unset($this->__item_cache[$idi]);  if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = null; }
-	public static function ResetItemCaches() { /** @var $m XMeta */ foreach (self::$__cache as $m) { $m->__item_cache = array(); $m->__item_concrete_meta_cache = array(); } }
 
 
 

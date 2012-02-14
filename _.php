@@ -12,13 +12,8 @@ require('oxy/src/OmniType/OmniValue.php');
 require('oxy/src/Types/ID.php');
 require('oxy/src/Oxygen.php');
 require('oxy/src/Utils/Scope.php');
-
-
-function __autoload($class) {
-	$f = Oxygen::FindClassFile($class);
-	if (is_null($f)) return;
-	require($f);
-}
+require('oxy/src/Utils/Database.php');
+require('oxy/src/Engine/XMeta.php');
 
 
 function user_error_handler($severity, $msg, $filename, $linenum, $content) {
@@ -26,46 +21,6 @@ function user_error_handler($severity, $msg, $filename, $linenum, $content) {
 	throw new ErrorException($msg, 0, $severity, $filename , $linenum);
 }
 set_error_handler("user_error_handler");
-
-function user_exception_handler($ex) {
-	while ( ob_get_level() > 0 ) ob_end_clean();
-	$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
-	try {
-		echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
-		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
-		echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;background:#555577;">';
-		echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
-		echo '<div style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;overflow:auto;padding:30px;">';
-		echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
-		if ($ex instanceof ApplicationException || $ex instanceof SecurityException) {
-			echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
-		}
-		elseif (!DEV){
-			echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Retrieve('MsgAnErrorOccurred').'</div>';
-		}
-		else {
-			echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Retrieve('MsgDevelopmentEnvironment').'</div>';
-			echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
-			echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($ex)).'</div>';
-			echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
-		}
-		echo '<div style="font:italic 11px/13px Trebuchet MS,sans-serif;color:#bbbbbb;margin-top:50px;">Oxygen</div>';
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-		if (!($ex instanceof ApplicationException || $ex instanceof SecurityException)){
-			error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
-			Debug::RecordException($ex);
-		}
-	}
-	catch (Exception $ex2){
-		echo $Q.$ex2->getMessage().'<br/><br/>'.$Q.$ex2->getFile().'['.$ex2->getLine().']';
-		error_log($ex2->getMessage().' '.$ex2->getFile().'['.$ex2->getLine().']');
-		try{ Debug::RecordException($ex2); } catch(Exception $ex3){ }
-	}
-}
-set_exception_handler("user_exception_handler");
-
 
 function user_shutdown_function() {
 	chdir(dirname(__FILE__));
@@ -76,8 +31,6 @@ function user_shutdown_function() {
 	if (DEBUG) Debug::ShowConsole();
 	if (PROFILE) Profiler::ShowConsole();
 }
-register_shutdown_function('user_shutdown_function');
-
 
 function dump($var){
 	$root = realpath('.');
