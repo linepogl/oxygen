@@ -34,9 +34,15 @@ class Debug {
 		ob_start();
 	}
 
+	public static function GetDateTimeStart(){
+		return new XDateTime( intval(self::$first) );
+	}
+	public static function GetSecondsElapsed(){
+		return microtime(true) - self::$first;
+	}
 	public static function Init(){
 		self::$entries = array();
-		self::$first =  microtime(true);
+		self::$first = microtime(true);
 	}
   private static function Add($message) {
   	$time = microtime(true);

@@ -297,7 +297,7 @@ class Oxygen {
 	private static $developer_emails = array();
 	public static function GetDeveloperEmails(){ return self::$developer_emails; }
 	public static function AddDeveloperEmail($value) { self::$developer_emails[] = $value; }
-	public static function SetDeveloperEmails($value=array()) { if (is_array($value)) self::$developer_emails = $value; else self::$developer_emails = array(); }
+	public static function SetDeveloperEmails($value=array()) { if (!is_array($value)) throw new InvalidArgumentException(); self::$developer_emails = $value; }
 
 
 
