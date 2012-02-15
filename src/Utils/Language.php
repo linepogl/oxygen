@@ -298,17 +298,17 @@ final class Language {
 		elseif ($hours < 0 && $hours >= -25)
 			return Lemma::Pick('Tomorrow');
 		elseif ($hours < -25 && $hours >= -49)
-			return Lemma::Sprintf('xDays',2);
+			return Lemma::Pick('xDays')->Sprintf(2);
 		elseif ($hours < -49 && $hours >= -73)
-			return Lemma::Sprintf('xDays',3);
+			return Lemma::Pick('xDays')->Sprintf(3);
 		elseif ($hours < -73 && $hours >= -97)
-			return Lemma::Sprintf('xDays',4);
+			return Lemma::Pick('xDays')->Sprintf(4);
 		elseif ($hours < -97 && $hours >= -121)
-			return Lemma::Sprintf('xDays',5);
+			return Lemma::Pick('xDays')->Sprintf(5);
 		elseif ($hours < -121 && $hours >= -145)
-			return Lemma::Sprintf('xDays',6);
+			return Lemma::Pick('xDays')->Sprintf(6);
 		elseif ($hours < -145 && $hours >= -169)
-			return Lemma::Sprintf('xDays',7);
+			return Lemma::Pick('xDays')->Sprintf(7);
 		else
 			return $value->GetDay().' '.$value->Format('F');
 	}
