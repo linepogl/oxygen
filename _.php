@@ -1,9 +1,8 @@
 <?php
-
+define('__ROOT__',substr(__DIR__,0,strrpos(__DIR__,'/')));
 define('DEBUG',array_key_exists('debug',$_GET));
 define('PROFILE',array_key_exists('profile',$_GET));
 define('DEV',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
-
 
 if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }
 require('oxy/src/OmniType/_OmniType.php');
@@ -14,23 +13,6 @@ require('oxy/src/Oxygen.php');
 require('oxy/src/Utils/Scope.php');
 require('oxy/src/Utils/Database.php');
 require('oxy/src/Engine/XMeta.php');
-
-
-function user_error_handler($severity, $msg, $filename, $linenum, $content) {
-	if (0 == (error_reporting() & $severity)) return;
-	throw new ErrorException($msg, 0, $severity, $filename , $linenum);
-}
-set_error_handler("user_error_handler");
-
-function user_shutdown_function() {
-	chdir(dirname(__FILE__));
-	chdir('..');
-	Progress::Shutdown();
-	if (PROFILE) Profiler::StopAndSave();
-	if (DEBUG) Debug::StopAndSave();
-	if (DEBUG) Debug::ShowConsole();
-	if (PROFILE) Profiler::ShowConsole();
-}
 
 function dump($var){
 	$root = realpath('.');
@@ -51,12 +33,3 @@ function from($whatever){
 	if ($whatever instanceof Traversable) return new LinqIterator(new IteratorIterator($whatever));
 	return new LinqIterator(new ArrayIterator(array($whatever)));
 }
-
-///** @return string */
-//function say($what){
-//	if (func_num_args() == 1)
-//		return strval(Lemma::Pick($what));
-//	else
-//		return vsprintf(Lemma::Pick($what),array_splice(func_get_args(),1));
-//}
-

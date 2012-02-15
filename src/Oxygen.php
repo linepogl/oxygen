@@ -2,38 +2,32 @@
 class Oxygen {
 
 	public static function Init(){
-		set_exception_handler("Oxygen::UserExceptionHandler");
-		register_shutdown_function('user_shutdown_function');
-
-		// autoloading
-		spl_autoload_register(function($class){
-				$f = Oxygen::FindClassFile($class);
-				if (is_null($f)) return;
-				require($f);
-			});
+		set_error_handler('Oxygen::OnError');
+		set_exception_handler('Oxygen::OnException');
+		register_shutdown_function('Oxygen::OnShutdown');
+		spl_autoload_register('Oxygen::OnAutoLoad');
 
 		// init session scoping
 		if (self::$session_scoping_enabled) {
-			if (array_key_exists(self::GetSessionCookieName(),$_POST)){
-				self::$session_hash = $_POST[self::GetSessionCookieName()];
+			if (array_key_exists(Oxygen::GetSessionCookieName(),$_POST)){
+				self::$session_hash = $_POST[Oxygen::GetSessionCookieName()];
 			}
-			elseif (array_key_exists(self::GetSessionCookieName(),$_COOKIE)){
-				self::$session_hash = $_COOKIE[self::GetSessionCookieName()];
+			elseif (array_key_exists(Oxygen::GetSessionCookieName(),$_COOKIE)){
+				self::$session_hash = $_COOKIE[Oxygen::GetSessionCookieName()];
 			}
 			if (is_null(self::$session_hash)){
 				self::$session_hash = Oxygen::HashRandom();
-				setcookie(self::GetSessionCookieName(),self::$session_hash, time()+90*24*3600 ); // 90 days
+				setcookie(Oxygen::GetSessionCookieName(),self::$session_hash, time()+90*24*3600 ); // 90 days
 			}
 		}
 		else {
 			self::$session_hash = Oxygen::HashRandom();
 		}
 
-		if (DEBUG) { if ($_GET['debug']=='pin') self::SetUrlPin('debug','pin'); }
-		if (PROFILE) { if ($_GET['profile']=='pin') self::SetUrlPin('profile','pin'); }
-
-		self::MakeTempFolder();
-		self::ClearTempFolderFromOldFiles();
+		if (DEBUG) { if ($_GET['debug']=='pin') Oxygen::SetUrlPin('debug','pin'); }
+		if (PROFILE) { if ($_GET['profile']=='pin') Oxygen::SetUrlPin('profile','pin'); }
+		Oxygen::MakeTempFolder();
+		Oxygen::ClearTempFolderFromOldFiles();
 		Debug::Init();
 
 		// init url handling
@@ -58,7 +52,7 @@ class Oxygen {
 		if (count(self::$langs)==0) self::$langs[] = 'en';
 		foreach (self::$langs as $l) if ($l == $lang) { $found = true;	break; }
 		if (!$found) $lang = self::$langs[0];
-		self::SetLanguage($lang);
+		Oxygen::SetLanguage($lang);
 
 		// set the action
 		self::$actionname = Http::$GET['action']->AsString();
@@ -77,19 +71,19 @@ class Oxygen {
 		self::$action = $classname::Make();
 
 		self::$action->WithMode(Http::$GET['mode']->AsInteger());
-		self::SetContentType(self::$action->GetContentType());
-		self::SetCharset(self::$action->GetCharset());
-		self::ResetHttpHeaders();
+		Oxygen::SetContentType(self::$action->GetContentType());
+		Oxygen::SetCharset(self::$action->GetCharset());
+		Oxygen::ResetHttpHeaders();
 
 		self::$content = self::$action->GetContent();
 
 
 		if (Debug::IsImmediateFlushingEnabled()) exit();
-		self::SendHttpHeaders();
-		if (self::$action->IsAjax() ) { echo Oxygen::$content; exit(); }
+		Oxygen::SendHttpHeaders();
+		if (self::$action->IsAjax() ) { echo self::$content; exit(); }
 		if (self::$action->IsIFrame() ) {
-			echo '<html><head>'.self::GetHead().'</head><body>';
-			echo Oxygen::$content;
+			echo '<html><head>'.Oxygen::GetHead().'</head><body>';
+			echo self::$content;
 			echo '</body></html>';
 			exit();
 		}
@@ -97,13 +91,25 @@ class Oxygen {
 
 
 
-	public static function AutoLoader($class){
+	public static function OnAutoLoad($class){
 		$f = Oxygen::FindClassFile($class);
 		if (is_null($f)) return;
 		require($f);
 	}
+	public static function OnShutdown() {
+		chdir(__ROOT__);
+		Progress::Shutdown();
+		if (PROFILE) Profiler::StopAndSave();
+		if (DEBUG) Debug::StopAndSave();
+		if (DEBUG) Debug::ShowConsole();
+		if (PROFILE) Profiler::ShowConsole();
+	}
+	public static function OnError($severity, $msg, $filename, $linenum, $content) {
+		if (0 == (error_reporting() & $severity)) return;
+		throw new ErrorException($msg, 0, $severity, $filename , $linenum);
+	}
 
-	public static function UserExceptionHandler($ex) {
+	public static function OnException($ex) {
 		while ( ob_get_level() > 0 ) ob_end_clean();
 		$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
 		try {
@@ -160,7 +166,7 @@ class Oxygen {
 	public static $langs = array();
 	public static $lang = null;
 	public static function AddLanguage($lang) { if (!in_array($lang,self::$langs)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
-	public static function SetLanguage($lang) { self::$lang = $lang; self::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Pick('locale')); }
+	public static function SetLanguage($lang) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Pick('locale')); }
 	public static function GetLang(){ return self::$lang; }
 	public static function GetLangs(){ return self::$langs; }
 
@@ -179,11 +185,11 @@ class Oxygen {
 	public static function GetHttpHeaders(){ return self::$http_headers; }
 	public static function ResetHttpHeaders(){
 		self::$http_headers = array();
-		self::AddHttpHeader('HTTP/1.1 '.self::GetResponseCode());
-		self::AddHttpHeader('Content-type: '.self::GetContentType().'; charset='.self::GetCharset());
-		self::AddHttpHeader('Cache-Control: no-cache, must-revalidate');
-		self::AddHttpHeader('Expires: 0');
-		self::AddHttpHeader('Pragma: No-cache');
+		Oxygen::AddHttpHeader('HTTP/1.1 '.Oxygen::GetResponseCode());
+		Oxygen::AddHttpHeader('Content-type: '.Oxygen::GetContentType().'; charset='.Oxygen::GetCharset());
+		Oxygen::AddHttpHeader('Cache-Control: no-cache, must-revalidate');
+		Oxygen::AddHttpHeader('Expires: 0');
+		Oxygen::AddHttpHeader('Pragma: No-cache');
 	}
 	public static function AddHttpHeader($value){ self::$http_headers[] = $value; }
 	public static function SendHttpHeaders(){
@@ -205,13 +211,13 @@ class Oxygen {
 	public static function SetCharset($value) { self::$charset = strtoupper($value); }
 	public static function GetCharset(){ return self::$charset; }
 	public static function ReadUnicode($value){
-//		return self::IsCharsetUnicode() ? $value : iconv('UTF-8',self::$charset,$value);
+//		return Oxygen::IsCharsetUnicode() ? $value : iconv('UTF-8',self::$charset,$value);
 		if (self::$charset == 'UTF-8') return $value;
 		if (self::$charset == 'ISO-8859-1') return utf8_decode($value);
 		throw new Exception('PHP versions before 6.0 do not support the converting of unicode to '.self::$charset.'.');
 	}
 	public static function ToUnicode($value){
-//		return self::IsCharsetUnicode() ? $value : iconv('UTF-8',self::$charset,$value);
+//		return Oxygen::IsCharsetUnicode() ? $value : iconv('UTF-8',self::$charset,$value);
 		if (self::$charset == 'UTF-8') return $value;
 		if (self::$charset == 'ISO-8859-1') return utf8_encode($value);
 		throw new Exception('PHP versions before 6.0 do not support the converting of '.self::$charset.' to unicode.');
@@ -252,12 +258,12 @@ class Oxygen {
 	//
 	//
 	private static $temp_folder = 'tmp';
-	public static function GetTempFolder($make = false){ if ($make) self::MakeTempFolder(); return self::$temp_folder; }
+	public static function GetTempFolder($make = false){ if ($make) Oxygen::MakeTempFolder(); return self::$temp_folder; }
 	public static function SetTempFolder($value) { self::$temp_folder = $value; }
 	public static function HasTempFolder(){ return is_dir(self::$temp_folder); }
 	public static function MakeTempFolder(){ if (!file_exists(self::$temp_folder)) mkdir(self::$temp_folder,0777,true); }
 	public static function ClearTempFolder(){
-		$tmp = self::GetTempFolder();
+		$tmp = Oxygen::GetTempFolder();
 		foreach (scandir($tmp) as $f){
 			if (is_dir($f)) continue;
 			try{
@@ -272,7 +278,7 @@ class Oxygen {
 		if ($force || is_null($last_time) || $now - $last_time > 3600) {
 			$one_day_time = 86400;
 
-			$tmp = self::GetTempFolder();
+			$tmp = Oxygen::GetTempFolder();
 			foreach (scandir($tmp) as $f){
 				if (is_dir($f)) continue;
 				try{
@@ -308,7 +314,7 @@ class Oxygen {
 	//
 	//
 	private static $data_folder = 'dat';
-	public static function GetDataFolder($make = false){ if ($make) self::MakeDataFolder(); return self::$data_folder; }
+	public static function GetDataFolder($make = false){ if ($make) Oxygen::MakeDataFolder(); return self::$data_folder; }
 	public static function SetDataFolder($value){ self::$data_folder = $value; }
 	public static function HasDataFolder(){ return is_dir(self::$data_folder); }
 	public static function MakeDataFolder(){ if(!file_exists(self::$data_folder)) mkdir(self::$data_folder,0777,true); }
@@ -321,7 +327,7 @@ class Oxygen {
 	//
 	//
 	private static $log_folder = 'log';
-	public static function GetLogFolder($make = false){ if ($make) self::MakeLogFolder(); return self::$log_folder; }
+	public static function GetLogFolder($make = false){ if ($make) Oxygen::MakeLogFolder(); return self::$log_folder; }
 	public static function SetLogFolder($value) { self::$log_folder = $value; }
 	public static function HasLogFolder(){ return is_dir(self::$log_folder); }
 	public static function MakeLogFolder(){ if(!file_exists(self::$log_folder)) mkdir(self::$log_folder,0777,true); }
@@ -352,7 +358,7 @@ class Oxygen {
 	private static $class_files_reloaded = false;
 	private static function ReloadClassFiles(){
 		Scope::$APPLICATION['Oxygen::ClassFiles'] = null;
-		self::LoadClassFiles();
+		Oxygen::LoadClassFiles();
 	}
 	private static function LoadClassFiles(){
 		self::$class_files = Scope::$APPLICATION['Oxygen::ClassFiles'];
@@ -360,7 +366,7 @@ class Oxygen {
 			self::$class_files = array();
 			foreach (self::$code_folders as $folder) {
 				if (is_dir($folder)) { // important!
-					self::LoadClassFilesRecursively($folder);
+					Oxygen::LoadClassFilesRecursively($folder);
 				}
 			}
 			Scope::$APPLICATION['Oxygen::ClassFiles'] = self::$class_files;
@@ -371,7 +377,7 @@ class Oxygen {
 		foreach (scandir($folder) as $x) if ($x!='.'&&$x!='..') {
 			$ff = $folder.'/'.$x;
 			if (is_dir($ff))
-				self::LoadClassFilesRecursively($folder.'/'.$x);
+				Oxygen::LoadClassFilesRecursively($folder.'/'.$x);
 			else {
 				$l = strlen($x);
 				if ($l > 4) {
@@ -387,17 +393,17 @@ class Oxygen {
 
 	public static function FindClassFile($class){
 		$r = null;
-		if (is_null(self::$class_files)) self::LoadClassFiles();
+		if (is_null(self::$class_files)) Oxygen::LoadClassFiles();
 		$b = isset(self::$class_files[$class]); if ($b) $r = self::$class_files[$class];
 		if (!self::$class_files_reloaded) {
 			if ($b) {
 				if (!file_exists($r)) {
-					self::ReloadClassFiles();
+					Oxygen::ReloadClassFiles();
 					if (isset(self::$class_files[$class])) $r = self::$class_files[$class];
 				}
 			}
 			else {
-				self::ReloadClassFiles();
+				Oxygen::ReloadClassFiles();
 				if (isset(self::$class_files[$class])) $r = self::$class_files[$class];
 			}
 		}
@@ -446,7 +452,7 @@ class Oxygen {
 	public static function GetUrlPins() { return self::$url_pins; }
 	public static function SetUrlPin($key,$value) { self::$url_pins[$key] = $value; }
 	public static function MakeHrefPreservingValues(array $params = array()){
-		return self::MakeHref( $params + $_GET );    // <-- array + operator is a better array_merge($b,$a)...
+		return Oxygen::MakeHref( $params + $_GET );    // <-- array + operator is a better array_merge($b,$a)...
 	}
 	public static function MakeHref(array $url_args = array()){
 		$s = '';
@@ -464,25 +470,25 @@ class Oxygen {
 	}
 	public static function Redirect(Action $action) {
 		while (ob_get_level()>0) ob_end_clean();
-		self::SendHttpHeaders();
+		Oxygen::SendHttpHeaders();
 		echo Js::BEGIN."window.location.href=".new Js($action->GetHrefPlain()).";".Js::END;
 		exit();
 	}
 	public static function RedirectBack(){
 		while (ob_get_level()>0) ob_end_clean();
-		self::SendHttpHeaders();
+		Oxygen::SendHttpHeaders();
 		echo Js::BEGIN."window.location.href=".new Js($_SERVER['HTTP_REFERER']).";".Js::END;
 		exit();
 	}
 	public static function Refresh(){
 		while (ob_get_level()>0) ob_end_clean();
-		self::SendHttpHeaders();
+		Oxygen::SendHttpHeaders();
 		echo Js::BEGIN."window.location.href=window.location.href;".Js::END;
 		exit();
 	}
 	public static function RefreshParent(){
 		while (ob_get_level()>0) ob_end_clean();
-		self::SendHttpHeaders();
+		Oxygen::SendHttpHeaders();
 		echo Js::BEGIN."parent.location.href=parent.location.href;".Js::END;
 		exit();
 	}
@@ -506,24 +512,24 @@ class Oxygen {
 		$s = $_SERVER['SCRIPT_NAME'];
 		return substr($s,strrpos($s,'/')+1) . '?' . $_SERVER['QUERY_STRING'];
 	}
-	public static function GetHrefServer($protocol = null,$port = null){
-		$old_protocol = self::IsHttps() ? 'https' : 'http';
-		if (is_null($protocol)) $protocol = $old_protocol;
-		$r = $protocol . '://' . $_SERVER["SERVER_NAME"];
-		if ($port == null) {
-			if ($protocol == 'http' && $_SERVER["SERVER_PORT"] != '80') $r .= ":".$_SERVER["SERVER_PORT"];
-			if ($protocol == 'https' && $_SERVER["SERVER_PORT"] != '443') $r .= ":".$_SERVER["SERVER_PORT"];
+	public static function GetHrefServer($new_protocol = null,$new_port = null){
+		$old_protocol = Oxygen::IsHttps() ? 'https' : 'http';
+		if (is_null($new_protocol)) $new_protocol = $old_protocol;
+		$r = $new_protocol . '://' . $_SERVER["SERVER_NAME"];
+		if ($new_port == null) {
+			if ($new_protocol == 'http' && $_SERVER["SERVER_PORT"] != '80') $r .= ":".$_SERVER["SERVER_PORT"];
+			if ($new_protocol == 'https' && $_SERVER["SERVER_PORT"] != '443') $r .= ":".$_SERVER["SERVER_PORT"];
 		}
 		return $r;
 	}
-	public static function GetHrefBaseFull($protocol = null,$port = null){
-		return self::GetHrefServer($protocol,$port) . self::GetHrefBase() . '/';
+	public static function GetHrefBaseFull($new_protocol = null,$new_port = null){
+		return Oxygen::GetHrefServer($new_protocol,$new_port) . Oxygen::GetHrefBase() . '/';
 	}
 
 	private static $href_root = null;
 	private static $href_current_folder = '';
-	public static function SetRequestFolders( $absolute_initial_request_folder , $absolute_physical_root_folder ){
-		self::$href_current_folder = substr( $absolute_initial_request_folder, strlen($absolute_physical_root_folder) + 1 );
+	public static function SetRequestFolders( $absolute_initial_request_folder ){
+		self::$href_current_folder = substr( $absolute_initial_request_folder, strlen(__ROOT__) + 1 );
 		self::$href_root = substr( $_SERVER['SCRIPT_NAME'] , 0 , strpos( $_SERVER['SCRIPT_NAME'] , self::$href_current_folder ) );
 	}
 	public static function GetHrefCurrentFolder(){ return self::$href_current_folder; }
@@ -621,7 +627,7 @@ class Oxygen {
 		ob_start();
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
 
-		if (self::GetHrefCurrentFolder() != '') {
+		if (Oxygen::GetHrefCurrentFolder() != '') {
 			echo '<base href="'.new Html(Oxygen::GetHrefBase()).'" />';
 		}
 
@@ -630,7 +636,7 @@ class Oxygen {
 			$new_window_hash = Oxygen::HashRandom32();
 			echo "if(window.name!=".new Js(self::$window_hash)."){";
 			echo "  window.name=".new Js($new_window_hash).";";
-			echo "  window.location.href=".new Js(self::MakeHrefPreservingValues(array('window'=>$new_window_hash)));
+			echo "  window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>$new_window_hash)));
 			echo "}";
 		}
 
@@ -641,7 +647,7 @@ class Oxygen {
 		}
 
 		echo "var oxygen_encoding = ".new Js(Oxygen::GetCharset()).";";
-		echo "var oxygen_lang = ".new Js(Oxygen::$lang).";";
+		echo "var oxygen_lang = ".new Js(Oxygen::GetLang()).";";
 		echo Js::END;
 
 		echo '<script type="text/javascript" src="oxy/jsc/prototype.js"></script>';
