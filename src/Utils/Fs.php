@@ -2,6 +2,12 @@
 
 class Fs {
 
+	public static function GetSafeFilename($filename) {
+		return str_replace(
+			array(" ","&","+","/","\\","'",'"')
+		 ,array("_","_","_","_","_","_","_")
+		 ,$filename);
+	}
 
 	/**
 	 * @param $dir string the directory to be scanned

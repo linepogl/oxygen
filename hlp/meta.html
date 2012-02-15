@@ -122,13 +122,13 @@ The value of the label can be changed with the method <span class="code">WithLab
 
 <p class="code">
 // No call
-$m->Title = OmniString::Field();                                                          // label: Lemma::Retrieve('Title')
+$m->Title = OmniString::Field();                                                          // label: Lemma::Pick('Title')
 
 // Call with one string argument
-$m->Title = OmniString::Field()->WithLabel('BookTitle');                                  // label: Lemma::Retrieve('BookTitle')
+$m->Title = OmniString::Field()->WithLabel('BookTitle');                                  // label: Lemma::Pick('BookTitle')
 
 // Call with one Lemma argument
-$m->Title = OmniString::Field()->WithLabel( Lemma::Retrieve('BookTitle') );               // label: Lemma::Retrieve('BookTitle')
+$m->Title = OmniString::Field()->WithLabel( Lemma::Pick('BookTitle') );               // label: Lemma::Pick('BookTitle')
 $m->Title = OmniString::Field()->WithLabel( new Lemma('en','Title','fr','Titre') );       // label: Lemma('en','Title','fr','Titre')
 
 // Call with two or more string arguments

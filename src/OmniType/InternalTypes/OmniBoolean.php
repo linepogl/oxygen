@@ -97,8 +97,8 @@ class OmniBoolean extends OmniType {
 	 * @return string
 	 */
 	public static function ExportHumanReadableHtmlString($value) {
-		if ($value) return (string)Lemma::Retrieve('Yes');
-		return (string)Lemma::Retrieve('No');
+		if ($value) return (string)Lemma::Pick('Yes');
+		return (string)Lemma::Pick('No');
 	}
 
 	/**

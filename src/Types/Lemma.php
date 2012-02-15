@@ -140,15 +140,18 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
 	private static $packed_dictionary = null;   // $name => serialize( $lemma->data )
 
 	/** @return Lemma */
+	public static function Pick($name){
+		if (is_null(self::$dictionary)) self::LoadDictionary();
+		return isset(self::$dictionary[$name]) ? self::$dictionary[$name] : self::Unpack($name);
+	}
+	/** @return Lemma */
 	public static function Retrieve($name){
 		if (is_null(self::$dictionary)) self::LoadDictionary();
 		return isset(self::$dictionary[$name]) ? self::$dictionary[$name] : self::Unpack($name);
 	}
 	/** @return string */
-	public static function Sprintf($name){
-		$a = func_get_args();
-		$a = array_splice($a,1);
-		return vsprintf(Lemma::Retrieve($name),$a);
+	public function Sprintf(){
+		return vsprintf($this,func_get_args());
 	}
 	/** @return Lemma */
 	private static function Unpack($name){

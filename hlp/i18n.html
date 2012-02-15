@@ -33,11 +33,11 @@ $lemma4 = new Lemma('Title','en','Title','fr','Titre');   // named lemma
 </p>
 
 <p>
-However, in the majority of the cases, the lemma is retrieved by the <span class="code">Lemma::Retrieve()</span> function:
+However, in the majority of the cases, the lemma is retrieved by the <span class="code">Lemma::Pick()</span> function:
 </p>
 
 <p class="code">
-$lemma = Lemma::Retrieve('Title');    // retrieves a lemma from the dictionaries
+$lemma = Lemma::Pick('Title');    // retrieves a lemma from the dictionaries
 </p>
 
 <p>
@@ -46,7 +46,7 @@ following code works:
 </p>
 
 <p class="code">
-echo Lemma::Retrieve('Title');  // Lemma will be converted to a string first. The conversion depends on the current language.
+echo Lemma::Pick('Title');  // Lemma will be converted to a string first. The conversion depends on the current language.
 </p>
 
 <p>
@@ -101,11 +101,11 @@ format specifiers.
 
 
 <p>
-The translation of these lemmas should be done with the use of <span class="code">Lemma::Sprintf</span> function:
+The translation of these lemmas should be done with the use of the <span class="code">Sprintf</span> method:
 </p>
 
 <p class="code">
-echo Lemma::Sprintf( 'MsgNumberOfBooksByAuthor' , $author , $number_of_books );
+echo Lemma::Pick( 'MsgNumberOfBooksByAuthor' )->Sprintf( $author , $number_of_books );
 </p>
 
 

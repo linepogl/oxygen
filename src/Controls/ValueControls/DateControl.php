@@ -81,18 +81,18 @@ DateControl extends ValueControl {
 		echo "var dyp = new Date(cm.getFullYear(),cm.getMonth(),1).add({years:-1});";
 		echo "var dyn = new Date(cm.getFullYear(),cm.getMonth(),1).add({years:1});";
 
-		echo "var months=new Array(".new Js(Lemma::Retrieve('Jan.'))
-														.",".new Js(Lemma::Retrieve('Feb.'))
-														.",".new Js(Lemma::Retrieve('Mar.'))
-														.",".new Js(Lemma::Retrieve('Apr.'))
-														.",".new Js(Lemma::Retrieve('May.'))
-														.",".new Js(Lemma::Retrieve('Jun.'))
-														.",".new Js(Lemma::Retrieve('Jul.'))
-														.",".new Js(Lemma::Retrieve('Aug.'))
-														.",".new Js(Lemma::Retrieve('Sep.'))
-														.",".new Js(Lemma::Retrieve('Oct.'))
-														.",".new Js(Lemma::Retrieve('Nov.'))
-														.",".new Js(Lemma::Retrieve('Dec.'))
+		echo "var months=new Array(".new Js(Lemma::Pick('Jan.'))
+														.",".new Js(Lemma::Pick('Feb.'))
+														.",".new Js(Lemma::Pick('Mar.'))
+														.",".new Js(Lemma::Pick('Apr.'))
+														.",".new Js(Lemma::Pick('May.'))
+														.",".new Js(Lemma::Pick('Jun.'))
+														.",".new Js(Lemma::Pick('Jul.'))
+														.",".new Js(Lemma::Pick('Aug.'))
+														.",".new Js(Lemma::Pick('Sep.'))
+														.",".new Js(Lemma::Pick('Oct.'))
+														.",".new Js(Lemma::Pick('Nov.'))
+														.",".new Js(Lemma::Pick('Dec.'))
 														.");";
 		echo "s+='<tr>';";
 		echo "s+='<td class=\"monthx\"><a href=\"javascript:".$this->name."ShowMonth(new Date('+dyp.getFullYear()+','+dyp.getMonth()+','+dyp.getDate()+'));\">&laquo;</a></td>';";
@@ -102,13 +102,13 @@ DateControl extends ValueControl {
 		echo "s+='<td class=\"monthx\"><a href=\"javascript:".$this->name."ShowMonth(new Date('+dyn.getFullYear()+','+dyn.getMonth()+','+dyn.getDate()+'));\">&raquo;</a></td>';";
 		echo "s+='</tr>';";
 
-		echo "var days=new Array(".new Js(substr(Lemma::Retrieve('Monday'),0,1))
-													.",".new Js(substr(Lemma::Retrieve('Tuesday'),0,1))
-													.",".new Js(substr(Lemma::Retrieve('Wednesday'),0,1))
-													.",".new Js(substr(Lemma::Retrieve('Thursday'),0,1))
-													.",".new Js(substr(Lemma::Retrieve('Friday'),0,1))
-													.",".new Js(substr(Lemma::Retrieve('Saturday'),0,1))
-													.",".new Js(substr(Lemma::Retrieve('Sunday'),0,1))
+		echo "var days=new Array(".new Js(substr(Lemma::Pick('Monday'),0,1))
+													.",".new Js(substr(Lemma::Pick('Tuesday'),0,1))
+													.",".new Js(substr(Lemma::Pick('Wednesday'),0,1))
+													.",".new Js(substr(Lemma::Pick('Thursday'),0,1))
+													.",".new Js(substr(Lemma::Pick('Friday'),0,1))
+													.",".new Js(substr(Lemma::Pick('Saturday'),0,1))
+													.",".new Js(substr(Lemma::Pick('Sunday'),0,1))
 													.");";
 
 		echo "s+='<tr>';";

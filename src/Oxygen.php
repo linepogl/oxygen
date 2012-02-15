@@ -117,10 +117,10 @@ class Oxygen {
 				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
 			}
 			elseif (!DEV){
-				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Retrieve('MsgAnErrorOccurred').'</div>';
+				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Pick('MsgAnErrorOccurred').'</div>';
 			}
 			else {
-				echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Retrieve('MsgDevelopmentEnvironment').'</div>';
+				echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div>';
 				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
 				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($ex)).'</div>';
 				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
@@ -160,7 +160,7 @@ class Oxygen {
 	public static $langs = array();
 	public static $lang = null;
 	public static function AddLanguage($lang) { if (!in_array($lang,self::$langs)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
-	public static function SetLanguage($lang) { self::$lang = $lang; self::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Retrieve('locale')); }
+	public static function SetLanguage($lang) { self::$lang = $lang; self::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Pick('locale')); }
 	public static function GetLang(){ return self::$lang; }
 	public static function GetLangs(){ return self::$langs; }
 

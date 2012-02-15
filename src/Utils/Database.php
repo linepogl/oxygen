@@ -83,14 +83,14 @@ class Database {
 			}
 			catch (Exception $ex){
 				self::PopConnection();
-				throw new ApplicationException(Lemma::Retrieve('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
+				throw new ApplicationException(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
 			}
 			try{
 				Database::Execute('CREATE DATABASE '.new SqlName($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
 			}
 			catch (Exception $ex){
 				self::PopConnection();
-				throw new ApplicationException(Lemma::Retrieve('MsgCannotCreateDatabase').'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
+				throw new ApplicationException(Lemma::Pick('MsgCannotCreateDatabase').'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
 			}
 			self::PopConnection();
 		}
@@ -99,7 +99,7 @@ class Database {
 
 	private static function RequireConnection(){
 		if (is_null(self::$cn)){
-			if (is_null(self::$cx)) throw new ApplicationException(Lemma::Retrieve('MsgNoDatabaseConnectionSpecified'));
+			if (is_null(self::$cx)) throw new ApplicationException(Lemma::Pick('MsgNoDatabaseConnectionSpecified'));
 			try{
 				switch (self::$cx->type){
 					case self::MYSQL:
@@ -116,7 +116,7 @@ class Database {
 				}
 			}
 			catch (Exception $ex){
-				throw new ApplicationException(Lemma::Retrieve('MsgCannotConnectToDatabase').'<br/><br/>'. self::$cx->server.'/'.self::$cx->schema. '<br/>'.$ex->getMessage());
+				throw new ApplicationException(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. self::$cx->server.'/'.self::$cx->schema. '<br/>'.$ex->getMessage());
 			}
 			if (self::$cx->is_managed){
 				self::Upgrade();

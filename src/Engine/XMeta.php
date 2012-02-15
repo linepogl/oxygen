@@ -63,7 +63,7 @@ class XMeta extends stdClass {
 			if ($is_field || $is_slave) {
 				$value->SetMeta($this);
 				$value->SetName($key);
-				if ($value->GetLabel() == null) $value->WithLabel(Lemma::Retrieve($key));
+				if ($value->GetLabel() == null) $value->WithLabel(Lemma::Pick($key));
 
 				if ($is_field) {
 					if ($key !== 'id') {

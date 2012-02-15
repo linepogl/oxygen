@@ -40,11 +40,11 @@ class TimeSpanControl extends ValueControl {
 
 		if ($this->show_days){
 			echo TextboxControl::Make($this->name.'_days',$d)->WithWidth('20px')->WithStyle('text-align:center;')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode);
-			echo '&nbsp;'.Lemma::Retrieve('d.').'&nbsp;';
+			echo '&nbsp;'.Lemma::Pick('d.').'&nbsp;';
 		}
 		if ($this->show_hours){
 			echo TextboxControl::Make($this->name.'_hours',$h)->WithWidth('20px')->WithStyle('text-align:center;')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode);
-			echo '&nbsp;'.Lemma::Retrieve('h.').'&nbsp;';
+			echo '&nbsp;'.Lemma::Pick('h.').'&nbsp;';
 		}
 		if ($this->show_minutes){
 			echo TextboxControl::Make($this->name.'_minutes',$m)->WithWidth('20px')->WithStyle('text-align:center;')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode);

@@ -109,8 +109,8 @@ class OmniBooleanOrNull extends OmniType {
 	 */
 	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
-		if ($value) return (string)Lemma::Retrieve('Yes');
-		return (string)Lemma::Retrieve('No');
+		if ($value) return (string)Lemma::Pick('Yes');
+		return (string)Lemma::Pick('No');
 	}
 
 	/**

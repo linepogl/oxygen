@@ -123,8 +123,8 @@ class OmniTimeSpan extends OmniType {
 		$h = $value->GetHours();
 		$m = $value->GetMinutes();
 		$s = $value->GetSeconds();
-		return ($d==0?'':$d.Lemma::Retrieve('d.'))
-				 . ($h==0?'':$h.Lemma::Retrieve('h.'))
+		return ($d==0?'':$d.Lemma::Pick('d.'))
+				 . ($h==0?'':$h.Lemma::Pick('h.'))
 				 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
 				 ;
 	}

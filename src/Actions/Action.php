@@ -41,7 +41,7 @@ abstract class Action implements OmniValue {
 
 	public function GetContentType(){ return Oxygen::GetContentType(); }
 	public function GetCharset(){ return Oxygen::GetCharset(); }
-	public function GetTitle(){ return Lemma::Retrieve($this->GetName()); }
+	public function GetTitle(){ return Lemma::Pick($this->GetName()); }
 	public function GetPathTitle(){ return $this->GetTitle(); }
 	public function GetDescription(){ return ''; }
 	/** @return Action */ public function GetParentAction(){ return null; }
@@ -84,7 +84,7 @@ abstract class Action implements OmniValue {
 		$this->content_compromised = false;
 		try {
 			if (!$this->IsPermitted()) throw new SecurityException();
-			if (!$this->IsLogical()) throw new ApplicationException(Lemma::Retrieve('MsgInvalidAction'));
+			if (!$this->IsLogical()) throw new ApplicationException(Lemma::Pick('MsgInvalidAction'));
 			$this->OnBeforeRender();
 			if ($this->IsLong())
 				ProgressControl::Make()->WithAction($this)->WithForwardRequest(true)->WithHeight($this->GetHeight()-150)->Render();
@@ -155,7 +155,7 @@ abstract class Action implements OmniValue {
 				elseif ($this->IsAjax() && $this->IsDialog()){
 					echo new MessageControl($ex);
 					echo '<div class="buttons1"><div class="buttons3"><div class="buttons2">';
-					echo ButtonControl::Make()->WithValue(Lemma::Retrieve('Close'))->WithOnClick('Oxygen.HideDialog();');
+					echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
 					echo '</div></div></div>';
 				}
 				else {
@@ -168,7 +168,7 @@ abstract class Action implements OmniValue {
 					echo new Spacer(350);
 					echo new MessageControl($ex);
 					echo new Spacer(350);
-					//echo '<br/><br/><br/>' . ButtonControl::Make()->WithValue(Lemma::Retrieve('Back'))->WithOnClick('history.back();');
+					//echo '<br/><br/><br/>' . ButtonControl::Make()->WithValue(Lemma::Pick('Back'))->WithOnClick('history.back();');
 					echo '</td>';
 					echo '</tr></table>';
 					echo '</td></tr></table>';
@@ -184,18 +184,18 @@ abstract class Action implements OmniValue {
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
 				if (DEV)
-					echo '['.Lemma::Retrieve('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
+					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
 				else
-					echo Lemma::Retrieve('MsgAnErrorOccurred');
+					echo Lemma::Pick('MsgAnErrorOccurred');
 			}
 			else {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
 					if (DEV)
-						Debug::Write( '['.Lemma::Retrieve('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) );
+						Debug::Write( '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) );
 					else
-						Debug::Write( Lemma::Retrieve('MsgAnErrorOccurred') );
+						Debug::Write( Lemma::Pick('MsgAnErrorOccurred') );
 				}
 				else {
 					echo '<table class="center"><tr><td>';
@@ -207,13 +207,13 @@ abstract class Action implements OmniValue {
 
 					if (DEV) {
 						echo new Spacer(350,12);
-						echo '<div style="font-weight:normal;font-style:italic;color:#cccccc;font-size:90%;">'.Lemma::Retrieve('MsgDevelopmentEnvironment').'</div><br/>';
+						echo '<div style="font-weight:normal;font-style:italic;color:#cccccc;font-size:90%;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div><br/>';
 						echo Debug::GetExceptionReportAsHtml($ex);
 						echo new Spacer(350);
 					}
 					else {
 						echo new Spacer(350,33);
-						echo new MessageControl( new ErrorMessage( Lemma::Retrieve('MsgAnErrorOccurred') ) );
+						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurred') ) );
 						echo new Spacer(350);
 					}
 

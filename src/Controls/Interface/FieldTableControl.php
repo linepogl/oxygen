@@ -48,12 +48,12 @@ class FieldTableControl extends Control {
 
 	public function AddOKCancel(){
 		$this->Add('');
-		$this->Write(ButtonControl::Make()->WithIsSubmit(true)->WithValue(Lemma::Retrieve('OK')).'&nbsp;'.ButtonControl::Make()->WithValue(Lemma::Retrieve('Cancel'))->WithOnClick("history.back();"));
+		$this->Write(ButtonControl::Make()->WithIsSubmit(true)->WithValue(Lemma::Pick('OK')).'&nbsp;'.ButtonControl::Make()->WithValue(Lemma::Pick('Cancel'))->WithOnClick("history.back();"));
 	}
 
 	public function AddSubmitReset(){
 		$this->Add('');
-		$this->Write(ButtonControl::Make()->WithValue(Lemma::Retrieve('OK'))->WithIsSubmit(true).new Spacer(7).ButtonControl::Make()->WithValue(Lemma::Retrieve('Cancel'))->WithIsReset(true));
+		$this->Write(ButtonControl::Make()->WithValue(Lemma::Pick('OK'))->WithIsSubmit(true).new Spacer(7).ButtonControl::Make()->WithValue(Lemma::Pick('Cancel'))->WithIsReset(true));
 	}
 
 

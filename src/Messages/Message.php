@@ -68,7 +68,7 @@ abstract class Message {
 			return new ErrorMessage($value->getMessage());
 
 		if ($value instanceof Exception)
-			return new BugMessage( DEV ? Debug::GetExceptionReportAsHtml($value) : Lemma::Retrieve('MsgAnErrorOccurred') );
+			return new BugMessage( DEV ? Debug::GetExceptionReportAsHtml($value) : Lemma::Pick('MsgAnErrorOccurred') );
 
 		if (is_array($value))
 			return new MultiMessage($value);

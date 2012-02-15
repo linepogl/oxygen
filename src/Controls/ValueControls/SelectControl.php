@@ -51,7 +51,7 @@ class SelectControl extends ValueControl {
 	}
 
 	public function AddXItemWithVersion(XItem $dbitem){
-		return $this->Add( $dbitem->id , $dbitem->GetCode() . ' '. Lemma::Retrieve('TITRE_VERSION'). ' '. $dbitem->version. ' &rarr; ' . $dbitem->GetTitle() );
+		return $this->Add( $dbitem->id , $dbitem->GetCode() . ' '. Lemma::Pick('TITRE_VERSION'). ' '. $dbitem->version. ' &rarr; ' . $dbitem->GetTitle() );
 	}
 
 	public function AddXItem(XItem $dbitem){

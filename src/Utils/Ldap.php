@@ -17,7 +17,7 @@ class Ldap {
 		// Test connexion
 		if (!@ldap_bind(self::$cn)) {
 			self::Disconnect();
-			throw new ApplicationException(Lemma::Retrieve('MsgCannotConnectToLdapServer'));
+			throw new ApplicationException(Lemma::Pick('MsgCannotConnectToLdapServer'));
 		}
 
 		ldap_unbind(self::$cn);
@@ -49,15 +49,15 @@ class Ldap {
 		$info	= ldap_get_entries(self::$cn, $search_result);
 
 		if ($info === false || $info['count'] == 0)
-			throw new ApplicationException(Lemma::Retrieve('MsgInvalidUsername'));
+			throw new ApplicationException(Lemma::Pick('MsgInvalidUsername'));
 
 		if ($info['count'] > 1)
-			throw new ApplicationException(Lemma::Retrieve('MsgMultipleUsersFound'));
+			throw new ApplicationException(Lemma::Pick('MsgMultipleUsersFound'));
 
 		$ldap_bind = ldap_bind(self::$cn, $info[0]['dn'], $password);
 
 		if ($ldap_bind === false)
-			throw new ApplicationException(Lemma::Retrieve('MsgInvalidPassword'));
+			throw new ApplicationException(Lemma::Pick('MsgInvalidPassword'));
 
 		return $info[0];
 	}

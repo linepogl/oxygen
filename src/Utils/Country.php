@@ -133,7 +133,7 @@ final class Country {
 		return self::$ordered_enum;
 	}
 	public static function Translate($code) {
-		return Lemma::Retrieve('country:'.$code);
+		return Lemma::Pick('country:'.$code);
 	}
 	public static function ConvertIso3ToIso2($iso3){
 		return isset(self::$Enum[$iso3]) ? self::$Enum[$iso3] : null;

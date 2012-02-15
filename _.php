@@ -55,8 +55,8 @@ function from($whatever){
 ///** @return string */
 //function say($what){
 //	if (func_num_args() == 1)
-//		return strval(Lemma::Retrieve($what));
+//		return strval(Lemma::Pick($what));
 //	else
-//		return vsprintf(Lemma::Retrieve($what),array_splice(func_get_args(),1));
+//		return vsprintf(Lemma::Pick($what),array_splice(func_get_args(),1));
 //}
 

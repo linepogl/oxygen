@@ -138,7 +138,7 @@ class ActionModifyBook extends Action {
 			// Validate the form
 			$v->Title->CheckMandatory( $this->book->Title );
 			$v->Author->CheckMandatory( $this->book->Author );
-			$v->Author->Check($this->book->Author==strtoupper($this->book->Author), Lemma::Retrieve('MsgUseCapitalLetters'));
+			$v->Author->Check($this->book->Author==strtoupper($this->book->Author), Lemma::Pick('MsgUseCapitalLetters'));
 
 			// Process the form
 			if ($v->HasPassed()) {
@@ -162,8 +162,8 @@ class ActionModifyBook extends Action {
 		if (!$v->Author->HasPassed()) echo new MessageControl($v->Author);
 		echo '&lt;br/&gt;'
 
-		ButtonControl::Make()->WithValue( Lemma::Retrieve('OK') )->WithIsSubmit( true )->Render();
-		ButtonControl::Make()->WithValue( Lemma::Retrieve('Cancel') )->WithIsCancel( true )->Render();
+		ButtonControl::Make()->WithValue( Lemma::Pick('OK') )->WithIsSubmit( true )->Render();
+		ButtonControl::Make()->WithValue( Lemma::Pick('Cancel') )->WithIsCancel( true )->Render();
 		echo $this->EndForm();
 	}
 }

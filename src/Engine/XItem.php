@@ -29,8 +29,8 @@ abstract class XItem implements Serializable,OmniValue {
 	public function GetMenu(){ return new Menu(); }
 
 	public static function GetClassName(){ return get_called_class(); }
-	public static function GetClassTitle(){ return Lemma::Retrieve(get_called_class()); }
-	public static function GetClassTitlePlural(){ return Lemma::Retrieve(get_called_class().'s'); }
+	public static function GetClassTitle(){ return Lemma::Pick(get_called_class()); }
+	public static function GetClassTitlePlural(){ return Lemma::Pick(get_called_class().'s'); }
 	public static function GetClassTitleGeneric($classname) { return $classname::GetClassTitle(); }
 	public static function GetClassTitlePluralGeneric($classname) { return $classname::GetClassTitlePlural(); }
 
@@ -449,7 +449,7 @@ abstract class XItem implements Serializable,OmniValue {
 								->Where($foreign_field->Eq($value))
 								->GetFirst();
 
-							if (is_null($x)) $v[] = new ErrorMessage(sprintf(Lemma::Retrieve('MsgXItemNotFound'),XItem::GetClassTitleGeneric($foreign_field->GetMeta()->GetClassName()),$value));
+							if (is_null($x)) $v[] = new ErrorMessage(sprintf(Lemma::Pick('MsgXItemNotFound'),XItem::GetClassTitleGeneric($foreign_field->GetMeta()->GetClassName()),$value));
 							$value = is_null($x) ? null : $x->id;
 						}
 					}

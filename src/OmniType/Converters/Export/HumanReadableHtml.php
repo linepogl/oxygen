@@ -27,7 +27,7 @@ final class HumanReadableHtml extends ExportConverter {
 //	  }
 //
 //	  if ( is_bool($this->value) ) {
-//		  $r = self::escape( strval ($this->value ? Lemma::Retrieve('Yes') : Lemma::Retrieve('No')));
+//		  $r = self::escape( strval ($this->value ? Lemma::Pick('Yes') : Lemma::Pick('No')));
 //		  return $r;
 //	  }
 //
@@ -68,8 +68,8 @@ final class HumanReadableHtml extends ExportConverter {
 //    	$h = $this->value->GetHours();
 //    	$m = $this->value->GetMinutes();
 //    	$s = $this->value->GetSeconds();
-//    	$r = ($d==0?'':$d.Lemma::Retrieve('d.'))
-//    			 . ($h==0?'':$h.Lemma::Retrieve('h.'))
+//    	$r = ($d==0?'':$d.Lemma::Pick('d.'))
+//    			 . ($h==0?'':$h.Lemma::Pick('h.'))
 //    			 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
 //    			 ;
 //	    return $r;

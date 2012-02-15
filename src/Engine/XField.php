@@ -64,7 +64,7 @@ class XField implements OmniValue {
 			$a = func_get_args();
       $z = func_num_args();
       if ($z == 1)
-        $this->label = Lemma::Retrieve($a[0]);
+        $this->label = Lemma::Pick($a[0]);
       else
 			  $this->label = new Lemma($a);
 		}
