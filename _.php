@@ -24,7 +24,10 @@ function dump($var){
   echo '</div>';
 }
 
-/** @return LinqIterator */
+/**
+ * @param $whatever ...
+ * @return LinqIterator
+ */
 function from($whatever){
 	$a = func_get_args();
 	if (count($a)!=1) return new LinqIterator(new ArrayIterator($a));
