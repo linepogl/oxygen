@@ -1,5 +1,10 @@
 <?php
 define('__ROOT__',substr(__DIR__,0,strrpos(__DIR__,'/')));
+define('__BASE__',substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-(strlen($_SERVER['SCRIPT_FILENAME'])-strlen(__ROOT__))+1));
+define('__OFFSET__',substr($_SERVER['SCRIPT_NAME'],strlen(__BASE__),strrpos($_SERVER['SCRIPT_NAME'],'/')-strlen(__BASE__)+1));
+chdir(__ROOT__);
+
+
 define('DEBUG',array_key_exists('debug',$_GET));
 define('PROFILE',array_key_exists('profile',$_GET));
 define('DEV',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
@@ -13,6 +18,13 @@ require('oxy/src/Oxygen.php');
 require('oxy/src/Utils/Scope.php');
 require('oxy/src/Utils/Database.php');
 require('oxy/src/Engine/XMeta.php');
+
+function user_error_handler($severity, $msg, $filename, $linenum, $content) {
+	if (0 == (error_reporting() & $severity)) return;
+	throw new ErrorException($msg, 0, $severity, $filename , $linenum);
+}
+set_error_handler('user_error_handler');
+
 
 function dump($var){
 	$root = realpath('.');

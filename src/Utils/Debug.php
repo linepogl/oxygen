@@ -159,10 +159,9 @@ class Debug {
 	private static $instrument_durations = array();
 
 	public static function InstrumentBegin( $instrument = null ){
-		$t = microtime(true);
 		$a = debug_backtrace();
 		$f = !is_null($instrument) ? $instrument : $a[1]['class'] . '::' . $a[1]['function'];
-		$level = count(self::$instuments);
+		//$level = count(self::$instuments);
 		//self::Add( str_repeat('&rsaquo;',$level+1) . 'BEGIN ' . $f);
 		array_push( self::$instuments , $f );
 		array_push( self::$instrument_timers , microtime(true) );
@@ -172,16 +171,18 @@ class Debug {
 		$a = debug_backtrace();
 		$f = !is_null($instrument) ? $instrument : $a[1]['class'] . '::' . $a[1]['function'];
 		$ff = null;
+		$d = 0.0;
 		while ($ff != $f){
-			$is_current = is_null($ff);
+			//$is_current = is_null($ff);
 			$ff = array_pop( self::$instuments );
 			$tt = array_pop( self::$instrument_timers );
 			$d = $t - $tt;
 			if (!array_key_exists($ff,self::$instrument_durations)) self::$instrument_durations[$ff] = 0;
 			self::$instrument_durations[$ff] += $d;
-			$level = count(self::$instuments);
+			//$level = count(self::$instuments);
 			//self::Add( str_repeat('&rsaquo;',$level+1) . 'END ' . $ff . ': [' .self::format_timespan($d) . '/' . self::format_timespan(self::$instrument_durations[$ff])  . '] ');
 		}
+		return $d;
 	}
 	public static function WriteInstruments(){
 		arsort(self::$instrument_durations);

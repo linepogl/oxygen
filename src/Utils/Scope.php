@@ -20,7 +20,7 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 		self::$base = '';
 		if (isset($_SERVER["SERVER_NAME"])) self::$base .= $_SERVER["SERVER_NAME"];
 		if (isset($_SERVER["SERVER_PORT"])) self::$base .= '.'.$_SERVER["SERVER_PORT"];
-		self::$base .= substr($_SERVER['SCRIPT_NAME'],0,strrpos($_SERVER['SCRIPT_NAME'],'/'));
+		self::$base .= __BASE__;
 		Scope::$APPLICATION = new HybridScope( new ApplicationApcScope(), new ApplicationHddScope() );
 		Scope::$DATABASE    = new HybridScope( new DatabaseApcScope(), new DatabaseHddScope() );
 		Scope::$SESSION     = new HybridScope( new SessionApcScope(), new SessionHddScope() );
@@ -100,22 +100,28 @@ abstract class MemoryScope extends Scope {
 
 
 abstract class ApcScope extends MemoryScope {
+	private $use_apc_storage = true;
+	public function SetUseApcStorage($value){ $this->use_apc_storage = $value; }
 	public function Reset(){
-		apc_clear_cache('user');
+		if ($this->use_apc_storage) {
+			apc_clear_cache('user');
+		}
 		$this->SoftReset();
 	}
 	public function offsetExists($offset) {
 		$key = $this->Hash($offset);
 		if (isset($this->data[$key]))
 			return true;
-		else
+		elseif ($this->use_apc_storage)
 			return apc_exists($key);
+		else
+			return false;
 	}
 	public function offsetGet($offset) {
 		$key = $this->Hash($offset);
 		if (isset($this->data[$key]))
 			return $this->data[$key];
-		elseif (apc_exists($key)) {
+		elseif ($this->use_apc_storage && apc_exists($key)) {
 			$this->data[$key] = apc_fetch($key);
 			return $this->data[$key];
 		}
@@ -126,26 +132,36 @@ abstract class ApcScope extends MemoryScope {
 		if ($offset == null) throw new Exception('All variables should be named.');
 		$key = $this->Hash($offset);
 		$this->data[$key] = $value;
-		if (is_null($value))
-			apc_delete($key);
-		else
-			apc_store($key,$value);
+		if ($this->use_apc_storage){
+			if (is_null($value))
+				apc_delete($key);
+			else
+				apc_store($key,$value);
+		}
 	}
 	public function offsetUnset($offset) {
 		$key = $this->Hash($offset);
 		unset($this->data[$key]);
-		apc_delete($key);
+		if ($this->use_apc_storage) {
+			apc_delete($key);
+		}
 	}
 	public function ForceGet($offset) {
 		$key = $this->Hash($offset);
-		if (apc_exists($key)) {
-			$this->data[$key] = apc_fetch($key);
+		if ($this->use_apc_storage){
+			if (apc_exists($key)) {
+				$this->data[$key] = apc_fetch($key);
+				return $this->data[$key];
+			}
+			else {
+				$this->data[$key] = null;
+				return null;
+			}
+		}
+		elseif (isset($this->data[$key]))
 			return $this->data[$key];
-		}
-		else {
-			$this->data[$key] = null;
+		else
 			return null;
-		}
 	}
 }
 
@@ -154,6 +170,8 @@ abstract class ApcScope extends MemoryScope {
 
 abstract class HddScope extends MemoryScope {
 	protected $folder = null;
+	private $use_hdd_storage = true;
+	public function SetUseHddStorage($value){ $this->use_hdd_storage = $value; }
 	public function GetFolder(){ if (is_null($this->folder)) return Oxygen::GetTempFolder(); return $this->folder; }
 	public function SetFolder($value){
 		$this->folder = $value;
@@ -161,10 +179,12 @@ abstract class HddScope extends MemoryScope {
 		$this->SoftReset();
 	}
 	public function Reset(){
-		$f = $this->GetFolder();
-		foreach (scandir($f.'/'.$this->prefix.'_*') as $ff){
-			if (is_dir($f)) continue;
-			try{ unlink($f.'/'.$ff); } catch(Exception $ex){}
+		if ($this->use_hdd_storage){
+			$f = $this->GetFolder();
+			foreach (scandir($f.'/'.$this->prefix.'_*') as $ff){
+				if (is_dir($f)) continue;
+				try{ unlink($f.'/'.$ff); } catch(Exception $ex){}
+			}
 		}
 		$this->SoftReset();
 	}
@@ -203,17 +223,21 @@ abstract class HddScope extends MemoryScope {
 		$key = $this->Hash($offset);
 		if (isset($this->data[$key]))
 			return true;
-		$f = $this->get_filename($key);
-		return file_exists($f);
+		elseif ($this->use_hdd_storage)
+			return file_exists($this->get_filename($key));
+		else
+			return false;
 	}
 	public function offsetGet($offset) {
 		$key = $this->Hash($offset);
 		if (isset($this->data[$key]))
 			return $this->data[$key];
-		$filename = $this->get_filename($key);
-		if (file_exists($filename)) {
-			$this->data[$key] = $this->hdd_fetch($filename);
-			return $this->data[$key];
+		elseif ($this->use_hdd_storage){
+			$filename = $this->get_filename($key);
+			if (file_exists($filename)) {
+				$this->data[$key] = $this->hdd_fetch($filename);
+				return $this->data[$key];
+			}
 		}
 		return null;
 	}
@@ -221,29 +245,39 @@ abstract class HddScope extends MemoryScope {
 		if ($offset == null) throw new Exception('All variables should be named.');
 		$key = $this->Hash($offset);
 		$this->data[$key] = $value;
-		$filename = $this->get_filename($key);
-		if (is_null($value))
-			$this->hdd_unset($filename);
-		else
-			$this->hdd_store($filename,$value);
+		if ($this->use_hdd_storage){
+			$filename = $this->get_filename($key);
+			if (is_null($value))
+				$this->hdd_unset($filename);
+			else
+				$this->hdd_store($filename,$value);
+		}
 	}
 	public function offsetUnset($offset) {
 		$key = $this->Hash($offset);
 		unset($this->data[$key]);
-		$filename = $this->get_filename($key);
-		$this->hdd_unset($filename);
+		if ($this->use_hdd_storage){
+			$filename = $this->get_filename($key);
+			$this->hdd_unset($filename);
+		}
 	}
 	public function ForceGet($offset) {
 		$key = $this->Hash($offset);
-		$filename = $this->get_filename($key);
-		if (file_exists($filename)) {
-			$this->data[$key] = $this->hdd_fetch($filename);
+		if ($this->use_hdd_storage){
+			$filename = $this->get_filename($key);
+			if (file_exists($filename)) {
+				$this->data[$key] = $this->hdd_fetch($filename);
+				return $this->data[$key];
+			}
+			else {
+				$this->data[$key] = null;
+				return null;
+			}
+		}
+		elseif (isset($this->data[$key]))
 			return $this->data[$key];
-		}
-		else {
-			$this->data[$key] = null;
+		else
 			return null;
-		}
 	}
 }
 
@@ -262,6 +296,10 @@ class HybridScope extends Scope {
 	}
 	public function GetMode(){ return $this->mode; }
 	public function GetModeTranslated(){ return $this->mode == self::APC ? 'APC' : 'HDD'; }
+	public function SetUseExternalStorage($value){
+		$this->SOFT->SetUseApcStorage($value);
+		$this->HARD->SetUseHddStorage($value);
+	}
 	public function SetMode( $value ) {
 		if ($value == self::APC && self::$is_apc_available) {
 			$this->mode = self::APC;

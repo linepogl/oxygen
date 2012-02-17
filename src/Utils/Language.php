@@ -10,12 +10,12 @@ final class Language {
 	/** @return string */
 	public static function GetDecimalSeparator(){
 		$l = Lemma::Pick('DecimalSeparator');
-		return $l->HasLanguage() ? $l->Translate() : self::GetDecimalSeparatorInvariant();
+		return $l->HasLang() ? $l->Translate() : self::GetDecimalSeparatorInvariant();
 	}
 	/** @return string */
 	public static function GetThousandsSeparator(){
 		$l = Lemma::Pick('ThousandsSeparator');
-		return $l->HasLanguage() ? $l->Translate() : self::GetThousandsSeparatorInvariant();
+		return $l->HasLang() ? $l->Translate() : self::GetThousandsSeparatorInvariant();
 	}
 
 	/** @return string */

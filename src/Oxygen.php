@@ -2,7 +2,6 @@
 class Oxygen {
 
 	public static function Init(){
-		set_error_handler('Oxygen::OnError');
 		set_exception_handler('Oxygen::OnException');
 		register_shutdown_function('Oxygen::OnShutdown');
 		spl_autoload_register('Oxygen::OnAutoLoad');
@@ -17,7 +16,7 @@ class Oxygen {
 			}
 			if (is_null(self::$session_hash)){
 				self::$session_hash = Oxygen::HashRandom();
-				setcookie(Oxygen::GetSessionCookieName(),self::$session_hash, time()+90*24*3600 ); // 90 days
+				setcookie(Oxygen::GetSessionCookieName(),self::$session_hash, time()+90*24*3600, __BASE__ ); // 90 days
 			}
 		}
 		else {
@@ -52,7 +51,7 @@ class Oxygen {
 		if (count(self::$langs)==0) self::$langs[] = 'en';
 		foreach (self::$langs as $l) if ($l == $lang) { $found = true;	break; }
 		if (!$found) $lang = self::$langs[0];
-		Oxygen::SetLanguage($lang);
+		Oxygen::SetLang($lang);
 
 		// set the action
 		self::$actionname = Http::$GET['action']->AsString();
@@ -103,10 +102,6 @@ class Oxygen {
 		if (DEBUG) Debug::StopAndSave();
 		if (DEBUG) Debug::ShowConsole();
 		if (PROFILE) Profiler::ShowConsole();
-	}
-	public static function OnError($severity, $msg, $filename, $linenum, $content) {
-		if (0 == (error_reporting() & $severity)) return;
-		throw new ErrorException($msg, 0, $severity, $filename , $linenum);
 	}
 
 	public static function OnException($ex) {
@@ -165,8 +160,9 @@ class Oxygen {
 	//
 	public static $langs = array();
 	public static $lang = null;
-	public static function AddLanguage($lang) { if (!in_array($lang,self::$langs)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
-	public static function SetLanguage($lang) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Pick('locale')); }
+	public static function AddLang($lang) { if (!in_array($lang,self::$langs,true)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
+	public static function SetLang($lang) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Pick('locale')); }
+	public static function HasLang($lang) { return in_array($lang,self::$langs,true); }
 	public static function GetLang(){ return self::$lang; }
 	public static function GetLangs(){ return self::$langs; }
 
@@ -424,14 +420,14 @@ class Oxygen {
 
 	private static $session_hash;
 	private static $session_scoping_enabled = true;
-	public static function SetSessionScopingEnabled($value){ self::$session_scoping_enabled = $value; }
+	public static function SetSessionScopingEnabled($value){ self::$session_scoping_enabled = $value; Scope::$SESSION->SetUseExternalStorage($value); }
 	public static function IsSessionScopingEnabled(){ return self::$session_scoping_enabled; }
 	public static function GetSessionHash(){ return self::$session_hash; }
 	public static function GetSessionCookieName(){ return 'Oxygen::SessionHash'; }
 
 	private static $window_hash;
-	private static $window_scoping_enabled = false;
-	public static function SetWindowScopingEnabled($value){ self::$window_scoping_enabled = $value; }
+	private static $window_scoping_enabled = true;
+	public static function SetWindowScopingEnabled($value){ self::$window_scoping_enabled = $value; Scope::$WINDOW->SetUseExternalStorage($value); }
 	public static function IsWindowScopingEnabled(){ return self::$window_scoping_enabled; }
 	public static function GetWindowHash(){ return self::$window_hash; }
 
@@ -523,22 +519,10 @@ class Oxygen {
 		return $r;
 	}
 	public static function GetHrefBaseFull($new_protocol = null,$new_port = null){
-		return Oxygen::GetHrefServer($new_protocol,$new_port) . Oxygen::GetHrefBase() . '/';
+		return Oxygen::GetHrefServer($new_protocol,$new_port) . __BASE__;
 	}
-
-	private static $href_root = null;
-	private static $href_current_folder = '';
-	public static function SetRequestFolders( $absolute_initial_request_folder ){
-		self::$href_current_folder = substr( $absolute_initial_request_folder, strlen(__ROOT__) + 1 );
-		self::$href_root = substr( $_SERVER['SCRIPT_NAME'] , 0 , strpos( $_SERVER['SCRIPT_NAME'] , self::$href_current_folder ) );
-	}
-	public static function GetHrefCurrentFolder(){ return self::$href_current_folder; }
 	public static function GetHrefBase(){
-		if (is_null(self::$href_root)) {
-			$s = $_SERVER['SCRIPT_NAME'];
-			self::$href_root = substr($s,0,strrpos($s,'/') + 1);
-		}
-		return self::$href_root;
+		return __BASE__;
 	}
 
 	
@@ -627,8 +611,8 @@ class Oxygen {
 		ob_start();
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
 
-		if (Oxygen::GetHrefCurrentFolder() != '') {
-			echo '<base href="'.new Html(Oxygen::GetHrefBase()).'" />';
+		if (__OFFSET__!='') {
+			echo '<base href="'.new Html(__BASE__).'" />';
 		}
 
 		echo Js::BEGIN;
