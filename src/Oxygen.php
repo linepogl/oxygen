@@ -58,6 +58,7 @@ class Oxygen {
 		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
 
 		Database::Upgrade();
+
 	}
 
 
