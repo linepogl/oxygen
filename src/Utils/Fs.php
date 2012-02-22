@@ -67,5 +67,9 @@ class Fs {
 	}
 
 
+	public static function Ensure($path) {
+		if (!is_dir($path))
+			mkdir($path,0777,true);
+	}
 
 }
