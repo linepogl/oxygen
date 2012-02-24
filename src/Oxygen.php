@@ -131,7 +131,7 @@ class Oxygen {
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
-			if (!($ex instanceof ApplicationException){
+			if (!($ex instanceof ApplicationException)){
 				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
 				Debug::RecordException($ex);
 			}
