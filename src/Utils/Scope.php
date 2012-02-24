@@ -19,7 +19,7 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 		self::$is_apc_available = self::IsAPCAvailable();
 		self::$base = '';
 		if (isset($_SERVER["SERVER_NAME"])) self::$base .= $_SERVER["SERVER_NAME"];
-		if (isset($_SERVER["SERVER_PORT"])) self::$base .= '.'.$_SERVER["SERVER_PORT"];
+		if (isset($_SERVER["SERVER_PORT"])) self::$base .= ':'.$_SERVER["SERVER_PORT"];
 		self::$base .= __BASE__;
 		Scope::$APPLICATION = new HybridScope( new ApplicationApcScope(), new ApplicationHddScope() );
 		Scope::$DATABASE    = new HybridScope( new DatabaseApcScope(), new DatabaseHddScope() );
