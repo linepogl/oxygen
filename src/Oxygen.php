@@ -37,11 +37,11 @@ class Oxygen {
 		// init window scoping
 		if (self::$window_scoping_enabled){
 			self::$window_hash = Http::$GET['window']->AsString();
-			if (is_null(self::$window_hash)) self::$window_hash = Oxygen::HashRandom32();
+			if (is_null(self::$window_hash)) self::$window_hash = Oxygen::Hash32(self::$session_hash);
 			self::$url_pins['window'] = self::$window_hash;
 		}
 		else {
-			self::$window_hash = Oxygen::HashRandom32();
+			self::$window_hash = Oxygen::Hash32(self::$session_hash);
 		}
 
 		// set the current language
@@ -115,7 +115,7 @@ class Oxygen {
 			echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
 			echo '<div style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;overflow:auto;padding:30px;">';
 			echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
-			if ($ex instanceof ApplicationException || $ex instanceof SecurityException) {
+			if ($ex instanceof ApplicationException) {
 				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
 			}
 			elseif (!DEV){
@@ -131,7 +131,7 @@ class Oxygen {
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
-			if (!($ex instanceof ApplicationException || $ex instanceof SecurityException)){
+			if (!($ex instanceof ApplicationException){
 				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
 				Debug::RecordException($ex);
 			}
@@ -421,14 +421,14 @@ class Oxygen {
 
 	private static $session_hash;
 	private static $session_scoping_enabled = true;
-	public static function SetSessionScopingEnabled($value){ self::$session_scoping_enabled = $value; Scope::$SESSION->SetUseExternalStorage($value); }
+	public static function SetSessionScopingEnabled($value){ self::$session_scoping_enabled = $value; Scope::$SESSION->SetUseExternalStorage($value); Scope::$WINDOW->SetUseExternalStorage(self::$window_scoping_enabled || $value); }
 	public static function IsSessionScopingEnabled(){ return self::$session_scoping_enabled; }
 	public static function GetSessionHash(){ return self::$session_hash; }
 	public static function GetSessionCookieName(){ return 'Oxygen::SessionHash'; }
 
 	private static $window_hash;
 	private static $window_scoping_enabled = true;
-	public static function SetWindowScopingEnabled($value){ self::$window_scoping_enabled = $value; Scope::$WINDOW->SetUseExternalStorage($value); }
+	public static function SetWindowScopingEnabled($value){ self::$window_scoping_enabled = $value; Scope::$WINDOW->SetUseExternalStorage(self::$session_scoping_enabled || $value); }
 	public static function IsWindowScopingEnabled(){ return self::$window_scoping_enabled; }
 	public static function GetWindowHash(){ return self::$window_hash; }
 
@@ -509,8 +509,14 @@ class Oxygen {
 		$s = $_SERVER['SCRIPT_NAME'];
 		return substr($s,strrpos($s,'/')+1) . '?' . $_SERVER['QUERY_STRING'];
 	}
+	public static function GetProtocol(){
+		return Oxygen::IsHttps() ? 'https' : 'http';
+	}
+	public static function GetPort(){
+		return $_SERVER["SERVER_PORT"];
+	}
 	public static function GetHrefServer($new_protocol = null,$new_port = null){
-		$old_protocol = Oxygen::IsHttps() ? 'https' : 'http';
+		$old_protocol = Oxygen::GetProtocol();
 		if (is_null($new_protocol)) $new_protocol = $old_protocol;
 		$r = $new_protocol . '://' . $_SERVER["SERVER_NAME"];
 		if ($new_port == null) {
@@ -650,7 +656,7 @@ class Oxygen {
 
 
 		echo '<script type="text/javascript" src="oxy/jsc/oxygen.js"></script>';
-		echo '<link href="oxy/css/oxygen.css?'.rand().'" rel="stylesheet" type="text/css" />';
+		echo '<link href="oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
 		echo '<link href="favicon.ico" rel="icon" type="image/x-icon" />';
 
 		$r = ob_get_clean();

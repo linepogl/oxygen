@@ -58,7 +58,7 @@ final class Progress {
 	private static function CheckCancelled(){
 		if(!self::HasFinished())
 			if (self::IsCancelled())
-				throw new MessageException(new ErrorMessage(Lemma::Pick('MsgProgressCancelled')));
+				throw new ApplicationException(Lemma::Pick('MsgProgressCancelled'));
 	}
 
 

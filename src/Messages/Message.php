@@ -5,7 +5,7 @@ abstract class Message {
 	protected $value;
 	protected $icon_name;
 	public function __construct($value,$icon_name=null){ $this->value = strval($value);$this->icon_name=$icon_name; }
-	public function __toString(){ return $this->AsString(); }
+	public function __toString(){ return $this->value; }
 	public final function AsString(){ return $this->value; }
 
 	const INFO = 0;
@@ -61,11 +61,8 @@ abstract class Message {
 		if ($value instanceof Message)
 			return $value;
 
-		if ($value instanceof MessageException)
-			return $value->AsMessage();
-
 		if ($value instanceof ApplicationException)
-			return new ErrorMessage($value->getMessage());
+			return $value->GetInnerMessage();
 
 		if ($value instanceof Exception)
 			return new BugMessage( DEV ? Debug::GetExceptionReportAsHtml($value) : Lemma::Pick('MsgAnErrorOccurred') );

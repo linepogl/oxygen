@@ -13,23 +13,25 @@ class Browser {
 		if (self::IsOpera()) return 'opera';
 		if (self::IsChrome()) return 'chrome';
 		if (self::IsFirefox()) return 'firefox';
+		if (self::IsSafari()) return 'safari';
 		return '';
 	}
 
 	public static function GetCssClasses(){
-		if (self::IsIE5()) return 'notouch ie ie5';
-		if (self::IsIE6()) return 'notouch ie ie6';
-		if (self::IsIE7()) return 'notouch ie ie7';
-		if (self::IsIE8()) return 'notouch ie ie8';
-		if (self::IsIE9()) return 'notouch ie ie9';
-		if (self::IsIE()) return 'notouch ie';
-		if (self::IsOpera()) return 'notouch opera';
-		if (self::IsChrome()) return 'notouch chrome';
-		if (self::IsFirefox()) return 'notouch firefox';
-		if (self::IsSafariIPad()) return 'touch safari ios ipad';
-		if (self::IsSafariIPod()) return 'touch safari ios ipod';
-		if (self::IsSafariIPhone()) return 'touch safari ios iphone';
-		if (self::IsSafari()) return 'notouch safari';
+		$os = 'notouch';
+		if (self::IsIPhone()) $os = 'touch ios iphone';
+		elseif (self::IsIPad()) $os = 'touch ios ipad';
+		elseif (self::IsIPod()) $os = 'touch ios ipod';
+		if (self::IsIE5())     return $os.' ie ie5';
+		if (self::IsIE6())     return $os.' ie ie6';
+		if (self::IsIE7())     return $os.' ie ie7';
+		if (self::IsIE8())     return $os.' ie ie8';
+		if (self::IsIE9())     return $os.' ie ie9';
+		if (self::IsIE())      return $os.' ie';
+		if (self::IsOpera())   return $os.' opera';
+		if (self::IsChrome())  return $os.' chrome';
+		if (self::IsFirefox()) return $os.' firefox';
+		if (self::IsSafari())  return $os.' safari';
 		return '';
 	}
 
@@ -81,17 +83,17 @@ class Browser {
 	public static function IsSafari(){
 		return strpos(strtolower(self::GetUA()),'safari') !== false;
 	}
-	public static function IsSafariIPad(){
+	public static function IsIPad(){
 		return strpos(strtolower(self::GetUA()),'ipad') !== false;
 	}
-	public static function IsSafariIPod(){
+	public static function IsIPod(){
 		return strpos(strtolower(self::GetUA()),'ipod') !== false;
 	}
-	public static function IsSafariIPhone(){
-		return strpos(strtolower(self::GetUA()),'iphonesafari') !== false;
+	public static function IsIPhone(){
+		return strpos(strtolower(self::GetUA()),'iphone') !== false;
 	}
-	public static function IsSafariIOS(){
-		return self::IsSafariIPad() || self::IsSafariIPhone() || self::IsSafariIPod();
+	public static function IsIOS(){
+		return self::IsIPad() || self::IsIPhone() || self::IsIPod();
 	}
 
 }

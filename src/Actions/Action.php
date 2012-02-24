@@ -92,7 +92,7 @@ abstract class Action implements OmniValue {
 				$this->Render();
 			$this->OnAfterRender();
 		}
-		catch (SecurityException $ex){
+		catch (SecurityException $ex){ // <-- this has to go before ApplicationException
 			$this->content_compromised = true;
 			if (ob_get_level()>0) ob_clean();
 

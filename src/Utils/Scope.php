@@ -335,7 +335,7 @@ class HybridScope extends Scope {
 
 class ApplicationApcScope extends ApcScope  {
 	public function __construct(){ parent::__construct('app'); }
-	protected function Hash($name){ return $this->prefix.'_'.self::$base.'_'.$name; }
+	protected function Hash($name){ return self::$base.$this->prefix.'_'.$name; }
 }
 class ApplicationHddScope extends HddScope  {
 	public function __construct(){ parent::__construct('app'); }
@@ -344,7 +344,7 @@ class ApplicationHddScope extends HddScope  {
 
 class DatabaseApcScope extends ApcScope  {
 	public function __construct(){ parent::__construct('dat'); }
-	protected function Hash($name){ return $this->prefix.'_'.self::$base.'_'.Database::GetServer().'_'.Database::GetSchema().'_'.$name; }
+	protected function Hash($name){ return self::$base.Database::GetServer().'/'.Database::GetSchema().'/'.$this->prefix.'_'.$name; }
 }
 class DatabaseHddScope extends HddScope  {
 	public function __construct(){ parent::__construct('dat'); }
@@ -353,7 +353,7 @@ class DatabaseHddScope extends HddScope  {
 
 class SessionApcScope extends ApcScope {
 	public function __construct(){ parent::__construct('ses'); }
-	protected function Hash($name){ return $this->prefix.'_'.self::$base.'_'.Oxygen::GetSessionHash().'_'.$name; }
+	protected function Hash($name){ return self::$base.Oxygen::GetSessionHash().'/'.$this->prefix.'_'.$name; }
 }
 class SessionHddScope extends HddScope {
 	public function __construct(){ parent::__construct('ses'); }
@@ -362,7 +362,7 @@ class SessionHddScope extends HddScope {
 
 class WindowApcScope extends ApcScope {
 	public function __construct(){ parent::__construct('win'); }
-	protected function Hash($name){ return $this->prefix.'_'.self::$base.'_'.Oxygen::GetWindowHash() . '_' . $name; }
+	protected function Hash($name){ return self::$base.Oxygen::GetWindowHash().'/'.$this->prefix.'_'.$name; }
 }
 class WindowHddScope extends HddScope {
 	public function __construct(){ parent::__construct('win'); }
@@ -371,7 +371,7 @@ class WindowHddScope extends HddScope {
 
 class RequestScope extends MemoryScope {
 	public function __construct(){ parent::__construct('req'); }
-	protected function Hash($name){ return $this->prefix.'_'.self::$base.'_'.$name; }
+	protected function Hash($name){ return self::$base.$this->prefix.'_'.$name; }
 }
 
 Scope::InitScopes();
