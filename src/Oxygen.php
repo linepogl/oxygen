@@ -641,23 +641,23 @@ class Oxygen {
 		echo "var oxygen_lang = ".new Js(Oxygen::GetLang()).";";
 		echo Js::END;
 
-		echo '<script type="text/javascript" src="oxy/jsc/prototype.js"></script>';
-		echo '<script type="text/javascript" src="oxy/jsc/scriptaculous-effects.js"></script>';
-		echo '<script type="text/javascript" src="oxy/jsc/date.js"></script>';
-		echo '<script type="text/javascript" src="oxy/jsc/jquery.js"></script>';
-		echo '<script type="text/javascript" src="oxy/jsc/jquery-ui.js"></script>';
-		echo '<script type="text/javascript" src="oxy/jsc/fix.js"></script>';
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/prototype.js"></script>';
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/scriptaculous-effects.js"></script>';
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/date.js"></script>';
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery.js"></script>';
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery-ui.js"></script>';
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/fix.js"></script>';
 
 		if (Browser::IsIE6()){
-			echo '<link href="oxy/fix/ie6-fixcsshover.css" rel="stylesheet" type="text/css" />';
-			echo '<link href="oxy/fix/ie6-fixpng.css" rel="stylesheet" type="text/css" />';
-			echo '<script type="text/javascript" src="oxy/fix/ie6-fixpng.js"></script>';
+			echo '<link href="'.__BASE__.'oxy/fix/ie6-fixcsshover.css" rel="stylesheet" type="text/css" />';
+			echo '<link href="'.__BASE__.'oxy/fix/ie6-fixpng.css" rel="stylesheet" type="text/css" />';
+			echo '<script type="text/javascript" src="'.__BASE__.'oxy/fix/ie6-fixpng.js"></script>';
 		}
 
 
-		echo '<script type="text/javascript" src="oxy/jsc/oxygen.js"></script>';
-		echo '<link href="oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
-		echo '<link href="favicon.ico" rel="icon" type="image/x-icon" />';
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.js"></script>';
+		echo '<link href="'.__BASE__.'oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
+		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
 
 		$r = ob_get_clean();
 		return $r;
