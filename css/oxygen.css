@@ -88,6 +88,8 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .message-success  { background-image:url(../ico/Success16.gif); }
 .message-info     { background-image:url(../ico/Info16.gif); }
 
+.progress-message { padding-top:2px; padding-bottom:2px; border-bottom:1px solid #fcfcfc; }
+
 .reportmenupanel { /* background:url('oxy/skn/striped_bg.gif'); */ }
 
 .expand   { width:100%;            }

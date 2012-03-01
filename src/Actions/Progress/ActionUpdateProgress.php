@@ -18,7 +18,7 @@ class ActionUpdateProgress extends Action{
 		$a = Progress::GetLogEntries();
 		if (count($a) > 0){
 			foreach($a as $index => $entry){
-				echo '<div id="'.$this->name.'_log_'.$index.'">';
+				echo '<div class="progress-message" id="'.$this->name.'_log_'.$index.'">';
 				echo $entry;
 				echo '</div>';
 			}

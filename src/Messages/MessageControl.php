@@ -17,8 +17,16 @@ class MessageControl extends Control {
 	public function Render(){
 
 		if ($this->show_border) echo '<div class="message-panel message-panel-'.$this->multi_message->GetCode().'">';
+		/** @var $m Message */
 		foreach ($this->multi_message as $m){
-			echo '<div class="message message-'.$m->GetCode().'">';
+			echo '<div';
+			if ($m->GetIconName() == $m->GetDefaultIconName()) {
+				echo ' class="message message-'.$m->GetCode().'"';
+			}
+			else {
+				echo ' class="message" style="background-image:url('.$m->GetIconScr16().');"';
+			}
+			echo '>';
 			echo $m->AsString();
 			echo '</div>';
 		}
