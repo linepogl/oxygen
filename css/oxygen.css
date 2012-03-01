@@ -74,10 +74,10 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .message-panel          { border-style:solid; border-width:1px; padding:4px; margin:0; color:#000000; }
 .message-panel-bug      { background:#f4f4f4; border-color:#999999; }
-.message-panel-error    { background:#ffeeee; border-color:#ffcccc; }
+.message-panel-error    { background:#ffeeee; border-color:#eebbbb; }
 .message-panel-warning  { background:#fcfcf0; border-color:#e0e088; }
-.message-panel-question { background:#eeeeff; border-color:#ccccff; }
-.message-panel-success  { background:#eeffee; border-color:#ccffcc; }
+.message-panel-question { background:#eeeeff; border-color:#bbbbee; }
+.message-panel-success  { background:#eeffee; border-color:#bbeebb; }
 .message-panel-info     { background:#f4f4f4; border-color:#cccccc; }
 
 .message          { padding:2px 2px 2px 19px; background-position:1px 50%; background-repeat:no-repeat;}

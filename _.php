@@ -1,6 +1,6 @@
 <?php
-define('__ROOT__',substr(__DIR__,0,strrpos(__DIR__,'/')));
-define('__BASE__',substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-(strlen($_SERVER['SCRIPT_FILENAME'])-strlen(__ROOT__))+1));
+define('__ROOT__',substr(__FILE__,0,-10));  // 10==strlen('/oxy/_.php')
+define('__BASE__',substr($_SERVER['SCRIPT_NAME'],0,1-(strlen($_SERVER['SCRIPT_FILENAME'])-strlen(__ROOT__))));
 define('__OFFSET__',substr($_SERVER['SCRIPT_NAME'],strlen(__BASE__),strrpos($_SERVER['SCRIPT_NAME'],'/')-strlen(__BASE__)+1));
 chdir(__ROOT__);
 

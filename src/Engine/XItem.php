@@ -1,6 +1,7 @@
 <?php
 
 abstract class XItem implements Serializable,OmniValue {
+	/** @var ID */
 	public $id;
 	public $has_temp_id = true;
 	public function IsTemporary(){ return $this->has_temp_id; }
@@ -550,7 +551,7 @@ abstract class XItem implements Serializable,OmniValue {
 	/** @return XItem */ public static final function Temp($id=null){ return static::Meta()->MakeTempItem($id); }
 	/** @return XItem */ public static final function TempGeneric($classname,$id=null){ return XMeta::Of($classname)->MakeTempItem($id); }
 
-	/** @return XList */ public static final function Make(){ return static::Meta()->MakePermItem(); }
+	/** @return XItem */ public static final function Make(){ return static::Meta()->MakePermItem(); }
 	/** @return XItem */ public static final function MakeGeneric($classname){ return XMeta::Of($classname)->MakePermItem(); }
 
 
@@ -636,6 +637,9 @@ abstract class XItem implements Serializable,OmniValue {
 	}
 	public function HasDataFolder(){
 		return is_dir($this->GetDataFolder());
+	}
+	public function EnsureDataFolder(){
+		if (!is_dir($this->GetDataFolder())) $this->MakeDataFolder();
 	}
 	public function MakeDataFolder(){
 		return mkdir($this->GetDataFolder(),0777,true);
