@@ -1,10 +1,10 @@
 <?php
 
-class OmniField extends OmniType {
+class OmniMetaField extends OmniType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
-	/** @return OmniField */ public static function Type() { return self::$instance; }
+	/** @return OmniMetaField */ public static function Type() { return self::$instance; }
 	/** @return XMetaField */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 
@@ -131,4 +131,4 @@ class OmniField extends OmniType {
 	}
 }
 
-OmniField::Init();
+OmniMetaField::Init();
