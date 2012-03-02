@@ -5,20 +5,20 @@ class OmniField extends OmniType {
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return OmniField */ public static function Type() { return self::$instance; }
-	/** @return XField */ public static function GetDefaultValue() { throw new ConvertionException(); }
+	/** @return XMetaField */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 
 
 
 	
 	/**
-	 * @param $address XField
+	 * @param $address XMetaField
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if ($value instanceof XField) $address = $value;
+		if ($value instanceof XMetaField) $address = $value;
 		throw new ValidationException();
 	}
 
@@ -37,7 +37,7 @@ class OmniField extends OmniType {
 	}
 
 	/**
-	 * @param $value XField
+	 * @param $value XMetaField
 	 * @param $platform int|null
 	 * @return mixed
 	 */
@@ -46,7 +46,7 @@ class OmniField extends OmniType {
 	}
 
 	/**
-	 * @param $value XField
+	 * @param $value XMetaField
 	 * @param $platform int|null
 	 * @return string
 	 */
@@ -55,7 +55,7 @@ class OmniField extends OmniType {
 	}
 
 	/**
-	 * @param $value XField
+	 * @param $value XMetaField
 	 * @param $platform int|null
 	 * @return string
 	 */
@@ -67,7 +67,7 @@ class OmniField extends OmniType {
 	}
 
 	/**
-	 * @param $value XField
+	 * @param $value XMetaField
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
@@ -75,7 +75,7 @@ class OmniField extends OmniType {
 	}
 
 	/**
-	 * @param $value XField
+	 * @param $value XMetaField
 	 * @return string
 	 */
 	public static function ExportXmlString($value) {
@@ -83,7 +83,7 @@ class OmniField extends OmniType {
 	}
 
 	/**
-	 * @param $value XField
+	 * @param $value XMetaField
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
@@ -91,7 +91,7 @@ class OmniField extends OmniType {
 	}
 
 	/**
-	 * @param $value XField
+	 * @param $value XMetaField
 	 * @return string
 	 */
 	public static function ExportHumanReadableHtmlString($value) {
@@ -99,7 +99,7 @@ class OmniField extends OmniType {
 	}
 
 	/**
-	 * @param $value XField
+	 * @param $value XMetaField
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
@@ -108,7 +108,7 @@ class OmniField extends OmniType {
 
 	/**
 	 * @param $value string|null
-	 * @return XField
+	 * @return XMetaField
 	 */
 	public static function ImportDBValue($value) {
 		throw new ConvertionException();
@@ -116,7 +116,7 @@ class OmniField extends OmniType {
 
 	/**
 	 * @param $value string|null
-	 * @return XField
+	 * @return XMetaField
 	 */
 	public static function ImportDomValue($value) {
 		throw new ConvertionException();
@@ -124,7 +124,7 @@ class OmniField extends OmniType {
 
 	/**
 	 * @param $value string|null|array
-	 * @return XField
+	 * @return XMetaField
 	 */
 	public static function ImportHttpValue($value) {
 		throw new ConvertionException();

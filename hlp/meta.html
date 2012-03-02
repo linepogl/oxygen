@@ -96,9 +96,9 @@ The id field is also used as the primary key for database operations. For more i
 <h2>Meta fields</h2>
 
 <p>
-Most of meta information regard the fields of an object. In a meta object, all fields are represented by instances of the class <span class="code">XField</span>. Every meta field
+Most of meta information regard the fields of an object. In a meta object, all fields are represented by instances of the class <span class="code">XMetaField</span>. Every meta field
 is based on an OmniType which is responsible for the all the conversions, ie. importing a value into a field of an object and exporting the value from the field (see the chapter
-<a href="types">The type system</a>). The easiest way to create an XField is from its OmniType:
+<a href="types">The type system</a>). The easiest way to create an XMetaField is from its OmniType:
 </p>
 
 <p class="code">
@@ -106,7 +106,7 @@ OmniString::Field();
 </p>
 
 <p>
-However, the class XField is designed to work in cooperation with the class XMeta. This is because, apart from the type, each field must also have a name. The name is automatically
+However, the class XMetaField is designed to work in cooperation with the class XMeta. This is because, apart from the type, each field must also have a name. The name is automatically
 assigned by the XMeta class, after the call to <span class="code">FillMeta</span>, and it is equal to the name of the PHP field inside the final filled meta object.
 </p>
 
@@ -202,7 +202,7 @@ foreach ($a->Skip(1) as $x)
 
 <p>
 It is now evident that there is a direct analogy between the field of an object and the fields of its meta object. the value of a field is a PHP variable while the value of the meta field
-is an <span class="code">XField</span> object.
+is an <span class="code">XMetaField</span> object.
 </p>
 
 <p class="code">
@@ -211,7 +211,7 @@ $x->Title = 'Alice in wonderland';
 $m = Book::Meta();
 echo gettype($x->Title);      // output: string
 echo gettype($m->Title);      // output: object
-echo get_class($m->Title);    // output: XField
+echo get_class($m->Title);    // output: XMetaField
 </p>
 
 <p>

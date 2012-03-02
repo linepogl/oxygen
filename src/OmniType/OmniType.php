@@ -31,10 +31,10 @@ abstract class OmniType implements _OmniType {
 
 
 	/**
-	 * @return XField
+	 * @return XMetaField
 	 */
 	public final static function Field(){
-		return new XField( static::Type() );
+		return new XMetaField( static::Type() );
 	}
 
 

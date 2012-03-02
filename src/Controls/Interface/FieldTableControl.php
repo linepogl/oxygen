@@ -28,7 +28,7 @@ class FieldTableControl extends Control {
 	private $row_names = array();
 
 	public function Add($that){
-		if ($that instanceof XWrapField || $that instanceof XField || $that instanceof XWrapSlave || $that instanceof XSlave){
+		if ($that instanceof XWrapField || $that instanceof XMetaField || $that instanceof XWrapSlave || $that instanceof XMetaSlave){
 			$this->labels[] = $that->GetLabel();
 			$this->contents[] = '';
 		}

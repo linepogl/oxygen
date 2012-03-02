@@ -8,10 +8,10 @@ class XWrap extends stdClass {
 		$this->__name = $name;
 		for ($mm = $m; !is_null($mm); $mm = $mm->GetParent()){
 			foreach ($mm as $key=>$value){
-				if ($value instanceof XField){
+				if ($value instanceof XMetaField){
 					$this->$key = new XWrapField($this,$value);
 				}
-				elseif ($value instanceof XSlave){
+				elseif ($value instanceof XMetaSlave){
 					$this->$key = new XWrapSlave($this,$value);
 				}
 			}

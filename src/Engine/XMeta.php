@@ -26,7 +26,7 @@ class XMeta extends stdClass {
 	private $__order_by = null;
 	/** @return XMeta */
 	public function SetOrderBy($order_by_or_field, $desc=false) {
-		if($order_by_or_field instanceof XField)
+		if($order_by_or_field instanceof XMetaField)
 			$this->__order_by = $order_by_or_field->Order($desc);
 		elseif($order_by_or_field instanceof XOrderBy)
 			$this->__order_by = $order_by_or_field;
@@ -58,8 +58,8 @@ class XMeta extends stdClass {
 		$this->__dbslaves = array();
 		$this->__xmlslaves = array();
 		foreach ($this as $key=>$value){
-			$is_field = $value instanceof XField;
-			$is_slave = $value instanceof XSlave;
+			$is_field = $value instanceof XMetaField;
+			$is_slave = $value instanceof XMetaSlave;
 			if ($is_field || $is_slave) {
 				$value->SetMeta($this);
 				$value->SetName($key);
@@ -251,7 +251,7 @@ class XMeta extends stdClass {
 		// 2. Clone slaves
 		for ($mx = $this; !is_null($mx); $mx = $mx->GetParent()){
 			$slaves = $mx->GetSlaves();
-			/** @var $sl XSlave */
+			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
 				$a = $item->$n;
@@ -411,21 +411,21 @@ class XMeta extends stdClass {
 
 
 
-	/** @return XField */ public static function ID() { return new XField( OmniIDOrNull::Type() ); }
-	/** @return XField */ public static function String() { return new XField( OmniStringOrNull::Type() ); }
-	/** @return XField */ public static function Integer() { return new XField( OmniInteger::Type() ); }
-	/** @return XField */ public static function NullableInteger() { return new XField( OmniIntegerOrNull::Type() ); }
-	/** @return XField */ public static function Float() { return new XField( OmniDecimal::Type() ); }
-	/** @return XField */ public static function NullableFloat() { return new XField( OmniDecimalOrNull::Type() ); }
-	/** @return XField */ public static function Boolean() { return new XField( OmniBoolean::Type() ); }
-	/** @return XField */ public static function NullableBoolean() { return new XField( OmniBooleanOrNull::Type() ); }
-	/** @return XField */ public static function Date() { return new XField( OmniDateOrNull::Type() ); }
-	/** @return XField */ public static function DateTime() { return new XField( OmniDateTimeOrNull::Type() ); }
-	/** @return XField */ public static function Time() { return new XField( OmniTimeOrNull::Type() ); }
-	/** @return XField */ public static function TimeSpan() { return new XField( OmniTimeSpanOrNull::Type() ); }
-	/** @return XField */ public static function Lemma() { return new XField( OmniLemmaOrNull::Type() ); }
+	/** @return XMetaField */ public static function ID() { return new XMetaField( OmniIDOrNull::Type() ); }
+	/** @return XMetaField */ public static function String() { return new XMetaField( OmniStringOrNull::Type() ); }
+	/** @return XMetaField */ public static function Integer() { return new XMetaField( OmniInteger::Type() ); }
+	/** @return XMetaField */ public static function NullableInteger() { return new XMetaField( OmniIntegerOrNull::Type() ); }
+	/** @return XMetaField */ public static function Float() { return new XMetaField( OmniDecimal::Type() ); }
+	/** @return XMetaField */ public static function NullableFloat() { return new XMetaField( OmniDecimalOrNull::Type() ); }
+	/** @return XMetaField */ public static function Boolean() { return new XMetaField( OmniBoolean::Type() ); }
+	/** @return XMetaField */ public static function NullableBoolean() { return new XMetaField( OmniBooleanOrNull::Type() ); }
+	/** @return XMetaField */ public static function Date() { return new XMetaField( OmniDateOrNull::Type() ); }
+	/** @return XMetaField */ public static function DateTime() { return new XMetaField( OmniDateTimeOrNull::Type() ); }
+	/** @return XMetaField */ public static function Time() { return new XMetaField( OmniTimeOrNull::Type() ); }
+	/** @return XMetaField */ public static function TimeSpan() { return new XMetaField( OmniTimeSpanOrNull::Type() ); }
+	/** @return XMetaField */ public static function Lemma() { return new XMetaField( OmniLemmaOrNull::Type() ); }
 
-	/** @return XSlave */ public static function Slave(XField $hook_meta_field){ return new XSlave($hook_meta_field); }
+	/** @return XMetaSlave */ public static function Slave(XMetaField $hook_meta_field){ return new XMetaSlave($hook_meta_field); }
 }
 
 

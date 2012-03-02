@@ -5,10 +5,10 @@ class XWrapSlave {
 	/** @var XWrap */
 	private $wrap;
 
-	/** @var XSlave */
+	/** @var XMetaSlave */
 	private $slave;
 
-	public function __construct(XWrap $wrap,XSlave $slave){
+	public function __construct(XWrap $wrap,XMetaSlave $slave){
 		$this->wrap = $wrap;
 		$this->slave = $slave;
 	}
@@ -19,7 +19,7 @@ class XWrapSlave {
 	/** @return XItem */
 	public function GetItem(){ return $this->wrap->GetItem(); }
 
-	/** @return XSlave */
+	/** @return XMetaSlave */
 	public function GetSlave(){ return $this->slave; }
 	
 	public function GetValue(){

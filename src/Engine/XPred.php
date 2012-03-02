@@ -11,7 +11,9 @@ abstract class XPred {
 	/** @return XPred */ public function IsTrue()                 { return $this; } // :-P
 	/** @return XPred */ public function IsNotTrue()              { return new XPredUnaryOp($this,XPredUnaryOp::OP_NOT); }
 
+	/** @return string */
 	abstract function ToSql();
+	/** @return array */
 	abstract function GetSqlParams();
 
 

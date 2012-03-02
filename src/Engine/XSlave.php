@@ -1,6 +1,6 @@
 <?php
 
-class XSlave {
+class XMetaSlave {
 	/** @var XMeta */
 	private $meta;
 	/** @return XMeta */
@@ -16,9 +16,9 @@ class XSlave {
 	public function IsAggressive(){ return $this->is_aggressive; }
 
 	private $hook_meta_field;
-	public function __construct(XField $hook_meta_field){ $this->hook_meta_field = $hook_meta_field; }
+	public function __construct(XMetaField $hook_meta_field){ $this->hook_meta_field = $hook_meta_field; }
 	/** @return XMeta */ public function GetHookMeta(){ return $this->hook_meta_field->GetMeta(); }
-	/** @return XField */ public function GetHookField(){ return $this->hook_meta_field; }
+	/** @return XMetaField */ public function GetHookField(){ return $this->hook_meta_field; }
 
 
 	/** @return XList */
@@ -39,7 +39,7 @@ class XSlave {
 
 	private $label;
 	public function GetLabel(){ return $this->label; }
-	/** @return XSlave */
+	/** @return XMetaSlave */
 	public function WithLabel($args){
 		if ($args instanceof Lemma)
 			$this->label = $args;
@@ -56,22 +56,22 @@ class XSlave {
 
 	/** @var XPred */
 	public $Where = null;
-	/** @return XSlave */
+	/** @return XMetaSlave */
 	public function WithWhere(XPred $value){ $this->Where=$value; return $this; }
 
 	/** @var XOrderBy */
 	public $OrderBy = null;
-	/** @return XSlave */
+	/** @return XMetaSlave */
 	public function WithOrderBy($value){ $this->OrderBy=$value; return $this; }
 
 
 	private $is_db_bound = true;
-	/** @return XSlave */
+	/** @return XMetaSlave */
 	public function WithIsDBBound($value){ $this->is_db_bound = $value; return $this; }
 	public function IsDBBound(){ return $this->is_db_bound; }
 
 	private $is_xml_bound = true;
-	/** @return XSlave */
+	/** @return XMetaSlave */
 	public function WithIsXmlBound($value){ $this->is_xml_bound = $value; return $this; }
 	public function IsXmlBound(){ return $this->is_xml_bound; }
 }

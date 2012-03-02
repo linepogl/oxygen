@@ -19,11 +19,11 @@ class XPredFieldOp extends XPred {
 
 
 
-	/** @var XField */
+	/** @var XMetaField */
 	private $field1;
 	private $field2_or_value;
 	private $op;
-	public function __construct(XField $field1, $field2_or_value, $op = self::OP_EQ){
+	public function __construct(XMetaField $field1, $field2_or_value, $op = self::OP_EQ){
 		$this->field1 = $field1;
 		$this->field2_or_value = $field2_or_value;
 		$this->op = $op;
@@ -36,44 +36,44 @@ class XPredFieldOp extends XPred {
 			case self::OP_EQ:
 				if (is_null($this->field2_or_value))
 					return new SqlName($this->field1) . ' IS NULL';
-				if ($this->field2_or_value instanceof XField)
+				if ($this->field2_or_value instanceof XMetaField)
 					return '(('.new SqlName($this->field1) . '=' . new SqlName($this->field2_or_value).') OR ('.new SqlName($this->field1) . ' IS NULL AND ' . new SqlName($this->field2_or_value).' IS NULL))' ;
 				return '('.new SqlName($this->field1) .' IS NOT NULL AND '.new SqlName($this->field1) . '=?)';
 
 			case self::OP_NOT_EQ:
 				if (is_null($this->field2_or_value))
 					return new SqlName($this->field1) . ' IS NOT NULL';
-				if ($this->field2_or_value instanceof XField)
+				if ($this->field2_or_value instanceof XMetaField)
 					return 'NOT ('.new SqlName($this->field1) . '=' . new SqlName($this->field2_or_value).')';
 				return '(' . new SqlName($this->field1) . ' IS NULL OR NOT (' . new SqlName($this->field1) . '=?))';
 
 			case self::OP_GT:
-				if ($this->field2_or_value instanceof XField)
+				if ($this->field2_or_value instanceof XMetaField)
 					return new SqlName($this->field1) . '>' . new SqlName($this->field2_or_value);
 				return new SqlName($this->field1) . '>?';
 
 			case self::OP_GE:
-				if ($this->field2_or_value instanceof XField)
+				if ($this->field2_or_value instanceof XMetaField)
 					return new SqlName($this->field1) . '>=' . new SqlName($this->field2_or_value);
 				return new SqlName($this->field1) . '>=?';
 
 			case self::OP_LT:
-				if ($this->field2_or_value instanceof XField)
+				if ($this->field2_or_value instanceof XMetaField)
 					return new SqlName($this->field1) . '<' . new SqlName($this->field2_or_value);
 				return new SqlName($this->field1) . '<?';
 
 			case self::OP_LE:
-				if ($this->field2_or_value instanceof XField)
+				if ($this->field2_or_value instanceof XMetaField)
 					return new SqlName($this->field1) . '<=' . new SqlName($this->field2_or_value);
 				return new SqlName($this->field1) . '<=?';
 
 			case self::OP_LIKE:
-				if ($this->field2_or_value instanceof XField)
+				if ($this->field2_or_value instanceof XMetaField)
 					return new SqlName($this->field1) . ' LIKE ' . new SqlName($this->field2_or_value);
 				return new SqlName($this->field1) . ' LIKE ?';
 
 			case self::OP_NOT_LIKE:
-				if ($this->field2_or_value instanceof XField)
+				if ($this->field2_or_value instanceof XMetaField)
 					return new SqlName($this->field1) . ' NOT LIKE ' . new SqlName($this->field2_or_value);
 				return new SqlName($this->field1) . ' NOT LIKE ?';
 
@@ -94,7 +94,7 @@ class XPredFieldOp extends XPred {
 		if (is_null($this->field2_or_value))
 			return array();
 
-		if ($this->field2_or_value instanceof XField)
+		if ($this->field2_or_value instanceof XMetaField)
 			return array();
 
 		switch ($this->op){

@@ -71,7 +71,7 @@ abstract class XItem implements Serializable,OmniValue {
 		$meta = $this->Meta();
 		$a['id'] = serialize($this->id);
 		$a['has_temp_id'] = serialize($this->has_temp_id);
-		/** @var $f XField */
+		/** @var $f XMetaField */
 		foreach ($meta->GetFields() as $f){
 			$n = $f->GetName();
 			$a[$n] = serialize($this->$n);
@@ -86,7 +86,7 @@ abstract class XItem implements Serializable,OmniValue {
 			$c = $this->Meta();
 			for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 				$slaves = $cx->GetDBSlaves();
-				/** @var $sl XSlave */
+				/** @var $sl XMetaSlave */
 				foreach ($slaves as $sl) {
 					$n = $sl->GetName();
 					$this->$n = $sl->SeekItemsByMaster($this);
@@ -103,7 +103,7 @@ abstract class XItem implements Serializable,OmniValue {
 		$c = $this->Meta();
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$slaves = $cx->GetDBSlaves();
-			/** @var $sl XSlave */
+			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
 				$this->$n = $sl->MakeItemList();
@@ -130,7 +130,7 @@ abstract class XItem implements Serializable,OmniValue {
 			$fields = $cx->GetDBFields();
 			if (is_null($dr) || $cx !== $c){
 				$sql = 'SELECT '.$cx->id->GetDBName();
-				/** @var $f XField */
+				/** @var $f XMetaField */
 				foreach ($fields as $f)
 					$sql .= ',' . new SqlName( $f->GetDBName() );
 				$sql .= ' FROM '.$cx->GetDBTableName();
@@ -160,7 +160,7 @@ abstract class XItem implements Serializable,OmniValue {
 		//
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$slaves = $cx->GetDBSlaves();
-			/** @var $sl XSlave */
+			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
 				$this->$n = $sl->SeekItemsByMaster($this);
@@ -204,7 +204,7 @@ abstract class XItem implements Serializable,OmniValue {
 					$i++;
 				}
 
-				/** @var $f XField */
+				/** @var $f XMetaField */
 				foreach ($fields as $f) {
 					if ($f->IsDBAliasComplex()) continue;
 					if ($i++ > 0) $sql .= ',';
@@ -241,7 +241,7 @@ abstract class XItem implements Serializable,OmniValue {
 		//
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$slaves = $cx->GetDBSlaves();
-			/** @var $sl XSlave */
+			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
 				$a = $this->$n;
@@ -280,7 +280,7 @@ abstract class XItem implements Serializable,OmniValue {
 		// 1. Delete slaves
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$slaves = $cx->GetDBSlaves();
-			/** @var $sl XSlave */
+			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
 				$a = $this->$n;
@@ -335,7 +335,7 @@ abstract class XItem implements Serializable,OmniValue {
 		// Export fields
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$fields = $cx->GetXmlFields();
-			/** @var $f XField */
+			/** @var $f XMetaField */
 			foreach ($fields as $f){
 				$found = false; foreach ($meta_fields_to_be_ignored as $ff) if ($f->IsEqualTo($ff)) { $found = true; break; }
 				if ($found) continue;
@@ -375,7 +375,7 @@ abstract class XItem implements Serializable,OmniValue {
 		// Export slaves
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$slaves = $cx->GetXmlSlaves();
-			/** @var $sl XSlave */
+			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
 				$a = $this->$n;
@@ -409,7 +409,7 @@ abstract class XItem implements Serializable,OmniValue {
 		// Import fields
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$fields = $cx->GetXmlFields();
-			/** @var $f XField */
+			/** @var $f XMetaField */
 			foreach ($fields as $f){
 				if ($f->GetXmlImportPhase() != $st->GetPhase()) continue;
 				$found = false; foreach ($meta_fields_to_be_ignored as $ff) if ($f->IsEqualTo($ff)) { $found = true; break; }
@@ -467,7 +467,7 @@ abstract class XItem implements Serializable,OmniValue {
 		// Import slaves
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$slaves = $cx->GetXmlSlaves();
-			/** @var $sl XSlave */
+			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();
 				$foreign_meta_field = $sl->GetHookField();
@@ -579,11 +579,11 @@ abstract class XItem implements Serializable,OmniValue {
 
 
 	/** @return array */
-	public static function SelectField(XField $meta_field,$where=null,$orderby=null){
+	public static function SelectField(XMetaField $meta_field,$where=null,$orderby=null){
 		return self::SelectFieldX($meta_field,$where,$orderby,array_slice(func_get_args(),3));
 	}
 	/** @return array */
-	public static function SelectFieldX(XField $meta_field,$where=null,$orderby=null,$params=array()){
+	public static function SelectFieldX(XMetaField $meta_field,$where=null,$orderby=null,$params=array()){
 		$c = $meta_field->GetMeta();
 		$sql = 'SELECT a.'.$meta_field->GetDBName().' AS id FROM '.$c->GetDBTableName().' AS a';
 

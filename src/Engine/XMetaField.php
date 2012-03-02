@@ -1,6 +1,6 @@
 <?php
 
-class XField implements OmniValue {
+class XMetaField implements OmniValue {
 	/** @var XMeta */
 	private $meta;
 	/** @return XMeta */
@@ -23,7 +23,7 @@ class XField implements OmniValue {
 			;
 	}
 
-	public function OmniType(){ return OmniField::Type(); }
+	public function OmniType(){ return OmniMetaField::Type(); }
 	public function __toString(){
 		return strval($this->GetLabel());
 	}
@@ -31,7 +31,7 @@ class XField implements OmniValue {
 	
 	private $db_alias;
 	private $db_alias_complex;
-	/** @return XField */
+	/** @return XMetaField */
 	public function WithDBAlias($value){ $this->db_alias = $value; $this->db_alias_complex=false; return $this; }
 	public function WithDBComplexAlias($value){ $this->db_alias = $value; $this->db_alias_complex=true; return $this; }
 	public function GetDBAlias(){ return $this->db_alias; }
@@ -39,24 +39,24 @@ class XField implements OmniValue {
 	public function IsDBAliasComplex(){ return $this->db_alias_complex; }
 
 	private $xml_alias = null;
-	/** @return XField */
+	/** @return XMetaField */
 	public function WithXmlAlias($value){ $this->xml_alias = $value; return $this; }
 	public function GetXmlAlias(){ return $this->xml_alias; }
 	public function GetXmlName(){ return $this->xml_alias; }
 
 	private $is_db_bound = true;
-	/** @return XField */
+	/** @return XMetaField */
 	public function WithIsDBBound($value){ $this->is_db_bound = $value; return $this; }
 	public function IsDBBound(){ return $this->is_db_bound; }
 
 	private $is_xml_bound = true;
-	/** @return XField */
+	/** @return XMetaField */
 	public function WithIsXmlBound($value){ $this->is_xml_bound = $value; return $this; }
 	public function IsXmlBound(){ return $this->is_xml_bound; }
 
 	private $label;
 	public function GetLabel(){ return $this->label; }
-	/** @return XField */
+	/** @return XMetaField */
 	public function WithLabel($args){
 		if ($args instanceof Lemma)
 			$this->label = $args;
@@ -73,20 +73,20 @@ class XField implements OmniValue {
 
 
 	private $xml_behaviour = Xml::Attribute;
-	/** @return XField */
+	/** @return XMetaField */
 	public function WithXmlBehaviour($value){ $this->xml_behaviour = $value; return $this; }
 	public function GetXmlBehaviour(){ return $this->xml_behaviour; }
 
 	private $xml_foreign_field = null;
-	/** @return XField */
+	/** @return XMetaField */
 	public function WithXmlForeignField($value){ $this->xml_foreign_field = $value; return $this; }
-	/** @return XField */
+	/** @return XMetaField */
 	public function GetXmlForeignField(){ return $this->xml_foreign_field; }
 
 	private $xml_exporter = null;
 	/**
 	@param void function($value,XmlExportState $state)
-	@return XField
+	@return XMetaField
 	*/
 	public function WithXmlExporter($value){ $this->xml_exporter = $value; return $this; }
 	public function GetXmlExporter(){ return $this->xml_exporter; }
@@ -94,13 +94,13 @@ class XField implements OmniValue {
 	private $xml_importer = null;
 	/**
 	@param void function($value,XmlImportState $state,Validator $v)
-	@return XField
+	@return XMetaField
 	*/
 	public function WithXmlImporter($value){ $this->xml_importer = $value; return $this; }
 	public function GetXmlImporter(){ return $this->xml_importer; }
 
 	private $xml_enum = null;
-	/** @return XField */
+	/** @return XMetaField */
 	public function WithXmlEnum($value){
 		$this->xml_enum = $value instanceof Enum
 			? $value
@@ -111,11 +111,11 @@ class XField implements OmniValue {
 	public function GetXmlEnum(){ return $this->xml_enum; }
 
 	private $xml_import_phase = 0;
-	/** @return XField */
+	/** @return XMetaField */
 	public function WithXmlImportPhase($value){ $this->xml_import_phase = $value; return $this; }
 	public function GetXmlImportPhase(){ return $this->xml_import_phase; }
 
-	public function IsEqualTo(XField $f){
+	public function IsEqualTo(XMetaField $f){
 		return $this->name == $f->GetName() && $this->meta->IsEqualTo($f->GetMeta());
 	}
 

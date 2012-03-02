@@ -44,19 +44,19 @@ following the conversion rules of the OmniType of the field. In reverse operatio
 <p>
 For this reason, there is the class <span class="code">XWrap</span>, which wraps an object with a namespace. By default the namespace of the object is a standard string derived from
 the name of the class and the id of the object. The <span class="code">XWrap</span> contain <span class="code">XWrapField</span>s and <span class="code">XWrapSlave</span>s
-in direct analogy with the <span class="code">XField</span>s and <span class="code">XSlave</span>s.
+in direct analogy with the <span class="code">XMetaField</span>s and <span class="code">XMetaSlave</span>s.
 </p>
 
 <p class="ascii">
-|---------------------|      |--------|      |---------------------|
-| XMeta            <---------- XItem <--------+              XWrap |
-|        |------------|      |--------|      |------------|        |
-|        | XField    <-------------------------XWrapField |        |
-|        |------------|                      |------------|        |
-|        | XField    <-------------------------XWrapField |        |
-|        |------------|                      |------------|        |
-|        | XSlave    <-------------------------XWrapSlave |      +--------------> name
-|--------|------------|                      |------------|--------|
+|-------------------------|      |--------|      |---------------------|
+| XMeta                <---------- XItem <--------+              XWrap |
+|        |----------------|      |--------|      |------------|        |
+|        | XMetaField    <-------------------------XWrapField |        |
+|        |----------------|                      |------------|        |
+|        | XMetaField    <-------------------------XWrapField |        |
+|        |----------------|                      |------------|        |
+|        | XMetaSlave    <-------------------------XWrapSlave |      +--------------> name
+|--------|----------------|                      |------------|--------|
 </p>
 
 

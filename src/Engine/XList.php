@@ -71,7 +71,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 		if ($this->is_aggressive)
 			for ($mm = $this->meta; !is_null($mm); $mm = $mm->GetParent())
-				/** @var $f XField */
+				/** @var $f XMetaField */
 				foreach ($mm->GetDBFields() as $f)
 					$sql .= ',' . $f->GetDBName();
 
@@ -214,7 +214,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			$this->order_by = $orderby_or_field_or_function;
 			return $this;
 		}
-		elseif ( $orderby_or_field_or_function instanceof XField ) {
+		elseif ( $orderby_or_field_or_function instanceof XMetaField ) {
 			$this->order_by = $orderby_or_field_or_function->Order($desc);
 			return $this;
 		}

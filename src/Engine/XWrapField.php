@@ -5,10 +5,10 @@ class XWrapField implements OmniValue {
 	/** @var XWrap */
 	private $wrap;
 
-	/** @var XField */
+	/** @var XMetaField */
 	private $field;
 
-	public function __construct(XWrap $wrap,XField $field){
+	public function __construct(XWrap $wrap,XMetaField $field){
 		$this->wrap = $wrap;
 		$this->field = $field;
 	}
@@ -21,7 +21,7 @@ class XWrapField implements OmniValue {
 	/** @return XItem */
 	public function GetItem(){ return $this->wrap->GetItem(); }
 
-	/** @return XField */
+	/** @return XMetaField */
 	public function GetField(){ return $this->field; }
 	
 	public function GetValue(){
