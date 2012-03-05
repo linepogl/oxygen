@@ -108,7 +108,7 @@ var Oxygen = {
 		x.update('<div style="text-align:center;"><img src=\"oxy/img/ajax.gif\" align="absmiddle" hspace="10" vspace="10" /><br/><span id=\"OxygenDialogClock\">0:00</span></div>');
 		x.style.width = '';
 		x.style.height = '';
-		x.style.overflow = 'none';
+		x.style.overflow = 'auto';
 		this.current_ajax_dialog_clock_value = 0;
 		this.current_ajax_dialog_clock_timer = setTimeout(function(){Oxygen.UpdateDialogClock();},1000);
 		dialog.show();
@@ -155,7 +155,7 @@ var Oxygen = {
 		x.update('<div style="text-align:center"><img src=\"oxy/img/ajax.gif\" hspace=\"10\" vspace=\"1\" align="absmiddle"/><br/><span id=\"OxygenDialogClock\">0:00</span></div>');
 		x.style.width = '';
 		x.style.height = '';
-		x.style.overflow = 'none';
+		x.style.overflow = 'auto';
 		this.current_ajax_dialog_clock_value = 0;
 		this.current_ajax_dialog_clock_timer = setTimeout(function(){Oxygen.UpdateDialogClock();},1000);
 		new Ajax.Request(this.current_ajax_dialog_url,{
@@ -225,8 +225,6 @@ var Oxygen = {
 
 // for backwards compatibility:
 Oxygen.HideAjaxDialog = Oxygen.HideDialog;
-
-
 
 function dump2(x,level){
 	var s = typeof x;

@@ -644,11 +644,11 @@ class Oxygen {
 		echo "var oxygen_lang = ".new Js(Oxygen::GetLang()).";";
 		echo Js::END;
 
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery.js"></script>'.Js::BEGIN.'jQuery.noConflict();'.Js::END; // jQuery has to be loaded before prototype and set to no-conflict mode.
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery-ui.js"></script>';
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/prototype.js"></script>';
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/scriptaculous-effects.js"></script>';
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/date.js"></script>';
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery.js"></script>';
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery-ui.js"></script>';
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/fix.js"></script>';
 
 		if (Browser::IsIE6()){

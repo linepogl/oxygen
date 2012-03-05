@@ -14,5 +14,3 @@ document.viewport.getHeight = function(){
 };
 
 
-// fix for jQuery
-jQuery.noConflict();
