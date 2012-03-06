@@ -27,8 +27,8 @@ class Book extends XItem {
 	public $Title;
 	public $NumberOfPages;
 	public static function FillMeta(XMeta $m){
-		$m->Title = OmniString::Field();
-		$m->NumberOfPages = OmniIntegerOrNull::Field();
+		$m->Title = MetaString::Field();
+		$m->NumberOfPages = MetaIntegerOrNull::Field();
 	}
 }
 
@@ -62,8 +62,8 @@ class Book extends XItem {
 	public $NumberOfPages;
 	public static function FillMeta(XMeta $m){
 		<b>$m->SetXmlTagName('book');</b>
-		$m->Title = OmniString::Field()<b>->WithIsXmlBound(false)</b>;
-		$m->NumberOfPages = OmniIntegerOrNull::Field()<b>->WithXmlAlias('number-of-pages')</b>;
+		$m->Title = MetaString::Field()<b>->WithIsXmlBound(false)</b>;
+		$m->NumberOfPages = MetaIntegerOrNull::Field()<b>->WithXmlAlias('number-of-pages')</b>;
 	}
 }
 
@@ -95,8 +95,8 @@ class Book extends XItem {
 	public $NumberOfPages;
 	public static function FillMeta(XMeta $m){
 		$m->SetXmlTagName('book');
-		$m->Title = OmniString::Field()<b>->WithXmlAlias('title')->WithXmlBehaviour(Xml::Element)</b>;
-		$m->NumberOfPages = OmniIntegerOrNull::Field()->WithXmlAlias('number-of-pages');
+		$m->Title = MetaString::Field()<b>->WithXmlAlias('title')->WithXmlBehaviour(Xml::Element)</b>;
+		$m->NumberOfPages = MetaIntegerOrNull::Field()->WithXmlAlias('number-of-pages');
 	}
 }
 
@@ -129,7 +129,7 @@ class Book extends XItem {
 	public $Title;
 	public $Chapters;
 	public static function FillMeta(XMeta $m){
-		$m->Title = OmniString::Field();
+		$m->Title = MetaString::Field();
 		$m->Chapters = BookChapter::Meta()->idBook->Slave();
 	}
 }
@@ -137,8 +137,8 @@ class BookChapter extends XItem {
 	public $idBook;
 	public $Title;
 	public static function FillMeta(XMeta $m){
-		$m->idBook = OmniID::Field();
-		$m->Title = OmniString::Field();
+		$m->idBook = MetaID::Field();
+		$m->Title = MetaString::Field();
 	}
 }
 

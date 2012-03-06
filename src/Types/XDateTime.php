@@ -1,6 +1,6 @@
 <?php
 
-class XDateTime implements Serializable, OmniValue {
+class XDateTime implements Serializable, XValue {
 	private $timestamp;
 	public static function Make($year,$month,$day,$hours=0,$minutes=0,$seconds=0){
 		return new static(mktime($hours,$minutes,$seconds,$month,$day,$year));
@@ -10,7 +10,7 @@ class XDateTime implements Serializable, OmniValue {
 		$this->timestamp = is_null($timestamp) ? time() : $timestamp;
 	}
 
-	public function OmniType(){ return OmniDateTime::Type(); }
+	public function MetaType(){ return MetaDateTime::Type(); }
 	public function serialize(){ return serialize($this->timestamp); }
 	public function unserialize($data){ $this->timestamp = unserialize($data); }
 

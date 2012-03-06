@@ -59,7 +59,7 @@ Database::GetType();       // int (Database::MYSQL or Database::ORACLE)
 
 <p>
 All queries are handled by the function <span class="code">Database::Execute()</span>. This function takes an SQL query in as string form, plus a number of arguments to be bound
-to placeholders marked with <b>?</b>. The arguments can have be of any type supported by the OmniType system (see the chapter on the <a href="types.html">Type System</a>).
+to placeholders marked with <b>?</b>. The arguments can have be of any type supported by the type system (see the chapter on the <a href="types.html">Type System</a>).
 </p>
 
 <p class="code">
@@ -68,14 +68,14 @@ Database::Execute('DELETE FROM Books WHERE id=?', $id);
 
 <p>
 If the query is a SELECT, then the results are return in the form of a <span class="code">DBReader</span>, which is a forward only cursor. Each column is a wrapped <span class="code">DBValue</span>
-which should be imported by using the proper OmniType.
+which should be imported by using the proper type.
 </p>
 
 <p class="code">
 $dr = Database::Execute('SELECT * FROM Books');
 while ($dr->Read()){
-	$id = $dr['id']->CastTo( OmniID::Type() );
-	$title = $dr['id']->CastTo( OmniString::Type() );
+	$id = $dr['id']->CastTo( MetaID::Type() );
+	$title = $dr['id']->CastTo( MetaString::Type() );
 	echo $id->AsHex();
 	echo $title;
 }
@@ -96,19 +96,19 @@ This function will return directly a <span class="code">DBValue</span> with the 
 </p>
 
 <p class="code">
-$count = Database::ExecuteScalar('SELECT COUNT(*) FROM Books')->CastTo( OmniInteger::Type() );
-$id = Database::ExecuteScalar('SELECT id FROM Books WHERE Name=?', 'Alice in wonderland')->CastTo( OmniIDOrNull::Type() );
+$count = Database::ExecuteScalar('SELECT COUNT(*) FROM Books')->CastTo( MetaInteger::Type() );
+$id = Database::ExecuteScalar('SELECT id FROM Books WHERE Name=?', 'Alice in wonderland')->CastTo( MetaID::Type() );
 </p>
 
 
 <h3>ExecuteColumnOf</h3>
 
 <p>
-This function will return an array of the first column of the results. Each element of the array will be casted to the predefined OmniType.
+This function will return an array of the first column of the results. Each element of the array will be casted to the predefined type.
 </p>
 
 <p class="code">
-$author_ids = Database::ExecuteColumnOf( OmniID::Type , 'SELECT idAuthor FROM Books WHERE idAuthor IS NOT NULL' );
+$author_ids = Database::ExecuteColumnOf( MetaID::Type() , 'SELECT idAuthor FROM Books WHERE idAuthor IS NOT NULL' );
 </p>
 
 <h3>ExecuteInsert</h3>

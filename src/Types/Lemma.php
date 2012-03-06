@@ -1,10 +1,10 @@
 <?php
 
-class Lemma implements ArrayAccess,IteratorAggregate,Serializable,OmniValue{
+class Lemma implements ArrayAccess,IteratorAggregate,Serializable,XValue{
 	private $name;
 	private $data = array();
 
-	public function OmniType(){ return OmniLemma::Type(); }
+	public function MetaType(){ return MetaLemma::Type(); }
 	public function offsetExists($offset) { return isset($this->data[$offset]); }
 	public function offsetGet($offset) { return isset($this->data[$offset]) ? $this->data[$offset] : null; }
 	public function offsetSet($offset, $value) { throw new Exception('Lemmas are immutable.'); }

@@ -58,65 +58,65 @@ inside the $_POST array.
 </p>
 
 <p>
-Oxygen introduces the idea of OmniType which represents the abstract Type of a variable without taking into account where it is stored. The OmniType of a variable
+Oxygen introduces the idea of XType which represents the abstract Type of a variable without taking into account where it is stored. The XType of a variable
 knows how to convert the variable from one type to another.
 </p>
 
-<h2>Primitive OmniTypes</h2>
+<h2>Primitive XTypes</h2>
 
 <p>
 The following data types are supported by Oxygen.
 </p>
 
 <table>
-<tr><th>OmniType</th>      <th>PHP Type</th>   <th>Default value</th>    <th>SQL Type</th>  <th>PHP literal</th>                           <th>SQL literal (MySQL)</th>      <th>URL value (french)</th>      <th>HTML value (french)</th>           </tr>
-<tr><td>OmniString</td>    <td>string</td>     <td>''</td>               <td>VARCHAR</td>   <td>'It\'s me & you'</td>                      <td>'It\'s me & you'</td>         <td>It's%20me%20%26%20you</td>   <td>It&quot;s me &amp;amp; you</td>    </tr>
-<tr><td>OmniInteger</td>   <td>integer</td>    <td>0</td>                <td>INT</td>       <td>3</td>                                     <td>3</td>                        <td>3</td>                       <td>3</td>                             </tr>
-<tr><td>OmniDecimal</td>   <td>float</td>      <td>0.0</td>              <td>DECIMAL</td>   <td>3.14</td>                                  <td>3.14</td>                     <td>3,14</td>                    <td>3,14</td>                          </tr>
-<tr><td>OmniBoolean</td>   <td>boolean</td>    <td>false</td>            <td>TINYINT</td>   <td>true</td>                                  <td>1</td>                        <td>true</td>                    <td>true</td>                          </tr>
-<tr><td>OmniNull</td>      <td>null</td>       <td>null</td>             <td>*</td>         <td>null</td>                                  <td>NULL</td>                     <td></td>                        <td></td>                              </tr>
-<tr><td>OmniID</td>        <td>ID</td>         <td>new ID(0)</td>        <td>INT</td>       <td>new ID(3)</td>                             <td>3</td>                        <td>00000003</td>                <td>00000003</td>                      </tr>
-<tr><td>OmniLemma</td>     <td>Lemma</td>      <td>new Lemma()</td>      <td>VARCHAR</td>   <td>new Lemma('en','Title','fr','Titre')</td>  <td>'en~Title~fr~Titre'</td>      <td>en~Title~fr~Titre</td>       <td>en~Title~fr~Titre</td>             </tr>
-<tr><td>OmniDateTime</td>  <td>XDateTime</td>  <td>new XDateTime()</td>  <td>DATETIME</td>  <td>XDateTime::Make(2010,10,21,12,30,15)</td>  <td>'2010-10-21 12:30:15'</td>    <td>20101021123015</td>          <td>20101021123015</td>                </tr>
-<tr><td>OmniDate</td>      <td>XDate</td>      <td>new XDate()</td>      <td>DATETIME</td>  <td>XDate::Make(2010,10,21)</td>               <td>'2010-10-21 00:00:00'</td>    <td>20101021000000</td>          <td>20101021000000</td>                </tr>
-<tr><td>OmniTime</td>      <td>XTime</td>      <td>new XTime()</td>      <td>DATETIME</td>  <td>XDate::Make(12,30,15)</td>                 <td>'2000-01-01 12:30:15'</td>    <td>20000101123015</td>          <td>20000101123015</td>                </tr>
-<tr><td>OmniTimeSpan</td>  <td>XTimeSpan</td>  <td>new XTimeSpan()</td>  <td>INT</td>       <td>XTimeSpan::Make(1,30,20,324)</td>          <td>5420324</td>                  <td>5420324</td>                 <td>5420324</td>                       </tr>
+<tr><th>XType</th>         <th>PHP Type</th>   <th>Default value</th>    <th>SQL Type</th>  <th>PHP literal</th>                           <th>SQL literal (MySQL)</th>      <th>URL value (french)</th>      <th>HTML value (french)</th>           </tr>
+<tr><td>MetaString</td>    <td>string</td>     <td>''</td>               <td>VARCHAR</td>   <td>'It\'s me & you'</td>                      <td>'It\'s me & you'</td>         <td>It's%20me%20%26%20you</td>   <td>It&quot;s me &amp;amp; you</td>    </tr>
+<tr><td>MetaInteger</td>   <td>integer</td>    <td>0</td>                <td>INT</td>       <td>3</td>                                     <td>3</td>                        <td>3</td>                       <td>3</td>                             </tr>
+<tr><td>MetaDecimal</td>   <td>float</td>      <td>0.0</td>              <td>DECIMAL</td>   <td>3.14</td>                                  <td>3.14</td>                     <td>3,14</td>                    <td>3,14</td>                          </tr>
+<tr><td>MetaBoolean</td>   <td>boolean</td>    <td>false</td>            <td>TINYINT</td>   <td>true</td>                                  <td>1</td>                        <td>true</td>                    <td>true</td>                          </tr>
+<tr><td>MetaNull</td>      <td>null</td>       <td>null</td>             <td>*</td>         <td>null</td>                                  <td>NULL</td>                     <td></td>                        <td></td>                              </tr>
+<tr><td>MetaID</td>        <td>ID</td>         <td>new ID(0)</td>        <td>INT</td>       <td>new ID(3)</td>                             <td>3</td>                        <td>00000003</td>                <td>00000003</td>                      </tr>
+<tr><td>MetaLemma</td>     <td>Lemma</td>      <td>new Lemma()</td>      <td>VARCHAR</td>   <td>new Lemma('en','Title','fr','Titre')</td>  <td>'en~Title~fr~Titre'</td>      <td>en~Title~fr~Titre</td>       <td>en~Title~fr~Titre</td>             </tr>
+<tr><td>MetaDateTime</td>  <td>XDateTime</td>  <td>new XDateTime()</td>  <td>DATETIME</td>  <td>XDateTime::Make(2010,10,21,12,30,15)</td>  <td>'2010-10-21 12:30:15'</td>    <td>20101021123015</td>          <td>20101021123015</td>                </tr>
+<tr><td>MetaDate</td>      <td>XDate</td>      <td>new XDate()</td>      <td>DATETIME</td>  <td>XDate::Make(2010,10,21)</td>               <td>'2010-10-21 00:00:00'</td>    <td>20101021000000</td>          <td>20101021000000</td>                </tr>
+<tr><td>MetaTime</td>      <td>XTime</td>      <td>new XTime()</td>      <td>DATETIME</td>  <td>XDate::Make(12,30,15)</td>                 <td>'2000-01-01 12:30:15'</td>    <td>20000101123015</td>          <td>20000101123015</td>                </tr>
+<tr><td>MetaTimeSpan</td>  <td>XTimeSpan</td>  <td>new XTimeSpan()</td>  <td>INT</td>       <td>XTimeSpan::Make(1,30,20,324)</td>          <td>5420324</td>                  <td>5420324</td>                 <td>5420324</td>                       </tr>
 </table>
 
 
 <p>
-In addition, all of the above types have a nullable equivalent (except <span class="code">OmniNull</span> of course). The nullable type has the same name as the not
-nullable with the suffix -OrNull. So, the nullable <span class="code">OmniString</span> is the <span class="code">OmniStringOrNull</span> and the nullable
-<span class="code">OmniBoolean</span> is the <span class="code">OmniBooleanOrNull</span>. When using non-nullable data types, a <b>null</b> value automatically
-gets coverted to the default value. So, when an <span class="code">OmniBoolean</span> encounters a null value, it will convert it to <b>false</b>. On the contrary,
-the <span class="code">OmniBooleanOrNull</span> will return a null.
+In addition, all of the above types have a nullable equivalent (except <span class="code">MetaNull</span> of course). The nullable type has the same name as the not
+nullable with the suffix -OrNull. So, the nullable <span class="code">MetaString</span> is the <span class="code">MetaStringOrNull</span> and the nullable
+<span class="code">MetaBoolean</span> is the <span class="code">MetaBooleanOrNull</span>. When using non-nullable data types, a <b>null</b> value automatically
+gets coverted to the default value. So, when an <span class="code">MetaBoolean</span> encounters a null value, it will convert it to <b>false</b>. On the contrary,
+the <span class="code">MetaBooleanOrNull</span> will return a null.
 </p>
 
 <p>
-The actual conversions are done by a set of functions that each OmniType has. Those functions are separated into two large groups, the exporters and the importers.
+The actual conversions are done by a set of functions that each XType has. Those functions are separated into two large groups, the exporters and the importers.
 The exporters convert a PHP value to an external form (such as an SQL literal), while the importers convert an external value (such as a database value) back into
 a PHP variable.
 </p>
 
 <p class="code">
-$sql_literal = OmniString::ExportSqlLiteral( 'This is a string', Database::MYSQL );
-$php_integer = OmniInteger::ImportHttpValue( '1' );
+$sql_literal = MetaString::ExportSqlLiteral( 'This is a string', Database::MYSQL );
+$php_integer = MetaInteger::ImportHttpValue( '1' );
 </p>
 
 <p>
-Usually, the OmniType to be used can be inferred from the type of the PHP variable. The function <span class="code">OmniType::Of</span> returns the default OmniType of
+Usually, the XType to be used can be inferred from the type of the PHP variable. The function <span class="code">XType::Of</span> returns the default XType of
 a variable. This comes with a little runtime overhead, but it is very convenient.
 </p>
 
 <p class="code">
 $s = 'This is a string';
-echo OmniType::Of($s)->ExportSqlLiteral( $s, Database::MYSQL );  // output: 'This is a string'
+echo XType::Of($s)->ExportSqlLiteral( $s, Database::MYSQL );  // output: 'This is a string'
 $i = 5;
-echo OmniType::Of($i)->ExportSqlLiteral( $i, Database::MYSQL );  // output: 5
+echo XType::Of($i)->ExportSqlLiteral( $i, Database::MYSQL );  // output: 5
 </p>
 
 <p>
-As these functions are used very frequently, all exporters come with some helping wrapper classes, that will infer the OmniType and execute the exporting function in
+As these functions are used very frequently, all exporters come with some helping wrapper classes, that will infer the XType and execute the exporting function in
 a lazy fashion. In addition, they will use the current open database connection to find the database type.
 </p>
 
@@ -143,15 +143,15 @@ things easier. These sources wrap the values to be imported in a structure that 
 
 <p>
 One of the sources is the <span class="code">DBReader</span> class (see the chapter <a href="dal.html">Database Abstraction Layer</a>). Each field of the current record
-can be imported with the help of an OmniType.
+can be imported with the help of an XType.
 </p>
 
 <p class="code">
 $dr = Database::Execute('SELECT * FROM Book');
 while($dr->Read()) {
-	$id = $dr['id']->CastTo( OmniID::Type() );
-	$NumberOfPages = $dr['NumberOfPages']->CastTo( OmniInteger::Type() );
-	$Author = $dr['Author']->CastTo( OmniString::Type() )
+	$id = $dr['id']->CastTo( MetaID::Type() );
+	$NumberOfPages = $dr['NumberOfPages']->CastTo( MetaInteger::Type() );
+	$Author = $dr['Author']->CastTo( MetaString::Type() )
 }
 $dr->Close();
 </p>
@@ -161,8 +161,8 @@ Another import source is the Http class with the arrays <span class="code">Http:
 </p>
 
 <p class="code">
-$id = Http::$GET['id']->CastTo( OmniID::Type() );
-$username = Http::$POST['username']->CastTo( OmniString::Type() );
+$id = Http::$GET['id']->CastTo( MetaID::Type() );
+$username = Http::$POST['username']->CastTo( MetaString::Type() );
 </p>
 
 <p>

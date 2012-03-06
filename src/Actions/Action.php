@@ -1,6 +1,6 @@
 <?php
 
-abstract class Action implements OmniValue {
+abstract class Action implements XValue {
 	//protected $name = null;
 	public function __construct(){
 		$this->mode = $this->GetDefaultMode();
@@ -15,7 +15,7 @@ abstract class Action implements OmniValue {
 
 
 
-	public function OmniType(){ return OmniAction::Type(); }
+	public function MetaType(){ return MetaAction::Type(); }
 
 
 

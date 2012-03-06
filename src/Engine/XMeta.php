@@ -5,7 +5,7 @@ class XMeta extends stdClass {
 	private $__classname;
 	private function __construct($classname){
 		$this->__classname=$classname;
-		$this->id = OmniID::Field();
+		$this->id = MetaID::Field();
 	}
 	public function GetClassName(){ return $this->__classname; }
 
@@ -411,19 +411,20 @@ class XMeta extends stdClass {
 
 
 
-	/** @return XMetaField */ public static function ID() { return new XMetaField( OmniIDOrNull::Type() ); }
-	/** @return XMetaField */ public static function String() { return new XMetaField( OmniStringOrNull::Type() ); }
-	/** @return XMetaField */ public static function Integer() { return new XMetaField( OmniInteger::Type() ); }
-	/** @return XMetaField */ public static function NullableInteger() { return new XMetaField( OmniIntegerOrNull::Type() ); }
-	/** @return XMetaField */ public static function Float() { return new XMetaField( OmniDecimal::Type() ); }
-	/** @return XMetaField */ public static function NullableFloat() { return new XMetaField( OmniDecimalOrNull::Type() ); }
-	/** @return XMetaField */ public static function Boolean() { return new XMetaField( OmniBoolean::Type() ); }
-	/** @return XMetaField */ public static function NullableBoolean() { return new XMetaField( OmniBooleanOrNull::Type() ); }
-	/** @return XMetaField */ public static function Date() { return new XMetaField( OmniDateOrNull::Type() ); }
-	/** @return XMetaField */ public static function DateTime() { return new XMetaField( OmniDateTimeOrNull::Type() ); }
-	/** @return XMetaField */ public static function Time() { return new XMetaField( OmniTimeOrNull::Type() ); }
-	/** @return XMetaField */ public static function TimeSpan() { return new XMetaField( OmniTimeSpanOrNull::Type() ); }
-	/** @return XMetaField */ public static function Lemma() { return new XMetaField( OmniLemmaOrNull::Type() ); }
+	/** @return XMetaField */ public static function ID() { return new XMetaField( MetaID::Type() ); }
+	/** @return XMetaField */ public static function String() { return new XMetaField( MetaString::Type() ); }
+	/** @return XMetaField */ public static function StringOrNull() { return new XMetaField( MetaStringOrNull::Type() ); }
+	/** @return XMetaField */ public static function Integer() { return new XMetaField( MetaInteger::Type() ); }
+	/** @return XMetaField */ public static function IntegerOrNull() { return new XMetaField( MetaIntegerOrNull::Type() ); }
+	/** @return XMetaField */ public static function Decimal() { return new XMetaField( MetaDecimal::Type() ); }
+	/** @return XMetaField */ public static function DecimalOrNull() { return new XMetaField( MetaDecimalOrNull::Type() ); }
+	/** @return XMetaField */ public static function Boolean() { return new XMetaField( MetaBoolean::Type() ); }
+	/** @return XMetaField */ public static function BooleanOrNull() { return new XMetaField( MetaBooleanOrNull::Type() ); }
+	/** @return XMetaField */ public static function Date() { return new XMetaField( MetaDate::Type() ); }
+	/** @return XMetaField */ public static function DateTime() { return new XMetaField( MetaDateTime::Type() ); }
+	/** @return XMetaField */ public static function Time() { return new XMetaField( MetaTime::Type() ); }
+	/** @return XMetaField */ public static function TimeSpan() { return new XMetaField( MetaTimeSpan::Type() ); }
+	/** @return XMetaField */ public static function Lemma() { return new XMetaField( MetaLemma::Type() ); }
 
 	/** @return XMetaSlave */ public static function Slave(XMetaField $hook_meta_field){ return new XMetaSlave($hook_meta_field); }
 }

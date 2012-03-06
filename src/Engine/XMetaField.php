@@ -1,6 +1,6 @@
 <?php
 
-class XMetaField implements OmniValue {
+class XMetaField implements XValue {
 	/** @var XMeta */
 	private $meta;
 	/** @return XMeta */
@@ -11,10 +11,10 @@ class XMetaField implements OmniValue {
 	public function GetName(){ return $this->name; }
 	public function SetName($value){ $this->name = $value; if (is_null($this->db_alias)) $this->db_alias = $value; if (is_null($this->xml_alias)) $this->xml_alias = $value; }
 
-	/** @var OmniType */
+	/** @var XType */
 	private $type;
-	public function __construct(OmniType $type){ $this->type = $type; }
-	/** @return OmniType */
+	public function __construct(XType $type){ $this->type = $type; }
+	/** @return XType */
 	public function GetType(){ return $this->type; }
 	public function GetXsdType(){
 		return is_null($this->xml_foreign_field)
@@ -23,7 +23,7 @@ class XMetaField implements OmniValue {
 			;
 	}
 
-	public function OmniType(){ return OmniMetaField::Type(); }
+	public function MetaType(){ return MetaMetaField::Type(); }
 	public function __toString(){
 		return strval($this->GetLabel());
 	}

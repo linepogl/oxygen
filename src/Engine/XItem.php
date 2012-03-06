@@ -1,6 +1,6 @@
 <?php
 
-abstract class XItem implements Serializable,OmniValue {
+abstract class XItem implements Serializable,XValue {
 	/** @var ID */
 	public $id;
 	public $has_temp_id = true;
@@ -65,7 +65,7 @@ abstract class XItem implements Serializable,OmniValue {
 	public final function GetIcon32() { return $this->GetIcon(32); }
 	public final function GetIcon48() { return $this->GetIcon(48); }
 
-	public function OmniType(){ return OmniItem::Type(); }
+	public function MetaType(){ return MetaItem::Type(); }
 	public function serialize(){
 		$a = array();
 		$meta = $this->Meta();

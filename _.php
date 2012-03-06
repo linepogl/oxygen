@@ -10,9 +10,8 @@ define('PROFILE',array_key_exists('profile',$_GET));
 define('DEV',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
 
 if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }
-require('oxy/src/OmniType/_OmniType.php');
-require('oxy/src/OmniType/OmniType.php');
-require('oxy/src/OmniType/OmniValue.php');
+require('oxy/src/TypeSystem/XType.php');
+require('oxy/src/TypeSystem/XValue.php');
 require('oxy/src/Types/ID.php');
 require('oxy/src/Oxygen.php');
 require('oxy/src/Utils/Scope.php');

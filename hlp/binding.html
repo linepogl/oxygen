@@ -38,7 +38,7 @@ such thing, however, we can create something equivalent with the use of namespac
 The namespace of a form that contains fields of an object can be anything. However, the name of each of the form elements depends only on the namespace of the form and the name of
 the field they represent. As a result, in order to fill a form with the data of an object, it is sufficient to provide a name and the object itself. Everything else can be extracted
 from this information. The name of the form element derives from the namespace and the name of the field. The value of the element is generated from the value of the field by
-following the conversion rules of the OmniType of the field. In reverse operation, reading from the HTTP parameters requires the same things.
+following the conversion rules of the XType of the field. In reverse operation, reading from the HTTP parameters requires the same things.
 </p>
 
 <p>
@@ -105,7 +105,7 @@ $ui->Read( Http::$POST );   // this is enough!
 
 <p>
 The above code will generate the name for each field of the book and will check the HTTP request if it contains parameters with this name. If so, it will extract these parameter
-by using the <span class="code">OmniType</span> of the field. As a result, the book will have its title and its author updated by the form, while the rest of the fields will
+by using the <span class="code">XType</span> of the field. As a result, the book will have its title and its author updated by the form, while the rest of the fields will
 remain unchanged.
 </p>
 

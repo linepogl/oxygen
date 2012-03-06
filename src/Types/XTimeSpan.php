@@ -1,7 +1,7 @@
 <?php
 
 
-class XTimeSpan implements Serializable,OmniValue {
+class XTimeSpan implements Serializable,XValue {
 	private $value;
 
 	public static function Make($days,$hours,$minutes,$seconds=0,$milliseconds=0,$sign=1){
@@ -11,7 +11,7 @@ class XTimeSpan implements Serializable,OmniValue {
 		$this->value = $total_milliseconds;
 	}
 
-	public function OmniType(){ return OmniTimeSpan::Type(); }
+	public function MetaType(){ return MetaTimeSpan::Type(); }
 	public function serialize(){ return serialize($this->value); }
 	public function unserialize($data){ $this->value = unserialize($data); }
 	

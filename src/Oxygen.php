@@ -32,11 +32,11 @@ class Oxygen {
 		// init url handling
 		self::$php_script = basename( $_SERVER['SCRIPT_NAME'] );
 		foreach (self::$url_pins as $key=>$value)
-			self::$url_pins[$key] = Http::$GET[$key]->AsString();
+			self::$url_pins[$key] = Http::$GET[$key]->AsStringOrNull();
 
 		// init window scoping
 		if (self::$window_scoping_enabled){
-			self::$window_hash = Http::$GET['window']->AsString();
+			self::$window_hash = Http::$GET['window']->AsStringOrNull();
 			if (is_null(self::$window_hash)) self::$window_hash = Oxygen::Hash32(self::$session_hash);
 			self::$url_pins['window'] = self::$window_hash;
 		}
@@ -54,7 +54,7 @@ class Oxygen {
 		Oxygen::SetLang($lang);
 
 		// set the action
-		self::$actionname = Http::$GET['action']->AsString();
+		self::$actionname = Http::$GET['action']->AsStringOrNull();
 		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
 
 		Database::Upgrade();

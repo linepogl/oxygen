@@ -41,8 +41,8 @@ final class HttpGet extends Http {
 final class HttpAny extends Http {
 	public final function offsetExists($offset) { return isset($_GET[$offset]) || isset($_POST[$offset]); }
 	/** @return HttpValue */ public function offsetGet($offset) {
-		$a = Http::$GET[$offset]->AsString();
-		$b = Http::$POST[$offset]->AsString();
+		$a = Http::$GET[$offset]->AsStringOrNull();
+		$b = Http::$POST[$offset]->AsStringOrNull();
 		$v = null; if (!is_null($a) && !is_null($b)) $v = $a.','.$b;	elseif (!is_null($a)) $v = $a; elseif (!is_null($b)) $v = $b;
 		return new HttpValue($v);
 	}

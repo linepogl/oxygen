@@ -1,9 +1,9 @@
 <?php
 
-class GenericID extends ID implements OmniValue {
+class GenericID extends ID implements XValue {
 	private $classname;
 
-	public function OmniType(){ return OmniGenericID::Type(); }
+	public function MetaType(){ return MetaGenericID::Type(); }
 	public function serialize(){ return serialize(array('classname'=>$this->classname,'value'=>$this->value)); }
 	public function unserialize($data){ $a = unserialize($data); $this->classname=$a['classname']; $this->value=$a['value']; }
 

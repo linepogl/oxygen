@@ -287,18 +287,18 @@ class Database {
 		self::RequireConnection();
 		$q = self::Prepare($sql);
 		$z = count($params);
-		if ($z > 0){ for($i = 0; $i < $z; $i++) $q->bindValue($i+1, OmniType::Of($params[$i])->ExportPdoValue( $params[$i] , self::$type ) ); }
+		if ($z > 0){ for($i = 0; $i < $z; $i++) $q->bindValue($i+1, XType::Of($params[$i])->ExportPdoValue( $params[$i] , self::$type ) ); }
 		try {
 			$q->execute();
 		}
 		catch (Exception $ex) {
 			$m = $ex->getMessage().'<br/><br/>'.$sql;
-			foreach ($params as $p) $m .= '<br/>&bull; '.Debug::GetVariableAsString(  OmniType::Of($p)->ExportPdoValue( $p , self::$type ) );
+			foreach ($params as $p) $m .= '<br/>&bull; '.Debug::GetVariableAsString(  XType::Of($p)->ExportPdoValue( $p , self::$type ) );
 			throw new Exception($m);
 		}
 		if ( $q->errorCode() !== '00000' ) {
 			$info = $q->errorInfo(); $m = $info[2].'<br/><br/>'.$sql;
-			foreach ($params as $p) $m .= '<br/>&bull; '.Debug::GetVariableAsString( OmniType::Of($p)->ExportPdoValue( $p , self::$type ) );
+			foreach ($params as $p) $m .= '<br/>&bull; '.Debug::GetVariableAsString( XType::Of($p)->ExportPdoValue( $p , self::$type ) );
 			throw new Exception($m);
 		}
 		if ($q->columnCount() > 0) return new DBReader($q);
@@ -312,18 +312,18 @@ class Database {
 	public static function Execute($sql){
 		self::RequireConnection();
 		$q = self::Prepare($sql);
-		$z = func_num_args(); if ($z > 1){ $a = func_get_args(); for($i = 1; $i < $z; $i++) $q->bindValue($i, OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) ); }
+		$z = func_num_args(); if ($z > 1){ $a = func_get_args(); for($i = 1; $i < $z; $i++) $q->bindValue($i, XType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) ); }
 		try {
 			$q->execute();
 		}
 		catch (Exception $ex) {
 			$m = $ex->getMessage().'<br/><br/>'.$sql;
-			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Debug::GetVariableAsString( OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
+			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Debug::GetVariableAsString( XType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
 			throw new Exception($m);
 		}
 		if ( $q->errorCode() !== '00000' ) {
 			$info = $q->errorInfo(); $m = $info[2].'<br/><br/>'.$sql;
-			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Debug::GetVariableAsString( OmniType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
+			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Debug::GetVariableAsString( XType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
 			throw new Exception($m);
 		}
 		if ($q->columnCount() > 0) return new DBReader($q);
@@ -334,22 +334,22 @@ class Database {
 
 	/**
 	 * @deprecated Since 1.3
-	 * @param OmniType $omnitype
+	 * @param XType $type
 	 * @param string $sql ... Pass the rest of the arguments after $sql
 	 * @return array
 	 */
-	public static function ExecuteListOf(OmniType $omnitype,$sql){ return self::ExecuteListOfX($omnitype,$sql,array_slice(func_get_args(),2)); }
+	public static function ExecuteListOf(XType $type,$sql){ return self::ExecuteListOfX($type,$sql,array_slice(func_get_args(),2)); }
 	/**
 	 * @deprecated Since 1.3
 	 * @param string $sql
-	 * @param OmniType $omnitype
+	 * @param XType $type
 	 * @param array $params
 	 * @return array
 	 */
-	public static function ExecuteListOfX(OmniType $omnitype,$sql,$params=array()){
+	public static function ExecuteListOfX(XType $type,$sql,$params=array()){
 		$dr = self::ExecuteX($sql,$params);
 		$r = array();
-		while ($dr->Read())	$r[] = $dr[0]->CastTo($omnitype);
+		while ($dr->Read())	$r[] = $dr[0]->CastTo($type);
 		$dr->Close();
 		return $r;
 	}
@@ -358,21 +358,21 @@ class Database {
 
 	/**
 	 * @api
-	 * @param OmniType $omnitype
+	 * @param XType $type
 	 * @param string $sql ... Pass the rest of the arguments after $sql
 	 * @return array
 	 */
-	public static function ExecuteColumnOf(OmniType $omnitype, $sql){ return self::ExecuteColumnOfX($omnitype,$sql,array_slice(func_get_args(),1)); }
+	public static function ExecuteColumnOf(XType $type, $sql){ return self::ExecuteColumnOfX($type,$sql,array_slice(func_get_args(),1)); }
 	/**
 	 * @param string $sql
-	 * @param OmniType $omnitype
+	 * @param XType $type
 	 * @param array $params
 	 * @return array
 	 */
-	public static function ExecuteColumnOfX(OmniType $omnitype, $sql,$params=array()){
+	public static function ExecuteColumnOfX(XType $type, $sql,$params=array()){
 		$dr = self::ExecuteX($sql,$params);
 		$r = array();
-		while ($dr->Read())	$r[] = $dr[0]->CastTo($omnitype);
+		while ($dr->Read())	$r[] = $dr[0]->CastTo($type);
 		$dr->Close();
 		return $r;
 	}

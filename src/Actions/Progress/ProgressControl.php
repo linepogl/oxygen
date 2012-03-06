@@ -39,9 +39,10 @@ class ProgressControl extends Control {
 		echo "params = {";
 		if($this->forward_request && Oxygen::IsPostback()){
 			$i=0;
+			/** @var $v HttpValue */
 			foreach(Http::$POST as $k=>$v){
 				if ($i++>0) echo ',';
-				echo new Js($k).':'.new Js($v->AsString());
+				echo new Js($k).':'.new Js($v->AsStringOrNull());
 			}
 		}
 		echo "};";
