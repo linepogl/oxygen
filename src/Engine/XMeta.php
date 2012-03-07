@@ -5,7 +5,7 @@ class XMeta extends stdClass {
 	private $__classname;
 	private function __construct($classname){
 		$this->__classname=$classname;
-		$this->id = MetaID::Field();
+		$this->id = XMeta::ID();
 	}
 	public function GetClassName(){ return $this->__classname; }
 

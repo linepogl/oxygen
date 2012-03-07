@@ -61,7 +61,7 @@ class Book extends XItem {
 	public $Title;
 	public static function FillMeta(XMeta $m){
 		$m->SetDBTableName('book');
-		$m->Title = MetaString::Field()->WithLabel('en','Title','fr','Titre');
+		$m->Title = XMeta::String()->WithLabel('en','Title','fr','Titre');
 	}
 }
 </p>
@@ -98,11 +98,13 @@ The id field is also used as the primary key for database operations. For more i
 <p>
 Most of meta information regard the fields of an object. In a meta object, all fields are represented by instances of the class <span class="code">XMetaField</span>. Every meta field
 is based on an XType which is responsible for the all the conversions, ie. importing a value into a field of an object and exporting the value from the field (see the chapter
-<a href="types">The type system</a>). The easiest way to create an XMetaField is from its XType:
+<a href="types">The type system</a>). The easiest way to create an XMetaField is from its XType, but for the most common types, this can be also done width convenience functions from XMeta:
 </p>
 
 <p class="code">
-MetaString::Field();
+$field = MetaString::Field();
+// or
+$field = XMeta::String();
 </p>
 
 <p>
@@ -111,28 +113,28 @@ assigned by the XMeta class, after the call to <span class="code">FillMeta</span
 </p>
 
 <p class="code">
-$field = MetaString::Field();
+$field = XMeta::String();
 $name = $field->GetName();     // $name is null, because it is not filled in by any XMeta object.
 </p>
 
 <p>
-In addition, every field is automatically assigne a label, which is equal to the lemma with the same name in the dictionary (see the chapter on <a href="i18n.html">Internationalization</a>).
+In addition, every field is automatically assigned a label, which is equal to the lemma with the same name in the dictionary (see the chapter on <a href="i18n.html">Internationalization</a>).
 The value of the label can be changed with the method <span class="code">WithLabel</span> which is overloaded.
 </p>
 
 <p class="code">
 // No call
-$m->Title = MetaString::Field();                                                          // label: Lemma::Pick('Title')
+$m->Title = XMeta::String();                                                          // label: Lemma::Pick('Title')
 
 // Call with one string argument
-$m->Title = MetaString::Field()->WithLabel('BookTitle');                                  // label: Lemma::Pick('BookTitle')
+$m->Title = XMeta::String->WithLabel('BookTitle');                                  // label: Lemma::Pick('BookTitle')
 
 // Call with one Lemma argument
-$m->Title = MetaString::Field()->WithLabel( Lemma::Pick('BookTitle') );               // label: Lemma::Pick('BookTitle')
-$m->Title = MetaString::Field()->WithLabel( new Lemma('en','Title','fr','Titre') );       // label: Lemma('en','Title','fr','Titre')
+$m->Title = XMeta::String()->WithLabel( Lemma::Pick('BookTitle') );               // label: Lemma::Pick('BookTitle')
+$m->Title = XMeta::String()->WithLabel( new Lemma('en','Title','fr','Titre') );       // label: Lemma('en','Title','fr','Titre')
 
 // Call with two or more string arguments
-$m->Title = MetaString::Field()->WithLabel('en','Title','fr','Titre');                    // label: Lemma('en','Title','fr','Titre')
+$m->Title = XMeta::String()->WithLabel('en','Title','fr','Titre');                    // label: Lemma('en','Title','fr','Titre')
 </p>
 
 <p>
@@ -141,7 +143,7 @@ an example of a field with database and XML mapping:
 </p>
 
 <p class="code">
-$m->Title = MetaString::Field()->WithLabel('BookTitle')->WithDBAlias('title')->WithXmlAlias('title')->WithXmlBehaviour(Xml::Element);
+$m->Title = XMeta::String()->WithLabel('BookTitle')->WithDBAlias('title')->WithXmlAlias('title')->WithXmlBehaviour(Xml::Element);
 </p>
 
 <p>
@@ -356,7 +358,7 @@ Finally, it is possible to define a default sorting for items inside the meta cl
 class Book extends XItem {
 	...
 	public static function FillMeta(XMeta $m){
-		$m->Title = MetaString::Field();
+		$m->Title = XMeta::String();
 		$m->OrderBy( $m->Title->Asc() );
 	}
 	...

@@ -92,7 +92,7 @@ abstract class Publication extends XItem {
 	public static function FillMeta(XMeta $m){
 		$m->SetDBTableName('publication');
 		$m->SetAbstractDBFieldName('ClassName');
-		$m->Title = MetaString::Field();
+		$m->Title = XMeta::String();
 	}
 }
 class Book extends Publication {
@@ -100,7 +100,7 @@ class Book extends Publication {
 	public static function FillMeta(XMeta $m){
 		$m->SetParent(Publication::Meta());
 		$m->SetDBTableName('book');
-		$m->Author = MetaString::Field();
+		$m->Author = XMeta::String();
 	}
 }
 class Magazine extends Publication {
@@ -108,7 +108,7 @@ class Magazine extends Publication {
 	public static function FillMeta(XMeta $m){
 		$m->SetParent(Publication::Meta());
 		$m->SetDBTableName('magazine');
-		$m->Issue = MetaInteger::Field();
+		$m->Issue = XMeta::Integer();
 	}
 }
 </p>
@@ -205,7 +205,7 @@ class BookChapter extends XItem {
 	public $idBook;
 	public static function FillMeta(XMeta $m){
 		...
-		$m->idBook = MetaID::Field();
+		$m->idBook = XMeta::ID();
 	}
 }
 </p>

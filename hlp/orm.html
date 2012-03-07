@@ -17,7 +17,7 @@ can be automatically preserved in a database.
 class Author extends XItem {
 	public $Name;
 	public static function FillMeta(XMeta $m){
-		$m->Name = MetaString::Field();
+		$m->Name = XMeta::String();
 	}
 }
 class Book extends XItem {
@@ -25,9 +25,9 @@ class Book extends XItem {
 	public $idAuthor;
 	public $NumberOfPages;
 	public static function FillMeta(XMeta $m){
-		$m->Title = MetaString::Field();
-		$m->idAuthor = MetaID::Field();
-		$m->NumberOfPages = MetaIntegerOrNull::Field();
+		$m->Title = XMeta::String();
+		$m->idAuthor = XMeta::ID();
+		$m->NumberOfPages = XMeta::IntegerOrNull();
 	}
 }
 </p>
@@ -43,7 +43,7 @@ class Author extends XItem {
 	public $Name;
 	public static function FillMeta(XMeta $m){
 		<b>$m->SetDBTableName('app_authors');</b>
-		$m->Name = MetaString::Field();
+		$m->Name = XMeta::String();
 	}
 }
 class Book extends XItem {
@@ -53,9 +53,9 @@ class Book extends XItem {
 	public static function FillMeta(XMeta $m){
 		<b>$m->SetDBTableName('app_books');</b>
 		<b>$m->id->WithDBAlias('book_id');</b>
-		$m->Title = MetaString::Field();
-		$m->idAuthor = MetaID::Field();
-		$m->NumberOfPages = MetaIntegerOrNull::Field()<b>->WithDBAlias('NumPages')</b>;
+		$m->Title = XMeta::String();
+		$m->idAuthor = XMeta::ID();
+		$m->NumberOfPages = XMeta::IntegerOrNull()<b>->WithDBAlias('NumPages')</b>;
 	}
 }
 </p>
