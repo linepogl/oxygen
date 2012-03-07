@@ -102,7 +102,13 @@ abstract class XItem implements Serializable,XValue {
 	private function Init(){
 		$c = $this->Meta();
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
-			$slaves = $cx->GetDBSlaves();
+			$fields = $cx->GetFields();
+			/** @var $f XMetaField */
+			foreach ($fields as $f){
+				$n = $f->GetName();
+				$this->$n = $f->GetType()->GetDefaultValue();
+			}
+			$slaves = $cx->GetSlaves();
 			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
 				$n = $sl->GetName();

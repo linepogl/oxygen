@@ -382,6 +382,30 @@ abstract class XType implements _XType {
 
 
 
+
+
+//	/** @return MetaString         */ public static function String()         { return MetaString::Type(); }
+//	/** @return MetaStringOrNull   */ public static function StringOrNull()   { return MetaStringOrNull::Type(); }
+//	/** @return MetaInteger        */ public static function Integer()        { return MetaInteger::Type(); }
+//	/** @return MetaIntegerOrNull  */ public static function IntegerOrNull()  { return MetaIntegerOrNull::Type(); }
+//	/** @return MetaDecimal        */ public static function Decimal()        { return MetaDecimal::Type(); }
+//	/** @return MetaDecimalOrNull  */ public static function DecimalOrNull()  { return MetaDecimalOrNull::Type(); }
+//	/** @return MetaBoolean        */ public static function Boolean()        { return MetaBoolean::Type(); }
+//	/** @return MetaBooleanOrNull  */ public static function BooleanOrNull()  { return MetaBooleanOrNull::Type(); }
+//	/** @return MetaID             */ public static function ID()             { return MetaID::Type(); }
+//	/** @return MetaDate           */ public static function Date()           { return MetaDate::Type(); }
+//	/** @return MetaDateOrToday    */ public static function DateOrToday()    { return MetaDateOrToday::Type(); }
+//	/** @return MetaDateTime       */ public static function DateTime()       { return MetaDateTime::Type(); }
+//	/** @return MetaDateTimeOrNow  */ public static function DateTimeOrNow()  { return MetaDateTimeOrNow::Type(); }
+//	/** @return MetaTime           */ public static function Time()           { return MetaTime::Type(); }
+//	/** @return MetaTimeOrCurrent  */ public static function TimeOrCurrent()  { return MetaTimeOrCurrent::Type(); }
+//	/** @return MetaTimeOrMidnight */ public static function TimeOrMidnight() { return MetaTimeOrMidnight::Type(); }
+//	/** @return MetaTimeSpan       */ public static function TimeSpan()       { return MetaTimeSpan::Type(); }
+//	/** @return MetaTimeSpanOrZero */ public static function TimeSpanOrZero() { return MetaTimeSpanOrZero::Type(); }
+//	/** @return MetaLemma          */ public static function Lemma()          { return MetaLemma::Type(); }
+//	/** @return MetaLemmaOrEmpty   */ public static function LemmaOrEmpty()   { return MetaLemmaOrEmpty::Type(); }
+
+
 }
 
 

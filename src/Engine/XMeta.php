@@ -411,20 +411,26 @@ class XMeta extends stdClass {
 
 
 
-	/** @return XMetaField */ public static function ID() { return new XMetaField( MetaID::Type() ); }
-	/** @return XMetaField */ public static function String() { return new XMetaField( MetaString::Type() ); }
-	/** @return XMetaField */ public static function StringOrNull() { return new XMetaField( MetaStringOrNull::Type() ); }
-	/** @return XMetaField */ public static function Integer() { return new XMetaField( MetaInteger::Type() ); }
-	/** @return XMetaField */ public static function IntegerOrNull() { return new XMetaField( MetaIntegerOrNull::Type() ); }
-	/** @return XMetaField */ public static function Decimal() { return new XMetaField( MetaDecimal::Type() ); }
-	/** @return XMetaField */ public static function DecimalOrNull() { return new XMetaField( MetaDecimalOrNull::Type() ); }
-	/** @return XMetaField */ public static function Boolean() { return new XMetaField( MetaBoolean::Type() ); }
-	/** @return XMetaField */ public static function BooleanOrNull() { return new XMetaField( MetaBooleanOrNull::Type() ); }
-	/** @return XMetaField */ public static function Date() { return new XMetaField( MetaDate::Type() ); }
-	/** @return XMetaField */ public static function DateTime() { return new XMetaField( MetaDateTime::Type() ); }
-	/** @return XMetaField */ public static function Time() { return new XMetaField( MetaTime::Type() ); }
-	/** @return XMetaField */ public static function TimeSpan() { return new XMetaField( MetaTimeSpan::Type() ); }
-	/** @return XMetaField */ public static function Lemma() { return new XMetaField( MetaLemma::Type() ); }
+	/** @return XMetaField */ public static function String()         { return new XMetaField( MetaString::Type() ); }
+	/** @return XMetaField */ public static function StringOrNull()   { return new XMetaField( MetaStringOrNull::Type() ); }
+	/** @return XMetaField */ public static function Integer()        { return new XMetaField( MetaInteger::Type() ); }
+	/** @return XMetaField */ public static function IntegerOrNull()  { return new XMetaField( MetaIntegerOrNull::Type() ); }
+	/** @return XMetaField */ public static function Decimal()        { return new XMetaField( MetaDecimal::Type() ); }
+	/** @return XMetaField */ public static function DecimalOrNull()  { return new XMetaField( MetaDecimalOrNull::Type() ); }
+	/** @return XMetaField */ public static function Boolean()        { return new XMetaField( MetaBoolean::Type() ); }
+	/** @return XMetaField */ public static function BooleanOrNull()  { return new XMetaField( MetaBooleanOrNull::Type() ); }
+	/** @return XMetaField */ public static function ID()             { return new XMetaField( MetaID::Type() ); }
+	/** @return XMetaField */ public static function Date()           { return new XMetaField( MetaDate::Type() ); }
+	/** @return XMetaField */ public static function DateOrToday()    { return new XMetaField( MetaDateOrToday::Type() ); }
+	/** @return XMetaField */ public static function DateTime()       { return new XMetaField( MetaDateTime::Type() ); }
+	/** @return XMetaField */ public static function DateTimeOrNow()  { return new XMetaField( MetaDateTimeOrNow::Type() ); }
+	/** @return XMetaField */ public static function Time()           { return new XMetaField( MetaTime::Type() ); }
+	/** @return XMetaField */ public static function TimeOrCurrent()  { return new XMetaField( MetaTimeOrCurrent::Type() ); }
+	/** @return XMetaField */ public static function TimeOrMidnight() { return new XMetaField( MetaTimeOrMidnight::Type() ); }
+	/** @return XMetaField */ public static function TimeSpan()       { return new XMetaField( MetaTimeSpan::Type() ); }
+	/** @return XMetaField */ public static function TimeSpanOrZero() { return new XMetaField( MetaTimeSpanOrZero::Type() ); }
+	/** @return XMetaField */ public static function Lemma()          { return new XMetaField( MetaLemma::Type() ); }
+	/** @return XMetaField */ public static function LemmaOrEmpty()   { return new XMetaField( MetaLemmaOrEmpty::Type() ); }
 
 	/** @return XMetaSlave */ public static function Slave(XMetaField $hook_meta_field){ return new XMetaSlave($hook_meta_field); }
 }
