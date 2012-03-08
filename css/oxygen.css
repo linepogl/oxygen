@@ -80,7 +80,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .message-panel-success  { background:#eeffee; border-color:#bbeebb; }
 .message-panel-info     { background:#f4f4f4; border-color:#cccccc; }
 
-.message          { padding:2px 2px 2px 19px; background-position:1px 50%; background-repeat:no-repeat;}
+.message          { text-align:left; padding:2px 2px 2px 19px; background-position:1px 50%; background-repeat:no-repeat; }
 .message-bug      { background-image:url(../ico/Bug16.gif); }
 .message-error    { background-image:url(../ico/Error16.gif); }
 .message-warning  { background-image:url(../ico/Warning16.gif); }

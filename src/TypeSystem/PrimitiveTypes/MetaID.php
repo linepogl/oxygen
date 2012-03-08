@@ -117,7 +117,7 @@ class MetaID extends XType {
 	 */
 	public static function ImportDBValue($value) {
 		if (is_null($value)) return null;
-		return new ID(intval($value));
+		return new ID($value);
 	}
 
 	/**
@@ -127,7 +127,7 @@ class MetaID extends XType {
 	public static function ImportDomValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
-		return new ID($value);
+		return ID::ParseHex($value);
 	}
 
 	/**
@@ -138,7 +138,7 @@ class MetaID extends XType {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();
-		return new ID($value);
+		return ID::ParseHex($value);
 	}
 }
 

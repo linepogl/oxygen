@@ -43,12 +43,12 @@ class HttpValue extends ImportConverter {
   		return array();
   	else if (is_array($this->value)){
 			$r = array();
-			foreach ($this->value as $s) $r[]= is_null($s) || $s=='' ? null : new ID($s);
+			foreach ($this->value as $s) $r[]= is_null($s) || $s=='' ? null : ID::ParseHex($s);
   		return $r;
 		}
   	else {
 			$r = array();
-			foreach (explode(',',$this->value) as $s) $r[]= is_null($s) || $s=='' ? null : new ID($s);
+			foreach (explode(',',$this->value) as $s) $r[]= is_null($s) || $s=='' ? null : ID::ParseHex($s);
   		return $r;
 		}
 	}

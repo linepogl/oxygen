@@ -49,6 +49,10 @@ class XMeta extends stdClass {
 
 
 
+	/** @var string|null */  private $__depends_on = null;
+	/** @var closure|null */ private $__dependency = null;
+	public function SetDependency( $value ){ $this->__dependency = $value; }
+
 
 	public function Compile(){
 		$this->__fields = array();
@@ -86,6 +90,8 @@ class XMeta extends stdClass {
 			$s .= $m->__db_table_name;
 		}
 		$this->__db_signature = Oxygen::Hash32($s);
+		$g = $this->__dependency;
+		if (!is_null($g)) $this->__depends_on = $g();
 	}
 
 	private $__fields;
@@ -132,19 +138,38 @@ class XMeta extends stdClass {
 	// Singleton
 	//
 	//
-	private static $__cache = array();
+	private static $__cache_all = array(); // $classname.$depends_on => XMeta
+	private static $__cache_last_used = array(); // $classname => XMeta;
 	/** @return XMeta */
 	public static function Of($classname){
-		if (!isset(self::$__cache[$classname])) {
-			self::$__cache[$classname] = new XMeta($classname);
-			$m = new ReflectionMethod($classname,'FillMeta');
-			$m->invoke(null,self::$__cache[$classname]);
-			self::$__cache[$classname]->Compile();
+		/** @var $r XMeta */
+		$r = null;
+		if (isset(self::$__cache_last_used[$classname])) {
+			$r = self::$__cache_last_used[$classname];
+			$g = $r->__dependency;
+			if (is_null($g)) return $r;
+			$depends_on = $g();
+			if ($depends_on == $r->__depends_on) return $r;
+			$key = $classname . $depends_on;
+			if (isset(self::$__cache_all[$key])) {
+				$r = self::$__cache_all[$key];
+				self::$__cache_last_used[$classname] = $r;
+				return $r;
+			}
 		}
-		return self::$__cache[$classname];
+		$r = new XMeta($classname);
+		$m = new ReflectionMethod($classname,'FillMeta');
+		$m->invoke(null,$r);
+		$r->Compile();
+
+		$key = $classname;
+		if (!is_null($r->__depends_on)) $key .= $r->__depends_on;
+		self::$__cache_all[$key] = $r;
+		self::$__cache_last_used[$classname] = $r;
+		return $r;
 	}
 
-	public static function SoftResetItemCaches() { /** @var $m XMeta */ foreach (self::$__cache as $m) $m->SoftResetItemCache(); }
+	public static function SoftResetItemCaches() { /** @var $m XMeta */ foreach (self::$__cache_all as $m) $m->SoftResetItemCache(); }
 
 
 

@@ -19,17 +19,6 @@ class ID implements Serializable, XValue {
 	}
 
 
-	private function parse(&$string){
-		$s = strtoupper(trim($string));
-		if (!Oxygen::IsID($s)) throw new Exception('Invalid ID: '.$s.'.');
-		$x = intval(substr($s,0,1),16);
-		if ($x < 0x8)
-			$this->value = intval($s,16);
-		else { // Stupid PHP does not understand negative hex while scanning back
-			$s = strval($x-0x8) . substr($s,1,7);
-			$this->value = intval($s,16) ^ 0x7FFFFFFF + 1;
-		}
-	}
 
 	public function __construct($value=null){
 		if (is_null($value))
@@ -38,15 +27,27 @@ class ID implements Serializable, XValue {
 			$this->value = $value->value;
 		elseif ($value instanceof XItem)
 			$this->value = $value->id->value;
-		elseif (is_string($value))
-			$this->parse($value);
 		elseif (is_int($value))
 			$this->value = $value;
 		else
-			$this->parse(strval($value));
+			$this->value = intval($value);
 	}
 
-	public static function Random(){ return new ID(); }
+	/** @return ID */
+	public static function Random(){
+		return new ID();
+	}
+
+	/** @return ID */
+	public static function ParseHex( $hex ){
+		$s = strtoupper(trim($hex));
+		if (!Oxygen::IsID($s)) throw new Exception('Invalid ID: '.$s.'.');
+		$x = intval(substr($s,0,1),16);
+		if ($x < 0x8)
+			return new ID( intval($s,16) );
+		else // Stupid PHP does not understand negative hex while scanning back
+			return new ID( intval(strval($x-0x8).substr($s,1,7),16) ^ 0x7FFFFFFF + 1 );
+	}
 
 	public function AsInt(){
 		return $this->value;
