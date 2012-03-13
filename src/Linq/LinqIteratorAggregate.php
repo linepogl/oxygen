@@ -170,8 +170,8 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		return $r;
 	}
 	/** O(n) @return value */
-	public function Max(){
-		$r = null;
+	public function Max($default = null){
+		$r = $default;
 		$it = $this->getIterator();
 		for($it->rewind();$it->valid();$it->next()) {
 			$x = $it->current();
@@ -180,8 +180,8 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		return $r;
 	}
 	/** O(n) @return value */
-	public function Min(){
-		$r = null;
+	public function Min($default = null){
+		$r = $default;
 		$it = $this->getIterator();
 		for($it->rewind();$it->valid();$it->next()){
 			$x = intval($it->current());
