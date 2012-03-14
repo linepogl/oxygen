@@ -182,8 +182,8 @@ abstract class HddScope extends MemoryScope {
 		if ($this->use_hdd_storage){
 			$f = $this->GetFolder();
 			foreach (glob($f.'/'.$this->prefix.'_*') as $ff){
-				if (is_dir($f.'/'.$ff)) continue;
-				try{ unlink($f.'/'.$ff); } catch(Exception $ex){}
+				if (is_dir($ff)) continue;
+				try{ unlink($ff); } catch(Exception $ex){}
 			}
 		}
 		$this->SoftReset();
