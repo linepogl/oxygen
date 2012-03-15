@@ -144,7 +144,7 @@ class Oxygen {
 	}
 
 	function user_shutdown_function() {
-		chdir(Oxygen::GetRootFolder());
+		chdir(__ROOT__);
 		Progress::Shutdown();
 		if (PROFILE) Profiler::StopAndSave();
 		if (DEBUG) Debug::StopAndSave();

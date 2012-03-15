@@ -52,6 +52,14 @@ final class Progress {
 		self::SetProgress(1.0);
 		self::SetFinished(true);
 	}
+	public static function HandleExceptionAndFinish(Exception $ex){
+		self::AddLogEntry(Message::Cast($ex));
+		self::SetProgress(1.0);
+		self::SetFinished(true);
+		if (!($ex instanceof ApplicationException)) {
+			Debug::RecordExceptionServed($ex,'Progress exception handler, mode '.(DEV?'DEVELOPMENT':'PRODUCTION'));
+		}
+	}
 
 	public static function IsCancelled(){ return !is_null(Scope::$WINDOW->ForceGet('progress_cancelled')); }
 	public static function Cancel(){ Scope::$WINDOW['progress_cancelled'] = true; }
