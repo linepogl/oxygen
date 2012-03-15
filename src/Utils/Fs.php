@@ -75,9 +75,21 @@ class Fs {
 
 
 	public static function GetMimeType($filename){
-		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-		$mime = finfo_file($finfo, $filename);
-		finfo_close($finfo);
+		if (!file_exists($filename)) {
+			$mime = 'application/octet-stream';
+		}
+		else {
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			$mime = finfo_file($finfo, $filename);
+			finfo_close($finfo);
+		}
+		if ($mime == 'application/octet-stream') { // fail-over
+			$x = strrpos($filename,'.');
+			if ($x !== false){
+				$ext = substr($filename,$x+1);
+				return self::GetMimeTypeByExtension($ext);
+			}
+		}
 		return $mime;
 	}
 
@@ -134,8 +146,7 @@ class Fs {
 			case 'pls': return 'audio/scpls';
 			case 'm3u': return 'audio/x-mpegurl';
 		}
-		return '';
-		//return 'application/octet-stream';
+		return 'application/octet-stream';
 	}
 	
 }
