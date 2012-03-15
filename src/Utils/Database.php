@@ -244,7 +244,7 @@ class Database {
 	//
 	//
 	public static function GetQueries(){ return self::$queries; }
-	public static function GetQueriesAsString(){
+	public static function GetQueriesAsText(){
 		$r = '';
 		$i = 0;
 		arsort(self::$prepared_stats);

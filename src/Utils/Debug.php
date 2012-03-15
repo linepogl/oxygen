@@ -217,9 +217,9 @@ class Debug {
 		for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()){
 			$r .= $exx->getMessage()."\n\n". basename($exx->getFile()).'['.$exx->getLine().']';
 			$r .= "\n".Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']';
-			$r .= "\n\n".Debug::GetTraceAsString($exx);
+			$r .= "\n\n".Debug::GetExceptionTraceAsText($exx);
 		}
-		$r .= "\n\n\n".Database::GetQueriesAsString();
+		$r .= "\n\n\n".Database::GetQueriesAsText();
 		return $r;
 	}
 	public static function GetExceptionReportAsHtml(Exception $ex){
@@ -228,42 +228,54 @@ class Debug {
 		for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()){
 			$r .= '<b>'.$Q.$exx->getMessage().$Q.'</b><br/><br/><i>'.$Q. basename($exx->getFile()).'['.$exx->getLine().']'.$Q.'</i>';
 			$r .= '<div style="color:#aaaaaa;"><i>'.Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']</i></div>';
-			$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($exx)).'</div>';
+			$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;margin-bottom:30px;">'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
 		}
-		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
+		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsText()).'</div>';
 		return $r;
 	}
-	public static function GetTraceAsString(Exception $ex){
+
+	private static function GetFileLinesAroundLine( $filename , $line , $lines = 9){
+		$r = '';
+		$spaces = intval(log($line+$lines,10))+1;
+		$f = fopen($filename,'r');
+		for($i=0; $i<$line-$lines-1; $i++) fgets($f);
+		for(; $i<$line+$lines; $i++) {
+			$s = fgets($f);
+			if ($s === false) break;
+			$r .= "\n" . ($i==$line-1?'# >> ':'#    ').sprintf('%'.$spaces.'d',$i+1).' # '. str_replace(array("\n","\r","\t"),array('','','  '),$s);
+		}
+		fclose($f);
+		return $r;
+	}
+	public static function GetExceptionTraceAsText(Exception $ex){
 		$s = '';
 		$a = $ex->getTrace();
-		$i = count($a)-1;
-		$root = realpath('.');
+		$iii = count($a);
+		$ex->getFile();
+		$ex->getLine();
+
+		$is_legacy_error = count($a)>0 && array_key_exists('function',$a[0]) && $a[0]['function']=='user_error_handler';
+		if ($is_legacy_error) $iii--;
+
+		$file = realpath($ex->getFile());
+		$s .= str_replace("\\",'/',substr($file,strlen(__ROOT__)+1)).'['.$ex->getLine().'] (#'.$iii--.')';
+		$s .= Debug::GetFileLinesAroundLine($ex->getFile(),$ex->getLine());
+		$s .="\n";
+
 		foreach ($a as $t){
-			if ($s != '') $s .="\n";
-
-			if (array_key_exists('function',$t) && $t['function']== 'user_error_handler'){
-				$t = $t['args'];
-				$s .= str_replace("\\",'/',substr($t[2],strlen($root)+1)).'['.$t[3].'] (#'.$i.')';
-
-				$f = fopen($t[2],'r');
-				for($i=0; $i<$t[3]-3; $i++)
-					fgets($f);
-				for(; $i<$t[3]+2; $i++)
-					$s .= "\n" . ($i==$t[3]-1?'>>>':'>  ') . str_replace(array("\n","\r","\t"),array('','','  '),fgets($f)) . ($i==$t[3]-1?'  <<<':'');
-				fclose($f);
-
-				foreach ($t[4] as $key=>$value){
-					$value = Debug::GetVariableAsString($value);
-					$s .= "\n" . '# $' . $key . ' = ' . str_replace("\n","\n# ",$value);
-				}
-				$s .= "\n";
+			if (array_key_exists('function',$t) && $t['function']=='user_error_handler'){
+//				$t = $t['args'];
+//				foreach ($t[4] as $key=>$value){
+//					$value = Debug::GetVariableAsString($value);
+//					$s .= '# $' . $key . ' = ' . str_replace("\n","\n# ",$value) . "\n";
+//				}
+//				$s .= "\n";
 			}
 			else {
-				if (array_key_exists('file',$t))
-					$s .= str_replace("\\",'/',substr($t['file'],strlen($root)+1));
-				if (array_key_exists('line',$t))
-					$s .= '['.$t['line'].'] ';
-				$s .= '(#'.$i.')'. "\n" ;
+				$s .="\n";
+				if (array_key_exists('file',$t)) $s .= str_replace("\\",'/',substr(realpath($t['file']),strlen(__ROOT__)+1));
+				if (array_key_exists('line',$t)) $s .= '['.$t['line'].'] ';
+				$s .= '(#'.$iii--.')'. "\n" ;
 				$s .= '# ' ;
 				if (array_key_exists('class',$t)) $s .= $t['class'];
 				if (array_key_exists('type',$t)) $s .= $t['type'];
@@ -280,7 +292,6 @@ class Debug {
 				if (array_key_exists('function',$t)) $s .= ')';
 				$s .= "\n";
 			}
-			$i--;
 		}
 		return $s;
 	}
@@ -288,10 +299,22 @@ class Debug {
 
 
 
+	public static function RecordExceptionConverted(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Exception converted.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); }
+	public static function RecordExceptionSilenced(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Exception silenced.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); }
+	public static function RecordExceptionRethrown(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Exception rethrown.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); }
+	public static function RecordExceptionServed(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Exception served.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); }
+	public static function RecordExceptionAndDie(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Execution halted.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); exit(); }
+	private static function RecordException(Exception $ex,$extra_developer_message){
+		try {
+			$error_log_message = '';
+			for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious())
+				$error_log_message .= "\n".get_class($exx).': '.$exx->getMessage().' '.$exx->getFile().'['.$exx->getLine().']';
+			error_log( $extra_developer_message . "\n" . $error_log_message . "\n");
+		}
+		catch (Exception $ex) {}
 
-
-	public static function RecordException(Exception $ex){
-		$body = Debug::GetExceptionReportAsHtml($ex);
+		$body = '<div style="font-style:italic;white-space:pre;color:#999999;">'.new Html($extra_developer_message).'</div><br/>';
+		$body .= Debug::GetExceptionReportAsHtml($ex);
 		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
 
 		try {

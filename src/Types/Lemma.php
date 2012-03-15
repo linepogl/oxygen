@@ -92,7 +92,12 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,XValue{
 	public function TranslateTo($lang){
 		if (isset($this->data[$lang])) return $this->data[$lang];
 		$r = '['.$this->name.'.'.$lang.']';
-		Debug::RecordException(new Exception('Undefined lemma: '.$r));
+		try {
+			throw new Exception('Undefined lemma: '.$r);
+		}
+		catch (Exception $ex){
+			Debug::RecordExceptionSilenced($ex);
+		}
 		return $r;
 	}
 	public function Translate(){ return $this->TranslateTo(Oxygen::$lang); }

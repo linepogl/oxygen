@@ -106,6 +106,7 @@ class Oxygen {
 	}
 
 	public static function OnException($ex) {
+		/** @var $ex Exception */
 		while ( ob_get_level() > 0 ) ob_end_clean();
 		$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
 		try {
@@ -124,8 +125,8 @@ class Oxygen {
 			else {
 				echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div>';
 				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
-				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetTraceAsString($ex)).'</div>';
-				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsString()).'</div>';
+				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
+				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsText()).'</div>';
 			}
 			echo '<div style="font:italic 11px/13px Trebuchet MS,sans-serif;color:#bbbbbb;margin-top:50px;">Oxygen</div>';
 			echo '</div>';
@@ -133,13 +134,12 @@ class Oxygen {
 			echo '</div>';
 			if (!($ex instanceof ApplicationException)){
 				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
-				Debug::RecordException($ex);
+				Debug::RecordExceptionServed($ex,'Outer exception handler, mode '.(DEV ?'DEVELOPMENT':'PRODUCTION').'.');
 			}
 		}
 		catch (Exception $ex2){
 			echo $Q.$ex2->getMessage().'<br/><br/>'.$Q.$ex2->getFile().'['.$ex2->getLine().']';
-			error_log($ex2->getMessage().' '.$ex2->getFile().'['.$ex2->getLine().']');
-			try{ Debug::RecordException($ex2); } catch(Exception $ex3){ }
+			try{ Debug::RecordExceptionServed($ex2,'FATAL: Exception inside the outer exception handler.'); } catch(Exception $ex3){ }
 		}
 	}
 

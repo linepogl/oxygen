@@ -2,6 +2,7 @@
 
 class Fs {
 
+
 	public static function GetSafeFilename($filename) {
 		return str_replace(
 			array(" ","&","+","/","\\","'",'"')
@@ -68,13 +69,16 @@ class Fs {
 
 
 	public static function Ensure($path) {
-		if (!is_dir($path))
-			return mkdir($path,0777,true);
-		return true;
+		$r = true;
+		if (!is_dir($path)) {
+			$r = mkdir($path,0777,true);
+			chmod($path,0777);
+		}
+		return $r;
 	}
 
 
-	public static function GetMimeType($filename){
+	public static function GetMimeType($filename,$fail_over_virtual_filename=null){
 		if (!file_exists($filename)) {
 			$mime = 'application/octet-stream';
 		}
@@ -84,9 +88,10 @@ class Fs {
 			finfo_close($finfo);
 		}
 		if ($mime == 'application/octet-stream') { // fail-over
-			$x = strrpos($filename,'.');
+			$s = is_null($fail_over_virtual_filename) ? $filename : $fail_over_virtual_filename;
+			$x = strrpos($s,'.');
 			if ($x !== false){
-				$ext = substr($filename,$x+1);
+				$ext = substr($s,$x+1);
 				return self::GetMimeTypeByExtension($ext);
 			}
 		}

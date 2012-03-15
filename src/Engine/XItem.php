@@ -95,7 +95,7 @@ abstract class XItem implements Serializable,XValue {
 			$this->OnLoad();
 		}
 		catch (Exception $ex){
-			Debug::RecordException($ex);
+			Debug::RecordExceptionSilenced($ex);
 		}
 	}
 

@@ -183,19 +183,27 @@ abstract class Action implements XValue {
 				Oxygen::SetResponseCode(500); // internal server error
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				if (DEV)
+				if (DEV) {
 					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
-				else
+					$exception_served_as = 'DEVELOPMENT/HTTP code 500';
+				}
+				else {
 					echo Lemma::Pick('MsgAnErrorOccurred');
+					$exception_served_as = 'PRODUCTION/HTTP code 500';
+				}
 			}
 			else {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
-					if (DEV)
+					if (DEV) {
 						Debug::Write( '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) );
-					else
+						$exception_served_as = 'DEVELOPMENT/Debug Immediate Flushing';
+					}
+					else {
 						Debug::Write( Lemma::Pick('MsgAnErrorOccurred') );
+						$exception_served_as = 'PRODUCTION/Debug Immediate Flushing';
+					}
 				}
 				else {
 					echo '<table class="center"><tr><td>';
@@ -210,11 +218,13 @@ abstract class Action implements XValue {
 						echo '<div style="font-weight:normal;font-style:italic;color:#cccccc;font-size:90%;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div><br/>';
 						echo Debug::GetExceptionReportAsHtml($ex);
 						echo new Spacer(350);
+						$exception_served_as = 'DEVELOPMENT';
 					}
 					else {
 						echo new Spacer(350,33);
 						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurred') ) );
 						echo new Spacer(350);
+						$exception_served_as = 'PRODUCTION';
 					}
 
 					echo '</td>';
@@ -223,7 +233,7 @@ abstract class Action implements XValue {
 					echo '</td></tr></table>';
 				}
 			}
-			Debug::RecordException($ex);
+			Debug::RecordExceptionServed($ex,'Inner exception handler, mode '.$exception_served_as.'.');
 		}
 		$result = ob_get_clean();
 		return $result;
