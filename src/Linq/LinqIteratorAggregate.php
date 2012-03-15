@@ -170,24 +170,24 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		return $r;
 	}
 	/** O(n) @return value */
-	public function Max(){
+	public function Max($default = null){
 		$r = null;
 		$it = $this->getIterator();
 		for($it->rewind();$it->valid();$it->next()) {
 			$x = $it->current();
 			if (is_null($r) || $r < $x) $r = $x;
 		}
-		return $r;
+		return is_null($r) ? $default : $r;
 	}
 	/** O(n) @return value */
-	public function Min(){
+	public function Min($default = null){
 		$r = null;
 		$it = $this->getIterator();
 		for($it->rewind();$it->valid();$it->next()){
 			$x = intval($it->current());
 			if (is_null($r) || $r > $x) $r = $x;
 		}
-		return $r;
+		return is_null($r) ? $default : $r;
 	}
 
 

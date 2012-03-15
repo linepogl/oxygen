@@ -171,22 +171,22 @@ class LinqIterator implements Iterator, Countable {
 		return $r;
 	}
 	/** O(n) */
-	public function Max(){
+	public function Max($default = null){
 		$r = null;
 		for($this->rewind();$this->valid();$this->next()){
 			$x = $this->current();
 			if (is_null($r) || $r < $x) $r = $x;
 		}
-		return $r;
+		return is_null($r) ? $default : $r;
 	}
 	/** O(n) */
-	public function Min(){
+	public function Min($default = null){
 		$r = null;
 		for($this->rewind();$this->valid();$this->next()){
 			$x = intval($this->current());
 			if (is_null($r) || $r > $x) $r = $x;
 		}
-		return $r;
+		return is_null($r) ? $default : $r;
 	}
 
 
