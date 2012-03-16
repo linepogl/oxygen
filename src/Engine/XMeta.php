@@ -262,10 +262,12 @@ class XMeta extends stdClass {
 	public function CopyItem( XItem $item, $with_a_perm_id = false ){
 		$r = clone $item;
 
-		if ( $with_a_perm_id )
-			$r->id = $this->GetNextPermID();
-		else
-			$r->id = $this->GetNextTempID();
+		if (!$this->id->IsDBAliasComplex()) {
+			if ( $with_a_perm_id )
+				$r->id = $this->GetNextPermID();
+			else
+				$r->id = $this->GetNextTempID();
+		}
 		$r->has_temp_id = !$with_a_perm_id;
 
 		// 1. Clone data folder
