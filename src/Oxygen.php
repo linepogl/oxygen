@@ -754,9 +754,11 @@ class Oxygen {
 		$rr = array();
 
 		$r = array();
+		$r['Date and time'] = Language::FormatDateTime(XDateTime::Now());
 		$r['Current action'] = Oxygen::GetActionName();
 		$r['Current language'] = Oxygen::GetLang();
 		$r['Content type'] = Oxygen::GetContentType();
+		$r['Remote IP'] = array_key_exists('REMOTE_ADDR',$_SERVER)?$_SERVER['REMOTE_ADDR']:'';
 		$r['HTTP headers'] = implode("\n",Oxygen::GetHttpHeaders());
 		$rr[] = $r;
 
