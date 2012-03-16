@@ -251,12 +251,14 @@ class Database {
 		foreach ( self::$prepared_stats as $q=>$v ) {
 			$r .= sprintf('%5d',++$i).'. '. $v . ' -> ' .(false===strstr($q,'?')?'* ':''). $q . "\n";
 		}
-		$r .= "\n\n";;
+		if ($r != '') $r .= "\n\n";
 
 		$i = 0;
 		foreach ( self::$queries as $q ) {
 			$r .=  sprintf('%5d',++$i) . '. ' . $q . "\n";
 		}
+
+		if ($r == '') $r .= '-';
 		return $r;
 	}
 

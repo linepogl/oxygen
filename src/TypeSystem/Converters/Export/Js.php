@@ -8,8 +8,8 @@ final class Js extends ExportConverter {
 
 	const Null = 'null';
 
-	const BEGIN = "<script type=\"text/javascript\">\n//<![CDATA[\n";
-	const END = "\n//]]>\n</script>";
+	const BEGIN = "<script type=\"text/javascript\">\n/*<![CDATA[*/\n";
+	const END = "\n/*]]>*/\n</script>";
 
 }
 

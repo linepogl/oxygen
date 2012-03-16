@@ -219,7 +219,13 @@ class Debug {
 			$r .= "\n".Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']';
 			$r .= "\n\n".Debug::GetExceptionTraceAsText($exx);
 		}
-		$r .= "\n\n\n".Database::GetQueriesAsText();
+		$r .= "\n\n";
+		echo "\nOxygen info";
+		echo "\n-----------";
+		echo "\n".Oxygen::GetInfoAsText();
+		echo "\nDatabase queries";
+		echo "\n----------------";
+		echo "\n".Database::GetQueriesAsText();
 		return $r;
 	}
 	public static function GetExceptionReportAsHtml(Exception $ex){
@@ -230,7 +236,8 @@ class Debug {
 			$r .= '<div style="color:#aaaaaa;"><i>'.Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']</i></div>';
 			$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;margin-bottom:30px;">'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
 		}
-		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsText()).'</div>';
+		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
+		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
 		return $r;
 	}
 
@@ -313,13 +320,14 @@ class Debug {
 		}
 		catch (Exception $ex) {}
 
+		$head = Oxygen::GetInfo();
 		$body = '<div style="font-style:italic;white-space:pre;color:#999999;">'.new Html($extra_developer_message).'</div><br/>';
 		$body .= Debug::GetExceptionReportAsHtml($ex);
 		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
 
 		try {
 			$f = Oxygen::GetLogFolder(true);
-			file_put_contents( $f .'/'.$serial.'.err', serialize(array( 'head' => Oxygen::GetInfo() , 'body' => $body )));
+			file_put_contents( $f .'/'.$serial.'.err', serialize(array( 'head' => $head , 'body' => $body )));
 		}
 		catch (Exception $ex) {}
 

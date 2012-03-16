@@ -125,8 +125,9 @@ class Oxygen {
 			else {
 				echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div>';
 				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
-				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;">'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
-				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;">'.new Html(Database::GetQueriesAsText()).'</div>';
+				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
+				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
+				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
 			}
 			echo '<div style="font:italic 11px/13px Trebuchet MS,sans-serif;color:#bbbbbb;margin-top:50px;">Oxygen</div>';
 			echo '</div>';
@@ -744,6 +745,11 @@ class Oxygen {
 	// Info
 	//
 	//
+	/** @var closure */
+	private static $application_info_generator = null;
+	public static function GetApplicationInfoGenerator() { return self::$application_info_generator; }
+	public static function SetApplicationInfoGenerator( $function ) { self::$application_info_generator = $function; }
+	public static function GetApplicationInfo(){ if (is_null(self::$application_info_generator)) return null; $f = self::$application_info_generator; return $f(); }
 	public static function GetInfo(){
 		$rr = array();
 
@@ -808,7 +814,43 @@ class Oxygen {
 		$r['Database upgrade scripts'] = implode("\n",Oxygen::GetDatabaseUpgradeFiles());
 		$rr[] = $r;
 
+		$r = Oxygen::GetApplicationInfo();
+		if (!is_null($r))
+			$rr[] = $r;
+
 		return $rr;
+	}
+	public static function GetInfoAsText($info = null){
+		$r = '';
+		if (is_null($info)) $info = Oxygen::GetInfo();
+		foreach ($info as $a){
+			foreach ($a as $label=>$value){
+				$i = 0;
+				foreach (explode("\n",$value) as $v){
+					$r .= $i++ == 0 ? sprintf('%-26s',$label) : str_repeat(' ',26);
+					$r .= ' | '.$v;
+					$r .= "\n";
+				}
+			}
+			$r .= "\n";
+		}
+		return $r;
+	}
+	public static function GetInfoAsHtml($info = null){
+		$r = '';
+		if (is_null($info)) $info = Oxygen::GetInfo();
+		$r .= '<table cellspacing="0" cellpadding="3" border=0">';
+		foreach ($info as $a){
+			foreach ($a as $label=>$value){
+				$r .= '<tr>';
+				$r .= '<td style="font:11px/13px Courier New,monospace;white-space:pre;color:#888888;padding:3px 6px;width:180px;vertical-align:top;">'.new Html($label).'&nbsp;</td>';
+				$r .= '<td style="font:11px/13px Courier New,monospace;white-space:pre;color:#222222;padding:3px 6px;border-left:1px solid #dddddd;">'.new Html($value).'&nbsp;</td>';
+				$r .= '</tr>';
+			}
+			$r .= '<tr><td>&nbsp;</td><td>&nbsp;</td></tr>';
+		}
+		$r .= '</table>';
+		return $r;
 	}
 }
 

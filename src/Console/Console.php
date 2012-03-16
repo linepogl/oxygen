@@ -14,7 +14,7 @@ class Console {
 		echo '.console-top a .badge { position:relative; top:10px; left:58px; height:10px; width:20px; margin-bottom:-20px; padding:2px; border:2px solid #bbbbbb; border-radius:40px; background:#801a1a; color:#bbbbbb; text-shadow:none;}';
 		echo '.console-top a.active .badge { background:#b30000; color:#eeeeee; border:2px solid #eeeeee; }';
 
-		echo 'div.console, div.console td, div.console * { font:12px/14px Courier New, Courier, monospace; }';
+		echo 'div.console, div.console td, div.console * { font-size:12px; line-heihgt:14px; font-family:Courier New, Courier, monospace; }';
 		echo 'div.console h1 { font:bold 18px/20px Courier New, Courier, monospace; margin:0 0 20px 0;}';
 		echo 'div.console a { color:#6666aa; text-decoration:underline; }';
 		echo 'div.console a:hover { color:#000000; text-decoration:underline; }';
@@ -94,12 +94,7 @@ class Console {
 
 	public static function RenderInfo( $info ){
 		echo '<div style="height:120px;overflow:auto;border:1px dotted #888888;background:#eeeeee;margin-bottom:10px;padding:5px;">';
-		foreach ($info as $a){
-			foreach ($a as $label=>$value){
-				echo '<div class="label">'.new Html($label).'</div><div class="value">'.new Html($value).'</div>';
-			}
-			echo '<br class="clear"/><br/>';
-		}
+		echo Oxygen::GetInfoAsHtml( $info );
 		echo '</div>';
 	}
 	

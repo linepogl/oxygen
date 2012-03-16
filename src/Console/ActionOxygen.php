@@ -14,14 +14,7 @@ class ActionOxygen extends ConsoleAction {
 
 	public function Render(){
 
-
-		foreach (Oxygen::GetInfo() as $a){
-			foreach ($a as $label=>$value){
-				echo '<div class="label">'.new Html($label).'</div><div class="value">'.new Html($value).'</div>';
-			}
-			echo '<br class="clear"/><br/>';
-		}
-
+		echo Oxygen::GetInfoAsHtml();
 
 	}
 
