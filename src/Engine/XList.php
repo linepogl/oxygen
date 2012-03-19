@@ -67,13 +67,13 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		//
 		// SELECT
 		//
-		$sql = 'SELECT a.'.$this->meta->id->GetDBName().' AS id';
+		$sql = 'SELECT a.'.new SqlName($this->meta->id->GetDBName()).' AS '.new SqlName('id');
 
 		if ($this->is_aggressive)
 			for ($mm = $this->meta; !is_null($mm); $mm = $mm->GetParent())
 				/** @var $f XMetaField */
 				foreach ($mm->GetDBFields() as $f)
-					$sql .= ',' . $f->GetDBName();
+					$sql .= ',' . new SqlName($f->GetDBName());
 
 		//
 		// FROM
@@ -89,7 +89,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$where = is_null($this->where) ? null : $this->where->ToSql();
 		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent()) {
 			if (!is_null($where)) $where .= ' AND ';
-			$where .= $mm->GetDBTableName().'.'.$mm->id->GetDBName().'=a.'.$this->meta->id->GetDBName();
+			$where .= $mm->GetDBTableName().'.'.new SqlName($mm->id->GetDBName()).'=a.'.new SqlName($this->meta->id->GetDBName());
 		}
 		if (!empty($where)) $sql .= ' WHERE '.$where;
 
