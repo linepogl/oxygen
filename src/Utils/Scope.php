@@ -335,43 +335,43 @@ class HybridScope extends Scope {
 
 class ApplicationApcScope extends ApcScope  {
 	public function __construct(){ parent::__construct('app'); }
-	protected function Hash($name){ return self::$base.$this->prefix.'_'.$name; }
+	protected function Hash($name){ return 'app['.self::$base.']'.$name; }
 }
 class ApplicationHddScope extends HddScope  {
 	public function __construct(){ parent::__construct('app'); }
-	protected function Hash($name){ return $this->prefix.'_'.Oxygen::Hash32(self::$base.$name); }
+	protected function Hash($name){ return 'app_'.Oxygen::Hash32(self::$base.$name); }
 }
 
 class DatabaseApcScope extends ApcScope  {
 	public function __construct(){ parent::__construct('dat'); }
-	protected function Hash($name){ return self::$base.Database::GetServer().'/'.Database::GetSchema().'/'.$this->prefix.'_'.$name; }
+	protected function Hash($name){ return 'dat['.Database::GetServer().'/'.Database::GetSchema().']'.$name; }
 }
 class DatabaseHddScope extends HddScope  {
 	public function __construct(){ parent::__construct('dat'); }
-	protected function Hash($name){ return $this->prefix.'_'.Oxygen::Hash32(self::$base.$name.Database::GetServer().Database::GetSchema()); }
+	protected function Hash($name){ return 'dat_'.Oxygen::Hash32($name.Database::GetServer().Database::GetSchema()); }
 }
 
 class SessionApcScope extends ApcScope {
 	public function __construct(){ parent::__construct('ses'); }
-	protected function Hash($name){ return self::$base.Oxygen::GetSessionHash().'/'.$this->prefix.'_'.$name; }
+	protected function Hash($name){ return 'ses['.self::$base.Oxygen::GetSessionHash().'/'.$this->prefix.'_'.$name; }
 }
 class SessionHddScope extends HddScope {
 	public function __construct(){ parent::__construct('ses'); }
-	protected function Hash($name){ return $this->prefix.'_'.Oxygen::Hash32(self::$base.$name.Oxygen::GetSessionHash()); }
+	protected function Hash($name){ return 'ses_'.Oxygen::Hash32(self::$base.$name.Oxygen::GetSessionHash()); }
 }
 
 class WindowApcScope extends ApcScope {
 	public function __construct(){ parent::__construct('win'); }
-	protected function Hash($name){ return self::$base.Oxygen::GetWindowHash().'/'.$this->prefix.'_'.$name; }
+	protected function Hash($name){ return 'win['.self::$base.Oxygen::GetWindowHash().']'.$name; }
 }
 class WindowHddScope extends HddScope {
 	public function __construct(){ parent::__construct('win'); }
-	protected function Hash($name){ return $this->prefix.'_'.Oxygen::Hash32(self::$base.$name.Oxygen::GetWindowHash() ); }
+	protected function Hash($name){ return 'win_'.Oxygen::Hash32(self::$base.$name.Oxygen::GetWindowHash() ); }
 }
 
 class RequestScope extends MemoryScope {
 	public function __construct(){ parent::__construct('req'); }
-	protected function Hash($name){ return self::$base.$this->prefix.'_'.$name; }
+	protected function Hash($name){ return 'req['.self::$base.']'.$name; }
 }
 
 Scope::InitScopes();
