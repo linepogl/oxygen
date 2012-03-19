@@ -262,43 +262,46 @@ class XMeta extends stdClass {
 	public function CopyItem( XItem $item, $with_a_perm_id = false ){
 		$r = clone $item;
 
-		if (!$this->id->IsDBAliasComplex()) {
+		if ($this->id->IsDBAliasComplex()) {
+			$r->id = $this->GetNextTempID();
+			$r->has_temp_id = !$with_a_perm_id;
+		}
+		else {
 			if ( $with_a_perm_id )
 				$r->id = $this->GetNextPermID();
 			else
 				$r->id = $this->GetNextTempID();
-		}
-		$r->has_temp_id = !$with_a_perm_id;
+			$r->has_temp_id = !$with_a_perm_id;
 
-		// 1. Clone data folder
-		if ($with_a_perm_id && !$item->IsTemporary() && $item->HasDataFolder()) {
-			self::copy_folder_recursive($item->GetDataFolder(),$r->GetDataFolder());
-		}
+			// 1. Clone data folder
+			if ($with_a_perm_id && !$item->IsTemporary() && $item->HasDataFolder()) {
+				self::copy_folder_recursive($item->GetDataFolder(),$r->GetDataFolder());
+			}
 
-		// 2. Clone slaves
-		for ($mx = $this; !is_null($mx); $mx = $mx->GetParent()){
-			$slaves = $mx->GetSlaves();
-			/** @var $sl XMetaSlave */
-			foreach ($slaves as $sl) {
-				$n = $sl->GetName();
-				$a = $item->$n;
-				$aa = $sl->MakeItemList();
-				/** @var $x XItem */
-				foreach ($a as $x) {
-					$xx = $x->Copy($with_a_perm_id);
-					$nn = $sl->GetHookField()->GetName();
-					$xx->$nn = $r->id;
-					$aa[] = $xx;
+			// 2. Clone slaves
+			for ($mx = $this; !is_null($mx); $mx = $mx->GetParent()){
+				$slaves = $mx->GetSlaves();
+				/** @var $sl XMetaSlave */
+				foreach ($slaves as $sl) {
+					$n = $sl->GetName();
+					$a = $item->$n;
+					$aa = $sl->MakeItemList();
+					/** @var $x XItem */
+					foreach ($a as $x) {
+						$xx = $x->Copy($with_a_perm_id);
+						$nn = $sl->GetHookField()->GetName();
+						$xx->$nn = $r->id;
+						$aa[] = $xx;
+					}
+					$r->$n = $aa;
 				}
-				$r->$n = $aa;
+			}
+
+			// 3. Save in cache
+			if ($with_a_perm_id) {
+				$this->SaveInCache( $r->id->AsInt(), $r );
 			}
 		}
-
-		// 3. Save in cache
-		if ($with_a_perm_id) {
-			$this->SaveInCache( $r->id->AsInt(), $r );
-		}
-
 		return $r;
 	}
 

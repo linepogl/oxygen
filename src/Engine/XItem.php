@@ -135,12 +135,12 @@ abstract class XItem implements Serializable,XValue {
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$fields = $cx->GetDBFields();
 			if (is_null($dr) || $cx !== $c){
-				$sql = 'SELECT '.new SqlName($cx->id->GetDBName());
+				$sql = 'SELECT '.new SqlName($cx->id);
 				/** @var $f XMetaField */
 				foreach ($fields as $f)
-					$sql .= ',' . new SqlName( $f->GetDBName() );
+					$sql .= ',' . new SqlName($f);
 				$sql .= ' FROM '.$cx->GetDBTableName();
-				$sql .= ' WHERE '.new SqlName($cx->id->GetDBName()).'=?';
+				$sql .= ' WHERE '.new SqlName($cx->id).'=?';
 
 				$dr = Database::Execute($sql,$this->id);
 				if (!$dr->Read()) return false;
@@ -199,14 +199,14 @@ abstract class XItem implements Serializable,XValue {
 		/** @var $cx XMeta */
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$fields = $cx->GetDBFields();
-			if (0==Database::ExecuteScalar('SELECT COUNT('.new SqlName($cx->id->GetDBName()).') FROM '.$cx->GetDBTableName().' WHERE '.new SqlName($cx->id->GetDBName()).'=?',$this->id)->AsInteger()){
+			if (0==Database::ExecuteScalar('SELECT COUNT('.new SqlName($cx->id).') FROM '.$cx->GetDBTableName().' WHERE '.new SqlName($cx->id).'=?',$this->id)->AsInteger()){
 				$params = array();
 				$sql = 'INSERT INTO '.$cx->GetDBTableName().'(';
 
 				$i = 0;
 				if (!$cx->id->IsDBAliasComplex()) {
 					$params[] =& $this->id;
-					$sql .= new SqlName($cx->id->GetDBName());
+					$sql .= new SqlName($cx->id);
 					$i++;
 				}
 
@@ -214,7 +214,7 @@ abstract class XItem implements Serializable,XValue {
 				foreach ($fields as $f) {
 					if ($f->IsDBAliasComplex()) continue;
 					if ($i++ > 0) $sql .= ',';
-					$sql .= new SqlName($f->GetDBName());
+					$sql .= new SqlName($f);
 					$n = $f->GetName();
 					$params[] =& $this->$n;
 				}
@@ -229,11 +229,11 @@ abstract class XItem implements Serializable,XValue {
 				foreach ($fields as $f) {
 					if ($f->IsDBAliasComplex()) continue;
 					if ($i++ > 0) $sql.=',';
-					$sql .= new SqlName($f->GetDBName()) . '=?';
+					$sql .= new SqlName($f) . '=?';
 					$n = $f->GetName();
 					$params[] =& $this->$n;
 				}
-				$sql .= ' WHERE '.new SqlName($cx->id->GetDBName()).'=?';
+				$sql .= ' WHERE '.new SqlName($cx->id).'=?';
 				$params[] =& $this->id;
 				Database::ExecuteX($sql,$params);
 			}
@@ -305,7 +305,7 @@ abstract class XItem implements Serializable,XValue {
 		// 3. Delete me
 		/** @var $cx XMeta */
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
-			$sql = 'DELETE FROM '.$cx->GetDBTableName().' WHERE '.new SqlName($cx->id->GetDBName()).'=?';
+			$sql = 'DELETE FROM '.$cx->GetDBTableName().' WHERE '.new SqlName($cx->id).'=?';
 			Database::Execute($sql,$this->id);
 		}
 		$c->RemoveFromCache($this->id->AsInt());
@@ -591,7 +591,7 @@ abstract class XItem implements Serializable,XValue {
 	/** @return array */
 	public static function SelectFieldX(XMetaField $meta_field,$where=null,$orderby=null,$params=array()){
 		$c = $meta_field->GetMeta();
-		$sql = 'SELECT a.'.new SqlName($meta_field->GetDBName()).' AS '.new SqlName('id').' FROM '.$c->GetDBTableName().' AS a';
+		$sql = 'SELECT a.'.new SqlName($meta_field).' AS id FROM '.$c->GetDBTableName().' AS a';
 
 		/** @var $cx XMeta */
 		for ($cx = $c->GetParent(); !is_null($cx); $cx = $cx->GetParent())
@@ -599,7 +599,7 @@ abstract class XItem implements Serializable,XValue {
 
 		for ($cx = $c->GetParent(); !is_null($cx); $cx = $cx->GetParent()) {
 			if (!is_null($where)) $where .= ' AND ';
-			$where .= $cx->GetDBTableName().'.'.new SqlName($cx->id->GetDBName()).'='.$c->GetDBTableName().'.'.new SqlName($c->id->GetDBName());
+			$where .= $cx->GetDBTableName().'.'.new SqlName($cx->id).'='.$c->GetDBTableName().'.'.new SqlName($c->id);
 		}
 
 		for ($cx = $c->GetParent(); !is_null($cx); $cx = $cx->GetParent()) {
