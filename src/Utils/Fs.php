@@ -15,7 +15,7 @@ class Fs {
 	 * @return array a flat array with all files of the tree
 	 */
 	public static function GetTreeFilesFlat($dir) {
-		$path		= '';
+		$path		= array();
 		$stack[]	= $dir;
 		while ($stack) {
 			$thisdir = array_pop($stack);
