@@ -40,24 +40,26 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
-	/** @return void */
-	private function Load(){
-		if (!is_null($this->data)) return;
-		$params = null;
-		$sql = $this->MakeQuery($params);
-		$this->data = array();
-		if ($this->is_aggressive) {
-			$dr = Database::ExecuteX($sql,$params);
-			while ($dr->Read())
-				$this->data[] = $this->meta->PickItem($dr[0]->AsID(),$dr);
-			$dr->Close();
+	/** @return XList */
+	public function Evaluate(){
+		if (is_null($this->data)) {
+			$params = null;
+			$sql = $this->MakeQuery($params);
+			$this->data = array();
+			if ($this->is_aggressive) {
+				$dr = Database::ExecuteX($sql,$params);
+				while ($dr->Read())
+					$this->data[] = $this->meta->PickItem($dr[0]->AsID(),$dr);
+				$dr->Close();
+			}
+			else {
+				$dr = Database::ExecuteX($sql,$params);
+				while ($dr->Read())
+					$this->data[] = $dr[0]->AsID();
+				$dr->Close();
+			}
 		}
-		else {
-			$dr = Database::ExecuteX($sql,$params);
-			while ($dr->Read())
-				$this->data[] = $dr[0]->AsID();
-			$dr->Close();
-		}
+		return $this;
 	}
 
 
@@ -155,11 +157,19 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
-	public function LoadAggressively(){
+	/** @return XList */
+	public function LoadAll(){
+		foreach ($this as $x)
+			;
+		return $this;
+	}
+
+	/** @return XList */
+	public function LoadAllAggressively(){
 		if (is_null($this->data)){
 			$old = $this->is_aggressive;
 			$this->is_aggressive = true;
-			$this->Load();
+			$this->Evaluate();
 			$this->is_aggressive = $old;
 		}
 		else {
@@ -179,6 +189,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 					$this->data[$offset] = $b[ $this->data[$offset]->AsInt() ];
 			}
 		}
+		return $this;
 	}
 
 
@@ -260,35 +271,35 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			$sql = 'SELECT COUNT(*) FROM ('.$sql.') c';
 			return Database::ExecuteScalarX($sql,$params)->AsInteger();
 		}
-		//$this->Load();
+		//$this->Evaluate();
 		return count($this->data);
 	}
 	public function getIterator(){
-		$this->Load();
+		$this->Evaluate();
 		return from(new XListIterator($this));
 	}
 
 
 
 	public function offsetExists($offset) {
-		$this->Load();
+		$this->Evaluate();
 		return isset($this->data[$offset]);
 	}
 	public function offsetGet($offset) {
-		$this->Load();
+		$this->Evaluate();
 		if (!array_key_exists($offset,$this->data)) throw new Exception('Offset '.$offset.' not found.');
 		if ($this->data[$offset] instanceof ID) $this->data[$offset] = $this->meta->PickItem( $this->data[$offset] );
 		return $this->data[$offset];
 	}
 	public function offsetSet($offset, $value) {
-		$this->Load();
+		$this->Evaluate();
 		if (is_null($offset))
 			$this->data[] = $value;
 		else
 			$this->data[$offset] = $value;
 	}
 	public function offsetUnset($offset) {
-		$this->Load();
+		$this->Evaluate();
 		unset($this->data[$offset]);
 		$a = array();
 		foreach ($this->data as $value) $a[] = $value;
@@ -299,22 +310,17 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$this->data = null;
 		return $this;
 	}
-	public function LoadAll(){
-		foreach ($this as $x)
-			;
-		return $this;
-	}
 
-	public function GetFirst(){ $this->Load(); return count($this)>0 ? $this[0] : null; }
-	public function GetFirstOr($default){ $this->Load(); return count($this)>0 ? $this[0] : $default; }
+	public function GetFirst(){ $this->Evaluate(); return count($this)>0 ? $this[0] : null; }
+	public function GetFirstOr($default){ $this->Evaluate(); return count($this)>0 ? $this[0] : $default; }
 
-	public function GetLast(){ $this->Load(); return count($this)>0 ? $this[count($this)-1] : null; }
-	public function GetLastOr($default){ $this->Load(); return count($this)>0 ? $this[count($this)-1] : $default; }
+	public function GetLast(){ $this->Evaluate(); return count($this)>0 ? $this[count($this)-1] : null; }
+	public function GetLastOr($default){ $this->Evaluate(); return count($this)>0 ? $this[count($this)-1] : $default; }
 
 
 	public function AsIDList(){ return $this->ToIDList(); }
 	public function ToIDList(){
-		$this->Load();
+		$this->Evaluate();
 		$r = array();
 		foreach ($this->data as $x) {
 			if ($x instanceof XItem)
@@ -327,7 +333,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	public function AsGenericIDList(){ return $this->AsGenericIDList(); }
 	public function ToGenericIDList(){
-		$this->Load();
+		$this->Evaluate();
 		$r = array();
 		foreach ($this->data as $x) {
 			if ($x instanceof XItem)
@@ -340,7 +346,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	/** @return XList */
 	public function Sort(){
-		$this->LoadAll();
+		$this->LoadAllAggressively();
 		usort($this->data, array($this->meta->GetClassName(),'Compare'));
 		return $this;
 	}
@@ -351,7 +357,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 
 	public function Merge($array){
-		$this->Load();
+		$this->Evaluate();
 		foreach ($array as $x)
 			$this[] = $x;
 	}
@@ -361,7 +367,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 
 	public function Contains($dbitem_or_id){
-		$this->Load();
+		$this->Evaluate();
 		foreach ($this->data as $xx)
 			if ($xx->IsEqualTo($dbitem_or_id))
 				return true;
@@ -369,7 +375,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 
 	public function Remove($dbitem_or_id){
-		$this->Load();
+		$this->Evaluate();
 		$a = array();
 		foreach ($this->data as $key=>$xx)
 			if ($xx->IsEqualTo($dbitem_or_id))
@@ -380,7 +386,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 
 	public function RemoveWhere($predicate_function){
-		$this->Load();
+		$this->Evaluate();
 		$a = array();
 		foreach ($this as $key=>$value)
 			if ($predicate_function($value))
