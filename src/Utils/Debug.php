@@ -215,7 +215,9 @@ class Debug {
 	public static function GetExceptionReportAsText(Exception $ex){
 		$r = '';
 		for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()){
-			$r .= $exx->getMessage()."\n\n". basename($exx->getFile()).'['.$exx->getLine().']';
+			$r .= get_class($exx);
+			$r .= "\n".$exx->getMessage();
+			$r .= "\n\n". basename($exx->getFile()).'['.$exx->getLine().']';
 			$r .= "\n".Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']';
 			$r .= "\n\n".Debug::GetExceptionTraceAsText($exx);
 		}
@@ -232,8 +234,10 @@ class Debug {
 		$r = '';
 		$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
 		for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()){
-			$r .= '<b>'.$Q.$exx->getMessage().$Q.'</b><br/><br/><i>'.$Q. basename($exx->getFile()).'['.$exx->getLine().']'.$Q.'</i>';
-			$r .= '<div style="color:#aaaaaa;"><i>'.Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']</i></div>';
+			$r .= '<div style="color:#aaaaaa;margin:0;">'.$Q.new Html(get_class($exx)).$Q.'</div>';
+			$r .= '<div style="color:#333333;margin:0;margin-bottom:20px;">'.$Q.new Html($exx->getMessage()).$Q.'</div>';
+			$r .= '<div style="font-style:italic;color:#333333;margin:0;">'.$Q.new Html(basename($exx->getFile()).'['.$exx->getLine().']').$Q.'</div>';
+			$r .= '<div style="font-style:italic;color:#999999;margin:0;">'.new Html(Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']').'</div>';
 			$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;margin-bottom:30px;">'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
 		}
 		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
@@ -306,24 +310,34 @@ class Debug {
 
 
 
-	public static function RecordExceptionConverted(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Exception converted.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); }
-	public static function RecordExceptionSilenced(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Exception silenced.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); }
-	public static function RecordExceptionRethrown(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Exception rethrown.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); }
-	public static function RecordExceptionServed(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Exception served.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); }
-	public static function RecordExceptionAndDie(Exception $ex,$extra_developer_message = null){ Debug::RecordException($ex,'Execution halted.'.(is_null($extra_developer_message)?'':"\n".$extra_developer_message)); exit(); }
-	private static function RecordException(Exception $ex,$extra_developer_message){
+	public static function RecordExceptionSilenced  (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,1,$extra_developer_message); }
+	public static function RecordExceptionConverted (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,2,$extra_developer_message); }
+	public static function RecordExceptionRethrown  (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,3,$extra_developer_message); }
+	public static function RecordExceptionServed    (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,4,$extra_developer_message); }
+	public static function RecordExceptionAndDie    (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,5,$extra_developer_message); exit(); }
+	private static function RecordException(Exception $ex,$way_handled,$extra_developer_message=null){
+		$way_handled_message = '';
+		switch ($way_handled){
+			case 1: $way_handled_message = 'Silenced'; break;
+			case 2: $way_handled_message = 'Converted'; break;
+			case 3: $way_handled_message = 'Rethrown'; break;
+			case 4: $way_handled_message = 'Served'; break;
+			case 5: $way_handled_message = 'Execution halted'; break;
+		}
+		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
+		$subject = 'Exception detected ('.$way_handled_message.') '.$serial;
+
 		try {
 			$error_log_message = '';
 			for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious())
-				$error_log_message .= "\n".get_class($exx).': '.$exx->getMessage().' '.$exx->getFile().'['.$exx->getLine().']';
-			error_log( $extra_developer_message . "\n" . $error_log_message . "\n");
+			$error_log_message .= "\n".get_class($exx).': '.$exx->getMessage().' '.$exx->getFile().'['.$exx->getLine().']';
+			error_log( $subject . (is_null($extra_developer_message)?'':"\n".$extra_developer_message) . "\n".$error_log_message . "\n");
 		}
 		catch (Exception $ex) {}
 
 		$head = Oxygen::GetInfo();
-		$body = '<div style="font-style:italic;white-space:pre;color:#999999;">'.new Html($extra_developer_message).'</div><br/>';
+		$body = '<div style="font:italic 11px/13px Courier New,monospace;color:#999999;padding:5px 5px 4px 5px;border:1px solid #cccccc;">-- '.new Html($way_handled_message).' --'.(is_null($extra_developer_message)?'':"<br/>".new Html($extra_developer_message)).'</div><br/>';
 		$body .= Debug::GetExceptionReportAsHtml($ex);
-		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
 
 		try {
 			$f = Oxygen::GetLogFolder(true);
@@ -331,10 +345,10 @@ class Debug {
 		}
 		catch (Exception $ex) {}
 
-		if (!DEV){
+		if (DEV){
 			foreach (Oxygen::GetDeveloperEmails() as $email) {
 				try {
-					Oxygen::SendEmail( 'oxygen' , $email , $email , '['.Oxygen::GetApplicationName().'] Unhandled exception ' . $serial , $body );
+					Oxygen::SendEmail( 'oxygen ['.Oxygen::GetApplicationName().']' , $email , $email , $subject , $body );
 				}
 				catch (Exception $ex) {}
 			}
