@@ -345,7 +345,7 @@ class Debug {
 		}
 		catch (Exception $ex) {}
 
-		if (DEV){
+		if (!DEV){
 			foreach (Oxygen::GetDeveloperEmails() as $email) {
 				try {
 					Oxygen::SendEmail( 'oxygen ['.Oxygen::GetApplicationName().']' , $email , $email , $subject , $body );
