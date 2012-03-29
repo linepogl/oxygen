@@ -1,10 +1,11 @@
 <?php
 
-class MetaString extends XType {
+class MetaString extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaString */ public static function Type(){ return self::$instance; }
+	/** @return MetaStringOrNull */ public static function GetNullableType(){ return MetaStringOrNull::Type(); }
 	/** @return string */ public static function GetDefaultValue() { return ''; }
 
 

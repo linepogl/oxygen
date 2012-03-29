@@ -1,6 +1,6 @@
 <?php
 
-class MetaNull extends XType {
+class MetaNull extends XNullableType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }

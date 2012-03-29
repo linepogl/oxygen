@@ -426,7 +426,7 @@ abstract class XType implements _XType {
 }
 
 abstract class XNullableType extends XType {
-	public static function GetNullableType(){ return self::Type(); }
+	public static function GetNullableType(){ return static::Type(); }
 }
 
 abstract class XConcreteType extends XType {
