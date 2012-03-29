@@ -1,10 +1,11 @@
 <?php
 
-class MetaMetaField extends XType {
+class MetaMetaField extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaMetaField */ public static function Type() { return self::$instance; }
+	/** @return MetaMetaField */ public static function GetNullableType() { throw new ConvertionException(); }
 	/** @return XMetaField */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 

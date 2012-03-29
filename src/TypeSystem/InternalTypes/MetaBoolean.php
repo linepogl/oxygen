@@ -1,10 +1,11 @@
 <?php
 
-class MetaBoolean extends XType {
+class MetaBoolean extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaBoolean */ public static function Type(){ return self::$instance; }
+	/** @return MetaBooleanOrNull */ public static function GetNullableType() { return MetaBooleanOrNull::Type(); }
 	/** @return boolean */ public static function GetDefaultValue() { return false; }
 
 

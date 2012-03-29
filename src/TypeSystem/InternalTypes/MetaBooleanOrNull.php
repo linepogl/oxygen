@@ -1,6 +1,6 @@
 <?php
 
-class MetaBooleanOrNull extends XType {
+class MetaBooleanOrNull extends XNullableType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }

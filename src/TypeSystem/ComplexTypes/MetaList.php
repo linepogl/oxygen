@@ -1,10 +1,11 @@
 <?php
 
-class MetaList extends XType {
+class MetaList extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaList */ public static function Type() { return self::$instance; }
+	/** @return MetaList */ public static function GetNullableType() { throw new ConvertionException(); }
 	/** @return XList */ public static function GetDefaultValue() { return new XList(); }
 
 

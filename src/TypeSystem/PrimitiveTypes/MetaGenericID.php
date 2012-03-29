@@ -1,6 +1,6 @@
 <?php
 
-class MetaGenericID extends XType {
+class MetaGenericID extends XNullableType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }

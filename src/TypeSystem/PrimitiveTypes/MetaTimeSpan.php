@@ -1,6 +1,6 @@
 <?php
 
-class MetaTimeSpan extends XType {
+class MetaTimeSpan extends XNullableType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }

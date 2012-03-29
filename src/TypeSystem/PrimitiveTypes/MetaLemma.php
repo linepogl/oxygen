@@ -1,6 +1,6 @@
 <?php
 
-class MetaLemma extends XType {
+class MetaLemma extends XNullableType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }

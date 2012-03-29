@@ -1,6 +1,6 @@
 <?php
 
-class MetaDecimalOrNull extends XType {
+class MetaDecimalOrNull extends XNullableType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }

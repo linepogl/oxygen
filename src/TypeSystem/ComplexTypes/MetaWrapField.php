@@ -1,10 +1,11 @@
 <?php
 
-class MetaWrapField extends XType {
+class MetaWrapField extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaWrapField */ public static function Type() { return self::$instance; }
+	/** @return MetaWrapField */ public static function GetNullableType() { throw new ConvertionException(); }
 	/** @return XWrapField */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 

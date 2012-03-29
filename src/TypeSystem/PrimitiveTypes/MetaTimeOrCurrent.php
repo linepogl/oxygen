@@ -1,11 +1,12 @@
 <?php
 
-class MetaTimeOrCurrent extends XType {
+class MetaTimeOrCurrent extends XConcreteType {
 
 	private static $default;
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); self::$default = new XTime(); }
 	/** @return MetaTimeOrCurrent */ public static function Type() { return self::$instance; }
+	/** @return MetaTime */ public static function GetNullableType(){ return MetaTime::Type(); }
 	/** @return XTime */ public static function GetDefaultValue() { return self::$default; }
 	
 

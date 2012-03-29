@@ -1,10 +1,11 @@
 <?php
 
-class MetaStringable extends XType {
+class MetaStringable extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaStringable */ public static function Type() { return self::$instance; }
+	/** @return MetaStringable */ public static function GetNullableType() { throw new ConvertionException(); }
 	/** @return mixed */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 

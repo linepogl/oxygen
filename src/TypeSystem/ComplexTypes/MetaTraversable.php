@@ -1,10 +1,11 @@
 <?php
 
-class MetaTraversable extends XType {
+class MetaTraversable extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaTraversable */ public static function Type() { return self::$instance; }
+	/** @return MetaTraversable */ public static function GetNullableType() { throw new ConvertionException(); }
 	/** @return Traversable */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 

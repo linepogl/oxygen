@@ -8,6 +8,10 @@ interface _XType {
 	 */
 	public static function Type();
 
+	/**
+	 * @return XNullableType
+	 */
+	public static function GetNullableType();
 
 	/**
 	 * @return mixed <T>
@@ -143,7 +147,6 @@ function int_or_null($var){
 abstract class XType implements _XType {
 
 	protected function __construct(){}
-
 
 
 
@@ -422,5 +425,11 @@ abstract class XType implements _XType {
 
 }
 
+abstract class XNullableType extends XType {
+	public static function GetNullableType(){ return self::Type(); }
+}
+
+abstract class XConcreteType extends XType {
+}
 
 

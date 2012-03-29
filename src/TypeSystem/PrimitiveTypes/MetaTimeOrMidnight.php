@@ -1,11 +1,12 @@
 <?php
 
-class MetaTimeOrMidnight extends XType {
+class MetaTimeOrMidnight extends XConcreteType {
 
 	private static $default;
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); self::$default = XTime::Midnight(); }
 	/** @return MetaTimeOrMidnight */ public static function Type() { return self::$instance; }
+	/** @return MetaTime */ public static function GetNullableType(){ return MetaTime::Type(); }
 	/** @return XTime */ public static function GetDefaultValue() { return self::$default; }
 	
 

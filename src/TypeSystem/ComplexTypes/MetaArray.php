@@ -1,10 +1,11 @@
 <?php
 
-class MetaArray extends XType {
+class MetaArray extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaArray */ public static function Type() { return self::$instance; }
+	/** @return MetaArray */ public static function GetNullableType() { throw new ConvertionException(); }
 	/** @return array */ public static function GetDefaultValue() { return array(); }
 
 

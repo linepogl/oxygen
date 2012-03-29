@@ -1,11 +1,12 @@
 <?php
 
-class MetaTimeSpanOrZero extends XType {
+class MetaTimeSpanOrZero extends XConcreteType {
 
 	private static $default;
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); self::$default = new XTimeSpan(); }
 	/** @return MetaTimeSpanOrZero */ public static function Type() { return self::$instance; }
+	/** @return MetaTimeSpan */ public static function GetNullableType(){ return MetaTimeSpan::Type(); }
 	/** @return XTimeSpan */ public static function GetDefaultValue() { return self::$default; }
 
 

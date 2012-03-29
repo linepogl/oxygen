@@ -28,7 +28,7 @@ class XAggrField {
 	public function GetType(){
 		switch ($this->function){
 			case self::COUNT: return MetaInteger::Type();
-			default: return $this->field->GetType();
+			default: return $this->field->GetType()->GetNullableType();
 		}
 	}
 

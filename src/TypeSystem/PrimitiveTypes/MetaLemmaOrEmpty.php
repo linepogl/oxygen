@@ -1,10 +1,11 @@
 <?php
 
-class MetaLemmaOrEmpty extends XType {
+class MetaLemmaOrEmpty extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaLemmaOrEmpty */ public static function Type() { return self::$instance; }
+	/** @return MetaLemma */ public static function GetNullableType(){ return MetaLemma::Type(); }
 	/** @return Lemma */ public static function GetDefaultValue() { return new Lemma(); }
 
 

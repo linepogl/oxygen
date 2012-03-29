@@ -1,6 +1,6 @@
 <?php
 
-class MetaDateTime extends XType {
+class MetaDateTime extends XNullableType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }

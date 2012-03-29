@@ -1,10 +1,11 @@
 <?php
 
-class MetaInteger extends XType {
+class MetaInteger extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaInteger */ public static function Type(){ return self::$instance; }
+	/** @return MetaIntegerOrNull */ public static function GetNullableType(){ return MetaDecimalOrNull::Type(); }
 	/** @return int */ public static function GetDefaultValue() { return 0; }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-class MetaID extends XType {
+class MetaID extends XNullableType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }

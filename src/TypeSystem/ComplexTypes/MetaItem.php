@@ -1,10 +1,11 @@
 <?php
 
-class MetaItem extends XType {
+class MetaItem extends XNullableType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaItem */ public static function Type() { return self::$instance; }
+	/** @return MetaItem */ public static function GetNullableType() { throw new ConvertionException(); }
 	/** @return XItem */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 

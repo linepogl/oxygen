@@ -1,11 +1,13 @@
 <?php
 
-class MetaAction extends XType {
+class MetaAction extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaAction */ public static function Type() { return self::$instance; }
+	/** @return MetaAction */ public static function GetNullableType() { throw new ConvertionException(); }
 	/** @return Action */ public static function GetDefaultValue() { throw new ConvertionException(); }
+
 
 
 
