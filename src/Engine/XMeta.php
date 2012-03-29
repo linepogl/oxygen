@@ -202,6 +202,9 @@ class XMeta extends stdClass {
 	/** @return XList */
 	public function SeekItems(){ return new XList($this,true); }
 
+	/** @return XAggr */
+	public function Aggr($selectors){ return new XAggr($this,$selectors); }
+
 	/** @return XItem */
 	public final function MakeTempItem($id = null){
 		$classname = $this->__classname;

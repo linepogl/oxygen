@@ -27,6 +27,7 @@ class XMetaField implements XValue {
 	public function __toString(){
 		return strval($this->GetLabel());
 	}
+	public function ToSql(){ return new SqlName($this); }
 
 	
 	private $db_alias;
@@ -138,11 +139,15 @@ class XMetaField implements XValue {
 	/** @return XPred */ public function Like($field_or_value){ return new XPredFieldOp($this,$field_or_value,XPredFieldOp::OP_LIKE); }
 	/** @return XPred */ public function NotLike($field_or_value){ return new XPredFieldOp($this,$field_or_value,XPredFieldOp::OP_NOT_LIKE); }
 
-
 	/** @return XOrderBy */ public function Order($desc = false){ return new XOrderByField($this,$desc); }
 	/** @return XOrderBy */ public function Asc(){ return new XOrderByField($this,false); }
 	/** @return XOrderBy */ public function Desc(){ return new XOrderByField($this,true); }
 
+	/** @return XAggrField */ public function Count(){ return new XAggrField($this,XAggrField::COUNT); }
+	/** @return XAggrField */ public function Sum(){ return new XAggrField($this,XAggrField::SUM); }
+	/** @return XAggrField */ public function Avg(){ return new XAggrField($this,XAggrField::AVG); }
+	/** @return XAggrField */ public function Min(){ return new XAggrField($this,XAggrField::MIN); }
+	/** @return XAggrField */ public function Max(){ return new XAggrField($this,XAggrField::MAX); }
 }
 
 

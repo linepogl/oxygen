@@ -126,6 +126,20 @@ interface _XType {
 
 
 
+/** @return int|null */
+function int_or_null($var){
+	if (is_null($var)) return null;
+	if ($var instanceof ID) return $var->AsInt();
+	if ($var instanceof XItem) return $var->id->AsInt();
+	if (is_integer($var)) return $var;
+	if (is_float($var)) return intval($var);
+	return intval(strval($var));
+}
+
+
+
+
+
 abstract class XType implements _XType {
 
 	protected function __construct(){}

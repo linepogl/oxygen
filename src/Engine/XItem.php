@@ -561,6 +561,9 @@ abstract class XItem implements Serializable,XValue {
 	/** @return XItem */ public static final function MakeGeneric($classname){ return XMeta::Of($classname)->MakePermItem(); }
 
 
+	/** @return XAggr */ public static final function Aggr($selectors){ return static::Meta()->Aggr($selectors); }
+	/** @return XAggr */ public static final function AggrGeneric($classname,$selectors){ return XMeta::Of($classname)->Aggr($selectors); }
+
 	/** @return XList */ public static final function Seek(){ return static::Meta()->SeekItems(); }
 	/** @return XList */ public static final function SeekAggressively(){ return static::Meta()->SeekItems()->Aggressively(); }
 	/** @return XList */ public static final function SeekGeneric($classname){ return XMeta::Of($classname)->SeekItems(); }
