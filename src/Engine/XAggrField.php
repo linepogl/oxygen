@@ -6,6 +6,7 @@ class XAggrField {
 	const MIN = 2;
 	const MAX = 3;
 	const AVG = 4;
+	const COUNT_DISTINCT = 5;
 
 	private $field;
 	private $function;
@@ -21,14 +22,18 @@ class XAggrField {
 			case self::MIN: return 'MIN('.new SqlName($this->field).')';
 			case self::SUM: return 'SUM('.new SqlName($this->field).')';
 			case self::AVG: return 'AVG('.new SqlName($this->field).')';
+			case self::COUNT_DISTINCT: return 'COUNT(DISTINCT '.new SqlName($this->field).')';
 		}
 	}
 
 	/** @return XType */
 	public function GetType(){
 		switch ($this->function){
-			case self::COUNT: return MetaInteger::Type();
-			default: return $this->field->GetType()->GetNullableType();
+			case self::COUNT:
+			case self::COUNT_DISTINCT:
+				return MetaInteger::Type();
+			default:
+				return $this->field->GetType()->GetNullableType();
 		}
 	}
 

@@ -66,6 +66,7 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		// SELECT
 		//
 		$sql = 'SELECT ';
+		if ($this->distinct) $sql .= 'DISTINCT ';
 
 		if (is_array($this->selectors)) {
 			$i = 0;
@@ -255,6 +256,17 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 
 
+	/** @return XAggr|LinqIterator */
+	private $distinct = false;
+	public function Unique( $hash_function = null){
+		if (is_null($hash_function)){
+			if (is_null($this->data)) {
+				$this->distinct = true;
+				return $this;
+			}
+		}
+		return parent::Unique( $hash_function );
+	}
 
 	public function count(){
 		$this->Evaluate();
