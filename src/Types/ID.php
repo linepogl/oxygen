@@ -60,7 +60,7 @@ class ID implements Serializable, XValue {
 		return $this->hex;
 	}
 	public function __toString(){
-		return $this->AsHex();
+		return strval($this->AsInt());
 	}
 
 
