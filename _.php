@@ -24,6 +24,16 @@ function user_error_handler($severity, $msg, $filename, $linenum, $content) {
 }
 set_error_handler('user_error_handler');
 
+function user_shutdown_function(){
+	try{
+		$a = error_get_last();
+		if (!empty($a)){
+			Debug::RecordExceptionAndDie(new ErrorException($a['message'],0,$a['type'],$a['file'],$a['line']));
+		}
+	} catch(Exception $exx) {}
+}
+register_shutdown_function('user_shutdown_function');
+
 
 function dump($var){
 	$root = realpath('.');
