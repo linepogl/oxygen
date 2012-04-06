@@ -78,7 +78,9 @@ class Database {
 			self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
 			try{
 				$a = explode(':',$server);
-				self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';charset='.Oxygen::GetCharset(), $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
+				$charset = Oxygen::GetCharset();
+				if ($charset == 'UTF-8') $charset = 'utf8'; elseif ($charset == 'ISO-8859-1') $charset = 'latin1';
+				self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';charset='.$charset, $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
 				self::$cn = self::$cx->cn;
 			}
 			catch (Exception $ex){
