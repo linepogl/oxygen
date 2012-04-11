@@ -106,7 +106,9 @@ class Database {
 				switch (self::$cx->type){
 					case self::MYSQL:
 						$a = explode(':',self::$cx->server);
-						self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';dbname='.self::$cx->schema.';charset='.Oxygen::GetCharset(), self::$cx->username, self::$cx->password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
+						$charset = Oxygen::GetCharset();
+						if ($charset == 'UTF-8') $charset = 'utf8'; elseif ($charset == 'ISO-8859-1') $charset = 'latin1';
+						self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';dbname='.self::$cx->schema.';charset='.$charset, self::$cx->username, self::$cx->password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
 						self::$cn = self::$cx->cn;
 						break;
 					case self::ORACLE:
