@@ -100,8 +100,11 @@ abstract class MemoryScope extends Scope {
 
 
 abstract class ApcScope extends MemoryScope {
-	private $use_apc_storage = true;
-	public function SetUseApcStorage($value){ $this->use_apc_storage = $value; }
+	private $use_apc_storage;
+	public function __construct(){
+		$this->use_apc_storage = self::$is_apc_available;
+	}
+	public function SetUseApcStorage($value){ $this->use_apc_storage = $value && self::$is_apc_available; }
 	public function Reset(){
 		if ($this->use_apc_storage) {
 			apc_clear_cache('user');
