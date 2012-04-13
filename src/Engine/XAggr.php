@@ -2,11 +2,11 @@
 
 class XAggrIterator implements Iterator {
 	private $index;
-	private $xlist;
-	public function __construct($xlist){ $this->xlist = $xlist; }
+	private $xaggr;
+	public function __construct($xaggr){ $this->xaggr = $xaggr; }
 	function key() { return $this->index; }
-	function current() { return $this->xlist[$this->index]; }
-	function valid() { return $this->index < count($this->xlist); }
+	function current() { return $this->xaggr[$this->index]; }
+	function valid() { return $this->index < count($this->xaggr); }
 	function rewind() { $this->index = -1; $this->next(); }
 	function next() { $this->index++; }
 }
@@ -38,7 +38,6 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			$this->data = array();
 			$dr = Database::ExecuteX($sql,$params);
 			while ($dr->Read()) {
-
 				if (is_array($this->selectors)) {
 					$a = array();
 					/** @var $selector XMetaField|XAggrField */
@@ -286,7 +285,6 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	public function offsetGet($offset) {
 		$this->Evaluate();
 		if (!array_key_exists($offset,$this->data)) throw new Exception('Offset '.$offset.' not found.');
-		if ($this->data[$offset] instanceof ID) $this->data[$offset] = $this->meta->PickItem( $this->data[$offset] );
 		return $this->data[$offset];
 	}
 	public function offsetSet($offset, $value) {

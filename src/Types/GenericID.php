@@ -12,6 +12,7 @@ class GenericID extends ID implements XValue {
 		$this->classname = $classname;
 	}
 
+	public function GetID(){ return new ID($this->AsInt()); }
 	public function ToXItem(){
 		return XMeta::Of($this->classname)->PickItem($this);
 	}
