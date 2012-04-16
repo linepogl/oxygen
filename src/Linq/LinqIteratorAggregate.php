@@ -205,7 +205,7 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		$r = array();
 		$it = $this->getIterator();
 		for($it->rewind();$it->valid();$it->next())
-			$r[] = $it->current();
+			$r[$it->key()] = $it->current();
 		return $r;
 	}
 

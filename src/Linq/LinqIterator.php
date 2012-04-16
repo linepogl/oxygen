@@ -203,7 +203,7 @@ class LinqIterator implements Iterator, Countable {
 	public function AsArray(){
 		$r = array();
 		for($this->rewind();$this->valid();$this->next())
-			$r[] = $this->current();
+			$r[$this->key()] = $this->current();
 		return $r;
 	}
 
