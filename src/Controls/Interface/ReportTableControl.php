@@ -480,7 +480,9 @@ class ReportTableControl extends ValueControl {
 		echo "    ev = Event.extend(ev||window.event);";
 		echo "    if (ev.element().tagName != 'TD' && ev.element().tagName != 'TH') return;";
 		echo "    ev.stop();";
-		echo "    this.SetGroupChecks(!this.IsChecked(i));";
+		echo "    var v = !this.IsChecked(i);";
+		echo "    this.SetCheck(i,v);";
+		echo "    this.SetGroupChecks(i,v);";
 		echo "  }";
 		echo " ,OnCheckTdClick : function(ev,i){";
 		echo "    ev = Event.extend(ev||window.event);";
@@ -509,6 +511,7 @@ class ReportTableControl extends ValueControl {
 		echo " ,OnGroupCheckChange : function(i){";
 		echo "    if (this.event_running) return; this.event_running = true;";
 		echo "    var v = this.IsChecked(i);";
+		echo "    this.SetCheck(i,v);";
 		echo "    this.SetGroupChecks(i,v);";
 		echo "    this.UpdateValue();";
 		echo "    this.event_running = false;";
@@ -562,6 +565,7 @@ class ReportTableControl extends ValueControl {
 			echo "      for (var j = 0; j < a.length; j++) this.SetCheck(a[j],v);";
 			echo "    }";
 		}
+		if ($has_values) echo "this.SetCheck('all',this.AreAllChecked());";
 		echo "  }";
 		echo " ,UpdateValue : function(){";
 		echo "    var s = '';";
