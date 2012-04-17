@@ -72,33 +72,6 @@ class Database {
 
 
 
-	public static function CreateSchema($server,$schema,$username,$password,$type=self::MYSQL){
-		if ($type == self::MYSQL){
-			self::PushConnection();
-			self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
-			try{
-				$a = explode(':',$server);
-				$charset = Oxygen::GetCharset();
-				if ($charset == 'UTF-8') $charset = 'utf8'; elseif ($charset == 'ISO-8859-1') $charset = 'latin1';
-				self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';charset='.$charset, $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
-				self::$cn = self::$cx->cn;
-			}
-			catch (Exception $ex){
-				self::PopConnection();
-				throw new ApplicationException(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
-			}
-			try{
-				Database::Execute('CREATE DATABASE '.new SqlName($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
-			}
-			catch (Exception $ex){
-				self::PopConnection();
-				throw new ApplicationException(Lemma::Pick('MsgCannotCreateDatabase').'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
-			}
-			self::PopConnection();
-		}
-		else throw new NonImplementedException('CreateSchema is not implemented in for this database.');
-	}
-
 	private static function RequireConnection(){
 		if (is_null(self::$cn)){
 			if (is_null(self::$cx)) throw new ApplicationException(Lemma::Pick('MsgNoDatabaseConnectionSpecified'));
@@ -771,14 +744,43 @@ class Database {
 				$queries[$numRequete]='';
 			}
 		}
-
-		foreach($queries as $req){	// et on les �x�cute
+		foreach($queries as $req){
 			if (trim($req)!=""){
 				self::$cn->exec($req);
 				if ( self::$cn->errorCode() !== '00000' ) { $info = self::$cn->errorInfo(); throw new Exception($info[2] . '<br/><br/>'.$sql); }
 			}
 		}
 	}
+
+
+
+	public static function CreateSchema($server,$schema,$username,$password,$type=self::MYSQL){
+		if ($type == self::MYSQL){
+			self::PushConnection();
+			self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
+			try{
+				$a = explode(':',$server);
+				$charset = Oxygen::GetCharset();
+				if ($charset == 'UTF-8') $charset = 'utf8'; elseif ($charset == 'ISO-8859-1') $charset = 'latin1';
+				self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';charset='.$charset, $username, $password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
+				self::$cn = self::$cx->cn;
+			}
+			catch (Exception $ex){
+				self::PopConnection();
+				throw new ApplicationException(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
+			}
+			try{
+				Database::Execute('CREATE DATABASE '.new SqlName($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
+			}
+			catch (Exception $ex){
+				self::PopConnection();
+				throw new ApplicationException(Lemma::Pick('MsgCannotCreateDatabase').'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
+			}
+			self::PopConnection();
+		}
+		else throw new NonImplementedException('CreateSchema is not implemented in for this database.');
+	}
+
 
 
 	public static function TransactionBegin(){
