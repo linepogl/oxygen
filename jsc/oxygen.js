@@ -77,7 +77,7 @@ var Oxygen = {
 	,FillDialog: function(dialog,icon,title){
 		dialog.update('<div class="ajaxdialog" id=\"OxygenDialogX\" >'
 				+ '<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
-				+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5"><div id=\"OxygenDialogInner\" class=\"ajaxdialoginner\"></div></div></div></div>'
+				+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5"><div id=\"OxygenDialogInner\"><div id=\"OxygenDialogInnerX\" class=\"ajaxdialoginner\"></div></div></div></div></div>'
 				+ '<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
 				+ '</div>');
 	}
@@ -89,14 +89,14 @@ var Oxygen = {
 		if (!width) width=500;
 		if (!height) height=350;
 		var dialog = this.MakeDialog(icon,title,width,height);
-		$('OxygenDialogInner').update(content);
+		$('OxygenDialogInnerX').update(content);
 		dialog.show();
 		this.ResizeDialog();
 	}
 	,ShowIFrameDialog: function(icon,title,url,width,height){
 		this.ShowFog();
 		var dialog = this.MakeDialog(icon,title,width,height);
-		$('OxygenDialogInner').appendChild(new Element('iframe',{'src':url,'width':width-40,'height':height-80}));
+		$('OxygenDialogInnerX').appendChild(new Element('iframe',{'src':url,'width':width-40,'height':height-80}));
 		dialog.show();
 		//this.ResizeDialog();
 		this.current_ajax_dialog_url = url;
@@ -104,7 +104,7 @@ var Oxygen = {
 	,ShowAjaxDialog: function(icon,title,url,width,height){
 		this.ShowFog();
 		var dialog = this.MakeDialog(icon,title,width,height);
-		var x = $('OxygenDialogInner');
+		var x = $('OxygenDialogInnerX');
 		x.update('<div style="text-align:center;"><img src=\"oxy/img/ajax.gif\" align="absmiddle" hspace="10" vspace="10" /><br/><span id=\"OxygenDialogClock\">0:00</span></div>');
 		x.style.width = '';
 		x.style.height = '';
@@ -122,7 +122,7 @@ var Oxygen = {
 						clearTimeout(this.current_ajax_dialog_clock_timer);
 						this.current_ajax_dialog_clock_timer = null;
 					}
-					$('OxygenDialogInner').update(transport.responseText);
+					$('OxygenDialogInnerX').update(transport.responseText);
 					Oxygen.FocusDialog();
 					Oxygen.ResizeDialog();
 				}
@@ -151,7 +151,7 @@ var Oxygen = {
 
 	,SubmitAjaxDialog: function(form){
 		var params = $(form).serialize(true);
-		var x = $('OxygenDialogInner');
+		var x = $('OxygenDialogInnerX');
 		x.update('<div style="text-align:center"><img src=\"oxy/img/ajax.gif\" hspace=\"10\" vspace=\"1\" align="absmiddle"/><br/><span id=\"OxygenDialogClock\">0:00</span></div>');
 		x.style.width = '';
 		x.style.height = '';
@@ -167,7 +167,7 @@ var Oxygen = {
 					clearTimeout(this.current_ajax_dialog_clock_timer);
 					this.current_ajax_dialog_clock_timer = null;
 				}
-				$('OxygenDialogInner').update(transport.responseText);
+				$('OxygenDialogInnerX').update(transport.responseText);
 				Oxygen.ResizeDialog();
 			}
 		});
@@ -186,9 +186,32 @@ var Oxygen = {
 		}
 	}
 	,ResizeDialog:function(){
+		var inner = $('OxygenDialogInner');
+		var innerx = $('OxygenDialogInnerX');
+
+		var a = innerx.descendants();
+		var iw = 0;
+		var ih = 0;
+		for(var i = 0; i<a.length; i++){
+			var ww = a[i].getWidth();
+			var hh = a[i].getHeight();
+			if (ww > iw) iw = ww;
+			if (hh > ih) ih = hh;
+		}
+
+		innerx.style.width = iw + 'px';
+		innerx.style.height = ih + 'px';
+		inner.style.overflow = 'visible';
+		if (innerx.getWidth() > inner.getWidth()) {
+			inner.style.overflowX = 'auto';
+		}
+		if (innerx.getHeight() > inner.getHeight()) {
+			inner.style.overflowY = 'auto';
+		}
+
 		var dialog = $('OxygenDialog');
 		var dialogx = $('OxygenDialogX');
-		var inner = $('OxygenDialogInner');
+
 		var a = dialog.descendants();
 		var w = 0;
 		var h = 0;
@@ -198,11 +221,10 @@ var Oxygen = {
 			if (ww > w) w = ww;
 			if (hh > h) h = hh;
 		}
-		w = Math.min( w , document.viewport.getWidth() - 80 );
-		h = Math.min( h , document.viewport.getHeight() - 80 );
+		var w = Math.min( w , document.viewport.getWidth() - 80 );
+		var h = Math.min( h , document.viewport.getHeight() - 80 );
 		var x = Math.floor((document.viewport.getWidth() - w - 40) / 2);
 		var y = Math.floor((document.viewport.getHeight() - h - 40) / 2);
-
 
 
 		dialog.style.width = w + 'px';
@@ -210,11 +232,11 @@ var Oxygen = {
 		dialog.style.left = x + 'px';
 		dialog.style.top = y + 'px';
 
-		var gap1 = dialog.getHeight() - inner.getHeight();
-		var gap2 = dialogx.getHeight() - inner.getHeight();
-		if (gap1 < gap2) {
-			inner.style.overflow = Prototype.Browser.IE ? 'auto' : '';
-			inner.style.height = (h-gap2) + 'px';
+		var gap1h = dialog.getHeight() - inner.getHeight();
+		var gap2h = dialogx.getHeight() - inner.getHeight();
+		if (gap1h < gap2h) {
+			inner.style.height = (h-gap2h) + 'px';
+			inner.style.overflowY = 'auto';
 		}
 	}
 	,IsDialogOpen:function(){
