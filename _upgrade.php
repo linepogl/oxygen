@@ -11,19 +11,17 @@ if (Database::BeginPatchingSystem()) {
 if (Database::BeginPatch('v',1,'Initial tables')) {
 	Database::ExecuteCreateTable('oxy_ids','TableName',Sql::String100 ,'LastID',Sql::ID);
 	Database::ExecuteAddPrimaryKey('oxy_ids','TableName');
-
 	Database::ExecuteCreateStandardTable('oxy_emails'
-			,'XFrom',Sql::String255
-			,'Rcpt',Sql::Text
-			,'Subject',Sql::String255
-			,'Body',Sql::Text
-			,'DateSent',Sql::DateTime
-			);
-
+		,'XFrom',Sql::String255
+		,'Rcpt',Sql::Text
+		,'Subject',Sql::String255
+		,'Body',Sql::Text
+		,'DateSent',Sql::DateTime
+		);
 	Database::ExecuteCreateStandardTable('oxy_local_lemmas'
-			,'Name',Sql::String255
-			,'Overlap',Sql::Text
-			);
+		,'Name',Sql::String255
+		,'Overlap',Sql::Text
+		);
 
 	Database::ExecuteCreateStandardTable('oxy_unhandled_exceptions'
 		,'ActionName',Sql::String255
