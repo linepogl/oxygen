@@ -323,7 +323,7 @@ class Debug {
 			case 2: $way_handled_message = 'Converted'; break;
 			case 3: $way_handled_message = 'Rethrown'; break;
 			case 4: $way_handled_message = 'Served'; break;
-			case 5: $way_handled_message = 'Served (Generic)'; break;
+			case 5: $way_handled_message = 'Served with generic message'; break;
 			case 6: $way_handled_message = 'Execution halted'; break;
 		}
 		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
