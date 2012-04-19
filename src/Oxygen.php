@@ -82,8 +82,8 @@ class Oxygen {
 
 		if (Debug::IsImmediateFlushingEnabled()) exit();
 		Oxygen::SendHttpHeaders();
-		if (self::$action->IsAjax() ) { echo self::$content; exit(); }
-		if (self::$action->IsIFrame() ) {
+		if (self::$action->IsAjax() || self::$action->IsBlind()) { echo self::$content; exit(); }
+		if (self::$action->IsIFrame()) {
 			echo '<html><head>'.Oxygen::GetHead().'</head><body>';
 			echo self::$content;
 			echo '</body></html>';

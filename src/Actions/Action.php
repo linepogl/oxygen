@@ -256,19 +256,26 @@ abstract class Action implements XValue {
 	// Href creation
 	//
 	//
+	const DIALOG           = 0x0010;
+	const LONG             = 0x0020;
+
+	// NORMAL (partial html with template)
 	const NORMAL           = 0x0000;
-	const DIALOG           = 0x0001;
-	const BLIND            = 0x2000;
-	const AJAX             = 0x0002;
-	const AJAX_BLIND       = 0x2002;
-	const AJAX_DIALOG      = 0x0003;
-	const IFRAME           = 0x0004;
-	const IFRAME_DIALOG    = 0x0005;
-	const LONG             = 0x1000;
-	const LONG_NORMAL      = 0x1000;
-	const LONG_DIALOG      = 0x1001;
-	const LONG_AJAX        = 0x1002;
-	const LONG_AJAX_DIALOG = 0x1003;
+	const LONG_NORMAL      = 0x0010;
+
+	// AJAX (partial html without template)
+	const AJAX             = 0x0001;
+	const AJAX_DIALOG      = 0x0011;
+	const LONG_AJAX        = 0x0021;
+	const LONG_AJAX_DIALOG = 0x1031;
+
+	// IFRAME (full html without template)
+	const IFRAME           = 0x0002;
+	const IFRAME_DIALOG    = 0x0012;
+
+	// IFRAME (no html)
+	const BLIND            = 0x0004;
+
 	protected $mode = self::NORMAL;
 	public final function IsAjax(){ return ($this->mode & self::AJAX) == self::AJAX; }
 	public final function IsBlind(){ return ($this->mode & self::BLIND) == self::BLIND; }
