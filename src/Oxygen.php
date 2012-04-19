@@ -54,8 +54,10 @@ class Oxygen {
 		Oxygen::SetLang($lang);
 
 		// set the action
+		self::$actionmode = Http::$GET['mode']->AsInteger();
 		self::$actionname = Http::$GET['action']->AsStringOrNull();
 		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
+
 
 		Database::Upgrade();
 
@@ -70,7 +72,7 @@ class Oxygen {
 		new ReflectionClass($classname); // <-- this will throw a mere exception if the class is not found, which will prevent a nasty FATAL php error in the next line.
 		self::$action = $classname::Make();
 
-		self::$action->WithMode(Http::$GET['mode']->AsInteger());
+		self::$action->WithMode(self::$actionmode);
 		Oxygen::SetContentType(self::$action->GetContentType());
 		Oxygen::SetCharset(self::$action->GetCharset());
 		Oxygen::ResetHttpHeaders();
@@ -607,12 +609,14 @@ class Oxygen {
 	//
 	//
 	private static $actionname = null;
+	private static $actionmode = null;
 	private static $action = null;
 	private static $content = '';
 	private static $default_actionname = 'Home';
 	/** @return void */ public static function SetDefaultActionName($actionname) { self::$default_actionname = $actionname; }
 	/** @return string */ public static function GetDefaultActionName() { return self::$default_actionname; }
 	/** @return string */ public static function GetActionName(){ return self::$actionname; }
+	/** @return int    */ public static function GetActionMode(){ return self::$actionmode; }
 	/** @return Action */ public static function GetAction(){ return self::$action; }
 	/** @return string */ public static function GetContent() { return self::$content; }
 	/** @return string */ public static function GetBody(){ return self::$content; }
@@ -756,6 +760,7 @@ class Oxygen {
 		$r = array();
 		$r['Date and time'] = Language::FormatDateTime(XDateTime::Now());
 		$r['Current action'] = Oxygen::GetActionName();
+		$r['Current mode'] = Oxygen::GetActionMode();
 		$r['Current language'] = Oxygen::GetLang();
 		$r['Content type'] = Oxygen::GetContentType();
 		$r['Remote IP'] = array_key_exists('REMOTE_ADDR',$_SERVER)?$_SERVER['REMOTE_ADDR']:'';
