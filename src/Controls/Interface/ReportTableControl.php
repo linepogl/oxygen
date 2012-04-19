@@ -230,178 +230,21 @@ class ReportTableControl extends ValueControl {
 		$has_values = false; foreach ($this->row_has_value as &$b) if ($b) { $has_values = true; break; }
 		$displayed_row_number = $this->begin_numbering_from;
 
-		echo new HiddenControl($this->name,$this->value);
-
-		echo '<div id="'.$this->name.'_menu_panel_1" class="group reportmenupanel" style="display:none;margin:0 1px 1px 0;"></div>';
-
-		echo '<table id="'.$this->name.'_div" class="'.$this->css_class.'" width="100%" style="'.$this->css_style.'" cellspacing="0" cellpadding="0" border="0">';
-
-
-
-		//
-		//
-		// HEADER
-		//
-		//
-		echo '<tr class="header" '.($this->show_header?'':' style="display:none;"').'>';
-		if ($this->show_numbers)
-			echo '<th class="number icon contract">'.(is_null($this->icon) ? new Spacer(16) : $this->icon).'</th>';
-
-		if ($this->use_check_boxes && $has_values){
-			if ($this->is_multiple) {
-				echo '<th class="contract checkbox" style="cursor:pointer;"';
-				echo ' onclick="'.$this->name.'.OnCheckThClick(event)"';
-				echo ' >';
-				ImageCheckboxControl::Make($this->name.'_check_all',false)
-					->WithOnChange($this->name.'.OnCheckAllChange();')
-					->Render();
-				echo '</th>';
-			}
-			else {
-				echo '<th class="contract checkbox">';
-				echo new Spacer(16);
-				echo '</th>';
-			}
-		}
-
-
-		for ($j = 0; $j < $count_cols; $j++){
-			if ($j < count($this->cells[0])){
-				$css_class = $this->cell_css_class[0][$j];
-				$css_style = $this->cell_css_style[0][$j];
-				$onclick = $this->cell_onclick[0][$j];
-				$fill_row = $this->cell_fill_row[0][$j];
-				$v = trim($this->cells[0][$j]);
-				$tag = $this->cell_tag[0][$j];
-				echo '<';
-				echo $tag;
-				if (!empty($css_class)) echo ' class="'.$css_class.'"';
-				if (!empty($css_style)) echo ' style="'.$css_style.'"';
-				if (!empty($onclick)) echo ' onclick="'.$onclick.'"';
-				if ($fill_row) echo ' colspan="'.($count_cols-$j).'"';
-				echo '>';
-				echo $v == '' ? new Spacer() : $v;
-				if ($j === $this->sorted_by){
-					echo '<span style="font-size:50%;">&nbsp;'.($this->sorted_desc?'&darr;':'&uarr;').'</span>';
-				}
-				echo '</'.$tag.'>';
-				if ($fill_row) break;
-			}
-			else
-				echo '<th class="contract">' . new Spacer(). '</th>';
-		}
-		echo '</tr>';
 
 
 
 
-		//
-		//
-		// ROWS
-		//
-		//
-		if ($count_rows == 0){
-			echo '<tr>';
-			if ($this->show_numbers) echo '<th class="number">'.new Spacer().'</th>';
-			$c = new MessageControl( is_null($this->empty_message)?new InfoMessage(Lemma::Pick('MsgNoObjectFound')):$this->empty_message );
-			$c->WithShowBorder(false);
-			echo '<td colspan="'.$count_cols.'">'.$c.'</td>';
-			echo '</tr>';
-		}
-		$alt = 0;
-		for ($i = 0; $i < $count_rows; $i++){
-			$css_class = $this->row_css_class[$i];
-			$css_style = $this->row_css_style[$i];
-			if ($this->row_mode[$i] == self::ROW_NORMAL){
-				if ($alt++%2==1){
-					if ($css_class !='') $css_class .= ' ';
-					$css_class .= 'alt';
-				}
-			}
-			elseif ($this->row_mode[$i] == self::ROW_GROUP){
-				$css_class .= 'grp';
-			}
-			$selected = $this->row_has_value[$i] && $this->IsSelected($this->row_value[$i]);
-			if ($selected) $css_class .= ' selected';
-
-			if ($this->IsClickable($i)) {
-				$css_style .= 'cursor:pointer;';
-			}
-
-			echo '<tr id="'.$this->name.'_tr_'.$i.'" class="'.$css_class.'" style="'.$css_style.'"';
-			if ($this->row_mode[$i] == self::ROW_NORMAL){
-				echo ' onmouseover="'.$this->name.'.OnMouseOver(event,'.$i.')"';
-				echo ' onmouseout="'.$this->name.'.OnMouseOut(event,'.$i.')"';
-				if ($this->IsClickable($i)){
-					echo ' onclick="'.$this->name.'.OnRowClick(event,'.$i.')"';
-				}
-			}
-			elseif ($this->row_mode[$i] == self::ROW_GROUP){
-				if ($this->IsClickable($i)){
-					echo ' onclick="'.$this->name.'.OnGroupRowClick(event,'.$i.')"';
-				}
-			}
-			echo '>';
-
-			if ($this->show_numbers){
-				if (!is_null($this->rows[$i]))
-					echo '<th class="number hright">' . $this->rows[$i] . '</th>';
-				elseif ($this->row_mode[$i] == self::ROW_NORMAL)
-					echo '<th class="number hright">'.( $displayed_row_number++ ).'.</th>';
-				else
-					echo '<th class="number hright">' . new Spacer(). '</th>';
-			}
-
-			if ($has_values && $this->use_check_boxes){
-				if ($this->IsClickable($i)){
-					if ($this->row_mode[$i] == self::ROW_NORMAL) {
-						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="'.$this->name.'.OnCheckTdClick(event,'.$i.')">';
-							ImageCheckboxControl::Make($this->name.'_check_'.$i,$selected)
-								->WithOnChange($this->name.'.OnCheckChange('.$i.');')
-								->Render();
-						echo '</td>';
-					}
-					elseif ($this->row_mode[$i] == self::ROW_GROUP){
-						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="'.$this->name.'.OnGroupCheckTdClick(event,'.$i.')">';
-							ImageCheckboxControl::Make($this->name.'_check_'.$i,$selected)
-								->WithOnChange($this->name.'.OnGroupCheckChange('.$i.');')
-								->Render();
-						echo '</td>';
-					}
-				}
-				else
-					echo '<td class="contract">'.new Spacer().'</td>';
-			}
 
 
-			for ($j = 0; $j < $count_cols; $j++){
-				if ($j < count($this->cells[$i+1])){
-					$css_class = $this->cell_css_class[$i+1][$j];
-					$css_style = $this->cell_css_style[$i+1][$j];
-					$onclick = $this->cell_onclick[$i+1][$j];
-					$fill_row = $this->cell_fill_row[$i+1][$j];
-					$v = trim($this->cells[$i+1][$j]);
-					$tag = $this->cell_tag[$i+1][$j];
-					echo '<';
-					echo $tag;
-					if (!empty($css_class)) echo ' class="'.$css_class.'"';
-					if (!empty($css_style)) echo ' style="'.$css_style.'"';
-					if (!empty($onclick)) echo ' style="'.$onclick.'"';
-					if ($fill_row) echo ' colspan="'.($count_cols-$j).'"';
-					echo '>';
-					echo $v == '' ? new Spacer() : $v;
-					echo '</'.$tag.'>';
-					if ($fill_row) break;
-				}
-				else
-					echo '<td>' . new Spacer(). '</td>';
-			}
-		}
-
-		echo '</table>';
 
 
-		echo '<div id="'.$this->name.'_menu_panel_2" class="group reportmenupanel" style="display:none;margin:0 1px 0 0;"></div>';
+
+
+
+
+
+
+
 
 
 
@@ -424,6 +267,12 @@ class ReportTableControl extends ValueControl {
 			}
 		}
 
+
+		//
+		//
+		// JAVASCRIPT
+		//
+		//
 		echo Js::BEGIN;
 		echo $this->name . " = {";
 		echo "  event_running : false";
@@ -628,6 +477,7 @@ class ReportTableControl extends ValueControl {
 			echo "  }";
 		}
 		echo "};";
+		echo Js::END;
 
 
 
@@ -635,6 +485,210 @@ class ReportTableControl extends ValueControl {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		echo new HiddenControl($this->name,$this->value);
+		echo '<div id="'.$this->name.'_menu_panel_1" class="group reportmenupanel" style="display:none;margin:0 1px 1px 0;"></div>';
+		echo '<table id="'.$this->name.'_div" class="'.$this->css_class.'" width="100%" style="'.$this->css_style.'" cellspacing="0" cellpadding="0" border="0">';
+
+
+
+		//
+		//
+		// HEADER
+		//
+		//
+		echo '<tr class="header" '.($this->show_header?'':' style="display:none;"').'>';
+		if ($this->show_numbers)
+			echo '<th class="number icon contract">'.(is_null($this->icon) ? new Spacer(16) : $this->icon).'</th>';
+
+		if ($this->use_check_boxes && $has_values){
+			if ($this->is_multiple) {
+				echo '<th class="contract checkbox" style="cursor:pointer;"';
+				echo ' onclick="'.$this->name.'.OnCheckThClick(event)"';
+				echo ' >';
+				ImageCheckboxControl::Make($this->name.'_check_all',false)
+					->WithOnChange($this->name.'.OnCheckAllChange();')
+					->Render();
+				echo '</th>';
+			}
+			else {
+				echo '<th class="contract checkbox">';
+				echo new Spacer(16);
+				echo '</th>';
+			}
+		}
+
+
+		for ($j = 0; $j < $count_cols; $j++){
+			if ($j < count($this->cells[0])){
+				$css_class = $this->cell_css_class[0][$j];
+				$css_style = $this->cell_css_style[0][$j];
+				$onclick = $this->cell_onclick[0][$j];
+				$fill_row = $this->cell_fill_row[0][$j];
+				$v = trim($this->cells[0][$j]);
+				$tag = $this->cell_tag[0][$j];
+				echo '<';
+				echo $tag;
+				if (!empty($css_class)) echo ' class="'.$css_class.'"';
+				if (!empty($css_style)) echo ' style="'.$css_style.'"';
+				if (!empty($onclick)) echo ' onclick="'.$onclick.'"';
+				if ($fill_row) echo ' colspan="'.($count_cols-$j).'"';
+				echo '>';
+				echo $v == '' ? new Spacer() : $v;
+				if ($j === $this->sorted_by){
+					echo '<span style="font-size:50%;">&nbsp;'.($this->sorted_desc?'&darr;':'&uarr;').'</span>';
+				}
+				echo '</'.$tag.'>';
+				if ($fill_row) break;
+			}
+			else
+				echo '<th class="contract">' . new Spacer(). '</th>';
+		}
+		echo '</tr>';
+
+
+
+
+		//
+		//
+		// ROWS
+		//
+		//
+		if ($count_rows == 0){
+			echo '<tr>';
+			if ($this->show_numbers) echo '<th class="number">'.new Spacer().'</th>';
+			$c = new MessageControl( is_null($this->empty_message)?new InfoMessage(Lemma::Pick('MsgNoObjectFound')):$this->empty_message );
+			$c->WithShowBorder(false);
+			echo '<td colspan="'.$count_cols.'">'.$c.'</td>';
+			echo '</tr>';
+		}
+		$alt = 0;
+		for ($i = 0; $i < $count_rows; $i++){
+			$css_class = $this->row_css_class[$i];
+			$css_style = $this->row_css_style[$i];
+			if ($this->row_mode[$i] == self::ROW_NORMAL){
+				if ($alt++%2==1){
+					if ($css_class !='') $css_class .= ' ';
+					$css_class .= 'alt';
+				}
+			}
+			elseif ($this->row_mode[$i] == self::ROW_GROUP){
+				$css_class .= 'grp';
+			}
+			$selected = $this->row_has_value[$i] && $this->IsSelected($this->row_value[$i]);
+			if ($selected) $css_class .= ' selected';
+
+			if ($this->IsClickable($i)) {
+				$css_style .= 'cursor:pointer;';
+			}
+
+			echo '<tr id="'.$this->name.'_tr_'.$i.'" class="'.$css_class.'" style="'.$css_style.'"';
+			if ($this->row_mode[$i] == self::ROW_NORMAL){
+				echo ' onmouseover="'.$this->name.'.OnMouseOver(event,'.$i.')"';
+				echo ' onmouseout="'.$this->name.'.OnMouseOut(event,'.$i.')"';
+				if ($this->IsClickable($i)){
+					echo ' onclick="'.$this->name.'.OnRowClick(event,'.$i.')"';
+				}
+			}
+			elseif ($this->row_mode[$i] == self::ROW_GROUP){
+				if ($this->IsClickable($i)){
+					echo ' onclick="'.$this->name.'.OnGroupRowClick(event,'.$i.')"';
+				}
+			}
+			echo '>';
+
+			if ($this->show_numbers){
+				if (!is_null($this->rows[$i]))
+					echo '<th class="number hright">' . $this->rows[$i] . '</th>';
+				elseif ($this->row_mode[$i] == self::ROW_NORMAL)
+					echo '<th class="number hright">'.( $displayed_row_number++ ).'.</th>';
+				else
+					echo '<th class="number hright">' . new Spacer(). '</th>';
+			}
+
+			if ($has_values && $this->use_check_boxes){
+				if ($this->IsClickable($i)){
+					if ($this->row_mode[$i] == self::ROW_NORMAL) {
+						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="'.$this->name.'.OnCheckTdClick(event,'.$i.')">';
+							ImageCheckboxControl::Make($this->name.'_check_'.$i,$selected)
+								->WithOnChange($this->name.'.OnCheckChange('.$i.');')
+								->Render();
+						echo '</td>';
+					}
+					elseif ($this->row_mode[$i] == self::ROW_GROUP){
+						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="'.$this->name.'.OnGroupCheckTdClick(event,'.$i.')">';
+							ImageCheckboxControl::Make($this->name.'_check_'.$i,$selected)
+								->WithOnChange($this->name.'.OnGroupCheckChange('.$i.');')
+								->Render();
+						echo '</td>';
+					}
+				}
+				else
+					echo '<td class="contract">'.new Spacer().'</td>';
+			}
+
+
+			for ($j = 0; $j < $count_cols; $j++){
+				if ($j < count($this->cells[$i+1])){
+					$css_class = $this->cell_css_class[$i+1][$j];
+					$css_style = $this->cell_css_style[$i+1][$j];
+					$onclick = $this->cell_onclick[$i+1][$j];
+					$fill_row = $this->cell_fill_row[$i+1][$j];
+					$v = trim($this->cells[$i+1][$j]);
+					$tag = $this->cell_tag[$i+1][$j];
+					echo '<';
+					echo $tag;
+					if (!empty($css_class)) echo ' class="'.$css_class.'"';
+					if (!empty($css_style)) echo ' style="'.$css_style.'"';
+					if (!empty($onclick)) echo ' style="'.$onclick.'"';
+					if ($fill_row) echo ' colspan="'.($count_cols-$j).'"';
+					echo '>';
+					echo $v == '' ? new Spacer() : $v;
+					echo '</'.$tag.'>';
+					if ($fill_row) break;
+				}
+				else
+					echo '<td>' . new Spacer(). '</td>';
+			}
+		}
+
+		echo '</table>';
+
+
+		echo '<div id="'.$this->name.'_menu_panel_2" class="group reportmenupanel" style="display:none;margin:0 1px 0 0;"></div>';
+
+
+
+
+
+
+
+
+		echo Js::BEGIN;
 		if ($this->is_multiple && $has_values) echo $this->name . ".SetCheck('all',".$this->name.".AreAllChecked());";
 		echo $this->name.".UpdateValue();";
 		echo Js::END;

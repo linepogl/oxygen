@@ -64,20 +64,24 @@ var Oxygen = {
 				dialog = document.body.appendChild(new Element('div',{'id':'OxygenDialog','style':'z-index:100;position:absolute;display:none;overflow:visible;'}));
 			}
 			else {
-				dialog = document.body.appendChild(new Element('div',{'id':'OxygenDialog','style':'z-index:100;position:fixed;width:50%;height:50%;top:25%;left:25%;display:none;'}));
+				dialog = document.body.appendChild(new Element('div',{'id':'OxygenDialog','style':'z-index:100;position:fixed;width:10%;height:10%;top:45%;left:45%;display:none;'}));
 			}
 		}
+		dialog.addClassName('ajaxdialog');
+		dialog.style.overflow = 'auto';
 		dialog.style.width = width + 'px';
 		dialog.style.height = height + 'px';
 		dialog.style.left = ((document.viewport.getWidth() - width) / 2) + 'px';
 		dialog.style.top = ((document.viewport.getHeight() - height) / 2) + 'px';
+		this.dialog_min_width = width;
+		this.dialog_min_height = height;
 		this.FillDialog(dialog,icon,title);
 		return dialog;
 	}
 	,FillDialog: function(dialog,icon,title){
-		dialog.update('<div class="ajaxdialog" id=\"OxygenDialogX\" >'
+		dialog.update('<div id=\"OxygenDialogX\">'
 				+ '<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
-				+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5"><div id=\"OxygenDialogInner\"><div id=\"OxygenDialogInnerX\" class=\"ajaxdialoginner\"></div></div></div></div></div>'
+				+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5"><div id=\"OxygenDialogInner\" class=\"ajaxdialoginner\"><table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id=\"OxygenDialogInnerX\"></td></tr></table></div></div></div></div>'
 				+ '<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
 				+ '</div>');
 	}
@@ -87,7 +91,7 @@ var Oxygen = {
 	,ShowSimpleDialog: function(icon,title,content,width,height){
 		this.ShowFog();
 		if (!width) width=500;
-		if (!height) height=350;
+		if (!height) height=50;
 		var dialog = this.MakeDialog(icon,title,width,height);
 		$('OxygenDialogInnerX').update(content);
 		dialog.show();
@@ -96,9 +100,15 @@ var Oxygen = {
 	,ShowIFrameDialog: function(icon,title,url,width,height){
 		this.ShowFog();
 		var dialog = this.MakeDialog(icon,title,width,height);
-		$('OxygenDialogInnerX').appendChild(new Element('iframe',{'src':url,'width':width-40,'height':height-80}));
+
+		var innerx = jQuery('#OxygenDialogInnerX');
+		var dialogx = jQuery('#OxygenDialogX');
 		dialog.show();
-		//this.ResizeDialog();
+		var dialog_extra_height = dialogx.outerHeight(true) - innerx.height();
+		var dialog_extra_width = dialogx.outerWidth(true) - innerx.width();
+
+		$('OxygenDialogInnerX').appendChild(new Element('iframe',{'src':url,'width':width-dialog_extra_width,'height':height-dialog_extra_height}));
+		this.ResizeDialog();
 		this.current_ajax_dialog_url = url;
 	}
 	,ShowAjaxDialog: function(icon,title,url,width,height){
@@ -106,9 +116,6 @@ var Oxygen = {
 		var dialog = this.MakeDialog(icon,title,width,height);
 		var x = $('OxygenDialogInnerX');
 		x.update('<div style="text-align:center;"><img src=\"oxy/img/ajax.gif\" align="absmiddle" hspace="10" vspace="10" /><br/><span id=\"OxygenDialogClock\">0:00</span></div>');
-		x.style.width = '';
-		x.style.height = '';
-		x.style.overflow = Prototype.Browser.IE ? 'auto' : '';
 		this.current_ajax_dialog_clock_value = 0;
 		this.current_ajax_dialog_clock_timer = setTimeout(function(){Oxygen.UpdateDialogClock();},1000);
 		dialog.show();
@@ -153,11 +160,9 @@ var Oxygen = {
 		var params = $(form).serialize(true);
 		var x = $('OxygenDialogInnerX');
 		x.update('<div style="text-align:center"><img src=\"oxy/img/ajax.gif\" hspace=\"10\" vspace=\"1\" align="absmiddle"/><br/><span id=\"OxygenDialogClock\">0:00</span></div>');
-		x.style.width = '';
-		x.style.height = '';
-		x.style.overflow = Prototype.Browser.IE ? 'auto' : '';
 		this.current_ajax_dialog_clock_value = 0;
 		this.current_ajax_dialog_clock_timer = setTimeout(function(){Oxygen.UpdateDialogClock();},1000);
+		this.ResizeDialog();
 		new Ajax.Request(this.current_ajax_dialog_url,{
 			method:'post'
 			,parameters:params
@@ -184,60 +189,83 @@ var Oxygen = {
 				break;
 			}
 		}
+
+		dialog = jQuery('#OxygenDialog');
+		dialog.scrollTop(0);
+		dialog.scrollLeft(0);
 	}
+	,dialog_min_width : 1
+	,dialog_min_height : 1
 	,ResizeDialog:function(){
-		var inner = $('OxygenDialogInner');
-		var innerx = $('OxygenDialogInnerX');
+		var viewport = jQuery(window);
+		var inner = jQuery('#OxygenDialogInner');
+		var innerx = jQuery('#OxygenDialogInnerX');
+		var dialog = jQuery('#OxygenDialog');
+		var dialogx = jQuery('#OxygenDialogX');
+		if (dialog.length == 0) return;
 
-		var a = innerx.descendants();
-		var iw = 0;
-		var ih = 0;
-		for(var i = 0; i<a.length; i++){
-			var ww = a[i].getWidth();
-			var hh = a[i].getHeight();
-			if (ww > iw) iw = ww;
-			if (hh > ih) ih = hh;
+		var viewport_height = viewport.height();
+		var dialog_height = dialog.height();
+		var dialog_margin_border_padding_height = dialog.outerHeight(true) - dialog_height;
+		var max_dialog_height = viewport_height - dialog_margin_border_padding_height - 40;
+		if (dialog_height < this.dialog_min_height) {
+			dialog_height = this.dialog_min_height;
+			dialog.height(dialog_height);
+		}
+		dialog_height = dialogx.outerHeight(true);
+		var inner_height = inner.height();
+		var dialog_extra_height = dialog_height - inner_height;
+		var real_inner_height = innerx.outerHeight(true);
+		dialog_height = real_inner_height + dialog_extra_height;
+		if (dialog_height > max_dialog_height) dialog_height = max_dialog_height;
+		dialog.height(dialog_height);
+
+
+		var viewport_width = viewport.width();
+		var dialog_width = dialog.width();
+		var dialog_margin_border_padding_width = dialog.outerWidth(true) - dialog_width;
+		var max_dialog_width = viewport_width - dialog_margin_border_padding_width - 40;
+		if (dialog_width < this.dialog_min_width) {
+			dialog_width = this.dialog_min_width;
+			dialog.width(dialog_width);
+		}
+		dialog_width = dialogx.outerWidth(true);
+		var inner_width = inner.width();
+		var dialog_extra_width = dialog_width - inner_width;
+		var real_inner_width = innerx.outerWidth(true);
+		dialog_width = real_inner_width + dialog_extra_width;
+		if (dialog_width > max_dialog_width) dialog_width = max_dialog_width;
+		dialog.width(dialog_width);
+
+
+		for (var i = 0; i < 5; i++){
+			var scroll_top = dialog.scrollTop();
+			dialog.scrollTop(10000);
+			var has_scrollbar_height = dialog.scrollTop() != 0;
+			dialog.scrollTop(scroll_top);
+
+			var scroll_left = dialog.scrollLeft();
+			dialog.scrollLeft(10000);
+			var has_scrollbar_width = dialog.scrollLeft() != 0;
+			dialog.scrollLeft(scroll_left);
+
+			if (has_scrollbar_height){
+				dialog_height += 5;
+				if (dialog_height > max_dialog_height) dialog_height = max_dialog_height;
+				dialog.height(dialog_height);
+			}
+			if (has_scrollbar_width){
+				dialog_width += 5;
+				if (dialog_width > max_dialog_width) dialog_width = max_dialog_width;
+				dialog.width(dialog_width);
+			}
 		}
 
-		innerx.style.width = iw + 'px';
-		innerx.style.height = ih + 'px';
-		inner.style.overflow = 'visible';
-		if (innerx.getWidth() > inner.getWidth()) {
-			inner.style.overflowX = 'auto';
-		}
-		if (innerx.getHeight() > inner.getHeight()) {
-			inner.style.overflowY = 'auto';
-		}
+		var dialog_top = Math.floor( (viewport_height - dialog_height - dialog_margin_border_padding_height) / 2 );
+		dialog.css('top',dialog_top+'px');
+		var dialog_left = Math.floor( (viewport_width - dialog_width - dialog_margin_border_padding_width) / 2 );
+		dialog.css('left',dialog_left+'px');
 
-		var dialog = $('OxygenDialog');
-		var dialogx = $('OxygenDialogX');
-
-		var a = dialog.descendants();
-		var w = 0;
-		var h = 0;
-		for(var i = 0; i<a.length; i++){
-			var ww = a[i].getWidth();
-			var hh = a[i].getHeight();
-			if (ww > w) w = ww;
-			if (hh > h) h = hh;
-		}
-		var w = Math.min( w , document.viewport.getWidth() - 80 );
-		var h = Math.min( h , document.viewport.getHeight() - 80 );
-		var x = Math.floor((document.viewport.getWidth() - w - 40) / 2);
-		var y = Math.floor((document.viewport.getHeight() - h - 40) / 2);
-
-
-		dialog.style.width = w + 'px';
-		dialog.style.height = h + 'px';
-		dialog.style.left = x + 'px';
-		dialog.style.top = y + 'px';
-
-		var gap1h = dialog.getHeight() - inner.getHeight();
-		var gap2h = dialogx.getHeight() - inner.getHeight();
-		if (gap1h < gap2h) {
-			inner.style.height = (h-gap2h) + 'px';
-			inner.style.overflowY = 'auto';
-		}
 	}
 	,IsDialogOpen:function(){
 		var dialog = $('OxygenDialog');
@@ -247,6 +275,7 @@ var Oxygen = {
 
 // for backwards compatibility:
 Oxygen.HideAjaxDialog = Oxygen.HideDialog;
+jQuery(window).resize(function(){ Oxygen.ResizeDialog(); });
 
 function dump2(x,level){
 	var s = typeof x;

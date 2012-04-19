@@ -21,7 +21,7 @@ abstract class Action implements XValue {
 
 
 	public function GetWidth(){ return 500; }
-	public function GetHeight(){ return 375; }
+	public function GetHeight(){ return 50; }
 
 	public function GetIconName() { return 'oxy/ico/Icon'; }
 	public function GetIconType() { return 'gif'; }
