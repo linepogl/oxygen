@@ -310,11 +310,12 @@ class Debug {
 
 
 
-	public static function RecordExceptionSilenced  (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,1,$extra_developer_message); }
-	public static function RecordExceptionConverted (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,2,$extra_developer_message); }
-	public static function RecordExceptionRethrown  (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,3,$extra_developer_message); }
-	public static function RecordExceptionServed    (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,4,$extra_developer_message); }
-	public static function RecordExceptionAndDie    (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,5,$extra_developer_message); exit(); }
+	public static function RecordExceptionSilenced      (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,1,$extra_developer_message); }
+	public static function RecordExceptionConverted     (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,2,$extra_developer_message); }
+	public static function RecordExceptionRethrown      (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,3,$extra_developer_message); }
+	public static function RecordExceptionServed        (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,4,$extra_developer_message); }
+	public static function RecordExceptionServedGeneric (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,5,$extra_developer_message); }
+	public static function RecordExceptionAndDie        (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,6,$extra_developer_message); exit(); }
 	private static function RecordException(Exception $ex,$way_handled,$extra_developer_message=null){
 		$way_handled_message = '';
 		switch ($way_handled){
@@ -322,7 +323,8 @@ class Debug {
 			case 2: $way_handled_message = 'Converted'; break;
 			case 3: $way_handled_message = 'Rethrown'; break;
 			case 4: $way_handled_message = 'Served'; break;
-			case 5: $way_handled_message = 'Execution halted'; break;
+			case 5: $way_handled_message = 'Served (Generic)'; break;
+			case 6: $way_handled_message = 'Execution halted'; break;
 		}
 		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
 		$subject = 'Exception detected ('.$way_handled_message.') '.$serial;
@@ -348,7 +350,7 @@ class Debug {
 		if (!DEV){
 			foreach (Oxygen::GetDeveloperEmails() as $email) {
 				try {
-					Oxygen::SendEmail( 'oxygen ['.Oxygen::GetApplicationName().']' , $email , $email , $subject , $body );
+					Oxygen::SendEmail( 'oxygen@'.Oxygen::GetApplicationName() , $email , $email , $subject , $body );
 				}
 				catch (Exception $ex) {}
 			}

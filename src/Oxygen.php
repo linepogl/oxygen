@@ -137,7 +137,10 @@ class Oxygen {
 			echo '</div>';
 			if (!($ex instanceof ApplicationException)){
 				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
-				Debug::RecordExceptionServed($ex,'Outer exception handler, mode '.(DEV ?'DEVELOPMENT':'PRODUCTION').'.');
+				if (DEV)
+					Debug::RecordExceptionServed($ex,'Outer exception handler.');
+				else
+					Debug::RecordExceptionServedGeneric($ex,'Outer exception handler.');
 			}
 		}
 		catch (Exception $ex2){
