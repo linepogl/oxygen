@@ -130,7 +130,11 @@
 		<fr>Non implémenté.</fr>
 		<el>Μη υλοποιημένο.</el>
 	</lemma>
-
+	<lemma name="MsgSecurityException">
+		<en>Access denied.</en>
+		<fr>Accès refusé.</fr>
+		<el>Μη επιτρεπτή πρόσβαση.</el>
+	</lemma>
 	<lemma name="MsgInvalidUsername">
 		<en>Unknown user.</en>
 		<fr>Utilisateur inconnu.</fr>

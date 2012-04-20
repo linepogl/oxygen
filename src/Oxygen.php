@@ -83,12 +83,6 @@ class Oxygen {
 		if (Debug::IsImmediateFlushingEnabled()) exit();
 		Oxygen::SendHttpHeaders();
 		if (!self::IsActionModeContent()) { echo self::$content; exit(); }
-//		if (self::$action->IsIFrame()) {
-//			echo '<html><head>'.Oxygen::GetHead().'</head><body>';
-//			echo self::$content;
-//			echo '</body></html>';
-//			exit();
-//		}
 	}
 
 
@@ -114,6 +108,8 @@ class Oxygen {
 
 		try {
 			if (Oxygen::IsActionModeRaw()) {
+				Oxygen::SetContentType('text/plain');
+				Oxygen::ResetHttpHeaders();
 				if ($ex instanceof SecurityException) {
 					Oxygen::SetResponseCode(403); // forbidden
 					$served_as = 'HTTP 403';
@@ -126,8 +122,7 @@ class Oxygen {
 					Oxygen::SetResponseCode(500); // internal server error
 					$served_as = 'HTTP 500';
 				}
-				Oxygen::SetContentType('text/plain');
-				Oxygen::ResetHttpHeaders();
+				Oxygen::SendHttpHeaders();
 				if ($ex instanceof ApplicationException)
 					echo $ex->getMessage();
 				elseif (!DEV)

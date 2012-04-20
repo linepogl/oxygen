@@ -110,8 +110,8 @@ class Debug {
 		if (is_bool($value)) return '{bool:'.($value?'true':'false').'}';
 		if ($value instanceof ID) return '{id:'.$value->AsHex().'|'.$value->AsInt().'}';
 		if ($value instanceof XDate) return '{XDate:'.$value->Format('Y-m-d').'}';
-		if ($value instanceof XTime) return '{XDate:'.$value->Format('H:i:s').'}';
-		if ($value instanceof XDateTime) return '{XDate:'.$value->Format('Y-m-d H:i:s').'}';
+		if ($value instanceof XTime) return '{XTime:'.$value->Format('H:i:s').'}';
+		if ($value instanceof XDateTime) return '{XDateTime:'.$value->Format('Y-m-d H:i:s').'}';
 		if (is_array($value)) {
 			$r = '{array:'.count($value).':';
 			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }
@@ -222,12 +222,12 @@ class Debug {
 			$r .= "\n\n".Debug::GetExceptionTraceAsText($exx);
 		}
 		$r .= "\n\n";
-		echo "\nOxygen info";
-		echo "\n-----------";
-		echo "\n".Oxygen::GetInfoAsText();
-		echo "\nDatabase queries";
-		echo "\n----------------";
-		echo "\n".Database::GetQueriesAsText();
+		$r .= "\nOxygen info";
+		$r .= "\n-----------";
+		$r .= "\n".Oxygen::GetInfoAsText();
+		$r .= "\nDatabase queries";
+		$r .= "\n----------------";
+		$r .= "\n".Database::GetQueriesAsText();
 		return $r;
 	}
 	public static function GetExceptionReportAsHtml(Exception $ex){
