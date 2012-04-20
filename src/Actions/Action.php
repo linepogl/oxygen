@@ -96,7 +96,7 @@ abstract class Action implements XValue {
 			$this->content_compromised = true;
 			if (ob_get_level()>0) ob_clean();
 
-			if ($this->IsModeHttp()){
+			if ($this->IsModeRaw()){
 				Oxygen::SetResponseCode(403); // forbidden
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
@@ -140,7 +140,7 @@ abstract class Action implements XValue {
 			$this->content_compromised = true;
 			if (ob_get_level()>0) ob_clean();
 
-			if ($this->IsModeHttp()){
+			if ($this->IsModeRaw()){
 				Oxygen::SetResponseCode(405); // not allowed
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
@@ -179,7 +179,7 @@ abstract class Action implements XValue {
 		catch (Exception $ex){
 			$this->content_compromised = true;
 			if (ob_get_level()>0) ob_clean();
-			if ($this->IsModeHttp()){
+			if ($this->IsModeRaw()){
 				Oxygen::SetResponseCode(500); // internal server error
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
@@ -263,29 +263,29 @@ abstract class Action implements XValue {
 	const FLAG_DEST_BLANK           = 0x01;
 	const FLAG_DEST_AJAX_DIALOG     = 0x02;
 	const FLAG_DEST_IFRAME_DIALOG   = 0x03;
-	const FLAG_DEST_AJAX            = 0x04;
+	const FLAG_DEST_FRAGMENT        = 0x04;
 
 	const FLAG_MODE_HTML            = 0x00;
-	const FLAG_MODE_HTTP            = 0x10;
+	const FLAG_MODE_RAW             = 0x10;
 	const FLAG_MODE_LONG            = 0x20;
 
 	const NORMAL                    = 0x00; // 0
-	const BLANK                     = 0x01; // 1 (to be opened as a full frame)
+	const HTML_DOCUMENT             = 0x01; // 1 (to be opened as a full frame)
 	const AJAX_DIALOG               = 0x02; // 2
 	const IFRAME_DIALOG             = 0x03; // 3
-	const AJAX                      = 0x05; // 4 (to be inserted into an html document)
+	const HTML_FRAGMENT             = 0x05; // 4 (to be inserted into an html document)
 
-	//const HTTP_NORMAL             = 0x10; // 16 (not possible: the template needs html)
-	const HTTP_BLANK                = 0x11; // 17
-	//const HTTP_AJAX_DIALOG        = 0x12; // 18 (not possible: the ajax dialog needs html)
-	const HTTP_IFRAME_DIALOG        = 0x13; // 19 (todo: how do you close the dialog?)
-	const HTTP_AJAX                 = 0x14; // 20
+	//const RAW_NORMAL              = 0x10; // 16 (not possible: the template needs html)
+	const RAW                       = 0x11; // 17
+	//const RAW_AJAX_DIALOG         = 0x12; // 18 (not possible: the ajax dialog needs html)
+	const RAW_IFRAME_DIALOG         = 0x13; // 19 (todo: how do you close the dialog?)
+	const RAW_FRAGMENT              = 0x14; // 20
 
 	const LONG_NORMAL               = 0x20; // 32
 	// const LONG_BLANK             = 0x21; // 33 (not sure)
 	const LONG_AJAX_DIALOG          = 0x22; // 34
 	// const LONG_IFRAME_DIALOG     = 0x23; // 35 (not sure)
-	// const LONG_AJAX              = 0x24; // 36 (not sure)
+	// const LONG_FRAGMENT          = 0x24; // 36 (not sure)
 
 
 
@@ -295,9 +295,10 @@ abstract class Action implements XValue {
 	public final function IsBlank()        { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_BLANK; }
 	public final function IsAjaxDialog()   { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_AJAX_DIALOG; }
 	public final function IsIFrameDialog() { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_IFRAME_DIALOG; }
+	public final function IsFragment()     { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_FRAGMENT; }
 
 	public final function IsModeHtml()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_HTML; }
-	public final function IsModeHttp()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_HTTP; }
+	public final function IsModeRaw()      { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_RAW; }
 	public final function IsModeLong()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_LONG; }
 
 	protected function GetDefaultMode(){ return self::NORMAL; }

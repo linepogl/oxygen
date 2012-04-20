@@ -113,7 +113,7 @@ class Oxygen {
 
 
 		try {
-			if (Oxygen::IsActionModeHttp()) {
+			if (Oxygen::IsActionModeRaw()) {
 				if ($ex instanceof SecurityException) {
 					Oxygen::SetResponseCode(403); // forbidden
 					$served_as = 'HTTP 403';
@@ -662,9 +662,10 @@ class Oxygen {
 	public static function IsActionModeBlank()        { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_BLANK; }
 	public static function IsActionModeAjaxDialog()   { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_AJAX_DIALOG; }
 	public static function IsActionModeIFrameDialog() { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_IFRAME_DIALOG; }
+	public static function IsActionModeFragment()     { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_FRAGMENT; }
 
 	public static function IsActionModeHtml()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_HTML; }
-	public static function IsActionModeHttp()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_HTTP; }
+	public static function IsActionModeRaw()      { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_RAW; }
 	public static function IsActionModeLong()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_LONG; }
 
 

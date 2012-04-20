@@ -138,11 +138,11 @@ This is the default behaviour and it is sufficient for the majority of actions. 
 </p>
 
 <p>
-In the <b>AJAX</b> mode, the action is rendered bare, without the surrounding template. This is very useful for rendering parts of a page as a response to an AJAX call for example.
+In the <b>HTML_FRAGMENT</b> mode, the action is rendered bare, without the surrounding template. This is very useful for rendering parts of a page as a response to an AJAX call for example.
 </p>
 
 <p>
-In the <b>HTTP_BLANK</b> mode, the action does not even render HTML code. This is useful for those actions where the result of the request will not be displayed as HTML to the user.
+In the <b>RAW</b> mode, the action does not even render HTML code. This is useful for those actions where the result of the request will not be displayed as HTML to the user.
 There are two kinds of such actions. First of all, there are the actions that do not return HTML at all, but other types of content such as binary files, XML, SVG etc. In addition,
 there are the actions that perform an operation after an AJAX call, but the result of the operation will not be displayed to the user, such as synchronization calls, variable
 setting calls, etc..
@@ -154,7 +154,7 @@ the page. The style of the dialog box can be changed with css.
 </p>
 
 <p>
-In the <b>IFRAME</b> mode, the action is rendered in the whole page but without using the template. In this mode, the action is expected to also render its own HTML header. This
+In the <b>HTML_DOCUMENTK</b> mode, the action is rendered in the whole page but without using the template. In this mode, the action is expected to also render its own HTML header. This
 is useful for actions rendered inside frames. In addition, in the <b>IFRAME_DIALOG</b> mode, the frame will be placed inside a dialog box.
 </p>
 
