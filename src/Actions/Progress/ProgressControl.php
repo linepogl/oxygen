@@ -16,7 +16,7 @@ class ProgressControl extends Control {
 	public function Render(){
 		//$window = ID::Random();
 		Progress::Clear();
-		$href = $this->action->GetHrefPlain(array('mode'=>Action::BLANK));
+		$href = $this->action->GetHrefPlain(array('mode'=>Action::AJAX));
 		$act1 = new ActionUpdateProgress($this->name);
 		$href1 = $act1->GetHrefPlain();
 		$act2 = new ActionCancelProgress($this->name);

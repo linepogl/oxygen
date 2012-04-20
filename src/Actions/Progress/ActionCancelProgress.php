@@ -1,7 +1,7 @@
 <?php
 
 class ActionCancelProgress extends Action{
-	public function GetDefaultMode(){ return self::BLANK; }
+	public function GetDefaultMode(){ return self::AJAX; }
 	public function IsPermitted(){ return true; }
 
 	private $name;

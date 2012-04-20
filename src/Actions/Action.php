@@ -263,58 +263,31 @@ abstract class Action implements XValue {
 	const FLAG_DEST_BLANK           = 0x01;
 	const FLAG_DEST_AJAX_DIALOG     = 0x02;
 	const FLAG_DEST_IFRAME_DIALOG   = 0x03;
+	const FLAG_DEST_AJAX            = 0x04;
 
 	const FLAG_MODE_HTML            = 0x00;
 	const FLAG_MODE_HTTP            = 0x10;
 	const FLAG_MODE_LONG            = 0x20;
-	const FLAG_MODE_TEXT            = 0x30;
-//	const FLAG_MODE_LOG             = 0x40;
 
 	const NORMAL                    = 0x00; // 0
-	const BLANK                     = 0x01; // 1
+	const BLANK                     = 0x01; // 1 (to be opened as a full frame)
 	const AJAX_DIALOG               = 0x02; // 2
 	const IFRAME_DIALOG             = 0x03; // 3
+	const AJAX                      = 0x05; // 4 (to be inserted into an html document)
 
 	//const HTTP_NORMAL             = 0x10; // 16 (not possible: the template needs html)
 	const HTTP_BLANK                = 0x11; // 17
 	//const HTTP_AJAX_DIALOG        = 0x12; // 18 (not possible: the ajax dialog needs html)
 	const HTTP_IFRAME_DIALOG        = 0x13; // 19 (todo: how do you close the dialog?)
+	const HTTP_AJAX                 = 0x14; // 20
 
 	const LONG_NORMAL               = 0x20; // 32
 	// const LONG_BLANK             = 0x21; // 33 (not sure)
 	const LONG_AJAX_DIALOG          = 0x22; // 34
-	// const LONG_IFRAME_DIALOG     = 0x23; // 35 (not possible: progress needs html)
-
-	const TEXT                      = 0x30; // 48
-	const TEXT_BLANK                = 0x31; // 49
-	const TEXT_AJAX_DIALOG          = 0x32; // 50
-	const TEXT_IFRAME_DIALOG        = 0x33; // 51
-
-//	const LOG                       = 0x40; // 48
-//	const LOG_BLANK                 = 0x41; // 49
-//	const LOG_AJAX_DIALOG           = 0x42; // 50
-//	const LOG_IFRAME_DIALOG         = 0x43; // 51
+	// const LONG_IFRAME_DIALOG     = 0x23; // 35 (not sure)
+	// const LONG_AJAX              = 0x24; // 36 (not sure)
 
 
-//	const DIALOG           = 0x0010;
-//	const LONG             = 0x0020;
-//
-//	// NORMAL (partial html with template)
-//	const NORMAL           = 0x0000;
-//	const LONG_NORMAL      = 0x0010;
-//
-//	// AJAX (partial html without template)
-//	const AJAX             = 0x0001;
-//	const AJAX_DIALOG      = 0x0011;
-//	const LONG_AJAX        = 0x0021;
-//	const LONG_AJAX_DIALOG = 0x1031;
-//
-//	// IFRAME (full html without template)
-//	const IFRAME           = 0x0002;
-//	const IFRAME_DIALOG    = 0x0012;
-//
-//	// IFRAME (no html)
-//	const BLIND            = 0x0004;
 
 	protected $mode = self::NORMAL;
 
@@ -326,7 +299,6 @@ abstract class Action implements XValue {
 	public final function IsModeHtml()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_HTML; }
 	public final function IsModeHttp()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_HTTP; }
 	public final function IsModeLong()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_LONG; }
-	public final function IsModeText()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_TEXT; }
 
 	protected function GetDefaultMode(){ return self::NORMAL; }
 	public final function WithMode($value){ $this->mode = $value; return $this; }

@@ -141,21 +141,6 @@ class Oxygen {
 				else
 					Debug::RecordExceptionServedGeneric($ex,'Outer exception handler, '.$served_as.'.');
 			}
-			elseif (Oxygen::IsActionModeText()) {
-				echo "\n\n";
-				if ($ex instanceof ApplicationException)
-					echo $ex->getMessage();
-				elseif (!DEV)
-					echo Lemma::Pick('MsgAnErrorOccurred');
-				else
-					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
-
-				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
-				if ($ex instanceof ApplicationException || DEV)
-					Debug::RecordExceptionServed($ex,'Outer exception handler, TEXT.');
-				else
-					Debug::RecordExceptionServedGeneric($ex,'Outer exception handler, TEXT.');
-			}
 			else {
 				$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
 				echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
@@ -681,7 +666,6 @@ class Oxygen {
 	public static function IsActionModeHtml()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_HTML; }
 	public static function IsActionModeHttp()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_HTTP; }
 	public static function IsActionModeLong()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_LONG; }
-	public static function IsActionModeText()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_TEXT; }
 
 
 	/** @return string */
