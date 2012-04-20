@@ -142,7 +142,7 @@ In the <b>AJAX</b> mode, the action is rendered bare, without the surrounding te
 </p>
 
 <p>
-In the <b>AJAX_BLIND</b> mode, the action does not even render HTML code. This is useful for those actions where the result of the request will not be displayed as HTML to the user.
+In the <b>HTTP_BLANK</b> mode, the action does not even render HTML code. This is useful for those actions where the result of the request will not be displayed as HTML to the user.
 There are two kinds of such actions. First of all, there are the actions that do not return HTML at all, but other types of content such as binary files, XML, SVG etc. In addition,
 there are the actions that perform an operation after an AJAX call, but the result of the operation will not be displayed to the user, such as synchronization calls, variable
 setting calls, etc..
@@ -185,12 +185,6 @@ Any <span class="code">ApplicationException</span> will be caught and the messag
 has to be friendly to the user. Furthermore, any <span class="code">SecurityException</span> will be caught, its message will be displayed to the user but along with a login form.
 Finally, all other kinds of exceptions will display a generic message to the user and an exception report will be send to the developer. So, unless a generic exception is wrapped
 inside one of the two other kinds, it is considered a bug.
-</p>
-
-<p>
-The rendering of the message of an exception depends on the mode of the current action. If the mode is BLIND, there will be no rendering as the result is not displayed to the user.
-So, BLIND actions should have their own exception handling mechanism. In any case, if there is an exception the actual content of the action will not be rendered. When this happens,
-the method <span class="code">ContentCompromised()</span> of the action returns <span class="code">false</span>.
 </p>
 
 
