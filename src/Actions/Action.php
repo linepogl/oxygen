@@ -86,7 +86,7 @@ abstract class Action implements XValue {
 			if (!$this->IsPermitted()) throw new SecurityException();
 			if (!$this->IsLogical()) throw new ApplicationException(Lemma::Pick('MsgInvalidAction'));
 			$this->OnBeforeRender();
-			if ($this->IsLong())
+			if ($this->IsModeLong())
 				ProgressControl::Make()->WithAction($this)->WithForwardRequest(true)->WithHeight($this->GetHeight()-150)->Render();
 			else
 				$this->Render();
@@ -96,7 +96,7 @@ abstract class Action implements XValue {
 			$this->content_compromised = true;
 			if (ob_get_level()>0) ob_clean();
 
-			if ($this->IsBlind()){
+			if ($this->IsModeHttp()){
 				Oxygen::SetResponseCode(403); // forbidden
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
@@ -106,7 +106,7 @@ abstract class Action implements XValue {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
-					Debug::WriteException($ex);
+					Debug::Write($ex->getMessage());
 				}
 				else {
 					$c = Oxygen::GetLoginControl();
@@ -140,7 +140,7 @@ abstract class Action implements XValue {
 			$this->content_compromised = true;
 			if (ob_get_level()>0) ob_clean();
 
-			if ($this->IsBlind()){
+			if ($this->IsModeHttp()){
 				Oxygen::SetResponseCode(405); // not allowed
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
@@ -152,7 +152,7 @@ abstract class Action implements XValue {
 				if (Debug::IsImmediateFlushingEnabled()) {
 					Debug::Write($ex->getMessage());
 				}
-				elseif ($this->IsAjax() && $this->IsDialog()){
+				elseif ($this->IsAjaxDialog()){
 					echo new MessageControl($ex);
 					echo '<div class="buttons1"><div class="buttons3"><div class="buttons2">';
 					echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
@@ -179,7 +179,7 @@ abstract class Action implements XValue {
 		catch (Exception $ex){
 			$this->content_compromised = true;
 			if (ob_get_level()>0) ob_clean();
-			if ($this->IsBlind()){
+			if ($this->IsModeHttp()){
 				Oxygen::SetResponseCode(500); // internal server error
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
@@ -256,43 +256,83 @@ abstract class Action implements XValue {
 	// Href creation
 	//
 	//
-	const DIALOG           = 0x0010;
-	const LONG             = 0x0020;
+	const MASK_DEST                 = 0x0F;
+	const MASK_MODE                 = 0xF0;
 
-	// NORMAL (partial html with template)
-	const NORMAL           = 0x0000;
-	const LONG_NORMAL      = 0x0010;
+	const FLAG_DEST_CONTENT         = 0x00;
+	const FLAG_DEST_BLANK           = 0x01;
+	const FLAG_DEST_AJAX_DIALOG     = 0x02;
+	const FLAG_DEST_IFRAME_DIALOG   = 0x03;
 
-	// AJAX (partial html without template)
-	const AJAX             = 0x0001;
-	const AJAX_DIALOG      = 0x0011;
-	const LONG_AJAX        = 0x0021;
-	const LONG_AJAX_DIALOG = 0x1031;
+	const FLAG_MODE_HTML            = 0x00;
+	const FLAG_MODE_HTTP            = 0x10;
+	const FLAG_MODE_LONG            = 0x20;
+	const FLAG_MODE_TEXT            = 0x30;
+//	const FLAG_MODE_LOG             = 0x40;
 
-	// IFRAME (full html without template)
-	const IFRAME           = 0x0002;
-	const IFRAME_DIALOG    = 0x0012;
+	const NORMAL                    = 0x00; // 0
+	const BLANK                     = 0x01; // 1
+	const AJAX_DIALOG               = 0x02; // 2
+	const IFRAME_DIALOG             = 0x03; // 3
 
-	// IFRAME (no html)
-	const BLIND            = 0x0004;
+	//const HTTP_NORMAL             = 0x10; // 16 (not possible: the template needs html)
+	const HTTP_BLANK                = 0x11; // 17
+	//const HTTP_AJAX_DIALOG        = 0x12; // 18 (not possible: the ajax dialog needs html)
+	const HTTP_IFRAME_DIALOG        = 0x13; // 19 (todo: how do you close the dialog?)
+
+	const LONG_NORMAL               = 0x20; // 32
+	// const LONG_BLANK             = 0x21; // 33 (not sure)
+	const LONG_AJAX_DIALOG          = 0x22; // 34
+	// const LONG_IFRAME_DIALOG     = 0x23; // 35 (not possible: progress needs html)
+
+	const TEXT                      = 0x30; // 48
+	const TEXT_BLANK                = 0x31; // 49
+	const TEXT_AJAX_DIALOG          = 0x32; // 50
+	const TEXT_IFRAME_DIALOG        = 0x33; // 51
+
+//	const LOG                       = 0x40; // 48
+//	const LOG_BLANK                 = 0x41; // 49
+//	const LOG_AJAX_DIALOG           = 0x42; // 50
+//	const LOG_IFRAME_DIALOG         = 0x43; // 51
+
+
+//	const DIALOG           = 0x0010;
+//	const LONG             = 0x0020;
+//
+//	// NORMAL (partial html with template)
+//	const NORMAL           = 0x0000;
+//	const LONG_NORMAL      = 0x0010;
+//
+//	// AJAX (partial html without template)
+//	const AJAX             = 0x0001;
+//	const AJAX_DIALOG      = 0x0011;
+//	const LONG_AJAX        = 0x0021;
+//	const LONG_AJAX_DIALOG = 0x1031;
+//
+//	// IFRAME (full html without template)
+//	const IFRAME           = 0x0002;
+//	const IFRAME_DIALOG    = 0x0012;
+//
+//	// IFRAME (no html)
+//	const BLIND            = 0x0004;
 
 	protected $mode = self::NORMAL;
-	public final function IsAjax(){ return ($this->mode & self::AJAX) == self::AJAX; }
-	public final function IsBlind(){ return ($this->mode & self::BLIND) == self::BLIND; }
-	public final function IsIFrame(){ return ($this->mode & self::IFRAME) == self::IFRAME; }
-	public final function IsLong(){ return ($this->mode & self::LONG) == self::LONG; }
-	public final function IsDialog(){ return ($this->mode & self::DIALOG) == self::DIALOG; }
-	public final function IsAjaxDialog(){ return ($this->mode & self::AJAX_DIALOG) == self::AJAX_DIALOG; }
-	public final function IsIFrameDialog(){ return ($this->mode & self::IFRAME_DIALOG) == self::IFRAME_DIALOG; }
+
+	public final function IsContent()      { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_CONTENT; }
+	public final function IsBlank()        { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_BLANK; }
+	public final function IsAjaxDialog()   { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_AJAX_DIALOG; }
+	public final function IsIFrameDialog() { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_IFRAME_DIALOG; }
+
+	public final function IsModeHtml()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_HTML; }
+	public final function IsModeHttp()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_HTTP; }
+	public final function IsModeLong()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_LONG; }
+	public final function IsModeText()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_TEXT; }
+
 	protected function GetDefaultMode(){ return self::NORMAL; }
 	public final function WithMode($value){ $this->mode = $value; return $this; }
-	protected function UseJavascriptAsHref(){ return $this->IsDialog(); }
-	public final function GetHref($args=array()){
-		return $this->UseJavascriptAsHref() ? $this->GetHrefJavascript($args) : $this->GetHrefPlain($args);
-	}
-	public final function GetHrefJavascript($args=array()){
-		return 'javascript:'.$this->GetJSCommand($args);
-	}
+	protected function UseJavascriptAsHref(){ return $this->IsAjaxDialog() || $this->IsIFrameDialog(); }
+	public final function GetHref($args=array()){ return $this->UseJavascriptAsHref() ? $this->GetHrefJavascript($args) : $this->GetHrefPlain($args); }
+	public final function GetHrefJavascript($args=array()){ return 'javascript:'.$this->GetJSCommand($args); }
 	public function GetJSCommand($args=array()){
 		if ($this->IsAjaxDialog())
 			return 'Oxygen.ShowAjaxDialog('.new Js($this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
@@ -308,13 +348,6 @@ abstract class Action implements XValue {
 			+ array('action'=>$this->GetName(),'mode'=> $this->mode==self::NORMAL ? null : $this->mode)
 			+ $this->GetUrlArgs()
 			);
-
-//		$a = $this->GetUrlArgs();
-//		$a['action'] = $this->GetName();         // <----------- this one also causes an array copy...
-//		if ($this->mode != self::NORMAL) $a['mode'] = $this->mode;
-//		foreach ($args as $key=>$value)
-//			$a[$key] = $value;
-//		return Oxygen::MakeHref($a);
 	}
 	public function GetForm($name=null){
 		if ($this->IsAjaxDialog())

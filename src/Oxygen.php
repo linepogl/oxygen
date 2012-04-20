@@ -82,13 +82,13 @@ class Oxygen {
 
 		if (Debug::IsImmediateFlushingEnabled()) exit();
 		Oxygen::SendHttpHeaders();
-		if (self::$action->IsAjax() || self::$action->IsBlind()) { echo self::$content; exit(); }
-		if (self::$action->IsIFrame()) {
-			echo '<html><head>'.Oxygen::GetHead().'</head><body>';
-			echo self::$content;
-			echo '</body></html>';
-			exit();
-		}
+		if (!self::IsActionModeContent()) { echo self::$content; exit(); }
+//		if (self::$action->IsIFrame()) {
+//			echo '<html><head>'.Oxygen::GetHead().'</head><body>';
+//			echo self::$content;
+//			echo '</body></html>';
+//			exit();
+//		}
 	}
 
 
@@ -110,41 +110,88 @@ class Oxygen {
 	public static function OnException($ex) {
 		/** @var $ex Exception */
 		while ( ob_get_level() > 0 ) ob_end_clean();
-		$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
+
+
 		try {
-			echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
-			echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
-			echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;background:#555577;">';
-			echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
-			echo '<div style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;overflow:auto;padding:30px;">';
-			echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
-			if ($ex instanceof ApplicationException) {
-				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
+			if (Oxygen::IsActionModeHttp()) {
+				if ($ex instanceof SecurityException) {
+					Oxygen::SetResponseCode(403); // forbidden
+					$served_as = 'HTTP 403';
+				}
+				elseif ($ex instanceof ApplicationException) {
+					Oxygen::SetResponseCode(405); // not allowed
+					$served_as = 'HTTP 405';
+				}
+				else {
+					Oxygen::SetResponseCode(500); // internal server error
+					$served_as = 'HTTP 500';
+				}
+				Oxygen::SetContentType('text/plain');
+				Oxygen::ResetHttpHeaders();
+				if ($ex instanceof ApplicationException)
+					echo $ex->getMessage();
+				elseif (!DEV)
+					echo Lemma::Pick('MsgAnErrorOccurred');
+				else
+					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
+
+				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
+				if ($ex instanceof ApplicationException || DEV)
+					Debug::RecordExceptionServed($ex,'Outer exception handler, '.$served_as.'.');
+				else
+					Debug::RecordExceptionServedGeneric($ex,'Outer exception handler, '.$served_as.'.');
 			}
-			elseif (!DEV){
-				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Pick('MsgAnErrorOccurred').'</div>';
+			elseif (Oxygen::IsActionModeText()) {
+				echo "\n\n";
+				if ($ex instanceof ApplicationException)
+					echo $ex->getMessage();
+				elseif (!DEV)
+					echo Lemma::Pick('MsgAnErrorOccurred');
+				else
+					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
+
+				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
+				if ($ex instanceof ApplicationException || DEV)
+					Debug::RecordExceptionServed($ex,'Outer exception handler, TEXT.');
+				else
+					Debug::RecordExceptionServedGeneric($ex,'Outer exception handler, TEXT.');
 			}
 			else {
-				echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div>';
-				echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
-				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
-				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
-				echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
-			}
-			echo '<div style="font:italic 11px/13px Trebuchet MS,sans-serif;color:#bbbbbb;margin-top:50px;">Oxygen</div>';
-			echo '</div>';
-			echo '</div>';
-			echo '</div>';
-			if (!($ex instanceof ApplicationException)){
-				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
-				if (DEV)
-					Debug::RecordExceptionServed($ex,'Outer exception handler.');
-				else
-					Debug::RecordExceptionServedGeneric($ex,'Outer exception handler.');
+				$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
+				echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
+				echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
+				echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;background:#555577;">';
+				echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
+				echo '<div style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;overflow:auto;padding:30px;">';
+				echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
+				if ($ex instanceof ApplicationException) {
+					echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
+				}
+				elseif (!DEV){
+					echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.Lemma::Pick('MsgAnErrorOccurred').'</div>';
+				}
+				else {
+					echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div>';
+					echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
+					echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
+					echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
+					echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
+				}
+				echo '<div style="font:italic 11px/13px Trebuchet MS,sans-serif;color:#bbbbbb;margin-top:50px;">Oxygen</div>';
+				echo '</div>';
+				echo '</div>';
+				echo '</div>';
+				if (!($ex instanceof ApplicationException)){
+					error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
+					if (DEV)
+						Debug::RecordExceptionServed($ex,'Outer exception handler, HTML.');
+					else
+						Debug::RecordExceptionServedGeneric($ex,'Outer exception handler, HTML.');
+				}
 			}
 		}
 		catch (Exception $ex2){
-			echo $Q.$ex2->getMessage().'<br/><br/>'.$Q.$ex2->getFile().'['.$ex2->getLine().']';
+			//echo $Q.$ex2->getMessage().'<br/><br/>'.$Q.$ex2->getFile().'['.$ex2->getLine().']';
 			try{ Debug::RecordExceptionServed($ex2,'FATAL: Exception inside the outer exception handler.'); } catch(Exception $ex3){ }
 		}
 	}
@@ -612,17 +659,30 @@ class Oxygen {
 	//
 	//
 	private static $actionname = null;
-	private static $actionmode = null;
+	/** @var Action */
 	private static $action = null;
 	private static $content = '';
 	private static $default_actionname = 'Home';
 	/** @return void */ public static function SetDefaultActionName($actionname) { self::$default_actionname = $actionname; }
 	/** @return string */ public static function GetDefaultActionName() { return self::$default_actionname; }
 	/** @return string */ public static function GetActionName(){ return self::$actionname; }
-	/** @return int    */ public static function GetActionMode(){ return self::$actionmode; }
 	/** @return Action */ public static function GetAction(){ return self::$action; }
 	/** @return string */ public static function GetContent() { return self::$content; }
 	/** @return string */ public static function GetBody(){ return self::$content; }
+
+	private static $actionmode = 0;
+	/** @return int    */ public static function GetActionMode(){ return self::$actionmode; }
+
+	public static function IsActionModeContent()      { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_CONTENT; }
+	public static function IsActionModeBlank()        { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_BLANK; }
+	public static function IsActionModeAjaxDialog()   { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_AJAX_DIALOG; }
+	public static function IsActionModeIFrameDialog() { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_IFRAME_DIALOG; }
+
+	public static function IsActionModeHtml()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_HTML; }
+	public static function IsActionModeHttp()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_HTTP; }
+	public static function IsActionModeLong()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_LONG; }
+	public static function IsActionModeText()     { return (self::$actionmode & Action::MASK_MODE) == Action::FLAG_MODE_TEXT; }
+
 
 	/** @return string */
 	public static function GetHead(){
