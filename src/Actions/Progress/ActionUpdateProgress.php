@@ -1,7 +1,7 @@
 <?php
 
 class ActionUpdateProgress extends Action{
-	public function GetDefaultMode(){ return self::HTML_FRAGMENT; }
+	public function GetDefaultMode(){ return Action::MODE_HTML_FRAGMENT; }
 	public function IsPermitted(){ return true; }
 
 	const INTERVAL = 1000;

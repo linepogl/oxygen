@@ -269,27 +269,27 @@ abstract class Action implements XValue {
 	const FLAG_MODE_RAW             = 0x10;
 	const FLAG_MODE_LONG            = 0x20;
 
-	const NORMAL                    = 0x00; // 0
-	const HTML_DOCUMENT             = 0x01; // 1 (to be opened as a full frame)
-	const AJAX_DIALOG               = 0x02; // 2
-	const IFRAME_DIALOG             = 0x03; // 3
-	const HTML_FRAGMENT             = 0x05; // 4 (to be inserted into an html document)
+	const MODE_NORMAL                    = 0x00; // 0
+	const MODE_HTML_DOCUMENT             = 0x01; // 1 (to be opened as a full frame)
+	const MODE_AJAX_DIALOG               = 0x02; // 2
+	const MODE_IFRAME_DIALOG             = 0x03; // 3
+	const MODE_HTML_FRAGMENT             = 0x05; // 4 (to be inserted into an html document)
 
-	//const RAW_NORMAL              = 0x10; // 16 (not possible: the template needs html)
-	const RAW                       = 0x11; // 17
-	//const RAW_AJAX_DIALOG         = 0x12; // 18 (not possible: the ajax dialog needs html)
-	const RAW_IFRAME_DIALOG         = 0x13; // 19 (todo: how do you close the dialog?)
-	const RAW_FRAGMENT              = 0x14; // 20
+	//const MODE_RAW_NORMAL              = 0x10; // 16 (not possible: the template needs html)
+	const MODE_RAW                       = 0x11; // 17
+	//const MODE_RAW_AJAX_DIALOG         = 0x12; // 18 (not possible: the ajax dialog needs html)
+	const MODE_RAW_IFRAME_DIALOG         = 0x13; // 19 (todo: how do you close the dialog?)
+	const MODE_RAW_FRAGMENT              = 0x14; // 20
 
-	const LONG_NORMAL               = 0x20; // 32
-	// const LONG_BLANK             = 0x21; // 33 (not sure)
-	const LONG_AJAX_DIALOG          = 0x22; // 34
+	const MODE_LONG_NORMAL               = 0x20; // 32
+	// const MODE_LONG_BLANK             = 0x21; // 33 (not sure)
+	const MODE_LONG_AJAX_DIALOG          = 0x22; // 34
 	// const LONG_IFRAME_DIALOG     = 0x23; // 35 (not sure)
 	// const LONG_FRAGMENT          = 0x24; // 36 (not sure)
 
 
 
-	protected $mode = self::NORMAL;
+	protected $mode = Action::MODE_NORMAL;
 
 	public final function IsContent()      { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_CONTENT; }
 	public final function IsBlank()        { return ($this->mode & self::MASK_DEST) == self::FLAG_DEST_BLANK; }
@@ -301,7 +301,7 @@ abstract class Action implements XValue {
 	public final function IsModeRaw()      { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_RAW; }
 	public final function IsModeLong()     { return ($this->mode & self::MASK_MODE) == self::FLAG_MODE_LONG; }
 
-	protected function GetDefaultMode(){ return self::NORMAL; }
+	protected function GetDefaultMode(){ return Action::MODE_NORMAL; }
 	public final function WithMode($value){ $this->mode = $value; return $this; }
 	protected function UseJavascriptAsHref(){ return $this->IsAjaxDialog() || $this->IsIFrameDialog(); }
 	public final function GetHref($args=array()){ return $this->UseJavascriptAsHref() ? $this->GetHrefJavascript($args) : $this->GetHrefPlain($args); }
@@ -318,7 +318,7 @@ abstract class Action implements XValue {
 	public final function GetHrefPlain($args=array()){
 		return Oxygen::MakeHref(
 			$args
-			+ array('action'=>$this->GetName(),'mode'=> $this->mode==self::NORMAL ? null : $this->mode)
+			+ array('action'=>$this->GetName(),'mode'=> $this->mode==Action::MODE_NORMAL ? null : $this->mode)
 			+ $this->GetUrlArgs()
 			);
 	}

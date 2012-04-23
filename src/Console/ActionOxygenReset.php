@@ -3,7 +3,7 @@
 
 class ActionOxygenReset extends Action {
 
-	public function GetDefaultMode(){ return self::AJAX_DIALOG; }
+	public function GetDefaultMode(){ return Action::MODE_AJAX_DIALOG; }
 	public function GetTitle(){ return 'Reset oxygen cache'; }
 	public function IsPermitted(){
 		return true;

@@ -189,7 +189,7 @@ This is a typical edit form for a book. It is wrapped inside an AJAX dialog and 
 
 <p class="code">
 class ActionModifyBook extends Action {
-	public function GetDefaultMode(){ return self::AJAX_DIALOG; }
+	public function GetDefaultMode(){ return Action::MODE_AJAX_DIALOG; }
 
 	/** @var Book */
 	private $book;

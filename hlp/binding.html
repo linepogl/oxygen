@@ -117,7 +117,7 @@ This is the same form of the chapter on <a href="rendering.html">Rendering</a>, 
 
 <p class="code">
 class ActionModifyBook extends Action {
-	public function GetDefaultMode(){ return self::AJAX_DIALOG; }
+	public function GetDefaultMode(){ return Action::MODE_AJAX_DIALOG; }
 
 	/** @var Book */
 	private $book;

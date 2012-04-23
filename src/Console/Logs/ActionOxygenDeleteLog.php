@@ -3,7 +3,7 @@
 
 class ActionOxygenDeleteLog extends Action {
 
-	public function GetDefaultMode(){ return self::AJAX_DIALOG; }
+	public function GetDefaultMode(){ return Action::MODE_AJAX_DIALOG; }
 	public function GetTitle(){ return 'Delete log '.$this->log; }
 
 	private $log;

@@ -167,7 +167,7 @@ overriding the method <span class="code">GetDefaultMode</span>.
 <p class="code">
 class ActionDeleteBook extends Action {
 	...
-	public function GetDefaultMode(){ return self::AJAX_DIALOG; }
+	public function GetDefaultMode(){ return Action::MODE_AJAX_DIALOG; }
 	...
 }
 </p>
