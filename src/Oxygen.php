@@ -123,7 +123,11 @@ class Oxygen {
 					$served_as = 'HTTP 500';
 				}
 				Oxygen::SendHttpHeaders();
-				if ($ex instanceof ApplicationException)
+				if ($ex instanceof SecurityException) {
+					$msg = $ex->getMessage();
+					echo empty($msg) ? Lemma::Pick('MsgAccessDenied') : $ex->getMessage();
+				}
+				elseif ($ex instanceof ApplicationException)
 					echo $ex->getMessage();
 				elseif (!DEV)
 					echo Lemma::Pick('MsgAnErrorOccurred');

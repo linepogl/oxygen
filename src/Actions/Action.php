@@ -100,7 +100,8 @@ abstract class Action implements XValue {
 				Oxygen::SetResponseCode(403); // forbidden
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				echo $ex->getMessage();
+				$msg = $ex->getMessage();
+				echo empty($msg) ? Lemma::Pick('MsgAccessDenied') : $ex->getMessage();
 			}
 			else {
 				Oxygen::SetContentType('text/html');
