@@ -30,7 +30,8 @@ var Js = function(value){
 };
 
 var Oxygen = {
-	 Lang: oxygen_lang
+	 lang: oxygen_lang
+	,Lang: oxygen_lang
 	,Encoding: oxygen_encoding
 
 	,current_ajax_dialog_url: null
