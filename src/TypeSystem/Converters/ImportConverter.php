@@ -5,7 +5,8 @@ abstract class ImportConverter {
   public function __construct($value){
     $this->value = $value;
   }
-
+	/** @return ImportConverter */
+	public static function Make($value){ return new static($value); }
 
 
   /** @return ID|null         */ public final function AsID()             { return $this->CastTo(MetaID::Type()); }

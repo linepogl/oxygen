@@ -123,8 +123,9 @@ class XDateTime implements Serializable, XValue {
 	*/
 	public static function Parse($value,$format){
 		$d = DateTime::createFromFormat($format,$value);
-		if ($d === false)
+		if ($d === false) {
 			throw new Exception('Invalid date or time.');
+		}
 		else
 		return new static($d->getTimestamp());
 	}

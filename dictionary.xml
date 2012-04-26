@@ -43,7 +43,10 @@
 	<lemma name="Today"><en>Today</en><fr>Aujourd'hui</fr><el>Σήμερα</el></lemma>
 	<lemma name="Tomorrow"><en>Tomorrow</en><fr>Demain</fr><el>Αύριο</el></lemma>
 	<lemma name="Now"><en>Now</en><fr>Maintenant</fr><el>Τώρα</el></lemma>
-	<lemma name="xDays"><en>%s days</en><fr>%s jours</fr><el>%s jours</el></lemma>
+	<lemma name="xDays"><en>%s days</en><fr>%s jours</fr><el>%s ημέρες</el></lemma>
+
+	<lemma name="Day"><en>Day</en><fr>Jour</fr><el>Ημέρα</el></lemma>
+	<lemma name="Night"><en>Night</en><fr>Nuit</fr><el>Νύχτα</el></lemma>
 
 	<lemma name="Submit"><en>Submit</en><fr>Soumettre</fr><el>Αποστολή</el></lemma>
 	<lemma name="Login"><en>Login</en><fr>Connexion</fr></lemma>
