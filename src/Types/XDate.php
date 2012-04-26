@@ -12,6 +12,9 @@ class XDate extends XDateTime {
 	}
 
 	public static function Today(){ return new XDate(); }
+	public static function MakeDate($year,$month,$day){
+		return parent::Make($year,$month,$day);
+	}
 
 	public function MetaType(){ return MetaDate::Type(); }
 }
