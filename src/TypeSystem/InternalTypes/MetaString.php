@@ -34,7 +34,7 @@ class MetaString extends XConcreteType {
 	 * @return string
 	 */
 	public static function GetXsdType() {
-		return PDO::PARAM_STR;
+		return 'xs:string';
 	}
 
 	/**
