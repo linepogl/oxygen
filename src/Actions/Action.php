@@ -228,13 +228,13 @@ abstract class Action implements XValue {
 					echo '</tr></table>';
 					echo '</td></tr></table>';
 					echo '</td></tr></table>';
+					$exception_served_as = '';
 				}
-				$exception_served_as = '';
 			}
 			if (DEV)
 				Debug::RecordExceptionServed($ex,'Inner exception handler'.$exception_served_as.'.');
 			else
-				Debug::RecordExceptionServedGeneric($ex,'Inner exception handler, mode '.$exception_served_as.'.');
+				Debug::RecordExceptionServedGeneric($ex,'Inner exception handler'.$exception_served_as.'.');
 		}
 		$result = ob_get_clean();
 		return $result;
