@@ -6,6 +6,8 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 	/** @var HttpAny  */ public static $ANY;
   public final function offsetSet($offset, $value) {	throw new Exception('Http arrays are readonly.'); }
 	public final function offsetUnset($offset) { throw new Exception('Http arrays are readonly.'); }
+
+	/** @return HttpValue */ public static function Read($nane){ return Http::$ANY[$nane]; }
 }
 
 final class HttpPost extends Http {

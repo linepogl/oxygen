@@ -69,6 +69,11 @@ class SelectControl extends ValueControl {
 			$this->Add($value,$caption);
 		return $this;
 	}
+	public function WithSimpleOptions($value_array){
+		foreach ($value_array as $value)
+			$this->Add($value,$value);
+		return $this;
+	}
 	public function WithOption($value,$caption=null){
 		$this->Add($value,$caption);
 		return $this;
