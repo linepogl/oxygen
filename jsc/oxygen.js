@@ -221,7 +221,6 @@ var Oxygen = {
 		if (dialog_height > max_dialog_height) dialog_height = max_dialog_height;
 		dialog.height(dialog_height);
 
-
 		var viewport_width = viewport.width();
 		var dialog_width = dialog.width();
 		var dialog_margin_border_padding_width = dialog.outerWidth(true) - dialog_width;

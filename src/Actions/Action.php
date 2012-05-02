@@ -86,8 +86,9 @@ abstract class Action implements XValue {
 			if (!$this->IsPermitted()) throw new SecurityException();
 			if (!$this->IsLogical()) throw new ApplicationException(Lemma::Pick('MsgInvalidAction'));
 			$this->OnBeforeRender();
-			if ($this->IsModeLong())
-				ProgressControl::Make()->WithAction($this)->WithForwardRequest(true)->WithHeight($this->GetHeight()-150)->Render();
+			if ($this->IsModeLong()) {
+				ProgressControl::Make()->WithAction($this)->WithForwardRequest(true)->WithHeight( $this->GetHeight() < 180 ? 200 : $this->GetHeight()-150 )->Render();
+			}
 			else
 				$this->Render();
 			$this->OnAfterRender();
