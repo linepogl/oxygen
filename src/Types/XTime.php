@@ -10,6 +10,10 @@ class XTime extends XDateTime {
 			);
 	}
 
+	public static function MakeTime($hours=0,$minutes=0,$seconds=0){
+		return parent::Make(2000,1,1,$hours,$minutes,$seconds);
+	}
+
 	/** @return XTime */
 	public static function Current(){ return new XTime(); }
 

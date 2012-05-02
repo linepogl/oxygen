@@ -129,21 +129,30 @@ class Debug {
 			$r = '{'.get_class($value).':';
 			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }
 			$i = 0;
-			for ($c = new ReflectionClass(get_class($value)); $c !== false; $c = $c->getParentClass()){
-				$filter = $i++==0
-					? ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC
-					: ReflectionProperty::IS_PRIVATE
-					;
-				foreach ($c->getProperties( $filter ) as $p){
-					if ($p->isStatic()) continue;
+			if ($value instanceof stdClass) {
+				foreach ((array)$value as $p=>$v){
 					$r .= "\n" . str_repeat(' ',($level+1)*2);
-					$p->setAccessible(true);
-					$v = $p->getValue($value);
-					if ($p->isPublic()) $r .= 'public ';
-					if ($p->isPrivate()) $r .= 'private ' . $c->getName() . '::';
-					if ($p->isProtected()) $r .= 'protected ';
-					$r .= '$'.$p->getName().' = ';
+					$r .= '$'.$p.' = ';
 					$r .= self::GetVariableAsString($v,$level+1);
+				}
+			}
+			else {
+				for ($c = new ReflectionClass(get_class($value)); $c !== false; $c = $c->getParentClass()){
+					$filter = $i++==0
+						? ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC
+						: ReflectionProperty::IS_PRIVATE
+						;
+					foreach ($c->getProperties( $filter ) as $p){
+						if ($p->isStatic()) continue;
+						$r .= "\n" . str_repeat(' ',($level+1)*2);
+						$p->setAccessible(true);
+						$v = $p->getValue($value);
+						if ($p->isPublic()) $r .= 'public ';
+						if ($p->isPrivate()) $r .= 'private ' . $c->getName() . '::';
+						if ($p->isProtected()) $r .= 'protected ';
+						$r .= '$'.$p->getName().' = ';
+						$r .= self::GetVariableAsString($v,$level+1);
+					}
 				}
 			}
 			$r .= "\n" . str_repeat(' ',$level*2).'}';

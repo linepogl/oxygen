@@ -100,12 +100,20 @@ class XMetaField implements XValue {
 	public function WithXmlImporter($value){ $this->xml_importer = $value; return $this; }
 	public function GetXmlImporter(){ return $this->xml_importer; }
 
+	/** @var Enum|null */
 	private $xml_enum = null;
 	/** @return XMetaField */
 	public function WithXmlEnum($value){
 		$this->xml_enum = $value instanceof Enum
-			? $value
-			: Enum::From($value);
+			? new Enum($value->GetInnerArray())
+			: new Enum($value);
+		return $this;
+	}
+	/** @return XMetaField */
+	public function WithXmlEnumMap($value){
+		$this->xml_enum = $value instanceof Enum
+			? new Enum($value->GetInnerArray(),true)
+			: new Enum($value,true);
 		return $this;
 	}
 	/** @return Enum */

@@ -23,8 +23,8 @@ abstract class Message {
 		,self::ERROR => 'error'
 		,self::BUG => 'bug'
 		);
-	public static function ConvertTypeToCode($type){ return Enum::From(self::$EnumType)->AsString($type); }
-	public static function ConvertCodeToType($code){ return Enum::From(self::$EnumType)->AsNumber($code); }
+	public static function ConvertTypeToCode($type){ return Enum::FromMap(self::$EnumType)->AsString($type); }
+	public static function ConvertCodeToType($code){ return Enum::FromMap(self::$EnumType)->AsNumber($code); }
 
 
 

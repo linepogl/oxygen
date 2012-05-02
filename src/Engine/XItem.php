@@ -483,7 +483,7 @@ abstract class XItem implements Serializable,XValue {
 					foreach ($e->childNodes as $ee){
 						if (!($ee instanceof DOMElement)) continue;
 						if ($ee->tagName != $foreign_meta_class->GetXmlTagName()) continue;
-						$x = $foreign_meta_class->MakeItem();
+						$x = $foreign_meta_class->MakeTempItem();
 						$nn = $foreign_meta_field->GetName();
 						$x->$nn = $this->id;
 						$v[] = $x->ImportXml($ee,$st,array($foreign_meta_field));
