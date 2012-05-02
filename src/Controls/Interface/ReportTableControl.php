@@ -178,13 +178,13 @@ class ReportTableControl extends ValueControl {
 
 
 
-	private function IsClickable($row_indwx){
-		if ($this->row_mode[$row_indwx] == self::ROW_NORMAL) {
-			return $this->row_has_value[$row_indwx];
+	private function IsClickable($row_index){
+		if ($this->row_mode[$row_index] == self::ROW_NORMAL) {
+			return $this->row_has_value[$row_index];
 		}
-		elseif ($this->row_mode[$row_indwx] == self::ROW_GROUP && $this->is_multiple) {
+		elseif ($this->row_mode[$row_index] == self::ROW_GROUP && $this->is_multiple) {
 			$found = false;
-			for ($i = $row_indwx + 1; $i < count($this->rows); $i++) {
+			for ($i = $row_index + 1; $i < count($this->rows); $i++) {
 				if ($this->row_mode[$i] == self::ROW_NORMAL) {
 					if ($this->row_has_value[$i]) {
 						$found = true;
@@ -226,8 +226,8 @@ class ReportTableControl extends ValueControl {
 
 	public function Render(){
 		$count_rows = count($this->rows);
-		$count_cols = 0; foreach ($this->cells as &$a){ $x = count($a); if ($x > $count_cols) $count_cols = $x; }
-		$has_values = false; foreach ($this->row_has_value as &$b) if ($b) { $has_values = true; break; }
+		$count_cols = 0; foreach ($this->cells as $a){ $x = count($a); if ($x > $count_cols) $count_cols = $x; }
+		$has_values = false; foreach ($this->row_has_value as $b) if ($b) { $has_values = true; break; }
 		$displayed_row_number = $this->begin_numbering_from;
 
 
