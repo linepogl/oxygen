@@ -271,6 +271,9 @@ var Oxygen = {
 		var dialog = $('OxygenDialog');
 		return dialog != null && dialog.style.display != 'none';
 	}
+	,Refresh:function(){
+		window.location.href=window.location.href;
+	}
 };
 
 // for backwards compatibility:
