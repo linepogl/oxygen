@@ -196,6 +196,12 @@
 		<el>Το πεδίο αυτό είναι υποχρεωτικό.</el>
 	</lemma>
 
+	<lemma name="MsgFieldMandatoryInAllLanguages">
+		<en>This field is mandatory in all languages.</en>
+		<fr>Ce champ est obligatoire en toutes les langues.</fr>
+		<el>Το πεδίο αυτό είναι υποχρεωτικό σε όλες τις γλώσσες.</el>
+	</lemma>
+
 	<lemma name="MsgPasswordChanged">
 		<en>The password has been changed.</en>
 		<fr>Le mot de passe a été changé.</fr>
