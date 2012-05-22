@@ -45,29 +45,48 @@ class Database {
 
 
 
-	public static function Upgrade($force=false){
-		if (is_null(self::$cx) || !self::$cx->is_managed) return;
-
-		$needs_refresh = false;
+	private static function NeedsUpgrade(){
 		foreach (Oxygen::GetDatabaseUpgradeFiles() as $filename){
-			$needs_upgrade = true;
 			$key = 'Database::upgrade_time_of_'. $filename;
 			$time = Scope::$DATABASE[$key];
-			if (!is_null($time))
-				$needs_upgrade = filemtime($filename) > $time;
-			if ($needs_upgrade || $force){
-				Database::RequireConnection();
-				set_time_limit(0);
-				Database::ClearPatchingSystem();
-				require($filename);
-				Scope::$DATABASE[$key] = time();
-				if (Database::IsPatchingSystemDirty()) $needs_refresh = true;
+			if (is_null($time))
+				return true;
+			if (filemtime($filename) > $time)
+				return true;
+		}
+		return false;
+	}
+	private static $upgrade_running = false;
+	public static function Upgrade($force=false){
+		if (self::$upgrade_running) return;
+		if (is_null(self::$cx) || !self::$cx->is_managed) return;
+		self::$upgrade_running = true;
+
+		$needs_refresh = false;
+		if ($force || self::NeedsUpgrade()) {
+			$f = fopen(Oxygen::GetTempFolder() .'/database.upgrade.lock','w');
+			if (flock($f,LOCK_EX)){
+				if ($force || self::NeedsUpgrade()) {
+					set_time_limit(0);
+					Database::RequireConnection();
+					Database::ClearPatchingSystem();
+					foreach (Oxygen::GetDatabaseUpgradeFiles() as $filename){
+						require($filename);
+						$key = 'Database::upgrade_time_of_'. $filename;
+						Scope::$DATABASE[$key] = time();
+					}
+					if (Database::IsPatchingSystemDirty()) $needs_refresh = true;
+				}
+				flock($f,LOCK_UN);
 			}
+			fclose($f);
 		}
 		if ($needs_refresh){
 			Debug::Write('Upgrade complete.<br/>Total queries: '.count(Database::GetQueries()).'.<br/><br/><br/>Please refresh.<br/><br/><br/><br/>');
 			exit();
 		}
+
+		self::$upgrade_running = false;
 	}
 
 
