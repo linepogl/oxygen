@@ -64,7 +64,8 @@ class Database {
 
 		$needs_refresh = false;
 		if ($force || self::NeedsUpgrade()) {
-			$f = fopen(Oxygen::GetTempFolder() .'/database.upgrade.lock','w');
+			$lock_filename = Oxygen::GetTempFolder() .'/database.upgrade.lock';
+			$f = fopen($lock_filename,'w');
 			if (flock($f,LOCK_EX)){
 				if ($force || self::NeedsUpgrade()) {
 					set_time_limit(0);
@@ -80,6 +81,7 @@ class Database {
 				flock($f,LOCK_UN);
 			}
 			fclose($f);
+			try { unlink($lock_filename); } catch(Exception $ex){}
 		}
 		if ($needs_refresh){
 			Debug::Write('Upgrade complete.<br/>Total queries: '.count(Database::GetQueries()).'.<br/><br/><br/>Please refresh.<br/><br/><br/><br/>');
