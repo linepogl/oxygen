@@ -58,9 +58,9 @@ final class Progress {
 		self::SetFinished(true);
 		if (!($ex instanceof ApplicationException)) {
 			if (DEV)
-				Debug::RecordExceptionServed($ex,'Progress exception handler.');
+				Debug::RecordExceptionServed($ex,'Progress Exception Handler.');
 			else
-				Debug::RecordExceptionServedGeneric($ex,'Progress exception handler.');
+				Debug::RecordExceptionServedGeneric($ex,'Progress Exception Handler.');
 		}
 	}
 

@@ -191,7 +191,7 @@ abstract class Action implements XValue {
 				else {
 					echo Lemma::Pick('MsgAnErrorOccurred');
 				}
-				$exception_served_as = ' (HTTP code 500)';
+				$exception_served_as = ' (HTTP 500)';
 			}
 			else {
 				Oxygen::SetContentType('text/html');
@@ -233,9 +233,9 @@ abstract class Action implements XValue {
 				}
 			}
 			if (DEV)
-				Debug::RecordExceptionServed($ex,'Inner exception handler'.$exception_served_as.'.');
+				Debug::RecordExceptionServed($ex,'Action Exception Handler'.$exception_served_as.'.');
 			else
-				Debug::RecordExceptionServedGeneric($ex,'Inner exception handler'.$exception_served_as.'.');
+				Debug::RecordExceptionServedGeneric($ex,'Action Exception Handler'.$exception_served_as.'.');
 		}
 		$result = ob_get_clean();
 		return $result;

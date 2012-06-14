@@ -96,7 +96,7 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,XValue{
 			throw new Exception('Undefined lemma: '.$r);
 		}
 		catch (Exception $ex){
-			Debug::RecordExceptionSilenced($ex);
+			Debug::RecordExceptionSilenced($ex,'Lemma Exception Handler');
 		}
 		return $r;
 	}

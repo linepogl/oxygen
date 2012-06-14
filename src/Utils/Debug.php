@@ -323,6 +323,7 @@ class Debug {
 	public static function RecordExceptionConverted     (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,2,$extra_developer_message); }
 	public static function RecordExceptionRethrown      (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,3,$extra_developer_message); }
 	public static function RecordExceptionServed        (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,4,$extra_developer_message); }
+	public static function RecordExceptionServedDebug   (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,7,$extra_developer_message); }
 	public static function RecordExceptionServedGeneric (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,5,$extra_developer_message); }
 	public static function RecordExceptionAndDie        (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,6,$extra_developer_message); exit(); }
 	private static function RecordException(Exception $ex,$way_handled,$extra_developer_message=null){
@@ -336,7 +337,11 @@ class Debug {
 			case 6: $way_handled_message = 'Execution halted'; break;
 		}
 		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
-		$subject = 'Exception detected ('.$way_handled_message.') '.$serial;
+
+		$subject = '['.Oxygen::GetApplicationName().'] ';
+		$subject .= get_class($ex). ' ('.$way_handled_message.')'; //.$serial;
+//		$subject .= ' '.$ex->getMessage();
+		$subject .= ' '.$extra_developer_message;
 
 		try {
 			$error_log_message = '';
@@ -347,7 +352,7 @@ class Debug {
 		catch (Exception $ex) {}
 
 		$head = Oxygen::GetInfo();
-		$body = '<div style="font:italic 11px/13px Courier New,monospace;color:#999999;padding:5px 5px 4px 5px;border:1px solid #cccccc;">-- '.new Html($way_handled_message).' --'.(is_null($extra_developer_message)?'':"<br/>".new Html($extra_developer_message)).'</div><br/>';
+		$body = '<div style="font:italic 11px/13px Courier New,monospace;color:#999999;padding:5px 5px 4px 5px;border:1px solid #cccccc;">-- '.new Html($way_handled_message).' --'.(is_null($extra_developer_message)?'':"<br/>".new Html($extra_developer_message)).'<br/>'.$serial.'</div><br/>';
 		$body .= Debug::GetExceptionReportAsHtml($ex);
 
 		try {

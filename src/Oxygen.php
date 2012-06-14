@@ -136,9 +136,9 @@ class Oxygen {
 
 				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
 				if ($ex instanceof ApplicationException || DEV)
-					Debug::RecordExceptionServed($ex,'Outer exception handler, '.$served_as.'.');
+					Debug::RecordExceptionServed($ex,'Global Exception Handler ('.$served_as.')');
 				else
-					Debug::RecordExceptionServedGeneric($ex,'Outer exception handler, '.$served_as.'.');
+					Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler ('.$served_as.')');
 			}
 			else {
 				$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
@@ -156,7 +156,8 @@ class Oxygen {
 				}
 				else {
 					echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div>';
-					echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:10px 0 20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
+					echo '<div style="font:normal 11px/12px Trebuchet MS,sans-serif;margin:10px 0 2px 0;color:#999999;">'.$Q.get_class($ex).$Q.'</div>';
+					echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:0 0 20px 0;color:#000000;">'.$Q.$ex->getMessage().$Q.'</div>';
 					echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;padding:10px;white-space:pre;color:#999999;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
 					echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
 					echo '<div style="font:11px/13px Courier New,monospace;border-left:1px solid #bbbbbb;margin-left:3px;margin-top:20px;padding:10px;white-space:pre;color:#999999;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
@@ -168,15 +169,15 @@ class Oxygen {
 				if (!($ex instanceof ApplicationException)){
 					error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
 					if (DEV)
-						Debug::RecordExceptionServed($ex,'Outer exception handler, HTML.');
+						Debug::RecordExceptionServed($ex,'Global Exception Handler');
 					else
-						Debug::RecordExceptionServedGeneric($ex,'Outer exception handler, HTML.');
+						Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler');
 				}
 			}
 		}
 		catch (Exception $ex2){
 			//echo $Q.$ex2->getMessage().'<br/><br/>'.$Q.$ex2->getFile().'['.$ex2->getLine().']';
-			try{ Debug::RecordExceptionServed($ex2,'FATAL: Exception inside the outer exception handler.'); } catch(Exception $ex3){ }
+			try{ Debug::RecordExceptionServed($ex2,'FATAL: Exception inside Global Exception Handler.'); } catch(Exception $ex3){ }
 		}
 	}
 
