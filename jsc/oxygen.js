@@ -101,12 +101,12 @@ var Oxygen = {
 	,ShowIFrameDialog: function(icon,title,url,width,height){
 		this.ShowFog();
 		var dialog = this.MakeDialog(icon,title,width,height);
-
+		var inner = jQuery('#OxygenDialogInner');
 		var innerx = jQuery('#OxygenDialogInnerX');
 		var dialogx = jQuery('#OxygenDialogX');
 		dialog.show();
 		var dialog_extra_height = dialogx.outerHeight(true) - innerx.height();
-		var dialog_extra_width = dialogx.outerWidth(true) - innerx.width();
+		var dialog_extra_width = dialogx.outerWidth(true) - inner.width();
 
 		$('OxygenDialogInnerX').appendChild(new Element('iframe',{'src':url,'width':width-dialog_extra_width,'height':height-dialog_extra_height}));
 		this.ResizeDialog();
@@ -270,6 +270,9 @@ var Oxygen = {
 	,IsDialogOpen:function(){
 		var dialog = $('OxygenDialog');
 		return dialog != null && dialog.style.display != 'none';
+	}
+	,Refresh:function(){
+		window.location.href=window.location.href;
 	}
 };
 

@@ -24,6 +24,7 @@ class CheckboxControl extends ValueControl {
 			echo ' disabled="disabled"';
 		if ($this->value) echo ' checked="checked"';
 		echo ' onclick="'.$this->name.'_OnClick();"';
+		echo ' />';
 		if ($this->show_label)
 			echo '<label for="'.$this->name.'_chk">'.new Html($this->label).'</label>';
 	}
