@@ -31,7 +31,7 @@ class GenericID extends ID implements XValue {
 		if (is_null($data)) return null;
 		$a = explode(self::DELIMETER,$data);
 		if (count($a) < 2) return null;
-		return new GenericID($a[0],$a[1]);
+		return new GenericID($a[0], ID::ParseHex($a[1]) );
 	}
 
 
