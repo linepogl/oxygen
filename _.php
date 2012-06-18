@@ -28,7 +28,7 @@ function user_shutdown_function(){
 	try{
 		$a = error_get_last();
 		if (!empty($a)){
-			Debug::RecordExceptionAndDie(new ErrorException($a['message'],0,$a['type'],$a['file'],$a['line']));
+			Debug::RecordExceptionAndDie(new ErrorException($a['message'],0,$a['type'],$a['file'],$a['line']),'Shutdown Exception Handler');
 		}
 	} catch(Exception $exx) {}
 }
