@@ -113,7 +113,6 @@ class Debug {
 		if ($value instanceof XTime) return '{XTime:'.$value->Format('H:i:s').'}';
 		if ($value instanceof XDateTime) return '{XDateTime:'.$value->Format('Y-m-d H:i:s').'}';
 		if ($value instanceof XList) {
-			/** @var $value XList */
 			$value->Evaluate();
 			$r = '{XList:'.count($value).':';
 			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }
@@ -129,6 +128,19 @@ class Debug {
 		}
 		if (is_array($value)) {
 			$r = '{array:'.count($value).':';
+			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }
+			$i = 0;
+			foreach ($value as $k=>$v) {
+				$r .= "\n" . str_repeat(' ',($level+1)*2);
+				if ($i++>=self::MAX_LENGTH) { $r.='...'; break; }
+				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
+				$r .= self::GetVariableAsString($v,$level+1);
+			}
+			$r .= "\n" . str_repeat(' ',$level*2).'}';
+			return $r;
+		}
+		if ($value instanceof IteratorAggregate || $value instanceof Iterator) {
+			$r = '{'.get_class($value).':';
 			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
