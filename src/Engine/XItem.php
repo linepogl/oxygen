@@ -317,6 +317,16 @@ abstract class XItem implements Serializable,XValue {
 
 
 
+	protected function OnBeforeCopy(){}
+	protected function OnAfterCopy(){}
+	/** @return XItem */
+	public function Copy( $with_a_perm_id = false , XMetaField $slave_hook_field = null , $slave_hook_id = null ){
+		$this->OnBeforeCopy();
+		$r = $this->Meta()->CopyItem($this,$with_a_perm_id,$slave_hook_field,$slave_hook_id);
+		$r->OnAfterCopy();
+		return $r;
+	}
+
 
 
 
@@ -577,8 +587,6 @@ abstract class XItem implements Serializable,XValue {
 
 
 
-
-	/** @return XItem */ public function Copy( $with_a_perm_id = false ){ return $this->Meta()->CopyItem($this,$with_a_perm_id); }
 
 
 
