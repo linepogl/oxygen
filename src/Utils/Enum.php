@@ -2,12 +2,12 @@
 
 class Enum implements ArrayAccess,Countable,IteratorAggregate {
 
-	public function offsetExists($offset) { return isset($this->array[$offset]); }
-	public function offsetGet($offset) { return $this->array[$offset]; }
-	public function offsetSet($offset, $value) { if (is_null($offset)) $this->array[] = $value; else $this->array[$offset] = $value; }
-	public function offsetUnset($offset) { unset($this->array[$offset]); }
-	public function count(){ return count($this->array); }
-	public function getIterator(){ return new ArrayIterator($this->array); }
+	public function OffsetExists($offset) { return isset($this->array[$offset]); }
+	public function OffsetGet($offset) { return $this->array[$offset]; }
+	public function OffsetSet($offset, $value) { if (is_null($offset)) $this->array[] = $value; else $this->array[$offset] = $value; }
+	public function OffsetUnset($offset) { unset($this->array[$offset]); }
+	public function Count(){ return count($this->array); }
+	public function GetIterator(){ return new ArrayIterator($this->array); }
 
 	private $array;
 	private $is_map;

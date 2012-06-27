@@ -265,7 +265,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
-	public function count(){
+	public function Count(){
 		if (is_null($this->data)){
 			$sql = $this->MakeQuery($params);
 			$sql = 'SELECT COUNT(*) FROM ('.$sql.') c';
@@ -274,7 +274,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		//$this->Evaluate();
 		return count($this->data);
 	}
-	public function getIterator(){
+	public function GetIterator(){
 		$this->Evaluate();
 		return from(new XListIterator($this));
 	}
@@ -383,6 +383,11 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$a = array_reverse($a);
 		foreach ($a as $key)
 			unset($this[$key]);
+	}
+
+	public function RemoveMany($traversable){
+		foreach ($traversable as $x)
+			$this->Remove($x);
 	}
 
 	public function RemoveWhere($predicate_function){

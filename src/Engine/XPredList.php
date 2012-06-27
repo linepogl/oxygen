@@ -13,8 +13,8 @@ class XPredList extends XPred implements ArrayAccess,Countable,IteratorAggregate
 	}
 
 
-	public function count(){ return count($this->preds); }
-	public function getIterator(){ return from($this->preds); }
+	public function Count(){ return count($this->preds); }
+	public function GetIterator(){ return from($this->preds); }
 	public function offsetExists($offset) { return isset($this->preds[$offset]); }
 	public function offsetGet($offset) { if (!isset($this->preds[$offset])) throw new Exception('Offset '.$offset.' not found.'); return $this->preds[$offset]; }
 	public function offsetSet($offset, $value) { if (is_null($offset)) $this->preds[] = $value; else $this->preds[$offset] = $value; }

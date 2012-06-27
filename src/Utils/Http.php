@@ -12,7 +12,7 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 
 final class HttpPost extends Http {
 	public final function offsetExists($offset) { return isset($_POST[$offset]); }
-	/** @return HttpValue */ public function offsetGet($offset) { return isset($_POST[$offset]) ? new HttpValue($this->url_encode($_POST[$offset])) : new HttpValue(null); }
+	/** @return HttpValue */ public function OffsetGet($offset) { return isset($_POST[$offset]) ? new HttpValue($this->url_encode($_POST[$offset])) : new HttpValue(null); }
 	private function url_encode($post_value){
 		if (is_array($post_value)){
 			$a = array();
@@ -23,7 +23,7 @@ final class HttpPost extends Http {
 		else
 			return rawurlencode($post_value);
 	}
-	public function getIterator(){
+	public function GetIterator(){
 		$r = array();
 		foreach (array_keys($_POST) as $key)
 			$r[$key] = $this[$key];
@@ -32,8 +32,8 @@ final class HttpPost extends Http {
 }
 final class HttpGet extends Http {
 	public final function offsetExists($offset) { return isset($_GET[$offset]); }
-	/** @return HttpValue */ public function offsetGet($offset) { return isset($_GET[$offset]) ? new HttpValue($_GET[$offset]) : new HttpValue(null); }
-	public function getIterator(){
+	/** @return HttpValue */ public function OffsetGet($offset) { return isset($_GET[$offset]) ? new HttpValue($_GET[$offset]) : new HttpValue(null); }
+	public function GetIterator(){
 		$r = array();
 		foreach (array_keys($_GET) as $key)
 			$r[$key] = $this[$key];
@@ -42,13 +42,13 @@ final class HttpGet extends Http {
 }
 final class HttpAny extends Http {
 	public final function offsetExists($offset) { return isset($_GET[$offset]) || isset($_POST[$offset]); }
-	/** @return HttpValue */ public function offsetGet($offset) {
+	/** @return HttpValue */ public function OffsetGet($offset) {
 		$a = Http::$GET[$offset]->AsStringOrNull();
 		$b = Http::$POST[$offset]->AsStringOrNull();
 		$v = null; if (!is_null($a) && !is_null($b)) $v = $a.','.$b;	elseif (!is_null($a)) $v = $a; elseif (!is_null($b)) $v = $b;
 		return new HttpValue($v);
 	}
-	public function getIterator(){
+	public function GetIterator(){
 		$r = array();
 		foreach (array_unique(array_merge(array_keys($_GET),array_keys($_POST))) as $key)
 			$r[$key] = $this[$key];

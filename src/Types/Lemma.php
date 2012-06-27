@@ -9,7 +9,7 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,XValue{
 	public function offsetGet($offset) { return isset($this->data[$offset]) ? $this->data[$offset] : null; }
 	public function offsetSet($offset, $value) { throw new Exception('Lemmas are immutable.'); }
 	public function offsetUnset($offset) { throw new Exception('Lemmas are immutable.'); }
-	public function getIterator(){ return new ArrayIterator($this->data); }
+	public function GetIterator(){ return new ArrayIterator($this->data); }
 
 	//const DELIMETER = '‡';  // I wish...
 	const DELIMETER = '~';

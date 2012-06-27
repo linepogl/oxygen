@@ -267,11 +267,11 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		return parent::Unique( $hash_function );
 	}
 
-	public function count(){
+	public function Count(){
 		$this->Evaluate();
 		return count($this->data);
 	}
-	public function getIterator(){
+	public function GetIterator(){
 		$this->Evaluate();
 		return from(new XAggrIterator($this));
 	}

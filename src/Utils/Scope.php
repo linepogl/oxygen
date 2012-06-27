@@ -68,23 +68,23 @@ abstract class MemoryScope extends Scope {
 	protected abstract function Hash($name);
 	public function Reset(){ $this->SoftReset(); }
 	public function SoftReset(){ $this->data = array(); }
-	public function offsetExists($offset) {
+	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
 		return isset($this->data[$key]);
 	}
-	public function offsetGet($offset) {
+	public function OffsetGet($offset) {
 		$key = $this->Hash($offset);
 		if (isset($this->data[$key]))
 			return $this->data[$key];
 		else
 			return null;
 	}
-	public function offsetSet($offset, $value) {
+	public function OffsetSet($offset, $value) {
 		if ($offset == null) throw new Exception('All variables should be named.');
 		$key = $this->Hash($offset);
 		$this->data[$key] = $value;
 	}
-	public function offsetUnset($offset) {
+	public function OffsetUnset($offset) {
 		$key = $this->Hash($offset);
 		unset($this->data[$key]);
 	}
@@ -111,7 +111,7 @@ abstract class ApcScope extends MemoryScope {
 		}
 		$this->SoftReset();
 	}
-	public function offsetExists($offset) {
+	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
 		if (isset($this->data[$key]))
 			return true;
@@ -120,7 +120,7 @@ abstract class ApcScope extends MemoryScope {
 		else
 			return false;
 	}
-	public function offsetGet($offset) {
+	public function OffsetGet($offset) {
 		$key = $this->Hash($offset);
 		if (isset($this->data[$key]))
 			return $this->data[$key];
@@ -131,7 +131,7 @@ abstract class ApcScope extends MemoryScope {
 		else
 			return null;
 	}
-	public function offsetSet($offset, $value) {
+	public function OffsetSet($offset, $value) {
 		if ($offset == null) throw new Exception('All variables should be named.');
 		$key = $this->Hash($offset);
 		$this->data[$key] = $value;
@@ -142,7 +142,7 @@ abstract class ApcScope extends MemoryScope {
 				apc_store($key,$value);
 		}
 	}
-	public function offsetUnset($offset) {
+	public function OffsetUnset($offset) {
 		$key = $this->Hash($offset);
 		unset($this->data[$key]);
 		if ($this->use_apc_storage) {
@@ -225,7 +225,7 @@ abstract class HddScope extends MemoryScope {
 		fclose($f);
 		return $r;
 	}
-	public function offsetExists($offset) {
+	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
 		if (isset($this->data[$key]))
 			return true;
@@ -234,7 +234,7 @@ abstract class HddScope extends MemoryScope {
 		else
 			return false;
 	}
-	public function offsetGet($offset) {
+	public function OffsetGet($offset) {
 		$key = $this->Hash($offset);
 		if (isset($this->data[$key]))
 			return $this->data[$key];
@@ -247,7 +247,7 @@ abstract class HddScope extends MemoryScope {
 		}
 		return null;
 	}
-	public function offsetSet($offset, $value) {
+	public function OffsetSet($offset, $value) {
 		if ($offset == null) throw new Exception('All variables should be named.');
 		$key = $this->Hash($offset);
 		$this->data[$key] = $value;
@@ -259,7 +259,7 @@ abstract class HddScope extends MemoryScope {
 				$this->hdd_store($filename,$value);
 		}
 	}
-	public function offsetUnset($offset) {
+	public function OffsetUnset($offset) {
 		$key = $this->Hash($offset);
 		unset($this->data[$key]);
 		if ($this->use_hdd_storage){
@@ -317,10 +317,10 @@ class HybridScope extends Scope {
 		}
 	}
 
-	public function offsetExists($offset)      { return $this->scope->offsetExists($offset); }
-	public function offsetGet($offset)         { return $this->scope->offsetGet($offset); }
-	public function offsetSet($offset, $value) { $this->scope->offsetSet($offset, $value); }
-	public function offsetUnset($offset)       { $this->scope->offsetUnset($offset); }
+	public function OffsetExists($offset)      { return $this->scope->offsetExists($offset); }
+	public function OffsetGet($offset)         { return $this->scope->offsetGet($offset); }
+	public function OffsetSet($offset, $value) { $this->scope->offsetSet($offset, $value); }
+	public function OffsetUnset($offset)       { $this->scope->offsetUnset($offset); }
 
 	public function Hash($name)       { return $this->scope->Hash($name); }
 	public function ForceGet($offset) { return $this->scope->ForceGet($offset); }

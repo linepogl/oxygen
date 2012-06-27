@@ -123,7 +123,7 @@ class LinqIterator implements Iterator, Countable {
 
 
 	/** Aggressive O(n) @return int */
-	public function count(){
+	public function Count(){
 		$r = 0;
 		for($this->rewind();$this->valid();$this->next())
 			$r++;

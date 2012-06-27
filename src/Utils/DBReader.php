@@ -29,7 +29,7 @@ class DBReader implements ArrayAccess {
 	// buggy and slow
 	public function &GetRecord(){ return $this->record; }
 
-	public function offsetExists($offset) {
+	public function OffsetExists($offset) {
 		try {
 			return array_key_exists($offset,$this->record);
 		}
@@ -38,7 +38,7 @@ class DBReader implements ArrayAccess {
 		}
 	}
 	/** @return DBValue */
-	public function offsetGet($offset) {
+	public function OffsetGet($offset) {
 		try {
 			$r = $this->record[$offset];
 			if (!($r instanceof DBValue)) { $r = new DBValue($r); $this->record[$offset] = $r; }
@@ -49,8 +49,8 @@ class DBReader implements ArrayAccess {
 			if (!array_key_exists($offset,$this->record)) throw new Exception('Field '.$offset.' not found.');
 		}
 	}
-  public function offsetSet($offset, $value) {	throw new Exception('DBReader is readonly.'); }
-	public function offsetUnset($offset) { throw new Exception('DBReader is readonly.'); }
+  public function OffsetSet($offset, $value) {	throw new Exception('DBReader is readonly.'); }
+	public function OffsetUnset($offset) { throw new Exception('DBReader is readonly.'); }
 
 }
 

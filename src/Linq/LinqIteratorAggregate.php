@@ -3,7 +3,7 @@
 
 abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 
-	public function getIterator(){ throw new NonImplementedException(); }
+	public function GetIterator(){ throw new NonImplementedException(); }
 
 	/** Lazy O(n) @return LinqIterator */
 	public function Where($function_where){

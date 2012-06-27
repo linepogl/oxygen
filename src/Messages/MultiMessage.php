@@ -34,8 +34,8 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 	public function GetBorderColor(){ return $this->dominant->GetBorderColor(); }
 
 
-	public function count(){ return count($this->messages); }
-	public function getIterator(){ return new ArrayIterator($this->messages); }
+	public function Count(){ return count($this->messages); }
+	public function GetIterator(){ return new ArrayIterator($this->messages); }
 	public function offsetExists($offset) { return isset($this->messages[$offset]); }
 	public function offsetGet($offset) { return $this->messages[$offset]; }
 	public function offsetUnset($offset) { unset($this->messages[$offset]); }

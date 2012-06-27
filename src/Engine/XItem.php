@@ -264,8 +264,13 @@ abstract class XItem implements Serializable,XValue {
 				$to_be_deleted->KillAll();
 
 				/** @var $x XItem */
-				foreach ($a as $x)
+				foreach ($a as $i=>$x) {
+					if ($x->IsTemporary()){
+						$x = $x->Copy(true);
+						$a[$i] = $x;
+					}
 					$x->Save();
+				}
 			}
 		}
 
