@@ -1,6 +1,6 @@
 <?php
 
-class Lemma implements ArrayAccess,IteratorAggregate,Serializable,XValue{
+class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable{
 	private $name;
 	private $data = array();
 
@@ -124,6 +124,17 @@ class Lemma implements ArrayAccess,IteratorAggregate,Serializable,XValue{
 	}
 
 
+
+	public function IsEqualTo( $x ) {
+		if (is_string($x)) return $this->TranslateTo(Oxygen::$lang) == $x;
+		if ($x instanceof Lemma) return $this->TranslateTo(Oxygen::$lang) == $x->TranslateTo(Oxygen::$lang);
+		return parent::IsEqualTo( $x );
+	}
+	public function CompareTo( $x ) {
+		if (is_string($x)) return strcmp($this->TranslateTo(Oxygen::$lang),$x);
+		if ($x instanceof Lemma) return strcmp($this->TranslateTo(Oxygen::$lang),$x->TranslateTo(Oxygen::$lang));
+		return parent::CompareTo( $x );
+	}
 
 
 

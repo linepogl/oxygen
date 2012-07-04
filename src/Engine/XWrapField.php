@@ -1,6 +1,6 @@
 <?php
 
-class XWrapField implements XValue {
+class XWrapField extends XValue {
 
 	/** @var XWrap */
 	private $wrap;

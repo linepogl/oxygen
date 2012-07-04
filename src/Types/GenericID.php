@@ -1,6 +1,6 @@
 <?php
 
-class GenericID extends ID implements XValue {
+class GenericID extends ID {
 	private $classname;
 
 	public function MetaType(){ return MetaGenericID::Type(); }
@@ -61,6 +61,26 @@ class GenericID extends ID implements XValue {
 		}
 		return $r;
 	}
+
+
+
+
+	public function IsEqualTo( $x ) {
+		if (is_int($x)||is_float($x)) return $this->value == $x;
+		if ($x instanceof GenericID) return $this->classname == $x->classname && $this->value == $x->value;
+		if ($x instanceof ID) return $this->value == $x->value;
+		if ($x instanceof XItem) return $this->classname = $x->GetClassName() && $this->value == $x->id->value;
+		return parent::IsEqualTo( $x );
+	}
+
+	public function CompareTo($x) {
+		if (is_int($x)||is_float($x)) return $this->value - $x;
+		if ($x instanceof GenericID) { $r = strcmp($this->classname,$x->classname); return $r == 0 ? $this->value - $x->value : $r; }
+		if ($x instanceof ID) return $this->value - $x->value;
+		if ($x instanceof XItem) { $r = strcmp($this->classname,$x->GetClassName()); return $r == 0 ? $this->value - $x->id->AsInt() : $r; }
+		return parent::CompareTo($x);
+	}
+
 
 }
 

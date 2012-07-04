@@ -1,6 +1,6 @@
 <?php
 
-class ID implements Serializable, XValue {
+class ID extends XValue implements Serializable {
 	protected $value;
 	private $hex = null;
 
@@ -65,8 +65,20 @@ class ID implements Serializable, XValue {
 
 
 
-	public function IsEqualTo($x) { return XType::AreEqual($this,$x); }
-	public function CompareTo($x){ return XType::Compare($this,$x); }
+
+	public function IsEqualTo( $x ) {
+		if (is_int($x)||is_float($x)) return $this->value == $x;
+		if ($x instanceof ID) return $this->value == $x->value;
+		if ($x instanceof XItem) return $this->value == $x->id->value;
+		return parent::IsEqualTo( $x );
+	}
+	public function CompareTo( $x ) {
+		if (is_int($x)||is_float($x)) return $this->value - $x;
+		if ($x instanceof ID) return $this->value - $x->value;
+		if ($x instanceof XItem) return $this->value - $x->id->value;
+		return parent::CompareTo( $x );
+	}
+
 }
 
 

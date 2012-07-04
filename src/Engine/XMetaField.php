@@ -1,6 +1,6 @@
 <?php
 
-class XMetaField implements XValue {
+class XMetaField extends XValue {
 	/** @var XMeta */
 	private $meta;
 	/** @return XMeta */
@@ -124,8 +124,16 @@ class XMetaField implements XValue {
 	public function WithXmlImportPhase($value){ $this->xml_import_phase = $value; return $this; }
 	public function GetXmlImportPhase(){ return $this->xml_import_phase; }
 
-	public function IsEqualTo(XMetaField $f){
-		return $this->name == $f->GetName() && $this->meta->IsEqualTo($f->GetMeta());
+
+
+
+	public function IsEqualTo( $x ){
+		if ( $x instanceof XMetaField ) return $this->meta->GetClassName() == $x->meta->GetClassName() && $this->name == $x->GetName();
+		return parent::IsEqualTo( $x );
+	}
+	public function CompareTo( $x ){
+		if ( $x instanceof XMetaField ) { $r = strcmp($this->meta->GetClassName(),$x->meta->GetClassName()); return $r == 0 ? strcmp($this->name,$x->GetName()) : $r; }
+		return parent::CompareTo( $x );
 	}
 
 

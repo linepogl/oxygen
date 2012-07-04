@@ -1,6 +1,6 @@
 <?php
 
-abstract class Action implements XValue {
+abstract class Action extends XValue {
 	//protected $name = null;
 	public function __construct(){
 		$this->mode = $this->GetDefaultMode();
@@ -13,6 +13,16 @@ abstract class Action implements XValue {
 
 
 
+	public function IsEqualTo($x) {
+		if ($x instanceof Action) return $this->GetName() == $x->GetName();
+		if (is_string($x)) return $this->GetName() == $x;
+		return parent::IsEqualTo($x);
+	}
+	public function CompareTo($x) {
+		if ($x instanceof Action) return strcmp($this->GetName(),$x->GetName());
+		if (is_string($x)) return strcmp($this->GetName(),$x);
+		return parent::CompareTo($x);
+	}
 
 
 	public function MetaType(){ return MetaAction::Type(); }
