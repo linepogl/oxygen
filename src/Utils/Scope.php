@@ -37,14 +37,15 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 	}
 	protected static function InitMemcached(){
 		if (self::$is_memcached_initialised) return self::$is_memcached_available;
-		self::$memcached = new Memcached();
-		foreach (self::$memcached_servers as $s){
-			$a = explode(':',$s);
-			$host = $a[0];
-			$port = count($a) > 1 ? $a[1] : '11211';
-			self::$memcached->addServer( $host , $port );
+		if (self::$is_memcached_available){
+			self::$memcached = new Memcached();
+			foreach (self::$memcached_servers as $s){
+				$a = explode(':',$s);
+				$host = $a[0];
+				$port = count($a) > 1 ? $a[1] : '11211';
+				self::$memcached->addServer( $host , $port );
+			}
 		}
-		self::$is_memcached_available = count(self::$memcached_servers) != 0;
 		self::$is_memcached_initialised = true;
 		return self::$is_memcached_available;
 	}
