@@ -607,7 +607,9 @@ abstract class XItem implements Serializable,XValue {
 	/** @return array */
 	public static function SelectFieldX(XMetaField $meta_field,$where=null,$orderby=null,$params=array()){
 		$c = $meta_field->GetMeta();
-		$sql = 'SELECT a.'.new SqlName($meta_field).' AS id FROM '.$c->GetDBTableName().' AS a';
+		$sql = $meta_field->IsDBAliasComplex()
+			? 'SELECT '.new SqlName($meta_field).' AS id FROM '.$c->GetDBTableName().' AS a'
+			: 'SELECT a.'.new SqlName($meta_field).' AS id FROM '.$c->GetDBTableName().' AS a';
 
 		/** @var $cx XMeta */
 		for ($cx = $c->GetParent(); !is_null($cx); $cx = $cx->GetParent())
