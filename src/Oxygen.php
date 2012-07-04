@@ -613,14 +613,16 @@ class Oxygen {
 	public static function SetApplicationScoping( $mode = Scope::APC ){
 		Scope::$APPLICATION->SetMode($mode);
 	}
-	public static function SetDatabaseScoping( $mode = Scope::APC ){
+	public static function SetDatabaseScoping( $mode = Scope::APC){
 		Scope::$DATABASE->SetMode($mode);
 	}
-	public static function SetSessionScoping( $mode = Scope::APC ){
+	public static function SetSessionScoping( $mode = Scope::APC , $enabled = true ){
 		Scope::$SESSION->SetMode($mode);
+		Oxygen::SetSessionScopingEnabled( $enabled );
 	}
-	public static function SetWindowScoping( $mode = Scope::APC ){
+	public static function SetWindowScoping( $mode = Scope::APC , $enabled = true ){
 		Scope::$WINDOW->SetMode($mode);
+		Oxygen::SetWindowScopingEnabled( $enabled );
 	}
 
 
