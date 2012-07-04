@@ -1,6 +1,6 @@
 <?php
 
-class XDateTime implements Serializable, XValue {
+class XDateTime extends XValue implements Serializable {
 	private $timestamp;
 	public static function Make($year,$month,$day,$hours=0,$minutes=0,$seconds=0){
 		return new static(mktime($hours,$minutes,$seconds,$month,$day,$year));
@@ -31,12 +31,20 @@ class XDateTime implements Serializable, XValue {
 	public function AsInt()  { return $this->timestamp; }
 
 
-	public function IsEqualTo(XDateTime $d = null){
-		return is_null($d) ? false :$this->timestamp == $d->GetTimestamp();
+	public function IsEqualTo( $x ){
+		if ($x instanceof XDateTime) return $this->timestamp == $x->timestamp;
+		if ($x instanceof DateTime) return $this->timestamp == $x->getTimestamp();
+		if (is_int($x)||is_float($x)) return $this->timestamp == $x;
+		return parent::IsEqualTo($x);
 	}
-	public function CompareTo(XDateTime $d = null){
-		return is_null($d) ? 1 : $this->timestamp - $d->GetTimestamp();
+
+	public function CompareTo( $x ){
+		if ($x instanceof XDateTime) return $this->timestamp - $x->timestamp;
+		if ($x instanceof DateTime) return $this->timestamp - $x->getTimestamp();
+		if (is_int($x)||is_float($x)) return $this->timestamp - $x;
+		return parent::CompareTo($x);
 	}
+
 
 
 	/** @return XTimeSpan */

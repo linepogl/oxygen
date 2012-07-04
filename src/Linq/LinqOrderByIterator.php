@@ -46,7 +46,7 @@ class LinqOrderByIterator extends LinqIterator {
 					$f = $functions[$i];
 					$x1 = $f($pair1[0],$pair1[1]);
 					$x2 = $f($pair2[0],$pair2[1]);
-					$r = XType::Compare($x1,$x2);
+					$r = XValue::Compare($x1,$x2);
 					if ($r!=0) return $orders[$i] == LinqOrderByIterator::ASC ? $r : -$r;
 				}
 				return 0;

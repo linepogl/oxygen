@@ -1,6 +1,6 @@
 <?php
 
-abstract class XItem implements Serializable,XValue {
+abstract class XItem extends XValue implements Serializable {
 	/** @var ID */
 	public $id;
 	public $has_temp_id = true;
@@ -642,11 +642,25 @@ abstract class XItem implements Serializable,XValue {
 	public function IsLocked(){ return false; }
 	public function IsHidden(){ return false; }
 
-	// TODO: this is used by XItem::Sort but should be removed.
-	public static function Compare($x1,$x2){ return XType::Compare($x1,$x2); }
 
-	public function IsEqualTo($x) { return XType::AreEqual($this,$x); }
-	public function CompareTo($x){ return XType::Compare($this,$x); }
+
+
+
+	public function IsEqualTo( $x ){
+		if (is_int($x)||is_float($x)) return $this->id->AsInt() == $x;
+		if ($x instanceof GenericID) return $this->GetClassName()==$x->GetClassName() && $this->id->AsInt() == $x->AsInt();
+		if ($x instanceof ID) return $this->id->AsInt() == $x->AsInt();
+		if ($x instanceof XItem) return $this->GetClassName()==$x->GetClassName() && $this->id->AsInt() == $x->id->AsInt();
+		return parent::IsEqualTo( $x );
+	}
+	public function CompareTo( $x ){
+		if (is_int($x)||is_float($x)) return $this->id->AsInt() - $x;
+		if ($x instanceof GenericID) { $r = strcmp($this->GetClassName(),$x->GetClassName()); return $r == 0 ? $this->id->AsInt() - $x->AsInt() : $r; }
+		if ($x instanceof ID) return $this->id->AsInt() - $x->AsInt();
+		if ($x instanceof XItem) { $r = strcmp($this->GetClassName(),$x->GetClassName()); return $r == 0 ? $this->id->AsInt() - $x->id->AsInt() : $r; }
+		return parent::CompareTo( $x );
+	}
+
 
 
 

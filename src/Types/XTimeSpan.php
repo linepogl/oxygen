@@ -1,7 +1,7 @@
 <?php
 
 
-class XTimeSpan implements Serializable,XValue {
+class XTimeSpan extends XValue implements Serializable {
 	private $value;
 
 	public static function Make($days,$hours,$minutes,$seconds=0,$milliseconds=0,$sign=1){
@@ -74,6 +74,19 @@ class XTimeSpan implements Serializable,XValue {
 	public function AsInt(){
 		return $this->value;
 	}
+
+
+	public function IsEqualTo( $x ){
+		if ($x instanceof XTimeSpan) return $this->value == $x->value;
+		if (is_int($x)||is_float($x)) return $this->value == $x;
+		return parent::IsEqualTo($x);
+	}
+	public function CompareTo( $x ){
+		if ($x instanceof XTimeSpan) return $this->value - $x->value;
+		if (is_int($x)||is_float($x)) return $this->value - $x;
+		return parent::CompareTo($x);
+	}
+
 
 
 }
