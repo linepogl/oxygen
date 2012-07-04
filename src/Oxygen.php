@@ -293,41 +293,36 @@ class Oxygen {
 	//
 	//
 	private static $temp_folder = 'tmp';
+	private static $shared_temp_folder = 'tmp';
 	public static function GetTempFolder($ensure = false){ if ($ensure) Oxygen::EnsureTempFolder(); return self::$temp_folder; }
-	public static function SetTempFolder($value) { self::$temp_folder = $value; }
+	public static function GetSharedTempFolder($ensure = false){ if ($ensure) Oxygen::EnsureSharedTempFolder(); return self::$shared_temp_folder; }
+	public static function SetTempFolder($local_temp_folder,$shared_temp_folder = null) { self::$temp_folder = $local_temp_folder; self::$shared_temp_folder = is_null($shared_temp_folder) ? $local_temp_folder : $shared_temp_folder; }
 	public static function HasTempFolder(){ return is_dir(self::$temp_folder); }
+	public static function HasSharedTempFolder(){ return is_dir(self::$shared_temp_folder); }
 	public static function EnsureTempFolder(){ if (!file_exists(self::$temp_folder)) mkdir(self::$temp_folder,0777,true); }
+	public static function EnsureSharedTempFolder(){ if (!file_exists(self::$shared_temp_folder)) mkdir(self::$shared_temp_folder,0777,true); }
 	public static function MakeTempFolder(){ mkdir(self::$temp_folder,0777,true); }
+	public static function MakeSharedTempFolder(){ mkdir(self::$shared_temp_folder,0777,true); }
 	public static function ClearTempFolder(){
-		$tmp = Oxygen::GetTempFolder();
-		foreach (scandir($tmp) as $f){
-			if (is_dir($f)) continue;
-			try{
-				unlink($tmp.'/'.$f);
-			}
-			catch(Exception $ex){}
-		}
+		$local_tmp = Oxygen::GetTempFolder();
+		foreach (scandir($local_tmp) as $f){ if (is_dir($f)) continue; try{ unlink($local_tmp.'/'.$f); } catch(Exception $ex){} }
+		$shared_tmp = Oxygen::GetSharedTempFolder();
+		if ($shared_tmp != $local_tmp) { foreach (scandir($shared_tmp) as $f){ if (is_dir($f)) continue; try{ unlink($shared_tmp.'/'.$f); } catch(Exception $ex){} } }
 	}
 	public static function ClearTempFolderFromOldFiles($force = false){
 		$last_time = Scope::$APPLICATION['Oxygen::ClearTempFolderFromOldFiles'];
 		$now = time();
 		if ($force || is_null($last_time) || $now - $last_time > 3600) {
 			$one_day_time = 86400;
-
-			$tmp = Oxygen::GetTempFolder();
-			foreach (scandir($tmp) as $f){
-				if (is_dir($f)) continue;
-				try{
-					$then = filemtime($tmp.'/'.$f);
-					if ($now - $then > $one_day_time){
-						unlink($tmp.'/'.$f);
-					}
-				}
-				catch(Exception $ex){}
-			}
+			$local_tmp = Oxygen::GetTempFolder();
+			foreach (scandir($local_tmp) as $f){ if (is_dir($f)) continue; try{ $then = filemtime($local_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($local_tmp.'/'.$f); } catch(Exception $ex){} }
+			$shared_tmp = Oxygen::GetSharedTempFolder();
+			if ($shared_tmp != $local_tmp) { foreach (scandir($shared_tmp) as $f){ if (is_dir($f)) continue; try{ $then = filemtime($shared_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($shared_tmp.'/'.$f); } catch(Exception $ex){} } }
 			Scope::$APPLICATION['Oxygen::ClearTempFolderFromOldFiles'] = $now;
 		}
 	}
+
+
 
 
 
@@ -602,32 +597,30 @@ class Oxygen {
 		Database::ConnectLazilyManaged($server,$schema,$username,$password,$type);
 	}
 
+	public static function SetMemcachedServer( $server ){
+		Scope::SetMemcachedServer( $server );
+	}
+	public static function SetMemcachedServers( $servers ){
+		Scope::SetMemcachedServers( $servers );
+	}
 
-	public static function SetScoping( $mode = Scope::APC , $folder = null ){
+	public static function SetScoping( $mode = Scope::APC ){
 		Scope::$APPLICATION->SetMode($mode);
-		Scope::$APPLICATION->HARD->SetFolder($folder);
 		Scope::$DATABASE->SetMode($mode);
-		Scope::$DATABASE->HARD->SetFolder($folder);
 		Scope::$SESSION->SetMode($mode);
-		Scope::$SESSION->HARD->SetFolder($folder);
 		Scope::$WINDOW->SetMode($mode);
-		Scope::$WINDOW->HARD->SetFolder($folder);
 	}
-	public static function SetApplicationScoping( $mode = Scope::APC , $folder = null ){
+	public static function SetApplicationScoping( $mode = Scope::APC ){
 		Scope::$APPLICATION->SetMode($mode);
-		Scope::$APPLICATION->HARD->SetFolder($folder);
 	}
-	public static function SetDatabaseScoping( $mode = Scope::APC , $folder = null ){
+	public static function SetDatabaseScoping( $mode = Scope::APC ){
 		Scope::$DATABASE->SetMode($mode);
-		Scope::$DATABASE->HARD->SetFolder($folder);
 	}
-	public static function SetSessionScoping( $mode = Scope::APC , $folder = null ){
+	public static function SetSessionScoping( $mode = Scope::APC ){
 		Scope::$SESSION->SetMode($mode);
-		Scope::$SESSION->HARD->SetFolder($folder);
 	}
-	public static function SetWindowScoping( $mode = Scope::APC , $folder = null ){
+	public static function SetWindowScoping( $mode = Scope::APC ){
 		Scope::$WINDOW->SetMode($mode);
-		Scope::$WINDOW->HARD->SetFolder($folder);
 	}
 
 
@@ -754,7 +747,7 @@ class Oxygen {
 	//
 	//
 	public static function Hash($that){ return strtoupper(md5(str_rot13(md5(sha1($that))))); }
-	public static function Hash32($value){ return substr(md5(strval($value)),0,8); }
+	public static function Hash32($value){ return strtoupper(substr(md5(strval($value)),0,8)); }
 	public static function HashRandom(){ return ID::Random()->AsHex() . ID::Random()->AsHex() . ID::Random()->AsHex() . ID::Random()->AsHex(); }
 	public static function HashRandom32(){ return ID::Random()->AsHex(); }
 
@@ -824,7 +817,11 @@ class Oxygen {
 		$r['Environment'] = (DEV?'DEVELOPMENT':'PRODUCTION').(DEBUG?' DEBUG':'').(PROFILE?' PROFILE':'');
 		$f = Oxygen::GetTempFolder();
 		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
-		$r['Temp folder'] = $s;
+		$r['Temp folder (local)'] = $s;
+
+		$f = Oxygen::GetSharedTempFolder();
+		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
+		$r['Temp folder (shared)'] = $s;
 
 		$f = Oxygen::GetLogFolder();
 		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
@@ -839,24 +836,11 @@ class Oxygen {
 		$r['ORM caching'] = Oxygen::IsItemCacheEnabled() ? 'Enabled' : 'Disabled';
 		$r['APC available'] = Scope::IsAPCAvailable() ? 'Yes' : 'No';
 
-		$f = Scope::$APPLICATION->HARD->GetFolder();
-		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
-		$r['Application scoping'] = Scope::$APPLICATION->GetModeTranslated() . ' - '. $s;
+		$r['Application scoping'] = Scope::$APPLICATION->GetModeTranslated();
+		$r['Database scoping'] = Scope::$DATABASE->GetModeTranslated();
+		$r['Session scoping'] = Scope::$SESSION->GetModeTranslated() . ' - ' . Oxygen::GetSessionHash() . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scoping is disabled ***');
+		$r['Window scoping'] = Scope::$WINDOW->GetModeTranslated() . ' - ' . Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scoping is disabled ***');
 
-		$f = Scope::$DATABASE->HARD->GetFolder();
-		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
-		$r['Database scoping'] = Scope::$DATABASE->GetModeTranslated() . ' - '. $s;
-
-		$f = Scope::$SESSION->HARD->GetFolder();
-		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
-		$r['Session scoping'] = Scope::$SESSION->GetModeTranslated() . ' - '. $s . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scoping is disabled ***');
-
-		$f = Scope::$WINDOW->HARD->GetFolder();
-		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
-		$r['Window scoping'] = Scope::$WINDOW->GetModeTranslated() . ' - '. $s . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scoping is disabled ***');
-
-		$r['Session hash'] = Oxygen::GetSessionHash() . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scope is disabled ***');
-		$r['Window hash'] = Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scope is disabled ***');
 		$rr[] = $r;
 
 		$r = array();
