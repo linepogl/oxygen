@@ -31,7 +31,7 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 		if (self::$is_memcached_initialised) return;
 		self::$memcached = new Memcached();
 		self::$memcached->setOption(Memcached::OPT_COMPRESSION,true);
-		if (Memcached::HAVE_IGBINARY) self::$memcached->setOption(Memcached::OPT_SERIALIZER,Memcached::SERIALIZER_IGBINARY);
+		self::$memcached->setOption(Memcached::OPT_NO_BLOCK,true);
 		foreach (self::$memcached_servers as $s){
 			$a = explode(':',$s);
 			$host = $a[0];
@@ -219,8 +219,15 @@ abstract class MemcachedScope extends MemoryScope {
 		if (isset($this->data[$key]))
 			return true;
 		elseif ($this->use_memcached_storage) {
-			self::$memcached->get( $key );
-			return self::$memcached->getResultCode() !== Memcached::RES_NOTFOUND;
+			$r = self::$memcached->get( $key );
+			if (self::$memcached->getResultCode() === Memcached::RES_NOTFOUND) {
+				$this->data[$key] = null;
+				return false;
+			}
+			else {
+				$this->data[$key] = $r;
+				return true;
+			}
 		}
 		else
 			return false;
@@ -231,7 +238,14 @@ abstract class MemcachedScope extends MemoryScope {
 			return $this->data[$key];
 		elseif ($this->use_memcached_storage) {
 			$r = self::$memcached->get( $key );
-			return self::$memcached->getResultCode() === Memcached::RES_NOTFOUND ? null : $r;
+			if (self::$memcached->getResultCode() === Memcached::RES_NOTFOUND) {
+				$this->data[$key] = null;
+				return null;
+			}
+			else {
+				$this->data[$key] = $r;
+				return $r;
+			}
 		}
 		else
 			return null;
