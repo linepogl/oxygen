@@ -36,10 +36,10 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 
 	public function Count(){ return count($this->messages); }
 	public function GetIterator(){ return new ArrayIterator($this->messages); }
-	public function offsetExists($offset) { return isset($this->messages[$offset]); }
-	public function offsetGet($offset) { return $this->messages[$offset]; }
-	public function offsetUnset($offset) { unset($this->messages[$offset]); }
-	public function offsetSet($offset, $value) {
+	public function OffsetExists($offset) { return isset($this->messages[$offset]); }
+	public function OffsetGet($offset) { return $this->messages[$offset]; }
+	public function OffsetUnset($offset) { unset($this->messages[$offset]); }
+	public function OffsetSet($offset, $value) {
 		if (is_null($offset))
 			$this->Add(Message::Cast($value));
 		else

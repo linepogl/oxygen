@@ -15,18 +15,9 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 	/** @var MemoryScope */ public static $REQUEST;
 
 	protected static $base = '';
-	protected static $is_apc_available = false;
-	protected static $is_memcached_available = false;
 	protected static $is_memcached_initialised = false;
 	/** @var Memcached */
 	protected static $memcached = null;
-
-	public static function IsAPCAvailable(){
-		return function_exists('apc_exists'); // because apc_exists was added later on, in 3.1.4
-	}
-	public static function IsMemcachedAvailable(){
-		return class_exists('Memcached');
-	}
 
 	private static $memcached_servers = array('localhost:11211');
 	public static function SetMemcachedServer( $server ){
@@ -36,22 +27,20 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 		self::$memcached_servers = $servers;
 	}
 	protected static function InitMemcached(){
-		if (self::$is_memcached_initialised) return self::$is_memcached_available;
-		if (self::$is_memcached_available){
-			self::$memcached = new Memcached();
-			foreach (self::$memcached_servers as $s){
-				$a = explode(':',$s);
-				$host = $a[0];
-				$port = count($a) > 1 ? $a[1] : '11211';
-				self::$memcached->addServer( $host , $port );
-			}
+		if (!IS_MEMCACHED_AVAILABLE) return;
+		if (self::$is_memcached_initialised) return;
+		self::$memcached = new Memcached();
+		self::$memcached->setOption(Memcached::OPT_COMPRESSION,true);
+		if (Memcached::HAVE_IGBINARY) self::$memcached->setOption(Memcached::OPT_SERIALIZER,Memcached::SERIALIZER_IGBINARY);
+		foreach (self::$memcached_servers as $s){
+			$a = explode(':',$s);
+			$host = $a[0];
+			$port = count($a) > 1 ? $a[1] : '11211';
+			self::$memcached->addServer( $host , $port );
 		}
 		self::$is_memcached_initialised = true;
-		return self::$is_memcached_available;
 	}
 	public static function InitScopes(){
-		self::$is_apc_available = self::IsAPCAvailable();
-		self::$is_memcached_available = self::IsMemcachedAvailable();
 		self::$base = '';
 		if (isset($_SERVER["SERVER_NAME"])) self::$base .= $_SERVER["SERVER_NAME"];
 		//if (isset($_SERVER["SERVER_PORT"])) self::$base .= ':'.$_SERVER["SERVER_PORT"];
@@ -63,11 +52,16 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 		Scope::$REQUEST     = new RequestScope();
 	}
 	public static function ResetScopes(){
-		if (self::$is_apc_available){
+		if (IS_APC_AVAILABLE){
 			Debug::Write('Cleaning APC user cache...');
 			apc_clear_cache('user');
 			Debug::Write('Cleaning APC system cache...');
 			apc_clear_cache();
+		}
+		if (IS_MEMCACHED_AVAILABLE){
+			Scope::InitMemcached();
+			Debug::Write('Cleaning Memcached...');
+			self::$memcached->flush();
 		}
 		Debug::Write('Cleaning APPLICATION scope...');
 		Scope::$APPLICATION->Reset();
@@ -136,10 +130,11 @@ abstract class MemoryScope extends Scope {
 
 abstract class ApcScope extends MemoryScope {
 	private $use_apc_storage;
-	public function __construct(){
-		$this->use_apc_storage = self::$is_apc_available;
+	public function __construct( $prefix ){
+		parent::__construct($prefix);
+		$this->use_apc_storage = IS_APC_AVAILABLE;
 	}
-	public function SetUseApcStorage($value){ $this->use_apc_storage = $value && self::$is_apc_available; }
+	public function SetUseApcStorage($value){ $this->use_apc_storage = $value && IS_APC_AVAILABLE; }
 	public function Reset(){
 		if ($this->use_apc_storage) {
 			apc_clear_cache('user');
@@ -208,10 +203,11 @@ abstract class ApcScope extends MemoryScope {
 
 abstract class MemcachedScope extends MemoryScope {
 	private $use_memcached_storage;
-	public function __construct(){
-		$this->use_memcached_storage = self::$is_memcached_available;
+	public function __construct( $prefix ){
+		parent::__construct($prefix);
+		$this->use_memcached_storage = IS_MEMCACHED_AVAILABLE;
 	}
-	public function SetUseMemcachedStorage($value){ $this->use_memcached_storage = $value && self::$is_memcached_available; }
+	public function SetUseMemcachedStorage($value){ $this->use_memcached_storage = $value && IS_MEMCACHED_AVAILABLE; }
 	public function Reset(){
 		if ($this->use_memcached_storage) {
 			self::$memcached->flush();
@@ -248,7 +244,7 @@ abstract class MemcachedScope extends MemoryScope {
 			if (is_null($value))
 				self::$memcached->delete( $key );
 			else
-				self::$memcached->set( $key , $value );
+				self::$memcached->set( $key , $value , 86400 ); // one day
 		}
 	}
 	public function OffsetUnset($offset) {
@@ -431,12 +427,13 @@ class HybridScope extends Scope {
 		$this->memcached_scope->SetUseMemcachedStorage($value);
 	}
 	public function SetMode( $value = Scope::APC ) {
-		if ($value == Scope::APC && self::$is_apc_available) {
+		if ($value == Scope::APC && IS_APC_AVAILABLE) {
 			$this->mode = $value;
 			$this->WEAK = $this->apc_scope;
 			$this->HARD->SetIsShared( false );
 		}
-		elseif (($value == Scope::MEMCACHED || $value == Scope::MEMCACHED_SHARED) && Scope::InitMemcached()) {
+		elseif (($value == Scope::MEMCACHED || $value == Scope::MEMCACHED_SHARED) && IS_MEMCACHED_AVAILABLE) {
+			Scope::InitMemcached();
 			$this->mode = $value;
 			$this->WEAK = $this->memcached_scope;
 			$this->HARD->SetIsShared( $value == Scope::MEMCACHED_SHARED );
@@ -478,55 +475,67 @@ class HybridScope extends Scope {
 
 
 class ApplicationApcScope extends ApcScope  {
-	public function __construct(){ parent::__construct('app'); }
-	protected function Hash($name){ return 'app['.self::$base.']'.$name; }
+	private $q;
+	public function __construct(){ parent::__construct('app'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . ']'; }
+	protected function Hash($name){ return $this->q.$name; }
 }
 class ApplicationMemcachedScope extends MemcachedScope  {
-	public function __construct(){ parent::__construct('app'); }
-	protected function Hash($name){ return 'app['.self::$base.']'.$name; }
+	private $q;
+	public function __construct(){ parent::__construct('app'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . ']'; }
+	protected function Hash($name){ return $this->q.$name; }
 }
 class ApplicationHddScope extends HddScope  {
-	public function __construct(){ parent::__construct('app'); }
-	protected function Hash($name){ return 'app_'.Oxygen::Hash32(self::$base.$name); }
+	private $q;
+	public function __construct(){ parent::__construct('app'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '_'; }
+	protected function Hash($name){ return $this->q.Oxygen::Hash32(self::$base.$name); }
 }
 
 class DatabaseApcScope extends ApcScope  {
-	public function __construct(){ parent::__construct('dat'); }
-	protected function Hash($name){ return 'dat['.Database::GetServer().'/'.Database::GetSchema().']'.$name; }
+	private $q;
+	public function __construct(){ parent::__construct('dat'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '['; }
+	protected function Hash($name){ return $this->q.Database::GetServer().'/'.Database::GetSchema().']'.$name; }
 }
 class DatabaseMemcachedScope extends MemcachedScope  {
-	public function __construct(){ parent::__construct('dat'); }
-	protected function Hash($name){ return 'dat['.Database::GetServer().'/'.Database::GetSchema().']'.$name; }
+	private $q;
+	public function __construct(){ parent::__construct('dat'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '['; }
+	protected function Hash($name){ return $this->q.Database::GetServer().'/'.Database::GetSchema().']'.$name; }
 }
 class DatabaseHddScope extends HddScope  {
-	public function __construct(){ parent::__construct('dat'); }
-	protected function Hash($name){ return 'dat_'.Oxygen::Hash32($name.Database::GetServer().Database::GetSchema()); }
+	private $q;
+	public function __construct(){ parent::__construct('dat'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '_'; }
+	protected function Hash($name){ return $this->q.Oxygen::Hash32($name.Database::GetServer().Database::GetSchema()); }
 }
 
 class SessionApcScope extends ApcScope {
-	public function __construct(){ parent::__construct('ses'); }
-	protected function Hash($name){ return 'ses['.self::$base.Oxygen::GetSessionHash().'/'.$this->prefix.'_'.$name; }
+	private $q;
+	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . Oxygen::GetSessionHash(); }
+	protected function Hash($name){ return $this->q.']'.$name; }
 }
 class SessionMemcachedScope extends MemcachedScope {
-	public function __construct(){ parent::__construct('ses'); }
-	protected function Hash($name){ return 'ses['.self::$base.Oxygen::GetSessionHash().'/'.$this->prefix.'_'.$name; }
+	private $q;
+	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . Oxygen::GetSessionHash(); }
+	protected function Hash($name){ return $this->q.']'.$name; }
 }
 class SessionHddScope extends HddScope {
-	public function __construct(){ parent::__construct('ses'); }
-	protected function Hash($name){ return 'ses_'.Oxygen::Hash32(self::$base.$name.Oxygen::GetSessionHash()); }
+	private $q;
+	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '_'; }
+	protected function Hash($name){ return $this->q.Oxygen::Hash32(self::$base.$name.Oxygen::GetSessionHash()); }
 }
 
 class WindowApcScope extends ApcScope {
-	public function __construct(){ parent::__construct('win'); }
-	protected function Hash($name){ return 'win['.self::$base.Oxygen::GetWindowHash().']'.$name; }
+	private $q;
+	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . Oxygen::GetWindowHash(); }
+	protected function Hash($name){ return $this->q.']'.$name; }
 }
 class WindowMemcachedScope extends MemcachedScope {
-	public function __construct(){ parent::__construct('win'); }
-	protected function Hash($name){ return 'win['.self::$base.Oxygen::GetWindowHash().']'.$name; }
+	private $q;
+	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . Oxygen::GetWindowHash(); }
+	protected function Hash($name){ return $this->q.']'.$name; }
 }
 class WindowHddScope extends HddScope {
-	public function __construct(){ parent::__construct('win'); }
-	protected function Hash($name){ return 'win_'.Oxygen::Hash32(self::$base.$name.Oxygen::GetWindowHash() ); }
+	private $q;
+	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '_'; }
+	protected function Hash($name){ return $this->q.Oxygen::Hash32(self::$base.$name.Oxygen::GetWindowHash() ); }
 }
 
 class RequestScope extends MemoryScope {

@@ -66,23 +66,39 @@ abstract class XItem extends XValue implements Serializable {
 	public final function GetIcon48() { return $this->GetIcon(48); }
 
 	public function MetaType(){ return MetaItem::Type(); }
-	public function serialize(){
-		$a = array();
+	public function Serialize(){
 		$meta = $this->Meta();
-		$a['id'] = serialize($this->id);
-		$a['has_temp_id'] = serialize($this->has_temp_id);
-		/** @var $f XMetaField */
-		foreach ($meta->GetFields() as $f){
-			$n = $f->GetName();
-			$a[$n] = serialize($this->$n);
+		if (IS_IGBINARY_AVAILABLE){
+			$a = array('id'=>igbinary_serialize( $this->id ),'has_temp_id'=>igbinary_serialize( $this->has_temp_id ) );
+			/** @var $f XMetaField */
+			foreach ($meta->GetFields() as $f){
+				$n = $f->GetName();
+				$a[$n] = igbinary_serialize( $this->$n );
+			}
+			return igbinary_serialize($a);
 		}
-		return serialize($a);
+		else {
+			$a = array('id'=>serialize( $this->id ),'has_temp_id'=>serialize( $this->has_temp_id ) );
+			/** @var $f XMetaField */
+			foreach ($meta->GetFields() as $f){
+				$n = $f->GetName();
+				$a[$n] = serialize( $this->$n );
+			}
+			return serialize($a);
+		}
 	}
-	public function unserialize($data){
+	public function Unserialize($data){
 		try {
-			$a = unserialize($data);
-			foreach ($a as $key=>$value)
-				$this->$key = unserialize($value);
+			if (IS_IGBINARY_AVAILABLE){
+				$a = igbinary_unserialize($data);
+				foreach ($a as $key=>$value)
+					$this->$key = igbinary_unserialize($value);
+			}
+			else {
+				$a = unserialize($data);
+				foreach ($a as $key=>$value)
+					$this->$key = unserialize($value);
+			}
 			$c = $this->Meta();
 			for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 				$slaves = $cx->GetDBSlaves();
@@ -647,10 +663,10 @@ abstract class XItem extends XValue implements Serializable {
 
 
 	public function IsEqualTo( $x ){
-		if (is_int($x)||is_float($x)) return $this->id->AsInt() == $x;
+		if ($x instanceof XItem) return $this->GetClassName()==$x->GetClassName() && $this->id->AsInt() == $x->id->AsInt();
 		if ($x instanceof GenericID) return $this->GetClassName()==$x->GetClassName() && $this->id->AsInt() == $x->AsInt();
 		if ($x instanceof ID) return $this->id->AsInt() == $x->AsInt();
-		if ($x instanceof XItem) return $this->GetClassName()==$x->GetClassName() && $this->id->AsInt() == $x->id->AsInt();
+		if (is_int($x)||is_float($x)) return $this->id->AsInt() == $x;
 		return parent::IsEqualTo( $x );
 	}
 	public function CompareTo( $x ){

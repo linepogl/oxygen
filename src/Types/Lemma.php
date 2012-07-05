@@ -5,10 +5,10 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	private $data = array();
 
 	public function MetaType(){ return MetaLemma::Type(); }
-	public function offsetExists($offset) { return isset($this->data[$offset]); }
-	public function offsetGet($offset) { return isset($this->data[$offset]) ? $this->data[$offset] : null; }
-	public function offsetSet($offset, $value) { throw new Exception('Lemmas are immutable.'); }
-	public function offsetUnset($offset) { throw new Exception('Lemmas are immutable.'); }
+	public function OffsetExists($offset) { return isset($this->data[$offset]); }
+	public function OffsetGet($offset) { return isset($this->data[$offset]) ? $this->data[$offset] : null; }
+	public function OffsetSet($offset, $value) { throw new Exception('Lemmas are immutable.'); }
+	public function OffsetUnset($offset) { throw new Exception('Lemmas are immutable.'); }
 	public function GetIterator(){ return new ArrayIterator($this->data); }
 
 	//const DELIMETER = '‡';  // I wish...
@@ -18,17 +18,8 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	private static function unescape($string) { return str_replace('\\'.self::DELIMETER,self::DELIMETER,$string); }
 
 
-	public function serialize(){
-		$a = array();
-		$a['name'] = $this->name;
-		$a['data'] = $this->data;
-		return serialize($a);
-	}
-	public function unserialize($data){
-		$a = unserialize($data);
-		$this->name = $a['name'];
-		$this->data = $a['data'];
-	}
+	public function Serialize(){ if (IS_IGBINARY_AVAILABLE) return igbinary_serialize( array($this->name,$this->data) ); else return serialize( array($this->name,$this->data) ); }
+	public function Unserialize($data){ if (IS_IGBINARY_AVAILABLE) list($this->name,$this->data) = igbinary_unserialize($data); else list($this->name,$this->data) = unserialize( $data ); }
 
 
 	public function HasName(){ return $this->name !== self::DEFAULT_NAME; }
@@ -173,7 +164,7 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	private static function Unpack($name){
 		$l = new Lemma($name);
 		if (isset(self::$packed_dictionary[$name])) {
-			$l->data = unserialize(self::$packed_dictionary[$name]);
+			$l->data = Oxygen::Unserialize(self::$packed_dictionary[$name]);
 		}
 		return $l;
 	}
@@ -219,7 +210,7 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 					foreach ($e->getElementsByTagName('*') as $ee){
 						$l->data[$ee->nodeName] = Oxygen::ReadUnicode( $ee->nodeValue );
 					}
-					self::$packed_dictionary[$name] = serialize($l->data);
+					self::$packed_dictionary[$name] = Oxygen::Serialize($l->data);
 				}
 			}
 			self::SaveDictionaryInCache($files);

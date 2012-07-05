@@ -53,10 +53,10 @@ class LinqOrderByIterator extends LinqIterator {
 			});
 		}
 	}
-	public function rewind(){ $this->init(); $this->index = 0; }
-	public function next(){ $this->index++; }
-	public function valid(){ return $this->index < count($this->pairs); }
-	public function current(){ return $this->pairs[$this->index][0]; }
-	public function key(){ return $this->pairs[$this->index][1]; }
+	public function Rewind(){ $this->init(); $this->index = 0; }
+	public function Next(){ $this->index++; }
+	public function Valid(){ return $this->index < count($this->pairs); }
+	public function Current(){ return $this->pairs[$this->index][0]; }
+	public function Key(){ return $this->pairs[$this->index][1]; }
 }
 
