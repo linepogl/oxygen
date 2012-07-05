@@ -5,7 +5,7 @@ class LinqUnionIterator extends LinqIterator {
 	private $iterating_other;
 	public function __construct(Iterator $iterator, Traversable $other_iterator){ parent::__construct($iterator); $this->other_iterator = new IteratorIterator($other_iterator); }
 
-	public function rewind(){
+	public function Rewind(){
 		$this->iterating_other = false;
 		$this->iterator->rewind();
 		if (!$this->iterator->valid()){
@@ -13,7 +13,7 @@ class LinqUnionIterator extends LinqIterator {
 			$this->other_iterator->rewind();
 		}
 	}
-	public function next(){
+	public function Next(){
 		if ($this->iterating_other){
 			$this->other_iterator->next();
 		}
@@ -25,9 +25,9 @@ class LinqUnionIterator extends LinqIterator {
 			}
 		}
 	}
-	public function valid(){ return !$this->iterating_other || $this->other_iterator->valid(); }
-	public function current(){ return $this->iterating_other ? $this->other_iterator->current() : $this->iterator->current(); }
-	public function key(){ return $this->iterating_other ? $this->other_iterator->key() : $this->iterator->key(); }
+	public function Valid(){ return !$this->iterating_other || $this->other_iterator->valid(); }
+	public function Current(){ return $this->iterating_other ? $this->other_iterator->current() : $this->iterator->current(); }
+	public function Key(){ return $this->iterating_other ? $this->other_iterator->key() : $this->iterator->key(); }
 
 
 }

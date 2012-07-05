@@ -15,7 +15,7 @@ class LinqUniqueIterator extends LinqIterator {
 	}
 
 
-	public function rewind(){
+	public function Rewind(){
 		$this->iterator->rewind();
 		if ($this->iterator->valid()){
 			$f = $this->hash_function;
@@ -23,7 +23,7 @@ class LinqUniqueIterator extends LinqIterator {
 			$this->served[] = $hash;
 		}
 	}
-	public function next(){
+	public function Next(){
 		for($this->iterator->next();$this->iterator->valid();$this->iterator->next()){
 			$f = $this->hash_function;
 			$hash = $f($this->iterator->current(),$this->iterator->key());

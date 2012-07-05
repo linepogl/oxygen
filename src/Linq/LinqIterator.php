@@ -7,11 +7,11 @@ class LinqIterator implements Iterator, Countable {
 		$this->iterator = $iterator;
 	}
 
-	public function current(){ return $this->iterator->current(); }
-	public function key(){ return $this->iterator->key(); }
-	public function next(){ $this->iterator->next(); }
-	public function rewind(){ $this->iterator->rewind(); }
-	public function valid(){ return $this->iterator->valid(); }
+	public function Current(){ return $this->iterator->current(); }
+	public function Key(){ return $this->iterator->key(); }
+	public function Next(){ $this->iterator->next(); }
+	public function Rewind(){ $this->iterator->rewind(); }
+	public function Valid(){ return $this->iterator->valid(); }
 
 
 	/** Lazy O(n) @return LinqIterator */

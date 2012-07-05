@@ -11,8 +11,8 @@ class XDateTime extends XValue implements Serializable {
 	}
 
 	public function MetaType(){ return MetaDateTime::Type(); }
-	public function serialize(){ return serialize($this->timestamp); }
-	public function unserialize($data){ $this->timestamp = unserialize($data); }
+	public function Serialize(){ if (IS_IGBINARY_AVAILABLE) return igbinary_serialize( $this->timestamp ); else return serialize( $this->timestamp ); }
+	public function Unserialize($data){ if (IS_IGBINARY_AVAILABLE) $this->timestamp = igbinary_unserialize($data); else $this->timestamp = unserialize( $data ); }
 
 	public static function Now(){ return new XDateTime(); }
 

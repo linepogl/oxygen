@@ -6,6 +6,7 @@ class Oxygen {
 		register_shutdown_function('Oxygen::OnShutdown');
 		spl_autoload_register('Oxygen::OnAutoLoad');
 
+
 		// init session scoping
 		if (self::$session_scoping_enabled) {
 			if (array_key_exists(Oxygen::GetSessionCookieName(),$_POST)){
@@ -272,6 +273,17 @@ class Oxygen {
 		}
 		return self::$content_type;
 	}
+
+
+
+
+	//
+	//
+	// Serialization
+	//
+	//
+	public static function Serialize( $x ){ if (IS_IGBINARY_AVAILABLE) return igbinary_serialize( $x ); else return serialize( $x ); }
+	public static function Unserialize( $x ){ if (IS_IGBINARY_AVAILABLE) return igbinary_unserialize($x); else return unserialize( $x ); }
 
 
 
@@ -836,12 +848,14 @@ class Oxygen {
 
 		$r = array();
 		$r['ORM caching'] = Oxygen::IsItemCacheEnabled() ? 'Enabled' : 'Disabled';
-		$r['APC available'] = Scope::IsAPCAvailable() ? 'Yes' : 'No';
+		$r['APC available'] = IS_APC_AVAILABLE ? 'Yes' : 'No';
+		$r['MEMCACHED available'] = IS_MEMCACHED_AVAILABLE ? 'Yes' : 'No';
+		$r['IGBINARY available'] = IS_IGBINARY_AVAILABLE ? 'Yes' : 'No';
 
-		$r['Application scoping'] = Scope::$APPLICATION->GetModeTranslated();
-		$r['Database scoping'] = Scope::$DATABASE->GetModeTranslated();
-		$r['Session scoping'] = Scope::$SESSION->GetModeTranslated() . ' - ' . Oxygen::GetSessionHash() . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scoping is disabled ***');
-		$r['Window scoping'] = Scope::$WINDOW->GetModeTranslated() . ' - ' . Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scoping is disabled ***');
+		$r['Application scoping'] = Scope::$APPLICATION->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'');
+		$r['Database scoping'] = Scope::$DATABASE->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'');
+		$r['Session scoping'] = Scope::$SESSION->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'') . ' - ' . Oxygen::GetSessionHash() . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scoping is disabled ***');
+		$r['Window scoping'] = Scope::$WINDOW->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'') . ' - ' . Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scoping is disabled ***');
 
 		$rr[] = $r;
 

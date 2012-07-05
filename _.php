@@ -9,6 +9,11 @@ define('DEBUG',array_key_exists('debug',$_GET));
 define('PROFILE',array_key_exists('profile',$_GET));
 define('DEV',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
 
+define('IS_IGBINARY_AVAILABLE',function_exists('igbinary_serialize'));
+define('IS_APC_AVAILABLE',function_exists('apc_exists'));
+define('IS_MEMCACHED_AVAILABLE',class_exists('Memcached'));
+
+
 if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }
 require('oxy/src/TypeSystem/XType.php');
 require('oxy/src/TypeSystem/XValue.php');

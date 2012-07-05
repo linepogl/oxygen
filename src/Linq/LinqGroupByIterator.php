@@ -29,10 +29,10 @@ class LinqGroupByIterator extends LinqIterator {
 		$this->inner_iterator = from($this->grouped_iterators);
 	}
 
-	public function rewind(){ $this->init(); $this->inner_iterator->rewind(); }
-	public function next(){ $this->inner_iterator->next(); }
-	public function valid(){ return $this->inner_iterator->valid(); }
-	public function current(){ return $this->inner_iterator->current(); }
-	public function key(){ return $this->inner_iterator->key(); }
+	public function Rewind(){ $this->init(); $this->inner_iterator->rewind(); }
+	public function Next(){ $this->inner_iterator->next(); }
+	public function Valid(){ return $this->inner_iterator->valid(); }
+	public function Current(){ return $this->inner_iterator->current(); }
+	public function Key(){ return $this->inner_iterator->key(); }
 
 }
