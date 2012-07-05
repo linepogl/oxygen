@@ -388,14 +388,14 @@ class Debug {
 		}
 		catch (Exception $ex) {}
 
-		if (!DEV){
+//		if (!DEV){
 			foreach (Oxygen::GetDeveloperEmails() as $email) {
 				try {
-					Oxygen::SendEmail( 'oxygen@'.Oxygen::GetApplicationName() , $email , $email , $subject , $body );
+					Oxygen::SendEmail( 'oxygen@'.Oxygen::GetApplicationName() , $email , $email , (DEV?'DEV':'').$subject , $body );
 				}
 				catch (Exception $ex) {}
 			}
-		}
+//		}
 	}
 
 }

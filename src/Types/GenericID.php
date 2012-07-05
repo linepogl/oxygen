@@ -4,8 +4,8 @@ class GenericID extends ID {
 	private $classname;
 
 	public function MetaType(){ return MetaGenericID::Type(); }
-	public function serialize(){ return serialize(array('classname'=>$this->classname,'value'=>$this->value)); }
-	public function unserialize($data){ $a = unserialize($data); $this->classname=$a['classname']; $this->value=$a['value']; }
+	public function Serialize(){ if (IS_IGBINARY_AVAILABLE) return igbinary_serialize( array($this->classname,$this->value) ); else return serialize( array($$this->classname,$this->value) ); }
+	public function Unserialize($data){ if (IS_IGBINARY_AVAILABLE) list($this->classname,$this->value) = igbinary_unserialize($data); else list($this->classname,$this->value) = unserialize( $data ); }
 
 	public function __construct($classname,$value=null){
 		parent::__construct($value);

@@ -43,10 +43,10 @@ class Menu extends Action implements IteratorAggregate, ArrayAccess, Countable {
 	public function IsEmpty(){ return count($this->items) == 0; }
 
 	public function GetIterator(){ return new ArrayIterator($this->items); }
-	public function offsetExists($offset) { return isset($this->items[$offset]); }
-	public function offsetGet($offset) { return isset($this->items[$offset]) ? $this->items[$offset] : null; }
-	public function offsetUnset($offset) { if (isset($this->items[$offset])) unset($this->items[$offset]); }
-  public function offsetSet($offset, $value) {
+	public function OffsetExists($offset) { return isset($this->items[$offset]); }
+	public function OffsetGet($offset) { return isset($this->items[$offset]) ? $this->items[$offset] : null; }
+	public function OffsetUnset($offset) { if (isset($this->items[$offset])) unset($this->items[$offset]); }
+  public function OffsetSet($offset, $value) {
   	if (is_null($offset))
   		$this->Add($value);
   	else

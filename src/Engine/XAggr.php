@@ -4,11 +4,11 @@ class XAggrIterator implements Iterator {
 	private $index;
 	private $xaggr;
 	public function __construct($xaggr){ $this->xaggr = $xaggr; }
-	function key() { return $this->index; }
-	function current() { return $this->xaggr[$this->index]; }
-	function valid() { return $this->index < count($this->xaggr); }
-	function rewind() { $this->index = -1; $this->next(); }
-	function next() { $this->index++; }
+	function Key() { return $this->index; }
+	function Current() { return $this->xaggr[$this->index]; }
+	function Valid() { return $this->index < count($this->xaggr); }
+	function Rewind() { $this->index = -1; $this->next(); }
+	function Next() { $this->index++; }
 }
 
 
@@ -278,23 +278,23 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
-	public function offsetExists($offset) {
+	public function OffsetExists($offset) {
 		$this->Evaluate();
 		return isset($this->data[$offset]);
 	}
-	public function offsetGet($offset) {
+	public function OffsetGet($offset) {
 		$this->Evaluate();
 		if (!array_key_exists($offset,$this->data)) throw new Exception('Offset '.$offset.' not found.');
 		return $this->data[$offset];
 	}
-	public function offsetSet($offset, $value) {
+	public function OffsetSet($offset, $value) {
 		$this->Evaluate();
 		if (is_null($offset))
 			$this->data[] = $value;
 		else
 			$this->data[$offset] = $value;
 	}
-	public function offsetUnset($offset) {
+	public function OffsetUnset($offset) {
 		$this->Evaluate();
 		unset($this->data[$offset]);
 		$a = array();
