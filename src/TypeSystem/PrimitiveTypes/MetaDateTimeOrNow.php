@@ -1,10 +1,11 @@
 <?php
 
-class MetaDateTimeOrNow extends XType {
+class MetaDateTimeOrNow extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
 	/** @return MetaDateTimeOrNow */ public static function Type() { return self::$instance; }
+	/** @return MetaDateTime */ public static function GetNullableType(){ return MetaDateTime::Type(); }
 
 
 

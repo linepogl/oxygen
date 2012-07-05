@@ -29,6 +29,7 @@ final class HttpPost extends Http {
 			$r[$key] = $this[$key];
 		return new ArrayIterator($r);
 	}
+	/** @return HttpValue */ public static function Read($nane){ return Http::$GET[$nane]; }
 }
 final class HttpGet extends Http {
 	public final function OffsetExists($offset) { return isset($_GET[$offset]); }
@@ -39,6 +40,7 @@ final class HttpGet extends Http {
 			$r[$key] = $this[$key];
 		return new ArrayIterator($r);
 	}
+	/** @return HttpValue */ public static function Read($nane){ return Http::$GET[$nane]; }
 }
 final class HttpAny extends Http {
 	public final function OffsetExists($offset) { return isset($_GET[$offset]) || isset($_POST[$offset]); }
