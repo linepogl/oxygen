@@ -40,12 +40,12 @@ function user_shutdown_function(){
 register_shutdown_function('user_shutdown_function');
 
 
-function dump($var){
+function dump($var,$detail=array(10,5)){
 	$root = realpath('.');
 	list($callee) = debug_backtrace();
   echo '<div style="border:solid 1px #bbbbbb;">';
 	echo '<div style="color:#333333;background:#e8e8e8;padding:4px;font:bold italic 11px/13px Trebuchet MS;">' . str_replace("\\",'/',substr($callee['file'],strlen($root)+1)).'['.$callee['line'].']</div>';
-	echo '<div style="color:#777777;background:#f8f8f8;padding:9px 9px 0px 9px;font:11px/13px Courier New,monospace;white-space:pre;">'.new Html(Debug::GetVariableAsString($var)).'</div>';
+	echo '<div style="color:#777777;background:#f8f8f8;padding:9px 9px 0px 9px;font:11px/13px Courier New,monospace;white-space:pre;">'.new Html(Debug::GetVariableAsString($var,$detail)).'</div>';
 	echo '<div style="color:#aaaaaa;background:#f8f8f8;padding:0 2px 2px 0;font:italic 9px/10px Trebuchet MS;text-align:right;">Oxygen</div>';
   echo '</div>';
 }

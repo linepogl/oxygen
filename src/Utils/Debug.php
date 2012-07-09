@@ -100,9 +100,7 @@ class Debug {
 		Console::EndPopup();
 	}
 
-	const MAX_DEPTH = 2;
-	const MAX_LENGTH = 5;
-	public static function GetVariableAsString($value,$level=0){
+	public static function GetVariableAsString($value,$detail=array(10,5),$level=0){
 		if (is_null($value)) return '{null}';
 		if (is_string($value)) return '{string:'.strlen($value).':\''.$value.'\'}';
 		if (is_int($value)) return '{int:'.$value.'}';
@@ -115,52 +113,52 @@ class Debug {
 		if ($value instanceof XList) {
 			$value->Evaluate();
 			$r = '{XList:'.count($value).':';
-			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }
+			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
 				$r .= "\n" . str_repeat(' ',($level+1)*2);
-				if ($i++>=self::MAX_LENGTH) { $r.='...'; break; }
+				if ($i++>=$detail[$level]) { $r .= '...}'; return $r; }
 				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
-				$r .= self::GetVariableAsString($v,$level+1);
+				$r .= self::GetVariableAsString($v,$detail,$level+1);
 			}
 			$r .= "\n" . str_repeat(' ',$level*2).'}';
 			return $r;
 		}
 		if (is_array($value)) {
 			$r = '{array:'.count($value).':';
-			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }
+			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
 				$r .= "\n" . str_repeat(' ',($level+1)*2);
-				if ($i++>=self::MAX_LENGTH) { $r.='...'; break; }
+				if ($i++>=$detail[$level]) { $r .= '...}'; return $r; }
 				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
-				$r .= self::GetVariableAsString($v,$level+1);
+				$r .= self::GetVariableAsString($v,$detail,$level+1);
 			}
 			$r .= "\n" . str_repeat(' ',$level*2).'}';
 			return $r;
 		}
 		if ($value instanceof IteratorAggregate || $value instanceof Iterator) {
 			$r = '{'.get_class($value).':';
-			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }
+			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
 				$r .= "\n" . str_repeat(' ',($level+1)*2);
-				if ($i++>=self::MAX_LENGTH) { $r.='...'; break; }
+				if ($i++>=$detail[$level]) { $r .= '...}'; return $r; }
 				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
-				$r .= self::GetVariableAsString($v,$level+1);
+				$r .= self::GetVariableAsString($v,$detail,$level+1);
 			}
 			$r .= "\n" . str_repeat(' ',$level*2).'}';
 			return $r;
 		}
 		if (is_object($value)) {
 			$r = '{'.get_class($value).':';
-			if ($level>=self::MAX_DEPTH) { $r .= '...}'; return $r; }
+			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			if ($value instanceof stdClass) {
 				foreach ((array)$value as $p=>$v){
 					$r .= "\n" . str_repeat(' ',($level+1)*2);
 					$r .= '$'.$p.' = ';
-					$r .= self::GetVariableAsString($v,$level+1);
+					$r .= self::GetVariableAsString($v,$detail,$level+1);
 				}
 			}
 			else {
@@ -178,7 +176,7 @@ class Debug {
 						if ($p->isPrivate()) $r .= 'private ' . $c->getName() . '::';
 						if ($p->isProtected()) $r .= 'protected ';
 						$r .= '$'.$p->getName().' = ';
-						$r .= self::GetVariableAsString($v,$level+1);
+						$r .= self::GetVariableAsString($v,$detail,$level+1);
 					}
 				}
 			}
