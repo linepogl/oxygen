@@ -355,6 +355,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 	/** @return XList */
 	public function Reverse(){
+		$this->Evaluate();
 		$this->data	= array_reverse($this->data);
 		return $this;
 	}
