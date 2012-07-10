@@ -360,9 +360,21 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		return $this;
 	}
 
-	public function Merge($array){
+	/** @return XItem|null */
+	public function Pop(){
 		$this->Evaluate();
-		foreach ($array as $x)
+		$l = count($this->data);
+		if ($l > 0) {
+			$r = $this[$l-1];
+			array_pop($this->data);
+			return $r;
+		}
+		return null;
+	}
+
+	public function Merge($traversable){
+		$this->Evaluate();
+		foreach ($traversable as $x)
 			$this[] = $x;
 	}
 
