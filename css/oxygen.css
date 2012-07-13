@@ -8,6 +8,9 @@ html, body, div, table, th, td, span, object, iframe, h1, h2, h3, h4, h5, h6, p,
 	padding:0;
 	border:0;
 }
+th, td {
+	vertical-align:middle;
+}
 
 article, aside, dialog, figure, footer, header, hgroup, nav, section { display:block; }
 body { background:#ffffff; }
