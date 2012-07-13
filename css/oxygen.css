@@ -1,4 +1,4 @@
-html, body, div, table, th, td, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, tbody, tfoot, thead, tr, article, aside, dialog, figure, footer, header, hgroup, nav, section {
+html, body, div, table, th, td, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, tbody, tfoot, thead, tr, article, aside, dialog, figure, footer, header, hgroup, nav, section, b,i,u,s,* {
 	font-weight:inherit;
 	font-style:inherit;
 	font-size:100.01%;
