@@ -26,9 +26,9 @@ a { outline-style:none; }
 th { text-align:center; }
 hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 
-.formPane {}
-.formButton {}
-.formLocked {}
+.formPane   { vertical-align:baseline; }
+.formButton { vertical-align:baseline; }
+.formLocked { vertical-align:baseline; }
 
 table.report    { width:100%; }
 table.report th { background:#e0e0e0; font:bold 11px/13px Trebuchet MS, sans-serif; color:#333333; padding:3px; border-right:1px solid #ffffff; border-bottom:1px solid #ffffff; }
@@ -46,10 +46,10 @@ table.report .selected td { background:#fafaea; }
 
 .fieldtable td { padding:0; margin:0; }
 .fieldtable td.label { padding-top:2px }
-.ajaxdialog { border:5px solid #aaaaaa;padding:10px; background:#ffffff; }
-.ie7 .ajaxdialog { overflow-x:hidden; overflow-y:auto;}
-.ajaxdialog h1 { font:24px/24px Trebuchet MS,sans-serif; color:#999999; padding:10px 10px 10px 5px; margin:0 0 10px 0; border-bottom:1px solid #999999; }
-.ajaxdialoginner { padding:5px; margin:0; }
+.ajaxdialog { border:5px solid #aaaaaa;padding:0; background:#ffffff; }
+.ajaxdialog h1 { font:24px/24px Trebuchet MS,sans-serif; color:#999999; padding:15px 20px 10px 15px; border-bottom:1px solid #999999; }
+.ajaxdialoginner { padding:15px 20px 15px 15px; margin:0; }
+.ie7 .ajaxdialoginner { overflow-x:hidden; overflow-y:auto; }
 .ajaxdialogfog { background:#000000; }
 #AjaxDialogClock { font:bold 10px/13px Courier New, monospace; color:#888888; }
 
