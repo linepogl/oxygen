@@ -96,7 +96,7 @@ var Oxygen = {
 		if (dialog_frame == null) return;
 		dialog_frame.show();
 		this.ResizeDialog();
-		Oxygen.dialog_watchdog = setInterval( function(){ Oxygen.ResizeDialog(); } , 100 );
+		Oxygen.dialog_watchdog = setInterval( function(){ Oxygen.ResizeDialog(); } , 250 );
 	}
 
 
@@ -210,14 +210,13 @@ var Oxygen = {
 	,dialog_min_height : 1
 	,dialog_watchdog : null
 	,ResizeDialog:function(){
+		if (!this.IsDialogOpen()) return ;
 		var dialog = jQuery('#OxygenDialog');
-		if (dialog.length == 0) return;
 		var viewport = jQuery(window);
 		var inner = jQuery('#OxygenDialogInner');
 		var innerx = jQuery('#OxygenDialogInnerX');
 		var dialogx = jQuery('#OxygenDialogX');
 		var framex = jQuery('#OxygenFrameX');
-
 
 		if (framex.height() < viewport.height()) framex.height(viewport.height());
 		inner.height(innerx.outerHeight(true));
@@ -307,8 +306,7 @@ var Oxygen = {
 
 	}
 	,IsDialogOpen:function(){
-		var dialog = $('OxygenDialog');
-		return dialog != null && dialog.style.display != 'none';
+		return $('OxygenDialog') != null;
 	}
 	,Refresh:function(){
 		window.location.href=window.location.href;
