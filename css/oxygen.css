@@ -1,4 +1,4 @@
-html, body, div, table, th, td, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, tbody, tfoot, thead, tr, article, aside, dialog, figure, footer, header, hgroup, nav, section, b,i,u,s,* {
+html, body, div, table, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, tbody, tfoot, thead, tr, article, aside, figure, footer, header, hgroup, nav, section, b,i,u,s,* {
 	font-weight:inherit;
 	font-style:inherit;
 	font-size:100.01%;
@@ -10,9 +10,16 @@ html, body, div, table, th, td, span, object, iframe, h1, h2, h3, h4, h5, h6, p,
 }
 th, td {
 	vertical-align:middle;
+	font-weight:inherit;
+	font-style:inherit;
+	font-size:100.01%;
+	font-family:inherit;
+	margin:0;
+	padding:0;
+	border:0;
 }
 
-article, aside, dialog, figure, footer, header, hgroup, nav, section { display:block; }
+article, aside, figure, footer, header, hgroup, nav, section { display:block; }
 body { background:#ffffff; }
 blockquote:before, blockquote:after, q:before, q:after { content:""; }
 blockquote, q { quotes:"" ""; }
@@ -47,7 +54,7 @@ table.report .selected td { background:#fafaea; }
 .fieldtable td { padding:0; margin:0; }
 .fieldtable td.label { padding-top:2px }
 .ajaxdialog { border:5px solid #aaaaaa;padding:0; background:#ffffff; }
-.ajaxdialog h1 { font:24px/24px Trebuchet MS,sans-serif; color:#999999; padding:15px 20px 10px 15px; border-bottom:1px solid #999999; }
+.ajaxdialog h1 { font:24px/24px Trebuchet MS,sans-serif; color:#999999; padding:15px 20px 10px 15px; border-bottom:1px solid #999999; margin:0; }
 .ajaxdialoginner { padding:15px 20px 15px 15px; margin:0; }
 .ie7 .ajaxdialoginner { overflow-x:hidden; overflow-y:auto; }
 .ajaxdialogfog { background:#000000; }

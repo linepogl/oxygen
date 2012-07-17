@@ -60,32 +60,57 @@ var Oxygen = {
 
 	,MakeDialog: function(icon,title,width,height){
 
-//		if (Prototype.Browser.IE6){
-//			dialog = document.body.appendChild(new Element('div',{'id':'OxygenDialog','style':'z-index:100;position:absolute;display:none;overflow:visible;'}));
-//		}
+		if (Prototype.Browser.IE6){
+			jQuery('body').append(''
+				+ '<div id="OxygenDialogFrame" style="z-index:100;position:absolute;top:0;left:0;overflow:auto;display:none;">'
+				+ '<table id="OxygenDialogFrameX" cellspacing="20" cellpadding="0" border="0" style="width:100%;height:100%;"><tr><td style="vertical-align:middle;">'
 
+					+ '<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
 
-		jQuery('body').append(''
-			+ '<div id="OxygenDialogFrame" style="z-index:100;position:fixed;top:0;left:0;width:100%;height:100%;overflow:auto;display:none;">'
-			+ '<table id="OxygenDialogFrameX" cellspacing="20" cellpadding="0" border="0" style="width:100%;height:100%;"><tr><td style="vertical-align:middle;">'
+						+ '<div id="OxygenDialogX">'
+						+ '<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
+						+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5">'
+							+ '<div id="OxygenDialogInner" class="ajaxdialoginner">'
+							+	'<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogInnerX"></td></tr></table>'
+							+	'</div>'
+						+ '</div></div></div>'
+						+ '<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
+						+ '</div>'
 
-				+ '<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
-
-					+ '<div id="OxygenDialogX">'
-					+ '<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
-					+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5">'
-						+ '<div id="OxygenDialogInner" class="ajaxdialoginner">'
-						+	'<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogInnerX"></td></tr></table>'
-						+	'</div>'
-					+ '</div></div></div>'
-					+ '<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
 					+ '</div>'
 
+				+ '</td></tr></table>'
 				+ '</div>'
+				);
 
-			+ '</td></tr></table>'
-			+ '</div>'
-			);
+
+		}
+		else {
+			jQuery('body').append(''
+				+ '<div id="OxygenDialogFrame" style="z-index:100;position:fixed;top:0;left:0;width:100%;height:100%;overflow:auto;display:none;">'
+				+ '<table id="OxygenDialogFrameX" cellspacing="20" cellpadding="0" border="0" style="width:100%;height:100%;"><tr><td style="vertical-align:middle;">'
+
+					+ '<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
+
+						+ '<div id="OxygenDialogX">'
+						+ '<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
+						+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5">'
+							+ '<div id="OxygenDialogInner" class="ajaxdialoginner">'
+							+	'<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogInnerX"></td></tr></table>'
+							+	'</div>'
+						+ '</div></div></div>'
+						+ '<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
+						+ '</div>'
+
+					+ '</div>'
+
+				+ '</td></tr></table>'
+				+ '</div>'
+				);
+
+		}
+
+
 
 
 		this.dialog_min_width = width;
@@ -95,6 +120,10 @@ var Oxygen = {
 		var dialog_frame = $('OxygenDialogFrame');
 		if (dialog_frame == null) return;
 		dialog_frame.show();
+		if (Prototype.Browser.IE6) {
+			document.body.scrollTop = 0;
+			document.documentElement.scrollTop = 0;
+		}
 		this.ResizeDialog();
 		Oxygen.dialog_watchdog = setInterval( function(){ Oxygen.ResizeDialog(); } , 250 );
 	}
@@ -133,13 +162,13 @@ var Oxygen = {
 				method:'get'
 				,encoding:Oxygen.Encoding
 				,onSuccess:function(transport){
-					if (this.current_ajax_dialog_clock_timer != null) {
-						clearTimeout(this.current_ajax_dialog_clock_timer);
-						this.current_ajax_dialog_clock_timer = null;
+					if (Oxygen.current_ajax_dialog_clock_timer != null) {
+						clearTimeout(Oxygen.current_ajax_dialog_clock_timer);
+						Oxygen.current_ajax_dialog_clock_timer = null;
 					}
 					$('OxygenDialogInnerX').update(transport.responseText);
 					Oxygen.FocusDialog();
-					//Oxygen.ResizeDialog();
+					Oxygen.ResizeDialog();
 				}
 			});
 		}
@@ -174,18 +203,18 @@ var Oxygen = {
 		x.update('<div style="text-align:center"><img src=\"oxy/img/ajax.gif\" hspace=\"10\" vspace=\"1\" align="absmiddle"/><br/><span id=\"OxygenDialogClock\">0:00</span></div>');
 		this.current_ajax_dialog_clock_value = 0;
 		this.current_ajax_dialog_clock_timer = setTimeout(function(){Oxygen.UpdateDialogClock();},1000);
-		//this.ResizeDialog();
+		this.ResizeDialog();
 		new Ajax.Request(this.current_ajax_dialog_url,{
 			method:'post'
 			,parameters:params
 			,encoding:Oxygen.Encoding
 			,onSuccess:function(transport){
-				if (this.current_ajax_dialog_clock_timer != null) {
-					clearTimeout(this.current_ajax_dialog_clock_timer);
-					this.current_ajax_dialog_clock_timer = null;
+				if (Oxygen.current_ajax_dialog_clock_timer != null) {
+					clearTimeout(Oxygen.current_ajax_dialog_clock_timer);
+					Oxygen.current_ajax_dialog_clock_timer = null;
 				}
 				$('OxygenDialogInnerX').update(transport.responseText);
-				//Oxygen.ResizeDialog();
+				Oxygen.ResizeDialog();
 			}
 		});
 	}
@@ -216,13 +245,23 @@ var Oxygen = {
 		var inner = jQuery('#OxygenDialogInner');
 		var innerx = jQuery('#OxygenDialogInnerX');
 		var dialogx = jQuery('#OxygenDialogX');
+		var frame = jQuery('#OxygenFrame');
 		var framex = jQuery('#OxygenFrameX');
 
+		frame.height(viewport.height());
+		frame.width(viewport.height());
 		if (framex.height() < viewport.height()) framex.height(viewport.height());
-		inner.height(innerx.outerHeight(true));
-		inner.width(innerx.outerWidth(true));
-		dialog.height(dialogx.outerHeight(true));
-		dialog.width(dialogx.outerWidth(true));
+
+		if (Prototype.Browser.IE6){
+
+		}
+		else {
+			inner.height(innerx.outerHeight(true));
+			inner.width(innerx.outerWidth(true));
+			dialogx.width(inner.outerWidth(true)); // I don't know why this is necessary. Normally dialogx should be resized automatically with its contents.
+			dialog.height(dialogx.outerHeight(true));
+			dialog.width(dialogx.outerWidth(true));
+		}
 
 
 //		var dialog_height = dialog.height();

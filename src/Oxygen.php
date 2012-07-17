@@ -895,7 +895,7 @@ class Oxygen {
 	public static function GetInfoAsHtml($info = null){
 		$r = '';
 		if (is_null($info)) $info = Oxygen::GetInfo();
-		$r .= '<table cellspacing="0" cellpadding="3" border=0">';
+		$r .= '<table cellspacing="0" cellpadding="0" border=0">';
 		foreach ($info as $a){
 			foreach ($a as $label=>$value){
 				$r .= '<tr>';

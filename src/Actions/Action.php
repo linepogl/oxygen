@@ -130,10 +130,10 @@ abstract class Action extends XValue {
 						if ($c->WrapAsException()){
 							echo '<table class="center"><tr><td>';
 							echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
-							echo '<table cellspacing="0" cellpadding="15" border="0"><tr>';
-							echo '<td style="text-align:right;vertical-align:top;padding-top:50px;"><img src="oxy/ico/Warning32.gif" /></td>';
-							echo '<td>'.new Spacer(1,150).'</td>';
-							echo '<td style="border-left:1px solid #dddddd;text-align:left;">';
+							echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+							echo '<td style="text-align:right;vertical-align:top;padding:50px 15px 15px 15px;"><img src="oxy/ico/Warning32.gif" /></td>';
+							echo '<td style="padding:15px;">'.new Spacer(1,150).'</td>';
+							echo '<td style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
 							echo new Spacer(350);
 						}
 						$c->Render();
@@ -173,10 +173,10 @@ abstract class Action extends XValue {
 				else {
 					echo '<table class="center"><tr><td>';
 					echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
-					echo '<table cellspacing="0" cellpadding="15" border="0"><tr>';
-					echo '<td align="right"><img src="oxy/ico/Warning32.gif" /></td>';
-					echo '<td>'.new Spacer(1,150).'</td>';
-					echo '<td style="border-left:1px solid #dddddd;text-align:left;">';
+					echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+					echo '<td style="padding:15px;text-align:right;"><img src="oxy/ico/Warning32.gif" /></td>';
+					echo '<td style="padding:15px;">'.new Spacer(1,150).'</td>';
+					echo '<td style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
 					echo new Spacer(350);
 					echo new MessageControl($ex);
 					echo new Spacer(350);
@@ -218,10 +218,10 @@ abstract class Action extends XValue {
 				else {
 					echo '<table class="center"><tr><td>';
 					echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
-					echo '<table cellspacing="0" cellpadding="15" border="0"><tr>';
-					echo '<td class="vtop hright">'.new Spacer(50,30).'<br/>'.new Icon('oxy/ico/Bug',32).'</td>';
-					echo '<td>'.new Spacer(1,100).'</td>';
-					echo '<td class="vtop" style="border-left:1px solid #dddddd;text-align:left;">';
+					echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+					echo '<td class="vtop hright" style="padding:15px;">'.new Spacer(50,30).'<br/>'.new Icon('oxy/ico/Bug',32).'</td>';
+					echo '<td style="padding:15px;">'.new Spacer(1,100).'</td>';
+					echo '<td class="vtop" style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
 
 					if (DEV) {
 						echo new Spacer(350,12);
