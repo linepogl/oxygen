@@ -258,7 +258,9 @@ var Oxygen = {
 		else {
 			inner.height(innerx.outerHeight(true));
 			inner.width(innerx.outerWidth(true));
-			dialogx.width(inner.outerWidth(true)); // I don't know why this is necessary. Normally dialogx should be resized automatically with its contents.
+			if (Prototype.Browser.Opera) {
+				dialogx.width(inner.outerWidth(true)); // I don't know why this is necessary. Normally dialogx should be resized automatically with its contents.
+			}
 			dialog.height(dialogx.outerHeight(true));
 			dialog.width(dialogx.outerWidth(true));
 		}

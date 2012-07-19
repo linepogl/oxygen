@@ -36,9 +36,11 @@ class Oxygen {
 			self::$url_pins[$key] = Http::$GET[$key]->AsStringOrNull();
 
 		// init window scoping
-		if (self::$window_scoping_enabled){
+		if (self::$window_scoping_enabled) {
 			self::$window_hash = Http::$GET['window']->AsStringOrNull();
-			if (is_null(self::$window_hash)) self::$window_hash = Oxygen::Hash32(self::$session_hash);
+			if (is_null(self::$window_hash)) {
+				self::$window_hash = Oxygen::HashRandom32();
+			}
 			self::$url_pins['window'] = self::$window_hash;
 		}
 		else {
@@ -678,6 +680,7 @@ class Oxygen {
 
 	/** @return string */
 	public static function GetHead(){
+
 		ob_start();
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
 
@@ -687,10 +690,9 @@ class Oxygen {
 
 		echo Js::BEGIN;
 		if (self::$window_scoping_enabled){
-			$new_window_hash = Oxygen::HashRandom32();
 			echo "if(window.name!=".new Js(self::$window_hash)."){";
-			echo "  window.name=".new Js($new_window_hash).";";
-			echo "  window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>$new_window_hash)));
+			echo "  if (window.name == '') window.name=".new Js(Oxygen::HashRandom32()).";";
+			echo "  window.location.href = ".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>self::$window_hash))) . ".replace(".new Js(strval(new Url(self::$window_hash))).",window.name);";
 			echo "}";
 		}
 

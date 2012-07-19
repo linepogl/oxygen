@@ -336,11 +336,11 @@ abstract class Action extends XValue {
 	}
 	public function GetForm($name=null){
 		if ($this->IsAjaxDialog())
-			return '<form'.(is_null($name)?'':' id="'.$name.'"').' method="post" action="" onsubmit="Oxygen.SubmitAjaxDialog(this);return false;" onreset="Oxygen.HideDialog();"><div class="inline">'.new HiddenControl('AjaxDialogSubmition',true);
+			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" onsubmit="Oxygen.SubmitAjaxDialog(this);return false;" onreset="Oxygen.HideDialog();"><div class="inline">'.new HiddenControl('AjaxDialogSubmition',true);
 		elseif ($this->IsIFrameDialog())
-			return '<form'.(is_null($name)?'':' id="'.$name.'"').' method="post" action="" onreset="parent.Oxygen.HideDialog();" enctype="multipart/form-data"><div class="inline">';
+			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" onreset="parent.Oxygen.HideDialog();" enctype="multipart/form-data"><div class="inline">';
 		else
-			return '<form'.(is_null($name)?'':' id="'.$name.'"').' method="post" action="" enctype="multipart/form-data"><div class="inline">';
+			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" enctype="multipart/form-data"><div class="inline">';
 	}
 	public function EndForm(){ return '</div></form>'; }
 	public function GetFormButtons(){ return '<div class="buttons1"><div class="buttons3"><div class="buttons2">'; }
