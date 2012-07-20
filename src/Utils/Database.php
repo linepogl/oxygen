@@ -747,31 +747,6 @@ class Database {
 		}
 	}
 
-	public static function ExecuteSqlFile($filename) {
-		self::RequireConnection();
-		$queries=array();
-		$queries[0]='';
-		$sql=file($filename); // on charge le fichier SQL
-		$numRequete=0;
-		$nb_cotes=0;
-		foreach($sql as $l){ // on le lit
-			if (substr(trim($l),0,2)!="--"){ // suppression des commentaires
-				$queries[$numRequete] .= $l;
-				$li=str_replace("'","", $l);
-				$nb_cotes+=substr_count ($li, "'");
-			}
-			if (substr(trim($l), -1, 1)==";" && ($nb_cotes%2)==0) { // Fin de la requete
-				$numRequete++;
-				$queries[$numRequete]='';
-			}
-		}
-		foreach($queries as $req){
-			if (trim($req)!=""){
-				self::$cn->exec($req);
-				if ( self::$cn->errorCode() !== '00000' ) { $info = self::$cn->errorInfo(); throw new Exception($info[2] . '<br/><br/>'.$sql); }
-			}
-		}
-	}
 
 
 

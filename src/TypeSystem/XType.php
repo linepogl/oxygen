@@ -257,7 +257,7 @@ abstract class XType implements _XType {
 	 * @return string
 	 */
 	protected static function EncodeAsHtmlString($string) {
-		return str_replace(array('&','>','<','"'),array('&amp;','&gt;','&lt;','&quot;'),$string);
+		return Str::Replace( array('&','>','<','"'),array('&amp;','&gt;','&lt;','&quot;'),$string);
 	}
 
 	/**

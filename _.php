@@ -63,3 +63,4 @@ function from($whatever){
 	if ($whatever instanceof Traversable) return new LinqIterator(new IteratorIterator($whatever));
 	return new LinqIterator(new ArrayIterator(array($whatever)));
 }
+

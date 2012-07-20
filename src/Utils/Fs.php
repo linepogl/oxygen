@@ -4,7 +4,7 @@ class Fs {
 
 
 	public static function GetSafeFilename($filename) {
-		return str_replace(
+		return Str::Replace(
 			array(" ","&","+","/","\\","'",'"')
 		 ,array("_","_","_","_","_","_","_")
 		 ,$filename);
