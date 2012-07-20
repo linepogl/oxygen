@@ -44,6 +44,7 @@
 	<lemma name="Tomorrow"><en>Tomorrow</en><fr>Demain</fr><el>Αύριο</el></lemma>
 	<lemma name="Now"><en>Now</en><fr>Maintenant</fr><el>Τώρα</el></lemma>
 	<lemma name="xDays"><en>%s days</en><fr>%s jours</fr><el>%s ημέρες</el></lemma>
+	<lemma name="xDaysAgo"><en>%s days ago</en><fr>Il y a %s jours</fr><el>Πριν από %s ημέρες</el></lemma>
 
 	<lemma name="Day"><en>Day</en><fr>Jour</fr><el>Ημέρα</el></lemma>
 	<lemma name="Night"><en>Night</en><fr>Nuit</fr><el>Νύχτα</el></lemma>

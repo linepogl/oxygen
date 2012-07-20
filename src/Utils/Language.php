@@ -314,6 +314,33 @@ final class Language {
 	}
 
 
+	/** @return string */
+	public static function FormatDateSpanSince($value,$null_caption = ''){
+		if (is_int( $value ))
+			$value = new XDateTime($value);
+		if ($value instanceof DateTime)
+			$value = new XDateTime($value);
+		if (!($value instanceof XDateTime))
+			return $null_caption;
+
+		$today = XDate::Today();
+		$value = $value->GetDate();
+		$timespan = $value->Diff( $today );
+		$d = $timespan->GetDays();
+
+		if ($d == 0)
+			return Lemma::Pick('Today');
+
+		if ($d == -1)
+			return Lemma::Pick('Yesterday');
+
+		if ($d == 1)
+			return Lemma::Pick('Tomorrow');
+
+		return Lemma::Pick('xDaysAgo')->Sprintf(-$d);
+	}
+
+
 
 
 	public static function FormatBytes($size){
