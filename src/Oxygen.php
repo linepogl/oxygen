@@ -515,6 +515,12 @@ class Oxygen {
 	public static function IsPostback(){
 		return strtolower($_SERVER['REQUEST_METHOD'])=='post';
 	}
+	public static function RedirectRaw( $href ) {
+		while (ob_get_level()>0) ob_end_clean();
+		Oxygen::SendHttpHeaders();
+		echo Js::BEGIN."window.location.href=".new Js($href).";".Js::END;
+		exit();
+	}
 	public static function Redirect(Action $action) {
 		while (ob_get_level()>0) ob_end_clean();
 		Oxygen::SendHttpHeaders();
@@ -704,6 +710,7 @@ class Oxygen {
 
 		echo "var oxygen_encoding = ".new Js(Oxygen::GetCharset()).";";
 		echo "var oxygen_lang = ".new Js(Oxygen::GetLang()).";";
+		echo "var oxygen_base = ".new Js(__BASE__).";";
 		echo Js::END;
 
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery.js"></script>'.Js::BEGIN.'jQuery.noConflict();'.Js::END; // jQuery has to be loaded before prototype and set to no-conflict mode.
