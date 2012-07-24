@@ -41,6 +41,18 @@ class Oxygen {
 			if (is_null(self::$window_hash)) {
 				self::$window_hash = Oxygen::HashRandom32();
 			}
+			else {
+				$old_window_hash = Http::$GET['old_window']->AsStringOrNull();
+				if (!is_null($old_window_hash)){
+					$new_window_hash = self::$window_hash;
+					self::$window_hash = $old_window_hash;
+					$hard = from(Scope::$WINDOW->HARD)->AsArray();
+					$weak = from(Scope::$WINDOW->WEAK)->AsArray();
+					self::$window_hash = $new_window_hash;
+					foreach ($hard as $key=>$value) Scope::$WINDOW->HARD[$key] = $value;
+					foreach ($weak as $key=>$value) Scope::$WINDOW->WEAK[$key] = $value;
+				}
+			}
 			self::$url_pins['window'] = self::$window_hash;
 		}
 		else {
@@ -696,9 +708,10 @@ class Oxygen {
 
 		echo Js::BEGIN;
 		if (self::$window_scoping_enabled){
+			$rnd = '~~'.ID::Random();
 			echo "if(window.name!=".new Js(self::$window_hash)."){";
 			echo "  if (window.name == '') window.name=".new Js(Oxygen::HashRandom32()).";";
-			echo "  window.location.href = ".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>self::$window_hash))) . ".replace(".new Js(strval(new Url(self::$window_hash))).",window.name);";
+			echo "  window.location.href = ".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>$rnd,'old_window'=>Oxygen::$window_hash))) . ".replace(".new Js($rnd).",window.name);";
 			echo "}";
 		}
 

@@ -1,6 +1,6 @@
 <?php
 
-abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
+abstract class Scope implements ArrayAccess,IteratorAggregate {
 	const APC = 0x00;
 	const HDD = 0x01;
 	const HDD_SHARED = 0x11;
@@ -83,8 +83,63 @@ abstract class Scope implements ArrayAccess /*, Countable, IteratorAggregate*/ {
 
 	public abstract function Reset();
 	public abstract function SoftReset();
+
+
+	public function GetIterator(){ throw new NonImplementedException(); }
+
+	protected function SimpleOffsetGet( $offset ) { return $this->OffsetGet($offset); }
+	protected function SimpleOffsetSet( $offset , $value ) { $this->OffsetSet($offset,$value); }
+	protected function SimpleOffsetUnset( $offset ) { $this->OffsetUnset($offset); }
+	private function LinkedListRemove($offset){
+		$prev_offset = $this->SimpleOffsetGet( $offset . ':prev' );
+		$next_offset = $this->SimpleOffsetGet( $offset . ':next' );
+		if (!is_null($prev_offset)) $this->SimpleOffsetSet( $prev_offset . ':next' , $next_offset );
+		if (!is_null($next_offset)) $this->SimpleOffsetSet( $next_offset . ':prev' , $prev_offset );
+		$this->SimpleOffsetUnset( $offset . ':prev' );
+		$this->SimpleOffsetUnset( $offset . ':next' );
+	}
+	private function LinkedListInsert($offset){
+		$curr_offset = null;
+		$next_offset = $this->SimpleOffsetGet(':head');
+		while (!is_null($next_offset)) {
+			$curr_offset = $next_offset;
+			$next_offset = $this->SimpleOffsetGet( $curr_offset . ':next' );
+		}
+		if (is_null($curr_offset)) {
+			$this->SimpleOffsetSet( ':head' , $offset );
+		}
+		else {
+			$this->SimpleOffsetSet( $curr_offset . ':next' , $offset );
+			$this->SimpleOffsetSet( $offset . ':prev' , $curr_offset );
+		}
+	}
+	protected function LinkedListSet($offset,$value){
+		if ($this->OffsetExists($offset)) {
+			if (is_null($value)) {
+				$this->LinkedListRemove($offset);
+			}
+		}
+		elseif (!is_null($value)) {
+			$this->LinkedListInsert($offset);
+		}
+	}
+	protected function LinkedListUnset($offset) {
+		if ($this->OffsetExists($offset)) {
+			$this->LinkedListRemove( $offset );
+		}
+	}
 }
 
+class ScopeIterator implements Iterator {
+	private $scope = null;
+	private $offset = null;
+	public function __construct( Scope $scope ){ $this->scope = $scope; $this->Rewind(); }
+	public function Current() { return $this->scope[$this->offset]; }
+	public function Next() { $this->offset = $this->scope[ $this->offset.':next' ]; }
+	public function Key() { return $this->offset; }
+	public function Valid() { return !is_null($this->offset); }
+	public function Rewind() { $this->offset = $this->scope[ ':head' ]; }
+}
 
 
 
@@ -129,7 +184,7 @@ abstract class MemoryScope extends Scope {
 
 
 abstract class ApcScope extends MemoryScope {
-	private $use_apc_storage;
+	protected $use_apc_storage;
 	public function __construct( $prefix ){
 		parent::__construct($prefix);
 		$this->use_apc_storage = IS_APC_AVAILABLE;
@@ -199,10 +254,26 @@ abstract class ApcScope extends MemoryScope {
 }
 
 
+abstract class LinkedListApcScope extends ApcScope {
+	public function GetIterator(){ return new ScopeIterator($this); }
+	protected function SimpleOffsetGet($offset){ return parent::OffsetGet($offset); }
+	protected function SimpleOffsetSet($offset,$value){ parent::OffsetSet($offset,$value); }
+	protected function SimpleOffsetUnset($offset){ parent::OffsetUnset($offset); }
+	public function OffsetSet($offset, $value) {
+		if ($this->use_apc_storage) $this->LinkedListSet($offset,$value);
+		parent::OffsetSet( $offset , $value );
+	}
+	public function OffsetUnset($offset) {
+		if ($this->use_apc_storage) $this->LinkedListUnset($offset);
+		parent::OffsetUnset($offset);
+	}
+}
+
+
 
 
 abstract class MemcachedScope extends MemoryScope {
-	private $use_memcached_storage;
+	protected $use_memcached_storage;
 	public function __construct( $prefix ){
 		parent::__construct($prefix);
 		$this->use_memcached_storage = IS_MEMCACHED_AVAILABLE;
@@ -287,13 +358,27 @@ abstract class MemcachedScope extends MemoryScope {
 			return null;
 	}
 }
+abstract class LinkedListMemcachedScope extends MemcachedScope {
+	public function GetIterator(){ return new ScopeIterator($this); }
+	protected function SimpleOffsetGet($offset){ return parent::OffsetGet($offset); }
+	protected function SimpleOffsetSet($offset,$value){ parent::OffsetSet($offset,$value); }
+	protected function SimpleOffsetUnset($offset){ parent::OffsetUnset($offset); }
+	public function OffsetSet($offset, $value) {
+		if ($this->use_memcached_storage) $this->LinkedListSet($offset,$value);
+		parent::OffsetSet( $offset , $value );
+	}
+	public function OffsetUnset($offset) {
+		if ($this->use_memcached_storage) $this->LinkedListUnset($offset);
+		parent::OffsetUnset($offset);
+	}
+}
 
 
 
 
 abstract class HddScope extends MemoryScope {
 	protected $shared = false;
-	private $use_hdd_storage = true;
+	protected $use_hdd_storage = true;
 	public function SetUseHddStorage($value){ $this->use_hdd_storage = $value; }
 	public function GetFolder(){ return $this->shared ? Oxygen::GetSharedTempFolder() : Oxygen::GetTempFolder(); }
 	public function SetIsShared($value){
@@ -405,13 +490,26 @@ abstract class HddScope extends MemoryScope {
 			return null;
 	}
 }
-
+abstract class LinkedListHddScope extends HddScope {
+	public function GetIterator(){ return new ScopeIterator($this); }
+	protected function SimpleOffsetGet($offset){ return parent::OffsetGet($offset); }
+	protected function SimpleOffsetSet($offset,$value){ parent::OffsetSet($offset,$value); }
+	protected function SimpleOffsetUnset($offset){ parent::OffsetUnset($offset); }
+	public function OffsetSet($offset, $value) {
+		if ($this->use_hdd_storage) $this->LinkedListSet($offset,$value);
+		parent::OffsetSet( $offset , $value );
+	}
+	public function OffsetUnset($offset) {
+		if ($this->use_hdd_storage) $this->LinkedListUnset($offset);
+		parent::OffsetUnset($offset);
+	}
+}
 
 
 class HybridScope extends Scope {
 	private $mode;
-	/** @var Scope */ private $WEAK;
-	/** @var Scope */ public  $HARD;
+	/** @var Scope */ public $WEAK;
+	/** @var Scope */ public $HARD;
 
 	/** @var ApcScope */ private $apc_scope;
 	/** @var HddScope */ private $hdd_scope;
@@ -463,6 +561,8 @@ class HybridScope extends Scope {
 			$this->HARD->SetIsShared( false );
 		}
 	}
+
+	public function GetIterator(){ return new ScopeIterator($this->WEAK); }
 
 	public function OffsetExists($offset)      { return $this->WEAK->offsetExists($offset); }
 	public function OffsetGet($offset)         { return $this->WEAK->offsetGet($offset); }
@@ -522,13 +622,13 @@ class DatabaseHddScope extends HddScope  {
 
 class SessionApcScope extends ApcScope {
 	private $q;
-	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . Oxygen::GetSessionHash(); }
-	protected function Hash($name){ return $this->q.']'.$name; }
+	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base; }
+	protected function Hash($name){ return $this->q.Oxygen::GetSessionHash().']'.$name; }
 }
 class SessionMemcachedScope extends MemcachedScope {
 	private $q;
-	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . Oxygen::GetSessionHash(); }
-	protected function Hash($name){ return $this->q.']'.$name; }
+	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base; }
+	protected function Hash($name){ return $this->q.Oxygen::GetSessionHash().']'.$name; }
 }
 class SessionHddScope extends HddScope {
 	private $q;
@@ -536,17 +636,17 @@ class SessionHddScope extends HddScope {
 	protected function Hash($name){ return $this->q.Oxygen::Hash32(self::$base.$name.Oxygen::GetSessionHash()); }
 }
 
-class WindowApcScope extends ApcScope {
+class WindowApcScope extends LinkedListApcScope {
 	private $q;
-	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . Oxygen::GetWindowHash(); }
-	protected function Hash($name){ return $this->q.']'.$name; }
+	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base; }
+	protected function Hash($name){ return $this->q.Oxygen::GetWindowHash().']'.$name; }
 }
-class WindowMemcachedScope extends MemcachedScope {
+class WindowMemcachedScope extends LinkedListMemcachedScope {
 	private $q;
-	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . Oxygen::GetWindowHash(); }
-	protected function Hash($name){ return $this->q.']'.$name; }
+	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base; }
+	protected function Hash($name){ return $this->q.Oxygen::GetWindowHash().']'.$name; }
 }
-class WindowHddScope extends HddScope {
+class WindowHddScope extends LinkedListHddScope {
 	private $q;
 	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '_'; }
 	protected function Hash($name){ return $this->q.Oxygen::Hash32(self::$base.$name.Oxygen::GetWindowHash() ); }
