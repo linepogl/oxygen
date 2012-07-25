@@ -93,7 +93,7 @@ abstract class Scope implements ArrayAccess,IteratorAggregate {
 	private function LinkedListRemove($offset){
 		$prev_offset = $this->SimpleOffsetGet( $offset . ':prev' );
 		$next_offset = $this->SimpleOffsetGet( $offset . ':next' );
-		if (!is_null($prev_offset)) $this->SimpleOffsetSet( $prev_offset . ':next' , $next_offset );
+		$this->SimpleOffsetSet( is_null($prev_offset) ? ':head' : $prev_offset . ':next' , $next_offset );
 		if (!is_null($next_offset)) $this->SimpleOffsetSet( $next_offset . ':prev' , $prev_offset );
 		$this->SimpleOffsetUnset( $offset . ':prev' );
 		$this->SimpleOffsetUnset( $offset . ':next' );
@@ -104,6 +104,7 @@ abstract class Scope implements ArrayAccess,IteratorAggregate {
 		while (!is_null($next_offset)) {
 			$curr_offset = $next_offset;
 			$next_offset = $this->SimpleOffsetGet( $curr_offset . ':next' );
+			if ($curr_offset === $next_offset) throw new Exception('Linked list error.');
 		}
 		if (is_null($curr_offset)) {
 			$this->SimpleOffsetSet( ':head' , $offset );

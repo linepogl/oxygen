@@ -339,6 +339,17 @@ final class Language {
 
 		return Lemma::Pick('xDaysAgo')->Sprintf(-$d);
 	}
+	/** @return string */
+	public static function FormatTimeSpanSince($value,$null_caption = ''){
+		if (is_int( $value ))
+			$value = new XDateTime($value);
+		if ($value instanceof DateTime)
+			$value = new XDateTime($value);
+		if (!($value instanceof XDateTime))
+			return $null_caption;
+
+		return Language::FormatTimeSpan( XDateTime::Now()->Diff( $value ) , false );
+	}
 
 
 
