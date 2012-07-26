@@ -31,7 +31,7 @@ class Oxygen {
 		Debug::Init();
 
 		// init url handling
-		self::$php_script = basename( $_SERVER['SCRIPT_NAME'] );
+		self::$php_script = substr( $_SERVER['SCRIPT_NAME'] , strlen(__BASE__) );
 		foreach (self::$url_pins as $key=>$value)
 			self::$url_pins[$key] = Http::$GET[$key]->AsStringOrNull();
 
