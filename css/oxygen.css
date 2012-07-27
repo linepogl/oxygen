@@ -25,7 +25,7 @@ blockquote, q { quotes:"" ""; }
 *:focus { outline:0; -moz-outline:0; }
 
 
-a img { border:none; }
+a img { border:0; }
 img { vertical-align:middle; }
 a { outline-style:none; }
 
