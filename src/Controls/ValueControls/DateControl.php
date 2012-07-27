@@ -150,7 +150,7 @@ DateControl extends ValueControl {
 		echo $this->name."SetDate = function(x){";
 		echo $this->name."_date=x;";
 		echo 'if (x==null){';
-		echo "$('".$this->name."box').value=".new Js($this->null_caption).";";
+		echo "$('".$this->name."box').value=jQuery('<div/>').html(".new Js($this->null_caption).").text();"; // This is interesting...
 		echo "$('".$this->name."').value='';";
 		echo '}';
 		echo 'else{';
