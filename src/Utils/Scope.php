@@ -403,8 +403,9 @@ abstract class HddScope extends MemoryScope {
 		return $this->GetFolder() . '/' . $key . '.object';
 	}
 	private function hdd_unset($filename){
-		if (file_exists($filename))
-			unlink($filename);
+		if (file_exists($filename)) {
+			try{ unlink($filename); } catch(Exception $ex){}
+		}
 	}
 	private function hdd_store($filename,$object){
 		$f = fopen($filename,'w');
@@ -416,18 +417,19 @@ abstract class HddScope extends MemoryScope {
 	}
 	private function hdd_fetch($filename){
 		$r = null;
-		$f = fopen($filename,'r');
-		if (flock($f,LOCK_SH)){
-			$size = filesize($filename);
-			if ($size > 0) {
-				try {
-					$r = unserialize(fread($f, $size));
+		if (file_exists($filename)) {
+			try { $f = fopen($filename,'r'); } catch (Exception $ex){ $f = null; }
+			if (!is_null($f)){
+				if (flock($f,LOCK_SH)){
+					$size = filesize($filename);
+					if ($size > 0) {
+						try { $r = unserialize(fread($f, $size)); } catch(Exception $ex){}
+					}
+					flock($f,LOCK_UN);
 				}
-				catch(Exception $ex){}
+				fclose($f);
 			}
-			flock($f,LOCK_UN);
 		}
-		fclose($f);
 		return $r;
 	}
 	public function OffsetExists($offset) {
@@ -445,10 +447,8 @@ abstract class HddScope extends MemoryScope {
 			return $this->data[$key];
 		elseif ($this->use_hdd_storage){
 			$filename = $this->get_filename($key);
-			if (file_exists($filename)) {
-				$this->data[$key] = $this->hdd_fetch($filename);
-				return $this->data[$key];
-			}
+			$this->data[$key] = $this->hdd_fetch($filename);
+			return $this->data[$key];
 		}
 		return null;
 	}
@@ -476,14 +476,8 @@ abstract class HddScope extends MemoryScope {
 		$key = $this->Hash($offset);
 		if ($this->use_hdd_storage){
 			$filename = $this->get_filename($key);
-			if (file_exists($filename)) {
-				$this->data[$key] = $this->hdd_fetch($filename);
-				return $this->data[$key];
-			}
-			else {
-				$this->data[$key] = null;
-				return null;
-			}
+			$this->data[$key] = $this->hdd_fetch($filename);
+			return $this->data[$key];
 		}
 		elseif (isset($this->data[$key]))
 			return $this->data[$key];
