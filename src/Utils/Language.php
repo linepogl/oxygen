@@ -350,6 +350,16 @@ final class Language {
 
 		return Language::FormatTimeSpan( XDateTime::Now()->Diff( $value ) , false );
 	}
+	/** @return string */
+	public static function FormatDaysSince($value,$null_caption = ''){
+		if (is_int( $value ))
+			$value = new XDateTime($value);
+		if ($value instanceof DateTime)
+			$value = new XDateTime($value);
+		if (!($value instanceof XDateTime))
+			return $null_caption;
+		return XDateTime::Now()->Diff( $value )->GetDays() . Lemma::Pick('d.');
+	}
 
 
 
