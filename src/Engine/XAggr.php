@@ -72,13 +72,13 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			/** @var $selector XMetaField|XAggrField */
 			foreach ($this->selectors as $key=>$selector) {
 				if ($i++>0) $sql.=',';
-				$sql .= $selector->ToSql().' AGGR'.$key;
+				$sql .= $selector->ToSql().' '.new SqlName('AGGR'.$key);
 			}
 		}
 		else {
 			/** @var $selector XMetaField|XAggrField */
 			$selector = $this->selectors;
-			$sql .= $selector->ToSql().' AGGR0';
+			$sql .= $selector->ToSql().' '.new SqlName('AGGR0');
 		}
 
 		//
