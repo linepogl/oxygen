@@ -309,6 +309,9 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$this->data = $a;
 	}
 
+	public function IsEvaluated(){
+		return !is_null($this->data);
+	}
 	public function Invalidate() {
 		$this->data = null;
 		return $this;

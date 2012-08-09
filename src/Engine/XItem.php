@@ -268,6 +268,9 @@ abstract class XItem extends XValue implements Serializable {
 				$n = $sl->GetName();
 				$a = $this->$n;
 
+				/** @var $a XList */
+				if ($a instanceof XList && !$a->IsEvaluated()) continue; // no need to load and re-save unevaluated slaves (probably buggy because of potential OnBeforeSave and OnAfterSave events...)
+
 				// delete removed slaves
 				$hook_field = $sl->GetHookField();
 				$hook_class = $hook_field->GetMeta();
