@@ -708,14 +708,15 @@ class Oxygen {
 
 		echo Js::BEGIN;
 		if (self::$window_scoping_enabled){
-			$rnd = '~~'.ID::Random();
-			echo "if(window.name!=".new Js(self::$window_hash)."){";
-			echo "  if (window.name == '') {"; // window did not have a name: it's a new window (either totally new or a clone)
-			echo "    window.name=".new Js(Oxygen::HashRandom32()).";";
-			echo "    window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>$rnd,'old_window'=>Oxygen::$window_hash))) . ".replace(".new Js($rnd).",window.name);";
+			echo "if(window.name!='Oxygen::'+".new Js(self::$window_hash)."){";
+			echo "  if (window.name.slice(0,8) != 'Oxygen::') {"; // window did not have an Oxygen-assigned name: it's a new window (either totally new or a clone)
+			echo "    var window_hash=".new Js(Oxygen::HashRandom32()).";";
+			echo "    window.name='Oxygen::'+window_hash;";
+			echo "    window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>'X','old_window'=>Oxygen::$window_hash))) . ".replace('window=X','window='+window_hash);";
 			echo "  }";
-			echo "  else {"; // window had a name: let's use that name
-			echo "    window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>$rnd))) . ".replace(".new Js($rnd).",window.name);";
+			echo "  else {"; // window had an Oxygen-assigned name: let's use that!
+			echo "    var window_hash=window.name.slice(8);";
+			echo "    window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>'X'))) . ".replace('window=X','window='+window_hash);";
 			echo "  }";
 			echo "}";
 		}
