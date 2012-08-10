@@ -306,6 +306,7 @@
 	<!-- deprecated --><lemma name="DecimalPoint"><en>.</en><fr>,</fr><el>,</el></lemma>
 
 	<lemma name="unit:byte"><en>B</en><fr>o</fr><el>B</el></lemma>
+	<lemma name="unit:sec"><en>sec</en><fr>sec</fr><el>sec</el></lemma>
 
 	<!-- LANGUAGES -->
 	<lemma name="lang:en"><en>English</en><fr>Anglais</fr><el>Αγγλικά</el></lemma>

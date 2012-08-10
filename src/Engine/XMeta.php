@@ -391,7 +391,7 @@ class XMeta extends stdClass {
 	private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
 	private function ExistsInRemoteCache($idi) { return $this->__remote_cache_is_trusted && Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__classname.$this->__db_signature.'::'.$idi); }
 	private function PickFromRemoteCache($idi) { return $this->__item_cache[$idi] = Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi]; }
-	public function SetRemoteCacheIsTrusted($value){ $this->__remote_cache_is_trusted = $value; return $this; }
+	public function SetIsRemoteCacheTrusted($value){ $this->__remote_cache_is_trusted = $value; return $this; }
 	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if ((is_null($item) || !$item->IsTemporary()) && Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = $item; }
 	public function RemoveFromCache($idi) { unset($this->__item_cache[$idi]);  if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = null; }
 
