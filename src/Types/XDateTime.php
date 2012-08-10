@@ -32,6 +32,7 @@ class XDateTime extends XValue implements Serializable {
 	public function AsTime() { return new XTime($this->timestamp); }
 	public function AsInt()  { return $this->timestamp; }
 
+	public function IsDate(){ return $this->Format('His') === '000000'; }
 
 	public function IsEqualTo( $x ){
 		if ($x instanceof XDateTime) return $this->timestamp == $x->timestamp;
