@@ -4,6 +4,7 @@ abstract class XItem extends XValue implements Serializable {
 	/** @var ID */
 	public $id;
 	public $has_temp_id = true;
+	public $comes_from_the_cache = false;
 	public function IsTemporary(){ return $this->has_temp_id; }
 	/**
 	 * Do not use this function directly. Instead, use the static functions Make() and Temp()

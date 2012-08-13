@@ -242,8 +242,11 @@ class XMeta extends stdClass {
 		$idi = $id->AsInt();
 		if ($this->ExistsInLocalCache($idi))
 			return $this->PickFromLocalCache($idi);
-		elseif ($this->ExistsInRemoteCache($idi))
-			return $this->PickFromRemoteCache($idi);
+		elseif ($this->ExistsInRemoteCache($idi)) {
+			$r = $this->PickFromRemoteCache($idi);
+			$r->comes_from_the_cache = true;
+			return $r;
+		}
 		elseif ($this->IsAbstract()){
 			if (!array_key_exists($idi,$this->__item_concrete_meta_cache)) {
 				$this->__item_concrete_meta_cache[$idi] = XMeta::Of( Database::ExecuteScalar('SELECT '.$this->GetAbstractDBFieldName().' FROM '.$this->GetDBTableName().' WHERE '.$this->id->GetDBName().'=?',$id)->AsString() );
@@ -394,9 +397,9 @@ class XMeta extends stdClass {
 	private $__item_concrete_meta_cache = array();
 	private function SoftResetItemCache(){ $this->__item_cache = array(); $this->__item_concrete_meta_cache = array(); }
 	private function ExistsInLocalCache($idi)  { return array_key_exists($idi,$this->__item_cache); }
-	private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
+	/** @return XItem */private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
 	private function ExistsInRemoteCache($idi) { return $this->__remote_cache_is_trusted && $this->__remote_cache_is_trusted && Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__classname.$this->__db_signature.'::'.$idi); }
-	private function PickFromRemoteCache($idi) { return $this->__item_cache[$idi] = Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi]; }
+	/** @return XItem */private function PickFromRemoteCache($idi) { return $this->__item_cache[$idi] = Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi]; }
 	public function SetIsRemoteCacheTrusted($value){ $this->__remote_cache_is_trusted = $value; return $this; }
 	public function IsRemoteCacheTrusted(){ return $this->__remote_cache_is_trusted; }
 	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if ((is_null($item) || !$item->IsTemporary()) && Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = $item; }
