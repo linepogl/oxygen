@@ -157,10 +157,16 @@ class XMeta extends stdClass {
 				return $r;
 			}
 		}
+		$propagate_source = $r;
+
 		$r = new XMeta($classname);
 		$m = new ReflectionMethod($classname,'FillMeta');
 		$m->invoke(null,$r);
 		$r->Compile();
+
+		if (!is_null($propagate_source)) {
+			$r->__remote_cache_is_trusted = $propagate_source->__remote_cache_is_trusted;
+		}
 
 		$key = $classname;
 		if (!is_null($r->__depends_on)) $key .= $r->__depends_on;
@@ -389,9 +395,10 @@ class XMeta extends stdClass {
 	private function SoftResetItemCache(){ $this->__item_cache = array(); $this->__item_concrete_meta_cache = array(); }
 	private function ExistsInLocalCache($idi)  { return array_key_exists($idi,$this->__item_cache); }
 	private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
-	private function ExistsInRemoteCache($idi) { return $this->__remote_cache_is_trusted && Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__classname.$this->__db_signature.'::'.$idi); }
+	private function ExistsInRemoteCache($idi) { return $this->__remote_cache_is_trusted && $this->__remote_cache_is_trusted && Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__classname.$this->__db_signature.'::'.$idi); }
 	private function PickFromRemoteCache($idi) { return $this->__item_cache[$idi] = Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi]; }
 	public function SetIsRemoteCacheTrusted($value){ $this->__remote_cache_is_trusted = $value; return $this; }
+	public function IsRemoteCacheTrusted(){ return $this->__remote_cache_is_trusted; }
 	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if ((is_null($item) || !$item->IsTemporary()) && Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = $item; }
 	public function RemoveFromCache($idi) { unset($this->__item_cache[$idi]);  if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = null; }
 
