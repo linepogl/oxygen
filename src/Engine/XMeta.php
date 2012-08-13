@@ -242,11 +242,8 @@ class XMeta extends stdClass {
 		$idi = $id->AsInt();
 		if ($this->ExistsInLocalCache($idi))
 			return $this->PickFromLocalCache($idi);
-		elseif ($this->ExistsInRemoteCache($idi)) {
-			$r = $this->PickFromRemoteCache($idi);
-			$r->comes_from_the_cache = true;
-			return $r;
-		}
+		elseif ($this->ExistsInRemoteCache($idi))
+			return $this->PickFromRemoteCache($idi);
 		elseif ($this->IsAbstract()){
 			if (!array_key_exists($idi,$this->__item_concrete_meta_cache)) {
 				$this->__item_concrete_meta_cache[$idi] = XMeta::Of( Database::ExecuteScalar('SELECT '.$this->GetAbstractDBFieldName().' FROM '.$this->GetDBTableName().' WHERE '.$this->id->GetDBName().'=?',$id)->AsString() );
