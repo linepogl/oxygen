@@ -214,6 +214,14 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		else
 			return parent::Where($pred_or_function);
 	}
+	/** @return XList|LinqIterator */
+	public function WhereAny( /* ... */ ) { return $this->WhereAnyX( func_get_args() ); }
+	/** @return XList|LinqIterator */
+	public function WhereAnyX( $preds ) { return $this->Where(XPred::Any($preds)); }
+	/** @return XList|LinqIterator */
+	public function WhereAll( /* ... */ ) { return $this->WhereAllX( func_get_args() ); }
+	/** @return XList|LinqIterator */
+	public function WhereAllX( $preds ) { return $this->Where(XPred::All($preds)); }
 
 
 
