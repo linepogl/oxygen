@@ -268,8 +268,8 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
-	public function SaveAll(){ foreach ($this as $x) $x->Save(); return $this; }
-	public function KillAll(){ foreach ($this as $x) $x->Kill(); return $this; }
+	/** @return XList */ public function SaveAll(){ foreach ($this as $x) $x->Save(); return $this; }
+	/** @return XList */ public function KillAll(){ foreach ($this as $x) $x->Kill(); return $this; }
 
 
 

@@ -207,10 +207,11 @@ class LinqIterator implements Iterator, Countable {
 		return $r;
 	}
 
-	/** Lazy O(n) @return void */
+	/** Lazy O(n) @return LinqIterator */
 	public function Apply($function_apply){
 		for($this->rewind();$this->valid();$this->next())
 			$function_apply($this->current(),$this->key());
+		return $this;
 	}
 
 
