@@ -33,8 +33,8 @@ class XMetaField extends XValue {
 	private $db_alias;
 	private $db_alias_complex;
 	/** @return XMetaField */
-	public function WithDBAlias($value){ $this->db_alias = $value; $this->db_alias_complex=false; return $this; }
-	public function WithDBComplexAlias($value){ $this->db_alias = $value; $this->db_alias_complex=true; return $this; }
+	public function WithDBAlias($value){ $this->db_alias = strval($value); $this->db_alias_complex=false; return $this; }
+	public function WithDBComplexAlias($value){ $this->db_alias = strval($value); $this->db_alias_complex=true; return $this; }
 	public function GetDBAlias(){ return $this->db_alias; }
 	public function GetDBName(){ return $this->db_alias; }
 	public function IsDBAliasComplex(){ return $this->db_alias_complex; }
