@@ -282,14 +282,16 @@ class Debug {
 	private static function GetFileLinesAroundLine( $filename , $line , $lines = 9){
 		$r = '';
 		$spaces = intval(log($line+$lines,10))+1;
-		$f = fopen($filename,'r');
-		for($i=0; $i<$line-$lines-1; $i++) fgets($f);
-		for(; $i<$line+$lines; $i++) {
-			$s = fgets($f);
-			if ($s === false) break;
-			$r .= "\n" . ($i==$line-1?'# >> ':'#    ').sprintf('%'.$spaces.'d',$i+1).' # '. str_replace(array("\n","\r","\t"),array('','','  '),$s);
+		if (file_exists($filename)) {
+			$f = fopen($filename,'r');
+			for($i=0; $i<$line-$lines-1; $i++) fgets($f);
+			for(; $i<$line+$lines; $i++) {
+				$s = fgets($f);
+				if ($s === false) break;
+				$r .= "\n" . ($i==$line-1?'# >> ':'#    ').sprintf('%'.$spaces.'d',$i+1).' # '. str_replace(array("\n","\r","\t"),array('','','  '),$s);
+			}
+			fclose($f);
 		}
-		fclose($f);
 		return $r;
 	}
 	public static function GetExceptionTraceAsText(Exception $ex){
@@ -344,12 +346,12 @@ class Debug {
 
 
 
-	public static function RecordExceptionSilenced      (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,1,$extra_developer_message); }
-	public static function RecordExceptionConverted     (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,2,$extra_developer_message); }
-	public static function RecordExceptionRethrown      (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,3,$extra_developer_message); }
-	public static function RecordExceptionServed        (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,4,$extra_developer_message); }
-	public static function RecordExceptionServedDebug   (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,7,$extra_developer_message); }
-	public static function RecordExceptionServedGeneric (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,5,$extra_developer_message); }
+	public static function RecordExceptionSilenced      (Exception $ex,$extra_developer_message = null) { return Debug::RecordException($ex,1,$extra_developer_message); }
+	public static function RecordExceptionConverted     (Exception $ex,$extra_developer_message = null) { return Debug::RecordException($ex,2,$extra_developer_message); }
+	public static function RecordExceptionRethrown      (Exception $ex,$extra_developer_message = null) { return Debug::RecordException($ex,3,$extra_developer_message); }
+	public static function RecordExceptionServed        (Exception $ex,$extra_developer_message = null) { return Debug::RecordException($ex,4,$extra_developer_message); }
+	public static function RecordExceptionServedDebug   (Exception $ex,$extra_developer_message = null) { return Debug::RecordException($ex,7,$extra_developer_message); }
+	public static function RecordExceptionServedGeneric (Exception $ex,$extra_developer_message = null) { return Debug::RecordException($ex,5,$extra_developer_message); }
 	public static function RecordExceptionAndDie        (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,6,$extra_developer_message); exit(); }
 	private static function RecordException(Exception $ex,$way_handled,$extra_developer_message=null){
 		$way_handled_message = '';
@@ -394,6 +396,7 @@ class Debug {
 				catch (Exception $ex) {}
 			}
 //		}
+		return $serial;
 	}
 
 }
