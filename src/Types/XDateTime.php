@@ -163,7 +163,7 @@ class XDateTime extends XValue implements Serializable {
 	*/
 	public function Format($format){
 		$r = strftime(self::translate_format($format),$this->timestamp);
-		return $r!==false ? $r : date($format,$this->timestamp);
+		return $r!==false ? Str::ForceUTF8($r) : date($format,$this->timestamp);
 	}
 
 
