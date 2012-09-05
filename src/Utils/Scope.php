@@ -421,10 +421,11 @@ abstract class HddScope extends MemoryScope {
 			try { $f = fopen($filename,'r'); } catch (Exception $ex){ $f = null; }
 			if (!is_null($f)){
 				if (flock($f,LOCK_SH)){
-					$size = filesize($filename);
-					if ($size > 0) {
-						try { $r = unserialize(fread($f, $size)); } catch(Exception $ex){}
+					try {
+						$size = filesize($filename);
+						if ($size > 0) $r = unserialize(fread($f, $size));
 					}
+					catch(Exception $ex){}
 					flock($f,LOCK_UN);
 				}
 				fclose($f);
