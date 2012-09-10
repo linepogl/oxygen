@@ -32,6 +32,7 @@ class Oxygen {
 
 		// init url handling
 		self::$php_script = substr( $_SERVER['SCRIPT_NAME'] , strlen(__BASE__) );
+		if (is_null(self::$php_controller)) self::$php_controller = self::$php_script;
 		foreach (self::$url_pins as $key=>$value)
 			self::$url_pins[$key] = Http::$GET[$key]->AsStringOrNull();
 
@@ -504,11 +505,14 @@ class Oxygen {
 	//
 	//
 	private static $php_script;
+	private static $php_controller = null;
 	private static $url_pins = array('action'=>null,'lang'=>null,'window'=>null);
 	public static function AddUrlPin($key) { self::$url_pins[$key] = null; }
 	public static function GetUrlPin($key) { return self::$url_pins[$key]; }
 	public static function GetUrlPins() { return self::$url_pins; }
 	public static function SetUrlPin($key,$value) { self::$url_pins[$key] = $value; }
+	public static function GetPhpController(){ return self::$php_controller; }
+	public static function SetPhpController($value){ self::$php_controller = $value; }
 	public static function MakeHrefPreservingValues(array $params = array()){
 		return Oxygen::MakeHref( $params + $_GET );    // <-- array + operator is a better array_merge($b,$a)...
 	}
@@ -521,7 +525,7 @@ class Oxygen {
 			$s .= '=';
 			$s .= new Url( $value );  // <---- this one costs a lot!
 		}
-		return self::$php_script . $s;
+		return self::$php_controller . $s;
 	}
 	public static function IsPostback(){
 		return strtolower($_SERVER['REQUEST_METHOD'])=='post';
@@ -729,6 +733,8 @@ class Oxygen {
 		echo "var oxygen_encoding = ".new Js(Oxygen::GetCharset()).";";
 		echo "var oxygen_lang = ".new Js(Oxygen::GetLang()).";";
 		echo "var oxygen_base = ".new Js(__BASE__).";";
+
+		echo "window.onerror = function(msg,url,line){ new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); };";
 		echo Js::END;
 
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery.js"></script>'.Js::BEGIN.'jQuery.noConflict();'.Js::END; // jQuery has to be loaded before prototype and set to no-conflict mode.
@@ -746,7 +752,7 @@ class Oxygen {
 
 
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.js"></script>';
-		echo '<link href="'.__BASE__.'oxy/css/oxygen.css?1" rel="stylesheet" type="text/css" />';
+		echo '<link href="'.__BASE__.'oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
 		echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
 
