@@ -31,8 +31,8 @@ class Oxygen {
 		Debug::Init();
 
 		// init url handling
-		self::$php_script = substr( $_SERVER['SCRIPT_NAME'] , strlen(__BASE__) );
-		if (is_null(self::$php_controller)) self::$php_controller = self::$php_script;
+		self::$php_controller = substr( $_SERVER['SCRIPT_NAME'] , strlen(__BASE__) );
+		if (is_null(self::$php_managed_controller)) self::$php_managed_controller = self::$php_controller;
 		foreach (self::$url_pins as $key=>$value)
 			self::$url_pins[$key] = Http::$GET[$key]->AsStringOrNull();
 
@@ -504,19 +504,20 @@ class Oxygen {
 	// Http context
 	//
 	//
-	private static $php_script;
-	private static $php_controller = null;
+	private static $php_controller;
+	private static $php_managed_controller = null;
 	private static $url_pins = array('action'=>null,'lang'=>null,'window'=>null);
 	public static function AddUrlPin($key) { self::$url_pins[$key] = null; }
 	public static function GetUrlPin($key) { return self::$url_pins[$key]; }
 	public static function GetUrlPins() { return self::$url_pins; }
 	public static function SetUrlPin($key,$value) { self::$url_pins[$key] = $value; }
 	public static function GetPhpController(){ return self::$php_controller; }
-	public static function SetPhpController($value){ self::$php_controller = $value; }
+	public static function GetPhpManagedController(){ return self::$php_managed_controller; }
+	public static function SetPhpManagedController($value){ self::$php_managed_controller = $value; }
 	public static function MakeHrefPreservingValues(array $params = array()){
-		return Oxygen::MakeHref( $params + $_GET , true );    // <-- array + operator is a better array_merge($b,$a)...
+		return Oxygen::MakeHref( $params + $_GET );    // <-- array + operator is a better array_merge($b,$a)...
 	}
-	public static function MakeHref(array $url_args = array() , $preserve_controller = false ){
+	public static function MakeHref(array $url_args = array() , $use_managed_controller = false ){
 		$s = '';
 		foreach ( ($url_args + self::$url_pins) as $key=>$value) { // <-- array + operator here again.
 			if (is_null($value)) continue;
@@ -525,8 +526,8 @@ class Oxygen {
 			$s .= '=';
 			$s .= new Url( $value );  // <---- this one costs a lot!
 		}
-		if ($preserve_controller)
-			return self::$php_script . $s;
+		if ($use_managed_controller)
+			return self::$php_managed_controller . $s;
 		else
 			return self::$php_controller . $s;
 	}

@@ -332,6 +332,7 @@ abstract class Action extends XValue {
 			$args
 			+ array('action'=>$this->GetName(),'mode'=> $this->mode==Action::MODE_NORMAL ? null : $this->mode)
 			+ $this->GetUrlArgs()
+			,true // <-- use managed controller always for actions
 			);
 	}
 	public function GetForm($name=null){
