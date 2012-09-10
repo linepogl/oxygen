@@ -514,9 +514,9 @@ class Oxygen {
 	public static function GetPhpController(){ return self::$php_controller; }
 	public static function SetPhpController($value){ self::$php_controller = $value; }
 	public static function MakeHrefPreservingValues(array $params = array()){
-		return Oxygen::MakeHref( $params + $_GET );    // <-- array + operator is a better array_merge($b,$a)...
+		return Oxygen::MakeHref( $params + $_GET , true );    // <-- array + operator is a better array_merge($b,$a)...
 	}
-	public static function MakeHref(array $url_args = array()){
+	public static function MakeHref(array $url_args = array() , $preserve_controller = false ){
 		$s = '';
 		foreach ( ($url_args + self::$url_pins) as $key=>$value) { // <-- array + operator here again.
 			if (is_null($value)) continue;
@@ -525,7 +525,10 @@ class Oxygen {
 			$s .= '=';
 			$s .= new Url( $value );  // <---- this one costs a lot!
 		}
-		return self::$php_controller . $s;
+		if ($preserve_controller)
+			return self::$php_script . $s;
+		else
+			return self::$php_controller . $s;
 	}
 	public static function IsPostback(){
 		return strtolower($_SERVER['REQUEST_METHOD'])=='post';
