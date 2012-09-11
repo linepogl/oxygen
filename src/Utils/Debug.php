@@ -384,7 +384,7 @@ class Debug {
 
 		try {
 			$f = Oxygen::GetLogFolder(true);
-			file_put_contents( $f .'/'.$serial.'.err', serialize(array( 'head' => $head , 'body' => $body )));
+			file_put_contents( $f .'/'.Fs::GetSafeFilename($serial.'.'.get_class($ex).'.'.$way_handled_message).'.err', serialize(array( 'head' => $head , 'body' => $body )));
 		}
 		catch (Exception $ex) {}
 

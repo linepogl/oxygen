@@ -814,6 +814,9 @@ class Oxygen {
 	public static function IsURL($that){
 		return 1==preg_match('/(https?|ftp):\/\/.+/',$that);
 	}
+	public static function IsMacAddress($that){
+		return mb_ereg("([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})", $that) && $that!="00-00-00-00-00-00";
+	}
 	public static function SendEmail($from_name,$from_email,$rcpt,$subject,$body){
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
