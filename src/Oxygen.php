@@ -914,6 +914,12 @@ class Oxygen {
 		if (!is_null($r))
 			$rr[] = $r;
 
+		// extra info:
+		$rr[] = $_SERVER;
+		$r = array(); foreach ($_GET as $key => $value) $r['GET[ '.$key.' ]'] = $value; if (!empty($r)) $rr[] = $r;
+		$r = array(); foreach ($_POST as $key => $value) $r['POST[ '.$key.' ]'] = $value; if (!empty($r)) $rr[] = $r;
+		$r = array(); foreach ($_COOKIE as $key => $value) $r['COOKIE[ '.$key.' ]'] = $value; if (!empty($r)) $rr[] = $r;
+
 		return $rr;
 	}
 	public static function GetInfoAsText($info = null){

@@ -30,7 +30,6 @@ class Database {
 
 	private static $queries = array();
 	private static $prepared = array();
-	private static $prepared_stats = array();
 
 	// duplicates, for speed:
 	private static $cn = null;
@@ -213,13 +212,11 @@ class Database {
 			array_push(self::$stack,self::$cx);
 			self::$queries = array();
 			self::$prepared = array();
-			self::$prepared_stats = array();
 		}
 	}
 	private static function PopConnection(){
 		self::$queries = array();
 		self::$prepared = array();
-		self::$prepared_stats = array();
 		self::SetConnection( array_pop(self::$stack) );
 	}
 	private static function ResetCaches(){
@@ -245,17 +242,9 @@ class Database {
 	public static function GetQueriesAsText(){
 		$r = '';
 		$i = 0;
-		arsort(self::$prepared_stats);
-		foreach ( self::$prepared_stats as $q=>$v ) {
-			$r .= sprintf('%5d',++$i).'. '. $v . ' -> ' .(false===strstr($q,'?')?'* ':''). $q . "\n";
-		}
-		if ($r != '') $r .= "\n\n";
-
-		$i = 0;
 		foreach ( self::$queries as $q ) {
 			$r .=  sprintf('%5d',++$i) . '. ' . $q . "\n";
 		}
-
 		if ($r == '') $r .= '-';
 		return $r;
 	}
@@ -266,14 +255,15 @@ class Database {
 	 * @return PDOStatement
 	 */
 	private static function &Prepare(&$sql){
-		if (self::$type == self::ORACLE) { $r = self::$cn->prepare($sql); return $r; } // Oracle handles the caching by itself.
-		self::$queries[] =& $sql;
-		if (!array_key_exists($sql,self::$prepared)) {
-			self::$prepared[$sql] = self::$cn->prepare($sql);
-			self::$prepared_stats[$sql] = 0;
+		if (self::$type == self::ORACLE) {
+			$r = self::$cn->prepare($sql); // Oracle handles the caching by itself.
 		}
-		self::$prepared_stats[$sql]++;
-		return self::$prepared[$sql];
+		else {
+			if (!array_key_exists($sql,self::$prepared)) self::$prepared[$sql] = self::$cn->prepare($sql);
+			$r = self::$prepared[$sql];
+		}
+		self::$queries[] =& $sql;
+		return $r;
 	}
 
 
