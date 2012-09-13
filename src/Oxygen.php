@@ -915,10 +915,13 @@ class Oxygen {
 			$rr[] = $r;
 
 		// extra info:
-		$rr[] = $_SERVER;
-		$r = array(); foreach ($_GET as $key => $value) $r['GET[ '.$key.' ]'] = $value; if (!empty($r)) $rr[] = $r;
-		$r = array(); foreach ($_POST as $key => $value) $r['POST[ '.$key.' ]'] = $value; if (!empty($r)) $rr[] = $r;
-		$r = array(); foreach ($_COOKIE as $key => $value) $r['COOKIE[ '.$key.' ]'] = $value; if (!empty($r)) $rr[] = $r;
+		$r = array();
+		$r['$_SERVER'] = var_export($_SERVER,true);
+		$r['$_GET'] = var_export($_GET,true);
+		$r['$_POST'] = var_export($_POST,true);
+		$r['$_FILES'] = var_export($_FILES,true);
+		$r['$_COOKIE'] = var_export($_COOKIE,true);
+		$rr[] = $r;
 
 		return $rr;
 	}
