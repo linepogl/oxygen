@@ -31,7 +31,6 @@ abstract class XValue implements _XValue {
 
 
 
-	private static $comparisons = array();
 	public static function AreEqual($x1,$x2){
 		if ( $x1 instanceof _XValue )
 			return $x1->IsEqualTo( $x2 );

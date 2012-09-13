@@ -588,10 +588,10 @@ abstract class XItem extends XValue implements Serializable {
 	/** @return XList */ public static final function MakeList(){ return static::Meta()->MakeItemList(); }
 	/** @return XList */ public static final function MakeListGeneric($classname){ return XMeta::Of($classname)->MakeItemList(); }
 
-	/** @return XItem */ public static final function Temp($id=null){ return static::Meta()->MakeTempItem($id); }
+	/** @return static|XItem */ public static final function Temp($id=null){ return static::Meta()->MakeTempItem($id); }
 	/** @return XItem */ public static final function TempGeneric($classname,$id=null){ return XMeta::Of($classname)->MakeTempItem($id); }
 
-	/** @return XItem */ public static final function Make(){ return static::Meta()->MakePermItem(); }
+	/** @return static|XItem */ public static final function Make(){ return static::Meta()->MakePermItem(); }
 	/** @return XItem */ public static final function MakeGeneric($classname){ return XMeta::Of($classname)->MakePermItem(); }
 
 
@@ -602,7 +602,7 @@ abstract class XItem extends XValue implements Serializable {
 	/** @return XList */ public static final function SeekAggressively(){ return static::Meta()->SeekItems()->Aggressively(); }
 	/** @return XList */ public static final function SeekGeneric($classname){ return XMeta::Of($classname)->SeekItems(); }
 
-	/** @return XItem|null */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
+	/** @return static|XItem|null */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
 	/** @return XItem|null */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
 
 

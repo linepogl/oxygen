@@ -27,8 +27,8 @@ class HttpValue extends ImportConverter {
 			return array();
 		else if (is_array($this->value)){
 			$a = array();
-			foreach ($this->value as $s)
-				$a[] = intval($s);
+			foreach ($this->value as $key=>$s)
+				$a[$key] = intval($s);
 			return $a;
 		}
 		else {
@@ -43,7 +43,7 @@ class HttpValue extends ImportConverter {
   		return array();
   	else if (is_array($this->value)){
 			$r = array();
-			foreach ($this->value as $s) $r[]= is_null($s) || $s=='' ? null : ID::ParseHex($s);
+			foreach ($this->value as $key=>$s) $r[$key]= is_null($s) || $s=='' ? null : ID::ParseHex($s);
   		return $r;
 		}
   	else {
