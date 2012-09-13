@@ -43,7 +43,7 @@ class XWrap extends stdClass {
 		$r = array();
 		foreach ($this as $key=>$value) {
 			if ($value instanceof XWrapField) {
-				$r[] = $value;
+				$r[$key] = $value;
 			}
 		}
 		return $r;
@@ -52,7 +52,7 @@ class XWrap extends stdClass {
 		$r = array();
 		foreach ($this as $key=>$value) {
 			if ($value instanceof XWrapSlave) {
-				$r[] = $value;
+				$r[$key] = $value;
 			}
 		}
 		return $r;

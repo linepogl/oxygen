@@ -6,7 +6,7 @@ class LinqSelectIterator extends LinqIterator {
 	public function Current(){
 		$f = $this->function_select;
 		$v = $f($this->iterator->current(),$this->iterator->key());
-		return $f($this->iterator->current(),$this->iterator->key());
+		return $v;
 	}
 }
 
