@@ -5,8 +5,8 @@ class HttpValue extends ImportConverter {
   public function __construct($value){
   	if (is_array($value)){
   		$a = array();
-  		foreach ($value as $s)
-  			$a[] = is_null($s) ? null : htmlspecialchars_decode( rawurldecode( $s) );
+  		foreach ($value as $key=>$s)
+  			$a[$key] = is_null($s) ? null : htmlspecialchars_decode( rawurldecode( $s) );
   		parent::__construct($a);
 		}
 		else{
