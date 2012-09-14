@@ -715,16 +715,10 @@ class Oxygen {
 
 		echo Js::BEGIN;
 		if (self::$window_scoping_enabled){
-			echo "if(window.name!='Oxygen::'+".new Js(self::$window_hash)."){";
-//			echo "  if (window.name.slice(0,8) != 'Oxygen::') {"; // window did not have an Oxygen-assigned name: it's a new window (either totally new or a clone)
-			echo "    var window_hash=".new Js(Oxygen::HashRandom32()).";";
-			echo "    window.name='Oxygen::'+window_hash;";
-			echo "    window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>'X','old_window'=>Oxygen::$window_hash))) . ".replace('window=X','window='+window_hash);";
-//			echo "  }";
-//			echo "  else {"; // window had an Oxygen-assigned name: let's use that!    [Update: Let's not! THIS IS A BUG! Changing the window hash without cloning will cancel any action done before the change!]
-//			echo "    var window_hash=window.name.slice(8);";
-//			echo "    window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>'X'))) . ".replace('window=X','window='+window_hash);";
-//			echo "  }";
+			echo "if(window.name!=".new Js(self::$window_hash)."){";
+			echo "  var window_hash=".new Js(Oxygen::HashRandom32()).";";
+			echo "  window.name=window_hash;";
+			echo "  window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>'X','old_window'=>Oxygen::$window_hash))) . ".replace('window=X','window='+window_hash);";
 			echo "}";
 		}
 
