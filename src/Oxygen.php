@@ -732,8 +732,8 @@ class Oxygen {
 		echo "var oxygen_lang = ".new Js(Oxygen::GetLang()).";";
 		echo "var oxygen_base = ".new Js(__BASE__).";";
 
-		echo "var oxygen_sent_exceptions = {};";
-		echo "window.onerror = function(msg,url,line){ if (oxygen_sent_exceptions[msg+url+line]===undefined) { new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); oxygen_sent_exceptions[msg+url+line]=1; } else { oxygen_sent_exceptions[msg+url+line]++; } };";
+		echo "var oxygen_exceptions = {};";
+		echo "window.onerror = function(msg,url,line){ if (oxygen_exceptions[msg+url+line]===undefined) { new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); oxygen_exceptions[msg+url+line]=1; } else { oxygen_exceptions[msg+url+line]++; } };";
 		echo Js::END;
 
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery.js"></script>'.Js::BEGIN.'jQuery.noConflict();'.Js::END; // jQuery has to be loaded before prototype and set to no-conflict mode.
