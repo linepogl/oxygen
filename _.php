@@ -2,6 +2,7 @@
 define('__ROOT__',substr(__FILE__,0,-10));  // 10==strlen('/oxy/_.php')
 define('__BASE__',substr($_SERVER['SCRIPT_NAME'],0,1-(strlen($_SERVER['SCRIPT_FILENAME'])-strlen(__ROOT__))));
 define('__OFFSET__',substr($_SERVER['SCRIPT_NAME'],strlen(__BASE__),strrpos($_SERVER['SCRIPT_NAME'],'/')-strlen(__BASE__)+1));
+
 chdir(__ROOT__);
 
 
@@ -18,6 +19,7 @@ if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }
 require('oxy/src/TypeSystem/XType.php');
 require('oxy/src/TypeSystem/XValue.php');
 require('oxy/src/Types/ID.php');
+require('oxy/src/Actions/Action.php');
 require('oxy/src/Oxygen.php');
 require('oxy/src/Utils/Scope.php');
 require('oxy/src/Utils/Database.php');

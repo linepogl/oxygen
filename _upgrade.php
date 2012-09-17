@@ -43,7 +43,7 @@ if (Database::BeginPatch('v',10,'Oxygen 1.10')) {
 
 if (Database::BeginPatch('v',11,'E-mails')) {
 	Database::ExecuteDropTable('oxy_emails');
-	Database::ExecuteDelete('oxy_ids','TableName='.new Sql('oxy_emails'));
+	Database::ExecuteDelete('oxy_ids',new SqlName('TableName').'='.new Sql('oxy_emails'));
 	Database::ApplyPatch();
 }
 if (Database::BeginPatch('v',12,'Remove unhandled exceptions')) {

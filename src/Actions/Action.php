@@ -330,7 +330,7 @@ abstract class Action extends XValue {
 	public final function GetHrefPlain($args=array()){
 		return Oxygen::MakeHref(
 			$args
-			+ array('action'=>$this->GetName(),'mode'=> $this->mode==Action::MODE_NORMAL ? null : $this->mode)
+			+ array('action'=>$this->GetName(),'mode'=> $this->mode == Oxygen::GetDefaultActionMode() ? null : $this->mode)
 			+ $this->GetUrlArgs()
 			,true // <-- use managed controller always for actions
 			);

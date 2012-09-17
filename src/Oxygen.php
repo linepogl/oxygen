@@ -70,7 +70,8 @@ class Oxygen {
 		Oxygen::SetLang($lang);
 
 		// set the action
-		self::$actionmode = Http::$GET['mode']->AsInteger();
+		self::$actionmode = Http::$GET['mode']->AsIntegerOrNull();
+		if (is_null(self::$actionmode)) self::$actionmode = self::$default_actionmode;
 		self::$actionname = Http::$GET['action']->AsStringOrNull();
 		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
 
@@ -169,7 +170,7 @@ class Oxygen {
 				}
 				else {
 					error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
-					if (!DEV) {
+					if (DEV) {
 						$serial = Debug::RecordExceptionServed($ex,'Global Exception Handler');
 						echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div>';
 						echo '<div style="font:normal 11px/12px Trebuchet MS,sans-serif;margin:10px 0 2px 0;color:#999999;">'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
@@ -681,15 +682,17 @@ class Oxygen {
 	/** @var Action */
 	private static $action = null;
 	private static $content = '';
+	private static $actionmode = 0;
 	private static $default_actionname = 'Home';
+	private static $default_actionmode = 0;
 	/** @return void */ public static function SetDefaultActionName($actionname) { self::$default_actionname = $actionname; }
+	/** @return void */ public static function SetDefaultActionMode($actionmode) { self::$default_actionmode = $actionmode; }
 	/** @return string */ public static function GetDefaultActionName() { return self::$default_actionname; }
+	/** @return int    */ public static function GetDefaultActionMode() { return self::$default_actionmode; }
 	/** @return string */ public static function GetActionName(){ return self::$actionname; }
 	/** @return Action */ public static function GetAction(){ return self::$action; }
 	/** @return string */ public static function GetContent() { return self::$content; }
 	/** @return string */ public static function GetBody(){ return self::$content; }
-
-	private static $actionmode = 0;
 	/** @return int    */ public static function GetActionMode(){ return self::$actionmode; }
 
 	public static function IsActionModeContent()      { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_CONTENT; }
@@ -708,10 +711,7 @@ class Oxygen {
 
 		ob_start();
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
-
-		if (__OFFSET__!='') {
-			echo '<base href="'.new Html(__BASE__).'" />';
-		}
+		echo '<base href="'.new Html(__BASE__).'" />';
 
 		echo Js::BEGIN;
 		if (self::$window_scoping_enabled){

@@ -63,7 +63,7 @@ class Database {
 
 		$needs_refresh = false;
 		if ($force || self::NeedsUpgrade()) {
-			$lock_filename = Oxygen::GetTempFolder() .'/database.upgrade.lock';
+			$lock_filename = Oxygen::GetSharedTempFolder(true) .'/database.upgrade.lock';
 			$f = fopen($lock_filename,'w');
 			if (flock($f,LOCK_EX)){
 				if ($force || self::NeedsUpgrade()) {
@@ -428,7 +428,7 @@ class Database {
 		$r = self::$patches[$patcher];
 		if (is_null($r)){
 			try{
-				$r = self::ExecuteScalar('SELECT '.self::$patching_system_fieldnames[$patcher].' FROM '.self::$patching_system_tablename)->AsInteger();
+				$r = self::ExecuteScalar('SELECT '.new SqlName(self::$patching_system_fieldnames[$patcher]).' FROM '.new SqlName(self::$patching_system_tablename))->AsInteger();
 				self::$patches[$patcher] = $r;
 			}
 			catch (Exception $ex){}
@@ -441,7 +441,7 @@ class Database {
 	}
 	public static function BeginPatchingSystem(){
 		try{
-			$r = 1!=self::ExecuteScalar('SELECT COUNT(*) FROM '.self::$patching_system_tablename)->AsInteger();
+			$r = 1!=self::ExecuteScalar('SELECT COUNT(*) FROM '.new SqlName(self::$patching_system_tablename))->AsInteger();
 		}
 		catch (Exception $ex){
 			$r = true;
@@ -495,10 +495,10 @@ class Database {
 	public static function ExecuteInsert($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'INSERT INTO '.$tablename.' (';
+		$sql = 'INSERT INTO '.new SqlName($tablename).' (';
 		for($i=1;$i<$z;$i+=2){
 			if ($i>1) $sql.=',';
-			$sql.=$a[$i];
+			$sql.=new SqlName($a[$i]);
 		}
 		$sql.=') VALUES (';
 		for($i=1;$i<$z;$i+=2){
@@ -520,7 +520,7 @@ class Database {
 		$z = func_num_args();
 		$primarykey = $z%2 == 1 ? 'id' : $a[1];
 		$id = self::ExecuteGetNextID($tablename,$primarykey);
-		$sql = 'INSERT INTO '.$tablename.' ('.$primarykey;
+		$sql = 'INSERT INTO '.new SqlName($tablename).' ('.new SqlName($primarykey);
 		for($i=2-$z%2;$i<$z;$i+=2)
 			$sql.=','.$a[$i];
 		$sql.=') VALUES ('.new Sql($id);
@@ -540,10 +540,10 @@ class Database {
 	public static function ExecuteUpdateAll($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'UPDATE '.$tablename.' SET ';
+		$sql = 'UPDATE '.new SqlName($tablename).' SET ';
 		for($i=1;$i<$z;$i+=2){
 			if ($i>1) $sql.=',';
-			$sql.=$a[$i] .'='. new Sql($a[$i+1]);
+			$sql.=new SqlName($a[$i]) .'='. new Sql($a[$i+1]);
 		}
 		self::Execute($sql);
 	}
@@ -559,14 +559,14 @@ class Database {
 		$sql = 'UPDATE '.new SqlName($tablename).' SET ';
 		for($i=2;$i<$z;$i+=2){
 			if ($i>2) $sql.=',';
-			$sql.=$a[$i] .'='. new Sql($a[$i+1]);
+			$sql.=new SqlName($a[$i]) .'='. new Sql($a[$i+1]);
 		}
 		if (!is_null($where)) $sql .=' WHERE '.$where;
 		self::Execute($sql);
 	}
 
 	public static function ExecuteDropTable($tablename) {
-		$sql = 'DROP TABLE IF EXISTS '.new SqlName($tablename);
+		$sql = 'DROP TABLE '.new SqlName($tablename);
 		self::Execute($sql);
 	}
 
@@ -575,24 +575,25 @@ class Database {
 	public static function ExecuteCreateTable($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'CREATE TABLE '.$tablename.' (';
+		$sql = 'CREATE TABLE '.new SqlName($tablename).' (';
 		for($i=1;$i<$z;$i+=2){
 			if ($i>1) $sql.=',';
-			$sql.=$a[$i].' '.$a[$i+1];
+			$sql.=new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 		}
-		$sql.=') ENGINE=INNODB';
+		$sql.=')';
+		if (self::$type == self::MYSQL) $sql .= $sql.=' ENGINE=INNODB';
 		self::Execute($sql);
 	}
 
 	public static function ExecuteCreateStandardTable($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'CREATE TABLE '.new SqlName($tablename).' (id '.Sql::ID.' NOT NULL';
+		$sql = 'CREATE TABLE '.new SqlName($tablename).' ('.new SqlName('id').' '.Sql::GetDataType(self::MYSQL,Sql::ID).' NOT NULL';
 		for($i=1;$i<$z;$i+=2){
-			$sql.=','.$a[$i].' '.$a[$i+1];
+			$sql.=','.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 		}
-		$sql .= ',PRIMARY KEY ( id )';
-		$sql.=') ENGINE=INNODB';
+		$sql .= ',PRIMARY KEY ( '.new SqlName('id').' ))';
+		if (self::$type == self::MYSQL) $sql .= $sql.=' ENGINE=INNODB';
 		self::Execute($sql);
 	}
 
@@ -611,7 +612,31 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=2){
-			$sql='ALTER TABLE '.new SqlName($tablename).' ADD INDEX ('.new SqlName($a[$i]).')';
+			switch (self::$type) {
+				case self::MYSQL:
+					$sql='ALTER TABLE '.new SqlName($tablename).' ADD INDEX ('.new SqlName($a[$i]).')';
+					break;
+				default:
+				case self::ORACLE:
+					$sql='CREATE INDEX '.new SqlName('idx_'.$tablename.'_'.$a[$i]).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')';
+					break;
+			}
+			self::Execute($sql);
+		}
+	}
+	public static function ExecuteAddUniqueIndices($tablename){
+		$a = func_get_args();
+		$z = func_num_args();
+		for($i=1;$i<$z;$i+=2){
+			switch (self::$type) {
+				case self::MYSQL:
+					$sql='ALTER TABLE '.new SqlName($tablename).' ADD UNIQUE INDEX ('.new SqlName($a[$i]).')';
+					break;
+				default:
+				case self::ORACLE:
+					$sql='CREATE UNIQUE INDEX '.new SqlName('idx_'.$tablename.'_'.$a[$i]).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')';
+					break;
+			}
 			self::Execute($sql);
 		}
 	}
@@ -620,7 +645,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			$sql = 'ALTER TABLE '.$tablename.' DROP COLUMN '.$a[$i];
+			$sql = 'ALTER TABLE '.new SqlName($tablename).' DROP COLUMN '.new SqlName($a[$i]);
 			self::Execute($sql);
 		}
 	}
@@ -628,7 +653,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=2){
-			$sql = 'ALTER TABLE '.$tablename.' ADD COLUMN '.$a[$i].' '.$a[$i+1];
+			$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD COLUMN '.new SqlName($a[$i]).' '.$a[$i+1];
 			self::Execute($sql);
 		}
 	}
@@ -637,7 +662,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=3){
-			$sql = 'ALTER TABLE '.new SqlName($tablename).' CHANGE '.new SqlName($a[$i]).' '.new SqlName($a[$i+1]).' '.$a[$i+2];
+			$sql = 'ALTER TABLE '.new SqlName($tablename).' CHANGE '.new SqlName($a[$i]).' '.new SqlName($a[$i+1]).' '.Sql::GetDataType(self::$type,$a[$i+2]);
 			self::Execute($sql);
 		}
 	}
@@ -645,7 +670,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=2){
-			$sql = 'ALTER TABLE '.new SqlName($tablename).' MODIFY COLUMN '.new SqlName($a[$i]).' '.$a[$i+1];
+			$sql = 'ALTER TABLE '.new SqlName($tablename).' MODIFY COLUMN '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 			self::Execute($sql);
 		}
 	}
