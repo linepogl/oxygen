@@ -215,9 +215,9 @@ abstract class XItem extends XValue implements Serializable {
 		/** @var $cx XMeta */
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$fields = $cx->GetDBFields();
-			if (0==Database::ExecuteScalar('SELECT COUNT('.new SqlName($cx->id).') FROM '.$cx->GetDBTableName().' WHERE '.new SqlName($cx->id).'=?',$this->id)->AsInteger()){
+			if (0==Database::ExecuteScalar('SELECT COUNT('.new SqlName($cx->id).') FROM '.new SqlName($cx->GetDBTableName()).' WHERE '.new SqlName($cx->id).'=?',$this->id)->AsInteger()){
 				$params = array();
-				$sql = 'INSERT INTO '.$cx->GetDBTableName().'(';
+				$sql = 'INSERT INTO '.new SqlName($cx->GetDBTableName()).'(';
 
 				$i = 0;
 				if (!$cx->id->IsDBAliasComplex()) {
@@ -240,7 +240,7 @@ abstract class XItem extends XValue implements Serializable {
 			}
 			elseif (count($fields) > 0){
 				$params = array();
-				$sql = 'UPDATE '.$cx->GetDBTableName().' SET ';
+				$sql = 'UPDATE '.new SqlName($cx->GetDBTableName()).' SET ';
 				$i = 0;
 				foreach ($fields as $f) {
 					if ($f->IsDBAliasComplex()) continue;
@@ -627,8 +627,8 @@ abstract class XItem extends XValue implements Serializable {
 	public static function SelectFieldX(XMetaField $meta_field,$where=null,$orderby=null,$params=array()){
 		$c = $meta_field->GetMeta();
 		$sql = $meta_field->IsDBAliasComplex()
-			? 'SELECT '.new SqlName($meta_field).' AS id FROM '.$c->GetDBTableName().' AS a'
-			: 'SELECT a.'.new SqlName($meta_field).' AS id FROM '.$c->GetDBTableName().' AS a';
+			? 'SELECT '.new SqlName($meta_field).' AS id FROM '.new SqlName($c->GetDBTableName()).' AS a'
+			: 'SELECT a.'.new SqlName($meta_field).' AS id FROM '.new SqlName($c->GetDBTableName()).' AS a';
 
 		/** @var $cx XMeta */
 		for ($cx = $c->GetParent(); !is_null($cx); $cx = $cx->GetParent())

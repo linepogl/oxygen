@@ -9,6 +9,7 @@
 	<lemma name="el"><en>Greek</en><fr>Grec</fr><el>Ελληνικά</el></lemma>
 	<lemma name="locale"><en>en_GB</en><fr>fr_FR</fr><el>el_GR</el></lemma>
 
+	<lemma name="Language"><en>Language</en><fr>Langue</fr><el>Γλώσσα</el></lemma>
 	<lemma name="Name"><en>Name</en><fr>Nom</fr><el>Όνομα</el></lemma>
 	<lemma name="Surname"><en>Surname</en><fr>Nom</fr><el>Επίθετο</el></lemma>
 	<lemma name="FirstName"><en>Name</en><fr>Prénom</fr><el>Όνομα</el></lemma>

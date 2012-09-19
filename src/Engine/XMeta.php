@@ -16,7 +16,7 @@ class XMeta extends stdClass {
 
 	private $__db_sequence = null;
 	/** @return XMeta */ public function SetDBSequence($value){ $this->__db_sequence = $value; return $this; }
-	public function GetDBSequence(){ return is_null($this->__db_sequence) ? $this->GetDBTableName() : $this->__db_sequence; }
+	public function GetDBSequence(){ return is_null($this->__db_sequence) ? 'seq_'.$this->GetDBTableName() : $this->__db_sequence; }
 
 	private $__xml_tag_name = null;
 	/** @return XMeta */ public function SetXmlTagName($value){ $this->__xml_tag_name = $value; return $this;}

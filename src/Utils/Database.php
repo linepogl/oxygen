@@ -640,7 +640,13 @@ class Database {
 			self::Execute($sql);
 		}
 	}
-
+	public static function ExecuteAddSequence($tablename){
+		switch (self::$type) {
+			case self::ORACLE:
+				self::Execute('CREATE SEQUENCE '.new SqlName('seq_'.$tablename).' NOMAXVALUE NOMINVALUE NOCYCLE NOORDER');
+				break;
+		}
+	}
 	public static function ExecuteDropFields($tablename){
 		$a = func_get_args();
 		$z = func_num_args();

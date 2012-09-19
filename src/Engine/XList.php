@@ -83,9 +83,9 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		//
 		// FROM
 		//
-		$sql .= ' FROM '.$this->meta->GetDBTableName().' a';
+		$sql .= ' FROM '.new SqlName($this->meta->GetDBTableName()).' a';
 		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent())
-			$sql .= ','.$mm->GetDBTableName();
+			$sql .= ','.new SqlName($mm->GetDBTableName());
 
 
 		//
