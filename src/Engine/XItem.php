@@ -329,7 +329,7 @@ abstract class XItem extends XValue implements Serializable {
 		// 3. Delete me
 		/** @var $cx XMeta */
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
-			$sql = 'DELETE FROM '.$cx->GetDBTableName().' WHERE '.new SqlName($cx->id).'=?';
+			$sql = 'DELETE FROM '.new SqlName($cx->GetDBTableName()).' WHERE '.new SqlName($cx->id).'=?';
 			Database::Execute($sql,$this->id);
 		}
 		$c->RemoveFromCache($this->id->AsInt());
