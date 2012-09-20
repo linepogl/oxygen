@@ -595,6 +595,7 @@ class Database {
 		$sql .= ',PRIMARY KEY ( '.new SqlName('id').' ))';
 		if (self::$type == self::MYSQL) $sql .= $sql.=' ENGINE=INNODB';
 		self::Execute($sql);
+		self::ExecuteAddSequence($tablename);
 	}
 
 	public static function ExecuteAddPrimaryKey($tablename){
@@ -618,7 +619,7 @@ class Database {
 					break;
 				default:
 				case self::ORACLE:
-					$sql='CREATE INDEX '.new SqlName('idx_'.$tablename.'_'.$a[$i]).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')';
+					$sql='CREATE INDEX '.new SqlName('idx_'.Oxygen::Hash32($tablename.'_'.$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')';
 					break;
 			}
 			self::Execute($sql);
@@ -634,7 +635,7 @@ class Database {
 					break;
 				default:
 				case self::ORACLE:
-					$sql='CREATE UNIQUE INDEX '.new SqlName('idx_'.$tablename.'_'.$a[$i]).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')';
+					$sql='CREATE UNIQUE INDEX '.new SqlName('idx_'.Oxygen::Hash32($tablename.'_'.$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')';
 					break;
 			}
 			self::Execute($sql);
@@ -737,9 +738,8 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=2){
-			$sql='ALTER TABLE '.new SqlName($tablename).' ADD INDEX ('.new SqlName($a[$i]).')';
-			self::Execute($sql);
-			$sql='ALTER TABLE '.new SqlName($tablename).' ADD FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' (id)';
+			self::ExecuteAddIndices($tablename,$a[$i]);
+			$sql='ALTER TABLE '.new SqlName($tablename).' ADD FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName('id').')';
 			self::Execute($sql);
 		}
 	}
@@ -747,8 +747,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=3){
-			$sql='ALTER TABLE '.new SqlName($tablename).' ADD INDEX ('.new SqlName($a[$i]).')';
-			self::Execute($sql);
+			self::ExecuteAddIndices($tablename,$a[$i]);
 			$sql='ALTER TABLE '.new SqlName($tablename).' ADD FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName($a[$i+2]).')';
 			self::Execute($sql);
 		}
@@ -764,7 +763,14 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName($a[$i]));
+			switch (self::$type) {
+				case self::MYSQL:
+					self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName($a[$i]));
+					break;
+				case self::ORACLE:
+					self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName('idx_'.Oxygen::Hash32($tablename.'_'.$a[$i])));
+					break;
+			}
 		}
 	}
 
