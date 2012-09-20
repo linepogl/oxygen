@@ -84,9 +84,9 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		//
 		// FROM
 		//
-		$sql .= ' FROM '.$this->meta->GetDBTableName().' a';
+		$sql .= ' FROM '.new SqlName($this->meta->GetDBTableName()).' a';
 		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent())
-			$sql .= ','.$mm->GetDBTableName();
+			$sql .= ','.new SqlName($mm->GetDBTableName());
 
 
 		//
@@ -95,7 +95,7 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$where = is_null($this->where) ? null : $this->where->ToSql();
 		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent()) {
 			if (!is_null($where)) $where .= ' AND ';
-			$where .= $mm->GetDBTableName().'.'.new SqlName($mm->id).'=a.'.new SqlName($this->meta->id);
+			$where .= new SqlName($mm->GetDBTableName()).'.'.new SqlName($mm->id).'=a.'.new SqlName($this->meta->id);
 		}
 		if (!empty($where)) $sql .= ' WHERE '.$where;
 
