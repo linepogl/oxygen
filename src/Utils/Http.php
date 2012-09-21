@@ -16,8 +16,8 @@ final class HttpPost extends Http {
 	private function url_encode($post_value){
 		if (is_array($post_value)){
 			$a = array();
-			foreach ($post_value as $x)
-				$a[] = rawurlencode($x);
+			foreach ($post_value as $key=>$x)
+				$a[$key] = rawurlencode($x);
 			return $a;
 		}
 		else
