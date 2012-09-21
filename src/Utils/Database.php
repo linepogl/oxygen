@@ -522,7 +522,7 @@ class Database {
 		$id = self::ExecuteGetNextID($tablename,$primarykey);
 		$sql = 'INSERT INTO '.new SqlName($tablename).' ('.new SqlName($primarykey);
 		for($i=2-$z%2;$i<$z;$i+=2)
-			$sql.=','.$a[$i];
+			$sql.=','.new SqlName($a[$i]);
 		$sql.=') VALUES ('.new Sql($id);
 		for($i=2-$z%2;$i<$z;$i+=2){
 			$sql.=','.new Sql($a[$i+1]);
@@ -595,7 +595,6 @@ class Database {
 		$sql .= ',PRIMARY KEY ( '.new SqlName('id').' ))';
 		if (self::$type == self::MYSQL) $sql .= $sql.=' ENGINE=INNODB';
 		self::Execute($sql);
-		self::ExecuteAddSequence($tablename);
 	}
 
 	public static function ExecuteAddPrimaryKey($tablename){
@@ -639,13 +638,6 @@ class Database {
 					break;
 			}
 			self::Execute($sql);
-		}
-	}
-	public static function ExecuteAddSequence($tablename){
-		switch (self::$type) {
-			case self::ORACLE:
-				self::Execute('CREATE SEQUENCE '.new SqlName('seq_'.$tablename).' NOMAXVALUE NOMINVALUE NOCYCLE NOORDER');
-				break;
 		}
 	}
 	public static function ExecuteDropFields($tablename){
@@ -709,10 +701,10 @@ class Database {
 	}
 
 	/** @return ID */
-	public static function ExecuteGetNextID($table_or_sequence_name,$primarykey='id') {
-		switch (self::$type){
+	public static function ExecuteGetNextID($tablename,$primarykey='id') {
+		switch (self::$type) {
+			default:
 			case self::MYSQL:
-				$tablename = $table_or_sequence_name;
 				self::Execute('LOCK TABLES oxy_ids WRITE,'.$tablename.' WRITE');
 				$id = self::ExecuteScalar('SELECT LastID FROM oxy_ids WHERE TableName=?',$tablename)->AsID();
 				if (is_null($id)){
@@ -725,11 +717,30 @@ class Database {
 					self::Execute('UPDATE oxy_ids SET LastID=? WHERE TableName=?',$id,$tablename);
 				}
 				self::Execute('UNLOCK TABLES');
-				return $id;
+				break;
 			case self::ORACLE:
-				$seq = $table_or_sequence_name;
-				return self::ExecuteScalar('SELECT '.new SqlName($seq).'.NEXTVAL A FROM DUAL')->AsID();
+				self::TransactionBegin();
+				self::Execute('LOCK TABLE "oxy_ids" IN EXCLUSIVE MODE');
+				self::Execute('LOCK TABLE '.new SqlName($tablename).' IN EXCLUSIVE MODE');
+				$id = self::ExecuteScalar('SELECT "LastID" FROM "oxy_ids" WHERE "TableName"=?',$tablename)->AsID();
+				if (is_null($id)){
+					$id = self::ExecuteScalar('SELECT MAX('.new SqlName($primarykey).') FROM '.new SqlName($tablename))->AsID();
+					$id = is_null($id) ? new ID(0) : new ID($id->AsInt() + 1);
+					self::Execute('INSERT INTO "oxy_ids" ("TableName","LastID") VALUES (?,?)',$tablename,$id);
+				}
+				else {
+					$id = new ID($id->AsInt() + 1);
+					self::Execute('UPDATE "oxy_ids" SET "LastID"=? WHERE "TableName"=?',$id,$tablename);
+				}
+				self::TransactionCommit();
+				break;
 		}
+		return $id;
+	}
+
+	/** @return ID */
+	public static function ExecuteGetNextIDFromSequence($sequence_name) {
+		return self::ExecuteScalar('SELECT '.new SqlName($sequence_name).'.NEXTVAL A FROM DUAL')->AsID();
 	}
 
 

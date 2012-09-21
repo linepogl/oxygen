@@ -16,7 +16,7 @@ class XMeta extends stdClass {
 
 	private $__db_sequence = null;
 	/** @return XMeta */ public function SetDBSequence($value){ $this->__db_sequence = $value; return $this; }
-	public function GetDBSequence(){ return is_null($this->__db_sequence) ? 'seq_'.$this->GetDBTableName() : $this->__db_sequence; }
+	public function GetDBSequence(){ return $this->__db_sequence; }
 
 	private $__xml_tag_name = null;
 	/** @return XMeta */ public function SetXmlTagName($value){ $this->__xml_tag_name = $value; return $this;}
@@ -180,7 +180,7 @@ class XMeta extends stdClass {
 
 
 
-	/** @return ID */ public function GetNextPermID(){ return ID::GetNextPermID($this->GetDBSequence(),$this->id->GetDBName()); }
+	/** @return ID */ public function GetNextPermID(){ $sequence = $this->GetDBSequence(); return is_null($sequence) ? ID::GetNextPermID($this->GetDBTableName(),$this->id->GetDBName()) : ID::GetNextPermIDFromSequence($sequence); }
 	/** @return ID */ public function GetNextTempID(){ return ID::GetNextTempID($this->GetDBSequence()); }
 
 

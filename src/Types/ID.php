@@ -10,12 +10,15 @@ class ID extends XValue implements Serializable {
 
 
 	private static $temp_sequences = array();
-	public static function GetNextPermID($sequence,$primarykey='id') {
-		return Database::ExecuteGetNextID($sequence,$primarykey);
+	public static function GetNextPermID($tablename,$primarykey='id') {
+		return Database::ExecuteGetNextID($tablename,$primarykey);
 	}
-	public static function GetNextTempID($sequence){
-		if (!isset(self::$temp_sequences[$sequence])) self::$temp_sequences[$sequence] = -0x7FFFFFF; else self::$temp_sequences[$sequence]++;
-		return new ID(self::$temp_sequences[$sequence]);
+	public static function GetNextPermIDFromSequence($sequence) {
+		return Database::ExecuteGetNextIDFromSequence($sequence);
+	}
+	public static function GetNextTempID($tablename){
+		if (!isset(self::$temp_sequences[$tablename])) self::$temp_sequences[$tablename] = -0x7FFFFFF; else self::$temp_sequences[$tablename]++;
+		return new ID(self::$temp_sequences[$tablename]);
 	}
 
 

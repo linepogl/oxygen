@@ -155,7 +155,7 @@ abstract class XItem extends XValue implements Serializable {
 				/** @var $f XMetaField */
 				foreach ($fields as $f)
 					$sql .= ',' . new SqlName($f);
-				$sql .= ' FROM '.$cx->GetDBTableName();
+				$sql .= ' FROM '.new SqlName($cx->GetDBTableName());
 				$sql .= ' WHERE '.new SqlName($cx->id).'=?';
 
 				$dr = Database::Execute($sql,$this->id);
