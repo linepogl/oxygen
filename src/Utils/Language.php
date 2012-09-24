@@ -180,7 +180,7 @@ final class Language {
 				}
 	    }
 	    else {
-		    if ($s != 0){
+		    if ($s != 0 || $r == ''){
 			    if ($r != '') $r .= ' ';
 			    $r .= $s;
 			    $r .= '\'\'';
