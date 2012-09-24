@@ -122,7 +122,7 @@ class XDateTime extends XValue implements Serializable {
  			));
 	}
 	/** @return XDateTime */
-	public function AddTimeSpan(TimeStamp $value){
+	public function AddTimeSpan(XTimeSpan $value){
 		return $this->AddSeconds($value->GetTotalSeconds());
 	}
 
