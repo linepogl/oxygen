@@ -8,6 +8,45 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 	public final function OffsetUnset($offset) { throw new Exception('Http arrays are readonly.'); }
 
 	/** @return HttpValue */ public static function Read($nane){ return Http::$ANY[$nane]; }
+
+
+
+	public static function RequestAsync($url,$method='GET',$args = array()){
+		$post_args = array();
+    foreach ($args as $key => &$val) {
+      $post_params[] = $key.'='.new Url($val);
+    }
+    $post_string = implode('&', $post_args);
+
+		$method = strtoupper($method);
+
+    $parts = parse_url($url);
+		$host = $parts['host'];
+		$port = isset($parts['port'])?$parts['port']:80;
+		$path = $parts['path'];
+    $length = strlen($post_string);
+		$query = isset($parts['query'])?$parts['query']:'';
+
+		if ($method == 'GET') {
+			if (!empty($query)) $query .= '&';
+			$query .= $post_string;
+		}
+		if (!empty($query)) {
+			$path .= '?' . $query;
+		}
+
+		$fp = fsockopen($host,$port,$errno,$errstr,30);
+    $out = "$method $path HTTP/1.1\r\n";
+    $out.= "Host: $host\r\n";
+    $out.= "Content-Type: application/x-www-form-urlencoded\r\n";
+    $out.= "Content-Length: $length\r\n";
+    $out.= "Connection: Close\r\n\r\n";
+
+    if ($method == 'POST') $out.= $post_string;
+
+    fwrite($fp, $out);
+    fclose($fp);
+  }
 }
 
 final class HttpPost extends Http {

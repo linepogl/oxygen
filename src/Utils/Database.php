@@ -660,9 +660,19 @@ class Database {
 	public static function ExecuteRenameFields($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		for($i=1;$i<$z;$i+=3){
-			$sql = 'ALTER TABLE '.new SqlName($tablename).' CHANGE '.new SqlName($a[$i]).' '.new SqlName($a[$i+1]).' '.Sql::GetDataType(self::$type,$a[$i+2]);
-			self::Execute($sql);
+		switch (self::$type){
+			case self::MYSQL:
+				for($i=1;$i<$z;$i+=3){
+					$sql = 'ALTER TABLE '.new SqlName($tablename).' CHANGE '.new SqlName($a[$i]).' '.new SqlName($a[$i+1]).' '.Sql::GetDataType(self::$type,$a[$i+2]);
+					self::Execute($sql);
+				}
+				break;
+			case self::ORACLE:
+				for($i=1;$i<$z;$i+=3){
+					$sql = 'ALTER TABLE '.new SqlName($tablename).' RENAME COLUMN '.new SqlName($a[$i]).' TO '.new SqlName($a[$i+1]);
+					self::Execute($sql);
+				}
+				break;
 		}
 	}
 	public static function ExecuteRecastFields($tablename){

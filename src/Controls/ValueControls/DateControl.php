@@ -1,7 +1,6 @@
 <?php
 
-class
-DateControl extends ValueControl {
+class DateControl extends ValueControl {
 
 	private $allow_null = false;
 	public function WithAllowNull($value){ $this->allow_null = $value; return $this; }
@@ -18,12 +17,12 @@ DateControl extends ValueControl {
 	public function Render(){
 		echo new HiddenControl($this->name,$this->value);
 
-		echo '<span style="white-space:nowrap;"';
+		echo '<span class="nowrap';
 		if ($this->mode==UIMode::Edit && !$this->is_readonly)
-			echo ' class="formPane"';
+			echo ' formPane"';
 		else
-			echo ' class="formLocked"';
-		echo '>';
+			echo ' formLocked"';
+		echo '">';
 		echo '<input type="text" id="'.$this->name.'box" value="'.(is_null($this->value)?$this->null_caption:$this->value->GetDay().'/'.$this->value->GetMonth().'/'.$this->value->GetYear());
 		if ($this->mode==UIMode::Edit && !$this->is_readonly)
 			echo '" class="formPane" onclick="'.$this->name.'ToggleCalendar();"';
@@ -31,8 +30,8 @@ DateControl extends ValueControl {
 			echo '" class="formLocked"';
 		echo ' readonly="readonly" style="width:7em;padding:0;margin:0;text-align:center;border:0;" />';
 		if ($this->mode==UIMode::Edit && !$this->is_readonly){
-			echo '<a href="javascript:'.$this->name.'ToggleCalendar();">';
-			echo '<img src="oxy/img/arrow_down.gif" alt="" style="vertical-align:middle;" />';
+			echo '<a href="javascript:'.$this->name.'ToggleCalendar();" style="vertical-align:baseline;">';
+			echo '<img src="oxy/img/arrow_down.gif" alt="" />';
 			echo '</a>';
 		}
 		echo '</span>';
