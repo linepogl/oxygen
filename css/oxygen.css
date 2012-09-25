@@ -113,10 +113,10 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .vtop     { vertical-align:top;    }
 .vbottom  { vertical-align:bottom; }
 .vmiddle  { vertical-align:middle; }
-.hright   { text-align:right;      }
-.hleft    { text-align:left;       }
-.hjustify { text-align:justify;    }
-.hcenter  { text-align:center;     }
+.hright   { text-align:right!important;   }
+.hleft    { text-align:left!important;    }
+.hjustify { text-align:justify!important; }
+.hcenter  { text-align:center!important;  }
 .inline   { display:inline;        }
 .block    { display:block;         }
 .center   { margin:auto;   }
