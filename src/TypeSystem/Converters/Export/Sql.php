@@ -46,11 +46,11 @@ class Sql extends ExportConverter {
 			Sql::DateTime => 'DATE',
 			Sql::Time => 'DATE',
 			Sql::TimeSpan => 'INT',
-			Sql::String20 => 'VARCHAR(20)',
-			Sql::String100 => 'VARCHAR(100)',
-			Sql::String255 => 'VARCHAR(255)',
+			Sql::String20 => 'VARCHAR2(20)',
+			Sql::String100 => 'VARCHAR2(100)',
+			Sql::String255 => 'VARCHAR2(255)',
 			Sql::Decimal_18_5 => 'DECIMAL(18,5)',
-			Sql::Text => 'CLOB'
+			Sql::Text => 'VARCHAR2(4000)'
 			),
 		);
 	public static function GetDataType( $database_type , $sql_type_number ) {
