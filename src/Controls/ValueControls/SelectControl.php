@@ -122,10 +122,10 @@ class SelectControl extends ValueControl {
 				echo '<div class="formPane" style="'.(empty($this->display)?'':'display:'.$this->display.';').'height:'.($this->rows*23).'px;width:'.(empty($this->width)?'auto':$this->width).';overflow:auto;white-space:nowrap;'.$this->style.'">';
 
 				if ( $this->allow_null )
-					echo '<div><input type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->name.($this->is_multiple?'[]':'').'" id="'.$this->name.'_null" value=""'.($this->IsSelected(null)?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.'_null">' . $this->NullCaption . '</label></div>';
+					echo '<div><input class="formCheck" type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->name.($this->is_multiple?'[]':'').'" id="'.$this->name.'_null" value=""'.($this->IsSelected(null)?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.'_null">' . $this->NullCaption . '</label></div>';
 
 				for ($i = 0; $i < count($this->list_values); $i++)
-					echo '<div><input type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->name.($this->is_multiple?'[]':'').'" id="'.$this->name.$i.'" value="'.new Html($this->list_values[$i]).'"'.($this->IsSelected($this->list_values[$i])?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.$i.'">'.$this->list_captions[$i].'</label></div>';
+					echo '<div><input class="formCheck" type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->name.($this->is_multiple?'[]':'').'" id="'.$this->name.$i.'" value="'.new Html($this->list_values[$i]).'"'.($this->IsSelected($this->list_values[$i])?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.$i.'">'.$this->list_captions[$i].'</label></div>';
 
 				echo '</div>';
 			}

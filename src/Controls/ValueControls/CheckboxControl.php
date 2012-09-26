@@ -19,7 +19,7 @@ class CheckboxControl extends ValueControl {
 			echo "};";
 			echo Js::END;
 		}
-		echo '<input type="checkbox" id="'.$this->name.'_chk"';
+		echo '<input class="formCheck" type="checkbox" id="'.$this->name.'_chk"';
 		if ($this->mode != UIMode::Edit)
 			echo ' disabled="disabled"';
 		if ($this->value) echo ' checked="checked"';
