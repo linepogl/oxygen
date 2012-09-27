@@ -581,7 +581,7 @@ class Database {
 			$sql.=new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 		}
 		$sql.=')';
-		if (self::$type == self::MYSQL) $sql .= $sql.=' ENGINE=INNODB';
+		if (self::$type == self::MYSQL) $sql .= ' ENGINE=INNODB';
 		self::Execute($sql);
 	}
 
@@ -593,7 +593,7 @@ class Database {
 			$sql.=','.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 		}
 		$sql .= ',PRIMARY KEY ( '.new SqlName('id').' ))';
-		if (self::$type == self::MYSQL) $sql .= $sql.=' ENGINE=INNODB';
+		if (self::$type == self::MYSQL) $sql .= ' ENGINE=INNODB';
 		self::Execute($sql);
 	}
 
