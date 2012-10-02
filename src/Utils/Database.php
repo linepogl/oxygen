@@ -113,7 +113,7 @@ class Database {
 				}
 			}
 			catch (Exception $ex){
-				throw new ApplicationException(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. self::$cx->server.'/'.self::$cx->schema. '<br/>'.$ex->getMessage());
+				throw new Exception(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. self::$cx->server.'/'.self::$cx->schema. '<br/>'.$ex->getMessage());
 			}
 			if (self::$cx->is_managed){
 				self::Upgrade();
@@ -821,7 +821,7 @@ class Database {
 			}
 			catch (Exception $ex){
 				self::PopConnection();
-				throw new ApplicationException(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
+				throw new Exception(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
 			}
 			try{
 				Database::Execute('CREATE DATABASE '.new SqlName($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
