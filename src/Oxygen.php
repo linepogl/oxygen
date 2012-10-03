@@ -52,6 +52,7 @@ class Oxygen {
 					self::$window_hash = $new_window_hash;
 					foreach ($hard as $key=>$value) Scope::$WINDOW->HARD[$key] = $value;
 					foreach ($weak as $key=>$value) Scope::$WINDOW->WEAK[$key] = $value;
+					Oxygen::RedirectRaw( Oxygen::MakeHrefPreservingValues(array('old_window'=>null)) );
 				}
 			}
 			self::$url_pins['window'] = self::$window_hash;
