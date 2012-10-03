@@ -28,6 +28,7 @@ class Database {
 	private static $cx = null;
 	private static $stack = array();
 
+	private static $count_queries = 0;
 	private static $queries = array();
 	private static $prepared = array();
 
@@ -83,7 +84,7 @@ class Database {
 			try { unlink($lock_filename); } catch(Exception $ex){}
 		}
 		if ($needs_refresh){
-			Debug::Write('Upgrade complete.<br/>Total queries: '.count(Database::GetQueries()).'.<br/><br/><br/>Please refresh.<br/><br/><br/><br/>');
+			Debug::Write('Upgrade complete.<br/>Total queries: '.(self::$count_queries).'.<br/><br/><br/>Please refresh.<br/><br/><br/><br/>');
 			exit();
 		}
 
@@ -210,11 +211,13 @@ class Database {
 	private static function PushConnection(){
 		if (!is_null(self::$cx)){
 			array_push(self::$stack,self::$cx);
+			self::$count_queries = 0;
 			self::$queries = array();
 			self::$prepared = array();
 		}
 	}
 	private static function PopConnection(){
+		self::$count_queries = 0;
 		self::$queries = array();
 		self::$prepared = array();
 		self::SetConnection( array_pop(self::$stack) );
@@ -238,12 +241,10 @@ class Database {
 	// Database queries
 	//
 	//
-	public static function GetQueries(){ return self::$queries; }
 	public static function GetQueriesAsText(){
 		$r = '';
-		$i = 0;
-		foreach ( self::$queries as $q ) {
-			$r .=  sprintf('%5d',++$i) . '. ' . $q . "\n";
+		foreach ( self::$queries as $i => $q ) {
+			$r .=  sprintf('%5d',($i+1)) . '. ' . $q . "\n";
 		}
 		if ($r == '') $r .= '-';
 		return $r;
@@ -263,6 +264,8 @@ class Database {
 			$r = self::$prepared[$sql];
 		}
 		self::$queries[] =& $sql;
+		self::$count_queries++;
+		if (count(self::$queries) > 1000) { unset(self::$queries[key(self::$queries)]); reset(self::$queries); } // remove the first element from the array
 		return $r;
 	}
 

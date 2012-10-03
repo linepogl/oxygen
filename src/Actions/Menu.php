@@ -22,7 +22,7 @@ class Menu extends Action implements IteratorAggregate, ArrayAccess, Countable {
 
 
 	public function AddSeparator(){
-		$this->Add(new MenuSeparator());	
+		return $this->Add(new MenuSeparator());
 	}
 	public function Add($item) {
 		if ($item->IsMenuSeparator()) {
@@ -37,6 +37,7 @@ class Menu extends Action implements IteratorAggregate, ArrayAccess, Countable {
 			}
 			$this->items[] = $item;
 		}
+		return $this;
 	}
 	
 	public function Count(){ return count($this->items); }

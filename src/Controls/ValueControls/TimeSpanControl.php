@@ -59,23 +59,23 @@ class TimeSpanControl extends ValueControl {
 
 		echo Js::BEGIN;
 		echo $this->name."_UpdateTimeSpan = function(){";
-		echo "var e = $('".$this->name."');";
+		echo "var e = $(".new Js($this->name).");";
 		echo "var found = false;";
 		echo "var x = 0;";
 		if ($this->show_days) {
-			echo "var d = \$F('".$this->name."_days');";
+			echo "var d = \$F(".new Js($this->name.'_days').");";
 			echo "if (d !== '') { d = parseInt(d); if (''+d=='NaN') {e.value = ''; return;} else {found=true; x+=d*24*60*60*1000;} }";
 		}
 		if ($this->show_hours) {
-			echo "var h = \$F('".$this->name."_hours')";
+			echo "var h = \$F(".new Js($this->name.'_hours').");";
 			echo "if (h !== '') { h = parseInt(h); if (''+h=='NaN') {e.value = ''; return;} else {found=true; x+=h*60*60*1000;} }";
 		}
 		if ($this->show_minutes) {
-			echo "var m = \$F('".$this->name."_minutes')";
+			echo "var m = \$F(".new Js($this->name.'_minutes').");";
 			echo "if (m !== '') { m = parseInt(m); if (''+m=='NaN') {e.value = ''; return;} else {found=true; x+=m*60*1000;} }";
 		}
 		if ($this->show_seconds) {
-			echo "var s = \$F('".$this->name."_seconds');";
+			echo "var s = \$F(".new Js($this->name.'_seconds').");";
 			echo "if (s !== '') { s = parseInt(s); if (''+s=='NaN') {e.value = ''; return;} else {found=true; x+=s*1000;} }";
 		}
 		echo "e.value = found ? ''+x : '';";

@@ -827,6 +827,19 @@ class Oxygen {
 		mail($rcpt, $subject, $msg, $headers);
 	}
 
+	public static function GetMemoryLimit(){
+		$s = trim(strtoupper(ini_get('memory_limit')));
+		$r = intval($s);
+		switch (substr($s,strlen($s)-1,1)) {
+			case 'K': return $r * 1024;
+			case 'M': return $r * 1024 * 1024;
+			case 'G': return $r * 1024 * 1024 * 1024;
+		}
+		return $r;
+	}
+	public static function GetMemoryUsage(){
+		return memory_get_usage(true);
+	}
 
 
 
