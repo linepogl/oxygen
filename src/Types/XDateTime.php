@@ -7,7 +7,7 @@ class XDateTime extends XValue implements Serializable {
 	}
 	public function __construct($timestamp = null){
 		if ($timestamp instanceof DateTime) $timestamp = $timestamp->getTimestamp();
-		$this->timestamp = is_null($timestamp) ? time() : $timestamp;
+		$this->timestamp = is_null($timestamp) ? microtime(true) : $timestamp;
 	}
 
 	public function MetaType(){ return MetaDateTime::Type(); }

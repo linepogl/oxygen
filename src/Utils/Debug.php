@@ -6,7 +6,6 @@ class Debug {
 	private static $entries = array();
 	private static $immediate = false;
 
-	public static function HasEntries(){ return count(self::$entries) > 0; }
 	public static function Render($entries = null){
 		if (is_null($entries)) $entries = self::$entries;
 		for ($i = 0; $i<count($entries); $i++)
@@ -22,6 +21,12 @@ class Debug {
 		echo "\n";
 	}
 
+	public static function CountEntries(){ return count(self::$entries); }
+	public static function HasEntries(){ return count(self::$entries) > 0; }
+	public static function GetEntryText( $index ){ return $index < count(self::$entries) ? self::$entries[$index][1] : null; }
+	public static function GetEntryDateTime( $index ){ return $index < count(self::$entries) ? new XDateTime(self::$entries[$index][0]) : null; }
+	public static function GetEntryTimeSpan( $index ){ return $index < count(self::$entries) ? new XTimeSpan((self::$entries[$index][0] - self::$first)*1000) : null; }
+	public static function GetEntryTimeSpanSincePreviousEntry( $index ){ return $index < count(self::$entries) ? ($index==0 ? new XTimeSpan(0) : new XTimeSpan((self::$entries[$index][0] - self::$entries[$index-1][0])*1000)) : null; }
 
 	public static function IsImmediateFlushingEnabled(){
 		return self::$immediate;
