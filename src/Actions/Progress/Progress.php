@@ -78,12 +78,12 @@ final class Progress {
 
 	private static $has_started = false;
 
-	public static function Start(Message $m){
+	public static function Start(Message $m, $time_to_finish_is_not_known = false ){
 		self::Clear();
 		set_time_limit(0);
 		self::$has_started = true;
 		self::$step = 0.01;
-		self::Update(0,$m);
+		self::Update( $time_to_finish_is_not_known ? -1 : 0, $m );
 	}
 	public static function Shutdown(){
 		if (!self::$has_started) return;

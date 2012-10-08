@@ -12,7 +12,6 @@ class ProgressControl extends Control {
 	private $forward_request = false;
 	public function WithForwardRequest($value){ $this->forward_request = $value; return $this; }
 
-
 	public function Render(){
 		//$window = ID::Random();
 		Progress::Clear();
