@@ -10,6 +10,24 @@ class Fs {
 		 ,$filename);
 	}
 
+	public static function GetAllFilePathsRecursively( $dir ) {
+		$r = array();
+		$stack = array($dir);
+		while(!empty($stack)) {
+			$f = array_pop($stack);
+			$a = scandir($f);
+			if (is_array($a)) foreach ($a as $ff) {
+				if ($ff == '.' || $ff == '..') continue;
+				$fff = "$f/$ff";
+				if (is_dir($fff))
+					array_push($stack,$fff);
+				else
+					$r[$fff] = $fff;
+			}
+		}
+		return $r;
+	}
+
 	/**
 	 * @param $dir string the directory to be scanned
 	 * @return array a flat array with all files of the tree
