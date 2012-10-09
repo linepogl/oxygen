@@ -12,17 +12,19 @@ class Fs {
 
 	public static function GetAllFilePathsRecursively( $dir ) {
 		$r = array();
-		$stack = array($dir);
-		while(!empty($stack)) {
-			$f = array_pop($stack);
-			$a = scandir($f);
-			if (is_array($a)) foreach ($a as $ff) {
-				if ($ff == '.' || $ff == '..') continue;
-				$fff = "$f/$ff";
-				if (is_dir($fff))
-					array_push($stack,$fff);
-				else
-					$r[$fff] = $fff;
+		if (is_dir($dir)) {
+			$stack = array($dir);
+			while(!empty($stack)) {
+				$f = array_pop($stack);
+				$a = scandir($f);
+				if (is_array($a)) foreach ($a as $ff) {
+					if ($ff == '.' || $ff == '..') continue;
+					$fff = "$f/$ff";
+					if (is_dir($fff))
+						array_push($stack,$fff);
+					else
+						$r[$fff] = $fff;
+				}
 			}
 		}
 		return $r;
@@ -34,24 +36,26 @@ class Fs {
 	 */
 	public static function GetTreeFilesFlat($dir) {
 		$path		= array();
-		$stack[]	= $dir;
-		while ($stack) {
-			$thisdir = array_pop($stack);
-			if ($dircont = scandir($thisdir)) {
-				$i=0;
-				while (isset($dircont[$i])) {
-					if ($dircont[$i] !== '.' && $dircont[$i] !== '..') {
+		if (is_dir($dir)) {
+			$stack[]	= $dir;
+			while ($stack) {
+				$thisdir = array_pop($stack);
+				if ($dircont = scandir($thisdir)) {
+					$i=0;
+					while (isset($dircont[$i])) {
+						if ($dircont[$i] !== '.' && $dircont[$i] !== '..') {
 
-						$current_file = $thisdir.'/'.$dircont[$i];
-						if (is_file($current_file)) {
-							$path[] = $thisdir.'/'.$dircont[$i];
+							$current_file = $thisdir.'/'.$dircont[$i];
+							if (is_file($current_file)) {
+								$path[] = $thisdir.'/'.$dircont[$i];
+							}
+							else if (is_dir($current_file)) {
+								$path[] = $thisdir.'/'.$dircont[$i].'/';
+								$stack[] = $current_file;
+							}
 						}
-						else if (is_dir($current_file)) {
-							$path[] = $thisdir.'/'.$dircont[$i].'/';
-							$stack[] = $current_file;
-						}
+						$i++;
 					}
-					$i++;
 				}
 			}
 		}
