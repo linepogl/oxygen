@@ -27,7 +27,8 @@ class Oxygen {
 		if (DEBUG) { if ($_GET['debug']=='pin') Oxygen::SetUrlPin('debug','pin'); }
 		if (PROFILE) { if ($_GET['profile']=='pin') Oxygen::SetUrlPin('profile','pin'); }
 		Oxygen::EnsureTempFolder();
-		Oxygen::ClearTempFolderFromOldFiles();
+		Oxygen::EnsureSharedTempFolder();
+		Oxygen::ClearTempFoldersFromOldFiles();
 		Debug::Init();
 
 		// init url handling
@@ -329,16 +330,17 @@ class Oxygen {
 	public static function HasSharedTempFolder(){ return is_dir(self::$shared_temp_folder); }
 	public static function EnsureTempFolder(){ if (!file_exists(self::$temp_folder)) mkdir(self::$temp_folder,0777,true); }
 	public static function EnsureSharedTempFolder(){ if (!file_exists(self::$shared_temp_folder)) mkdir(self::$shared_temp_folder,0777,true); }
+	public static function EnsureTempFolders(){ self::EnsureTempFolder(); self::EnsureSharedTempFolder(); }
 	public static function MakeTempFolder(){ mkdir(self::$temp_folder,0777,true); }
 	public static function MakeSharedTempFolder(){ mkdir(self::$shared_temp_folder,0777,true); }
-	public static function ClearTempFolder(){
+	public static function ClearTempFolders(){
 		$local_tmp = Oxygen::GetTempFolder();
 		foreach (scandir($local_tmp) as $f){ if (is_dir($f)) continue; try{ unlink($local_tmp.'/'.$f); } catch(Exception $ex){} }
 		$shared_tmp = Oxygen::GetSharedTempFolder();
 		if ($shared_tmp != $local_tmp) { foreach (scandir($shared_tmp) as $f){ if (is_dir($f)) continue; try{ unlink($shared_tmp.'/'.$f); } catch(Exception $ex){} } }
 	}
-	public static function ClearTempFolderFromOldFiles($force = false){
-		$last_time = Scope::$APPLICATION['Oxygen::ClearTempFolderFromOldFiles'];
+	public static function ClearTempFoldersFromOldFiles($force = false){
+		$last_time = Scope::$APPLICATION['Oxygen::ClearTempFoldersFromOldFiles'];
 		$now = time();
 		if ($force || is_null($last_time) || $now - $last_time > 3600) {
 			$one_day_time = 86400;
@@ -346,7 +348,7 @@ class Oxygen {
 			foreach (scandir($local_tmp) as $f){ if (is_dir($f)) continue; try{ $then = filemtime($local_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($local_tmp.'/'.$f); } catch(Exception $ex){} }
 			$shared_tmp = Oxygen::GetSharedTempFolder();
 			if ($shared_tmp != $local_tmp) { foreach (scandir($shared_tmp) as $f){ if (is_dir($f)) continue; try{ $then = filemtime($shared_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($shared_tmp.'/'.$f); } catch(Exception $ex){} } }
-			Scope::$APPLICATION['Oxygen::ClearTempFolderFromOldFiles'] = $now;
+			Scope::$APPLICATION['Oxygen::ClearTempFoldersFromOldFiles'] = $now;
 		}
 	}
 

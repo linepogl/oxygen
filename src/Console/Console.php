@@ -75,9 +75,13 @@ class Console {
 		echo '<img src="oxy/img/console_tab_docs.png" /><br/>';
 		echo 'Docs';
 		echo '</a>';
+		echo '<a href="'.new Html(new ActionOxygenResetCache()).'" style="float:right;">';
+		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
+		echo 'Reset cache';
+		echo '</a>';
 		echo '<a href="'.new Html(new ActionOxygenReset()).'" style="float:right;">';
 		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
-		echo 'Reset';
+		echo 'Reset all';
 		echo '</a>';
 		echo '<div style="float:right;height:100px;background:url(oxy/img/console_tab_shadow.png);">'.new Spacer().'</div>';
 
@@ -123,9 +127,13 @@ class Console {
 		echo '<img src="oxy/img/console_tab_docs.png" /><br/>';
 		echo 'Docs';
 		echo '</a>';
+		echo '<a href="'.new Html(new ActionOxygenResetCache()).'" style="float:right;">';
+		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
+		echo 'Reset cache';
+		echo '</a>';
 		echo '<a href="'.new Html(new ActionOxygenReset()).'" style="float:right;">';
 		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
-		echo 'Reset';
+		echo 'Reset all';
 		echo '</a>';
 		echo '<div style="float:right;height:100px;background:url(oxy/img/console_tab_shadow.png);">'.new Spacer().'</div>';
 

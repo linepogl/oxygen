@@ -51,29 +51,22 @@ abstract class Scope implements ArrayAccess,IteratorAggregate {
 		Scope::$WINDOW      = new HybridScope( new WindowHddScope() , new WindowApcScope() , new WindowMemcachedScope() );
 		Scope::$REQUEST     = new RequestScope();
 	}
-	public static function ResetScopes(){
-		if (IS_APC_AVAILABLE){
-			Debug::Write('Cleaning APC user cache...');
-			apc_clear_cache('user');
-			Debug::Write('Cleaning APC system cache...');
-			apc_clear_cache();
-		}
-		if (IS_MEMCACHED_AVAILABLE){
-			Scope::InitMemcached();
-			Debug::Write('Cleaning Memcached...');
-			self::$memcached->flush();
-		}
-		Debug::Write('Cleaning APPLICATION scope...');
-		Scope::$APPLICATION->Reset();
-		Debug::Write('Cleaning DATABASE scope...');
-		Scope::$DATABASE->Reset();
-		Debug::Write('Cleaning SESSION scope...');
-		Scope::$SESSION->Reset();
-		Debug::Write('Cleaning WINDOW scope...');
-		Scope::$WINDOW->Reset();
-		Debug::Write('Cleaning REQUEST scope...');
+
+	public static function ResetAllWeak(){
+		Scope::$APPLICATION->WEAK->Reset();
+		Scope::$DATABASE->WEAK->Reset();
+		Scope::$SESSION->WEAK->Reset();
+		Scope::$WINDOW->WEAK->Reset();
 		Scope::$REQUEST->Reset();
 	}
+	public static function ResetAllHard(){
+		Scope::$APPLICATION->HARD->Reset();
+		Scope::$DATABASE->HARD->Reset();
+		Scope::$SESSION->HARD->Reset();
+		Scope::$WINDOW->HARD->Reset();
+		Scope::$REQUEST->Reset();
+	}
+
 
 	protected $prefix;
 	protected function __construct($prefix){ $this->prefix = $prefix; }
@@ -81,8 +74,8 @@ abstract class Scope implements ArrayAccess,IteratorAggregate {
 	public abstract function ForceGet($offset);
 	public function Contains($key){ return $this->offsetExists($key); }
 
-	public abstract function Reset();
 	public abstract function SoftReset();
+	public abstract function Reset();
 
 
 	public function GetIterator(){ throw new NonImplementedException(); }
@@ -151,8 +144,8 @@ class ScopeIterator implements Iterator {
 abstract class MemoryScope extends Scope {
 	protected $data = array();
 	protected abstract function Hash($name);
-	public function Reset(){ $this->SoftReset(); }
-	public function SoftReset(){ $this->data = array(); }
+	public function SoftReset() { $this->data = array(); }
+	public function Reset() { $this->SoftReset(); }
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
 		return isset($this->data[$key]);
@@ -194,8 +187,9 @@ abstract class ApcScope extends MemoryScope {
 	public function Reset(){
 		if ($this->use_apc_storage) {
 			apc_clear_cache('user');
+			apc_clear_cache();
 		}
-		$this->SoftReset();
+		parent::Reset();
 	}
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
@@ -282,9 +276,10 @@ abstract class MemcachedScope extends MemoryScope {
 	public function SetUseMemcachedStorage($value){ $this->use_memcached_storage = $value && IS_MEMCACHED_AVAILABLE; }
 	public function Reset(){
 		if ($this->use_memcached_storage) {
+			Scope::InitMemcached();
 			self::$memcached->flush();
 		}
-		$this->SoftReset();
+		parent::Reset();
 	}
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
@@ -389,15 +384,17 @@ abstract class HddScope extends MemoryScope {
 	public function Reset(){
 		if ($this->use_hdd_storage){
 			$f = $this->GetFolder();
-			$a = glob($f.'/'.$this->prefix.'_*');
-			if (is_array($a)){
-				foreach ($a as $ff){
-					if (is_dir($ff)) continue;
-					try{ unlink($ff); } catch(Exception $ex){}
+			if (is_dir($f)) {
+				$a = glob($f.'/'.$this->prefix.'_*');
+				if (is_array($a)){
+					foreach ($a as $ff){
+						if (is_dir($ff)) continue;
+						try{ unlink($ff); } catch(Exception $ex){}
+					}
 				}
 			}
 		}
-		$this->SoftReset();
+		parent::Reset();
 	}
 	protected function get_filename($key){
 		return $this->GetFolder() . '/' . $key . '.object';
@@ -568,16 +565,8 @@ class HybridScope extends Scope {
 	public function Hash($name)       { return $this->WEAK->Hash($name); }
 	public function ForceGet($offset) { return $this->WEAK->ForceGet($offset); }
 
-	public function SoftReset(){
-		$this->hdd_scope->SoftReset();
-		$this->apc_scope->SoftReset();
-		$this->memcached_scope->SoftReset();
-	}
-	public function Reset() {
-		$this->hdd_scope->Reset();
-		$this->apc_scope->Reset();
-		$this->memcached_scope->Reset();
-	}
+	public function SoftReset(){ $this->WEAK->SoftReset(); }
+	public function Reset() { $this->WEAK->Reset(); }
 }
 
 

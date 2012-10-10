@@ -1,18 +1,16 @@
 <?php
 
 
-class ActionOxygenReset extends Action {
+class ActionOxygenResetCache extends Action {
 
 	public function GetDefaultMode(){ return Action::MODE_AJAX_DIALOG; }
-	public function GetTitle(){ return 'Reset'; }
+	public function GetTitle(){ return 'Reset cache'; }
 	public function IsPermitted(){
 		return true;
 	}
 
 	public function Render(){
 		Scope::ResetAllWeak();
-		Scope::ResetAllHard();
-		Oxygen::ClearTempFolders();
 		Oxygen::Refresh();
 	}
 
