@@ -64,11 +64,32 @@ class Oxygen {
 
 		// set the current language
 		$lang = '';
-		if (isset($_GET['lang'])) $lang = $_GET['lang'];
-		$found = false;
 		if (count(self::$langs)==0) self::$langs[] = 'en';
-		foreach (self::$langs as $l) if ($l == $lang) { $found = true;	break; }
-		if (!$found) $lang = self::$langs[0];
+		if (count(self::$langs)==1) {
+			$lang = self::$langs[0];
+		}
+		else {
+			$found = false;
+			if (isset($_GET['lang'])) {
+				$lang = $_GET['lang'];
+				foreach (self::$langs as $l) if ($l == $lang) { $found = true; break; }
+			}
+			if (!$found && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) { // try to find the preferred user language
+				$a = explode(';',$_SERVER["HTTP_ACCEPT_LANGUAGE"]);
+				if (strlen($a[0]) >= 2) {
+					$lang = substr($a[0],0,2);
+					foreach (self::$langs as $l) if ($l == $lang) { $found = true; break; }
+				}
+				for ($i = 1; !$found && $i < count($a); $i++) {
+					$b = explode(',',$a[$i]);
+					if (count($b) > 1 && strlen($b[1]) >= 2) {
+						$lang = substr($b[1],0,2);
+						foreach (self::$langs as $l) if ($l == $lang) { $found = true; break; }
+					}
+				}
+			}
+			if (!$found) $lang = self::$langs[0];
+		}
 		Oxygen::SetLang($lang);
 
 		// set the action
