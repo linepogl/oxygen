@@ -118,6 +118,20 @@ class Console {
 		echo '</a>';
 		echo '<div style="float:left;height:100px;background:url(oxy/img/console_tab_hilight.png);">'.new Spacer().'</div>';
 
+
+		$i = 0;
+		/** @var $act ConsoleAction */
+		foreach (new ConsoleMenu() as $act){
+			if ($i++ == 0) continue;
+			echo '<a href="'.new Html($act->GetHref(array('debug'=>null,'profile'=>null))).'">';
+			$b = $act->GetBadgeText(); if (!empty($b)) echo '<div class="badge">'.$b.'</div>';
+			echo '<img src="'.$act->GetNormalTabIconSrc().'" />';
+			echo '<br/>';
+			echo $act->GetTabTitle();
+			echo '</a>';
+		}
+
+
 		echo '<div style="float:left;height:100px;background:url(oxy/img/console_tab_hilight.png);">'.new Spacer().'</div>';
 		echo '<a href="javascript:(function(){$('.new Js($name).').hide();})();" style="float:right;width:99px;border-top-right-radius:10px;">';
 		echo '<img src="oxy/img/console_tab_hide.png" /><br/>';
