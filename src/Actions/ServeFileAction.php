@@ -3,10 +3,10 @@
 abstract class ServeFileAction extends Action  {
 	public function GetDefaultMode(){ return self::MODE_RAW; }
 
-	protected function RequiresCaching(){ return true; }
-	protected function GetMimeType(){ return Fs::GetMimeType($this->GetFilename()); }
 	protected abstract function GetFilename();
-	protected abstract function GetSaveAsName();
+	protected function GetSaveAsName(){ return basename($this->GetFilename()); }
+	protected function GetMimeType(){ return Fs::GetMimeType($this->GetFilename()); }
+	protected function RequiresCaching(){ return true; }
 
 	public function Render() {
 
