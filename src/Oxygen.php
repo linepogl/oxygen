@@ -873,6 +873,74 @@ class Oxygen {
 
 
 
+
+	//
+	//
+	// Serve file
+	//
+	//
+	public static function ServeFile( $filename , $save_as = null , $mime = null , $requires_caching = true ){
+		if (!is_readable($filename)) throw new Exception('File not found: '. $filename);
+		try {
+			$size = filesize($filename);
+			$mime = is_null($mime) ? Fs::GetMimeType($filename) : $mime;
+			$save_as = is_null($save_as) ? basename($filename) : $save_as;
+			$range = 0;
+			$length = $size;
+
+			while (ob_get_level()>0) ob_end_clean();
+			if(ini_get('zlib.output_compression')) ini_set('zlib.output_compression', 'Off');
+			Oxygen::ClearHttpHeaders();
+			Oxygen::AddHttpHeader('Content-Type: '.$mime);
+			Oxygen::AddHttpHeader('Content-Disposition: attachment; filename="'.$save_as.'"');
+			Oxygen::AddHttpHeader("Content-Transfer-Encoding: binary");
+			Oxygen::AddHttpHeader('Accept-Ranges: bytes');
+			if ($requires_caching){
+				Oxygen::AddHttpHeader("Cache-control: private");
+				Oxygen::AddHttpHeader('Pragma: private');
+				Oxygen::AddHttpHeader('Expires: ' . gmdate('D, d M Y H:i:s', time() + 60 * 60 * 24 * 100) . ' GMT'); // 100 days
+			}
+
+	    if (isset($_SERVER['HTTP_RANGE'])) {
+				list($a, $range) = explode("=",$_SERVER['HTTP_RANGE'],2);
+				list($range) = explode(",",$range,2);
+				list($range, $range_end) = explode("-", $range);
+				$range = intval($range);
+				if (!$range_end)
+					$range_end = $size - 1;
+				else
+					$range_end = intval($range_end);
+		    $length = $range_end - $range + 1;
+		    Oxygen::AddHttpHeader("HTTP/1.1 206 Partial Content");
+		    Oxygen::AddHttpHeader("Content-Length: $length");
+		    Oxygen::AddHttpHeader("Content-Range: bytes $range-$range_end/$size");
+	    }
+	    else {
+				Oxygen::AddHttpHeader("Content-Length: $length");
+	    }
+			Oxygen::SendHttpHeaders();
+
+			set_time_limit(0);
+			$chunksize = 1 * 1024 * 1024;
+			$bytes_send = 0;
+			$f = fopen($filename, 'r');
+			if ($f === false) throw new Exception('Cannot open file: '.$filename);
+			if ($range > 0) fseek($f, $range);
+			while (!feof($f) && (!connection_aborted()) && ($bytes_send<$length)) {
+				$buffer = fread($f, $chunksize);
+				print($buffer);
+				flush();
+				$bytes_send += strlen($buffer);
+			}
+			fclose($f);
+			die();
+		}
+		catch (Exception $ex){
+			// we cannot send the exceptions along with the files...
+			Debug::RecordExceptionAndDie($ex,'File Server Exception Handler ('.$filename.')');
+		}
+	}
+
 	
 
 	//
