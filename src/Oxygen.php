@@ -933,7 +933,6 @@ class Oxygen {
 				$bytes_send += strlen($buffer);
 			}
 			fclose($f);
-			die();
 		}
 		catch (Exception $ex){
 			// we cannot send the exceptions along with the files...
