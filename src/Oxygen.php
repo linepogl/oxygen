@@ -78,17 +78,17 @@ class Oxygen {
 				$a = explode(';',$_SERVER["HTTP_ACCEPT_LANGUAGE"]);
 				if (strlen($a[0]) >= 2) {
 					$lang = substr($a[0],0,2);
-					foreach (self::$langs as $l) if ($l == $lang) { $found = true; break; }
+					foreach (self::$langs as $l) if ($l == $lang) { $found = true; self::$lang_auto_selection = true; break; }
 				}
 				for ($i = 1; !$found && $i < count($a); $i++) {
 					$b = explode(',',$a[$i]);
 					if (count($b) > 1 && strlen($b[1]) >= 2) {
 						$lang = substr($b[1],0,2);
-						foreach (self::$langs as $l) if ($l == $lang) { $found = true; break; }
+						foreach (self::$langs as $l) if ($l == $lang) { $found = true; self::$lang_auto_selection = true; break; }
 					}
 				}
 			}
-			if (!$found) $lang = self::$langs[0];
+			if (!$found) { $lang = self::$langs[0]; self::$lang_auto_selection = true; }
 		}
 		Oxygen::SetLang($lang);
 
@@ -238,9 +238,11 @@ class Oxygen {
 	//
 	public static $langs = array();
 	public static $lang = null;
+	public static $lang_auto_selection = false;
 	public static function AddLang($lang) { if (!in_array($lang,self::$langs,true)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
 	public static function SetLang($lang) { if (Oxygen::HasLang($lang)) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Pick('locale')); } }
 	public static function HasLang($lang) { return in_array($lang,self::$langs,true); }
+	public static function HasLangAutoSelection() { return self::$lang_auto_selection; }
 	public static function GetLang(){ return self::$lang; }
 	public static function GetLangs(){ return self::$langs; }
 
@@ -544,7 +546,8 @@ class Oxygen {
 	}
 	public static function MakeHref(array $url_args = array() , $use_managed_controller = false ){
 		$s = '';
-		foreach ( ($url_args + self::$url_pins) as $key=>$value) { // <-- array + operator here again.
+		foreach ( ($url_args
+				+ self::$url_pins) as $key=>$value) { // <-- array + operator here again.
 			if (is_null($value)) continue;
 			$s .= ($s===''?'?':'&');
 			$s .= rawurlencode( $key ); /// <-- huge savings by using this directly here... CORRECTION: this is not true, it was because of false info from XDebug

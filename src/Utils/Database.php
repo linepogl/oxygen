@@ -654,9 +654,19 @@ class Database {
 	public static function ExecuteAddFields($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		for($i=1;$i<$z;$i+=2){
-			$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD COLUMN '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
-			self::Execute($sql);
+		switch (self::$type){
+			case self::MYSQL:
+				for($i=1;$i<$z;$i+=2){
+					$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD COLUMN '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+					self::Execute($sql);
+				}
+				break;
+			case self::ORACLE:
+				for($i=1;$i<$z;$i+=2){
+					$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+					self::Execute($sql);
+				}
+				break;
 		}
 	}
 
