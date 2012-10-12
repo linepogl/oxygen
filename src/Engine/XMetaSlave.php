@@ -13,6 +13,7 @@ class XMetaSlave {
 
 	private $is_aggressive = true;
 	public function SetIsAggressive($value){ $this->is_aggressive = $value; return $this; }
+	public function WithIsAggressive($value){ $this->is_aggressive = $value; return $this; }
 	public function IsAggressive(){ return $this->is_aggressive; }
 
 	private $hook_meta_field;

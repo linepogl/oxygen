@@ -48,6 +48,7 @@ class Debug {
 	public static function Init(){
 		self::$entries = array();
 		self::$first = microtime(true);
+		if (DEBUG) self::Add('Start');
 	}
   private static function Add($message) {
   	$time = microtime(true);
