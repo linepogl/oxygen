@@ -699,6 +699,14 @@ class Database {
 		self::Execute($sql);
 	}
 
+    public static function ExecuteCreateSequence($sequence_name,$from=0) {
+        switch(self::$type) {
+            case self::ORACLE:
+                $sql = 'CREATE SEQUENCE '.new SqlName($sequence_name).' INCREMENT BY 1 START WITH '.$from.' NOMAXVALUE NOMINVALUE NOCYCLE NOCACHE';
+                self::Execute($sql);
+                break;
+        }
+    }
 
 	/**
 	 * @api Since 1.3
