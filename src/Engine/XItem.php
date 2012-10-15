@@ -353,6 +353,12 @@ abstract class XItem extends XValue implements Serializable {
 
 
 
+	public function Free() {
+		self::Meta()->RemoveFromLocalCache( $this->id->AsInt() );
+	}
+
+
+
 
 
 

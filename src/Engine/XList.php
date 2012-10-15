@@ -3,12 +3,20 @@
 class XListIterator implements Iterator {
 	private $index;
 	private $xlist;
+	private $current;
 	public function __construct($xlist){ $this->xlist = $xlist; }
 	function Key() { return $this->index; }
-	function Current() { return $this->xlist[$this->index]; }
+	function Current() { return $this->current; }
 	function Valid() { return $this->index < count($this->xlist); }
-	function Rewind() { $this->index = -1; $this->next(); }
-	function Next() { $this->index++; }
+	function Rewind() { $this->index = -1; $this->Next(); }
+	function Next() {
+		$this->index++;
+		if ($this->index < count($this->xlist)) {
+			$this->current = $this->xlist[$this->index];
+			if (is_null($this->current)) $this->Next();
+		}
+		else $this->current = null;
+	}
 }
 
 
@@ -270,6 +278,20 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	/** @return XList */ public function SaveAll(){ foreach ($this as $x) $x->Save(); return $this; }
 	/** @return XList */ public function KillAll(){ foreach ($this as $x) $x->Kill(); return $this; }
+
+	/** @return XList */
+	public function FreeAll(){
+		$this->Evaluate();
+		foreach ($this->data as $offset => $x) {
+			if ($x instanceof ID)
+				$this->meta->RemoveFromCache( $x->AsInt() );
+			elseif ($x instanceof XItem) {
+				$this->data[$offset] = $x->id;
+				$x->Free();
+			}
+		}
+		return $this;
+	}
 
 
 

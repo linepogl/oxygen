@@ -28,8 +28,14 @@ class ActionUpdateProgress extends Action{
 		}
 
 		echo Js::BEGIN;
-		echo "$(".new Js($this->name.'_progress').").update(".new Js(floor($progress*100).'%').");";
-		echo "$(".new Js($this->name.'_progress_bar').").style.width = ".new Js(floor($progress*100).'%').";";
+		if ($progress < 0){
+			echo "$(".new Js($this->name.'_progress').").hide();";
+			echo "$(".new Js($this->name.'_progress_bar').").style.width = ".new Js('0').";";
+		}
+		else {
+			echo "$(".new Js($this->name.'_progress').").update(".new Js(floor($progress*100).'%').");";
+			echo "$(".new Js($this->name.'_progress_bar').").style.width = ".new Js(floor($progress*100).'%').";";
+		}
 
 		if(!$finished)
 			echo "setTimeout(function(){new Ajax.Updater(".new Js($this->name.'_log').",".new Js($this).",{method:'get',encoding:Oxygen.Encoding,evalScripts:true,insertion:'bottom'});},".self::INTERVAL.");";

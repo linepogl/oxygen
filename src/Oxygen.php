@@ -27,7 +27,8 @@ class Oxygen {
 		if (DEBUG) { if ($_GET['debug']=='pin') Oxygen::SetUrlPin('debug','pin'); }
 		if (PROFILE) { if ($_GET['profile']=='pin') Oxygen::SetUrlPin('profile','pin'); }
 		Oxygen::EnsureTempFolder();
-		Oxygen::ClearTempFolderFromOldFiles();
+		Oxygen::EnsureSharedTempFolder();
+		Oxygen::ClearTempFoldersFromOldFiles();
 		Debug::Init();
 
 		// init url handling
@@ -52,6 +53,7 @@ class Oxygen {
 					self::$window_hash = $new_window_hash;
 					foreach ($hard as $key=>$value) Scope::$WINDOW->HARD[$key] = $value;
 					foreach ($weak as $key=>$value) Scope::$WINDOW->WEAK[$key] = $value;
+					Oxygen::RedirectRaw( __BASE__ . Oxygen::MakeHrefPreservingValues(array('old_window'=>null)) );
 				}
 			}
 			self::$url_pins['window'] = self::$window_hash;
@@ -62,11 +64,32 @@ class Oxygen {
 
 		// set the current language
 		$lang = '';
-		if (isset($_GET['lang'])) $lang = $_GET['lang'];
-		$found = false;
 		if (count(self::$langs)==0) self::$langs[] = 'en';
-		foreach (self::$langs as $l) if ($l == $lang) { $found = true;	break; }
-		if (!$found) $lang = self::$langs[0];
+		if (count(self::$langs)==1) {
+			$lang = self::$langs[0];
+		}
+		else {
+			$found = false;
+			if (isset($_GET['lang'])) {
+				$lang = $_GET['lang'];
+				foreach (self::$langs as $l) if ($l == $lang) { $found = true; break; }
+			}
+			if (!$found && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) { // try to find the preferred user language
+				$a = explode(';',$_SERVER["HTTP_ACCEPT_LANGUAGE"]);
+				if (strlen($a[0]) >= 2) {
+					$lang = substr($a[0],0,2);
+					foreach (self::$langs as $l) if ($l == $lang) { $found = true; self::$lang_auto_selection = true; break; }
+				}
+				for ($i = 1; !$found && $i < count($a); $i++) {
+					$b = explode(',',$a[$i]);
+					if (count($b) > 1 && strlen($b[1]) >= 2) {
+						$lang = substr($b[1],0,2);
+						foreach (self::$langs as $l) if ($l == $lang) { $found = true; self::$lang_auto_selection = true; break; }
+					}
+				}
+			}
+			if (!$found) { $lang = self::$langs[0]; self::$lang_auto_selection = true; }
+		}
 		Oxygen::SetLang($lang);
 
 		// set the action
@@ -215,9 +238,11 @@ class Oxygen {
 	//
 	public static $langs = array();
 	public static $lang = null;
+	public static $lang_auto_selection = false;
 	public static function AddLang($lang) { if (!in_array($lang,self::$langs,true)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
 	public static function SetLang($lang) { if (Oxygen::HasLang($lang)) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Pick('locale')); } }
 	public static function HasLang($lang) { return in_array($lang,self::$langs,true); }
+	public static function HasLangAutoSelection() { return self::$lang_auto_selection; }
 	public static function GetLang(){ return self::$lang; }
 	public static function GetLangs(){ return self::$langs; }
 
@@ -328,16 +353,17 @@ class Oxygen {
 	public static function HasSharedTempFolder(){ return is_dir(self::$shared_temp_folder); }
 	public static function EnsureTempFolder(){ if (!file_exists(self::$temp_folder)) mkdir(self::$temp_folder,0777,true); }
 	public static function EnsureSharedTempFolder(){ if (!file_exists(self::$shared_temp_folder)) mkdir(self::$shared_temp_folder,0777,true); }
+	public static function EnsureTempFolders(){ self::EnsureTempFolder(); self::EnsureSharedTempFolder(); }
 	public static function MakeTempFolder(){ mkdir(self::$temp_folder,0777,true); }
 	public static function MakeSharedTempFolder(){ mkdir(self::$shared_temp_folder,0777,true); }
-	public static function ClearTempFolder(){
+	public static function ClearTempFolders(){
 		$local_tmp = Oxygen::GetTempFolder();
 		foreach (scandir($local_tmp) as $f){ if (is_dir($f)) continue; try{ unlink($local_tmp.'/'.$f); } catch(Exception $ex){} }
 		$shared_tmp = Oxygen::GetSharedTempFolder();
 		if ($shared_tmp != $local_tmp) { foreach (scandir($shared_tmp) as $f){ if (is_dir($f)) continue; try{ unlink($shared_tmp.'/'.$f); } catch(Exception $ex){} } }
 	}
-	public static function ClearTempFolderFromOldFiles($force = false){
-		$last_time = Scope::$APPLICATION['Oxygen::ClearTempFolderFromOldFiles'];
+	public static function ClearTempFoldersFromOldFiles($force = false){
+		$last_time = Scope::$APPLICATION['Oxygen::ClearTempFoldersFromOldFiles'];
 		$now = time();
 		if ($force || is_null($last_time) || $now - $last_time > 3600) {
 			$one_day_time = 86400;
@@ -345,7 +371,7 @@ class Oxygen {
 			foreach (scandir($local_tmp) as $f){ if (is_dir($f)) continue; try{ $then = filemtime($local_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($local_tmp.'/'.$f); } catch(Exception $ex){} }
 			$shared_tmp = Oxygen::GetSharedTempFolder();
 			if ($shared_tmp != $local_tmp) { foreach (scandir($shared_tmp) as $f){ if (is_dir($f)) continue; try{ $then = filemtime($shared_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($shared_tmp.'/'.$f); } catch(Exception $ex){} } }
-			Scope::$APPLICATION['Oxygen::ClearTempFolderFromOldFiles'] = $now;
+			Scope::$APPLICATION['Oxygen::ClearTempFoldersFromOldFiles'] = $now;
 		}
 	}
 
@@ -520,7 +546,8 @@ class Oxygen {
 	}
 	public static function MakeHref(array $url_args = array() , $use_managed_controller = false ){
 		$s = '';
-		foreach ( ($url_args + self::$url_pins) as $key=>$value) { // <-- array + operator here again.
+		foreach ( ($url_args
+				+ self::$url_pins) as $key=>$value) { // <-- array + operator here again.
 			if (is_null($value)) continue;
 			$s .= ($s===''?'?':'&');
 			$s .= rawurlencode( $key ); /// <-- huge savings by using this directly here... CORRECTION: this is not true, it was because of false info from XDebug
@@ -827,11 +854,91 @@ class Oxygen {
 		mail($rcpt, $subject, $msg, $headers);
 	}
 
+	public static function GetMemoryLimit(){
+		$s = trim(strtoupper(ini_get('memory_limit')));
+		$r = intval($s);
+		switch (substr($s,strlen($s)-1,1)) {
+			case 'K': return $r * 1024;
+			case 'M': return $r * 1024 * 1024;
+			case 'G': return $r * 1024 * 1024 * 1024;
+		}
+		return $r;
+	}
+	public static function GetMemoryUsage(){
+		return memory_get_usage(true);
+	}
 
 
 
 
 
+
+
+	//
+	//
+	// Serve file
+	//
+	//
+	public static function ServeFile( $filename , $save_as = null , $mime = null , $requires_caching = true ){
+		if (!is_readable($filename)) throw new Exception('File not found: '. $filename);
+		try {
+			$size = filesize($filename);
+			$mime = is_null($mime) ? Fs::GetMimeType($filename) : $mime;
+			$save_as = is_null($save_as) ? basename($filename) : $save_as;
+			$range = 0;
+			$length = $size;
+
+			while (ob_get_level()>0) ob_end_clean();
+			if(ini_get('zlib.output_compression')) ini_set('zlib.output_compression', 'Off');
+			Oxygen::ClearHttpHeaders();
+			Oxygen::AddHttpHeader('Content-Type: '.$mime);
+			Oxygen::AddHttpHeader('Content-Disposition: attachment; filename="'.$save_as.'"');
+			Oxygen::AddHttpHeader("Content-Transfer-Encoding: binary");
+			Oxygen::AddHttpHeader('Accept-Ranges: bytes');
+			if ($requires_caching){
+				Oxygen::AddHttpHeader("Cache-control: private");
+				Oxygen::AddHttpHeader('Pragma: private');
+				Oxygen::AddHttpHeader('Expires: ' . gmdate('D, d M Y H:i:s', time() + 60 * 60 * 24 * 100) . ' GMT'); // 100 days
+			}
+
+	    if (isset($_SERVER['HTTP_RANGE'])) {
+				list($a, $range) = explode("=",$_SERVER['HTTP_RANGE'],2);
+				list($range) = explode(",",$range,2);
+				list($range, $range_end) = explode("-", $range);
+				$range = intval($range);
+				if (!$range_end)
+					$range_end = $size - 1;
+				else
+					$range_end = intval($range_end);
+		    $length = $range_end - $range + 1;
+		    Oxygen::AddHttpHeader("HTTP/1.1 206 Partial Content");
+		    Oxygen::AddHttpHeader("Content-Length: $length");
+		    Oxygen::AddHttpHeader("Content-Range: bytes $range-$range_end/$size");
+	    }
+	    else {
+				Oxygen::AddHttpHeader("Content-Length: $length");
+	    }
+			Oxygen::SendHttpHeaders();
+
+			set_time_limit(0);
+			$chunksize = 1 * 1024 * 1024;
+			$bytes_send = 0;
+			$f = fopen($filename, 'r');
+			if ($f === false) throw new Exception('Cannot open file: '.$filename);
+			if ($range > 0) fseek($f, $range);
+			while (!feof($f) && (!connection_aborted()) && ($bytes_send<$length)) {
+				$buffer = fread($f, $chunksize);
+				print($buffer);
+				flush();
+				$bytes_send += strlen($buffer);
+			}
+			fclose($f);
+		}
+		catch (Exception $ex){
+			// we cannot send the exceptions along with the files...
+			Debug::RecordExceptionAndDie($ex,'File Server Exception Handler ('.$filename.')');
+		}
+	}
 
 	
 

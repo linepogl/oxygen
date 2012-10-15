@@ -31,6 +31,11 @@ class XTimeSpan extends XValue implements Serializable {
 	public function GetSeconds(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_MINUTE) / self::MILLISECONDS_IN_SECOND); }
 	public function GetMilliseconds(){ return $this->GetSign() * (abs($this->value) % self::MILLISECONDS_IN_SECOND); }
 
+	public function GetDecimalDays(){ return $this->GetSign() * $this->value / self::MILLISECONDS_IN_DAY; }
+	public function GetDecimalHours(){ return $this->GetSign() * $this->value / self::MILLISECONDS_IN_HOUR; }
+	public function GetDecimalMinutes(){ return $this->GetSign() * $this->value / self::MILLISECONDS_IN_MINUTE; }
+	public function GetDecimalSeconds(){ return $this->GetSign() * $this->value/self::MILLISECONDS_IN_SECOND; }
+	public function GetDecimalMilliSeconds(){ return $this->GetSign() * $this->value; }
 
 	/**
 	* @param string $value W3C duration format

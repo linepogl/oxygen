@@ -187,6 +187,12 @@ final class Language {
 		    }
 	    }
 
+	    if ($r == '') {
+		    $r = '0';
+		    if ($show_milliseconds) $r .= self::GetDecimalSeparator().'000';
+		    $r .= '\'\'';
+	    }
+
 			if ($value->GetSign()<0) $r = '-'.$r;
 	    return $r;
 		}

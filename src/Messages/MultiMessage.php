@@ -25,6 +25,7 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 			if (!empty($this->value)) $this->value .= "\\n";
 			$this->value .= $m->AsString();
 			$this->messages[] = $m;
+			if (is_callable($this->on_add)) {  $f = $this->on_add; $f($m); }
 		}
 	}
 	public function GetCode(){ return $this->dominant->GetCode(); }
@@ -46,6 +47,9 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 			throw new InvalidArgumentException('Cannot modify existing messages of a MultiMessage.');
 	}
 
+
+	/** @var callable */ private $on_add = null;
+	public function WithOnAdd( $callback = null ){ $this->on_add = $callback; return $this; }
 
 }
 

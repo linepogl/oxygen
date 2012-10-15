@@ -75,9 +75,13 @@ class Console {
 		echo '<img src="oxy/img/console_tab_docs.png" /><br/>';
 		echo 'Docs';
 		echo '</a>';
+		echo '<a href="'.new Html(new ActionOxygenResetCache()).'" style="float:right;">';
+		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
+		echo 'Reset cache';
+		echo '</a>';
 		echo '<a href="'.new Html(new ActionOxygenReset()).'" style="float:right;">';
 		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
-		echo 'Reset';
+		echo 'Reset all';
 		echo '</a>';
 		echo '<div style="float:right;height:100px;background:url(oxy/img/console_tab_shadow.png);">'.new Spacer().'</div>';
 
@@ -114,6 +118,20 @@ class Console {
 		echo '</a>';
 		echo '<div style="float:left;height:100px;background:url(oxy/img/console_tab_hilight.png);">'.new Spacer().'</div>';
 
+
+		$i = 0;
+		/** @var $act ConsoleAction */
+		foreach (new ConsoleMenu() as $act){
+			if ($i++ == 0) continue;
+			echo '<a href="'.new Html($act->GetHref(array('debug'=>null,'profile'=>null))).'">';
+			$b = $act->GetBadgeText(); if (!empty($b)) echo '<div class="badge">'.$b.'</div>';
+			echo '<img src="'.$act->GetNormalTabIconSrc().'" />';
+			echo '<br/>';
+			echo $act->GetTabTitle();
+			echo '</a>';
+		}
+
+
 		echo '<div style="float:left;height:100px;background:url(oxy/img/console_tab_hilight.png);">'.new Spacer().'</div>';
 		echo '<a href="javascript:(function(){$('.new Js($name).').hide();})();" style="float:right;width:99px;border-top-right-radius:10px;">';
 		echo '<img src="oxy/img/console_tab_hide.png" /><br/>';
@@ -123,9 +141,13 @@ class Console {
 		echo '<img src="oxy/img/console_tab_docs.png" /><br/>';
 		echo 'Docs';
 		echo '</a>';
+		echo '<a href="'.new Html(new ActionOxygenResetCache()).'" style="float:right;">';
+		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
+		echo 'Reset cache';
+		echo '</a>';
 		echo '<a href="'.new Html(new ActionOxygenReset()).'" style="float:right;">';
 		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
-		echo 'Reset';
+		echo 'Reset all';
 		echo '</a>';
 		echo '<div style="float:right;height:100px;background:url(oxy/img/console_tab_shadow.png);">'.new Spacer().'</div>';
 

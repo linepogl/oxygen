@@ -28,6 +28,7 @@ class Database {
 	private static $cx = null;
 	private static $stack = array();
 
+	private static $count_queries = 0;
 	private static $queries = array();
 	private static $prepared = array();
 
@@ -83,7 +84,7 @@ class Database {
 			try { unlink($lock_filename); } catch(Exception $ex){}
 		}
 		if ($needs_refresh){
-			Debug::Write('Upgrade complete.<br/>Total queries: '.count(Database::GetQueries()).'.<br/><br/><br/>Please refresh.<br/><br/><br/><br/>');
+			Debug::Write('Upgrade complete.<br/>Total queries: '.(self::$count_queries).'.<br/><br/><br/>Please refresh.<br/><br/><br/><br/>');
 			exit();
 		}
 
@@ -113,7 +114,7 @@ class Database {
 				}
 			}
 			catch (Exception $ex){
-				throw new ApplicationException(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. self::$cx->server.'/'.self::$cx->schema. '<br/>'.$ex->getMessage());
+				throw new Exception(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. self::$cx->server.'/'.self::$cx->schema. '<br/>'.$ex->getMessage());
 			}
 			if (self::$cx->is_managed){
 				self::Upgrade();
@@ -210,11 +211,13 @@ class Database {
 	private static function PushConnection(){
 		if (!is_null(self::$cx)){
 			array_push(self::$stack,self::$cx);
+			self::$count_queries = 0;
 			self::$queries = array();
 			self::$prepared = array();
 		}
 	}
 	private static function PopConnection(){
+		self::$count_queries = 0;
 		self::$queries = array();
 		self::$prepared = array();
 		self::SetConnection( array_pop(self::$stack) );
@@ -238,12 +241,10 @@ class Database {
 	// Database queries
 	//
 	//
-	public static function GetQueries(){ return self::$queries; }
 	public static function GetQueriesAsText(){
 		$r = '';
-		$i = 0;
-		foreach ( self::$queries as $q ) {
-			$r .=  sprintf('%5d',++$i) . '. ' . $q . "\n";
+		foreach ( self::$queries as $i => $q ) {
+			$r .=  sprintf('%5d',($i+1)) . '. ' . $q . "\n";
 		}
 		if ($r == '') $r .= '-';
 		return $r;
@@ -263,6 +264,9 @@ class Database {
 			$r = self::$prepared[$sql];
 		}
 		self::$queries[] =& $sql;
+		self::$count_queries++;
+		if (count(self::$queries) > 1000) { unset(self::$queries[key(self::$queries)]); reset(self::$queries); } // remove the first element from the array
+		if (DEBUG) Debug::Write( 'Query #'.self::$count_queries.': '.$sql);
 		return $r;
 	}
 
@@ -453,6 +457,11 @@ class Database {
 		}
 		return $r;
 	}
+	public static function WriteToPatchingSystem($message){
+		self::$patching_system_dirty = true;
+		if (!Debug::IsImmediateFlushingEnabled()) Debug::EnableImmediateFlushing();
+		Debug::Write($message);
+	}
 	public static function BeginPatch($patcher,$patch,$description=null){
 		$current = self::GetPatch($patcher);
 		if (is_null($current) || $current < $patch) {
@@ -608,38 +617,6 @@ class Database {
 		$sql.=')';
 		self::Execute($sql);
 	}
-	public static function ExecuteAddIndices($tablename){
-		$a = func_get_args();
-		$z = func_num_args();
-		for($i=1;$i<$z;$i+=2){
-			switch (self::$type) {
-				case self::MYSQL:
-					$sql='ALTER TABLE '.new SqlName($tablename).' ADD INDEX ('.new SqlName($a[$i]).')';
-					break;
-				default:
-				case self::ORACLE:
-					$sql='CREATE INDEX '.new SqlName('idx_'.Oxygen::Hash32($tablename.'_'.$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')';
-					break;
-			}
-			self::Execute($sql);
-		}
-	}
-	public static function ExecuteAddUniqueIndices($tablename){
-		$a = func_get_args();
-		$z = func_num_args();
-		for($i=1;$i<$z;$i+=2){
-			switch (self::$type) {
-				case self::MYSQL:
-					$sql='ALTER TABLE '.new SqlName($tablename).' ADD UNIQUE INDEX ('.new SqlName($a[$i]).')';
-					break;
-				default:
-				case self::ORACLE:
-					$sql='CREATE UNIQUE INDEX '.new SqlName('idx_'.Oxygen::Hash32($tablename.'_'.$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')';
-					break;
-			}
-			self::Execute($sql);
-		}
-	}
 	public static function ExecuteDropFields($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
@@ -651,9 +628,19 @@ class Database {
 	public static function ExecuteAddFields($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		for($i=1;$i<$z;$i+=2){
-			$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD COLUMN '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
-			self::Execute($sql);
+		switch (self::$type){
+			case self::MYSQL:
+				for($i=1;$i<$z;$i+=2){
+					$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD COLUMN '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+					self::Execute($sql);
+				}
+				break;
+			case self::ORACLE:
+				for($i=1;$i<$z;$i+=2){
+					$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+					self::Execute($sql);
+				}
+				break;
 		}
 	}
 
@@ -773,13 +760,14 @@ class Database {
 
 
 
+	private static function hash_foreign_key($tablename,$field){ return 'fk_' . Oxygen::Hash32($tablename.'+'.$field); }
+	private static function hash_index($tablename,$field){ return 'idx_' . Oxygen::Hash32($tablename.'+'.$field); }
 	public static function ExecuteAddForeignKeys($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=2){
 			self::ExecuteAddIndices($tablename,$a[$i]);
-			$sql='ALTER TABLE '.new SqlName($tablename).' ADD FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName('id').')';
-			self::Execute($sql);
+			self::Execute('ALTER TABLE '.new SqlName($tablename).' ADD CONSTRAINT '.new SqlName( self::hash_foreign_key($tablename,$a[$i]) ).' FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName('id').')');
 		}
 	}
 	public static function ExecuteAddForeignKeysWithAltTarget($tablename){
@@ -787,32 +775,38 @@ class Database {
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=3){
 			self::ExecuteAddIndices($tablename,$a[$i]);
-			$sql='ALTER TABLE '.new SqlName($tablename).' ADD FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName($a[$i+2]).')';
-			self::Execute($sql);
+			self::Execute('ALTER TABLE '.new SqlName($tablename).' ADD CONSTRAINT '.new SqlName( self::hash_foreign_key($tablename,$a[$i]) ).' FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName($a[$i+2]).')');
 		}
 	}
 	public static function ExecuteDropForeignKeys($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP FOREIGN KEY '.new SqlName($a[$i]));
+			self::ExecuteDropIndices($tablename,$a[$i]);
+			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP FOREIGN KEY '.new SqlName(self::hash_foreign_key($tablename,$a[$i])));
+		}
+	}
+	public static function ExecuteAddIndices($tablename){
+		$a = func_get_args();
+		$z = func_num_args();
+		for($i=1;$i<$z;$i+=2){
+			self::Execute('CREATE INDEX '.new SqlName(self::hash_index($tablename,$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')');
+		}
+	}
+	public static function ExecuteAddUniqueIndices($tablename){
+		$a = func_get_args();
+		$z = func_num_args();
+		for($i=1;$i<$z;$i+=2){
+			self::Execute('CREATE UNIQUE INDEX '.new SqlName(self::hash_index($tablename,$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')');
 		}
 	}
 	public static function ExecuteDropIndices($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			switch (self::$type) {
-				case self::MYSQL:
-					self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName($a[$i]));
-					break;
-				case self::ORACLE:
-					self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName('idx_'.Oxygen::Hash32($tablename.'_'.$a[$i])));
-					break;
-			}
+			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName(self::hash_index($tablename,$a[$i])));
 		}
 	}
-
 
 
 
@@ -829,7 +823,7 @@ class Database {
 			}
 			catch (Exception $ex){
 				self::PopConnection();
-				throw new ApplicationException(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
+				throw new Exception(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
 			}
 			try{
 				Database::Execute('CREATE DATABASE '.new SqlName($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
