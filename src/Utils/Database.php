@@ -610,7 +610,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD PRIMARY KEY(';
-		for($i=1;$i<$z;$i+=2){
+		for($i=1;$i<$z;$i++){
 			if ($i>1) $sql .= ',';
 			$sql.=new SqlName($a[$i]);
 		}
