@@ -766,7 +766,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=2){
-			self::ExecuteAddIndices($tablename,$a[$i]);
+            try { self::ExecuteAddIndices($tablename,$a[$i]); } catch (Exception $ex){}
 			self::Execute('ALTER TABLE '.new SqlName($tablename).' ADD CONSTRAINT '.new SqlName( self::hash_foreign_key($tablename,$a[$i]) ).' FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName('id').')');
 		}
 	}
@@ -774,7 +774,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=3){
-			self::ExecuteAddIndices($tablename,$a[$i]);
+			try { self::ExecuteAddIndices($tablename,$a[$i]);  } catch (Exception $ex){}
 			self::Execute('ALTER TABLE '.new SqlName($tablename).' ADD CONSTRAINT '.new SqlName( self::hash_foreign_key($tablename,$a[$i]) ).' FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName($a[$i+2]).')');
 		}
 	}
@@ -782,7 +782,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			self::ExecuteDropIndices($tablename,$a[$i]);
+			try { self::ExecuteDropIndices($tablename,$a[$i]);  } catch (Exception $ex){}
 			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP FOREIGN KEY '.new SqlName(self::hash_foreign_key($tablename,$a[$i])));
 		}
 	}
