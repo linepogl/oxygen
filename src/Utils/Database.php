@@ -762,6 +762,7 @@ class Database {
 
 	private static function hash_foreign_key($tablename,$field){ return 'fk_' . Oxygen::Hash32($tablename.'+'.$field); }
 	private static function hash_index($tablename,$field){ return 'idx_' . Oxygen::Hash32($tablename.'+'.$field); }
+	private static function hash_unique($tablename,$fields){ return 'uq_' . Oxygen::Hash32($tablename.'+'.implode('+',$fields)); }
 	public static function ExecuteAddForeignKeys($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
@@ -796,7 +797,7 @@ class Database {
 	public static function ExecuteAddUniqueIndices($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		for($i=1;$i<$z;$i+=2){
+		for($i=1;$i<$z;$i++){
 			self::Execute('CREATE UNIQUE INDEX '.new SqlName(self::hash_index($tablename,$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')');
 		}
 	}
@@ -806,6 +807,31 @@ class Database {
 		for($i=1;$i<$z;$i++){
 			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName(self::hash_index($tablename,$a[$i])));
 		}
+	}
+	public static function ExecuteDropIndicesRaw($tablename){
+		$a = func_get_args();
+		$z = func_num_args();
+		for($i=0;$i<$z;$i++){
+			self::Execute('DROP INDEX '.new SqlName($a[$i]));
+		}
+	}
+	public static function ExecuteDropConstraints($tablename){
+		$a = func_get_args();
+		$z = func_num_args();
+		for($i=1;$i<$z;$i++){
+			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP CONSTRAINT '.new SqlName($a[$i]));
+		}
+	}
+
+	public static function ExecuteAddUniqueConstraint($tablename){
+		$a = func_get_args();
+		$z = func_num_args();
+
+		self::Execute('CREATE UNIQUE INDEX '.new SqlName(self::hash_unique($tablename, array_splice($a,1))).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')');
+	}
+
+	public static function ExecuteDropPrimaryKey($tablename){
+		self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP PRIMARY KEY');
 	}
 
 

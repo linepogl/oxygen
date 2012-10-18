@@ -15,27 +15,53 @@ class XTimeSpan extends XValue implements Serializable {
 	public function Serialize(){ if (IS_IGBINARY_AVAILABLE) return igbinary_serialize( $this->value ); else return serialize( $this->value ); }
 	public function Unserialize($data){ if (IS_IGBINARY_AVAILABLE) $this->value = igbinary_unserialize($data); else $this->value = unserialize( $data ); }
 	
+	const MILLISECONDS_IN_WEEK = 604800000;
 	const MILLISECONDS_IN_DAY = 86400000;
 	const MILLISECONDS_IN_HOUR = 3600000;
 	const MILLISECONDS_IN_MINUTE = 60000;
 	const MILLISECONDS_IN_SECOND = 1000;
 
-	public function GetDays(){ return intval($this->value/self::MILLISECONDS_IN_DAY); }
+
+	public function GetTotalWeeks(){ return intval($this->value/self::MILLISECONDS_IN_WEEK); }
+	public function GetTotalDays(){ return intval($this->value/self::MILLISECONDS_IN_DAY); }
 	public function GetTotalHours(){ return intval($this->value/self::MILLISECONDS_IN_HOUR); }
 	public function GetTotalMinutes(){ return intval($this->value/self::MILLISECONDS_IN_MINUTE); }
 	public function GetTotalSeconds(){ return intval($this->value/self::MILLISECONDS_IN_SECOND); }
 	public function GetTotalMilliSeconds(){ return $this->value; }
 	public function GetSign(){ return $this->value < 0 ? -1 : 1; }
+
+
+	public function GetJustWeeks(){ return intval($this->value/self::MILLISECONDS_IN_WEEK); }
+	public function GetJustDays(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_WEEK) / self::MILLISECONDS_IN_DAY); }
+	public function GetJustHours(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_DAY) / self::MILLISECONDS_IN_HOUR); }
+	public function GetJustMinutes(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_HOUR) / self::MILLISECONDS_IN_MINUTE); }
+	public function GetJustSeconds(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_MINUTE) / self::MILLISECONDS_IN_SECOND); }
+	public function GetJustMilliseconds(){ return $this->GetSign() * (abs($this->value) % self::MILLISECONDS_IN_SECOND); }
+
+	public function GetDecimalWeeks(){ return $this->value / self::MILLISECONDS_IN_DAY; }
+	public function GetDecimalDays(){ return $this->value / self::MILLISECONDS_IN_DAY; }
+	public function GetDecimalHours(){ return $this->value / self::MILLISECONDS_IN_HOUR; }
+	public function GetDecimalMinutes(){ return $this->value / self::MILLISECONDS_IN_MINUTE; }
+	public function GetDecimalSeconds(){ return $this->value/self::MILLISECONDS_IN_SECOND; }
+	public function GetDecimalMilliSeconds(){ return $this->value; }
+
+	// TODO: REMOVE THESE DEPRECATED FUNCTIONS
+	public function GetDays(){ return intval($this->value/self::MILLISECONDS_IN_DAY); }
 	public function GetHours(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_DAY) / self::MILLISECONDS_IN_HOUR); }
 	public function GetMinutes(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_HOUR) / self::MILLISECONDS_IN_MINUTE); }
 	public function GetSeconds(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_MINUTE) / self::MILLISECONDS_IN_SECOND); }
 	public function GetMilliseconds(){ return $this->GetSign() * (abs($this->value) % self::MILLISECONDS_IN_SECOND); }
+	/////
 
-	public function GetDecimalDays(){ return $this->GetSign() * $this->value / self::MILLISECONDS_IN_DAY; }
-	public function GetDecimalHours(){ return $this->GetSign() * $this->value / self::MILLISECONDS_IN_HOUR; }
-	public function GetDecimalMinutes(){ return $this->GetSign() * $this->value / self::MILLISECONDS_IN_MINUTE; }
-	public function GetDecimalSeconds(){ return $this->GetSign() * $this->value/self::MILLISECONDS_IN_SECOND; }
-	public function GetDecimalMilliSeconds(){ return $this->GetSign() * $this->value; }
+
+	/** @return XTimeSpan */ public function Add( XTimeSpan $value = null ){ return new XTimeSpan( $this->value + (is_null($value) ? 0 : $value->GetTotalMilliSeconds()) ); }
+	/** @return XTimeSpan */ public function AddWeeks( $value ){ return new XTimeSpan( $this->value + $value * self::MILLISECONDS_IN_WEEK ); }
+	/** @return XTimeSpan */ public function AddDays( $value ){ return new XTimeSpan( $this->value + $value * self::MILLISECONDS_IN_DAY ); }
+	/** @return XTimeSpan */ public function AddHours( $value ){ return new XTimeSpan( $this->value + $value * self::MILLISECONDS_IN_HOUR ); }
+	/** @return XTimeSpan */ public function AddMinutes( $value ){ return new XTimeSpan( $this->value + $value * self::MILLISECONDS_IN_MINUTE ); }
+	/** @return XTimeSpan */ public function AddSeconds( $value ){ return new XTimeSpan( $this->value + $value * self::MILLISECONDS_IN_SECOND ); }
+	/** @return XTimeSpan */ public function AddMilliSeconds( $value ){ return new XTimeSpan( $this->value + $value  ); }
+
 
 	/**
 	* @param string $value W3C duration format

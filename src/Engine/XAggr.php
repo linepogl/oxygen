@@ -40,14 +40,14 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			while ($dr->Read()) {
 				if (is_array($this->selectors)) {
 					$a = array();
-					/** @var $selector XMetaField|XAggrField */
+					/** @var $selector XMetaField|XFuncField */
 					foreach ($this->selectors as $key=>$selector) {
 						$a[ $key ] = $dr['AGGR'.$key]->CastTo($selector->GetType());
 					}
 					$this->data[] = $a;
 				}
 				else {
-					/** @var $selector XMetaField|XAggrField */
+					/** @var $selector XMetaField|XFuncField */
 					$selector = $this->selectors;
 					$this->data[] = $dr['AGGR0']->CastTo($selector->GetType());
 				}
@@ -69,14 +69,14 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 		if (is_array($this->selectors)) {
 			$i = 0;
-			/** @var $selector XMetaField|XAggrField */
+			/** @var $selector XMetaField|XFuncField */
 			foreach ($this->selectors as $key=>$selector) {
 				if ($i++>0) $sql.=',';
 				$sql .= $selector->ToSql().' '.new SqlName('AGGR'.$key);
 			}
 		}
 		else {
-			/** @var $selector XMetaField|XAggrField */
+			/** @var $selector XMetaField|XFuncField */
 			$selector = $this->selectors;
 			$sql .= $selector->ToSql().' '.new SqlName('AGGR0');
 		}
@@ -108,7 +108,13 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			$i = 0;
 			foreach ($this->groupers as $grouper){
 				if ($i++>0) $sql .= ',';
-				$sql .= new SqlName($grouper);
+				if ($grouper instanceof XMetaField)
+					$sql .= new SqlName($grouper);
+				elseif ($grouper instanceof XFuncField)
+					$sql .= $grouper->ToSql();
+				else
+					$sql .= new SqlName('AGGR'.$grouper);
+
 			}
 		}
 
@@ -182,12 +188,18 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			$this->groupers[] = $grouper_or_function;
 			return $this;
 		}
+		elseif ( $grouper_or_function instanceof XFuncField ) {
+			$this->groupers[] = $grouper_or_function;
+			return $this;
+		}
 		elseif ( is_string($grouper_or_function) ) {
 			$this->groupers[] = $grouper_or_function;
 			return $this;
 		}
-		else
+		elseif ( is_callable( $grouper_or_function ) )
 			return parent::GroupBy( $grouper_or_function );
+		else
+			throw new Exception();
 	}
 
 

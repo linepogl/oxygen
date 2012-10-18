@@ -159,11 +159,20 @@ class XMetaField extends XValue {
 	/** @return XOrderBy */ public function Asc(){ return new XOrderByField($this,false); }
 	/** @return XOrderBy */ public function Desc(){ return new XOrderByField($this,true); }
 
-	/** @return XAggrField */ public function Count(){ return new XAggrField($this,XAggrField::COUNT); }
-	/** @return XAggrField */ public function Sum(){ return new XAggrField($this,XAggrField::SUM); }
-	/** @return XAggrField */ public function Avg(){ return new XAggrField($this,XAggrField::AVG); }
-	/** @return XAggrField */ public function Min(){ return new XAggrField($this,XAggrField::MIN); }
-	/** @return XAggrField */ public function Max(){ return new XAggrField($this,XAggrField::MAX); }
+	/** @return XFuncField */ public function Count(){ return new XFuncField($this,XFuncField::COUNT); }
+	/** @return XFuncField */ public function CountDistinct(){ return new XFuncField($this,XFuncField::COUNT_DISTINCT); }
+	/** @return XFuncField */ public function Sum(){ return new XFuncField($this,XFuncField::SUM); }
+	/** @return XFuncField */ public function Avg(){ return new XFuncField($this,XFuncField::AVG); }
+	/** @return XFuncField */ public function Min(){ return new XFuncField($this,XFuncField::MIN); }
+	/** @return XFuncField */ public function Max(){ return new XFuncField($this,XFuncField::MAX); }
+
+	/** @return XFuncField */ public function HashYear(){ return new XFuncField($this,XFuncField::HASH_YEAR); }
+	/** @return XFuncField */ public function HashMonth(){ return new XFuncField($this,XFuncField::HASH_MONTH); }
+	/** @return XFuncField */ public function HashDay(){ return new XFuncField($this,XFuncField::HASH_DAY); }
+	/** @return XFuncField */ public function HashWeekDay(){ return new XFuncField($this,XFuncField::HASH_WEEKDAY); }
+	/** @return XFuncField */ public function HashHour(){ return new XFuncField($this,XFuncField::HASH_HOUR); }
+	/** @return XFuncField */ public function HashExactDay(){ return new XFuncField($this,XFuncField::HASH_EXACT_DAY); }
+	/** @return XFuncField */ public function HashExactMonth(){ return new XFuncField($this,XFuncField::HASH_EXACT_MONTH); }
 }
 
 
