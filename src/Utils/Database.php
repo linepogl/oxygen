@@ -266,7 +266,7 @@ class Database {
 		self::$queries[] =& $sql;
 		self::$count_queries++;
 		if (count(self::$queries) > 1000) { unset(self::$queries[key(self::$queries)]); reset(self::$queries); } // remove the first element from the array
-		if (DEBUG) Debug::Write( 'Query #'.self::$count_queries.': '.$sql);
+		if (DEBUG && !self::$upgrade_running) Debug::Write( 'Query #'.self::$count_queries.': '.$sql);
 		return $r;
 	}
 
@@ -762,7 +762,6 @@ class Database {
 
 	private static function hash_foreign_key($tablename,$field){ return 'fk_' . Oxygen::Hash32($tablename.'+'.$field); }
 	private static function hash_index($tablename,$field){ return 'idx_' . Oxygen::Hash32($tablename.'+'.$field); }
-	private static function hash_unique($tablename,$fields){ return 'uq_' . Oxygen::Hash32($tablename.'+'.implode('+',$fields)); }
 	public static function ExecuteAddForeignKeys($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
@@ -794,6 +793,12 @@ class Database {
 			self::Execute('CREATE INDEX '.new SqlName(self::hash_index($tablename,$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')');
 		}
 	}
+	public static function ExecuteAddIndex($tablename){
+		$a = func_get_args();
+		$key = self::hash_index($tablename, implode('+',array_splice($a,1)));
+		$sql_fields = implode(',',array_map(function($x){return new SqlName($x);},array_splice($a,1)));
+		self::Execute('CREATE INDEX '.new SqlName($key).' ON '.new SqlName($tablename).' ('.$sql_fields.')');
+	}
 	public static function ExecuteAddUniqueIndices($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
@@ -801,12 +806,24 @@ class Database {
 			self::Execute('CREATE UNIQUE INDEX '.new SqlName(self::hash_index($tablename,$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')');
 		}
 	}
+	public static function ExecuteAddUniqueIndex($tablename){
+		$a = func_get_args();
+		$key = self::hash_index($tablename, implode('+',array_splice($a,1)));
+		$sql_fields = implode(',',array_map(function($x){return new SqlName($x);},array_splice($a,1)));
+		self::Execute('CREATE UNIQUE INDEX '.new SqlName($key).' ON '.new SqlName($tablename).' ('.$sql_fields.')');
+	}
 	public static function ExecuteDropIndices($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
 			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName(self::hash_index($tablename,$a[$i])));
 		}
+	}
+	public static function ExecuteDropIndex($tablename){
+		$a = func_get_args();
+		$z = func_num_args();
+		$key = self::hash_index($tablename, implode('+',array_splice($a,1)));
+		self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName($key));
 	}
 	public static function ExecuteDropIndicesRaw($tablename){
 		$a = func_get_args();
@@ -823,12 +840,6 @@ class Database {
 		}
 	}
 
-	public static function ExecuteAddUniqueConstraint($tablename){
-		$a = func_get_args();
-		$z = func_num_args();
-
-		self::Execute('CREATE UNIQUE INDEX '.new SqlName(self::hash_unique($tablename, array_splice($a,1))).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')');
-	}
 
 	public static function ExecuteDropPrimaryKey($tablename){
 		self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP PRIMARY KEY');
