@@ -394,7 +394,7 @@ class ReportTableControl extends ValueControl {
 		echo "  }";
 		echo " ,SetCheck : function(i,v){";
 		echo "    var x = ".new Js($this->name)." + '_check_' + i;";
-		echo "    if (v) eval(x+'_SetValue(\\'true\\');'); else eval(x+'_SetValue(\\'false\\');');";
+		echo "    if (v) eval(x+'.SetValue(true);'); else eval(x+'.SetValue(false);');";
 		echo "    var tr = $('".$this->name."_tr_'+i);";
 		echo "    if (tr != null) {";
 		echo "      if (v) tr.addClassName('selected'); else tr.removeClassName('selected');";

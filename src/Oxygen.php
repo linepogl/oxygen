@@ -833,6 +833,9 @@ class Oxygen {
 	public static function IsEmail($that){
 		return 1==preg_match('/.+@.+$/',$that);
 	}
+	public static function IsIPV4Address($that){
+		return 1==preg_match('/([1-2]?[0-9])?[0-9]\.([1-2]?[0-9])?[0-9]\.([1-2]?[0-9])?[0-9]\.([1-2]?[0-9])?[0-9]$/',$that);
+	}
 	public static function IsURL($that){
 		return 1==preg_match('/(https?|ftp):\/\/.+/',$that);
 	}

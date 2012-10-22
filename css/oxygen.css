@@ -107,6 +107,18 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .reportmenupanel { /* background:url('oxy/skn/striped_bg.gif'); */ }
 
+
+.checkbox-anchor                    { white-space:nowrap; }
+.checkbox                           { width:15px; height:15px; background-repeat:no-repeat; background-position:50% 50%; vertical-align:middle;}
+.checkbox-checked                   { background-image:url(../img/checkbox-checked.gif                  ); }
+.checkbox-unchecked                 { background-image:url(../img/checkbox-unchecked.gif                ); }
+.checkbox-dirty-checked             { background-image:url(../img/checkbox-dirty-checked.gif            ); }
+.checkbox-dirty-unchecked           { background-image:url(../img/checkbox-dirty-unchecked.gif          ); }
+.checkbox-readonly-checked          { background-image:url(../img/checkbox-readonly-checked.gif         ); }
+.checkbox-readonly-unchecked        { background-image:url(../img/checkbox-readonly-unchecked.gif       ); }
+.checkbox-readonly-dirty-checked    { background-image:url(../img/checkbox-readonly-dirty-checked.gif   ); }
+.checkbox-readonly-dirty-unchecked  { background-image:url(../img/checkbox-readonly-dirty-unchecked.gif ); }
+
 .expand   { width:100%;            }
 .contract { width:1px;             }
 .nowrap   { white-space:nowrap;    }
