@@ -9,16 +9,30 @@ class Debug {
 	public static function Render($entries = null){
 		if (is_null($entries)) $entries = self::$entries;
 		for ($i = 0; $i<count($entries); $i++)
-			self::RenderEntry($i,$entries);
+			echo self::GetEntryAsHtml($i,$entries);
 	}
-	private static function RenderEntry($index=null,$entries = null){
+	public static function GetEntriesAsText(){
+		$r = '';
+		for ($i = 0; $i<count(self::$entries); $i++)
+			$r .= self::GetEntryAsText($i,self::$entries);
+		return $r;
+	}
+	private static function GetEntryAsHtml($index=null,$entries = null){
 		if (is_null($entries)) $entries = self::$entries;
 		if (is_null($index)) $index = count($entries) - 1;
 		$prev_time = $index == 0 ? 0 : $entries[$index-1][0];
-		echo '<pre>';
-		echo self::format_timespan($entries[$index][0]) . ' <i>(+' . self::format_timespan($entries[$index][0] - $prev_time) . ')</i>: ' . $entries[$index][1] . "\n";
-		echo '</pre>';
-		echo "\n";
+		$r = '<pre>';
+		$r .= self::format_timespan($entries[$index][0]) . ' <i>(+' . self::format_timespan($entries[$index][0] - $prev_time) . ')</i>: ' . $entries[$index][1] . "\n";
+		$r .= '</pre>';
+		$r .= "\n";
+		return $r;
+	}
+	private static function GetEntryAsText($index=null,$entries = null){
+		if (is_null($entries)) $entries = self::$entries;
+		if (is_null($index)) $index = count($entries) - 1;
+		$prev_time = $index == 0 ? 0 : $entries[$index-1][0];
+		$r = self::format_timespan($entries[$index][0]) . ' (+' . self::format_timespan($entries[$index][0] - $prev_time) . '): ' . $entries[$index][1] . "\n";
+		return $r;
 	}
 
 	public static function CountEntries(){ return count(self::$entries); }
@@ -61,7 +75,7 @@ class Debug {
  		self::$entries[] = $e;
 		if (self::$immediate){
 			while(ob_get_level()!=0) ob_end_clean();
-			self::RenderEntry();
+			echo self::GetEntryAsHtml();
 			echo "<script>window.scrollBy(0,50);</script>";
 			flush();
 			ob_start();
@@ -265,6 +279,9 @@ class Debug {
 		$r .= "\nOxygen info";
 		$r .= "\n-----------";
 		$r .= "\n".Oxygen::GetInfoAsText();
+		$r .= "\nDebug entries";
+		$r .= "\n-----------";
+		$r .= "\n".Debug::GetEntriesAsText();
 		$r .= "\nDatabase queries";
 		$r .= "\n----------------";
 		$r .= "\n".Database::GetQueriesAsText();
@@ -281,6 +298,7 @@ class Debug {
 			$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;margin-bottom:30px;">'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
 		}
 		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
+		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Debug entries</b><br/><br/>'.new Html(Debug::GetEntriesAsText()).'</div>';
 		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
 		return $r;
 	}
