@@ -770,7 +770,7 @@ class Database {
 
 
 
-	private static function hash_sequence($tablename,$field='id'){ return 'seq_' . Oxygen::Hash32($tablename.'+'.$field) . '_' . substr($tablename,0,17) ; }
+	private static function hash_sequence($tablename,$field='id'){ return 'seq_' . substr($tablename,0,15) . '_' . Oxygen::Hash32($tablename.'+'.$field); }
 	private static function hash_foreign_key($tablename,$field){ return 'fk_' . Oxygen::Hash32($tablename.'+'.$field); }
 	private static function hash_index($tablename,$field){ return 'idx_' . Oxygen::Hash32($tablename.'+'.$field); }
 	public static function ExecuteAddForeignKeys($tablename){
