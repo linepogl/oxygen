@@ -734,20 +734,30 @@ class Database {
 				self::Execute('UNLOCK TABLES');
 				break;
 			case self::ORACLE:
-				self::TransactionBegin();
-				self::Execute('LOCK TABLE "oxy_ids" IN EXCLUSIVE MODE');
-				self::Execute('LOCK TABLE '.new SqlName($tablename).' IN EXCLUSIVE MODE');
-				$id = self::ExecuteScalar('SELECT "LastID" FROM "oxy_ids" WHERE "TableName"=?',$tablename)->AsID();
-				if (is_null($id)){
+				$id = null;
+				try {
+					$id = self::ExecuteScalar('SELECT '.new SqlName(self::hash_sequence($tablename,$primarykey)).'.NEXTVAL A FROM DUAL')->AsID();
+				}
+				catch (Exception $ex) {
 					$id = self::ExecuteScalar('SELECT MAX('.new SqlName($primarykey).') FROM '.new SqlName($tablename))->AsID();
 					$id = is_null($id) ? new ID(0) : new ID($id->AsInt() + 1);
-					self::Execute('INSERT INTO "oxy_ids" ("TableName","LastID") VALUES (?,?)',$tablename,$id);
+					Database::ExecuteCreateSequence(self::hash_sequence($tablename,$primarykey),$id->AsInt());
+					$id = self::ExecuteScalar('SELECT '.new SqlName(self::hash_sequence($tablename,$primarykey)).'.NEXTVAL A FROM DUAL')->AsID();
 				}
-				else {
-					$id = new ID($id->AsInt() + 1);
-					self::Execute('UPDATE "oxy_ids" SET "LastID"=? WHERE "TableName"=?',$id,$tablename);
-				}
-				self::TransactionCommit();
+//				self::TransactionBegin();
+//				self::Execute('LOCK TABLE "oxy_ids" IN EXCLUSIVE MODE');
+//				self::Execute('LOCK TABLE '.new SqlName($tablename).' IN EXCLUSIVE MODE');
+//				$id = self::ExecuteScalar('SELECT "LastID" FROM "oxy_ids" WHERE "TableName"=?',$tablename)->AsID();
+//				if (is_null($id)){
+//					$id = self::ExecuteScalar('SELECT MAX('.new SqlName($primarykey).') FROM '.new SqlName($tablename))->AsID();
+//					$id = is_null($id) ? new ID(0) : new ID($id->AsInt() + 1);
+//					self::Execute('INSERT INTO "oxy_ids" ("TableName","LastID") VALUES (?,?)',$tablename,$id);
+//				}
+//				else {
+//					$id = new ID($id->AsInt() + 1);
+//					self::Execute('UPDATE "oxy_ids" SET "LastID"=? WHERE "TableName"=?',$id,$tablename);
+//				}
+//				self::TransactionCommit();
 				break;
 		}
 		return $id;
@@ -760,6 +770,7 @@ class Database {
 
 
 
+	private static function hash_sequence($tablename,$field='id'){ return 'seq_' . Oxygen::Hash32($tablename.'+'.$field) . '_' . substr($tablename,0,17) ; }
 	private static function hash_foreign_key($tablename,$field){ return 'fk_' . Oxygen::Hash32($tablename.'+'.$field); }
 	private static function hash_index($tablename,$field){ return 'idx_' . Oxygen::Hash32($tablename.'+'.$field); }
 	public static function ExecuteAddForeignKeys($tablename){
