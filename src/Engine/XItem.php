@@ -24,7 +24,7 @@ abstract class XItem extends XValue implements Serializable {
 	}
 	public static function FillMeta(XMeta $m){}
 	public function __toString(){
-		return $this->id->AsHex();
+		return strval($this->id->AsInt());
 	}
 
 	public function GetMenu(){ return new Menu(); }
