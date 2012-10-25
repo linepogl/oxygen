@@ -10,7 +10,13 @@ abstract class ExportConverter {
 
   public abstract function Export();
   public final function __toString(){
-		return $this->Export();
+	  try {
+			return $this->Export();
+	  }
+	  catch (Exception $ex){
+			Debug::RecordExceptionRethrown($ex,'Export Converter Exception Handler');
+		  throw $ex;
+	  }
   }
 
 
