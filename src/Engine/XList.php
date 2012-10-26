@@ -427,7 +427,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$this->Evaluate();
 		$a = array();
 		foreach ($this->data as $key=>$xx)
-			if ($xx->IsEqualTo($dbitem_or_id))
+			if (!is_null($xx) && $xx->IsEqualTo($dbitem_or_id))
 				$a[] = $key;
 		$a = array_reverse($a);
 		foreach ($a as $key)
