@@ -389,21 +389,23 @@ class Debug {
 		}
 		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
 
-		$subject = '['.Oxygen::GetApplicationName().'] ';
-		$subject .= get_class($ex). ' ('.$way_handled_message.')'; //.$serial;
-//		$subject .= ' '.$ex->getMessage();
+		$subject = DEV?'[DEV]':'';
+		$subject .= '['.Oxygen::GetApplicationName().']';
+		$subject .= ' '.get_class($ex);
+		$subject .= ' ('.$way_handled_message.')'; //.$serial;
 		$subject .= ' '.$extra_developer_message;
+		$subject .= ' #'.$serial;
 
 		try {
 			$error_log_message = '';
 			for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious())
-			$error_log_message .= "\n".get_class($exx).': '.$exx->getMessage().' '.$exx->getFile().'['.$exx->getLine().']';
-			error_log( $subject . (is_null($extra_developer_message)?'':"\n".$extra_developer_message) . "\n".$error_log_message . "\n");
+				$error_log_message .= "\n".get_class($exx).': '.$exx->getMessage().' '.$exx->getFile().'['.$exx->getLine().']';
+			error_log( $subject . "\n" . $error_log_message . "\n");
 		}
 		catch (Exception $ex) {}
 
 		$head = Oxygen::GetInfo();
-		$body = '<div style="font:italic 11px/13px Courier New,monospace;color:#999999;padding:5px 5px 4px 5px;border:1px solid #cccccc;">-- '.new Html($way_handled_message).' --'.(is_null($extra_developer_message)?'':"<br/>".new Html($extra_developer_message)).'<br/>'.$serial.'</div><br/>';
+		$body = '<div style="font:italic 11px/13px Courier New,monospace;color:#999999;padding:5px 5px 4px 5px;border:1px solid #cccccc;">-- '.new Html($way_handled_message).' --'.(is_null($extra_developer_message)?'':"<br/>".new Html($extra_developer_message)).'<br/>#'.$serial.'</div><br/>';
 		$body .= Debug::GetExceptionReportAsHtml($ex);
 
 		try {
@@ -415,7 +417,7 @@ class Debug {
 //		if (!DEV){
 			foreach (Oxygen::GetDeveloperEmails() as $email) {
 				try {
-					Oxygen::SendEmail( 'oxygen@'.Oxygen::GetApplicationName() , $email , $email , (DEV?'DEV':'').$subject , $body );
+					Oxygen::SendEmail( 'oxygen@'.Oxygen::GetApplicationName() , $email , $email , $subject , $body );
 				}
 				catch (Exception $ex) {}
 			}
