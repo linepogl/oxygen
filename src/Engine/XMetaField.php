@@ -2,17 +2,17 @@
 
 class XMetaField extends XValue {
 	/** @var XMeta */
-	private $meta;
+	private $meta = null;  // will be auto-set on compile
 	/** @return XMeta */
 	public function GetMeta(){ return $this->meta; }
 	public function SetMeta(XMeta $value){ $this->meta = $value; }
 
-	private $name;
+	private $name = null;  // will be auto-set on compile
 	public function GetName(){ return $this->name; }
 	public function SetName($value){ $this->name = $value; if (is_null($this->db_alias)) $this->db_alias = $value; if (is_null($this->xml_alias)) $this->xml_alias = $value; }
 
 	/** @var XType */
-	private $type;
+	private $type = null;  // will be auto-set on construct
 	public function __construct(XType $type){ $this->type = $type; }
 	/** @return XType */
 	public function GetType(){ return $this->type; }
@@ -30,7 +30,7 @@ class XMetaField extends XValue {
 	public function ToSql(){ return new SqlName($this); }
 
 	
-	private $db_alias;
+	private $db_alias = null;
 	private $is_db_alias_complex = false;
 	/** @return XMetaField */
 	public function WithDBAlias($value){ $this->db_alias = strval($value); $this->is_db_alias_complex=false; return $this; }
@@ -55,7 +55,7 @@ class XMetaField extends XValue {
 	public function WithIsXmlBound($value){ $this->is_xml_bound = $value; return $this; }
 	public function IsXmlBound(){ return $this->is_xml_bound; }
 
-	private $label;
+	private $label = null; // will be auto-set on compile
 	public function GetLabel(){ return $this->label; }
 	/** @return XMetaField */
 	public function WithLabel($args){
