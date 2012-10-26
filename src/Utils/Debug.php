@@ -376,14 +376,14 @@ class Debug {
 	public static function RecordExceptionServed        (Exception $ex,$extra_developer_message = null) { return Debug::RecordException($ex,4,$extra_developer_message); }
 	public static function RecordExceptionServedDebug   (Exception $ex,$extra_developer_message = null) { return Debug::RecordException($ex,7,$extra_developer_message); }
 	public static function RecordExceptionServedGeneric (Exception $ex,$extra_developer_message = null) { return Debug::RecordException($ex,5,$extra_developer_message); }
-	public static function RecordExceptionAndDie        (Exception $ex,$extra_developer_message = null) { Debug::RecordException($ex,6,$extra_developer_message); exit(); }
+	public static function RecordExceptionAndDie        (Exception $ex,$extra_developer_message = null) {        Debug::RecordException($ex,6,$extra_developer_message); exit(); }
 	private static function RecordException(Exception $ex,$way_handled,$extra_developer_message=null){
 		$way_handled_message = '';
 		switch ($way_handled){
 			case 1: $way_handled_message = 'Silenced'; break;
 			case 2: $way_handled_message = 'Converted'; break;
 			case 3: $way_handled_message = 'Rethrown'; break;
-			case 4: $way_handled_message = 'Served'; break;
+			case 4: $way_handled_message = 'Served as is'; break;
 			case 5: $way_handled_message = 'Served with generic message'; break;
 			case 6: $way_handled_message = 'Execution halted'; break;
 		}
@@ -392,8 +392,8 @@ class Debug {
 		$subject = DEV?'[DEV]':'';
 		$subject .= '['.Oxygen::GetApplicationName().']';
 		$subject .= ' '.get_class($ex);
-		$subject .= ' ('.$way_handled_message.')'; //.$serial;
-		$subject .= ' '.$extra_developer_message;
+		$subject .= ' ('.$way_handled_message.')';
+		if (!is_null($extra_developer_message)) $subject .= ' '.$extra_developer_message;
 		$subject .= ' #'.$serial;
 
 		try {
