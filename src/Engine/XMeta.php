@@ -240,29 +240,26 @@ class XMeta extends stdClass {
 		if (is_null($id)) return null;
 		if (!($id instanceof ID)) $id = new ID($id);
 		$idi = $id->AsInt();
-		if ($this->ExistsInLocalCache($idi))
-			return $this->PickFromLocalCache($idi);
-		elseif ($this->ExistsInRemoteCache($idi))
-			return $this->PickFromRemoteCache($idi);
-		elseif ($this->IsAbstract()){
-			if (!array_key_exists($idi,$this->__item_concrete_meta_cache)) {
-				$this->__item_concrete_meta_cache[$idi] = XMeta::Of( Database::ExecuteScalar('SELECT '.$this->GetAbstractDBFieldName().' FROM '.$this->GetDBTableName().' WHERE '.$this->id->GetDBName().'=?',$id)->AsString() );
+		if ($this->ExistsInLocalCache($idi)) return $this->PickFromLocalCache($idi);
+		/** @var $r XItem */
+		$r = $this->PickFromRemoteCache($idi);
+		if (is_null($r)) {
+			if ($this->IsAbstract()) {
+				if (!array_key_exists($idi,$this->__item_concrete_meta_cache)) {
+					$this->__item_concrete_meta_cache[$idi] = XMeta::Of( Database::ExecuteScalar('SELECT '.$this->GetAbstractDBFieldName().' FROM '.$this->GetDBTableName().' WHERE '.$this->id->GetDBName().'=?',$id)->AsString() );
+				}
+				/** @var $m XMeta */
+				$m = $this->__item_concrete_meta_cache[$idi];
+				$r = $m->PickItem($id);
 			}
-			/** @var $m XMeta */
-			$m = $this->__item_concrete_meta_cache[$idi];
-			$x = $m->PickItem($id);
-			$this->SaveInCache($idi,$x);
+			else {
+				$classname = $this->__classname;
+				$r = new $classname($id,true);
+				if (!$r->Load($dr)) $r = null;
+			}
+			$this->SaveInCache($idi,$r);
 		}
-		else {
-			/** @var $x XItem */
-			$classname = $this->__classname;
-			$x = new $classname($id,true);
-			$found = $x->Load($dr);
-			if (!$found)
-				$x = null;
-		}
-		$this->SaveInCache($idi,$x);
-		return $x;
+		return $r;
 	}
 
 
@@ -394,9 +391,16 @@ class XMeta extends stdClass {
 	private $__item_concrete_meta_cache = array();
 	private function SoftResetItemCache(){ $this->__item_cache = array(); $this->__item_concrete_meta_cache = array(); }
 	private function ExistsInLocalCache($idi)  { return array_key_exists($idi,$this->__item_cache); }
-	/** @return XItem */private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
-	private function ExistsInRemoteCache($idi) { return $this->__remote_cache_is_trusted && $this->__remote_cache_is_trusted && Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__classname.$this->__db_signature.'::'.$idi); }
-	/** @return XItem */private function PickFromRemoteCache($idi) { return $this->__item_cache[$idi] = Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi]; }
+	/** @return XItem */ private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
+	/** @return XItem */
+	private function PickFromRemoteCache($idi) {
+		$r = null;
+		if ($this->__remote_cache_is_trusted && Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__classname.$this->__db_signature.'::'.$idi)) {
+			$r = Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi];
+			if (is_null($r) || $r instanceof XItem) $this->__item_cache[$idi] = $r; else $r = null;
+		}
+		return $r;
+	}
 	public function SetIsRemoteCacheTrusted($value){ $this->__remote_cache_is_trusted = $value; return $this; }
 	public function IsRemoteCacheTrusted(){ return $this->__remote_cache_is_trusted; }
 	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if ((is_null($item) || !$item->IsTemporary()) && Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = $item; }
