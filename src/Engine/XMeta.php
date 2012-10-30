@@ -180,7 +180,15 @@ class XMeta extends stdClass {
 
 
 
-	/** @return ID */ public function GetNextPermID(){ $sequence = $this->GetDBSequence(); return is_null($sequence) ? ID::GetNextPermID($this->GetDBTableName(),$this->id->GetDBName()) : ID::GetNextPermIDFromSequence($sequence); }
+	/** @return ID */
+	public function GetNextPermID(){
+		if ($this->id->IsDBAliasComplex())
+			return $this->GetNextTempID();
+		$sequence = $this->GetDBSequence();
+		if (!is_null($sequence))
+			return ID::GetNextPermIDFromSequence($sequence);
+		return ID::GetNextPermID($this->GetDBTableName(),$this->id->GetDBName());
+	}
 	/** @return ID */ public function GetNextTempID(){ return ID::GetNextTempID($this->GetDBSequence()); }
 
 
