@@ -689,7 +689,7 @@ class Database {
     public static function ExecuteCreateSequence($sequence_name,$from=0) {
         switch(self::$type) {
             case self::ORACLE:
-                $sql = 'CREATE SEQUENCE '.new SqlName($sequence_name).' INCREMENT BY 1 START WITH '.$from.' NOMAXVALUE MINVALUE='.min(0,$from).' NOCYCLE NOCACHE';
+                $sql = 'CREATE SEQUENCE '.new SqlName($sequence_name).' INCREMENT BY 1 START WITH '.$from.' NOMAXVALUE MINVALUE '.min(0,$from).' NOCYCLE NOCACHE';
                 self::Execute($sql);
                 break;
         }
