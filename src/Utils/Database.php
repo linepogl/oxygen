@@ -462,9 +462,12 @@ class Database {
 		if (!Debug::IsImmediateFlushingEnabled()) Debug::EnableImmediateFlushing();
 		Debug::Write($message);
 	}
-	public static function BeginPatch($patcher,$patch,$description=null){
+	public static function HasPatch($patcher,$patch){
 		$current = self::GetPatch($patcher);
-		if (is_null($current) || $current < $patch) {
+		return !is_null($current) && $current >= $patch;
+	}
+	public static function BeginPatch($patcher,$patch,$description=null){
+		if (!self::HasPatch($patcher,$patch)) {
 			if (!self::IsPatchingSystemDirty()){
 				self::$patching_system_dirty = true;
 				Debug::EnableImmediateFlushing();
@@ -580,6 +583,16 @@ class Database {
 	}
 
 
+
+	public static function ExecuteTableExists($tablename){
+		try {
+			self::Execute('SELECT COUNT(*) FROM '.new SqlName($tablename));
+		}
+		catch (Exception $ex) {
+			return false;
+		}
+		return true;
+	}
 
 	public static function ExecuteCreateTable($tablename){
 		$a = func_get_args();
