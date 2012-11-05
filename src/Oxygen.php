@@ -746,7 +746,7 @@ class Oxygen {
 			echo "if(window.name!=".new Js(self::$window_hash)."){";
 			echo "  var window_hash=".new Js(Oxygen::HashRandom32()).";";
 			echo "  window.name=window_hash;";
-			echo "  window.location.href=".new Js(Oxygen::MakeHrefPreservingValues(array('window'=>'X','old_window'=>Oxygen::$window_hash))) . ".replace('window=X','window='+window_hash);";
+			echo "  window.location.href=".new Js(__BASE__.Oxygen::MakeHrefPreservingValues(array('window'=>'X','old_window'=>Oxygen::$window_hash))) . ".replace('window=X','window='+window_hash);";
 			echo "}";
 		}
 
