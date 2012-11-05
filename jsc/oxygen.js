@@ -28,6 +28,15 @@ var Js = function(value){
 			return '\'' + this.value.toString().replace(/'/g,'\\\'') + '\'';
 	};
 };
+var Lemma = function(){
+	this.data = {};
+	for (var i = 1; i < arguments.length; i += 2) {
+		this.data[ arguments[i-1] ] = arguments[i];
+	}
+	this.toString = function(){
+		return this.data[Oxygen.lang];
+	};
+};
 
 var Oxygen = {
 	 lang: oxygen_lang
