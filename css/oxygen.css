@@ -134,6 +134,9 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .center   { margin:auto;   }
 .code     { font-family:Courier New,monospace; white-space:pre; }
 .notext   { font-size:1px;line-height:1px; }
+.fright   { float:right;   }
+.fleft    { float:left;    }
+.fclear   { clear:both!important;    }
 
 .nounderline { text-decoration:none; }
 .nounderline:hover { text-decoration:none; }
