@@ -49,7 +49,7 @@ abstract class Message {
 	public final function GetIconName(){ return is_null($this->icon_name) ? $this->GetDefaultIconName() : $this->icon_name; }
 	public final function GetIconType(){ return is_null($this->icon_type) ? $this->GetDefaultIconType() : $this->icon_type; }
 	public final function GetIconSrc($size){ return $this->GetIconName().$size.'.'.$this->GetIconType(); }
-	public final function GetIcon($size) { return new Icon($this->GetIconName(),$size); }
+	public final function GetIcon($size) { return new Icon($this->GetIconName(),$size,$this->GetIconType()); }
 	public final function GetIconScr16(){ return $this->GetIconSrc(16); }
 	public final function GetIconScr32(){ return $this->GetIconSrc(32); }
 	public final function GetIconScr48(){ return $this->GetIconSrc(48); }

@@ -875,6 +875,10 @@ class Oxygen {
 
 
 
+	private static $default_icon_type = 'gif';
+	public static function GetDefaultIconType(){ return self::$default_icon_type; }
+	public static function SetDefaultIconType($value){ self::$default_icon_type = $value; }
+
 
 
 

@@ -34,7 +34,7 @@ abstract class Action extends XValue {
 	public function GetHeight(){ return 50; }
 
 	public function GetIconName() { return 'oxy/ico/Icon'; }
-	public function GetIconType() { return 'gif'; }
+	public function GetIconType() { return Oxygen::GetDefaultIconType(); }
 	public function GetIconSrc($size=16){ return $this->GetIconName().$size.'.'.$this->GetIconType(); }
 	public function GetIcon($size=16) { return '<img class="icon" src="'.$this->GetIconSrc($size).'" width="'.$size.'" height="'.$size.'" alt="" />'; }
 	public final function GetIconScr16(){ return $this->GetIconSrc(16); }
@@ -219,7 +219,7 @@ abstract class Action extends XValue {
 					echo '<table class="center"><tr><td>';
 					echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
 					echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-					echo '<td class="vtop hright" style="padding:15px;">'.new Spacer(50,30).'<br/>'.new Icon('oxy/ico/Bug',32).'</td>';
+					echo '<td class="vtop hright" style="padding:15px;">'.new Spacer(50,30).'<br/>'.new Icon('oxy/ico/Bug',32,'gif').'</td>';
 					echo '<td style="padding:15px;">'.new Spacer(1,100).'</td>';
 					echo '<td class="vtop" style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
 
