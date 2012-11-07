@@ -699,14 +699,17 @@ class Database {
 		self::Execute($sql);
 	}
 
-    public static function ExecuteCreateSequence($sequence_name,$from=0) {
-        switch(self::$type) {
-            case self::ORACLE:
-                $sql = 'CREATE SEQUENCE '.new SqlName($sequence_name).' INCREMENT BY 1 START WITH '.$from.' NOMAXVALUE MINVALUE '.min(0,$from).' NOCYCLE NOCACHE';
-                self::Execute($sql);
-                break;
-        }
-    }
+	public static function ExecuteCreateStandardSequence($tablename,$from=0) {
+		self::ExecuteCreateSequence(self::hash_sequence($tablename,'id'),$from);
+	}
+  public static function ExecuteCreateSequence($sequence_name,$from=0) {
+		switch(self::$type) {
+			case self::ORACLE:
+				$sql = 'CREATE SEQUENCE '.new SqlName($sequence_name).' INCREMENT BY 1 START WITH '.$from.' NOMAXVALUE MINVALUE '.min(0,$from).' NOCYCLE NOCACHE';
+				self::Execute($sql);
+			break;
+		}
+  }
 
 	/**
 	 * @api Since 1.3
@@ -757,20 +760,6 @@ class Database {
 					Database::ExecuteCreateSequence(self::hash_sequence($tablename,$primarykey),$id->AsInt());
 					$id = self::ExecuteScalar('SELECT '.new SqlName(self::hash_sequence($tablename,$primarykey)).'.NEXTVAL A FROM DUAL')->AsID();
 				}
-//				self::TransactionBegin();
-//				self::Execute('LOCK TABLE "oxy_ids" IN EXCLUSIVE MODE');
-//				self::Execute('LOCK TABLE '.new SqlName($tablename).' IN EXCLUSIVE MODE');
-//				$id = self::ExecuteScalar('SELECT "LastID" FROM "oxy_ids" WHERE "TableName"=?',$tablename)->AsID();
-//				if (is_null($id)){
-//					$id = self::ExecuteScalar('SELECT MAX('.new SqlName($primarykey).') FROM '.new SqlName($tablename))->AsID();
-//					$id = is_null($id) ? new ID(0) : new ID($id->AsInt() + 1);
-//					self::Execute('INSERT INTO "oxy_ids" ("TableName","LastID") VALUES (?,?)',$tablename,$id);
-//				}
-//				else {
-//					$id = new ID($id->AsInt() + 1);
-//					self::Execute('UPDATE "oxy_ids" SET "LastID"=? WHERE "TableName"=?',$id,$tablename);
-//				}
-//				self::TransactionCommit();
 				break;
 		}
 		return $id;
