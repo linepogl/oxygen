@@ -49,7 +49,7 @@ final class Language {
 	/** @return float|null */
 	public static function ParseDecimal($string, $default = null) {
 		$string = strval($string);
-		$s = preg_replace('/[^1234567890\\'.self::GetDecimalSeparator().']/','',$string);
+		$s = preg_replace('/[^-1234567890\\'.self::GetDecimalSeparator().']/','',$string);
 		$s = str_replace( self::GetDecimalSeparator() , self::GetDecimalSeparatorInvariant() , $s );
 		$s_length = strlen($s);
 		$d_count = substr_count($s,self::GetDecimalSeparatorInvariant());
@@ -78,7 +78,7 @@ final class Language {
 	/** @return float|null */
 	public static function ParseDecimalInvariant($string, $default = null) {
 		$string = strval($string);
-		$s = preg_replace('/[^1234567890\\'.self::GetDecimalSeparatorInvariant().']/','',$string);
+		$s = preg_replace('/[^-1234567890\\'.self::GetDecimalSeparatorInvariant().']/','',$string);
 		$s_length = strlen($s);
 		$d_count = substr_count($s,self::GetDecimalSeparatorInvariant());
 		if ($d_count == $s_length || $d_count > 1 || $s_length == 0) return $default;
@@ -111,7 +111,7 @@ final class Language {
 	/** @return float|int|null */
 	public static function ParseNumber($string, $default = null) {
 		$string = strval($string);
-		$s = preg_replace('/[^1234567890\\'.self::GetDecimalSeparator().']/','',$string);
+		$s = preg_replace('/[^-1234567890\\'.self::GetDecimalSeparator().']/','',$string);
 		$s = str_replace( self::GetDecimalSeparator() , self::GetDecimalSeparatorInvariant() , $s );
 		$s_length = strlen($s);
 		$d_count = substr_count($s,self::GetDecimalSeparatorInvariant());
@@ -143,7 +143,7 @@ final class Language {
 	/** @return float|int|null */
 	public static function ParseNumberInvariant($string, $default = null) {
 		$string = strval($string);
-		$s = preg_replace('/[^1234567890\\'.self::GetDecimalSeparatorInvariant().']/','',$string);
+		$s = preg_replace('/[^-1234567890\\'.self::GetDecimalSeparatorInvariant().']/','',$string);
 		$s_length = strlen($s);
 		$d_count = substr_count($s,self::GetDecimalSeparatorInvariant());
 		if ($d_count == $s_length || $d_count > 1 || $s_length == 0) return $default;
