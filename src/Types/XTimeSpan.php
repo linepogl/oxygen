@@ -1,6 +1,5 @@
 <?php
 
-
 class XTimeSpan extends XValue implements Serializable {
 	private $value;
 
@@ -12,9 +11,9 @@ class XTimeSpan extends XValue implements Serializable {
 	}
 
 	public function MetaType(){ return MetaTimeSpan::Type(); }
-	public function Serialize(){ if (IS_IGBINARY_AVAILABLE) return igbinary_serialize( $this->value ); else return serialize( $this->value ); }
-	public function Unserialize($data){ if (IS_IGBINARY_AVAILABLE) $this->value = igbinary_unserialize($data); else $this->value = unserialize( $data ); }
-	
+	public function Serialize(){ return Oxygen::SerializeInner( $this->value ); }
+	public function Unserialize($data){ $this->value = Oxygen::UnserializeInner( $data ); }
+
 	const MILLISECONDS_IN_WEEK = 604800000;
 	const MILLISECONDS_IN_DAY = 86400000;
 	const MILLISECONDS_IN_HOUR = 3600000;
@@ -121,4 +120,3 @@ class XTimeSpan extends XValue implements Serializable {
 
 
 }
-

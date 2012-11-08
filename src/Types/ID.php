@@ -5,9 +5,8 @@ class ID extends XValue implements Serializable {
 	private $hex = null;
 
 	public function MetaType(){ return MetaID::Type(); }
-	public function Serialize(){ if (IS_IGBINARY_AVAILABLE) return igbinary_serialize( $this->value ); else return serialize( $this->value ); }
-	public function Unserialize($data){ if (IS_IGBINARY_AVAILABLE) $this->value = igbinary_unserialize($data); else $this->value = unserialize( $data ); }
-
+	public function Serialize(){ return Oxygen::SerializeInner( $this->value ); }
+	public function Unserialize($data){ $this->value = Oxygen::UnserializeInner($data); }
 
 	private static $temp_sequences = array();
 	public static function GetNextPermID($tablename,$primarykey='id') {

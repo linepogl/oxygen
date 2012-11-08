@@ -68,37 +68,19 @@ abstract class XItem extends XValue implements Serializable {
 	public function MetaType(){ return MetaItem::Type(); }
 	public function Serialize(){
 		$meta = $this->Meta();
-		if (IS_IGBINARY_AVAILABLE){
-			$a = array('id'=>igbinary_serialize( $this->id ),'has_temp_id'=>igbinary_serialize( $this->has_temp_id ) );
-			/** @var $f XMetaField */
-			foreach ($meta->GetFields() as $f){
-				$n = $f->GetName();
-				$a[$n] = igbinary_serialize( $this->$n );
-			}
-			return igbinary_serialize($a);
+		$a = array('id'=>Oxygen::SerializeInner( $this->id ),'has_temp_id'=>Oxygen::SerializeInner( $this->has_temp_id ) );
+		/** @var $f XMetaField */
+		foreach ($meta->GetFields() as $f){
+			$n = $f->GetName();
+			$a[$n] = Oxygen::SerializeInner( $this->$n );
 		}
-		else {
-			$a = array('id'=>serialize( $this->id ),'has_temp_id'=>serialize( $this->has_temp_id ) );
-			/** @var $f XMetaField */
-			foreach ($meta->GetFields() as $f){
-				$n = $f->GetName();
-				$a[$n] = serialize( $this->$n );
-			}
-			return serialize($a);
-		}
+		return Oxygen::SerializeInner($a);
 	}
 	public function Unserialize($data){
 		try {
-			if (IS_IGBINARY_AVAILABLE){
-				$a = igbinary_unserialize($data);
-				foreach ($a as $key=>$value)
-					$this->$key = igbinary_unserialize($value);
-			}
-			else {
-				$a = unserialize($data);
-				foreach ($a as $key=>$value)
-					$this->$key = unserialize($value);
-			}
+			$a = Oxygen::UnserializeInner($data);
+			foreach ($a as $key=>$value)
+				$this->$key = Oxygen::UnserializeInner($value);
 			$c = $this->Meta();
 			for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 				$slaves = $cx->GetDBSlaves();
@@ -111,7 +93,7 @@ abstract class XItem extends XValue implements Serializable {
 			$this->OnLoad();
 		}
 		catch (Exception $ex){
-			Debug::RecordExceptionSilenced($ex,'XItem Unserializer');
+			Debug::RecordExceptionSilenced($ex,'XItem Unserializer'.(Ig::IsActive()?' (IG)':''));
 		}
 	}
 

@@ -318,15 +318,6 @@ class Oxygen {
 
 
 
-	//
-	//
-	// Serialization
-	//
-	//
-	public static function Serialize( $x ){ if (IS_IGBINARY_AVAILABLE) return igbinary_serialize( $x ); else return serialize( $x ); }
-	public static function Unserialize( $x ){ if (IS_IGBINARY_AVAILABLE) return igbinary_unserialize($x); else return unserialize( $x ); }
-
-
 
 	//
 	//
@@ -879,6 +870,65 @@ class Oxygen {
 	public static function GetDefaultIconType(){ return self::$default_icon_type; }
 	public static function SetDefaultIconType($value){ self::$default_icon_type = $value; }
 
+
+
+
+	//
+	//
+	// Serialization
+	//
+	//
+	private static $is_ig_active = false;
+	public static function SerializeWithIgBinary($data){
+		self::$is_ig_active = true;
+		$r = igbinary_serialize( $data );
+		self::$is_ig_active = false;
+		return $r;
+	}
+	public static function UnserializeWithIgBinary($data){
+		self::$is_ig_active = true;
+		$r = igbinary_unserialize( $data );
+		self::$is_ig_active = false;
+		return $r;
+	}
+	public static function SerializeWithPhp($data){
+		return serialize( $data );
+	}
+	public static function UnserializeWithPhp($data){
+		return unserialize( $data );
+	}
+	public static function SerializeWithTheBestAvailableMethod($data){
+		if (IS_IGBINARY_AVAILABLE) {
+			self::$is_ig_active = true;
+			$r = igbinary_serialize( $data );
+			self::$is_ig_active = false;
+			return $r;
+		}
+		else
+			return serialize( $data );
+	}
+	public static function UnserializeWithTheBestAvailableMethod($data){
+		if (IS_IGBINARY_AVAILABLE) {
+			self::$is_ig_active = true;
+			$r = igbinary_unserialize( $data );
+			self::$is_ig_active = false;
+			return $r;
+		}
+		else
+			return unserialize( $data );
+	}
+	public static function SerializeInner($data){
+		if (self::$is_ig_active)
+			return igbinary_serialize( $data );
+		else
+			return serialize( $data );
+	}
+	public static function UnserializeInner($data){
+		if (self::$is_ig_active)
+			return igbinary_unserialize($data);
+		else
+			return unserialize( $data );
+	}
 
 
 

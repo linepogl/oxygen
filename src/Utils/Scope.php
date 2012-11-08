@@ -407,7 +407,7 @@ abstract class HddScope extends MemoryScope {
 	private function hdd_store($filename,$object){
 		$f = fopen($filename,'w');
 		if (flock($f,LOCK_EX)){
-			fwrite($f,serialize($object));
+			fwrite($f,Oxygen::SerializeWithTheBestAvailableMethod($object));
 			flock($f,LOCK_UN);
 			fclose($f);
 		}
@@ -420,7 +420,9 @@ abstract class HddScope extends MemoryScope {
 				if (flock($f,LOCK_SH)){
 					try {
 						$size = filesize($filename);
-						if ($size > 0) $r = unserialize(fread($f, $size));
+						if ($size > 0) {
+							$r = Oxygen::UnserializeWithTheBestAvailableMethod(fread($f, $size));
+						}
 					}
 					catch(Exception $ex){}
 					flock($f,LOCK_UN);
