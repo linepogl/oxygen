@@ -917,13 +917,13 @@ class Oxygen {
 		else
 			return unserialize( $data );
 	}
-	public static function SerializeInner($data){
+	public static function SerializeWithTheCurrentMethod($data){
 		if (self::$is_ig_active)
 			return igbinary_serialize( $data );
 		else
 			return serialize( $data );
 	}
-	public static function UnserializeInner($data){
+	public static function UnserializeWithTheCurrentMethod($data){
 		if (self::$is_ig_active)
 			return igbinary_unserialize($data);
 		else

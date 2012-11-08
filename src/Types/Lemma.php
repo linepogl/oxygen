@@ -18,8 +18,8 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	private static function unescape($string) { return str_replace('\\'.self::DELIMETER,self::DELIMETER,$string); }
 
 
-	public function Serialize(){ return Oxygen::SerializeInner( array($this->name,$this->data) ); }
-	public function Unserialize($data){ list($this->name,$this->data) = Oxygen::UnserializeInner( $data ); }
+	public function Serialize(){ return Oxygen::SerializeWithTheCurrentMethod( array($this->name,$this->data) ); }
+	public function Unserialize($data){ list($this->name,$this->data) = Oxygen::UnserializeWithTheCurrentMethod( $data ); }
 
 	public function HasName(){ return $this->name !== self::DEFAULT_NAME; }
 	public function GetName(){ return $this->name; }

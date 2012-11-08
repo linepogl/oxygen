@@ -11,8 +11,8 @@ class XTimeSpan extends XValue implements Serializable {
 	}
 
 	public function MetaType(){ return MetaTimeSpan::Type(); }
-	public function Serialize(){ return Oxygen::SerializeInner( $this->value ); }
-	public function Unserialize($data){ $this->value = Oxygen::UnserializeInner( $data ); }
+	public function Serialize(){ return Oxygen::SerializeWithTheCurrentMethod( $this->value ); }
+	public function Unserialize($data){ $this->value = Oxygen::UnserializeWithTheCurrentMethod( $data ); }
 
 	const MILLISECONDS_IN_WEEK = 604800000;
 	const MILLISECONDS_IN_DAY = 86400000;

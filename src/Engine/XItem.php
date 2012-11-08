@@ -68,19 +68,19 @@ abstract class XItem extends XValue implements Serializable {
 	public function MetaType(){ return MetaItem::Type(); }
 	public function Serialize(){
 		$meta = $this->Meta();
-		$a = array('id'=>Oxygen::SerializeInner( $this->id ),'has_temp_id'=>Oxygen::SerializeInner( $this->has_temp_id ) );
+		$a = array('id'=>Oxygen::SerializeWithTheCurrentMethod( $this->id ),'has_temp_id'=>Oxygen::SerializeWithTheCurrentMethod( $this->has_temp_id ) );
 		/** @var $f XMetaField */
 		foreach ($meta->GetFields() as $f){
 			$n = $f->GetName();
-			$a[$n] = Oxygen::SerializeInner( $this->$n );
+			$a[$n] = Oxygen::SerializeWithTheCurrentMethod( $this->$n );
 		}
-		return Oxygen::SerializeInner($a);
+		return Oxygen::SerializeWithTheCurrentMethod($a);
 	}
 	public function Unserialize($data){
 		try {
-			$a = Oxygen::UnserializeInner($data);
+			$a = Oxygen::UnserializeWithTheCurrentMethod($data);
 			foreach ($a as $key=>$value)
-				$this->$key = Oxygen::UnserializeInner($value);
+				$this->$key = Oxygen::UnserializeWithTheCurrentMethod($value);
 			$c = $this->Meta();
 			for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 				$slaves = $cx->GetDBSlaves();
@@ -93,7 +93,7 @@ abstract class XItem extends XValue implements Serializable {
 			$this->OnLoad();
 		}
 		catch (Exception $ex){
-			Debug::RecordExceptionSilenced($ex,'XItem Unserializer'.(Ig::IsActive()?' (IG)':''));
+			Debug::RecordExceptionSilenced($ex,'XItem Unserializer');
 		}
 	}
 
