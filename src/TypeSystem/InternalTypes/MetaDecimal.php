@@ -43,7 +43,7 @@ class MetaDecimal extends XConcreteType {
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		return $value;
+		return Language::FormatDecimalInvariant($value);
 	}
 
 	/**
