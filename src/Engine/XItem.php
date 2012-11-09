@@ -134,9 +134,12 @@ abstract class XItem extends XValue implements Serializable {
 			$fields = $cx->GetDBFields();
 			if (is_null($dr) || $cx !== $c){
 				$sql = 'SELECT '.new SqlName($cx->id);
+				if ($cx->id->IsDBAliasComplex()) $sql .= ' AS '.new SqlName($cx->id->GetName());
 				/** @var $f XMetaField */
-				foreach ($fields as $f)
+				foreach ($fields as $f) {
 					$sql .= ',' . new SqlName($f);
+					if ($f->IsDBAliasComplex()) $sql .= ' AS '.new SqlName($f->GetName());
+				}
 				$sql .= ' FROM '.new SqlName($cx->GetDBTableName());
 				$sql .= ' WHERE '.new SqlName($cx->id).'=?';
 
@@ -144,14 +147,24 @@ abstract class XItem extends XValue implements Serializable {
 				if (!$dr->Read()) return false;
 				foreach ($fields as $f){
 					$n = $f->GetName();
-					$this->$n = $dr[$f->GetDBName()]->CastTo($f->GetType());
+					if ($f->IsDBAliasComplex())
+						$v = $dr[$f->GetName()];
+					else
+						$v = $dr[$f->GetDBName()];
+					$this->$n = $v->CastTo($f->GetType());
+
 				}
 				$dr->Close();
 			}
 			else {
+				/** @var $f XMetaField */
 				foreach ($fields as $f){
 					$n = $f->GetName();
-					$this->$n = $dr[$f->GetDBName()]->CastTo($f->GetType());
+					if ($f->IsDBAliasComplex())
+						$v = $dr[$f->GetName()];
+					else
+						$v = $dr[$f->GetDBName()];
+					$this->$n = $v->CastTo($f->GetType());
 				}
 			}
 		}

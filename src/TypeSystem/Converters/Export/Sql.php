@@ -13,17 +13,19 @@ class Sql extends ExportConverter {
 
 	const Null = 'NULL';
 
-	const ID           = 1;
-	const Integer      = 2;
-	const Decimal_18_5 = 3;
-	const Boolean      = 4;
-	const DateTime     = 5;
-	const Time         = 6;
-	const TimeSpan     = 7;
-	const String20     = 8;
-	const String100    = 9;
-	const String255    = 10;
-	const Text         = 11;
+	const ID            = 1;
+	const Integer       = 2;
+	const Decimal_18_5  = 3;
+	const Decimal_38_5  = 3;
+	const Decimal_38_20 = 5;
+	const Boolean       = 6;
+	const DateTime      = 7;
+	const Time          = 8;
+	const TimeSpan      = 9;
+	const String20      = 10;
+	const String100     = 11;
+	const String255     = 12;
+	const Text          = 13;
 
 	private static $data_types = array(
 		Database::MYSQL => array (
