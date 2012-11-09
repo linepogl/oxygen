@@ -50,25 +50,38 @@ var Oxygen = {
 
 	,fog_appearing: false
 	,fog_disapearing: false
+	,fog_visible: false
+
 	,ShowFog: function(){
 		if (Prototype.Browser.IE6) return;
 		var fog = $('OxygenDialogFog');
 		if (fog==null) fog = $( document.body.appendChild(new Element('div',{'id':'OxygenDialogFog','class':'ajaxdialogfog','style':'position:fixed;top:0;left:0;width:100%;height:100%;z-index:90;display:none;'})) );
 		if (this.fog_appearing) return;
 		if (this.fog_disapearing) setTimeout( function(){Oxygen.ShowFog();} );
+		if (this.fog_visible) return;
 		this.fog_appearing = true;
-		fog.appear({duration: 0.2, from: 0.0, to: 0.8, afterFinish:function(){ Oxygen.fog_appearing = false; } });
+		fog.appear({duration: 0.2, from: 0.0, to: 0.8, afterFinish:function(){ Oxygen.fog_appearing = false; Oxygen.fog_visible=true; } });
 	}
 	,HideFog: function(){
 		var fog = $('OxygenDialogFog');
 		if (fog==null) return;
 		if (this.fog_disapearing) return;
 		if (this.fog_appearing) setTimeout( function(){Oxygen.HideFog();} );
+		if (!this.fog_visible) return;
 		this.fog_dappearing = true;
-		fog.fade({duration: 0.5, from: 0.8, to: 0.0, afterFinish:function(){ Oxygen.fog_disapearing = false; } });
+		fog.fade({duration: 0.5, from: 0.8, to: 0.0, afterFinish:function(){ Oxygen.fog_disapearing = false; Oxygen.fog_visible=false;} });
 	}
 
 	,MakeDialog: function(icon,title,width,height){
+		if (this.current_ajax_dialog_clock_timer != null) {
+			clearTimeout(this.current_ajax_dialog_clock_timer);
+			this.current_ajax_dialog_clock_timer = null;
+		}
+		if (this.dialog_watchdog != null){
+			clearInterval(this.dialog_watchdog);
+			this.dialog_watchdog = null;
+		}
+		jQuery('#OxygenDialogFrame').detach();
 
 		if (Prototype.Browser.IE6){
 			jQuery('body').append(''
