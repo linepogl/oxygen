@@ -139,6 +139,7 @@ class Oxygen {
 		if (DEBUG) Debug::StopAndSave();
 		if (DEBUG) Debug::ShowConsole();
 		if (PROFILE) Profiler::ShowConsole();
+		Debug::ShutdownExceptionRecording();
 	}
 
 	public static function OnException($ex) {
@@ -1022,6 +1023,7 @@ class Oxygen {
 		$r['Remote IP'] = array_key_exists('REMOTE_ADDR',$_SERVER)?$_SERVER['REMOTE_ADDR']:'';
 		$r['HTTP headers'] = implode("\n",Oxygen::GetHttpHeaders());
 		$rr[] = $r;
+
 
 		$r = array();
 		$r['Application name'] = Oxygen::GetApplicationName();

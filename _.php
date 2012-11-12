@@ -67,3 +67,5 @@ function from($whatever){
 	return new LinqIterator(new ArrayIterator(array($whatever)));
 }
 
+
+
