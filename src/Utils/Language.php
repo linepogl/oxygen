@@ -155,7 +155,7 @@ final class Language {
 
 
 	/** @return string */
-	public static function FormatTimeSpan($value,$show_milliseconds = true){
+	public static function FormatTimeSpan($value,$show_milliseconds = true,$invariant_decimal_separator = false){
 		if (is_int($value))
 			$value = new XTimeSpan($value);
 //		if ($value instanceof DateInterval)
@@ -175,7 +175,7 @@ final class Language {
 				if ($s != 0 || $ms != 0){
 					if ($r != '') $r .= ' ';
 					$r .= $s;
-					if ($ms != 0) $r .= self::GetDecimalSeparator().sprintf('%03d',$ms);
+					if ($ms != 0) $r .= ($invariant_decimal_separator?self::GetDecimalSeparatorInvariant():self::GetDecimalSeparator()).sprintf('%03d',$ms);
 					$r .= '\'\'';
 				}
 	    }
@@ -189,7 +189,7 @@ final class Language {
 
 	    if ($r == '') {
 		    $r = '0';
-		    if ($show_milliseconds) $r .= self::GetDecimalSeparator().'000';
+		    if ($show_milliseconds) $r .= ($invariant_decimal_separator?self::GetDecimalSeparatorInvariant():self::GetDecimalSeparator()).'000';
 		    $r .= '\'\'';
 	    }
 

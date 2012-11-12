@@ -397,34 +397,33 @@ class Debug {
 		$initial_time = $now;
 		$time_to_record = $now;
 		$hits = 1;
-//		$record_immediately = false;
-//		try {
-//			/** @var $initial_time XDateTime */
-//			$initial_time = Scope::$APPLICATION[$key . '_initial_time'];
-//			if (is_null($initial_time)) {
-//				$initial_time = $now;
-//				Scope::$APPLICATION[$key . '_responsible'] = $serial; // take the initial responsibility to record the exception
-//				Scope::$APPLICATION[$key . '_initial_time'] = $initial_time;
+		$record_immediately = false;
+		try {
+//			Scope::$APPLICATION[$key . '_responsible'] = $serial;
+			/** @var $initial_time XDateTime */
+			$initial_time = Scope::$APPLICATION[$key . '_initial_time'];
+			if (is_null($initial_time)) {
+				$initial_time = $now;
+				Scope::$APPLICATION[$key . '_initial_time'] = $initial_time;
+				Scope::$APPLICATION[$key . '_hits'] = $hits;
 //				$time_to_record = $now->AddSeconds(30);
-//				Scope::$APPLICATION[$key . '_hits'] = $hits;
-//			}
-//			else {
-//				Scope::$APPLICATION[$key . '_responsible'] = $serial;   // stop any other process from recording the exception
-//				$last_time_to_record = $initial_time->AddMinutes(5);
-//				if ($now->CompareTo($last_time_to_record) <= 0) {
+			}
+			elseif ($now->Diff($initial_time)->GetDecimalMinutes() < 5)  {
+				$hits = Scope::$APPLICATION[$key . '_hits'] + 1;
+				Scope::$APPLICATION[$key . '_hits'] = $hits;
 //					$time_to_record = $now->AddSeconds(30);
+//				  $last_time_to_record = $initial_time->AddMinutes(5);
 //					if ($time_to_record->CompareTo($last_time_to_record) > 0) $time_to_record = $last_time_to_record;
-//				}
-//				else {
+			}
+			else {
+				$initial_time = $now;
+				Scope::$APPLICATION[$key . '_initial_time'] = $initial_time;
+				Scope::$APPLICATION[$key . '_hits'] = $hits;
 //					$time_to_record = $now;
 //					$record_immediately = true;
-//				}
-//				$hits = Scope::$APPLICATION[$key . '_hits'];
-//				$hits++;
-//				Scope::$APPLICATION[$key . '_hits'] = $hits;
-//			}
-//		}
-//		catch (Exception $ex){ }
+			}
+		}
+		catch (Exception $ex){ }
 
 
 		$filename = Fs::GetSafeFilename($serial.'.'.get_class($ex).'.'.$way_handled_message).'.err';
@@ -443,7 +442,7 @@ class Debug {
 		$body .= '-- '.new Html($way_handled_message).' --';
 		$body .= is_null($extra_developer_message)?'':"<br/>".new Html($extra_developer_message);
 		$body .= '<br/>#'.$serial;
-		$body .= $hits<=1?'':' (x'.$hits.' in '.Language::FormatTimeSpan($time_to_record->Diff($initial_time),false).')';
+		$body .= $hits<=1?'':' (x'.$hits.' in '.Language::FormatTimeSpan($time_to_record->Diff($initial_time),true,true).')';
 		$body .= '</div>';
 		$body .= '<br/>';
 		$body .= Debug::GetExceptionReportAsHtml($ex);
@@ -461,9 +460,9 @@ class Debug {
 
 		// redord function
 		$record = function()use($ex,$key,$head,$body,$subject,$filename){
-			Scope::$APPLICATION[$key . '_responsible'] = null;
-			Scope::$APPLICATION[$key . '_hits'] = null;
-			Scope::$APPLICATION[$key . '_initial_time'] = null;
+//			Scope::$APPLICATION[$key . '_responsible'] = null;
+//			Scope::$APPLICATION[$key . '_hits'] = null;
+//			Scope::$APPLICATION[$key . '_initial_time'] = null;
 			try {
 				$f = Oxygen::GetLogFolder(true);
 				file_put_contents( $f .'/'.$filename, serialize(array( 'head' => $head , 'body' => $body )));
@@ -492,7 +491,7 @@ class Debug {
 //				$record();
 //			};
 
-		return $serial.($hits<=1?'':' (x'.$hits.' in '.Language::FormatTimeSpan($now->Diff($initial_time),false).')');
+		return $serial.($hits<=1?'':' (x'.$hits.' in '.Language::FormatTimeSpan($now->Diff($initial_time),true,true).')');
 	}
 
 //	private static $delayed_exception_recorders = array();
