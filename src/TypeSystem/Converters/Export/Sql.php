@@ -16,7 +16,7 @@ class Sql extends ExportConverter {
 	const ID            = 1;
 	const Integer       = 2;
 	const Decimal_18_5  = 3;
-	const Decimal_38_5  = 3;
+	const Decimal_38_5  = 4;
 	const Decimal_38_20 = 5;
 	const Boolean       = 6;
 	const DateTime      = 7;
@@ -39,6 +39,8 @@ class Sql extends ExportConverter {
 			Sql::String100 => 'VARCHAR(100)',
 			Sql::String255 => 'VARCHAR(255)',
 			Sql::Decimal_18_5 => 'DECIMAL(18,5)',
+			Sql::Decimal_38_5 => 'DECIMAL(38,5)',
+			Sql::Decimal_38_20 => 'DECIMAL(38,20)',
 			Sql::Text => 'TEXT'
 			),
 		Database::ORACLE => array (
@@ -52,6 +54,8 @@ class Sql extends ExportConverter {
 			Sql::String100 => 'VARCHAR2(100)',
 			Sql::String255 => 'VARCHAR2(255)',
 			Sql::Decimal_18_5 => 'DECIMAL(18,5)',
+			Sql::Decimal_38_5 => 'DECIMAL(38,5)',
+			Sql::Decimal_38_20 => 'DECIMAL(38,20)',
 			Sql::Text => 'VARCHAR2(4000)'
 			),
 		);
