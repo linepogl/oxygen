@@ -139,7 +139,6 @@ class Oxygen {
 		if (DEBUG) Debug::StopAndSave();
 		if (DEBUG) Debug::ShowConsole();
 		if (PROFILE) Profiler::ShowConsole();
-		Debug::ShutdownExceptionRecording();
 	}
 
 	public static function OnException($ex) {

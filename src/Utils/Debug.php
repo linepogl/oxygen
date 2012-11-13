@@ -271,9 +271,11 @@ class Debug {
 		for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()){
 			$r .= get_class($exx);
 			$r .= "\n".$exx->getMessage();
-			$r .= "\n\n". basename($exx->getFile()).'['.$exx->getLine().']';
-			$r .= "\n".Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']';
-			$r .= "\n\n".Debug::GetExceptionTraceAsText($exx);
+			if (!($ex instanceof JavascriptException)) {
+				$r .= "\n\n". basename($exx->getFile()).'['.$exx->getLine().']';
+				$r .= "\n".Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']';
+				$r .= "\n\n".Debug::GetExceptionTraceAsText($exx);
+			}
 		}
 		$r .= "\n\n";
 		$r .= "\nOxygen info";
@@ -293,9 +295,11 @@ class Debug {
 		for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()){
 			$r .= '<div style="color:#aaaaaa;margin:0;">'.$Q.new Html(get_class($exx)).$Q.'</div>';
 			$r .= '<div style="color:#333333;margin:0;margin-bottom:20px;">'.$Q.new Html($exx->getMessage()).$Q.'</div>';
-			$r .= '<div style="font-style:italic;color:#333333;margin:0;">'.$Q.new Html(basename($exx->getFile()).'['.$exx->getLine().']').$Q.'</div>';
-			$r .= '<div style="font-style:italic;color:#999999;margin:0;">'.new Html(Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']').'</div>';
-			$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;margin-bottom:30px;">'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
+			if (!($ex instanceof JavascriptException)) {
+				$r .= '<div style="font-style:italic;color:#333333;margin:0;">'.$Q.new Html(basename($exx->getFile()).'['.$exx->getLine().']').$Q.'</div>';
+				$r .= '<div style="font-style:italic;color:#999999;margin:0;">'.new Html(Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']').'</div>';
+				$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;margin-bottom:30px;">'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
+			}
 		}
 		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
 		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Debug entries</b><br/><br/>'.new Html(Debug::GetEntriesAsText()).'</div>';
@@ -397,36 +401,22 @@ class Debug {
 		$initial_time = $now;
 		$time_to_record = $now;
 		$hits = 1;
-		$record_immediately = false;
 		try {
-//			Scope::$APPLICATION[$key . '_responsible'] = $serial;
 			/** @var $initial_time XDateTime */
 			$initial_time = Scope::$APPLICATION[$key . '_initial_time'];
 			if (is_null($initial_time)) {
 				$initial_time = $now;
 				Scope::$APPLICATION[$key . '_initial_time'] = $initial_time;
-				Scope::$APPLICATION[$key . '_hits'] = $hits;
-//				$time_to_record = $now->AddSeconds(30);
-			}
-			elseif ($now->Diff($initial_time)->GetDecimalMinutes() < 5)  {
-				$hits = Scope::$APPLICATION[$key . '_hits'] + 1;
-				Scope::$APPLICATION[$key . '_hits'] = $hits;
-//					$time_to_record = $now->AddSeconds(30);
-//				  $last_time_to_record = $initial_time->AddMinutes(5);
-//					if ($time_to_record->CompareTo($last_time_to_record) > 0) $time_to_record = $last_time_to_record;
 			}
 			else {
-				$initial_time = $now;
-				Scope::$APPLICATION[$key . '_initial_time'] = $initial_time;
-				Scope::$APPLICATION[$key . '_hits'] = $hits;
-//					$time_to_record = $now;
-//					$record_immediately = true;
+				$hits = Scope::$APPLICATION[$key . '_hits'] + 1;
 			}
+			Scope::$APPLICATION[$key . '_hits'] = $hits;
 		}
 		catch (Exception $ex){ }
 
 
-		$filename = Fs::GetSafeFilename($serial.'.'.get_class($ex).'.'.$way_handled_message).'.err';
+		$filename = Fs::GetSafeFilename($serial.'.'.get_class($ex).($hits<=1?'':'.x'.$hits).'.'.$way_handled_message).'.err';
 
 		$subject = DEV?'[DEV]':'';
 		$subject .= '['.Oxygen::GetApplicationName().']';
@@ -448,73 +438,39 @@ class Debug {
 		$body .= Debug::GetExceptionReportAsHtml($ex);
 
 
-
 		// error_log directly
 		try {
 			$error_log_message = '';
-			for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious())
-				$error_log_message .= '   '.get_class($exx).': '.$exx->getMessage().' in '.$exx->getFile().'['.$exx->getLine().']';
+			for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()) {
+				if ($ex instanceof JavascriptException)
+					$error_log_message .= '   '.get_class($exx).': '.$exx->getMessage();
+				else
+					$error_log_message .= '   '.get_class($exx).': '.$exx->getMessage().' in '.$exx->getFile().'['.$exx->getLine().']';
+			}
 			error_log( $subject.': ' . $error_log_message );
 		}
 		catch (Exception $ex) {}
 
-		// redord function
-		$record = function()use($ex,$key,$head,$body,$subject,$filename){
-//			Scope::$APPLICATION[$key . '_responsible'] = null;
-//			Scope::$APPLICATION[$key . '_hits'] = null;
-//			Scope::$APPLICATION[$key . '_initial_time'] = null;
+		// record to file
+		try {
+			$f = Oxygen::GetLogFolder(true);
+			file_put_contents( $f .'/'.$filename, serialize(array( 'head' => $head , 'body' => $body )));
+		}
+		catch (Exception $ex) {}
+
+		// send e-mail
+		foreach (Oxygen::GetDeveloperEmails() as $email) {
 			try {
-				$f = Oxygen::GetLogFolder(true);
-				file_put_contents( $f .'/'.$filename, serialize(array( 'head' => $head , 'body' => $body )));
+				Oxygen::SendEmail( 'oxygen@'.Oxygen::GetApplicationName() , $email , $email , $subject , $body );
 			}
 			catch (Exception $ex) {}
-			foreach (Oxygen::GetDeveloperEmails() as $email) {
-				try {
-					Oxygen::SendEmail( 'oxygen@'.Oxygen::GetApplicationName() , $email , $email , $subject , $body );
-				}
-				catch (Exception $ex) {}
-			}
-		};
-
-//		if ($record_immediately)
-			$record();
-//		else
-//			self::$delayed_exception_recorders[] = function()use($ex,$key,$time_to_record,$serial,$record){
-//				$responsible = Scope::$APPLICATION->ForceGet($key . '_responsible');
-//				if ($responsible !== $serial) return;
-//				while ( XDateTime::Now()->CompareTo( $time_to_record ) < 0 ) {
-//					flush();
-//					sleep(1);
-//					$responsible = Scope::$APPLICATION->ForceGet($key . '_responsible');
-//					if ($responsible !== $serial) return;
-//				}
-//				$record();
-//			};
+		}
 
 		return $serial.($hits<=1?'':' (x'.$hits.' in '.Language::FormatTimeSpan($now->Diff($initial_time),true,true).')');
 	}
-
-//	private static $delayed_exception_recorders = array();
-
-	public static function ShutdownExceptionRecording(){
-//		set_time_limit(0);
-//		ignore_user_abort(true);
-//		flush();
-//		foreach (self::$delayed_exception_recorders as $record) {
-//			try {
-//				$record();
-//			}
-//			catch (Exception $ex){}
-//		}
-	}
-
-
 
 
 
 
 }
-
-
-
 
