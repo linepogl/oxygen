@@ -23,7 +23,7 @@ class XDateTime extends XValue implements Serializable {
 	public function GetMinutes()     { return intval(date('i',$this->timestamp)); }
 	public function GetSeconds()     { return intval(date('s',$this->timestamp)); }
 	public function GetWeek()        { return intval(date('W',$this->timestamp)); }
-	public function GetDayOfWeek()   { return intval(date('w',$this->timestamp)); }
+	public function GetDayOfWeek($first_day_of_week = 0)   { return ( intval(date('w',$this->timestamp)) + (7-$first_day_of_week) ) % 7; }
 	public function GetDaysInMonth() { return intval(date('t',$this->timestamp)); }
 	public function GetTimestamp()   { return $this->timestamp; }
 	public function GetDate() { return new XDate($this->timestamp); }
