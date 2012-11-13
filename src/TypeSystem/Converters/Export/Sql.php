@@ -44,9 +44,9 @@ class Sql extends ExportConverter {
 			Sql::Text => 'TEXT'
 			),
 		Database::ORACLE => array (
-			Sql::ID => 'INT',
-			Sql::Integer => 'INT',
-			Sql::Boolean => 'NUMBER(3)',
+			Sql::ID => 'NUMBER(10,0)',
+			Sql::Integer => 'NUMBER(10,0)',
+			Sql::Boolean => 'NUMBER(1,0)',
 			Sql::DateTime => 'DATE',
 			Sql::Time => 'DATE',
 			Sql::TimeSpan => 'DECIMAL(15,6)',
