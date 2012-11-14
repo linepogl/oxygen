@@ -415,6 +415,13 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			$this[] = $x;
 	}
 
+	public function MergeNewOnly($traversable) {
+		$this->Evaluate();
+		foreach ($traversable as $x)
+			if (!$this->Contains( $x ) )
+				$this[] = $x;
+	}
+
 	public function Clear(){
 		$this->data = array();
 	}
