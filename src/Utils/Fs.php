@@ -176,5 +176,38 @@ class Fs {
 		}
 		return 'application/octet-stream';
 	}
-	
+
+
+	public static function ConsumePostedFile( $posted_file , $destination_filename = null){
+		if (is_null($destination_filename)) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
+		try{
+			if (!is_file($posted_file['tmp_name'])) throw new Exception('The $posted_file[\'tmp_name\'] is not a file.');
+			$size = filesize($posted_file['tmp_name']);
+			$test = move_uploaded_file( $posted_file['tmp_name'] , $destination_filename);
+			if ($test === false) throw new Exception('The function move_uploaded_file has failed.');
+			if (!file_exists($destination_filename)) throw new Exception('The function move_uploaded_file has failed.');
+			if (filesize($destination_filename) != $size) throw new Exception('The function move_uploaded_file has failed.');
+		}
+		catch (Exception $ex){
+			Debug::RecordExceptionConverted($ex);
+			try{ unlink( $destination_filename ); } catch(Exception $ex){}
+			throw new ApplicationException(Lemma::Pick('MsgErrorWhileUploadingFile'));
+		}
+		return $destination_filename;
+	}
+	public static function ConsumeRawData( $raw_data , $destination_filename = null ){
+		if (is_null($destination_filename)) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
+		try {
+			$file = fopen( $destination_filename , 'w' );
+			fwrite( $file , $raw_data );
+			fclose( $file );
+		}
+		catch (Exception $ex){
+			Debug::RecordExceptionConverted($ex);
+			try{ unlink( $destination_filename ); } catch(Exception $ex){}
+			throw new ApplicationException(Lemma::Pick('MsgErrorWhileUploadingFile'));
+		}
+		return $destination_filename;
+	}
+
 }

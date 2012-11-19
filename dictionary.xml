@@ -302,6 +302,13 @@
 	</lemma>
 
 
+	<lemma name="MsgErrorWhileUploadingFile">
+		<en>An error occurred while uploading file.</en>
+		<fr>Erreur pendant l'envoi du fichier.</fr>
+		<el>Σφάλμα κατά την αποστολή του αρχείου.</el>
+	</lemma>
+
+
 	<lemma name="ThousandsSeparator"><en>,</en><fr> </fr><el>.</el></lemma>
 	<lemma name="DecimalSeparator"><en>.</en><fr>,</fr><el>,</el></lemma>
 	<!-- deprecated --><lemma name="DecimalPoint"><en>.</en><fr>,</fr><el>,</el></lemma>
