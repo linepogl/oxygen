@@ -730,7 +730,7 @@ class Oxygen {
 
 		ob_start();
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
-		echo '<base href="'.new Html(__BASE__).'" />';
+		echo '<base href="'.new Html(Oxygen::GetHrefBaseFull()).'" />';
 
 		echo Js::BEGIN;
 		if (self::$window_scoping_enabled){
