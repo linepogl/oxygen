@@ -324,7 +324,7 @@ abstract class Action extends XValue {
 		elseif ($this->IsIFrameDialog())
 			return 'Oxygen.ShowIFrameDialog('.new Js($this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
 		else
-			return 'window.location.href='.new Js($this->GetHrefPlain($args)).';';
+			return 'window.location.href='.new Js(__BASE__.$this->GetHrefPlain($args)).';';
 	}
 	protected function GetUrlArgs(){ $r = array(); return $r; }
 	public final function GetHrefPlain($args=array()){
