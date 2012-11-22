@@ -178,6 +178,20 @@ class Fs {
 	}
 
 
+	public static function ConsumeFileFromUrl( $url , $destination_filename = null ){
+		if (is_null($destination_filename)) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
+		try {
+			ini_set('memory_limit', '2G');
+			set_time_limit(0);
+			file_put_contents( $destination_filename , file_get_contents( $url ) );
+		}
+		catch (Exception $ex){
+			Debug::RecordExceptionConverted($ex);
+			try{ unlink( $destination_filename ); } catch(Exception $ex){}
+			throw new ApplicationException(Lemma::Pick('MsgErrorWhileDownloadingFile'));
+		}
+		return $destination_filename;
+	}
 	public static function ConsumePostedFile( $posted_file , $destination_filename = null){
 		if (is_null($destination_filename)) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
 		try{
