@@ -274,7 +274,7 @@ class ReportTableControl extends ValueControl {
 		//
 		//
 		echo Js::BEGIN;
-		echo $this->name . " = {";
+		echo "window.".$this->name . " = {";
 		echo "  event_running : false";
 		$s = ''; foreach ($row_indices as $i) $s .= ($s==''?'':',') . $this->row_js[$i];
 		echo " ,rows : [" . $s . "]";

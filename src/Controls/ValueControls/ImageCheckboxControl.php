@@ -57,30 +57,29 @@ class ImageCheckboxControl extends ValueControl {
 
 
 		echo Js::BEGIN;
-		echo $this->name .'={';
-		echo "  is_readonly:".new Js($readonly);
-		echo " ,is_dirty:".new Js($this->is_dirty);
-		echo " ,SetValue:function(value){";
+		echo "window.".$this->name .'={';
+		echo "  'is_readonly':".new Js($readonly);
+		echo " ,'is_dirty':".new Js($this->is_dirty);
+		echo " ,'SetValue':function(value){";
 		echo "    var old = this.GetValue();";
 		echo "    $(".new Js($this->name).").value = value ? ".new Js(strval(new Url(true)))." : ".new Js(strval(new Url(false))).";";
 		echo "    $(".new Js($this->name.'-check').").className = 'checkbox checkbox-' + ( this.is_readonly ? 'readonly-' : '' ) + ( this.is_dirty ? 'dirty-' : '' ) + ( value ? 'checked' : 'unchecked' );";
 		echo "    if (old!=value){".$this->on_change."}";
 		echo "  }";
-		echo " ,GetValue:function(){";
+		echo " ,'GetValue':function(){";
 		echo "    return \$F(".new Js($this->name).") == ".new Js(strval(new Url(true))).";";
 		echo "  }";
-		echo " ,IsDirty:function(){";
+		echo " ,'IsDirty':function(){";
 		echo "    return ".$this->name.".is_dirty;";
 		echo "  }";
-		echo " ,SetDirty:function(dirty){";
+		echo " ,'SetDirty':function(dirty){";
 		echo "    ".$this->name.".is_dirty = dirty;";
 		echo "    ".$this->name.".SetValue(\$F(".new Js($this->name)."));";
 		echo "  }";
-		echo " ,Toggle:function(){";
+		echo " ,'Toggle':function(){";
 		echo "    ".$this->name.".SetValue(\$F(".new Js($this->name).")!='true');";
 		echo "  }";
 		echo "};";
-
 
 		/// Backwards compatibility:
 		echo $this->name . "_SetValue = function(value){".$this->name.".SetValue(value=='true');};";

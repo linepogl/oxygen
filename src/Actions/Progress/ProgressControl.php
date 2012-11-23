@@ -35,7 +35,7 @@ class ProgressControl extends Control {
 		echo '<div id="'.$this->name.'_actual" style="display:none;"><img src="oxy/img/ajax.gif" /></div>';
 
 		echo Js::BEGIN;
-		echo "params = {";
+		echo "var params = {";
 		if($this->forward_request && Oxygen::IsPostback()){
 			$i=0;
 			/** @var $v HttpValue */
