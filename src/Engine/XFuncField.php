@@ -37,7 +37,7 @@ class XFuncField {
 			case self::HASH_YEAR: return 'TO_CHAR('.new SqlName($this->field).',\'YYYY\')';
 			case self::HASH_MONTH: return 'TO_CHAR('.new SqlName($this->field).',\'MM\')';
 			case self::HASH_DAY: return 'TO_CHAR('.new SqlName($this->field).',\'DD\')';
-			case self::HASH_WEEKDAY: return 'TO_CHAR('.new SqlName($this->field).',\'D\')';
+			case self::HASH_WEEKDAY: return '(TO_CHAR('.new SqlName($this->field).',\'D\')-1)';
 			case self::HASH_HOUR: return 'TO_CHAR('.new SqlName($this->field).',\'HH24\')';
 			case self::HASH_EXACT_DAY: return 'TO_CHAR('.new SqlName($this->field).',\'YYYYMMDD\')';
 			case self::HASH_EXACT_MONTH: return 'TO_CHAR('.new SqlName($this->field).',\'YYYYMM\')';
