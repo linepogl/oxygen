@@ -22,10 +22,12 @@ class Sql extends ExportConverter {
 	const DateTime      = 7;
 	const Time          = 8;
 	const TimeSpan      = 9;
-	const String20      = 10;
-	const String100     = 11;
-	const String255     = 12;
-	const Text          = 13;
+	const String1       = 10;
+	const String2       = 11;
+	const String20      = 12;
+	const String100     = 13;
+	const String255     = 14;
+	const Text          = 15;
 
 	private static $data_types = array(
 		Database::MYSQL => array (
@@ -35,6 +37,8 @@ class Sql extends ExportConverter {
 			Sql::DateTime => 'DATETIME',
 			Sql::Time => 'DATETIME',
 			Sql::TimeSpan => 'DECIMAL(15,6)',
+			Sql::String1 => 'CHAR(1)',
+			Sql::String2 => 'CHAR(2)',
 			Sql::String20 => 'VARCHAR(20)',
 			Sql::String100 => 'VARCHAR(100)',
 			Sql::String255 => 'VARCHAR(255)',
@@ -50,6 +54,8 @@ class Sql extends ExportConverter {
 			Sql::DateTime => 'DATE',
 			Sql::Time => 'DATE',
 			Sql::TimeSpan => 'DECIMAL(15,6)',
+			Sql::String1 => 'CHAR(1)',
+			Sql::String2 => 'CHAR(2)',
 			Sql::String20 => 'VARCHAR2(20)',
 			Sql::String100 => 'VARCHAR2(100)',
 			Sql::String255 => 'VARCHAR2(255)',
