@@ -7,8 +7,8 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	public function MetaType(){ return MetaLemma::Type(); }
 	public function OffsetExists($offset) { return isset($this->data[$offset]); }
 	public function OffsetGet($offset) { return isset($this->data[$offset]) ? $this->data[$offset] : null; }
-	public function OffsetSet($offset, $value) { throw new Exception('Lemmas are immutable.'); }
-	public function OffsetUnset($offset) { throw new Exception('Lemmas are immutable.'); }
+	public function OffsetSet($offset, $value) { if(is_null($offset)) throw new Exception('Cannot add to a lemmas without language.'); $this->data[$offset] = strval($value); }
+	public function OffsetUnset($offset) { unset($this->data[$offset]); }
 	public function GetIterator(){ return new ArrayIterator($this->data); }
 
 	//const DELIMETER = '‡';  // I wish...
@@ -24,17 +24,6 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	public function HasName(){ return $this->name !== self::DEFAULT_NAME; }
 	public function GetName(){ return $this->name; }
 
-	private static function Merge($lemma1, $lemma2){
-		$a = array();
-		foreach ($lemma1->data as $lang=>$value)
-			$a[$lang] = $value;
-		foreach ($lemma2->data as $lang=>$value)
-			$a[$lang] = $value;
-		$r = new Lemma();
-		$r->name = $lemma1->name;
-		$r->data = $a;
-		return $r;
-	}
 
 
 	/**

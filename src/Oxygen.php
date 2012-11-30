@@ -154,6 +154,10 @@ class Oxygen {
 					Oxygen::SetResponseCode(403); // forbidden
 					$served_as = 'HTTP 403';
 				}
+				elseif ($ex instanceof NotFound404Exception) {
+					Oxygen::SetResponseCode(404); // not found
+					$served_as = 'HTTP 404';
+				}
 				elseif ($ex instanceof ApplicationException) {
 					Oxygen::SetResponseCode(405); // not allowed
 					$served_as = 'HTTP 405';
@@ -166,6 +170,10 @@ class Oxygen {
 				if ($ex instanceof SecurityException) {
 					$msg = $ex->getMessage();
 					echo empty($msg) ? Lemma::Pick('MsgAccessDenied') : $ex->getMessage();
+				}
+				if ($ex instanceof NotFound404Exception) {
+					$msg = $ex->getMessage();
+					echo empty($msg) ? Lemma::Pick('MsgObjectNotFound') : $ex->getMessage();
 				}
 				elseif ($ex instanceof ApplicationException)
 					echo $ex->getMessage();

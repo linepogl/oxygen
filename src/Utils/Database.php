@@ -432,7 +432,7 @@ class Database {
 		$r = self::$patches[$patcher];
 		if (is_null($r)){
 			try{
-				$r = self::ExecuteScalar('SELECT '.new SqlName(self::$patching_system_fieldnames[$patcher]).' FROM '.new SqlName(self::$patching_system_tablename))->AsInteger();
+				$r = self::ExecuteScalar('SELECT '.new SqlIden(self::$patching_system_fieldnames[$patcher]).' FROM '.new SqlIden(self::$patching_system_tablename))->AsInteger();
 				self::$patches[$patcher] = $r;
 			}
 			catch (Exception $ex){}
@@ -445,7 +445,7 @@ class Database {
 	}
 	public static function BeginPatchingSystem(){
 		try{
-			$r = 1!=self::ExecuteScalar('SELECT COUNT(*) FROM '.new SqlName(self::$patching_system_tablename))->AsInteger();
+			$r = 1!=self::ExecuteScalar('SELECT COUNT(*) FROM '.new SqlIden(self::$patching_system_tablename))->AsInteger();
 		}
 		catch (Exception $ex){
 			$r = true;
@@ -507,10 +507,10 @@ class Database {
 	public static function ExecuteInsert($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'INSERT INTO '.new SqlName($tablename).' (';
+		$sql = 'INSERT INTO '.new SqlIden($tablename).' (';
 		for($i=1;$i<$z;$i+=2){
 			if ($i>1) $sql.=',';
-			$sql.=new SqlName($a[$i]);
+			$sql.=new SqlIden($a[$i]);
 		}
 		$sql.=') VALUES (';
 		for($i=1;$i<$z;$i+=2){
@@ -532,9 +532,9 @@ class Database {
 		$z = func_num_args();
 		$primarykey = $z%2 == 1 ? 'id' : $a[1];
 		$id = self::ExecuteGetNextID($tablename,$primarykey);
-		$sql = 'INSERT INTO '.new SqlName($tablename).' ('.new SqlName($primarykey);
+		$sql = 'INSERT INTO '.new SqlIden($tablename).' ('.new SqlIden($primarykey);
 		for($i=2-$z%2;$i<$z;$i+=2)
-			$sql.=','.new SqlName($a[$i]);
+			$sql.=','.new SqlIden($a[$i]);
 		$sql.=') VALUES ('.new Sql($id);
 		for($i=2-$z%2;$i<$z;$i+=2){
 			$sql.=','.new Sql($a[$i+1]);
@@ -552,10 +552,10 @@ class Database {
 	public static function ExecuteUpdateAll($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'UPDATE '.new SqlName($tablename).' SET ';
+		$sql = 'UPDATE '.new SqlIden($tablename).' SET ';
 		for($i=1;$i<$z;$i+=2){
 			if ($i>1) $sql.=',';
-			$sql.=new SqlName($a[$i]) .'='. new Sql($a[$i+1]);
+			$sql.=new SqlIden($a[$i]) .'='. new Sql($a[$i+1]);
 		}
 		self::Execute($sql);
 	}
@@ -568,17 +568,17 @@ class Database {
 	public static function ExecuteUpdate($tablename,$where){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'UPDATE '.new SqlName($tablename).' SET ';
+		$sql = 'UPDATE '.new SqlIden($tablename).' SET ';
 		for($i=2;$i<$z;$i+=2){
 			if ($i>2) $sql.=',';
-			$sql.=new SqlName($a[$i]) .'='. new Sql($a[$i+1]);
+			$sql.=new SqlIden($a[$i]) .'='. new Sql($a[$i+1]);
 		}
 		if (!is_null($where)) $sql .=' WHERE '.$where;
 		self::Execute($sql);
 	}
 
 	public static function ExecuteDropTable($tablename) {
-		$sql = 'DROP TABLE '.new SqlName($tablename);
+		$sql = 'DROP TABLE '.new SqlIden($tablename);
 		self::Execute($sql);
 	}
 
@@ -586,7 +586,7 @@ class Database {
 
 	public static function ExecuteTableExists($tablename){
 		try {
-			self::Execute('SELECT COUNT(*) FROM '.new SqlName($tablename));
+			self::Execute('SELECT COUNT(*) FROM '.new SqlIden($tablename));
 		}
 		catch (Exception $ex) {
 			return false;
@@ -597,10 +597,10 @@ class Database {
 	public static function ExecuteCreateTable($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'CREATE TABLE '.new SqlName($tablename).' (';
+		$sql = 'CREATE TABLE '.new SqlIden($tablename).' (';
 		for($i=1;$i<$z;$i+=2){
 			if ($i>1) $sql.=',';
-			$sql.=new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+			$sql.=new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 		}
 		$sql.=')';
 		if (self::$type == self::MYSQL) $sql .= ' ENGINE=INNODB';
@@ -610,11 +610,11 @@ class Database {
 	public static function ExecuteCreateStandardTable($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'CREATE TABLE '.new SqlName($tablename).' ('.new SqlName('id').' '.Sql::GetDataType(self::MYSQL,Sql::ID).' NOT NULL';
+		$sql = 'CREATE TABLE '.new SqlIden($tablename).' ('.new SqlIden('id').' '.Sql::GetDataType(self::MYSQL,Sql::ID).' NOT NULL';
 		for($i=1;$i<$z;$i+=2){
-			$sql.=','.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+			$sql.=','.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 		}
-		$sql .= ',PRIMARY KEY ( '.new SqlName('id').' ))';
+		$sql .= ',PRIMARY KEY ( '.new SqlIden('id').' ))';
 		if (self::$type == self::MYSQL) $sql .= ' ENGINE=INNODB';
 		self::Execute($sql);
 	}
@@ -622,10 +622,10 @@ class Database {
 	public static function ExecuteAddPrimaryKey($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD PRIMARY KEY(';
+		$sql = 'ALTER TABLE '.new SqlIden($tablename).' ADD PRIMARY KEY(';
 		for($i=1;$i<$z;$i++){
 			if ($i>1) $sql .= ',';
-			$sql.=new SqlName($a[$i]);
+			$sql.=new SqlIden($a[$i]);
 		}
 		$sql.=')';
 		self::Execute($sql);
@@ -634,7 +634,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			$sql = 'ALTER TABLE '.new SqlName($tablename).' DROP COLUMN '.new SqlName($a[$i]);
+			$sql = 'ALTER TABLE '.new SqlIden($tablename).' DROP COLUMN '.new SqlIden($a[$i]);
 			self::Execute($sql);
 		}
 	}
@@ -644,13 +644,13 @@ class Database {
 		switch (self::$type){
 			case self::MYSQL:
 				for($i=1;$i<$z;$i+=2){
-					$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD COLUMN '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+					$sql = 'ALTER TABLE '.new SqlIden($tablename).' ADD COLUMN '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 					self::Execute($sql);
 				}
 				break;
 			case self::ORACLE:
 				for($i=1;$i<$z;$i+=2){
-					$sql = 'ALTER TABLE '.new SqlName($tablename).' ADD '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+					$sql = 'ALTER TABLE '.new SqlIden($tablename).' ADD '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 					self::Execute($sql);
 				}
 				break;
@@ -663,13 +663,13 @@ class Database {
 		switch (self::$type){
 			case self::MYSQL:
 				for($i=1;$i<$z;$i+=3){
-					$sql = 'ALTER TABLE '.new SqlName($tablename).' CHANGE '.new SqlName($a[$i]).' '.new SqlName($a[$i+1]).' '.Sql::GetDataType(self::$type,$a[$i+2]);
+					$sql = 'ALTER TABLE '.new SqlIden($tablename).' CHANGE '.new SqlIden($a[$i]).' '.new SqlIden($a[$i+1]).' '.Sql::GetDataType(self::$type,$a[$i+2]);
 					self::Execute($sql);
 				}
 				break;
 			case self::ORACLE:
 				for($i=1;$i<$z;$i+=3){
-					$sql = 'ALTER TABLE '.new SqlName($tablename).' RENAME COLUMN '.new SqlName($a[$i]).' TO '.new SqlName($a[$i+1]);
+					$sql = 'ALTER TABLE '.new SqlIden($tablename).' RENAME COLUMN '.new SqlIden($a[$i]).' TO '.new SqlIden($a[$i+1]);
 					self::Execute($sql);
 				}
 				break;
@@ -681,13 +681,13 @@ class Database {
 		switch (self::$type){
 			case self::MYSQL:
 				for($i=1;$i<$z;$i+=2){
-					$sql = 'ALTER TABLE '.new SqlName($tablename).' MODIFY COLUMN '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+					$sql = 'ALTER TABLE '.new SqlIden($tablename).' MODIFY COLUMN '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 					self::Execute($sql);
 				}
 				break;
 			case self::ORACLE:
 				for($i=1;$i<$z;$i+=2){
-					$sql = 'ALTER TABLE '.new SqlName($tablename).' MODIFY COLUMN '.new SqlName($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
+					$sql = 'ALTER TABLE '.new SqlIden($tablename).' MODIFY COLUMN '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
 					self::Execute($sql);
 				}
 				break;
@@ -695,7 +695,7 @@ class Database {
 	}
 
 	public static function ExecuteRenameTable($tablename, $newName){
-		$sql = 'RENAME TABLE '.new SqlName($tablename).' TO '.new SqlName($newName);
+		$sql = 'RENAME TABLE '.new SqlIden($tablename).' TO '.new SqlIden($newName);
 		self::Execute($sql);
 	}
 
@@ -705,7 +705,7 @@ class Database {
   public static function ExecuteCreateSequence($sequence_name,$from=0) {
 		switch(self::$type) {
 			case self::ORACLE:
-				$sql = 'CREATE SEQUENCE '.new SqlName($sequence_name).' INCREMENT BY 1 START WITH '.$from.' NOMAXVALUE MINVALUE '.min(0,$from).' NOCYCLE NOCACHE';
+				$sql = 'CREATE SEQUENCE '.new SqlIden($sequence_name).' INCREMENT BY 1 START WITH '.$from.' NOMAXVALUE MINVALUE '.min(0,$from).' NOCYCLE NOCACHE';
 				self::Execute($sql);
 			break;
 		}
@@ -717,7 +717,7 @@ class Database {
 	 * @return void
 	 */
 	public static function ExecuteDeleteAll($tablename){
-		$sql = 'DELETE FROM '.new SqlName($tablename);
+		$sql = 'DELETE FROM '.new SqlIden($tablename);
 		self::Execute($sql);
 	}
 	/**
@@ -727,7 +727,7 @@ class Database {
 	 * @return void
 	 */
 	public static function ExecuteDelete($tablename, $where){
-		$sql = 'DELETE FROM '.new SqlName($tablename).' WHERE '.$where;
+		$sql = 'DELETE FROM '.new SqlIden($tablename).' WHERE '.$where;
 		self::Execute($sql);
 	}
 
@@ -752,13 +752,13 @@ class Database {
 			case self::ORACLE:
 				$id = null;
 				try {
-					$id = self::ExecuteScalar('SELECT '.new SqlName(self::hash_sequence($tablename,$primarykey)).'.NEXTVAL A FROM DUAL')->AsID();
+					$id = self::ExecuteScalar('SELECT '.new SqlIden(self::hash_sequence($tablename,$primarykey)).'.NEXTVAL A FROM DUAL')->AsID();
 				}
 				catch (Exception $ex) {
-					$id = self::ExecuteScalar('SELECT MAX('.new SqlName($primarykey).') FROM '.new SqlName($tablename))->AsID();
+					$id = self::ExecuteScalar('SELECT MAX('.new SqlIden($primarykey).') FROM '.new SqlIden($tablename))->AsID();
 					$id = is_null($id) ? new ID(0) : new ID($id->AsInt() + 1);
 					Database::ExecuteCreateSequence(self::hash_sequence($tablename,$primarykey),$id->AsInt());
-					$id = self::ExecuteScalar('SELECT '.new SqlName(self::hash_sequence($tablename,$primarykey)).'.NEXTVAL A FROM DUAL')->AsID();
+					$id = self::ExecuteScalar('SELECT '.new SqlIden(self::hash_sequence($tablename,$primarykey)).'.NEXTVAL A FROM DUAL')->AsID();
 				}
 				break;
 		}
@@ -767,7 +767,7 @@ class Database {
 
 	/** @return ID */
 	public static function ExecuteGetNextIDFromSequence($sequence_name) {
-		return self::ExecuteScalar('SELECT '.new SqlName($sequence_name).'.NEXTVAL A FROM DUAL')->AsID();
+		return self::ExecuteScalar('SELECT '.new SqlIden($sequence_name).'.NEXTVAL A FROM DUAL')->AsID();
 	}
 
 
@@ -780,7 +780,7 @@ class Database {
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=2){
             try { self::ExecuteAddIndices($tablename,$a[$i]); } catch (Exception $ex){}
-			self::Execute('ALTER TABLE '.new SqlName($tablename).' ADD CONSTRAINT '.new SqlName( self::hash_foreign_key($tablename,$a[$i]) ).' FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName('id').')');
+			self::Execute('ALTER TABLE '.new SqlIden($tablename).' ADD CONSTRAINT '.new SqlIden( self::hash_foreign_key($tablename,$a[$i]) ).' FOREIGN KEY ('.new SqlIden($a[$i]).') REFERENCES '.new SqlIden($a[$i+1]).' ('.new SqlIden('id').')');
 		}
 	}
 	public static function ExecuteAddForeignKeysWithAltTarget($tablename){
@@ -788,7 +788,7 @@ class Database {
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=3){
 			try { self::ExecuteAddIndices($tablename,$a[$i]);  } catch (Exception $ex){}
-			self::Execute('ALTER TABLE '.new SqlName($tablename).' ADD CONSTRAINT '.new SqlName( self::hash_foreign_key($tablename,$a[$i]) ).' FOREIGN KEY ('.new SqlName($a[$i]).') REFERENCES '.new SqlName($a[$i+1]).' ('.new SqlName($a[$i+2]).')');
+			self::Execute('ALTER TABLE '.new SqlIden($tablename).' ADD CONSTRAINT '.new SqlIden( self::hash_foreign_key($tablename,$a[$i]) ).' FOREIGN KEY ('.new SqlIden($a[$i]).') REFERENCES '.new SqlIden($a[$i+1]).' ('.new SqlIden($a[$i+2]).')');
 		}
 	}
 	public static function ExecuteDropForeignKeys($tablename){
@@ -796,66 +796,66 @@ class Database {
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
 			try { self::ExecuteDropIndices($tablename,$a[$i]);  } catch (Exception $ex){}
-			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP FOREIGN KEY '.new SqlName(self::hash_foreign_key($tablename,$a[$i])));
+			self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP FOREIGN KEY '.new SqlIden(self::hash_foreign_key($tablename,$a[$i])));
 		}
 	}
 	public static function ExecuteAddIndices($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=2){
-			self::Execute('CREATE INDEX '.new SqlName(self::hash_index($tablename,$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')');
+			self::Execute('CREATE INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])).' ON '.new SqlIden($tablename).' ('.new SqlIden($a[$i]).')');
 		}
 	}
 	public static function ExecuteAddIndex($tablename){
 		$a = func_get_args();
 		$key = self::hash_index($tablename, implode('+',array_splice($a,1)));
-		$sql_fields = implode(',',array_map(function($x){return new SqlName($x);},array_splice($a,1)));
-		self::Execute('CREATE INDEX '.new SqlName($key).' ON '.new SqlName($tablename).' ('.$sql_fields.')');
+		$sql_fields = implode(',',array_map(function($x){return new SqlIden($x);},array_splice($a,1)));
+		self::Execute('CREATE INDEX '.new SqlIden($key).' ON '.new SqlIden($tablename).' ('.$sql_fields.')');
 	}
 	public static function ExecuteAddUniqueIndices($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			self::Execute('CREATE UNIQUE INDEX '.new SqlName(self::hash_index($tablename,$a[$i])).' ON '.new SqlName($tablename).' ('.new SqlName($a[$i]).')');
+			self::Execute('CREATE UNIQUE INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])).' ON '.new SqlIden($tablename).' ('.new SqlIden($a[$i]).')');
 		}
 	}
 	public static function ExecuteAddUniqueIndex($tablename){
 		$a = func_get_args();
 		$key = self::hash_index($tablename, implode('+',array_splice($a,1)));
-		$sql_fields = implode(',',array_map(function($x){return new SqlName($x);},array_splice($a,1)));
-		self::Execute('CREATE UNIQUE INDEX '.new SqlName($key).' ON '.new SqlName($tablename).' ('.$sql_fields.')');
+		$sql_fields = implode(',',array_map(function($x){return new SqlIden($x);},array_splice($a,1)));
+		self::Execute('CREATE UNIQUE INDEX '.new SqlIden($key).' ON '.new SqlIden($tablename).' ('.$sql_fields.')');
 	}
 	public static function ExecuteDropIndices($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName(self::hash_index($tablename,$a[$i])));
+			self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])));
 		}
 	}
 	public static function ExecuteDropIndex($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		$key = self::hash_index($tablename, implode('+',array_splice($a,1)));
-		self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP INDEX '.new SqlName($key));
+		self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden($key));
 	}
 	public static function ExecuteDropIndicesRaw($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=0;$i<$z;$i++){
-			self::Execute('DROP INDEX '.new SqlName($a[$i]));
+			self::Execute('DROP INDEX '.new SqlIden($a[$i]));
 		}
 	}
 	public static function ExecuteDropConstraints($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP CONSTRAINT '.new SqlName($a[$i]));
+			self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP CONSTRAINT '.new SqlIden($a[$i]));
 		}
 	}
 
 
 	public static function ExecuteDropPrimaryKey($tablename){
-		self::Execute('ALTER TABLE '.new SqlName($tablename).' DROP PRIMARY KEY');
+		self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP PRIMARY KEY');
 	}
 
 
@@ -876,7 +876,7 @@ class Database {
 				throw new Exception(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
 			}
 			try{
-				Database::Execute('CREATE DATABASE '.new SqlName($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
+				Database::Execute('CREATE DATABASE '.new SqlIden($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
 			}
 			catch (Exception $ex){
 				self::PopConnection();

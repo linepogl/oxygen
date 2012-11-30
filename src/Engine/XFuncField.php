@@ -26,21 +26,21 @@ class XFuncField {
 	public function ToSql() {
 		switch ($this->function){
 			default:
-			case self::COUNT: return 'COUNT('.new SqlName($this->field).')';
-			case self::MAX: return 'MAX('.new SqlName($this->field).')';
-			case self::MIN: return 'MIN('.new SqlName($this->field).')';
-			case self::SUM: return 'SUM('.new SqlName($this->field).')';
-			case self::AVG: return 'AVG('.new SqlName($this->field).')';
-			case self::COUNT_DISTINCT: return 'COUNT(DISTINCT '.new SqlName($this->field).')';
+			case self::COUNT: return 'COUNT('.new SqlIden($this->field).')';
+			case self::MAX: return 'MAX('.new SqlIden($this->field).')';
+			case self::MIN: return 'MIN('.new SqlIden($this->field).')';
+			case self::SUM: return 'SUM('.new SqlIden($this->field).')';
+			case self::AVG: return 'AVG('.new SqlIden($this->field).')';
+			case self::COUNT_DISTINCT: return 'COUNT(DISTINCT '.new SqlIden($this->field).')';
 
 			// TODO: TRANSLATE THESE TO MYSQL ALSO:
-			case self::HASH_YEAR: return 'TO_CHAR('.new SqlName($this->field).',\'YYYY\')';
-			case self::HASH_MONTH: return 'TO_CHAR('.new SqlName($this->field).',\'MM\')';
-			case self::HASH_DAY: return 'TO_CHAR('.new SqlName($this->field).',\'DD\')';
-			case self::HASH_WEEKDAY: return '(TO_CHAR('.new SqlName($this->field).',\'D\')-1)';
-			case self::HASH_HOUR: return 'TO_CHAR('.new SqlName($this->field).',\'HH24\')';
-			case self::HASH_EXACT_DAY: return 'TO_CHAR('.new SqlName($this->field).',\'YYYYMMDD\')';
-			case self::HASH_EXACT_MONTH: return 'TO_CHAR('.new SqlName($this->field).',\'YYYYMM\')';
+			case self::HASH_YEAR: return 'TO_CHAR('.new SqlIden($this->field).',\'YYYY\')';
+			case self::HASH_MONTH: return 'TO_CHAR('.new SqlIden($this->field).',\'MM\')';
+			case self::HASH_DAY: return 'TO_CHAR('.new SqlIden($this->field).',\'DD\')';
+			case self::HASH_WEEKDAY: return '(TO_CHAR('.new SqlIden($this->field).',\'D\')-1)';
+			case self::HASH_HOUR: return 'TO_CHAR('.new SqlIden($this->field).',\'HH24\')';
+			case self::HASH_EXACT_DAY: return 'TO_CHAR('.new SqlIden($this->field).',\'YYYYMMDD\')';
+			case self::HASH_EXACT_MONTH: return 'TO_CHAR('.new SqlIden($this->field).',\'YYYYMM\')';
 
 		}
 	}

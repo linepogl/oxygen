@@ -35,53 +35,53 @@ class XPredFieldOp extends XPred {
 
 			case self::OP_EQ:
 				if (is_null($this->field2_or_value))
-					return new SqlName($this->field1) . ' IS NULL';
+					return new SqlIden($this->field1) . ' IS NULL';
 				if ($this->field2_or_value instanceof XMetaField)
-					return '(('.new SqlName($this->field1) . '=' . new SqlName($this->field2_or_value).') OR ('.new SqlName($this->field1) . ' IS NULL AND ' . new SqlName($this->field2_or_value).' IS NULL))' ;
-				return '('.new SqlName($this->field1) .' IS NOT NULL AND '.new SqlName($this->field1) . '=?)';
+					return '(('.new SqlIden($this->field1) . '=' . new SqlIden($this->field2_or_value).') OR ('.new SqlIden($this->field1) . ' IS NULL AND ' . new SqlIden($this->field2_or_value).' IS NULL))' ;
+				return '('.new SqlIden($this->field1) .' IS NOT NULL AND '.new SqlIden($this->field1) . '=?)';
 
 			case self::OP_NOT_EQ:
 				if (is_null($this->field2_or_value))
-					return new SqlName($this->field1) . ' IS NOT NULL';
+					return new SqlIden($this->field1) . ' IS NOT NULL';
 				if ($this->field2_or_value instanceof XMetaField)
-					return 'NOT ('.new SqlName($this->field1) . '=' . new SqlName($this->field2_or_value).')';
-				return '(' . new SqlName($this->field1) . ' IS NULL OR NOT (' . new SqlName($this->field1) . '=?))';
+					return 'NOT ('.new SqlIden($this->field1) . '=' . new SqlIden($this->field2_or_value).')';
+				return '(' . new SqlIden($this->field1) . ' IS NULL OR NOT (' . new SqlIden($this->field1) . '=?))';
 
 			case self::OP_GT:
 				if ($this->field2_or_value instanceof XMetaField)
-					return new SqlName($this->field1) . '>' . new SqlName($this->field2_or_value);
-				return new SqlName($this->field1) . '>?';
+					return new SqlIden($this->field1) . '>' . new SqlIden($this->field2_or_value);
+				return new SqlIden($this->field1) . '>?';
 
 			case self::OP_GE:
 				if ($this->field2_or_value instanceof XMetaField)
-					return new SqlName($this->field1) . '>=' . new SqlName($this->field2_or_value);
-				return new SqlName($this->field1) . '>=?';
+					return new SqlIden($this->field1) . '>=' . new SqlIden($this->field2_or_value);
+				return new SqlIden($this->field1) . '>=?';
 
 			case self::OP_LT:
 				if ($this->field2_or_value instanceof XMetaField)
-					return new SqlName($this->field1) . '<' . new SqlName($this->field2_or_value);
-				return new SqlName($this->field1) . '<?';
+					return new SqlIden($this->field1) . '<' . new SqlIden($this->field2_or_value);
+				return new SqlIden($this->field1) . '<?';
 
 			case self::OP_LE:
 				if ($this->field2_or_value instanceof XMetaField)
-					return new SqlName($this->field1) . '<=' . new SqlName($this->field2_or_value);
-				return new SqlName($this->field1) . '<=?';
+					return new SqlIden($this->field1) . '<=' . new SqlIden($this->field2_or_value);
+				return new SqlIden($this->field1) . '<=?';
 
 			case self::OP_LIKE:
 				if ($this->field2_or_value instanceof XMetaField)
-					return new SqlName($this->field1) . ' LIKE ' . new SqlName($this->field2_or_value);
-				return new SqlName($this->field1) . ' LIKE ?';
+					return new SqlIden($this->field1) . ' LIKE ' . new SqlIden($this->field2_or_value);
+				return new SqlIden($this->field1) . ' LIKE ?';
 
 			case self::OP_NOT_LIKE:
 				if ($this->field2_or_value instanceof XMetaField)
-					return new SqlName($this->field1) . ' NOT LIKE ' . new SqlName($this->field2_or_value);
-				return new SqlName($this->field1) . ' NOT LIKE ?';
+					return new SqlIden($this->field1) . ' NOT LIKE ' . new SqlIden($this->field2_or_value);
+				return new SqlIden($this->field1) . ' NOT LIKE ?';
 
 			case self::OP_IN:
-				return new SqlName($this->field1) . ' IN '. new Sql($this->field2_or_value);
+				return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
 
 			case self::OP_NOT_IN:
-				return new SqlName($this->field1) . ' NOT IN '. new Sql($this->field2_or_value);
+				return new SqlIden($this->field1) . ' NOT IN '. new Sql($this->field2_or_value);
 
 		}
 		throw new InvalidArgumentException('Unsupported field comparison filter operator: ' . $this->op );

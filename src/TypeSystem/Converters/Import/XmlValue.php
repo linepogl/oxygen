@@ -2,6 +2,9 @@
 
 class XmlValue extends ImportConverter {
 
+	/** @return string|null */
+	public function GetInnerValue(){ return $this->value; }
+
 	private static function unescape($string){
 		return str_replace(
   		array('&amp;','&gt;','&lt;','&quot;'),

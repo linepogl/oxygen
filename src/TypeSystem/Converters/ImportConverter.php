@@ -9,6 +9,7 @@ abstract class ImportConverter {
 	public static function Make($value){ return new static($value); }
 
 
+
   /** @return ID|null         */ public final function AsID()             { return $this->CastTo(MetaID::Type()); }
   /** @return XDate|null      */ public final function AsDate()           { return $this->CastTo(MetaDate::Type()); }
 	/** @return XDate           */ public final function AsDateOrToday()    { return $this->CastTo(MetaDateOrToday::Type()); }

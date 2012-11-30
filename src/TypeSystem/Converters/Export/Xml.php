@@ -21,5 +21,3 @@ class Xml extends ExportConverter {
 }
 
 
-
-

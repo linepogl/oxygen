@@ -138,6 +138,11 @@
 		<fr>Non implémenté.</fr>
 		<el>Μη υλοποιημένο.</el>
 	</lemma>
+	<lemma name="MsgObjectNotFound">
+		<en>Object not found.</en>
+		<fr>L'objet n'était pas trouvé.</fr>
+		<el>Το αντικείμενο δεν βρέθηκε.</el>
+	</lemma>
 	<lemma name="MsgAccessDenied">
 		<en>Access denied.</en>
 		<fr>Accès refusé.</fr>
@@ -246,15 +251,27 @@
 		<el>Δεν είναι δυνατό να διαγραφεί ο τρέχον χρήστης.</el>
 	</lemma>
 
+	<lemma name="MsgObjectXNotFound">
+		<en>This object was not found: %s.</en>
+		<fr>Objet non trouvé : %s.</fr>
+		<el>Το αντικείμενο αυτό δεν βρέθηκε: [%s].</el>
+	</lemma>
+	<lemma name="MsgObjectXAlreadyExists">
+		<en>This object already exists: %s.</en>
+		<fr>Cet objet existe déjà : %s.</fr>
+		<el>Το αντικείμενο αυτό υπάρχει ήδη: %s.</el>
+	</lemma>
+
+
 	<lemma name="MsgXItemNotFound">
 		<en>This object was not found [%s %s].</en>
 		<fr>Objet non trouvé [%s %s].</fr>
 		<el>Το αντικείμενο αυτό δεν βρέθηκε: [%s %s].</el>
 	</lemma>
 	<lemma name="MsgXItemAlreadyExists">
-		<fr>Cet objet existe déjà: %s "%s".</fr>
-		<en>This object already exists: %s "%s".</en>
-		<el>Το αντικείμενο αυτό υπάρχει ήδη: %s "%s".</el>
+		<fr>Cet objet existe déjà: %s "%s.</fr>
+		<en>This object already exists: %s "%s.</en>
+		<el>Το αντικείμενο αυτό υπάρχει ήδη: %s "%s.</el>
 	</lemma>
 
 	<lemma name="MsgCancelling">

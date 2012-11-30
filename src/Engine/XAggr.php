@@ -72,21 +72,21 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			/** @var $selector XMetaField|XFuncField */
 			foreach ($this->selectors as $key=>$selector) {
 				if ($i++>0) $sql.=',';
-				$sql .= $selector->ToSql().' '.new SqlName('AGGR'.$key);
+				$sql .= $selector->ToSql().' '.new SqlIden('AGGR'.$key);
 			}
 		}
 		else {
 			/** @var $selector XMetaField|XFuncField */
 			$selector = $this->selectors;
-			$sql .= $selector->ToSql().' '.new SqlName('AGGR0');
+			$sql .= $selector->ToSql().' '.new SqlIden('AGGR0');
 		}
 
 		//
 		// FROM
 		//
-		$sql .= ' FROM '.new SqlName($this->meta->GetDBTableName()).' a';
+		$sql .= ' FROM '.new SqlIden($this->meta->GetDBTableName()).' a';
 		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent())
-			$sql .= ','.new SqlName($mm->GetDBTableName());
+			$sql .= ','.new SqlIden($mm->GetDBTableName());
 
 
 		//
@@ -95,7 +95,7 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$where = is_null($this->where) ? null : $this->where->ToSql();
 		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent()) {
 			if (!is_null($where)) $where .= ' AND ';
-			$where .= new SqlName($mm->GetDBTableName()).'.'.new SqlName($mm->id).'=a.'.new SqlName($this->meta->id);
+			$where .= new SqlIden($mm->GetDBTableName()).'.'.new SqlIden($mm->id).'=a.'.new SqlIden($this->meta->id);
 		}
 		if (!empty($where)) $sql .= ' WHERE '.$where;
 
@@ -109,11 +109,11 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			foreach ($this->groupers as $grouper){
 				if ($i++>0) $sql .= ',';
 				if ($grouper instanceof XMetaField)
-					$sql .= new SqlName($grouper);
+					$sql .= new SqlIden($grouper);
 				elseif ($grouper instanceof XFuncField)
 					$sql .= $grouper->ToSql();
 				else
-					$sql .= new SqlName('AGGR'.$grouper);
+					$sql .= new SqlIden('AGGR'.$grouper);
 
 			}
 		}

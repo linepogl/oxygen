@@ -27,7 +27,7 @@ class XMetaField extends XValue {
 	public function __toString(){
 		return strval($this->GetLabel());
 	}
-	public function ToSql(){ return new SqlName($this); }
+	public function ToSql(){ return new SqlIden($this); }
 
 	
 	private $db_alias = null;

@@ -135,7 +135,7 @@ Update name-value pairs into a table with or without a WHERE clause.
 <p class="code">
 // UPDATE `Books` SET `Title` = ? WHERE `id`=3
 // bind ['Alice in wonderland']
-Database::ExecuteUpdate('Books',new SqlName('id').'='.new Sql(new ID(3))
+Database::ExecuteUpdate('Books',new SqlIden('id').'='.new Sql(new ID(3))
 	,'Title', 'Alice in wonderland'
 	);
 
@@ -155,7 +155,7 @@ Update rows from a table with or without a WHERE clause.
 
 <p class="code">
 // DELETE FROM `Books` WHERE `id`=3
-Database::ExecuteDelete('Books',new SqlName('id').'='.new Sql(new ID(3)) );
+Database::ExecuteDelete('Books',new SqlIden('id').'='.new Sql(new ID(3)) );
 
 // DELETE FROM `Books`
 Database::ExecuteDeleteAll('Books');

@@ -10,7 +10,7 @@ class XOrderByField extends XOrderBy {
 	}
 
 	public function ToSql(){
-		return new SqlName($this->field) . ($this->desc ? ' DESC' : ' ASC');
+		return new SqlIden($this->field) . ($this->desc ? ' DESC' : ' ASC');
 	}
 
 

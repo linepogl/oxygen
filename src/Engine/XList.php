@@ -78,16 +78,16 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		// SELECT
 		//
 		$sql = $this->meta->id->IsDBAliasComplex()
-			? 'SELECT '.new SqlName($this->meta->id).' AS id'
-			: 'SELECT a.'.new SqlName($this->meta->id).' AS id'
+			? 'SELECT '.new SqlIden($this->meta->id).' AS id'
+			: 'SELECT a.'.new SqlIden($this->meta->id).' AS id'
 			;
 
 		if ($this->is_aggressive) {
 			for ($mm = $this->meta; !is_null($mm); $mm = $mm->GetParent()) {
 				/** @var $f XMetaField */
 				foreach ($mm->GetDBFields() as $f) {
-					$sql .= ',' . new SqlName($f);
-					if ($f->IsDBAliasComplex()) $sql .= ' AS '.new SqlName($f->GetName());
+					$sql .= ',' . new SqlIden($f);
+					if ($f->IsDBAliasComplex()) $sql .= ' AS '.new SqlIden($f->GetName());
 				}
 			}
 		}
@@ -95,9 +95,9 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		//
 		// FROM
 		//
-		$sql .= ' FROM '.new SqlName($this->meta->GetDBTableName()).' a';
+		$sql .= ' FROM '.new SqlIden($this->meta->GetDBTableName()).' a';
 		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent())
-			$sql .= ','.new SqlName($mm->GetDBTableName());
+			$sql .= ','.new SqlIden($mm->GetDBTableName());
 
 
 		//
@@ -106,7 +106,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$where = is_null($this->where) ? null : $this->where->ToSql();
 		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent()) {
 			if (!is_null($where)) $where .= ' AND ';
-			$where .= $mm->GetDBTableName().'.'.new SqlName($mm->id).'=a.'.new SqlName($this->meta->id);
+			$where .= $mm->GetDBTableName().'.'.new SqlIden($mm->id).'=a.'.new SqlIden($this->meta->id);
 		}
 		if (!empty($where)) $sql .= ' WHERE '.$where;
 
