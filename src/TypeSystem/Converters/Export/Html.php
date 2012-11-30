@@ -7,6 +7,9 @@ final class Html extends ExportConverter {
 		return $this->type->ExportHtmlString($this->value);
 	}
 
+	const DOCTYPE = '<!doctype html>';
+
+
 }
 
 

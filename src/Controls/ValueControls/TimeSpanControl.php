@@ -9,7 +9,7 @@ class TimeSpanControl extends ValueControl {
 	public function WithShowDays($value){ $this->show_days = $value; return $this; }
 
 	private $show_hours = true;
-	public function WithShowHours($value){ $this->show_days = $value; return $this; }
+	public function WithShowHours($value){ $this->show_hours = $value; return $this; }
 
 	private $show_minutes = true;
 	public function WithShowMinutes($value){ $this->show_minutes = $value; return $this; }

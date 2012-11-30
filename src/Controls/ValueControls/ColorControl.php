@@ -2,6 +2,12 @@
 
 class ColorControl extends ValueControl {
 
+	private $allow_null = false;
+	public function WithAllowNull($value){ $this->allow_null = $value; return $this; }
+
+	private $null_caption = '&empty;';
+	public function WithNullCaption($value){ $this->null_caption = $value; return $this; }
+
 	public function Render(){
 		if ($this->mode==UIMode::Edit){
 			echo new HiddenControl($this->name,$this->value);
