@@ -158,8 +158,6 @@ final class Language {
 	public static function FormatTimeSpan($value,$show_milliseconds = true,$invariant_decimal_separator = false){
 		if (is_int($value))
 			$value = new XTimeSpan($value);
-//		if ($value instanceof DateInterval)
-//			$value = new XTimeSpan($value);
     if ( $value instanceof XTimeSpan ){
     	$d = $value->GetDays();
     	$h = $value->GetHours();
@@ -168,28 +166,24 @@ final class Language {
 	    $ms = $value->GetMilliseconds();
 	    $r = '';
 
-	    if ($d != 0) $r .= $d.Lemma::Pick('d.');
-	    if ($r == '') { if ($h != 0) $r .= $h.Lemma::Pick('h.'); } else $r .= ' '.$h.Lemma::Pick('h.');
-			if ($r == '') { if ($m != 0) $r .= $m.'\''; } else $r .= ' '.$m.'\'';
-	    if ($show_milliseconds){
-				if ($s != 0 || $ms != 0){
-					if ($r != '') $r .= ' ';
-					$r .= $s;
-					if ($ms != 0) $r .= ($invariant_decimal_separator?self::GetDecimalSeparatorInvariant():self::GetDecimalSeparator()).sprintf('%03d',$ms);
-					$r .= '\'\'';
-				}
-	    }
-	    else {
-		    if ($s != 0 || $r == ''){
-			    if ($r != '') $r .= ' ';
-			    $r .= $s;
-			    $r .= '\'\'';
-		    }
+	    if ($d != 0) {
+		    $r .= $d.Lemma::Pick('d.');
 	    }
 
-	    if ($r == '') {
-		    $r = '0';
-		    if ($show_milliseconds) $r .= ($invariant_decimal_separator?self::GetDecimalSeparatorInvariant():self::GetDecimalSeparator()).'000';
+	    if ($h != 0) {
+		    if ($r !== '') $r .= ' ';
+		    $r .= $h.Lemma::Pick('h.');
+	    }
+
+	    if ($m != 0) {
+		    if ($r !== '') $r .= ' ';
+		    $r .= $m.'\'';
+	    }
+
+	    if ($s != 0 || ($ms != 0 && $show_milliseconds) || $r === '') {
+		    if ($r !== '') $r .= ' ';
+		    $r .= $s;
+		    if ($ms != 0 && $show_milliseconds) $r .= ($invariant_decimal_separator?self::GetDecimalSeparatorInvariant():self::GetDecimalSeparator()).sprintf('%03d',$ms);
 		    $r .= '\'\'';
 	    }
 

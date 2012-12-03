@@ -29,7 +29,6 @@ class XTimeSpan extends XValue implements Serializable {
 	public function GetTotalMilliSeconds(){ return $this->value; }
 	public function GetSign(){ return $this->value < 0 ? -1 : 1; }
 
-
 	public function GetJustWeeks(){ return intval($this->value/self::MILLISECONDS_IN_WEEK); }
 	public function GetJustDays(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_WEEK) / self::MILLISECONDS_IN_DAY); }
 	public function GetJustHours(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_DAY) / self::MILLISECONDS_IN_HOUR); }
@@ -37,7 +36,7 @@ class XTimeSpan extends XValue implements Serializable {
 	public function GetJustSeconds(){ return $this->GetSign() * intval((abs($this->value) % self::MILLISECONDS_IN_MINUTE) / self::MILLISECONDS_IN_SECOND); }
 	public function GetJustMilliseconds(){ return $this->GetSign() * (abs($this->value) % self::MILLISECONDS_IN_SECOND); }
 
-	public function GetDecimalWeeks(){ return $this->value / self::MILLISECONDS_IN_DAY; }
+	public function GetDecimalWeeks(){ return $this->value / self::MILLISECONDS_IN_WEEK; }
 	public function GetDecimalDays(){ return $this->value / self::MILLISECONDS_IN_DAY; }
 	public function GetDecimalHours(){ return $this->value / self::MILLISECONDS_IN_HOUR; }
 	public function GetDecimalMinutes(){ return $this->value / self::MILLISECONDS_IN_MINUTE; }
@@ -66,16 +65,36 @@ class XTimeSpan extends XValue implements Serializable {
 	* @param string $value W3C duration format
 	* @return XTimeSpan
 	*/
+	private static $W3C_DURATION_REGEXP = '/^(-?)P(([0-9]+)D)?(T(([0-9]+)H)?(([0-9]+)M)?(([0-9]+\.?[0-9]*?)S)?)?$/';
 	public static function Parse($value){
-		$x = new DateInterval($value);
-		return self::Make(
-			intval($x->format('%a')),
-			intval($x->format('%h')),
-			intval($x->format('%i')),
-			intval($x->format('%s')),
-			(floatval($x->format('%s'))*1000) % 1000,
-			$x->format('%r')=='-' ? -1 : 1
-			);
+		preg_match_all(self::$W3C_DURATION_REGEXP,$value,$matches,PREG_SET_ORDER);
+		if (empty($matches)) throw new Exception('Invalid timespan.');
+		$count = count($matches[0]);
+		$milliseconds = 0;
+		$seconds = 0;
+		$minutes = 0;
+		$hours = 0;
+		$days = 0;
+		$sign = 1;
+		if ($count>1) {
+			$sign = $matches[0][1]==='-' ? -1 : 1;
+			if ($count>3) {
+				$days = intval($matches[0][3]);
+				if ($count>6) {
+					$hours = intval($matches[0][6]);
+					if ($count>8) {
+						$minutes = intval($matches[0][8]);
+						if ($count>10) {
+							$seconds = intval($matches[0][10]);
+							if ($count>12) {
+								$milliseconds = intval($matches[0][12]);
+							}
+						}
+					}
+				}
+			}
+		}
+		return XTimeSpan::Make($days,$hours,$minutes,$seconds,$milliseconds,$sign);
 	}
 
 	/**

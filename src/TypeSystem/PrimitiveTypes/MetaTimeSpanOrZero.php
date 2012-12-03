@@ -145,7 +145,8 @@ class MetaTimeSpanOrZero extends XConcreteType {
 	 */
 	public static function ImportDomValue($value) {
 		if (is_null($value)) return self::GetDefaultValue();
-		return new XTimeSpan(intval($value));
+		if ($value === '') return new XTimeSpan(0);
+		return XTimeSpan::Parse($value);
 	}
 
 	/**
