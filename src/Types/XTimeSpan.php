@@ -84,19 +84,17 @@ class XTimeSpan extends XValue implements Serializable {
 	public function AsString(){
 		$r = '';
 		if ($this->GetSign() < 0) $r .= '-';
-		$r .= 'P';
-//		$x = $this->GetDays(); if ($x > 0) $r .= $x . 'D';
-		$r1 = '';
-		$x = $this->GetTotalHours(); if ($x >= 0) $r1 .= $x . 'H';
-		$x = $this->GetMinutes(); if ($x >= 0) $r1 .= $x . 'M';
+		$r .= 'PT';
+		$x = $this->GetTotalHours(); if ($x > 0) $r .= $x . 'H';
+		$x = $this->GetMinutes(); if ($x > 0) $r .= $x . 'M';
 		$x = $this->GetSeconds();
 		$x1 = $this->GetMilliseconds();
-		if ($x >= 0) {
-			$r1 .= $x;
-			if ($x1>=0) $r1 .= '.'.sprintf('%03d',$x1);
-			$r1 .= 'S';
+		if ($x > 0 || $x1 > 0) {
+			$r .= $x;
+			if ($x1>0) $r .= '.'.sprintf('%03d',$x1);
+			$r .= 'S';
 		}
-		if ($r1 != '') $r .= 'T' . $r1;
+		if ($r == 'PT') $r .= '0S';
 		return $r;
 	}
 

@@ -945,6 +945,12 @@ class Oxygen {
 	// Serve file
 	//
 	//
+	public static function ServeData( $data , $save_as , $mime = null , $requires_caching = true ){
+		$filename = Oxygen::GetTempFolder(true).Oxygen::HashRandom32().'.dat';
+		file_put_contents($filename,$data);
+		Oxygen::ServeFile($filename,$save_as,$mime,$requires_caching);
+		try {unlink($filename);} catch(Exception $ex){}
+	}
 	public static function ServeFile( $filename , $save_as = null , $mime = null , $requires_caching = true ){
 		if (!is_readable($filename)) throw new Exception('File not found: '. $filename);
 		try {

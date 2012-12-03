@@ -155,6 +155,7 @@ class Fs {
 			case 'wmv': return 'video/x-ms-wmv';
 			case 'wmx': return 'video/x-ms-wmx';
 			case 'xml': return 'text/xml';
+			case 'xsd': return 'text/xml';
 			case 'xsl': return 'text/xsl';
 			case 'doc': return 'application/msword';
 			case 'rtf': return 'application/msword';

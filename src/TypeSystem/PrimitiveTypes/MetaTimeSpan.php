@@ -152,7 +152,7 @@ class MetaTimeSpan extends XNullableType {
 	public static function ImportDomValue($value) {
 		if (is_null($value)) return null;
 		if ($value === '') return null;
-		return new XTimeSpan(intval($value));
+		return XTimeSpan::Parse($value);
 	}
 
 	/**
