@@ -136,7 +136,9 @@ class DateControl extends ValueControl {
 			echo "b=d==null;";
 			echo "s+='<tr><td colspan=\"7\" align=\"center\" class=\"'+(b?'selectedday':'weekend')+'\">';";
 			echo "s+='<a href=\"javascript:".$this->name."SetDate(null);\">';";
-			echo "s+=".new Js($this->null_caption).";";
+			$null_caption = trim($this->null_caption);
+			if ($null_caption=='') $null_caption = '&empty;';
+			echo "s+=".new Js($null_caption).";";
 			echo "s+='</a>';";
 			echo "s+='</td></tr>';";
 		}

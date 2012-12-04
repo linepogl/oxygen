@@ -74,6 +74,9 @@ table.report .selected td { background:#fafaea; }
 .calendar .monthx a:hover { background:#f0f0f0; text-decoration:none; padding:2px;}
 .calendar .day, .calendar .month { text-align:center; color:#000000; padding:2px; background:#cccccc; }
 
+.colorbox-popup a.null       { display:block; padding:3px 0 2px 0; margin:0; text-align:center; text-decoration:none; background:#ffffff; color:#444444; font:normal 10px/12px Trebuchet MS, sans-serif; }
+.colorbox-popup a.null:hover { background:#f0f0f0; color:#000000; text-decoration:none; }
+
 
 table.tab_buttons td { border-bottom:1px solid #cccccc; padding:0 3px; }
 table.tab_buttons td.tab_button { padding:0; border-bottom-width:0; }
