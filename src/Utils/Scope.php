@@ -97,7 +97,10 @@ abstract class Scope implements ArrayAccess,IteratorAggregate {
 		while (!is_null($next_offset)) {
 			$curr_offset = $next_offset;
 			$next_offset = $this->SimpleOffsetGet( $curr_offset . ':next' );
-			if ($curr_offset === $next_offset) throw new Exception('Linked list error.');
+			if ($curr_offset === $next_offset) {
+				$next_offset = null; // it's better to lose the remaining info (which is lost anyway) than raise an exception here...
+				//throw new Exception('Linked list error.');
+			}
 		}
 		if (is_null($curr_offset)) {
 			$this->SimpleOffsetSet( ':head' , $offset );

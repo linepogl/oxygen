@@ -22,7 +22,7 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 		else {
 			if ($m->GetSeverity() >= $this->dominant->GetSeverity())
 				$this->dominant = $m;
-			if (!empty($this->value)) $this->value .= "\\n";
+			if (!empty($this->value)) $this->value .= "\n";
 			$this->value .= $m->AsString();
 			$this->messages[] = $m;
 			if (is_callable($this->on_add)) {  $f = $this->on_add; $f($m); }
