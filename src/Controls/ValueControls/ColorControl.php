@@ -28,8 +28,14 @@ class ColorControl extends ValueControl {
 			echo " ,GetColor : function(r,g,b){return '#'+this.Hex(r)+this.Hex(g)+this.Hex(b);}";
 			echo " ,SetColor : function(c){";
 			echo "    if (c==null || c=='') {";
-			echo "      $('".$this->name."').value='';";
-			echo "      jQuery('#".$this->name."box').css({'background':'#ffffff','border-width':'0','padding':'1px'});";
+			if ($this->allow_null) {
+				echo "      $('".$this->name."').value='';";
+				echo "      jQuery('#".$this->name."box').css({'background':'#ffffff','border-width':'0','padding':'1px'});";
+			}
+			else {
+				echo "      $('".$this->name."').value='#ffffff';";
+				echo "      jQuery('#".$this->name."box').css({'background':'#ffffff','border-width':'1px','padding':'0'});";
+			}
 			echo "    }";
 			echo "    else {";
 			echo "      $('".$this->name."').value=c;";

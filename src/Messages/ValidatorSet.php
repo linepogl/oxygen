@@ -11,6 +11,8 @@ class ValidatorSet {
 		return $this->validators[$name];
 	}
 
+	public function GetValidators(){ return $this->validators; }
+
 	public function HasPassed(){
 		foreach ($this->validators as $v)
 			if (!$v->HasPassed())
