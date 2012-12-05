@@ -122,6 +122,8 @@
 	<lemma name="ChangeProfile"><en>Change profile</en><fr>Profil</fr><el>Αλλαγή προφίλ</el></lemma>
 	<lemma name="ModifyProfile"><en>Modify profile</en><fr>Modifier profil</fr><el>Αλλαγή προφίλ</el></lemma>
 
+	<lemma name="Error"><en>Error</en><fr>Erreur</fr><el>Σφάλμα</el></lemma>
+
 	<lemma name="ActionLogin"><en>Login</en><fr>Connexion</fr></lemma>
 	<lemma name="ActionLogoff"><en>Logoff</en><fr>Déconnexion</fr></lemma>
 	<lemma name="ActionChangePassword"><en>Change password</en><fr>Mot de passe</fr><el>Αλλαγή κωδικού</el></lemma>

@@ -28,7 +28,7 @@ class MessageControl extends Control {
 			}
 			echo '>';
 			echo $m->AsString();
-			echo '</div>';
+			echo '&nbsp;</div>';
 		}
 		if ($this->show_border) echo '</div>';
 

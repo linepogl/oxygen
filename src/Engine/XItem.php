@@ -606,8 +606,6 @@ abstract class XItem extends XValue implements Serializable {
 	/** @return static|XItem|null */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
 	/** @return XItem|null */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
 
-	/** @return static|XItem */ public static final function Pick404($id,DBReader $dr=null){ $r = static::Meta()->PickItem($id,$dr); if (is_null($r)) throw new NotFound404Exception(Lemma::Pick('MsgObjectXNotFound')->Sprintf(static::GetClassTitle().' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
-	/** @return XItem */ public static final function Pick404FindGeneric($classname,$id,DBReader $dr=null){ $r = XMeta::Of($classname)->PickItem($id,$dr);  if (is_null($r)) throw new NotFound404Exception(Lemma::Pick('MsgObjectXNotFound')->Sprintf(self::GetClassTitleGeneric($classname).' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
 
 
 	/** @return ID */ public static function GetNextPermID(){ return static::Meta()->GetNextPermID(); }
