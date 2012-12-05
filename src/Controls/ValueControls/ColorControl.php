@@ -14,7 +14,17 @@ class ColorControl extends ValueControl {
 			echo '<a id="'.$this->name.'angor" class="formPane" href="javascript:'.$this->name.'.TogglePalette();" style="padding:2px 0 4px 2px;">';
 		}
 
-		echo '<span id="'.$this->name.'box" style="border:1px solid #666666;border-radius:2px;">';
+		if (empty($this->value)) {
+			if ($this->allow_null)
+				$style = 'background:#ffffff;border:0 solid #666666;padding:1px';
+			else
+				$style = 'background:#ffffff;border:1px solid #666666;padding:0';
+		}
+		else
+			$style = 'background:'.$this->value.';border:1px solid #666666;padding:0';
+
+
+		echo '<span id="'.$this->name.'box" style="border-radius:2px;'.$style.'">';
 		echo new Spacer(26,16);
 		echo '</span>';
 		if ($this->mode==UIMode::Edit){
@@ -41,7 +51,7 @@ class ColorControl extends ValueControl {
 			echo "      $('".$this->name."').value=c;";
 			echo "      jQuery('#".$this->name."box').css({'background':c,'border-width':'1px','padding':'0'});";
 			echo "    }";
-			echo "    $('".$this->name."palette').hide();";
+			echo "    jQuery('#".$this->name."palette').hide();";
 			echo "  }";
 			echo " ,TogglePalette : function(){";
 			echo "    var p = $('".$this->name."palette');";

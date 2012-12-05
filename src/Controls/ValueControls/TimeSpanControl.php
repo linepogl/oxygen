@@ -21,16 +21,17 @@ class TimeSpanControl extends ValueControl {
 	public function WithReadonly($value){ $this->readonly = $value; return $this; }
 
 	public function Render(){
-//		if ($this->mode != UIMode::Edit && is_null($this->value)){
-//			return;
-//		}
-
 
 		$v = $this->value;
 		if (is_null($v)) {
 			if (!$this->allow_null){
 				$v = new XTimeSpan();
 			}
+		}
+
+		if ($this->mode != UIMode::Edit){
+			echo Language::FormatTimeSpan($this->value);
+			return;
 		}
 
 		echo new HiddenControl($this->name,$v);
