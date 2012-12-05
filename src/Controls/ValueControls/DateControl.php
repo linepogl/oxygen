@@ -16,7 +16,10 @@ class DateControl extends ValueControl {
 
 	public function Render(){
 		if ($this->mode != UIMode::Edit){
-			echo Language::FormatDate($this->value);
+			if (empty($this->value) && $this->allow_null)
+				echo $this->null_caption;
+			else
+				echo Language::FormatDate($this->value);
 			return;
 		}
 
