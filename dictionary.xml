@@ -140,6 +140,11 @@
 		<fr>Non implémenté.</fr>
 		<el>Μη υλοποιημένο.</el>
 	</lemma>
+	<lemma name="MsgPageNotFound">
+		<en>Page not found.</en>
+		<fr>La page n'était pas trouvée.</fr>
+		<el>Η σελίδα δεν βρέθηκε.</el>
+	</lemma>
 	<lemma name="MsgObjectNotFound">
 		<en>Object not found.</en>
 		<fr>L'objet n'était pas trouvé.</fr>

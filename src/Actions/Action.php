@@ -148,6 +148,47 @@ abstract class Action extends XValue {
 				}
 			}
 		}
+		catch (PageNotFoundException $ex){
+			$this->content_compromised = true;
+			if (ob_get_level()>0) ob_clean();
+
+			if ($this->IsModeRaw()){
+				Oxygen::SetResponseCode(404); // not allowed
+				Oxygen::SetContentType('text/plain');
+				Oxygen::ResetHttpHeaders();
+				$msg = $ex->getMessage();
+				echo empty($msg) ? Lemma::Pick('MsgPageNotFound') : $ex->getMessage();
+			}
+			else {
+				Oxygen::SetContentType('text/html');
+				Oxygen::ResetHttpHeaders();
+				if (Debug::IsImmediateFlushingEnabled()) {
+					Debug::Write($ex->getMessage());
+				}
+				elseif ($this->IsAjaxDialog()){
+					echo new MessageControl($ex);
+					echo '<div class="buttons1"><div class="buttons3"><div class="buttons2">';
+					echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+					echo '</div></div></div>';
+				}
+				else {
+					echo '<table class="center"><tr><td>';
+					echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
+					echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+					echo '<td style="padding:15px;text-align:right;"><img src="oxy/ico/Warning32.gif" /></td>';
+					echo '<td style="padding:15px;">'.new Spacer(1,150).'</td>';
+					echo '<td style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
+					echo new Spacer(350);
+					echo new MessageControl($ex);
+					echo new Spacer(350);
+					//echo '<br/><br/><br/>' . ButtonControl::Make()->WithValue(Lemma::Pick('Back'))->WithOnClick('history.back();');
+					echo '</td>';
+					echo '</tr></table>';
+					echo '</td></tr></table>';
+					echo '</td></tr></table>';
+				}
+			}
+		}
 		catch (ApplicationException $ex){
 			$this->content_compromised = true;
 			if (ob_get_level()>0) ob_clean();

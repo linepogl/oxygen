@@ -113,9 +113,12 @@ class Oxygen {
 			new ReflectionClass($classname); // <-- this will throw a mere exception if the class is not found, which will prevent a nasty FATAL php error in the next line.
 			self::$action = $classname::Make();
 		}
+		catch (ApplicationException $ex){
+			self::$action = new ActionOxygenThrowException($ex);
+		}
 		catch (Exception $ex){
-			Debug::RecordExceptionConverted($ex);
-			self::$action = new ActionException($ex);
+			Debug::RecordExceptionConverted($ex,'Action Initialisation Exception Handler');
+			self::$action = new ActionOxygenThrowException(new PageNotFoundException(Lemma::Pick('MsgPageNotFound'),0,$ex));
 		}
 
 		self::$action->WithMode(self::$actionmode);
@@ -160,6 +163,10 @@ class Oxygen {
 					Oxygen::SetResponseCode(403); // forbidden
 					$served_as = 'HTTP 403';
 				}
+				elseif ($ex instanceof PageNotFoundException) {
+					Oxygen::SetResponseCode(404); // not found
+					$served_as = 'HTTP 404';
+				}
 				elseif ($ex instanceof ApplicationException) {
 					Oxygen::SetResponseCode(405); // not allowed
 					$served_as = 'HTTP 405';
@@ -172,6 +179,10 @@ class Oxygen {
 				if ($ex instanceof SecurityException) {
 					$msg = $ex->getMessage();
 					echo empty($msg) ? Lemma::Pick('MsgAccessDenied') : $ex->getMessage();
+				}
+				if ($ex instanceof PageNotFoundException) {
+					$msg = $ex->getMessage();
+					echo empty($msg) ? Lemma::Pick('MsgPageNotFound') : $ex->getMessage();
 				}
 				elseif ($ex instanceof ApplicationException)
 					echo $ex->getMessage();
