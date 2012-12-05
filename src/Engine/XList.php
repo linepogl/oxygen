@@ -409,6 +409,11 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		return null;
 	}
 
+	/** @return XList */
+	public function Copy(){
+		return clone $this;
+	}
+
 	public function Merge($traversable){
 		$this->Evaluate();
 		foreach ($traversable as $x)
