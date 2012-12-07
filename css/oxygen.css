@@ -1,3 +1,8 @@
+/*
+ *
+ * Reset
+ *
+ */
 html, body, div, table, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, tbody, tfoot, thead, tr, article, aside, figure, footer, header, hgroup, nav, section, b,i,u,s,* {
 	font-weight:inherit;
 	font-style:inherit;
@@ -17,21 +22,135 @@ th, td {
 	padding:0;
 	border:0;
 }
-
 article, aside, figure, footer, header, hgroup, nav, section { display:block; }
 body { background:#ffffff; }
 blockquote:before, blockquote:after, q:before, q:after { content:""; }
 blockquote, q { quotes:"" ""; }
 *:focus { outline:0; -moz-outline:0; }
-
 abbr { text-decoration:dotted; }
-
 a img { border:0; }
 img { vertical-align:middle; }
 a { outline-style:none; }
-
 th { text-align:center; }
 hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
+
+
+
+
+
+/*
+ *
+ * Common helpers
+ *
+ */
+.expand              { width:100%;            }
+.contract            { width:1px;             }
+.nowrap              { white-space:nowrap;    }
+.vtop                { vertical-align:top;    }
+.vbottom             { vertical-align:bottom; }
+.vmiddle             { vertical-align:middle; }
+.hright              { text-align:right!important;   }
+.hleft               { text-align:left!important;    }
+.hjustify            { text-align:justify!important; }
+.hcenter             { text-align:center!important;  }
+.inline              { display:inline;        }
+.block               { display:block;         }
+.center              { margin:auto;   }
+.code                { font-family:Courier New,monospace; white-space:pre; }
+.notext              { font-size:1px;line-height:1px; }
+.fright              { float:right;   }
+.fleft               { float:left;    }
+.fclear              { clear:both!important;    }
+.nounderline         { text-decoration:none; }
+.nounderline:hover   { text-decoration:none; }
+*:hover .nounderline { text-decoration:none; }
+
+
+
+
+
+/*
+ *
+ * Print
+ *
+ */
+.noprint       { }
+.printonly     { display:none;  }
+.overflow      { overflow:auto; }
+@media print {
+	*            { overflow:visible; }
+	body         { background:#ffffff; }
+	.noprint     { display:none; }
+	.printonly   { display:block; }
+	.overflow    { overflow:visible; }
+}
+
+
+
+
+
+/*
+ *
+ * Oxygen Controls
+ *
+ */
+
+.oxygen-input-box                { vertical-align:baseline; border-radius:4px; border:1px solid #999999; color:#666699; font:normal 12px/14px Trebuchet MS, sans-serif; padding:4px; background-color:#ffffff; }
+.oxygen-input-box:focus          { color:#444477; background-color:#fcfcfc; border-color:#666666; }
+
+.oxygen-input-box-readonly       { color:#999999!important; background-color:#fbfbfb!important; border-color:#999999!important; }
+.oxygen-input-box-readonly:focus { color:#777777!important; background-color:#fafafa!important; border-color:#777777!important; }
+
+.oxygen-input-box-dropdown a                 { text-decoration:none!important; color:#333333!important; }
+.oxygen-input-box-dropdown a:hover           { text-decoration:none!important; color:#000000!important; }
+
+.oxygen-input-box-anchor       { background-image:url('../img/input-box-anchor.gif'); background-repeat:no-repeat; background-position:100% 50%; }
+.oxygen-input-box-anchor:focus { background-image:url('../img/input-box-anchor-focus.gif'); }
+
+.oxygen-input-box-dropdown           { position:absolute; display:block; z-index:1000; border-radius:5px; border:1px solid #b3b3b3; background-color:#ffffff; font:normal 12px/14px Helvetica,Arial,sans-serif; margin-top:28px; }
+.oxygen-input-box-dropdown-hook      { height:10px; background:url('../img/input-box-dropdown-hook.gif') 50% 0 no-repeat; margin-top:-10px; }
+.oxygen-input-box-dropdown-header    { height:16px; background:url('../img/input-box-dropdown-header-bg.gif') 0 0 repeat-x; border-bottom:1px solid #c5c0cf; border-radius:5px 5px 0 0; padding:8px 12px; font:normal 13px/18px Helvetica,Arial,sans-serif!important; text-transform:uppercase; text-decoration:none; text-align:center; color:#666666; }
+.oxygen-input-box-dropdown-footer    { height:16px; background:url('../img/input-box-dropdown-footer-bg.gif') 0 0 repeat-x; border-top:1px solid #dddddd; border-radius:0 0 5px 5px; padding:7px 12px; }
+.oxygen-input-box-dropdown-body      { padding:10px; }
+
+.oxygen-input-box-dropdown-header a.button       { float:left; display:block; color:#a8a5ad!important; cursor:pointer; border:1px solid #b0b0b0; border-radius:10px; background:#ffffff; text-decoration:none; }
+.oxygen-input-box-dropdown-header a.button:hover { color:#666666!important; border-color:#777777; background:#f4f4f4; text-decoration:none; }
+.oxygen-input-box-dropdown-footer a.button       { float:left; display:block; color:#777777!important; cursor:pointer; border:1px solid #b0b0b0; border-radius:3px; background:#ffffff; font:normal 10px/15px Trebuchet MS, sans-serif!important; text-transform:uppercase; text-decoration:none; height:15px; padding:0 6px; margin-right:3px; }
+.oxygen-input-box-dropdown-footer a.button:hover { color:#666666!important; border-color:#777777; background:#f4f4f4; text-decoration:none; }
+
+.oxygen-input-box-dropdown-header a.button-prev  { float:left; color:#a8a5ad!important; width:15px; height:15px; text-align:center; font:bold 16px/16px Helvetica,Arial,sans-serif!important; }
+.oxygen-input-box-dropdown-header a.button-next  { float:right;color:#a8a5ad!important; width:15px; height:15px; text-align:center; font:bold 16px/16px Helvetica,Arial,sans-serif!important; }
+.oxygen-input-box-dropdown-footer a.button-prev  { float:right;color:#a8a5ad!important; height:15px; text-align:center; font:bold 16px/16px Helvetica,Arial,sans-serif!important; padding:0 4px 0 4px; border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; margin:0; }
+.oxygen-input-box-dropdown-footer a.button-next  { float:right;color:#a8a5ad!important; height:15px; text-align:center; font:bold 16px/16px Helvetica,Arial,sans-serif!important; padding:0 3px 0 5px; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
+.oxygen-input-box-dropdown-footer a.button-next:hover  { border-left:1px dotted #aaaaaa; }
+
+
+.oxygen-input-box-date                            { width:7em; text-align:left; }
+.oxygen-input-box-date-anchor                     { background-image:url('../img/input-box-date-anchor.gif'); background-repeat:no-repeat; background-position:100% 50%; }
+.oxygen-input-box-date-anchor:focus               { background-image:url('../img/input-box-date-anchor-focus.gif'); }
+.oxygen-input-box-date-dropdown                   { width:240px; }
+.oxygen-input-box-date-dropdown td                { margin:0!important; padding:0!important; border:0!important; }
+.oxygen-input-box-date-dropdown th                { margin:0!important; padding:0!important; border:0!important; }
+.oxygen-input-box-date-dropdown th.day            { font:bold 10px/10px Helvetica,Arial,sans-serif!important; padding-top:5px!important; padding-bottom:5px!important; color:#bbbbbb!important; text-transform:uppercase!important; text-align:center!important; }
+.oxygen-input-box-date-dropdown td.empty          { }
+.oxygen-input-box-date-dropdown td.day            { font:bold 11px/11px Helvetica,Arial,sans-serif!important; width:100px; }
+.oxygen-input-box-date-dropdown td.day a          { display:block; padding:9px 0 9px 0!important; text-align:center!important; margin:1px!important; font-weight:bold!important; border-radius:3px!important; color:#777777!important; }
+.oxygen-input-box-date-dropdown td.past a         { color:#aaaaaa!important;}
+.oxygen-input-box-date-dropdown td.weekend a      { background:#fcfcfc!important;}
+.oxygen-input-box-date-dropdown td.day a:hover    { background:#f8f8f8!important; color:#000000!important; }
+.oxygen-input-box-date-dropdown td.selected a     { background:#eeeeee!important; }
+
+
+.oxygen-input-box-color                           { width:2.5em; text-align:left; }
+.oxygen-input-box-color-dropdown                  { width:350px; }
+.oxygen-input-box-color-dropdown td               { margin:0!important; padding:0!important; border:0!important; }
+.oxygen-input-box-color-dropdown th               { margin:0!important; padding:0!important; border:0!important; }
+.oxygen-input-box-color-dropdown td.color         { line-height:1px!important; width:100px; }
+.oxygen-input-box-color-dropdown td.color a       { display:block; width:12px; height:12px; border-radius:3px; margin:3px; }
+.oxygen-input-box-color-dropdown td.color a:hover { border:2px solid #000000; margin:1px; }
+
+
+
 
 .formPane   { vertical-align:baseline; }
 .formButton { vertical-align:baseline; }
@@ -121,43 +240,3 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .checkbox-readonly-unchecked        { background-image:url(../img/checkbox-readonly-unchecked.gif       ); }
 .checkbox-readonly-dirty-checked    { background-image:url(../img/checkbox-readonly-dirty-checked.gif   ); }
 .checkbox-readonly-dirty-unchecked  { background-image:url(../img/checkbox-readonly-dirty-unchecked.gif ); }
-
-.expand   { width:100%;            }
-.contract { width:1px;             }
-.nowrap   { white-space:nowrap;    }
-.vtop     { vertical-align:top;    }
-.vbottom  { vertical-align:bottom; }
-.vmiddle  { vertical-align:middle; }
-.hright   { text-align:right!important;   }
-.hleft    { text-align:left!important;    }
-.hjustify { text-align:justify!important; }
-.hcenter  { text-align:center!important;  }
-.inline   { display:inline;        }
-.block    { display:block;         }
-.center   { margin:auto;   }
-.code     { font-family:Courier New,monospace; white-space:pre; }
-.notext   { font-size:1px;line-height:1px; }
-.fright   { float:right;   }
-.fleft    { float:left;    }
-.fclear   { clear:both!important;    }
-
-.nounderline { text-decoration:none; }
-.nounderline:hover { text-decoration:none; }
-*:hover .nounderline { text-decoration:none; }
-
-
-/*
- *
- * Print
- *
- */
-.noprint       { }
-.printonly     { display:none;  }
-.overflow      { overflow:auto; }
-@media print {
-	*            { overflow:visible; }
-	body         { background:#ffffff; }
-	.noprint     { display:none; }
-	.printonly   { display:block; }
-	.overflow    { overflow:visible; }
-}

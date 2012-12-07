@@ -27,9 +27,9 @@ class DateControl extends ValueControl {
 
 		echo '<span class="nowrap';
 		if ($this->is_readonly)
-			echo ' formLocked"';
+			echo ' formLocked';
 		else
-			echo ' formPane"';
+			echo ' formPane';
 		echo '">';
 		echo '<input type="text" id="'.$this->name.'box" value="'.(is_null($this->value)?$this->null_caption:$this->value->GetDay().'/'.$this->value->GetMonth().'/'.$this->value->GetYear());
 		if ($this->is_readonly)
@@ -44,7 +44,6 @@ class DateControl extends ValueControl {
 		}
 		echo '</span>';
 
-//		echo '<div class="calendar" id="'.$this->name.'calendar" style="position:absolute;display:none;z-index:1000;"></div>';
 
 		echo Js::BEGIN;
 		echo "var ".$this->name."_date=".new Js($this->value).";";
@@ -52,6 +51,7 @@ class DateControl extends ValueControl {
 		echo $this->name."ToggleCalendar = function(){";
 		echo "var p = $('".$this->name."calendar');";
 		echo "if (p == null) $(document.body).insert(". new Js('<div class="calendar" id="'.$this->name.'calendar" style="position:absolute;display:none;z-index:1000;"></div>').');';
+		echo "if (p == null) $(document.body).insert(". new Js('<div class="fog" id="'.$this->name.'calendar" style="position:absolute;display:none;z-index:1000;"></div>').');';
 		echo "var p = $('".$this->name."calendar');";
 		echo "if (p.style.display!='none')";
 		echo   "$('".$this->name."calendar').hide();";
