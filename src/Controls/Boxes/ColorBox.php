@@ -20,22 +20,22 @@ class ColorBox extends Box {
 		}
 
 		echo '<span';
-		echo ' class="oxygen-input-box oxygen-input-box-color'.($this->readonly?' oxygen-input-box-readonly oxygen-input-box-color-readonly':'').'"';
+		echo ' class="formPane formColor '.($this->readonly?' formLocked':'').'"';
 		echo ' style="padding:0;border:0;position:relative;"';
 		echo '>';
 
 		if (!$this->readonly){
 			echo new HiddenControl($this->name,$this->value);
-			echo '<div id="'.$this->name.'-dropdown" class="oxygen-input-box-dropdown oxygen-input-box-color-dropdown" style="display:none;">';
-			echo '<div class="oxygen-input-box-dropdown-hook"></div>';
-			echo '<div class="oxygen-input-box-dropdown-header">';
-			echo '<div id="'.$this->name.'-dropdown-header"></div>';
-			echo '</div>';
-			echo '<div class="oxygen-input-box-dropdown-body">';
+			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formColorDropDown" style="display:none;">';
+			echo '<div class="formDropDownHook"></div>';
+//			echo '<div class="formDropDownHead">';
+//			echo '<div id="'.$this->name.'-dropdown-header"></div>';
+//			echo '</div>';
+			echo '<div class="formDropDownBody">';
 			echo '<div id="'.$this->name.'-dropdown-body"></div>';
 			echo '</div>';
 			if ($this->allow_null){
-				echo '<div class="oxygen-input-box-dropdown-footer">';
+				echo '<div class="formDropDownFoot">';
 				$null_caption = trim($this->null_caption);
 				echo '<a class="fleft button" href="javascript:'.$this->name.'.SetColor(null);">'.($null_caption===''?'&empty;':new Html($null_caption)).'</a>';
 				echo '</div>';
@@ -44,8 +44,10 @@ class ColorBox extends Box {
 		}
 
 
+        echo '<span id="'.$this->name.'-anchor" class="formPaneAnchor formColorAnchor">&nbsp;</span>';
+
 		echo '<input id="'.$this->name.'-box"';
-		echo ' class="oxygen-input-box oxygen-input-box-color '.($this->readonly?' oxygen-input-box-readonly oxygen-input-box-color-readonly':' oxygen-input-box-anchor').' oxygen-input-box-color-anchor"';
+		echo ' class="formPane formColor'.($this->readonly?' formLocked':'').'"';
 		echo ' style="margin:0;"';
 		echo ' readonly="readonly"';
 		echo '/>';
@@ -55,6 +57,7 @@ class ColorBox extends Box {
 		if (!$this->readonly){
 			echo Js::BEGIN;
 			echo "jQuery('#$this->name-box').click(function(){ $this->name.ShowDropDown(); });";
+			echo "jQuery('#$this->name-anchor').click(function(){ $this->name.ShowDropDown(); });";
 			echo "jQuery('#$this->name-box-value').click(function(){ $this->name.ShowDropDown(); });";
 			echo "window.".$this->name." = {";
 			echo "  IntToHex : function(d){return (d<0x10?'0':'')+d.toString(16).toUpperCase();}";

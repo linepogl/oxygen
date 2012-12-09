@@ -9,8 +9,8 @@ class DateBox extends Box {
 	public function WithNullCaption($value){ $this->null_caption = $value; return $this; }
 
 	public function Render(){
-		if (!($this->value instanceof XDateTime) && !$this->allow_null) {
-			$this->value = XDate::Today();
+        if (!($this->value instanceof XDateTime)) {
+            $this->value = $this->allow_null ? null : XDate::Today();
 		}
 
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
@@ -21,37 +21,40 @@ class DateBox extends Box {
 		$caption = $this->value instanceof XDateTime ? $this->value->GetDay().'/'.$this->value->GetMonth().'/'.$this->value->GetYear() : ( $this->allow_null ? $this->null_caption : '' );
 
 		echo '<span';
-		echo ' class="oxygen-input-box oxygen-input-box-date'.($this->readonly?' oxygen-input-box-readonly oxygen-input-box-date-readonly':'').'"';
+		echo ' class="formPane '.($this->readonly?' formLocked':'').'"';
 		echo ' style="padding:0;border:0;position:relative;"';
 		echo '>';
 
+
 		if (!$this->readonly){
 			echo new HiddenControl($this->name,$this->value);
-			echo '<div id="'.$this->name.'-dropdown" class="oxygen-input-box-dropdown oxygen-input-box-date-dropdown" style="display:none;">';
-			echo '<div class="oxygen-input-box-dropdown-hook"></div>';
-			echo '<div class="oxygen-input-box-dropdown-header">';
-			echo '<a class="button button-prev" href="javascript:'.$this->name.'.ShowPrevMonth();">&lsaquo;</a>';
-			echo '<a class="button button-next" href="javascript:'.$this->name.'.ShowNextMonth();">&rsaquo;</a>';
+			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formDateDropDown" style="display:none;">';
+			echo '<div class="formDropDownHook"></div>';
+			echo '<div class="formDropDownHead">';
+			echo '<a class="button button-prev" href="javascript:'.$this->name.'.ShowPrevMonth();"></a>';
+			echo '<a class="button button-next" href="javascript:'.$this->name.'.ShowNextMonth();"></a>';
 			echo '<div id="'.$this->name.'-month"></div>';
 			echo '</div>';
-			echo '<div class="oxygen-input-box-dropdown-body">';
+			echo '<div class="formDropDownBody">';
 			echo '<div id="'.$this->name.'-dropdown-body"></div>';
 			echo '</div>';
-			echo '<div class="oxygen-input-box-dropdown-footer">';
+			echo '<div class="formDropDownFoot">';
 			if ($this->allow_null){
 				$null_caption = trim($this->null_caption);
-				echo '<a class="fleft button" href="javascript:'.$this->name.'.SetDate(null);">'.new Html($null_caption===''?'∅':$null_caption).'</a>';
+				echo '<a id="'.$this->name.'-null" class="fleft button" href="javascript:'.$this->name.'.SetDate(null);">'.new Html($null_caption===''?'∅':$null_caption).'</a>';
 			}
-			echo '<a class="button" href="javascript:'.$this->name.'.SetDate('.new Js(XDate::Today()).');">'.new Html(Lemma::Pick('Today')).'</a>';
+			echo '<a id="'.$this->name.'-today" class="button" href="javascript:'.$this->name.'.SetDate('.new Js(XDate::Today()).');">'.new Html(Lemma::Pick('Today')).'</a>';
 			echo '<div id="'.$this->name.'-month"></div>';
-			echo '<a class="button button-next" href="javascript:'.$this->name.'.ShowNextYear();">&raquo;</a>';
-			echo '<a class="button button-prev" href="javascript:'.$this->name.'.ShowPrevYear();">&laquo;</a>';
+			echo '<a class="button button-next" href="javascript:'.$this->name.'.ShowNextYear();"></a>';
+			echo '<a class="button button-prev" href="javascript:'.$this->name.'.ShowPrevYear();"></a>';
 			echo '</div>';
 			echo '</div>';
 		}
 
+        echo '<span id="'.$this->name.'-anchor" class="formPaneAnchor formDateAnchor">&nbsp;</span>';
+
 		echo '<input id="'.$this->name.'-box"';
-		echo ' class="oxygen-input-box oxygen-input-box-date '.($this->readonly?' oxygen-input-box-readonly oxygen-input-box-date-readonly':' oxygen-input-box-anchor').' oxygen-input-box-date-anchor"';
+		echo ' class="formPane formDate'.($this->readonly?' formLocked':'').'"';
 		echo ' style="margin:0;"';
 		echo ' value="'.new Html($caption).'"';
 		echo ' readonly="readonly"';

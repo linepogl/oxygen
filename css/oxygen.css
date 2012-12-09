@@ -94,67 +94,64 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
  * Oxygen Controls
  *
  */
+.formButton       { vertical-align:baseline; }
 
-.oxygen-input-box                { vertical-align:baseline; border-radius:4px; border:1px solid #999999; color:#666699; font:normal 12px/14px Trebuchet MS, sans-serif; padding:4px; background-color:#ffffff; }
-.oxygen-input-box:focus          { color:#444477; background-color:#fcfcfc; border-color:#666666; }
+.formPane         { vertical-align:baseline; border-radius:3px; border:1px solid #999999; font:normal 12px/14px Trebuchet MS, sans-serif; padding:4px; }
+.formPane         { background-color:#ffffff; border-color:#999999; color:#666699; }
+.formPane:focus   { background-color:#fcfcfc; border-color:#666666; color:#444477; }
 
-.oxygen-input-box-readonly       { color:#999999!important; background-color:#fbfbfb!important; border-color:#999999!important; }
-.oxygen-input-box-readonly:focus { color:#777777!important; background-color:#fafafa!important; border-color:#777777!important; }
+.formLocked       { background-color:#fbfbfb; border-color:#999999; color:#999999; }
+.formLocked:focus { background-color:#fafafa; border-color:#777777; color:#777777; }
 
-.oxygen-input-box-dropdown a                 { text-decoration:none!important; color:#333333!important; }
-.oxygen-input-box-dropdown a:hover           { text-decoration:none!important; color:#000000!important; }
+.formDropDown a       { color:#333333; text-decoration:none; }
+.formDropDown a:hover { color:#000000; text-decoration:none; }
 
-.oxygen-input-box-anchor       { background-image:url('../img/input-box-anchor.gif'); background-repeat:no-repeat; background-position:100% 50%; }
-.oxygen-input-box-anchor:focus { background-image:url('../img/input-box-anchor-focus.gif'); }
+.formPaneAnchor   { position:absolute; float:right; right:0; margin:4px; width:16px; height:16px; }
+.formPaneAnchor   { background:url(../img/form-pane-anchor.gif) 50% 50% no-repeat; }
 
-.oxygen-input-box-dropdown           { position:absolute; display:block; z-index:1000; border-radius:5px; border:1px solid #b3b3b3; background-color:#ffffff; font:normal 12px/14px Helvetica,Arial,sans-serif; margin-top:28px; }
-.oxygen-input-box-dropdown-hook      { height:10px; background:url('../img/input-box-dropdown-hook.gif') 50% 0 no-repeat; margin-top:-10px; }
-.oxygen-input-box-dropdown-header    { height:16px; background:url('../img/input-box-dropdown-header-bg.gif') 0 0 repeat-x; border-bottom:1px solid #c5c0cf; border-radius:5px 5px 0 0; padding:8px 12px; font:normal 13px/18px Helvetica,Arial,sans-serif!important; text-transform:uppercase; text-decoration:none; text-align:center; color:#666666; }
-.oxygen-input-box-dropdown-footer    { height:16px; background:url('../img/input-box-dropdown-footer-bg.gif') 0 0 repeat-x; border-top:1px solid #dddddd; border-radius:0 0 5px 5px; padding:7px 12px; }
-.oxygen-input-box-dropdown-body      { padding:10px; }
+.formDropDown      { position:absolute; display:block; z-index:1000; border-radius:5px; border:1px solid #b3b3b3; background-color:#ffffff; font:normal 12px/14px Helvetica,Arial,sans-serif; margin-top:28px; }
+.formDropDownHook  { height:10px; background:url(../img/form-dropdown-hook.gif) 50% 0 no-repeat; margin-top:-10px; }
+.formDropDownHead  { height:16px; background:url(../img/form-dropdown-head-bg.gif) 0 0 repeat-x; border-bottom:1px solid #c5c0cf; border-radius:5px 5px 0 0; padding:8px 5px; font:normal 12px/18px Helvetica,Arial,sans-serif!important; text-transform:uppercase; text-decoration:none; text-align:center; color:#666666; }
+.formDropDownFoot  { height:16px; background:url(../img/form-dropdown-foot-bg.gif) 0 0 repeat-x; border-top:1px solid #dddddd; border-radius:0 0 5px 5px; padding:7px 5px; }
+.formDropDownBody  { padding:10px; }
 
-.oxygen-input-box-dropdown-header a.button       { float:left; display:block; color:#a8a5ad!important; cursor:pointer; border:1px solid #b0b0b0; border-radius:10px; background:#ffffff; text-decoration:none; }
-.oxygen-input-box-dropdown-header a.button:hover { color:#666666!important; border-color:#777777; background:#f4f4f4; text-decoration:none; }
-.oxygen-input-box-dropdown-footer a.button       { float:left; display:block; color:#777777!important; cursor:pointer; border:1px solid #b0b0b0; border-radius:3px; background:#ffffff; font:normal 10px/15px Trebuchet MS, sans-serif!important; text-transform:uppercase; text-decoration:none; height:15px; padding:0 6px; margin-right:3px; }
-.oxygen-input-box-dropdown-footer a.button:hover { color:#666666!important; border-color:#777777; background:#f4f4f4; text-decoration:none; }
+.formDropDownHead a.button       { float:left; display:block; color:#a8a5ad!important; cursor:pointer; border:1px solid #b0b0b0; border-radius:10px; background:#ffffff; text-decoration:none; }
+.formDropDownHead a.button:hover { color:#666666!important; border-color:#777777; background-color:#f4f4f4; text-decoration:none; }
+.formDropDownFoot a.button       { float:left; display:block; color:#777777!important; cursor:pointer; border:1px solid #b0b0b0; border-radius:3px; background:#ffffff; font:normal 10px/15px Trebuchet MS, sans-serif!important; text-transform:uppercase; text-decoration:none; height:15px; padding:0 6px; margin-right:3px; }
+.formDropDownFoot a.button:hover { color:#666666!important; border-color:#777777; background-color:#f4f4f4; text-decoration:none; }
+.formDropDownFoot a.button.selected { color:#000000!important; border-color:#333333; background-color:#d3d6c2; text-decoration:none; }
+.formDropDownHead a.button-prev  { float:left;  width:15px; height:15px; background:#ffffff url(../img/form-dropdown-prev.png) 50% 50% no-repeat; }
+.formDropDownHead a.button-next  { float:right; width:15px; height:15px; background:#ffffff url(../img/form-dropdown-next.png) 50% 50% no-repeat; }
+.formDropDownFoot a.button-prev  { float:right; width:18px; height:15px; padding:0; background:#ffffff url(../img/form-dropdown-pprev.png) 50% 50% no-repeat; border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; margin:0; }
+.formDropDownFoot a.button-next  { float:right; width:18px; height:15px; padding:0; background:#ffffff url(../img/form-dropdown-nnext.png) 50% 50% no-repeat; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
+.formDropDownFoot a.button-next:hover  { border-left:1px dotted #aaaaaa; }
 
-.oxygen-input-box-dropdown-header a.button-prev  { float:left; color:#a8a5ad!important; width:15px; height:15px; text-align:center; font:bold 16px/16px Helvetica,Arial,sans-serif!important; }
-.oxygen-input-box-dropdown-header a.button-next  { float:right;color:#a8a5ad!important; width:15px; height:15px; text-align:center; font:bold 16px/16px Helvetica,Arial,sans-serif!important; }
-.oxygen-input-box-dropdown-footer a.button-prev  { float:right;color:#a8a5ad!important; height:15px; text-align:center; font:bold 16px/16px Helvetica,Arial,sans-serif!important; padding:0 4px 0 4px; border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; margin:0; }
-.oxygen-input-box-dropdown-footer a.button-next  { float:right;color:#a8a5ad!important; height:15px; text-align:center; font:bold 16px/16px Helvetica,Arial,sans-serif!important; padding:0 3px 0 5px; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
-.oxygen-input-box-dropdown-footer a.button-next:hover  { border-left:1px dotted #aaaaaa; }
-
-
-.oxygen-input-box-date                            { width:7em; text-align:left; }
-.oxygen-input-box-date-anchor                     { background-image:url('../img/input-box-date-anchor.gif'); background-repeat:no-repeat; background-position:100% 50%; }
-.oxygen-input-box-date-anchor:focus               { background-image:url('../img/input-box-date-anchor-focus.gif'); }
-.oxygen-input-box-date-dropdown                   { width:240px; }
-.oxygen-input-box-date-dropdown td                { margin:0!important; padding:0!important; border:0!important; }
-.oxygen-input-box-date-dropdown th                { margin:0!important; padding:0!important; border:0!important; }
-.oxygen-input-box-date-dropdown th.day            { font:bold 10px/10px Helvetica,Arial,sans-serif!important; padding-top:5px!important; padding-bottom:5px!important; color:#bbbbbb!important; text-transform:uppercase!important; text-align:center!important; }
-.oxygen-input-box-date-dropdown td.empty          { }
-.oxygen-input-box-date-dropdown td.day            { font:bold 11px/11px Helvetica,Arial,sans-serif!important; width:100px; }
-.oxygen-input-box-date-dropdown td.day a          { display:block; padding:9px 0 9px 0!important; text-align:center!important; margin:1px!important; font-weight:bold!important; border-radius:3px!important; color:#777777!important; }
-.oxygen-input-box-date-dropdown td.past a         { color:#aaaaaa!important;}
-.oxygen-input-box-date-dropdown td.weekend a      { background:#fcfcfc!important;}
-.oxygen-input-box-date-dropdown td.day a:hover    { background:#f8f8f8!important; color:#000000!important; }
-.oxygen-input-box-date-dropdown td.selected a     { background:#eeeeee!important; }
-
-
-.oxygen-input-box-color                           { width:2.5em; text-align:left; }
-.oxygen-input-box-color-dropdown                  { width:350px; }
-.oxygen-input-box-color-dropdown td               { margin:0!important; padding:0!important; border:0!important; }
-.oxygen-input-box-color-dropdown th               { margin:0!important; padding:0!important; border:0!important; }
-.oxygen-input-box-color-dropdown td.color         { line-height:1px!important; width:100px; }
-.oxygen-input-box-color-dropdown td.color a       { display:block; width:12px; height:12px; border-radius:3px; margin:3px; }
-.oxygen-input-box-color-dropdown td.color a:hover { border:2px solid #000000; margin:1px; }
+.formDate                         { width:7.5em; text-align:left; }
+.formDateAnchor                   { background:url(../img/form-date-anchor.gif) 50% 50% no-repeat; }
+.formDateDropDown                 { width:210px; }
+.formDateDropDown td              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }
+.formDateDropDown th              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }
+.formDateDropDown th.day          { font:normal 9px/9px Helvetica,Arial,sans-serif!important; padding-top:4px!important; padding-bottom:4px!important; color:#bbbbbb!important; text-transform:uppercase!important; text-align:center!important; }
+.formDateDropDown td.empty        { }
+.formDateDropDown td.day          { font:bold 11px/11px Helvetica,Arial,sans-serif!important; width:100px; }
+.formDateDropDown td.day a        { display:block; padding:7px 0 7px 0!important; text-align:center!important; margin:0 1px 1px 0!important; font-weight:bold!important; border-radius:3px!important; color:#777777!important; }
+.formDateDropDown td.past a       { color:#aaaaaa!important;}
+.formDateDropDown td.weekend a    { background:#f8f8f8!important;}
+.formDateDropDown td.day a:hover  { background:#f0f0f0!important; color:#000000!important; }
+.formDateDropDown td.selected a   { background:#d3d6c2!important; color:#000000!important; }
 
 
+.formColor                          { width:3.0em; text-align:left; }
+.formColorDropDown                  { width:250px; }
+.formColorDropDown td               { margin:0!important; padding:0!important; border:0!important; }
+.formColorDropDown th               { margin:0!important; padding:0!important; border:0!important; }
+.formColorDropDown td.color         { line-height:1px!important; width:100px; }
+.formColorDropDown td.color a       { display:block; width:12px; height:12px; border-radius:2px; margin:1px; }
+.formColorDropDown td.color a:hover { border:1px solid #000000; margin:0; }
 
 
-.formPane   { vertical-align:baseline; }
-.formButton { vertical-align:baseline; }
-.formLocked { vertical-align:baseline; }
+
+
 
 table.report    { width:100%; }
 table.report th { background:#e0e0e0; font:bold 11px/13px Trebuchet MS, sans-serif; color:#333333; padding:3px; border-right:1px solid #ffffff; border-bottom:1px solid #ffffff; }
