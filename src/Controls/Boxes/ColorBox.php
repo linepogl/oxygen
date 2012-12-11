@@ -12,10 +12,17 @@ class ColorBox extends Box {
 		if ((is_null($this->value) || trim($this->value) === '') && !$this->allow_null) {
 			$this->value = '#ffffff';
 		}
+		$is_null = is_null($this->value) || trim($this->value) === '';
 
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
-			$caption = (is_null($this->value) || trim($this->value) === '') ? ( $this->allow_null ? $this->null_caption : '' ) : $this->value;
-			echo new Html($caption);
+			if ($is_null) {
+				echo '<span style="background:url(oxy/img/checkers.gif) 50% 50% repeat;padding:0 0.65em;margin:0;border:1px solid #999999;">'.new Spacer().'</span>&nbsp;';
+				$null_caption = trim($this->null_caption);
+				echo $null_caption===''?'&empty;':new Html($null_caption);
+			}
+			else {
+				echo '<span style="background:'.$this->value.';padding:0 0.65em;margin:0;border:1px solid #999999;">'.new Spacer().'</span>&nbsp;';
+			}
 			return;
 		}
 
@@ -48,16 +55,16 @@ class ColorBox extends Box {
 
 		echo '<input id="'.$this->name.'-box"';
 		echo ' class="formPane formColor'.($this->readonly?' formLocked':'').'"';
-		echo ' style="margin:0;"';
+		echo ' style="margin:0;background:'.($is_null?'url(oxy/img/checkers.gif) 50% 50% repeat':$this->value).';"';
 		echo ' readonly="readonly"';
 		echo '/>';
 
 		echo '</span>';
 
+		echo Js::BEGIN;
+		echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
 		if (!$this->readonly){
-			echo Js::BEGIN;
 			echo "jQuery('#$this->name-box,#$this->name-anchor,#$this->name-box-value').click(function(e){ $this->name.ToggleDropDown(); });";
-			echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
 			echo "window.".$this->name." = {";
 			echo "  IntToHex : function(d){return (d<0x10?'0':'')+d.toString(16).toUpperCase();}";
 			echo " ,RgbToColor : function(r,g,b){return '#'+this.IntToHex(r)+this.IntToHex(g)+this.IntToHex(b);}";
@@ -120,9 +127,8 @@ class ColorBox extends Box {
 			echo "    jQuery('#$this->name-dropdown-body').html(s);";
 			echo "  }";
 			echo "};";
-			echo $this->name.".SetColor(".new Js($this->value).");";
-			echo Js::END;
 		}
+		echo Js::END;
 
 
 	}

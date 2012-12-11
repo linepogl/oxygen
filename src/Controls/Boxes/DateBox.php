@@ -62,10 +62,10 @@ class DateBox extends Box {
 
 		echo '</span>';
 
+		echo Js::BEGIN;
+		echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
 		if (!$this->readonly){
-			echo Js::BEGIN;
 			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.ToggleDropDown(); });";
-			echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
 			echo "window.".$this->name." = {";
 			echo "  date : ".new Js($this->value);
 			echo " ,month : ".new Js($this->value);
@@ -155,8 +155,8 @@ class DateBox extends Box {
 			echo "  }";
 			echo "};";
 
-			echo Js::END;
 		}
+		echo Js::END;
 
 
 	}
