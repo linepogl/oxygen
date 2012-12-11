@@ -44,7 +44,7 @@ class ColorBox extends Box {
 		}
 
 
-        echo '<span id="'.$this->name.'-anchor" class="formPaneAnchor formColorAnchor">&nbsp;</span>';
+		echo '<span id="'.$this->name.'-anchor" class="formPaneAnchor formColorAnchor">&nbsp;</span>';
 
 		echo '<input id="'.$this->name.'-box"';
 		echo ' class="formPane formColor'.($this->readonly?' formLocked':'').'"';
@@ -56,9 +56,8 @@ class ColorBox extends Box {
 
 		if (!$this->readonly){
 			echo Js::BEGIN;
-			echo "jQuery('#$this->name-box').click(function(){ $this->name.ShowDropDown(); });";
-			echo "jQuery('#$this->name-anchor').click(function(){ $this->name.ShowDropDown(); });";
-			echo "jQuery('#$this->name-box-value').click(function(){ $this->name.ShowDropDown(); });";
+			echo "jQuery('#$this->name-box,#$this->name-anchor,#$this->name-box-value').click(function(e){ $this->name.ToggleDropDown(); });";
+			echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
 			echo "window.".$this->name." = {";
 			echo "  IntToHex : function(d){return (d<0x10?'0':'')+d.toString(16).toUpperCase();}";
 			echo " ,RgbToColor : function(r,g,b){return '#'+this.IntToHex(r)+this.IntToHex(g)+this.IntToHex(b);}";
@@ -75,17 +74,19 @@ class ColorBox extends Box {
 			echo "    this.HideDropDown();";
 			echo $this->on_change;
 			echo "  }";
-
+			echo " ,ToggleDropDown : function(){ if (jQuery('#$this->name-dropdown').is(':visible')) this.HideDropDown(); else this.ShowDropDown(); }";
+			echo " ,Showing : false";
 			echo " ,ShowDropDown : function(){";
+			echo "    this.Showing = true;";
 			echo "    var b = jQuery('#$this->name-box');";
 			echo "    var d = jQuery('#$this->name-dropdown');";
 			echo "    d.show();";
 			echo "    var w = d.width();";
 			echo "    var ww = b.outerWidth(false) - (d.outerWidth(false) - w);";
 			echo "    if (ww > w) d.css({width:ww+'px'});";
-			echo "    d.css({'margin-left':Math.floor((b.outerWidth(false)-d.outerWidth(false))/2)+'px'});";
+			echo "    d.css({'margin-top':(1+b.outerHeight(false))+'px','margin-left':Math.floor((b.outerWidth(false)-d.outerWidth(false))/2)+'px'});";
 			echo "    this.FillPalette();";
-			echo "    setTimeout(function(){jQuery('html').on('click.$this->name', function(e){ if (jQuery('#$this->name-dropdown').has(e.target).length === 0) $this->name.HideDropDown(); }); },100);";
+			echo "    jQuery('html').on('click.$this->name', function(e){ if ($this->name.Showing) { $this->name.Showing = false; return; } if (jQuery('#$this->name-dropdown').has(e.target).length === 0) $this->name.HideDropDown(); });";
 			echo "  }";
 			echo " ,HideDropDown : function(){";
 			echo "    jQuery('#$this->name-dropdown').hide();";
