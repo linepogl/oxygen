@@ -409,13 +409,9 @@ abstract class HddScope extends MemoryScope {
 	}
 	private function hdd_store($filename,$object){
 		$f = fopen($filename,'w');
-		error_log('hdd_store before LOCK_EX '.$filename);
 		if (flock($f,LOCK_EX)){
-			error_log('hdd_store after LOCK_EX '.$filename);
 			fwrite($f,Oxygen::SerializeWithTheBestAvailableMethod($object));
-			error_log('hdd_store before LOCK_UN '.$filename);
 			flock($f,LOCK_UN);
-			error_log('hdd_store after LOCK_UN '.$filename);
 			fclose($f);
 		}
 	}
