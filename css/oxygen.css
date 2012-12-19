@@ -125,6 +125,9 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 .formDropDownFoot a.button-prev  { float:right; width:18px; height:15px; padding:0; background:#ffffff url(../img/form-dropdown-pprev.png) 50% 50% no-repeat; border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; margin:0; }
 .formDropDownFoot a.button-next  { float:right; width:18px; height:15px; padding:0; background:#ffffff url(../img/form-dropdown-nnext.png) 50% 50% no-repeat; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
 .formDropDownFoot a.button-next:hover  { border-left:1px dotted #aaaaaa; }
+.formDropDownFoot a.button-am       { float:right; padding:0 3px; border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; margin:0; }
+.formDropDownFoot a.button-pm       { float:right; padding:0 3px; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
+.formDropDownFoot a.button-pm:hover { border-left:1px dotted #aaaaaa; }
 
 .formDate                         { width:7.5em; text-align:left; }
 .formDateAnchor                   { background:url(../img/form-date-anchor.gif) 50% 50% no-repeat; }
@@ -148,13 +151,15 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 .formColorDropDown td.color a       { display:block; width:12px; height:12px; border-radius:2px; margin:1px; }
 .formColorDropDown td.color a:hover { border:1px solid #000000; margin:0; }
 
-.formTime                           { width:6.5em; text-align:left; }
-.formTimeAnchor                     { background:url(../img/form-time-anchor.png) 50% 50% no-repeat; }
-.formTimeDropDown                   { width:200px; }
-.formTimeDropDown .input            { width:28px; border:0; background:#ffffff; color:#666666; font:bold 18px/18px Helvetica,Arial,sans-serif!important; text-align:center; }
-.formTimeDropDown .clock a          { position:absolute; background:#f0f0f0; border-radius:10px; }
-.formTimeDropDown .clock a:hover    { background:#d3d6c2; }
-.formTimeDropDown .clock a.selected { background:#d3d6c2; }
+.formTime                             { width:6.5em; text-align:left; }
+.formTimeAnchor                       { background:url(../img/form-time-anchor.png) 50% 50% no-repeat; }
+.formTimeDropDown                     { width:200px; }
+.formTimeDropDown .clock              { font:bold 18px/20px Helvetica,Arial,sans-serif!important; }
+.formTimeDropDown .clock .input       { width:28px; border:0; padding-top:2px; background:#ffffff; color:#666666; font:bold 18px/20px Helvetica,Arial,sans-serif!important; text-align:center; }
+.formTimeDropDown .clock .input:focus { background:#eeeeee; }
+.formTimeDropDown .clock a            { position:absolute; background:#f0f0f0; border-radius:10px; }
+.formTimeDropDown .clock a:hover      { background:#d3d6c2; }
+.formTimeDropDown .clock a.selected   { background:#c3c6b2; }
 
 
 
