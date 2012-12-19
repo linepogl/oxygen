@@ -120,7 +120,7 @@ class TextboxControl extends ValueControl {
 			}
 		}
 		else {
-			echo '<span style="white-space:pre;">'.new HumanReadableHtml( $this->value ).'</span>';
+			echo '<span id="'.$this->name.'" style="white-space:pre;">'.new HumanReadableHtml( $this->value ).'</span>';
 		}
 	}
 

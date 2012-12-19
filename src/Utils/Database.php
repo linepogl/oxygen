@@ -678,19 +678,14 @@ class Database {
 	public static function ExecuteRecastFields($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		switch (self::$type){
-			case self::MYSQL:
-				for($i=1;$i<$z;$i+=2){
-					$sql = 'ALTER TABLE '.new SqlIden($tablename).' MODIFY COLUMN '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
-					self::Execute($sql);
-				}
-				break;
-			case self::ORACLE:
-				for($i=1;$i<$z;$i+=2){
-					$sql = 'ALTER TABLE '.new SqlIden($tablename).' MODIFY COLUMN '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
-					self::Execute($sql);
-				}
-				break;
+		for($i=1;$i<$z;$i+=2){
+			$tmp = 'tmp_'.Oxygen::HashRandom32();
+			self::ExecuteAddFields($tablename,$tmp,$a[$i+1]);
+			self::Execute('UPDATE '.new SqlIden($tablename).' SET '.new SqlIden($tmp).'='.new SqlIden($a[$i]));
+			self::ExecuteDropFields($tablename,$a[$i]);
+			self::ExecuteAddFields($tablename,$a[$i],$a[$i+1]);
+			self::Execute('UPDATE '.new SqlIden($tablename).' SET '.new SqlIden($a[$i]).'='.new SqlIden($tmp));
+			self::ExecuteDropFields($tablename,$tmp);
 		}
 	}
 

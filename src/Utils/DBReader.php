@@ -5,16 +5,11 @@ class DBReader implements ArrayAccess {
   private $data;
 	private $max_index;
 	private $index = -1;
-	private $columns;
 
 
 	public function __construct(PDOStatement $stmt){
 		$this->data = $stmt->fetchAll();
-		//$stmt->closeCursor();
 		$this->max_index = count($this->data) - 1;
-		if ($this->max_index >= 0) {
-			$this->columns = array_keys( $this->data[0] );
-		}
 	}
 
   public function Read(){
