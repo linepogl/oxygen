@@ -28,7 +28,7 @@ class ColorBox extends Box {
 
 		echo '<span';
 		echo ' class="formPane formColor '.($this->readonly?' formLocked':'').'"';
-		echo ' style="padding:0;border:0;position:relative;"';
+		echo ' style="padding:0;border:0;position:relative;display:inline-block;"';
 		echo '>';
 
 		if (!$this->readonly){

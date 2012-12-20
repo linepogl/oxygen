@@ -155,8 +155,8 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 .formTimeAnchor                       { background:url(../img/form-time-anchor.png) 50% 50% no-repeat; }
 .formTimeDropDown                     { width:200px; }
 .formTimeDropDown .clock              { font:bold 18px/20px Helvetica,Arial,sans-serif!important; }
-.formTimeDropDown .clock .input       { width:28px; border:0; padding-top:2px; background:#ffffff; color:#666666; font:bold 18px/20px Helvetica,Arial,sans-serif!important; text-align:center; }
-.formTimeDropDown .clock .input:focus { background:#eeeeee; }
+.formTimeDropDown .clock span         { padding:3px 2px 1px 3px; border-radius:3px; }
+.formTimeDropDown .clock span.focus   { background:#eeeeee; }
 .formTimeDropDown .clock a            { position:absolute; background:#f0f0f0; border-radius:10px; }
 .formTimeDropDown .clock a:hover      { background:#d3d6c2; }
 .formTimeDropDown .clock a.selected   { background:#c3c6b2; }
