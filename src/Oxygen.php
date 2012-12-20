@@ -785,11 +785,15 @@ class Oxygen {
 			echo '<script type="text/javascript" src="'.__BASE__.'oxy/fix/ie6-fixpng.js"></script>';
 		}
 
-
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.js"></script>';
 		echo '<link href="'.__BASE__.'oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
-		echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
+
+		if (Browser::IsIOS()) {
+			echo '<link href="'.__BASE__.'oxy/css/touchscroll.css" rel="stylesheet" type="text/css" />';
+			echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/touchscroll.js"></script>';
+			echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
+		}
 
 		$r = ob_get_clean();
 		return $r;

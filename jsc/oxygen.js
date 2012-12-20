@@ -81,6 +81,9 @@ var Oxygen = {
 			clearInterval(this.dialog_watchdog);
 			this.dialog_watchdog = null;
 		}
+		this.dialog_touchscroll = null;
+		this.dialog_width = null;
+		this.dialog_min_height = null;
 		jQuery('#OxygenDialogFrame').detach();
 
 		if (Prototype.Browser.IE6){
@@ -101,6 +104,7 @@ var Oxygen = {
 						+ '</div>'
 
 					+ '</div>'
+
 
 				+ '</td></tr></table>'
 				+ '</div>'
@@ -260,7 +264,10 @@ var Oxygen = {
 	}
 	,dialog_min_width : 1
 	,dialog_min_height : 1
+	,dialog_width : null
+	,dialog_height : null
 	,dialog_watchdog : null
+	,dialog_touchscroll : null
 	,ResizeDialog:function(){
 		if (!this.IsDialogOpen()) return ;
 		var dialog = jQuery('#OxygenDialog');
@@ -268,13 +275,15 @@ var Oxygen = {
 		var inner = jQuery('#OxygenDialogInner');
 		var innerx = jQuery('#OxygenDialogInnerX');
 		var dialogx = jQuery('#OxygenDialogX');
-		var frame = jQuery('#OxygenFrame');
-		var framex = jQuery('#OxygenFrameX');
+		var frame = jQuery('#OxygenDialogFrame');
+		var framex = jQuery('#OxygenDialogFrameX');
 
 		frame.height(viewport.height());
-		frame.width(viewport.height());
+		frame.width(viewport.width());
 		if (framex.height() < viewport.height()) framex.height(viewport.height());
 
+		var h = null;
+		var w = null;
 		if (Prototype.Browser.IE6){
 
 		}
@@ -286,88 +295,26 @@ var Oxygen = {
 			}
 			dialog.height(dialogx.outerHeight(true));
 			dialog.width(dialogx.outerWidth(true));
+
+			h = dialog.height();
+			w = dialog.width();
+
 		}
 
-
-//		var dialog_height = dialog.height();
-//		var dialog_margin_border_padding_height = dialog.outerHeight(true) - dialog_height;
-//		dialog.height(dialog_height);
-//
-//		var dialog_width = dialog.width();
-//		var dialog_margin_border_padding_width = dialog.outerWidth(true) - dialog_width;
-//		dialog.width(dialog_width);
-//
-//		var viewport_height = viewport.height();
-//		var viewport_width = viewport.width();
-//		var dialog_top = Math.max( Math.floor( (viewport_height - dialog_height - dialog_margin_border_padding_height) / 2 ) , 20 );
-//		var dialog_left = Math.max( Math.floor( (viewport_width - dialog_width - dialog_margin_border_padding_width) / 2 ) , 20 );
-//		dialog.css({top:dialog_top+'px',left:dialog_left+'px'});
-
-
-
-//		// Maximum height
-//		var max_dialog_height = viewport_height - dialog_margin_border_padding_height - 40;
-//		if (dialog_height < this.dialog_min_height) {
-//			dialog_height = this.dialog_min_height;
-//			dialog.height(dialog_height);
-//		}
-//
-//		// Inner height
-//		var real_inner_height = innerx.outerHeight(true);
-//		inner.height(real_inner_height);
-//		dialog_height = dialogx.outerHeight(true);
-//		var dialog_extra_height = dialog_height - real_inner_height;
-//		if (dialog_height > max_dialog_height) dialog_height = max_dialog_height;
-//		dialog.height(dialog_height);
-//		inner.height(dialog_height - dialog_extra_height);
-//		inner.css({'overflow-y':'auto'});
-//
-//
-
-
-//		var max_dialog_width = viewport_width - dialog_margin_border_padding_width - 40;
-//		if (dialog_width < this.dialog_min_width) {
-//			dialog_width = this.dialog_min_width;
-//			dialog.width(dialog_width);
-//		}
-//
-//		dialog_width = dialogx.outerWidth(true);
-//		var inner_width = inner.width();
-//		var dialog_extra_width = dialog_width - inner_width;
-//		var real_inner_width = innerx.outerWidth(true);
-//		dialog_width = real_inner_width + dialog_extra_width;
-//		if (dialog_width > max_dialog_width) dialog_width = max_dialog_width;
-//		dialog.width(dialog_width);
-//
-
-//		for (var i = 0; i < 5; i++){
-//			var scroll_top = inner.scrollTop();
-//			inner.scrollTop(10000);
-//			var has_scrollbar_height = inner.scrollTop() != 0;
-//			inner.scrollTop(scroll_top);
-//
-//			var scroll_left = inner.scrollLeft();
-//			inner.scrollLeft(10000);
-//			var has_scrollbar_width = inner.scrollLeft() != 0;
-//			inner.scrollLeft(scroll_left);
-//
-//			if (has_scrollbar_height){
-//				dialog_height += 5;
-//				if (dialog_height > max_dialog_height) dialog_height = max_dialog_height;
-//				dialog.height(dialog_height);
-//			}
-//			if (has_scrollbar_width){
-//				dialog_width += 5;
-//				if (dialog_width > max_dialog_width) dialog_width = max_dialog_width;
-//				dialog.width(dialog_width);
-//			}
-//		}
-
-//		var dialog_top = Math.floor( (viewport_height - dialog_height - dialog_margin_border_padding_height) / 2 );
-//		dialog.css('top',dialog_top+'px');
-//		var dialog_left = Math.floor( (viewport_width - dialog_width - dialog_margin_border_padding_width) / 2 );
-//		dialog.css('left',dialog_left+'px');
-
+		if (this.dialog_height !== h || this.dialog_width !== w) {
+			this.dialog_height = h;
+			this.dialog_width = w;
+			if (Prototype.Browser.SafariIOS){
+				if (this.dialog_touchscroll === null) {
+					this.dialog_touchscroll = new TouchScroll(frame[0]);
+				}
+				if (viewport.height() - h < 40)
+					dialog.css({'margin-bottom':'100px'});
+				else
+					dialog.css({'margin-bottom':'0'});
+				this.dialog_touchscroll.setupScroller();
+			}
+		}
 	}
 	,IsDialogOpen:function(){
 		return $('OxygenDialog') != null;
