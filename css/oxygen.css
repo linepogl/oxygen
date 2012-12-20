@@ -154,7 +154,7 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 .formTime                             { width:6.5em; text-align:left; }
 .formTimeAnchor                       { background:url(../img/form-time-anchor.png) 50% 50% no-repeat; }
 .formTimeDropDown                     { width:200px; }
-.formTimeDropDown .clock              { font:bold 18px/20px Helvetica,Arial,sans-serif!important; }
+.formTimeDropDown .clock              { font:bold 18px/20px Helvetica,Arial,sans-serif!important; color:#666666!important; }
 .formTimeDropDown .clock span         { padding:3px 2px 1px 3px; border-radius:3px; }
 .formTimeDropDown .clock span.focus   { background:#eeeeee; }
 .formTimeDropDown .clock a            { position:absolute; background:#f0f0f0; border-radius:10px; }
@@ -247,20 +247,4 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .checkbox-readonly-unchecked        { background-image:url(../img/checkbox-readonly-unchecked.gif       ); }
 .checkbox-readonly-dirty-checked    { background-image:url(../img/checkbox-readonly-dirty-checked.gif   ); }
 .checkbox-readonly-dirty-unchecked  { background-image:url(../img/checkbox-readonly-dirty-unchecked.gif ); }
-
-
-
-
-
-.touchScroll                            { position:relative; }
-.touchScrollBars                        { display:-webkit-box; padding:3px; position:absolute; top:0; right:0; bottom:0; left:0; z-index:2147483647; -webkit-box-align:end; -webkit-box-pack:end; -webkit-box-sizing:border-box; }
-.touchScrollTrack                       { width:100%; height:100%; overflow:hidden; }
-.touchScrollTrackX                      { height:6px; }
-.touchScrollTrackY                      { float:right; width:6px; }
-.touchScrollBarsBoth                    { padding-bottom:12px; padding-right:12px; }
-.touchScrollBarsBoth .touchScrollTrackX { -webkit-transform:translateY(9px); }
-.touchScrollBarsBoth .touchScrollTrackY { -webkit-transform:translateX(3px); }
-.touchScrollHandle                      { border:1px solid; min-height:4px; min-width:4px; -webkit-transition-property:-webkit-transform,height,width; -webkit-border-radius:3px; border-color:rgba(255,255,255,0.15); background:rgba(0,0,0,0.5); }
-
-
 

@@ -108,14 +108,17 @@ class DateBox extends Box {
 
 			echo " ,OnKeyDown : function(ev){";
 			echo "    switch(ev.which){";
+			echo "      case 13:case 27:if(this.pseudo_focus!==null){this.HideDropDown();ev.preventDefault();}break;";
 			echo "      case 32:this.ToggleDropDown();break;";
-			echo "      case 13:if(this.pseudo_focus!==null)this.HideDropDown();break;";
-			echo "      case 37:if(this.pseudo_focus==='d')this.DecD();if(this.pseudo_focus===null)this.ShowDropDown();break;";
-			echo "      case 39:if(this.pseudo_focus==='d')this.IncD();if(this.pseudo_focus===null)this.ShowDropDown();break;";
-			echo "      case 38:if(this.pseudo_focus==='d')this.DecDM();if(this.pseudo_focus===null)this.ShowDropDown();break;";
-			echo "      case 40:if(this.pseudo_focus==='d')this.IncDM();if(this.pseudo_focus===null)this.ShowDropDown();break;";
-			echo "      case 33:if(this.pseudo_focus==='d')this.DecDY();if(this.pseudo_focus===null)this.ShowDropDown();break;";
-			echo "      case 34:if(this.pseudo_focus==='d')this.IncDY();if(this.pseudo_focus===null)this.ShowDropDown();break;";
+			if ($this->allow_null){
+				echo "    case 8:case 46:this.SetD(null);break;";
+			}
+			echo "      case 37:this.DecD();break;";
+			echo "      case 39:this.IncD();break;";
+			echo "      case 38:this.DecDM();break;";
+			echo "      case 40:this.IncDM();break;";
+			echo "      case 33:if(this.pseudo_focus==='d'){this.DecDY();ev.preventDefault();}break;";
+			echo "      case 34:if(this.pseudo_focus==='d'){this.IncDY();ev.preventDefault();}break;";
 			echo "    }";
 			echo "  }";
 			echo " ,OnBlur : function(ev){";

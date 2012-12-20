@@ -93,12 +93,15 @@ class TimeBox extends Box {
 			echo "  }";
 			echo " ,OnKeyDown : function(ev){";
 			echo "    switch(ev.which){";
+			echo "      case 13:case 27:if(this.pseudo_focus!==null){this.HideDropDown();ev.preventDefault();}break;";
 			echo "      case 32:this.ToggleDropDown();break;";
-			echo "      case 13:if(this.focus!==null)this.HideDropDown();break;";
+			if ($this->allow_null){
+				echo "    case 8:case 46:this.SetH(null);break;";
+			}
 			echo "      case 37:if(this.focus=='m')this.SetFocus('h');".($this->show_seconds?" else if(this.focus=='s')this.SetFocus('m');":"")." break;";
 			echo "      case 39:if(this.focus=='h')this.SetFocus('m');".($this->show_seconds?" else if(this.focus=='m')this.SetFocus('s');":"")." break;";
-			echo "      case 38:if(this.focus=='h')this.SetH(this.h===null?0:(parseInt(this.h,10)+1)); else if(this.focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)+1)); else if(this.focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)+1)); else this.ShowDropDown(); break;";
-			echo "      case 40:if(this.focus=='h')this.SetH(this.h===null?0:(parseInt(this.h,10)-1)); else if(this.focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)-1)); else if(this.focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)-1)); else this.ShowDropDown(); break;";
+			echo "      case 38:if(this.focus=='h'||this.focus===null)this.SetH(this.h===null?0:(parseInt(this.h,10)+1)); else if(this.focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)+1)); else if(this.focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)+1)); break;";
+			echo "      case 40:if(this.focus=='h'||this.focus===null)this.SetH(this.h===null?0:(parseInt(this.h,10)-1)); else if(this.focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)-1)); else if(this.focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)-1)); break;";
 			echo "    }";
 			echo "  }";
 			echo " ,OnBlur : function(ev){";
