@@ -37,12 +37,12 @@ class TimeBox extends Box {
 			echo '<div id="'.$this->name.'-clock" class="clock" style="height:180px;">';
 			echo '<div style="padding-top:80px;text-align:center;">';
 
-			echo '<span id="'.$this->name.'-h" onclick="window.'.$this->name.'.SetFocus(\'h\');">'.(is_null($this->value)?'':$this->value->Format('H')).'</span>';
+			echo '<span id="'.$this->name.'-h" onclick="window.'.$this->name.'.SetPseudoFocus(\'h\');">'.(is_null($this->value)?'':$this->value->Format('H')).'</span>';
 			echo '<span>:</span>';
-			echo '<span id="'.$this->name.'-m" onclick="window.'.$this->name.'.SetFocus(\'m\');">'.(is_null($this->value)?'':$this->value->Format('i')).'</span>';
+			echo '<span id="'.$this->name.'-m" onclick="window.'.$this->name.'.SetPseudoFocus(\'m\');">'.(is_null($this->value)?'':$this->value->Format('i')).'</span>';
 			if ($this->show_seconds) {
 				echo '<span>:</span>';
-				echo '<span id="'.$this->name.'-s" onclick="window.'.$this->name.'.SetFocus(\'s\');">'.(is_null($this->value)?'':$this->value->Format('s')).'</span>';
+				echo '<span id="'.$this->name.'-s" onclick="window.'.$this->name.'.SetPseudoFocus(\'s\');">'.(is_null($this->value)?'':$this->value->Format('s')).'</span>';
 			}
 
 			echo '</div>';
@@ -73,17 +73,18 @@ class TimeBox extends Box {
 		echo Js::BEGIN;
 		echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
 		if (!$this->readonly){
-			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.ToggleDropDown(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); });";
+			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.ToggleDropDown(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); }).focus(function(e){ $this->name.ShowPseudoFocus(); });";
 			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
 			echo "window.".$this->name." = {";
-			echo "  focus : null";
+			echo "  pseudo_focus : 'h'";
+			echo " ,is_open : false";
 			echo " ,keep_focus : false";
 			echo " ,h : ".new Js(is_null($this->value) ? null : $this->value->Format('H'));
 			echo " ,m : ".new Js(is_null($this->value) ? null : $this->value->Format('i'));
 			echo " ,s : ".new Js(is_null($this->value) ? null : $this->value->Format('s'));
-			echo " ,SetH : function(x){if(x===null)this.h=this.m=this.s=null;else{ if(x<0)x+=24;x%=24;this.h=x<10?'0'+x:''+x;if(this.m===null)this.m='00';if(this.s===null)this.s='00'; } this.SetFocus('h'); this.OnChange(); }";
-			echo " ,SetM : function(x){if(x===null)this.h=this.m=this.s=null;else{ if(x<0)x+=60;x%=60;this.m=x<10?'0'+x:''+x;if(this.s===null)this.s='00';if(this.h===null)this.h='00'; } this.SetFocus('m'); this.OnChange(); }";
-			echo " ,SetS : function(x){if(x===null)this.h=this.m=this.s=null;else{ if(x<0)x+=60;x%=60;this.s=x<10?'0'+x:''+x;if(this.h===null)this.h='00';if(this.m===null)this.m='00'; } this.SetFocus('s'); this.OnChange(); }";
+			echo " ,SetH : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=24;x%=24;this.h=x<10?'0'+x:''+x;if(this.m===null)this.m='00';if(this.s===null)this.s='00'; } this.OnChange(); this.SetPseudoFocus('h'); }";
+			echo " ,SetM : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=60;x%=60;this.m=x<10?'0'+x:''+x;if(this.s===null)this.s='00';if(this.h===null)this.h='00'; } this.OnChange(); this.SetPseudoFocus('m'); }";
+			echo " ,SetS : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=60;x%=60;this.s=x<10?'0'+x:''+x;if(this.h===null)this.h='00';if(this.m===null)this.m='00'; } this.OnChange(); this.SetPseudoFocus('s'); }";
 			echo " ,SetAM : function(){ this.SetH( this.h===null ? 0 : parseInt(this.h,10) % 12 ); }";
 			echo " ,SetPM : function(){ this.SetH( this.h===null ? 12 : parseInt(this.h,10) % 12 + 12 ); }";
 			echo " ,OnChange : function(){";
@@ -93,27 +94,31 @@ class TimeBox extends Box {
 			echo "  }";
 			echo " ,OnKeyDown : function(ev){";
 			echo "    switch(ev.which){";
-			echo "      case 13:case 27:if(this.pseudo_focus!==null){this.HideDropDown();ev.preventDefault();}break;";
+			echo "      case 13:case 27:if(this.is_open){this.HideDropDown();ev.preventDefault();}break;";
 			echo "      case 32:this.ToggleDropDown();break;";
 			if ($this->allow_null){
-				echo "    case 8:case 46:this.SetH(null);break;";
+				echo "    case 8:case 46:this.SetH(null);ev.preventDefault();break;";
 			}
-			echo "      case 37:if(this.focus=='m')this.SetFocus('h');".($this->show_seconds?" else if(this.focus=='s')this.SetFocus('m');":"")." break;";
-			echo "      case 39:if(this.focus=='h')this.SetFocus('m');".($this->show_seconds?" else if(this.focus=='m')this.SetFocus('s');":"")." break;";
-			echo "      case 38:if(this.focus=='h'||this.focus===null)this.SetH(this.h===null?0:(parseInt(this.h,10)+1)); else if(this.focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)+1)); else if(this.focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)+1)); break;";
-			echo "      case 40:if(this.focus=='h'||this.focus===null)this.SetH(this.h===null?0:(parseInt(this.h,10)-1)); else if(this.focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)-1)); else if(this.focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)-1)); break;";
+			if ($this->show_seconds)
+				echo "      case 9:if(this.h===null)return;if(this.pseudo_focus==='h'&&!ev.shiftKey)this.SetPseudoFocus('m');else if(this.pseudo_focus==='m')this.SetPseudoFocus(ev.shiftKey?'h':'s');else if(this.pseudo_focus==='s'&&ev.shiftKey)this.SetPseudoFocus('m');else return;ev.preventDefault();break;";
+			else
+				echo "      case 9:if(this.h===null)return;if(this.pseudo_focus==='h'&&!ev.shiftKey)this.SetPseudoFocus('m');else if(this.pseudo_focus==='m'&&ev.shiftKey)this.SetPseudoFocus('d');else return;ev.preventDefault();break;";
+			echo "      case 38:case 39:if(this.pseudo_focus=='h')this.SetH(this.h===null?0:(parseInt(this.h,10)+1)); else if(this.pseudo_focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)+1)); else if(this.pseudo_focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)+1)); break;";
+			echo "      case 40:case 37:if(this.pseudo_focus=='h')this.SetH(this.h===null?0:(parseInt(this.h,10)-1)); else if(this.pseudo_focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)-1)); else if(this.pseudo_focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)-1)); break;";
 			echo "    }";
 			echo "  }";
 			echo " ,OnBlur : function(ev){";
-			echo "    setTimeout(function(){if(!$this->name.keep_focus&&!jQuery('#$this->name-box').is(':focus'))$this->name.HideDropDown();},200);";
+			echo "    setTimeout(function(){if(!$this->name.keep_focus&&!jQuery('#$this->name-box').is(':focus')){ $this->name.HideDropDown();$this->name.HidePseudoFocus(); }},200);";
 			echo "  }";
-			echo " ,SetFocus : function(f){ this.focus=f; this.Update(); }";
+			echo " ,SetPseudoFocus : function(f){ this.pseudo_focus=f; this.Update(); }";
 			echo " ,KeepFocus : function(){ this.keep_focus = true; setTimeout(function(){ $this->name.Update(); },500); }";
       echo " ,Update : function(){";
+			echo "    this.ShowPseudoFocus();";
+			echo "    if (!this.is_open) return;";
 			echo "    jQuery('#$this->name-h').html(this.h);";
 			echo "    jQuery('#$this->name-m').html(this.m);";
 			echo "    jQuery('#$this->name-s').html(this.s);";
-      echo "    if (this.focus==='h') {";
+      echo "    if (this.pseudo_focus==='h') {";
 			echo "      var xo=90,yo=90,R=75,r=6,s='',v=parseInt(this.h,10),o=v<12?0:12;";
       echo "      jQuery('#$this->name-clock a').detach();";
       echo "      for(var i = o; i < o+12; i++){";
@@ -125,7 +130,7 @@ class TimeBox extends Box {
 			echo "      jQuery('#$this->name-clock span').removeClass('focus');";
       echo "      jQuery('#$this->name-h').addClass('focus');";
       echo "    }";
-			echo "    else if (this.focus==='m') {";
+			echo "    else if (this.pseudo_focus==='m') {";
 			echo "      var xo=90,yo=90,R=85,r1=5,r2=2,s='',v=parseInt(this.m,10);";
 			echo "      jQuery('#$this->name-clock a').detach();";
 			echo "      for(var i = 0; i < 60; i++){";
@@ -138,7 +143,7 @@ class TimeBox extends Box {
 			echo "      jQuery('#$this->name-clock span').removeClass('focus');";
 			echo "      jQuery('#$this->name-m').addClass('focus');";
 			echo "    }";
-			echo "    else if (this.focus==='s') {";
+			echo "    else if (this.pseudo_focus==='s') {";
 			echo "      var xo=90,yo=90,R=85,r1=5,r2=2,s='',v=parseInt(this.s,10);";
 			echo "      jQuery('#$this->name-clock a').detach();";
 			echo "      for(var i = 0; i < 60; i++){";
@@ -154,8 +159,6 @@ class TimeBox extends Box {
 			echo "    jQuery('#$this->name-box').focus();";
 			echo "    this.keep_focus = false;";
       echo "  }";
-
-
 			echo " ,ToggleDropDown : function(){ if (jQuery('#$this->name-dropdown').is(':visible')) this.HideDropDown(); else this.ShowDropDown(); }";
 			echo " ,Showing : false";
 			echo " ,ShowDropDown : function(){";
@@ -167,14 +170,26 @@ class TimeBox extends Box {
 			echo "    var ww = b.outerWidth(false) - (d.outerWidth(false) - w);";
 			echo "    if (ww > w) d.css({width:ww+'px'});";
 			echo "    d.css({'margin-top':(1+b.outerHeight(false))+'px','margin-left':Math.floor((b.outerWidth(false)-d.outerWidth(false))/2)+'px'});";
-      echo "    this.SetFocus('h');";
+			echo "    this.is_open = true;";
+			echo "    this.Update();";
 			echo "    jQuery('html').on('click.$this->name', function(e){ if ($this->name.Showing) { $this->name.Showing = false; return; } if (jQuery('#$this->name-dropdown').has(e.target).length === 0) $this->name.HideDropDown(); });";
 			echo "  }";
 			echo " ,HideDropDown : function(){";
-			echo "    this.focus = null;";
 			echo "    this.keep_focus = false;";
+			echo "    this.is_open = false;";
 			echo "    jQuery('#$this->name-dropdown').hide();";
 			echo "    jQuery('html').off('click.$this->name');";
+			echo "    this.ShowPseudoFocus();";
+			echo "  }";
+			echo " ,ShowPseudoFocus : function(){";
+			echo "    var el = jQuery('#$this->name-box')[0];";
+			echo "    var from = this.pseudo_focus==='h'?0:(this.pseudo_focus==='m'?3:6);";
+			echo "    var till = this.pseudo_focus==='h'?2:(this.pseudo_focus==='m'?5:8);";
+			echo "    if(el.setSelectionRange)el.setSelectionRange(from,till);else{var r=el.createTextRange();r.collapse(true);r.moveEnd('character',till);r.moveStart('character',from);r.select();}";
+			echo "  }";
+			echo " ,HidePseudoFocus : function(){";
+			echo "    var el = jQuery('#$this->name-box')[0];";
+			echo "    if(el.setSelectionRange)el.setSelectionRange(0,0);else{var r=el.createTextRange();r.collapse(true);r.moveEnd('character',0);r.moveStart('character',0);r.select();}";
 			echo "  }";
 			echo "};";
 
