@@ -27,7 +27,7 @@ class ColorBox extends Box {
 		}
 
 		echo '<span';
-		echo ' class="formPane formColor '.($this->readonly?' formLocked':'').'"';
+		echo ' class="formPane '.($this->readonly?' formLocked':'').'"';
 		echo ' style="padding:0;border:0;position:relative;display:inline-block;"';
 		echo '>';
 
@@ -64,9 +64,12 @@ class ColorBox extends Box {
 		echo Js::BEGIN;
 		echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
 		if (!$this->readonly){
-			echo "jQuery('#$this->name-box,#$this->name-anchor,#$this->name-box-value').click(function(e){ $this->name.ToggleDropDown(); });";
+			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.ToggleDropDown(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); });";
+			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
 			echo "window.".$this->name." = {";
-			echo "  IntToHex : function(d){return (d<0x10?'0':'')+d.toString(16).toUpperCase();}";
+			echo "  is_open : false";
+			echo " ,keep_focus : false";
+			echo " ,IntToHex : function(d){return (d<0x10?'0':'')+d.toString(16).toUpperCase();}";
 			echo " ,RgbToColor : function(r,g,b){return '#'+this.IntToHex(r)+this.IntToHex(g)+this.IntToHex(b);}";
 			echo " ,RgbToCell : function(r,g,b){return '<td class=\"color\"><a style=\"background:'+this.RgbToColor(r,g,b)+'\" href=\"javascript:$this->name.SetColor(\\''+$this->name.RgbToColor(r,g,b)+'\\');\">".new Spacer(1,1)."</a></td>';}";
 			echo " ,SetColor : function(x){";
@@ -78,9 +81,32 @@ class ColorBox extends Box {
 			echo "      jQuery('#$this->name-box').css({background:x});";
 			echo "      jQuery('#$this->name').val(x);";
 			echo "    }";
-			echo "    this.HideDropDown();";
 			echo $this->on_change;
+			echo "    this.Update();";
+			echo "    this.HideDropDown();";
 			echo "  }";
+
+
+			echo " ,OnKeyDown : function(ev){";
+			echo "    switch(ev.which){";
+			echo "      case 13:case 27:if(this.is_open){this.HideDropDown();ev.preventDefault();}break;";
+			echo "      case 32:this.ToggleDropDown();break;";
+			if ($this->allow_null){
+				echo "    case 8:case 46:this.SetColor(null);ev.preventDefault();break;";
+			}
+			echo "    }";
+			echo "  }";
+			echo " ,OnBlur : function(ev){";
+			echo "    setTimeout(function(){if(!$this->name.keep_focus&&!jQuery('#$this->name-box').is(':focus')){ $this->name.HideDropDown(); }},200);";
+			echo "  }";
+			echo " ,KeepFocus : function(){ this.keep_focus = true; setTimeout(function(){ $this->name.Update(); },500); }";
+			echo " ,Update : function(){";
+			echo "    if (!this.is_open) return;";
+			echo "    jQuery('#$this->name-box').focus();";
+			echo "    this.keep_focus = false;";
+			echo "  }";
+
+
 			echo " ,ToggleDropDown : function(){ if (jQuery('#$this->name-dropdown').is(':visible')) this.HideDropDown(); else this.ShowDropDown(); }";
 			echo " ,Showing : false";
 			echo " ,ShowDropDown : function(){";
@@ -93,9 +119,13 @@ class ColorBox extends Box {
 			echo "    if (ww > w) d.css({width:ww+'px'});";
 			echo "    d.css({'margin-top':(1+b.outerHeight(false))+'px','margin-left':Math.floor((b.outerWidth(false)-d.outerWidth(false))/2)+'px'});";
 			echo "    this.FillPalette();";
+			echo "    this.is_open = true;";
+			echo "    this.Update();";
 			echo "    jQuery('html').on('click.$this->name', function(e){ if ($this->name.Showing) { $this->name.Showing = false; return; } if (jQuery('#$this->name-dropdown').has(e.target).length === 0) $this->name.HideDropDown(); });";
 			echo "  }";
 			echo " ,HideDropDown : function(){";
+			echo "    this.keep_focus = false;";
+			echo "    this.is_open = false;";
 			echo "    jQuery('#$this->name-dropdown').hide();";
 			echo "    jQuery('html').off('click.$this->name');";
 			echo "  }";

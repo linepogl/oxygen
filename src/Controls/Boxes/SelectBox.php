@@ -8,7 +8,35 @@ class SelectBox extends Box {
 	private $null_caption = '';
 	public function WithNullCaption($value){ $this->null_caption = $value; return $this; }
 
+	private $options = array();
+	public function WithOptions($value){ $this->options = $value; return $this; }
+	
+	private $value_selector = null;
+	public function WithValueSelector($value){ $this->value_selector = $value; return $this; }
+	private function SelectValue($item){ return $item; }
 
+	private $title_selector = null;
+	public function WithTitleSelector($value){ $this->title_selector = $value; return $this; }
+	private function SelectTitle($item){ if ($item instanceof XItem) return $item->GetTitle(); else return strval($item); }
+
+	private $extra_selector = null;
+	public function WithExtraSelector($value){ $this->extra_selector = $value; return $this; }
+	private function SelectExtra($item){ return null; }
+
+	private $code_selector = null;
+	public function WithCodeSelector($value){ $this->code_selector = $value; return $this; }
+	private function SelectCode($item){ if ($item instanceof XItem) return $item->GetCode(); else return null; }
+
+	private $icon_selector = null;
+	public function WithIconSelector($value){ $this->icon_selector = $value; return $this; }
+	private function SelectIcon($item){ return null; }
+
+	private $children_selector = null;
+	public function WithChildrenSelector($value){ $this->children_selector = $value; return $this; }
+	private function SelectChildren($item){ return null; }
+
+
+	
 	public function Render(){
 
 		$caption = '';

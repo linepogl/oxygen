@@ -18,7 +18,7 @@ class DateBox extends Box {
 			echo new Html($caption);
 			return;
 		}
-		$caption = $this->value instanceof XDateTime ? $this->value->GetDay().'/'.$this->value->GetMonth().'/'.$this->value->GetYear() : ( $this->allow_null ? $this->null_caption : '' );
+		$caption = $this->value instanceof XDateTime ? $this->value->Format('d/m/Y') : ( $this->allow_null ? $this->null_caption : '' );
 
 		echo '<span class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 

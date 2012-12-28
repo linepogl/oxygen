@@ -23,7 +23,7 @@ class DateTimeBox extends Box {
 			->WithReadOnly($this->readonly)
 			->WithAllowNull($this->allow_null)
 			->WithNullCaption($this->null_caption)
-			->WithOnChange($this->name.'.UpdateD();')
+			->WithOnChange('window.'.$this->name.'.UpdateD();')
 			->Render();
 
 		echo '&nbsp;';
@@ -31,7 +31,7 @@ class DateTimeBox extends Box {
 		TimeBox::Make($this->name . '_time' , $this->value )
 			->WithMode($this->mode)
 			->WithReadOnly($this->readonly)
-			->WithOnChange($this->name.'.UpdateT();')
+			->WithOnChange('window.'.$this->name.'.UpdateT();')
 			->WithNullCaption($this->null_caption)
 			->WithAllowNull($this->allow_null)
 			->WithShowSeconds($this->show_seconds)

@@ -82,9 +82,9 @@ class TimeBox extends Box {
 			echo " ,h : ".new Js(is_null($this->value) ? null : $this->value->Format('H'));
 			echo " ,m : ".new Js(is_null($this->value) ? null : $this->value->Format('i'));
 			echo " ,s : ".new Js(is_null($this->value) ? null : $this->value->Format('s'));
-			echo " ,SetH : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=24;x%=24;this.h=x<10?'0'+x:''+x;if(this.m===null)this.m='00';if(this.s===null)this.s='00'; } this.OnChange(); this.SetPseudoFocus('h'); }";
-			echo " ,SetM : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=60;x%=60;this.m=x<10?'0'+x:''+x;if(this.s===null)this.s='00';if(this.h===null)this.h='00'; } this.OnChange(); this.SetPseudoFocus('m'); }";
-			echo " ,SetS : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=60;x%=60;this.s=x<10?'0'+x:''+x;if(this.h===null)this.h='00';if(this.m===null)this.m='00'; } this.OnChange(); this.SetPseudoFocus('s'); }";
+			echo " ,SetH : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=24;x%=24;this.h=x<10?'0'+x:''+x;if(this.m===null)this.m='00';if(this.s===null)this.s='00';this.pseudo_focus='h'; } this.OnChange(); this.Update(); }";
+			echo " ,SetM : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=60;x%=60;this.m=x<10?'0'+x:''+x;if(this.s===null)this.s='00';if(this.h===null)this.h='00';this.pseudo_focus='m'; } this.OnChange(); this.Update(); }";
+			echo " ,SetS : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=60;x%=60;this.s=x<10?'0'+x:''+x;if(this.h===null)this.h='00';if(this.m===null)this.m='00';this.pseudo_focus='s'; } this.OnChange(); this.Update(); }";
 			echo " ,SetAM : function(){ this.SetH( this.h===null ? 0 : parseInt(this.h,10) % 12 ); }";
 			echo " ,SetPM : function(){ this.SetH( this.h===null ? 12 : parseInt(this.h,10) % 12 + 12 ); }";
 			echo " ,OnChange : function(){";
@@ -102,7 +102,7 @@ class TimeBox extends Box {
 			if ($this->show_seconds)
 				echo "      case 9:if(this.h===null)return;if(this.pseudo_focus==='h'&&!ev.shiftKey)this.SetPseudoFocus('m');else if(this.pseudo_focus==='m')this.SetPseudoFocus(ev.shiftKey?'h':'s');else if(this.pseudo_focus==='s'&&ev.shiftKey)this.SetPseudoFocus('m');else return;ev.preventDefault();break;";
 			else
-				echo "      case 9:if(this.h===null)return;if(this.pseudo_focus==='h'&&!ev.shiftKey)this.SetPseudoFocus('m');else if(this.pseudo_focus==='m'&&ev.shiftKey)this.SetPseudoFocus('d');else return;ev.preventDefault();break;";
+				echo "      case 9:if(this.h===null)return;if(this.pseudo_focus==='h'&&!ev.shiftKey)this.SetPseudoFocus('m');else if(this.pseudo_focus==='m'&&ev.shiftKey)this.SetPseudoFocus('h');else return;ev.preventDefault();break;";
 			echo "      case 38:case 39:if(this.pseudo_focus=='h')this.SetH(this.h===null?0:(parseInt(this.h,10)+1)); else if(this.pseudo_focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)+1)); else if(this.pseudo_focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)+1)); break;";
 			echo "      case 40:case 37:if(this.pseudo_focus=='h')this.SetH(this.h===null?0:(parseInt(this.h,10)-1)); else if(this.pseudo_focus=='m')this.SetM(this.m===null?0:(parseInt(this.m,10)-1)); else if(this.pseudo_focus=='s')this.SetS(this.s===null?0:(parseInt(this.s,10)-1)); break;";
 			echo "    }";
@@ -192,7 +192,6 @@ class TimeBox extends Box {
 			echo "    if(el.setSelectionRange)el.setSelectionRange(0,0);else{var r=el.createTextRange();r.collapse(true);r.moveEnd('character',0);r.moveStart('character',0);r.select();}";
 			echo "  }";
 			echo "};";
-
 		}
 		echo Js::END;
 

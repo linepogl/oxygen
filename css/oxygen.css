@@ -3,35 +3,12 @@
  * Reset
  *
  */
-html, body, div, table, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, tbody, tfoot, thead, tr, article, aside, figure, footer, header, hgroup, nav, section, b,i,u,s,* {
-	font-weight:inherit;
-	font-style:inherit;
-	font-size:100.01%;
-	font-family:inherit;
-	vertical-align:top;
-	margin:0;
-	padding:0;
-}
-th, td {
-	vertical-align:middle;
-	font-weight:inherit;
-	font-style:inherit;
-	font-size:100.01%;
-	font-family:inherit;
-	margin:0;
-	padding:0;
-	border:0;
-}
-article, aside, figure, footer, header, hgroup, nav, section { display:block; }
+* { vertical-align:baseline; }
+
 body { background:#ffffff; }
-blockquote:before, blockquote:after, q:before, q:after { content:""; }
-blockquote, q { quotes:"" ""; }
-*:focus { outline:0; -moz-outline:0; }
-abbr { text-decoration:dotted; }
-a img { border:0; }
-img { vertical-align:middle; }
-a { outline-style:none; }
+th, td { vertical-align:middle; }
 th { text-align:center; }
+img { vertical-align:middle; }
 hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 
 
@@ -179,7 +156,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formPane         { background-color:#ffffff; border-color:#999999; color:#666699; }
 .formPane:focus   { background-color:#fcfcfc; border-color:#666666; color:#444477; }
 .formPaneAnchor   { position:absolute; float:right; right:0; margin:0; padding:0; width:15px; height:15px; }
-.formPaneAnchor   { background:url(../img/form-pane-anchor.gif) 50% 50% no-repeat; }
+.formPaneAnchor   { background:url(../img/form-pane-anchor.png) 50% 50% no-repeat; }
 
 .formLocked       { background-color:#fbfbfb; border-color:#999999; color:#999999; }
 .formLocked:focus { background-color:#fafafa; border-color:#777777; color:#777777; }
@@ -207,7 +184,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDownFoot a.button-pm:hover   { border-left:1px dotted #aaaaaa; }
 
 .formDate                         { width:7.5em; text-align:left; }
-.formDateAnchor                   { background:url(../img/form-date-anchor.gif) 50% 50% no-repeat; }
+.formDateAnchor                   { background:url(../img/form-date-anchor.png) 50% 50% no-repeat; }
 .formDateDropDown                 { width:210px; }
 .formDateDropDown td              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }
 .formDateDropDown th              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }

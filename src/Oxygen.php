@@ -786,6 +786,7 @@ class Oxygen {
 		}
 
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.js"></script>';
+		echo '<link href="'.__BASE__.'oxy/css/reset.css" rel="stylesheet" type="text/css" />';
 		echo '<link href="'.__BASE__.'oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
 
