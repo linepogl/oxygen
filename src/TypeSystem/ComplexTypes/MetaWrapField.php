@@ -76,8 +76,8 @@ class MetaWrapField extends XConcreteType {
 	 * @param $value XWrapField
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
-		return self::EncodeAsXmlString($value->GetName());
+	public static function ExportXmlString($value,$attr=false) {
+		return self::EncodeAsXmlString($value->GetName(),$attr);
 	}
 
 	/**
@@ -85,14 +85,6 @@ class MetaWrapField extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return self::EncodeAsHtmlString($value->GetName());
-	}
-
-	/**
-	 * @param $value XWrapField
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return self::EncodeAsHtmlString($value->GetLabel());
 	}
 

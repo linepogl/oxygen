@@ -76,7 +76,7 @@ class MetaNull extends XNullableType {
 	 * @param $value null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		return '';
 	}
 
@@ -85,14 +85,6 @@ class MetaNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return '';
-	}
-
-	/**
-	 * @param $value null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return '';
 	}
 

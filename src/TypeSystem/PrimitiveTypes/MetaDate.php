@@ -116,7 +116,7 @@ class MetaDate extends MetaDateTime {
 	 * @param $value XDate|null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if (is_null($value)) return '';
 		return $value->Format('Y-m-d');
 	}
@@ -127,17 +127,9 @@ class MetaDate extends MetaDateTime {
 	 */
 	public static function ExportHtmlString($value) {
 		if (is_null($value)) return '';
-		return $value->Format('YmdHis');
-	}
-
-	/**
-	 * @param $value XDate|null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
-		if (is_null($value)) return '';
 		return self::EncodeAsHtmlString( Language::FormatDate($value) );
 	}
+
 
 	/**
 	 * @param $value XDate|null

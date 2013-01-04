@@ -103,7 +103,7 @@ class MetaTimeSpanOrZero extends XConcreteType {
 	 * @param $value XTimeSpan
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		return $value->AsString();
 	}
 
@@ -112,14 +112,6 @@ class MetaTimeSpanOrZero extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return strval($value->GetTotalMilliseconds());
-	}
-
-	/**
-	 * @param $value XTimeSpan
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		$d = $value->GetDays();
 		$h = $value->GetHours();
 		$m = $value->GetMinutes();

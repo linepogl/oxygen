@@ -56,10 +56,7 @@ class TextboxControl extends ValueControl {
 				}
 
 
-				if ($this->readonly)
-					echo ' value="'.new HumanReadableHtml($this->value).'" />';
-				else
-					echo ' value="'.new Html($this->value).'" />';
+				echo ' value="'.new Html($this->value).'" />';
 			}
 			else {
 				echo '<textarea id="'.$this->name.'" rows="'.$this->rows.'"';
@@ -120,7 +117,7 @@ class TextboxControl extends ValueControl {
 			}
 		}
 		else {
-			echo '<span id="'.$this->name.'" style="white-space:pre;">'.new HumanReadableHtml( $this->value ).'</span>';
+			echo '<span id="'.$this->name.'" style="white-space:pre;">'.new Html( $this->value ).'</span>';
 		}
 	}
 

@@ -79,7 +79,7 @@ class MetaID extends XNullableType {
 	 * @param $value ID|null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if (is_null($value)) return '';
 		return $value->AsHex();
 	}
@@ -89,15 +89,6 @@ class MetaID extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		return $value->AsHex();
-	}
-
-	/**
-	 * @param $value ID|null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		return $value->AsHex();
 	}

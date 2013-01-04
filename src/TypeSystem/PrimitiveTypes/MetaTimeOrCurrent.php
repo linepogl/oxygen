@@ -82,7 +82,7 @@ class MetaTimeOrCurrent extends XConcreteType {
 	 * @param $value XTime
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		return $value->Format('H:i:s');
 	}
 
@@ -91,14 +91,6 @@ class MetaTimeOrCurrent extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return $value->Format('YmdHis');
-	}
-
-	/**
-	 * @param $value XTime
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return self::EncodeAsHtmlString( Language::FormatTime($value) );
 	}
 

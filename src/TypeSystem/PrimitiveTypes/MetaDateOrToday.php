@@ -112,7 +112,7 @@ class MetaDateOrToday extends MetaDateTimeOrNow {
 	 * @param $value XDate
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		return $value->Format('Y-m-d');
 	}
 
@@ -121,14 +121,6 @@ class MetaDateOrToday extends MetaDateTimeOrNow {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return $value->Format('YmdHis');
-	}
-
-	/**
-	 * @param $value XDate
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return self::EncodeAsHtmlString( Language::FormatDate($value) );
 	}
 

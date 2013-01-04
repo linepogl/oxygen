@@ -86,7 +86,7 @@ class MetaDecimal extends XConcreteType {
 	 * @param $value float
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		return Language::FormatDecimalInvariant($value);
 	}
 
@@ -95,14 +95,6 @@ class MetaDecimal extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return Language::FormatDecimal($value);
-	}
-
-	/**
-	 * @param $value float
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return Language::FormatDecimal($value);
 	}
 

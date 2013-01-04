@@ -79,7 +79,7 @@ class MetaBoolean extends XConcreteType {
 	 * @param $value boolean
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if ($value) return 'true';
 		return 'false';
 	}
@@ -89,15 +89,6 @@ class MetaBoolean extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if ($value) return 'true';
-		return 'false';
-	}
-
-	/**
-	 * @param $value boolean
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		if ($value) return (string)Lemma::Pick('Yes');
 		return (string)Lemma::Pick('No');
 	}

@@ -1,11 +1,11 @@
 <?php
 
-abstract class ImportConverter {
+abstract class ImportValue {
   protected $value;
   public function __construct($value){
     $this->value = $value;
   }
-	/** @return ImportConverter */
+	/** @return ImportValue */
 	public static function Make($value){ return new static($value); }
 
 

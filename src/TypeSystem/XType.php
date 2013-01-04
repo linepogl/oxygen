@@ -3,10 +3,6 @@
 
 interface _XType {
 
-	/**
-	 * @return XType
-	 */
-	public static function Type();
 
 	/**
 	 * @return XNullableType
@@ -77,7 +73,7 @@ interface _XType {
 	 * @param $value mixed <T>
 	 * @return string
 	 */
-	public static function ExportXmlString($value);
+	public static function ExportXmlString($value,$attr=false);
 
 
 	/**
@@ -85,13 +81,6 @@ interface _XType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value);
-
-
-	/**
-	 * @param $value mixed <T>
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value);
 
 
 	/**
@@ -126,19 +115,14 @@ interface _XType {
 
 }
 
-
-
-
-
-
-
-
-
-
 abstract class XType implements _XType {
 
 	protected function __construct(){}
 
+	/**
+	 * @return XType
+	 */
+	public static abstract function Type();
 
 
 	/**
@@ -148,7 +132,7 @@ abstract class XType implements _XType {
 	public final static function Of($value){
 		if (is_string($value)) return MetaString::Type();
 		if (is_null($value)) return MetaNull::Type();
-		if ($value instanceof _XValue) /** @var $value _XValue */ return $value->MetaType();
+		if ($value instanceof XValue) return $value->MetaType();
 		if (is_int($value)) return MetaInteger::Type();
 		if (is_float($value)) return MetaDecimal::Type();
 		if (is_bool($value)) return MetaBoolean::Type();
@@ -248,9 +232,14 @@ abstract class XType implements _XType {
 	 * @param $string string
 	 * @return string
 	 */
-	protected static function EncodeAsXmlString($string) {
-		return Oxygen::ToUnicode(str_replace(array('&','>','<','"',"\r\n"),array('&amp;','&gt;','&lt;','&quot;',"\n"),$string));
+	protected static function EncodeAsXmlString($string,$attr=false) {
+		if ($attr)
+			return Oxygen::ToUnicode(str_replace(array('&','>','<','"',"\r\n","\n","\r","\t"),array('&amp;','&gt;','&lt;','&quot;','&#10;','&#10;','&#13;','&#9;'),$string));
+		else
+			return Oxygen::ToUnicode(str_replace(array('&','>','<','"',"\r\n"),array('&amp;','&gt;','&lt;','&quot;',"\n"),$string));
 	}
+
+
 
 	/**
 	 * @param $string string
@@ -292,15 +281,6 @@ abstract class XType implements _XType {
 	protected static function DecodeUrlString($string) {
 		return rawurldecode($string);
 	}
-
-
-
-
-
-
-
-
-
 
 
 

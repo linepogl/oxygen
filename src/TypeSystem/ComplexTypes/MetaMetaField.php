@@ -79,8 +79,8 @@ class MetaMetaField extends XConcreteType {
 	 * @param $value XMetaField
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
-		return self::EncodeAsXmlString($value->GetName());
+	public static function ExportXmlString($value,$attr=false) {
+		return self::EncodeAsXmlString($value->GetName(),$attr);
 	}
 
 	/**
@@ -88,14 +88,6 @@ class MetaMetaField extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return self::EncodeAsHtmlString($value->GetName());
-	}
-
-	/**
-	 * @param $value XMetaField
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return self::EncodeAsHtmlString($value->GetLabel());
 	}
 

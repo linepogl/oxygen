@@ -1,10 +1,14 @@
 <?php
 
 
-class Xml extends ExportConverter {
+class Xml extends ExportValue {
 
 	public function Export(){
 		return $this->type->ExportXmlString($this->value);
+	}
+
+	public function MetaType(){
+		return MetaXml::Type();
 	}
 
 

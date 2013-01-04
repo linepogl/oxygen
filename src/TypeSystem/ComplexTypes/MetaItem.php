@@ -76,7 +76,7 @@ class MetaItem extends XNullableType {
 	 * @param $value XItem
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		return $value->id->AsHex();
 	}
 
@@ -85,14 +85,6 @@ class MetaItem extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return $value->id->AsHex();
-	}
-
-	/**
-	 * @param $value XItem
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return $value->id->AsHex();
 	}
 

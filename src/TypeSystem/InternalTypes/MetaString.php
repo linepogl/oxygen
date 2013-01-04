@@ -77,8 +77,8 @@ class MetaString extends XConcreteType {
 	 * @param $value string
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
-		return self::EncodeAsXmlString($value);
+	public static function ExportXmlString($value,$attr=false) {
+		return self::EncodeAsXmlString($value,$attr);
 	}
 
 	/**
@@ -86,14 +86,6 @@ class MetaString extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return self::EncodeAsHtmlString($value);
-	}
-
-	/**
-	 * @param $value string
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return self::EncodeAsHtmlString($value);
 	}
 

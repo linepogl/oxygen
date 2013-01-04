@@ -447,7 +447,7 @@ abstract class XItem extends XValue implements Serializable {
 		//$xml = $e->ownerDocument;
 		$c = $this->Meta();
 
-		// Import fields
+		// ImportValues fields
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$fields = $cx->GetXmlFields();
 			/** @var $f XMetaField */
@@ -505,7 +505,7 @@ abstract class XItem extends XValue implements Serializable {
 			}
 		}
 
-		// Import slaves
+		// ImportValues slaves
 		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 			$slaves = $cx->GetXmlSlaves();
 			/** @var $sl XMetaSlave */

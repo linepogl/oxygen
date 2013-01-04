@@ -87,9 +87,9 @@ class MetaStringOrNull extends XNullableType {
 	 * @param $value string|null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if (is_null($value)) return '';
-		return self::EncodeAsHtmlString($value);
+		return self::EncodeAsXmlString($value,$attr);
 	}
 
 	/**
@@ -97,15 +97,6 @@ class MetaStringOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		return self::EncodeAsHtmlString($value);
-	}
-
-	/**
-	 * @param $value string|null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		return self::EncodeAsHtmlString($value);
 	}

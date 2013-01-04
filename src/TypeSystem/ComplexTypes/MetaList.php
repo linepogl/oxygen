@@ -79,9 +79,9 @@ class MetaList extends XConcreteType {
 	 * @param $value XList
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		$ids = $value->ToIDList();
-		return implode(',',array_map(function($id){ return MetaID::ExportXmlString($id); },$ids));
+		return implode(',',array_map(function($id)use($attr){ return MetaID::ExportXmlString($id,$attr); },$ids));
 	}
 
 	/**
@@ -91,14 +91,6 @@ class MetaList extends XConcreteType {
 	public static function ExportHtmlString($value) {
 		$ids = $value->ToIDList();
 		return implode(',',array_map(function($id){ return MetaID::ExportHtmlString($id); },$ids));
-	}
-
-	/**
-	 * @param $value XList
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
-		throw new ConvertionException();
 	}
 
 	/**

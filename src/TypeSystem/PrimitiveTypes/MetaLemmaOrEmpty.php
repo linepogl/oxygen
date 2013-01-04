@@ -74,8 +74,8 @@ class MetaLemmaOrEmpty extends XConcreteType {
 	 * @param $value Lemma
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
-		return self::EncodeAsXmlString( $value->Encode() );
+	public static function ExportXmlString($value,$attr=false) {
+		return self::EncodeAsXmlString( $value->Encode() , $attr );
 	}
 
 	/**
@@ -83,14 +83,6 @@ class MetaLemmaOrEmpty extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return self::EncodeAsHtmlString( $value->Translate() );
-	}
-
-	/**
-	 * @param $value Lemma
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return self::EncodeAsHtmlString( $value->Translate() );
 	}
 

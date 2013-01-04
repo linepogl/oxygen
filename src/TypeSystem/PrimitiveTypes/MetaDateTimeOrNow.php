@@ -81,7 +81,7 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @param $value XDateTime
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		return $value->Format('Y-m-d\TH:i:s');
 	}
 
@@ -90,14 +90,6 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return $value->Format('YmdHis');
-	}
-
-	/**
-	 * @param $value XDateTime
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return self::EncodeAsHtmlString( Language::FormatDateTime($value) );
 	}
 

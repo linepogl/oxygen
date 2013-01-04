@@ -1,6 +1,6 @@
 <?php
 
-class Sql extends ExportConverter {
+class Sql extends ExportValue {
 
 	public function Export(){
 		try{
@@ -9,6 +9,10 @@ class Sql extends ExportConverter {
 		catch (Exception $ex){
 			return '';
 		}
+	}
+
+	public function MetaType(){
+		return MetaSql::Type();
 	}
 
 	const Null = 'NULL';

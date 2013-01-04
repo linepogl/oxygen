@@ -105,7 +105,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @param $value XTimeSpan|null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if (is_null($value)) return '';
 		return $value->AsString();
 	}
@@ -115,15 +115,6 @@ class MetaTimeSpan extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		return strval($value->GetTotalMilliseconds());
-	}
-
-	/**
-	 * @param $value XTimeSpan|null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		$d = $value->GetDays();
 		$h = $value->GetHours();

@@ -87,25 +87,17 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @param $value float|null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if (is_null($value)) return '';
 		return Language::FormatDecimalInvariant($value);
 	}
+
 
 	/**
 	 * @param $value float|null
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		return Language::FormatDecimal($value);
-	}
-
-	/**
-	 * @param $value float|null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		return Language::FormatDecimal($value);
 	}

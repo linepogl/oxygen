@@ -87,9 +87,9 @@ class MetaLemma extends XNullableType {
 	 * @param $value Lemma|null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if (is_null($value)) return '';
-		return self::EncodeAsXmlString( $value->Encode() );
+		return self::EncodeAsXmlString( $value->Encode() , $attr );
 	}
 
 	/**
@@ -97,15 +97,6 @@ class MetaLemma extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		return self::EncodeAsHtmlString( $value->Translate() );
-	}
-
-	/**
-	 * @param $value Lemma|null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		return self::EncodeAsHtmlString( $value->Translate() );
 	}

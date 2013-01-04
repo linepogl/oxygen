@@ -1,6 +1,6 @@
 <?php
 
-class XmlValue extends ImportConverter {
+class XmlValue extends ImportValue {
 
 	/** @return string|null */
 	public function GetInnerValue(){ return $this->value; }

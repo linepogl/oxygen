@@ -87,7 +87,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @param $value boolean|null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if (is_null($value)) return '';
 		if ($value) return 'true';
 		return 'false';
@@ -98,16 +98,6 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		if ($value) return 'true';
-		return 'false';
-	}
-
-	/**
-	 * @param $value boolean|null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		if ($value) return (string)Lemma::Pick('Yes');
 		return (string)Lemma::Pick('No');

@@ -1,6 +1,6 @@
 <?php
 
-class DBValue extends ImportConverter {
+class DBValue extends ImportValue {
 
 
 	public function CastTo(XType $type) {

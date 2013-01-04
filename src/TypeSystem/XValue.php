@@ -1,19 +1,11 @@
 <?php
 
-
-interface _XValue {
+abstract class XValue {
 
 	/**
 	 * @return XType;
 	 */
-	public function MetaType();
-
-	public function CompareTo($x);
-	public function IsEqualTo($x);
-
-}
-
-abstract class XValue implements _XValue {
+	public abstract function MetaType();
 
 	/** @return int */
 	public function CompareTo($x){
@@ -32,10 +24,10 @@ abstract class XValue implements _XValue {
 
 
 	public static function AreEqual($x1,$x2){
-		if ( $x1 instanceof _XValue )
+		if ( $x1 instanceof XValue )
 			return $x1->IsEqualTo( $x2 );
 
-		if ( $x2 instanceof _XValue )
+		if ( $x2 instanceof XValue )
 			return $x2->IsEqualTo( $x1 );
 
 		if ( gettype( $x1 ) == gettype( $x2 ) )
@@ -50,10 +42,10 @@ abstract class XValue implements _XValue {
 		throw new InvalidArgumentException('Unsupported comparison: ' . (is_object($x1)?get_class($x1):gettype($x1)) . ' - ' . (is_object($x2)?get_class($x2):gettype($x2))  );
 	}
 	public static function Compare($x1,$x2){
-		if ( $x1 instanceof _XValue )
+		if ( $x1 instanceof XValue )
 			return $x1->CompareTo( $x2 );
 
-		if ( $x2 instanceof _XValue )
+		if ( $x2 instanceof XValue )
 			return $x2->CompareTo( $x1 );
 
 		if (is_null($x1)) {

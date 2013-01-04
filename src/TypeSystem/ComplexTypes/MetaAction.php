@@ -77,14 +77,6 @@ class MetaAction extends XConcreteType {
 	 * @param $value Action
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
-		throw new ConvertionException();
-	}
-
-	/**
-	 * @param $value Action
-	 * @return string
-	 */
 	public static function ExportHtmlString($value) {
 		return self::EncodeAsHtmlString($value->GetHref());
 	}
@@ -93,9 +85,10 @@ class MetaAction extends XConcreteType {
 	 * @param $value Action
 	 * @return string
 	 */
-	public static function ExportHumanReadableHtmlString($value) {
-		return self::EncodeAsHtmlString($value->GetLinkedTitle());
+	public static function ExportXmlString($value,$attr=false) {
+		throw new ConvertionException();
 	}
+
 
 	/**
 	 * @param $value Action

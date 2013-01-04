@@ -75,8 +75,8 @@ class MetaStringable extends XConcreteType {
 	 * @param $value mixed
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
-		return MetaString::ExportXmlString(strval($value));
+	public static function ExportXmlString($value,$attr=false) {
+		return MetaString::ExportXmlString(strval($value),$attr);
 	}
 
 	/**
@@ -85,14 +85,6 @@ class MetaStringable extends XConcreteType {
 	 */
 	public static function ExportHtmlString($value) {
 		return MetaString::ExportHtmlString(strval($value));
-	}
-
-	/**
-	 * @param $value mixed
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
-		return MetaString::ExportHumanReadableHtmlString(strval($value));
 	}
 
 	/**

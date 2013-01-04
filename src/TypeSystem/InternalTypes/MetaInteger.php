@@ -79,7 +79,7 @@ class MetaInteger extends XConcreteType {
 	 * @param $value int
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		return sprintf('%d',$value);
 	}
 
@@ -88,14 +88,6 @@ class MetaInteger extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return sprintf('%d',$value);
-	}
-
-	/**
-	 * @param $value int
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		return sprintf('%d',$value);
 	}
 

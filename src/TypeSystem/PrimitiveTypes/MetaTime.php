@@ -85,7 +85,7 @@ class MetaTime extends XNullableType {
 	 * @param $value XTime|null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if (is_null($value)) return '';
 		return $value->Format('H:i:s');
 	}
@@ -95,15 +95,6 @@ class MetaTime extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		return $value->Format('YmdHis');
-	}
-
-	/**
-	 * @param $value XTime|null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		return self::EncodeAsHtmlString( Language::FormatTime($value) );
 	}

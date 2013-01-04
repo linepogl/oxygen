@@ -1,7 +1,7 @@
 <?php
 
 
-class HttpValue extends ImportConverter {
+class HttpValue extends ImportValue {
   public function __construct($value){
   	if (is_array($value)){
   		$a = array();

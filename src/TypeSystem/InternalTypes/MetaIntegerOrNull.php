@@ -85,7 +85,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @param $value int|null
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		if (is_null($value)) return '';
 		return sprintf('%d',$value);
 	}
@@ -95,15 +95,6 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
-		return sprintf('%d',$value);
-	}
-
-	/**
-	 * @param $value int|null
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
 		if (is_null($value)) return '';
 		return sprintf('%d',$value);
 	}

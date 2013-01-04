@@ -84,10 +84,10 @@ class MetaTraversable extends XConcreteType {
 	 * @param $value Traversable
 	 * @return string
 	 */
-	public static function ExportXmlString($value) {
+	public static function ExportXmlString($value,$attr=false) {
 		$a = array();
 		foreach ($value as $x)
-			$a[] = XType::Of($x)->ExportXmlString($x);
+			$a[] = XType::Of($x)->ExportXmlString($x,$attr);
 		return implode(',',$a);
 	}
 
@@ -100,17 +100,6 @@ class MetaTraversable extends XConcreteType {
 		foreach ($value as $x)
 			$a[] = XType::Of($x)->ExportHtmlString($x);
 		return implode(',',$a);
-	}
-
-	/**
-	 * @param $value Traversable
-	 * @return string
-	 */
-	public static function ExportHumanReadableHtmlString($value) {
-		$a = array();
-		foreach ($value as $x)
-			$a[] = XType::Of($x)->ExportHumanReadableHtmlString($x);
-		return implode(', ',$a);
 	}
 
 	/**
