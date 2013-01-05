@@ -5,56 +5,104 @@ class SelectBox extends Box {
 	private $allow_null = false;
 	public function WithAllowNull($value){ $this->allow_null = $value; return $this; }
 
-	private $null_caption = '';
-	public function WithNullCaption($value){ $this->null_caption = $value; return $this; }
+	private $null_option = null;
+	public function WithNullCaption($value){
+		if ($value instanceof SelectBoxOption)
+			$this->null_option = $value->WithValue(null);
+		else
+			$this->null_option = SelectBoxOption::Make()->WithValue(null)->WithCaption($value);
+		return $this;
+	}
 
 	private $options = array();
-	public function WithOptions($value){ $this->options = $value; return $this; }
-	
-	private $value_selector = null;
-	public function WithValueSelector($value){ $this->value_selector = $value; return $this; }
-	private function SelectValue($item){ return $item; }
+	public function Add($value,$caption = null){
+		return $this->AddMany(array($value),$caption);
+	}
+	public function AddMany($values,$captions = null){
+		if (is_callable($captions)) {
+			foreach ($values as $key=>$value){
+				$x = $captions($value,$key);
+				if (is_null($x))
+					$this->options[] = SelectBoxOption::Make()->WithValue($value);
+				elseif ($x instanceof SelectBoxOption)
+					$this->options[] = $x->WithValue($value);
+				else
+					$this->options[] = SelectBoxOption::Make()->WithValue($value)->WithCaption($x);
+			}
+		}
+		elseif (is_array($captions) || $captions instanceof Traversable) {
+			$o = from($captions);
+			$o->Rewind();
+			foreach ($values as $value){
+				$x = null;
+				if ($o->Valid()){
+					$x = $o->Current();
+					$o->Next();
+				}
+				if (is_null($x))
+					$this->options[] = SelectBoxOption::Make()->WithValue($value);
+				elseif ($x instanceof SelectBoxOption)
+					$this->options[] = $x->WithValue($value);
+				else
+					$this->options[] = SelectBoxOption::Make()->WithValue($value)->WithCaption($x);
+			}
+		}
+		else {
+			foreach ($values as $value){
+				if ($value instanceof SelectBoxOption)
+					$this->options[] = $value;
+				else
+					$this->options[] = SelectBoxOption::Make()->WithValue($value)->WithCaption($captions);
+			}
+		}
+		return $this;
+	}
 
-	private $title_selector = null;
-	public function WithTitleSelector($value){ $this->title_selector = $value; return $this; }
-	private function SelectTitle($item){ if ($item instanceof XItem) return $item->GetTitle(); else return strval($item); }
-
-	private $extra_selector = null;
-	public function WithExtraSelector($value){ $this->extra_selector = $value; return $this; }
-	private function SelectExtra($item){ return null; }
-
-	private $code_selector = null;
-	public function WithCodeSelector($value){ $this->code_selector = $value; return $this; }
-	private function SelectCode($item){ if ($item instanceof XItem) return $item->GetCode(); else return null; }
-
-	private $icon_selector = null;
-	public function WithIconSelector($value){ $this->icon_selector = $value; return $this; }
-	private function SelectIcon($item){ return null; }
-
-	private $children_selector = null;
-	public function WithChildrenSelector($value){ $this->children_selector = $value; return $this; }
-	private function SelectChildren($item){ return null; }
 
 
 	
 	public function Render(){
+		if (is_null($this->null_option)) $this->null_option = SelectBoxOption::Make()->WithValue(null)->WithCaption('');
 
-		$caption = '';
+		$options = array();
+		if ($this->allow_null || count($this->options) == 0) $options[] = $this->null_option;
+		foreach ($this->options as $option) $options[] = $option;
+
+
+		$selected_index = 0;
+		$url_value = strval(new Url($this->value));
+		$i = 0;
+		/** @var $option SelectBoxOption */
+		foreach ($options as $option) {
+			if ( $option->GetUrlValue() === $url_value ) {
+				$selected_index = $i;
+				break;
+			}
+			$i++;
+		}
+		/** @var $selected_option SelectBoxOption */
+		$selected_option = $options[$selected_index];
 
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
-			echo new Html($caption);
+			echo new Html( $selected_option->GetCaption() );
 			return;
 		}
 
-		$caption = '';
+		$caption = new Html($selected_option->GetCaption());
 		echo '<span class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 
 		if (!$this->readonly){
 			echo new HiddenControl($this->name,$this->value);
-			echo '<div id="'.$this->name.'-dropdown" class="formDropDown" style="display:none;">';
+			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formSelectDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
 //    echo '<div class="formDropDownHead"></div>';
 			echo '<div class="formDropDownBody">';
+
+			foreach ($options as $option){
+				echo '<a class="option" href="#">';
+				echo new Html($option->GetCaption());
+				echo '</a>';
+			}
 
 			echo '</div>';
 //    echo '<div class="formDropDownFoot"></div>';
@@ -66,8 +114,8 @@ class SelectBox extends Box {
 		echo '<input id="'.$this->name.'-box"';
 		echo ' class="formPane'.($this->readonly?' formLocked':'').'"';
 		echo ' style="width:100%;margin:0;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;"';
-		echo ' value="'.new Html($caption).'"';
 		echo ' readonly="readonly"';
+		echo ' value="'.new Html($caption).'"';
 		echo '/>';
 
 		echo '</span>';

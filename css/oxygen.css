@@ -215,7 +215,10 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formTimeDropDown .clock a:hover      { background:#d3d6c2; }
 .formTimeDropDown .clock a.selected   { background:#c3c6b2; }
 
-
+.formSelectDropDown .formDropDownBody { padding:0; }
+.formSelectDropDown a.option { display:block; font:normal 12px/14px Helvetica,Arial,sans-serif; color:#666666; padding:6px 10px; }
+.formSelectDropDown a.option:hover    { background:#f0f0f0!important; color:#000000!important; }
+.formSelectDropDown a.option.selected { background:#d3d6c2!important; color:#000000!important; }
 
 
 /*
