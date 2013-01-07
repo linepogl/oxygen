@@ -119,11 +119,6 @@ abstract class XType implements _XType {
 
 	protected function __construct(){}
 
-	/**
-	 * @return XType
-	 */
-	public static abstract function Type();
-
 
 	/**
 	 * @param $value mixed
