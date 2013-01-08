@@ -8,7 +8,7 @@ chdir(__ROOT__);
 
 define('DEBUG',array_key_exists('debug',$_GET));
 define('PROFILE',array_key_exists('profile',$_GET));
-define('DEV',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
+define('LOCALHOST',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
 
 //define('IS_IGBINARY_AVAILABLE',function_exists('igbinary_serialize'));
 define('IS_IGBINARY_AVAILABLE',false);

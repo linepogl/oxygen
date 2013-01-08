@@ -418,7 +418,7 @@ class Debug {
 
 		$filename = Fs::GetSafeFilename($serial.'.'.get_class($ex).($hits<=1?'':'.x'.$hits).'.'.$way_handled_message).'.err';
 
-		$subject = DEV?'[DEV]':'';
+		$subject = Oxygen::IsDevelopment()?'[DEV]':'';
 		$subject .= '['.Oxygen::GetApplicationName().']';
 		$subject .= ' '.get_class($ex);
 		$subject .= $hits<=1?'':' x'.$hits;

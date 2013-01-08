@@ -57,7 +57,7 @@ final class Progress {
 		self::SetProgress(1.0);
 		self::SetFinished(true);
 		if (!($ex instanceof ApplicationException)) {
-			if (DEV)
+			if (Oxygen::IsDevelopment())
 				Debug::RecordExceptionServed($ex,'Progress Exception Handler.');
 			else
 				Debug::RecordExceptionServedGeneric($ex,'Progress Exception Handler.');

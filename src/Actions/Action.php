@@ -236,7 +236,7 @@ abstract class Action extends XValue {
 				Oxygen::SetResponseCode(500); // internal server error
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				if (DEV) {
+				if (Oxygen::IsDevelopment()) {
 					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
 				}
 				else {
@@ -248,7 +248,7 @@ abstract class Action extends XValue {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
-					if (DEV) {
+					if (Oxygen::IsDevelopment()) {
 						Debug::Write( '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) );
 					}
 					else {
@@ -264,7 +264,7 @@ abstract class Action extends XValue {
 					echo '<td style="padding:15px;">'.new Spacer(1,100).'</td>';
 					echo '<td class="vtop" style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
 
-					if (DEV) {
+					if (Oxygen::IsDevelopment()) {
 						echo new Spacer(350,12);
 						echo '<div style="font-weight:normal;font-style:italic;color:#cccccc;font-size:90%;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div><br/>';
 						echo Debug::GetExceptionReportAsHtml($ex);
@@ -283,7 +283,7 @@ abstract class Action extends XValue {
 					$exception_served_as = '';
 				}
 			}
-			if (DEV)
+			if (Oxygen::IsDevelopment())
 				Debug::RecordExceptionServed($ex,'Action Exception Handler'.$exception_served_as.'.');
 			else
 				Debug::RecordExceptionServedGeneric($ex,'Action Exception Handler'.$exception_served_as.'.');

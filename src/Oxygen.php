@@ -186,13 +186,13 @@ class Oxygen {
 				}
 				elseif ($ex instanceof ApplicationException)
 					echo $ex->getMessage();
-				elseif (!DEV)
+				elseif (!Oxygen::IsDevelopment())
 					echo Lemma::Pick('MsgAnErrorOccurred');
 				else
 					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
 
 				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
-				if ($ex instanceof ApplicationException || DEV)
+				if ($ex instanceof ApplicationException || Oxygen::IsDevelopment())
 					Debug::RecordExceptionServed($ex,'Global Exception Handler ('.$served_as.')');
 				else
 					Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler ('.$served_as.')');
@@ -210,7 +210,7 @@ class Oxygen {
 				}
 				else {
 					error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
-					if (DEV) {
+					if (Oxygen::IsDevelopment()) {
 						$serial = Debug::RecordExceptionServed($ex,'Global Exception Handler');
 						echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div>';
 						echo '<div style="font:normal 11px/12px Trebuchet MS,sans-serif;margin:10px 0 2px 0;color:#999999;">'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
@@ -397,7 +397,9 @@ class Oxygen {
 	public static function GetDeveloperEmails(){ return self::$developer_emails; }
 	public static function AddDeveloperEmail($value) { self::$developer_emails[] = $value; }
 	public static function SetDeveloperEmails($value=array()) { if (!is_array($value)) throw new InvalidArgumentException(); self::$developer_emails = $value; }
-
+	private static $development = LOCALHOST;
+	public static function SetDevelopment($value){ self::$development = $value; }
+	public static function IsDevelopment(){ return self::$development; }
 
 
 
@@ -1057,7 +1059,7 @@ class Oxygen {
 		$r['Entry PHP Script'] = Oxygen::GetCurrentPhpScript();
 		$a = Oxygen::GetDeveloperEmails();
 		$r['Developer e-mails'] = implode(', ',$a).(empty($a)?' *** NOT DEFINED ***':'');
-		$r['Environment'] = (DEV?'DEVELOPMENT':'PRODUCTION').(DEBUG?' DEBUG':'').(PROFILE?' PROFILE':'');
+		$r['Environment'] = (Oxygen::IsDevelopment()?'DEVELOPMENT':'PRODUCTION').(DEBUG?' DEBUG':'').(PROFILE?' PROFILE':'');
 		$f = Oxygen::GetTempFolder();
 		$s = $f; if (is_dir($f)) { try{ $ff = $f.'/'.ID::Random()->AsHex(); file_put_contents($ff,'test'); unlink($ff); } catch(Exception $ex){ $s .= ' *** NO WRITE PERMISSION ***'; } } else { $s .= ' *** NOT FOUND ***'; }
 		$r['Temp folder (local)'] = $s;
