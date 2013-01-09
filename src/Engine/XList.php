@@ -451,8 +451,15 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 
 	public function RemoveMany($traversable){
-		foreach ($traversable as $x)
-			$this->Remove($x);
+		$this->Evaluate();
+		$a = array();
+		foreach ($this->data as $key=>$xx)
+			if (!is_null($xx))
+				foreach ($traversable as $x)
+					if ($xx->IsEqualTo($x)) { $a[] = $key; break; }
+		$a = array_reverse($a);
+		foreach ($a as $key)
+			unset($this[$key]);
 	}
 
 	public function RemoveWhere($predicate_function){

@@ -170,7 +170,7 @@ class ReportTableControl extends ValueControl {
 					.'}';
 			}
 			else {
-				$this->row_js[$i] = new Js(strval(new Url($value)));
+				$this->row_js[$i] = new Js(new Url($value));
 			}
 		}
 		return $this;
@@ -418,7 +418,7 @@ class ReportTableControl extends ValueControl {
 		echo "  }";
 		echo " ,UpdateValue : function(){";
 		echo "    var s = '';";
-		foreach ($row_with_values_indices as $i) echo "if(this.IsChecked(".new Js($i)."))s+=(s==''?'':',')+".new Js(strval(new Url($this->row_value[$i]))).";";
+		foreach ($row_with_values_indices as $i) echo "if(this.IsChecked(".new Js($i)."))s+=(s==''?'':',')+".new Js(new Url($this->row_value[$i])).";";
 		echo "    var rows = [];";
 		echo "    var a = [" . implode(',',$row_with_values_indices) ."];";
 		echo "    for (var i = 0; i < a.length; i++) if(this.IsChecked(a[i])) rows.push(this.rows[a[i]]);";

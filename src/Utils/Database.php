@@ -356,7 +356,7 @@ class Database {
 	 * @param string $sql ... Pass the rest of the arguments after $sql
 	 * @return array
 	 */
-	public static function ExecuteColumnOf(XType $type, $sql){ return self::ExecuteColumnOfX($type,$sql,array_slice(func_get_args(),1)); }
+	public static function ExecuteColumnOf(XType $type, $sql){ return self::ExecuteColumnOfX($type,$sql,array_slice(func_get_args(),2)); }
 	/**
 	 * @param string $sql
 	 * @param XType $type
