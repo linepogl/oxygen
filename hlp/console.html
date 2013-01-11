@@ -79,21 +79,12 @@ and select the best tool for each case.
 <h2>Profiler</h2>
 
 <p>
-Oxygen comes with a profiler, which is a slightly modified fork of <a class="external" href="http://pecl.php.net/package/xhprof">XHProf</a>.
+Oxygen uses <a class="external" href="http://pecl.php.net/package/xhprof">XHProf</a> to profile instantly the function times. If the xhprof plugin is installed, the profiler can be called the same way as the debugger
+by adding the query string parameter <b>profile</b> or <b>profile=pin</b>. The process is similar, the profiler report will be shown immediatelly if possible and a copy will be saved in the log folder.
 </p>
 
 <p>
-Setting up the profiler is a little tricky as it implies compiling the profiler as a PHP extension and including it in the php.ini. The code for the compiler can be found inside the folder <b>oxy/ext/xhprof fork</b>.
-Compiling an extension is a standard procedure described in <a class="external" href="http://php.net/manual/en/install.pecl.phpize.php">http://php.net/manual/en/install.pecl.phpize.php</a>.
-</p>
-
-<p>
-Once set up, the profiler can be called the same way as the debugger by adding the query string parameter <b>profile</b> or <b>profile=pin</b>. The process is similar, the profiler report will be shown immediatelly
-if possible and a copy will be saved in the log folder.
-</p>
-
-<p>
-The profiler is configured to work in instrumentation mode (which means tracking the entrance and the exit to each function, in constast to the sampling mode) and it ignores the calls to internal function (their
+The profiler is configured to work in instrumentation mode (which means tracking the entrance and the exit to each function, in constast to sampling mode) and it ignores the calls to internal functions (their
 time is added to the caller function). It shows the total number of calls to each function and the total time spent in the function inclusively and exclusively. The later is probably to most important hint for
 the point in the application that need optimising.
 </p>
