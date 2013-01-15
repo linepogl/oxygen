@@ -27,6 +27,7 @@ abstract class ValueControl extends Control {
 
 	public $label;
 	public function WithLabel($value){ $this->label = $value; return $this; }
+	public function GetLabel(){ return $this->label; }
 
 	public static function Fill(XWrapField $ui){
 		return new static($ui);

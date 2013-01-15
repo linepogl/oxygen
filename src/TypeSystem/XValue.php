@@ -31,7 +31,7 @@ abstract class XValue {
 			return $x2->IsEqualTo( $x1 );
 
 		if ( gettype( $x1 ) == gettype( $x2 ) )
-			return $x1 === $x1;
+			return $x1 === $x2;
 
 		if ( ( is_int($x1)&&is_float($x2) ) || ( is_int($x2)&&is_float($x1) ) )
 			return $x1 == $x2;
