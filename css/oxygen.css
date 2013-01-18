@@ -150,9 +150,11 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
  * Oxygen Controls
  *
  */
-.formButton       { vertical-align:baseline; }
 
-.formPane         { vertical-align:baseline; border-radius:3px; border:1px solid #999999; font:normal 12px/14px Trebuchet MS, sans-serif; padding:4px; }
+
+.formButton       { box-sizing:border-box; vertical-align:baseline; }
+
+.formPane         { box-sizing:border-box; vertical-align:baseline; border-radius:3px; border:1px solid #999999; font:normal 12px/14px Trebuchet MS, sans-serif; padding:4px; }
 .formPane         { background-color:#ffffff; border-color:#999999; color:#666699; }
 .formPane:focus   { background-color:#fcfcfc; border-color:#666666; color:#444477; }
 .formPaneAnchor   { position:absolute; float:right; right:0; margin:0; padding:0; width:15px; height:15px; }
@@ -183,7 +185,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDownFoot a.button-pm         { float:right; padding:0 3px; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
 .formDropDownFoot a.button-pm:hover   { border-left:1px dotted #aaaaaa; }
 
-.formDate                         { width:7.5em; text-align:left; }
+.formDate                         { width:9.0em; text-align:left; }
 .formDateAnchor                   { background:url(../img/form-date-anchor.png) 50% 50% no-repeat; }
 .formDateDropDown                 { width:210px; }
 .formDateDropDown td              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }
@@ -197,7 +199,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDateDropDown td.day a:hover  { background:#f0f0f0!important; color:#000000!important; }
 .formDateDropDown td.selected a   { background:#d3d6c2!important; color:#000000!important; }
 
-.formColor                          { width:3.0em; text-align:left; }
+.formColor                          { width:4.0em; text-align:left; }
 .formColorDropDown                  { width:250px; }
 .formColorDropDown td               { margin:0!important; padding:0!important; border:0!important; }
 .formColorDropDown th               { margin:0!important; padding:0!important; border:0!important; }
@@ -205,7 +207,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formColorDropDown td.color a       { display:block; width:12px; height:12px; border-radius:2px; margin:1px; }
 .formColorDropDown td.color a:hover { border:1px solid #000000; margin:0; }
 
-.formTime                             { width:6.5em; text-align:left; }
+.formTime                             { width:7em; text-align:left; }
 .formTimeAnchor                       { background:url(../img/form-time-anchor.png) 50% 50% no-repeat; }
 .formTimeDropDown                     { width:200px; }
 .formTimeDropDown .clock              { font:bold 18px/20px Helvetica,Arial,sans-serif!important; color:#666666!important; }
