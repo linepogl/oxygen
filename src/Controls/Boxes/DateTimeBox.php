@@ -14,7 +14,7 @@ class DateTimeBox extends Box {
 	public function Render(){
 
 		if ($this->mode == UIMode::Edit && !$this->readonly){
-			HiddenControl::Make($this->name,$this->value)
+			HiddenBox::Make($this->name,$this->value)
 				->Render();
 		}
 

@@ -378,7 +378,7 @@ abstract class Action extends XValue {
 	}
 	public function GetForm($name=null){
 		if ($this->IsAjaxDialog())
-			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" onsubmit="Oxygen.SubmitAjaxDialog(this);return false;" onreset="Oxygen.HideDialog();"><div class="inline">'.new HiddenControl('AjaxDialogSubmition',true);
+			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" onsubmit="Oxygen.SubmitAjaxDialog(this);return false;" onreset="Oxygen.HideDialog();"><div class="inline">'.new HiddenBox('AjaxDialogSubmition',true);
 		elseif ($this->IsIFrameDialog())
 			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" onreset="parent.Oxygen.HideDialog();" enctype="multipart/form-data"><div class="inline">';
 		else
@@ -400,7 +400,7 @@ abstract class Action extends XValue {
 		$r = '<form'.(is_null($name)?'':' id="'.$name.'"').' method="get" action="'.new Html(Oxygen::GetCurrentPhpScript()).'"><div class="inline">';
 		$a = func_get_args();
 		$a = array_splice($a,1);
-		foreach ($_GET as $key=>$value) if (!in_array($key,$a,true)) $r .= HiddenControl::Make($key,$value);
+		foreach ($_GET as $key=>$value) if (!in_array($key,$a,true)) $r .= HiddenBox::Make($key,$value);
 		return $r;
 	}
 	public function EndFilterForm(){ return '</div></form>'; }

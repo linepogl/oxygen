@@ -32,7 +32,7 @@ class ColorBox extends Box {
 		echo '>';
 
 		if (!$this->readonly){
-			echo new HiddenControl($this->name,$this->value);
+			echo new HiddenBox($this->name,$this->value);
 			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formColorDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
 //			echo '<div class="formDropDownHead">';

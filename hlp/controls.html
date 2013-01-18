@@ -94,11 +94,11 @@ $book->NumberOfPages = Http::$POST['NumberOfPages']->AsIntegerOrNull();
 <h2>Common value controls</h2>
 
 <p>
-The <span class="code">HiddenControl</span> renders a hidden HTML form element.
+The <span class="code">HiddenBox</span> renders a hidden HTML form element.
 </p>
 
 <p class="code">
-HiddenControl::Make( 'title' , $book->Title )->Render();
+HiddenBox::Make( 'title' , $book->Title )->Render();
 </p>
 
 <p>

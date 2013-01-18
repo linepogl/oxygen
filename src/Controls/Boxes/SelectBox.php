@@ -92,7 +92,7 @@ class SelectBox extends Box {
 		echo '<span class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 
 		if (!$this->readonly){
-			echo new HiddenControl($this->name,$this->value);
+			echo new HiddenBox($this->name,$this->value);
 			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formSelectDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
 //    echo '<div class="formDropDownHead"></div>';

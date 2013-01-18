@@ -510,7 +510,7 @@ class ReportTableControl extends ValueControl {
 
 
 
-		echo new HiddenControl($this->name,$this->value);
+		echo new HiddenBox($this->name,$this->value);
 		echo '<div id="'.$this->name.'_menu_panel_1" class="group reportmenupanel" style="display:none;margin:0 1px 1px 0;"></div>';
 		echo '<table id="'.$this->name.'_div" class="'.$this->css_class.'" width="100%" style="'.$this->css_style.'" cellspacing="0" cellpadding="0" border="0">';
 
