@@ -79,8 +79,8 @@ After retrieving the wrap, the form can be filled with the use of <span class="c
 
 <p class="code">
 $ui = $book->Wrap();
-TextboxControl::Make( $ui->Title->GetName() , $ui->Title->GetValue() )->Render();
-TextboxControl::Make( $ui->Author->GetName() , $ui->Author->GetValue() )->Render();
+TextBox::Make( $ui->Title->GetName() , $ui->Title->GetValue() )->Render();
+TextBox::Make( $ui->Author->GetName() , $ui->Author->GetValue() )->Render();
 </p>
 
 <p>
@@ -89,8 +89,8 @@ As this is quite ofter, all controls have another overload of their constructor 
 
 <p class="code">
 $ui = $book->Wrap();
-TextboxControl::Make( $ui->Title );
-TextboxControl::Make( $ui->Author );
+TextBox::Make( $ui->Title );
+TextBox::Make( $ui->Author );
 </p>
 
 <p>
@@ -152,13 +152,13 @@ class ActionModifyBook extends Action {
 
 		echo <b>$ui->Title</b>->GetLabel();
 		echo '&lt;br/&gt;'
-		TextboxControl::Make( <b>$ui->Title</b> )->Render();
+		TextBox::Make( <b>$ui->Title</b> )->Render();
 		if (!$v->Title->HasPassed()) echo new MessageControl($v->Title);
 		echo '&lt;br/&gt;'
 
 		echo <b>$ui->Author</b>->GetLabel();
 		echo '&lt;br/&gt;'
-		TextboxControl::Make( <b>$ui->Author</b> )->Render();;
+		TextBox::Make( <b>$ui->Author</b> )->Render();;
 		if (!$v->Author->HasPassed()) echo new MessageControl($v->Author);
 		echo '&lt;br/&gt;'
 

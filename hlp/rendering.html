@@ -225,13 +225,13 @@ class ActionModifyBook extends Action {
 
 		echo $m->Title->GetLabel();
 		echo '&lt;br/&gt;'
-		TextboxControl::Make( 'title', $this->book->Title )->Render();
+		TextBox::Make( 'title', $this->book->Title )->Render();
 		if (!$v->Title->HasPassed()) echo new MessageControl($v->Title);
 		echo '&lt;br/&gt;'
 
 		echo $m->Author->GetLabel();
 		echo '&lt;br/&gt;'
-		TextboxControl::Make( 'author', $this->book->Author )->Render();;
+		TextBox::Make( 'author', $this->book->Author )->Render();;
 		if (!$v->Author->HasPassed()) echo new MessageControl($v->Author);
 		echo '&lt;br/&gt;'
 

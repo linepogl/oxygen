@@ -59,13 +59,13 @@ along with the name. This time, the name of the control is important because thi
 </p>
 
 <p>
-There are several premade value controls, such as the <span class="code">TextboxControl</span>, the <span class="code">CheckboxControl</span>, the <span class="code">SelectControl</span> and others.
+There are several premade value controls, such as the <span class="code">TextBox</span>, the <span class="code">CheckboxControl</span>, the <span class="code">SelectControl</span> and others.
 </p>
 
 <p class="code">
 // This will create an HTML form text input with name "title", filled with the book's title. Several
 // attributes can be defined in a chained fashion.
-TextboxControl::Make( 'title' , $book->Title )
+TextBox::Make( 'title' , $book->Title )
 	->WithWidth( '100px' )                          // width
 	->WithOnChange( 'CheckBookTitle();' )           // a Javascript event
 	->Render();
@@ -85,7 +85,7 @@ The conversion of the value to HTML is done according to the rules of the Oxygen
 </p>
 
 <p class="code">
-TextboxControl::Make( 'NumberOfPages' , $book->NumberOfPages )->Render();
+TextBox::Make( 'NumberOfPages' , $book->NumberOfPages )->Render();
 ...
 $book->NumberOfPages = Http::$POST['NumberOfPages']->AsIntegerOrNull();
 </p>
@@ -102,19 +102,19 @@ HiddenControl::Make( 'title' , $book->Title )->Render();
 </p>
 
 <p>
-The <span class="code">TextboxControl</span> renders a text or a textarea input.
+The <span class="code">TextBox</span> renders a text or a textarea input.
 </p>
 
 <p class="code">
-HiddenControl::Make( 'description' , $book->Description )->WithRows(10)->Render();
+TextBox::Make( 'description' , $book->Description )->WithRows(10)->Render();
 </p>
 
 <p>
-The <span class="code">PasswordControl</span> is for passwords.
+The <span class="code">TextBox</span> is also for passwords.
 </p>
 
 <p class="code">
-PasswordControl::Make( 'password' , '' )->Render();    // pre-fill does not make sense here...
+TextBox::Make( 'password' , '' )->WithIsPassword(true)->Render();    // pre-fill does not make sense here...
 </p>
 
 <p>
