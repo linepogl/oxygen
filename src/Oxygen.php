@@ -781,11 +781,6 @@ class Oxygen {
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/date.js"></script>';
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/fix.js"></script>';
 
-		if (Browser::IsIE6()){
-			echo '<link href="'.__BASE__.'oxy/fix/ie6-fixcsshover.css" rel="stylesheet" type="text/css" />';
-			echo '<link href="'.__BASE__.'oxy/fix/ie6-fixpng.css" rel="stylesheet" type="text/css" />';
-			echo '<script type="text/javascript" src="'.__BASE__.'oxy/fix/ie6-fixpng.js"></script>';
-		}
 
 		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.js"></script>';
 		echo '<link href="'.__BASE__.'oxy/css/reset.css" rel="stylesheet" type="text/css" />';
