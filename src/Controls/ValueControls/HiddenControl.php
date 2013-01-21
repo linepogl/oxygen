@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated */
 class HiddenControl extends ValueControl {
 
 	public function Render(){

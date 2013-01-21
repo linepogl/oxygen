@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated */
 class DateTimeControl extends ValueControl {
 
 	private $is_readonly;

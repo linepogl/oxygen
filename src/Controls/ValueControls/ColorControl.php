@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated */
 class ColorControl extends ValueControl {
 
 	private $allow_null = false;

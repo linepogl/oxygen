@@ -1,6 +1,6 @@
 <?php
 
-
+/** @deprecated */
 class PasswordControl extends ValueControl {
 
  	private $width = '100%';

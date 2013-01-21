@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated */
 class TextboxControl extends ValueControl {
 
 	private $width = '100%';
