@@ -16,7 +16,7 @@ class TimeBox extends Box {
         $this->value = $this->allow_null ? null : XTime::Midnight();
 		}
 
-    $caption = $this->value instanceof XDateTime ? Language::FormatTime($this->value,$this->show_seconds?'H:i:s':'H:i') : ( $this->allow_null ? $this->null_caption : '' );
+    $caption = !is_null($this->value) ? Language::FormatTime($this->value,$this->show_seconds?'H:i:s':'H:i') : ( $this->allow_null ? $this->null_caption : '' );
 		$null_caption = trim($this->null_caption);
 
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
@@ -24,19 +24,20 @@ class TimeBox extends Box {
 			return;
 		}
 
-		echo '<span class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
+		$n = $this->allow_null ? $this->null_caption : '';
+		$h = is_null($this->value) ? '' : $this->value->Format('H');
+		$m = is_null($this->value) ? '' : $this->value->Format('i');
+		$s = is_null($this->value) ? '' : $this->value->Format('s');
+
+		echo '<span id="'.$this->name.'-span" class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 
 		if (!$this->readonly){
 			echo new HiddenBox($this->name,$this->value);
 			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formTimeDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
-//			echo '<div class="formDropDownHead">';
-//			echo '</div>';
-
 			echo '<div class="formDropDownBody">';
 			echo '<div id="'.$this->name.'-clock" class="clock" style="height:180px;">';
 			echo '<div style="padding-top:80px;text-align:center;">';
-
 			echo '<span id="'.$this->name.'-h" onclick="window.'.$this->name.'.SetPseudoFocus(\'h\');">'.(is_null($this->value)?'':$this->value->Format('H')).'</span>';
 			echo '<span>:</span>';
 			echo '<span id="'.$this->name.'-m" onclick="window.'.$this->name.'.SetPseudoFocus(\'m\');">'.(is_null($this->value)?'':$this->value->Format('i')).'</span>';
@@ -44,11 +45,9 @@ class TimeBox extends Box {
 				echo '<span>:</span>';
 				echo '<span id="'.$this->name.'-s" onclick="window.'.$this->name.'.SetPseudoFocus(\'s\');">'.(is_null($this->value)?'':$this->value->Format('s')).'</span>';
 			}
-
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
-
       echo '<div class="formDropDownFoot">';
 			if ($this->allow_null){
           echo '<a id="'.$this->name.'-null" class="fleft button" href="javascript:'.$this->name.'.SetH(null);'.$this->name.'.HideDropDown();">'.new Html($null_caption===''?'∅':$null_caption).'</a>';
@@ -59,21 +58,32 @@ class TimeBox extends Box {
       echo '</div>';
 		}
 
-		echo '<span id="'.$this->name.'-anchor" class="formPaneAnchor formTimeAnchor">&nbsp;</span>';
+		echo '<div id="'.$this->name.'-box-null" class="formPaneInnerWrap" style="'.(is_null($this->value)?'':'display:none;').'"><div class="formPane formPaneInner" style="background:none;border:0;margin:0;padding:0;">';
+		echo new Html($n);
+		echo '</div></div>';
+
+		echo '<div id="'.$this->name.'-box-time" class="formPaneInnerWrap" style="'.(is_null($this->value)?'display:none;':'').'"><div class="formPane formPaneInner" style="background:none;border:0;margin:0;padding:0;">';
+		echo '<span id="'.$this->name.'-box-h">'.$h.'</span>:<span id="'.$this->name.'-box-m">'.$m.'</span>'.($this->show_seconds?':<span id="'.$this->name.'-box-s">'.$s.'</span>':'');
+		echo '</div></div>';
+
+		echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formTimeAnchorOuter"><div class="formPaneAnchor formTimeAnchor"></div></div>';
 
 		echo '<input id="'.$this->name.'-box"';
 		echo ' class="formPane formTime'.($this->readonly?' formLocked':'').'"';
 		echo ' style="margin:0;"';
-		echo ' value="'.new Html($caption).'"';
+		echo ' value=""';
 		echo ' readonly="readonly"';
 		echo '/>';
 
 		echo '</span>';
 
 		echo Js::BEGIN;
-		echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
+		echo "var x =  jQuery('#$this->name-box');";
+		echo "jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
+		echo "jQuery('#$this->name-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
+		echo "jQuery('#$this->name-span .formPaneInner').css({'line-height':x.height()+'px'});";
 		if (!$this->readonly){
-			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); }).focus(function(e){ $this->name.ShowPseudoFocus(); });";
+			echo "jQuery('#$this->name-box,#$this->name-anchor,#$this->name-box-time,#$this->name-box-null').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); }).focus(function(e){ $this->name.ShowPseudoFocus(); });";
 			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
 			echo "window.".$this->name." = {";
 			echo "  pseudo_focus : 'h'";
@@ -88,8 +98,19 @@ class TimeBox extends Box {
 			echo " ,SetAM : function(){ this.SetH( this.h===null ? 0 : parseInt(this.h,10) % 12 ); }";
 			echo " ,SetPM : function(){ this.SetH( this.h===null ? 12 : parseInt(this.h,10) % 12 + 12 ); }";
 			echo " ,OnChange : function(){";
-			echo "    jQuery('#$this->name-box').val( this.h===null ? ".new Js($null_caption)." : this.h+':'+this.m".($this->show_seconds?"+':'+this.s":"").");";
-			echo "    jQuery('#$this->name').val(this.h===null?'':'20000000'+this.h+this.m+this.s);";
+			echo "    if(this.h===null){";
+			echo "      jQuery('#$this->name-box-null').show();";
+			echo "      jQuery('#$this->name-box-time').hide();";
+			echo "      jQuery('#$this->name').val('');";
+			echo "    }";
+			echo "    else {";
+			echo "      jQuery('#$this->name-box-null').hide();";
+			echo "      jQuery('#$this->name-box-time').show();";
+			echo "      jQuery('#$this->name-box-h').html(this.h);";
+			echo "      jQuery('#$this->name-box-m').html(this.m);";
+			echo "      jQuery('#$this->name-box-s').html(this.s);";
+			echo "      jQuery('#$this->name').val('20000000'+this.h+this.m+this.s);";
+			echo "    }";
 			echo $this->on_change;
 			echo "  }";
 			echo " ,OnKeyDown : function(ev){";
@@ -184,14 +205,12 @@ class TimeBox extends Box {
 			echo "    this.ShowPseudoFocus();";
 			echo "  }";
 			echo " ,ShowPseudoFocus : function(){";
-			echo "    var el = jQuery('#$this->name-box')[0];";
-			echo "    var from = this.pseudo_focus==='h'?0:(this.pseudo_focus==='m'?3:6);";
-			echo "    var till = this.pseudo_focus==='h'?2:(this.pseudo_focus==='m'?5:8);";
-			echo "    if(el.setSelectionRange)el.setSelectionRange(from,till);else{var r=el.createTextRange();r.collapse(true);r.moveEnd('character',till);r.moveStart('character',from);r.select();}";
+			echo "    jQuery('#$this->name-box-h').css({'text-decoration':this.pseudo_focus==='h'?'underline':'none'});";
+			echo "    jQuery('#$this->name-box-m').css({'text-decoration':this.pseudo_focus==='m'?'underline':'none'});";
+			echo "    jQuery('#$this->name-box-s').css({'text-decoration':this.pseudo_focus==='s'?'underline':'none'});";
 			echo "  }";
 			echo " ,HidePseudoFocus : function(){";
-			echo "    var el = jQuery('#$this->name-box')[0];";
-			echo "    if(el.setSelectionRange)el.setSelectionRange(0,0);else{var r=el.createTextRange();r.collapse(true);r.moveEnd('character',0);r.moveStart('character',0);r.select();}";
+			echo "    jQuery('#$this->name-box-h,#$this->name-box-m,#$this->name-box-s').css({'text-decoration':'none'});";
 			echo "  }";
 			echo "};";
 		}

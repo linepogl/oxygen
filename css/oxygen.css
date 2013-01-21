@@ -150,15 +150,17 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
  * Oxygen Controls
  *
  */
+.formPane, .formButton { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; }
 
+.formButton       { vertical-align:baseline; }
 
-.formButton       { box-sizing:border-box; vertical-align:baseline; }
-
-.formPane         { box-sizing:border-box; vertical-align:baseline; border-radius:3px; border:1px solid #999999; font:normal 12px/14px Trebuchet MS, sans-serif; padding:4px; }
+.formPane         { vertical-align:baseline; border-radius:3px; border:1px solid #999999; font:normal 12px/14px Trebuchet MS, sans-serif; padding:4px; }
 .formPane         { background-color:#ffffff; border-color:#999999; color:#666699; }
 .formPane:focus   { background-color:#fcfcfc; border-color:#666666; color:#444477; }
-.formPaneAnchor   { position:absolute; float:right; right:0; margin:0; padding:0; width:15px; height:15px; }
-.formPaneAnchor   { background:url(../img/form-pane-anchor.png) 50% 50% no-repeat; }
+
+.formPaneInnerWrap  { position:absolute; float:left; left:0; cursor:pointer; }
+.formPaneAnchorWrap { position:absolute; float:right; right:0; cursor:pointer; }
+.formPaneAnchor     { background:url(../img/form-pane-anchor.png) 50% 50% no-repeat; width:15px; height:15px; }
 
 .formLocked       { background-color:#fbfbfb; border-color:#999999; color:#999999; }
 .formLocked:focus { background-color:#fafafa; border-color:#777777; color:#777777; }
@@ -185,7 +187,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDownFoot a.button-pm         { float:right; padding:0 3px; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
 .formDropDownFoot a.button-pm:hover   { border-left:1px dotted #aaaaaa; }
 
-.formDate                         { width:9.0em; text-align:left; }
+.formDate                         { width:9.0em; text-align:left; cursor:pointer; }
 .formDateAnchor                   { background:url(../img/form-date-anchor.png) 50% 50% no-repeat; }
 .formDateDropDown                 { width:210px; }
 .formDateDropDown td              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }
@@ -199,7 +201,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDateDropDown td.day a:hover  { background:#f0f0f0!important; color:#000000!important; }
 .formDateDropDown td.selected a   { background:#d3d6c2!important; color:#000000!important; }
 
-.formColor                          { width:4.0em; text-align:left; }
+.formColor                          { width:4.0em; text-align:left; cursor:pointer; }
 .formColorDropDown                  { width:250px; }
 .formColorDropDown td               { margin:0!important; padding:0!important; border:0!important; }
 .formColorDropDown th               { margin:0!important; padding:0!important; border:0!important; }
@@ -207,11 +209,11 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formColorDropDown td.color a       { display:block; width:12px; height:12px; border-radius:2px; margin:1px; }
 .formColorDropDown td.color a:hover { border:1px solid #000000; margin:0; }
 
-.formTime                             { width:7em; text-align:left; }
+.formTime                             { width:7em; text-align:left; cursor:pointer; }
 .formTimeAnchor                       { background:url(../img/form-time-anchor.png) 50% 50% no-repeat; }
 .formTimeDropDown                     { width:200px; }
 .formTimeDropDown .clock              { font:bold 18px/20px Helvetica,Arial,sans-serif!important; color:#666666!important; }
-.formTimeDropDown .clock span         { padding:3px 2px 1px 3px; border-radius:3px; }
+.formTimeDropDown .clock span         { padding:3px 2px 1px 3px; border-radius:3px; cursor:pointer; }
 .formTimeDropDown .clock span.focus   { background:#eeeeee; }
 .formTimeDropDown .clock a            { position:absolute; background:#f0f0f0; border-radius:10px; }
 .formTimeDropDown .clock a:hover      { background:#d3d6c2; }

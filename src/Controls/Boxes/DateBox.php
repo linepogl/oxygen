@@ -18,9 +18,13 @@ class DateBox extends Box {
 			echo new Html($caption);
 			return;
 		}
-		$caption = $this->value instanceof XDateTime ? $this->value->Format('d/m/Y') : ( $this->allow_null ? $this->null_caption : '' );
 
-		echo '<span class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
+		$n = $this->allow_null ? $this->null_caption : '';
+		$y = is_null($this->value) ? '' : $this->value->Format('Y');
+		$m = is_null($this->value) ? '' : $this->value->Format('m');
+		$d = is_null($this->value) ? '' : $this->value->Format('d');
+
+		echo '<span id="'.$this->name.'-span" class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 
 		if (!$this->readonly){
 			echo new HiddenBox($this->name,$this->value);
@@ -47,21 +51,32 @@ class DateBox extends Box {
 			echo '</div>';
 		}
 
-		echo '<span id="'.$this->name.'-anchor" class="formPaneAnchor formDateAnchor">&nbsp;</span>';
+		echo '<div id="'.$this->name.'-box-null" class="formPaneInnerWrap" style="'.(is_null($this->value)?'':'display:none;').'"><div class="formPane formPaneInner" style="background:none;border:0;margin:0;padding:0;">';
+		echo new Html($n);
+		echo '</div></div>';
+
+		echo '<div id="'.$this->name.'-box-date" class="formPaneInnerWrap" style="'.(is_null($this->value)?'display:none;':'').'"><div class="formPane formPaneInner" style="background:none;border:0;margin:0;padding:0;">';
+		echo '<span id="'.$this->name.'-d">'.$d.'</span>/<span id="'.$this->name.'-m">'.$m.'</span>/<span id="'.$this->name.'-y">'.$y.'</span>';
+		echo '</div></div>';
+
+		echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formDateAnchorOuter"><div class="formPaneAnchor formDateAnchor"></div></div>';
 
 		echo '<input id="'.$this->name.'-box"';
 		echo ' class="formPane formDate'.($this->readonly?' formLocked':'').'"';
-		echo ' style="margin:0;"';
-		echo ' value="'.new Html($caption).'"';
+		echo ' style="margin:0;cursor:pointer;"';
+		echo ' value=""';
 		echo ' readonly="readonly"';
 		echo '/>';
 
 		echo '</span>';
 
 		echo Js::BEGIN;
-		echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
+		echo "var x =  jQuery('#$this->name-box');";
+		echo "jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
+		echo "jQuery('#$this->name-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
+		echo "jQuery('#$this->name-span .formPaneInner').css({'line-height':x.height()+'px'});";
 		if (!$this->readonly){
-			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); }).focus(function(e){ $this->name.ShowPseudoFocus(); });";
+			echo "jQuery('#$this->name-box,#$this->name-anchor,#$this->name-box-date,#$this->name-box-null').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); }).focus(function(e){ $this->name.ShowPseudoFocus(); });";
 			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
 			echo "window.".$this->name." = {";
 			echo "  date : ".new Js($this->value);
@@ -73,16 +88,21 @@ class DateBox extends Box {
 			echo " ,SetD : function(x){";
 			echo "    this.date=x;";
 			echo "    if (x==null){";
-			echo "      jQuery('#$this->name-box').val( jQuery('<div/>').html(".new Js($this->null_caption).").text() );"; // This is interesting...
+			echo "      jQuery('#$this->name-box-null').show();";
+			echo "      jQuery('#$this->name-box-date').hide();";
 			echo "      jQuery('#$this->name').val('');";
-			echo "      this.pseudo_focus = 'd'";
+			echo "      this.pseudo_focus = 'd';";
 			echo "    }";
 			echo "    else {";
-			echo "      var day = x.getDate(); if (x.getDate()<10) {day='0'+x.getDate();}";
-			echo "      var month = x.getMonth()+1; if ((x.getMonth()+1)<10) {month='0'+(x.getMonth()+1);}";
-			echo "      var year = x.getFullYear();";
-			echo "      jQuery('#$this->name-box').val(day+'/'+month+'/'+year);";
-			echo "      jQuery('#$this->name').val(year+''+month+''+day+'000000');";
+			echo "      jQuery('#$this->name-box-null').hide();";
+			echo "      jQuery('#$this->name-box-date').show();";
+			echo "      var d = x.getDate(); d=(d<10?'0':'')+d;";
+			echo "      var m = x.getMonth()+1; m=(m<10?'0':'')+m;";
+			echo "      var y = x.getFullYear()+'';";
+			echo "      jQuery('#$this->name-d').html(d);";
+			echo "      jQuery('#$this->name-m').html(m);";
+			echo "      jQuery('#$this->name-y').html(y);";
+			echo "      jQuery('#$this->name').val(y+m+d+'000000');";
 			echo "    }";
 			echo "    this.ShowMonth(x);";
 			echo $this->on_change;
@@ -198,14 +218,12 @@ class DateBox extends Box {
 			echo "    this.ShowPseudoFocus();";
 			echo "  }";
 			echo " ,ShowPseudoFocus : function(){";
-			echo "    var el = jQuery('#$this->name-box')[0];";
-			echo "    var from = this.pseudo_focus==='d'?0:(this.pseudo_focus==='m'?3:6);";
-			echo "    var till = this.pseudo_focus==='d'?2:(this.pseudo_focus==='m'?5:10);";
-			echo "    if(el.setSelectionRange)el.setSelectionRange(from,till);else{var r=el.createTextRange();r.collapse(true);r.moveEnd('character',till);r.moveStart('character',from);r.select();}";
+			echo "    jQuery('#$this->name-d').css({'text-decoration':this.pseudo_focus==='d'?'underline':'none'});";
+			echo "    jQuery('#$this->name-m').css({'text-decoration':this.pseudo_focus==='m'?'underline':'none'});";
+			echo "    jQuery('#$this->name-y').css({'text-decoration':this.pseudo_focus==='y'?'underline':'none'});";
 			echo "  }";
 			echo " ,HidePseudoFocus : function(){";
-			echo "    var el = jQuery('#$this->name-box')[0];";
-			echo "    if(el.setSelectionRange)el.setSelectionRange(0,0);else{var r=el.createTextRange();r.collapse(true);r.moveEnd('character',0);r.moveStart('character',0);r.select();}";
+			echo "    jQuery('#$this->name-d,#$this->name-m,#$this->name-y').css({'text-decoration':'none'});";
 			echo "  }";
 			echo "};";
 

@@ -51,7 +51,7 @@ class ColorBox extends Box {
 		}
 
 
-		echo '<span id="'.$this->name.'-anchor" class="formPaneAnchor formColorAnchor">&nbsp;</span>';
+		echo '<div id="'.$this->name.'-anchor" class="formPane formPaneAnchorWrap formColorAnchorOuter" style="background:none;border:0;margin:0;"><div class="formPaneAnchor formColorAnchor"></div></div>';
 
 		echo '<input id="'.$this->name.'-box"';
 		echo ' class="formPane formColor'.($this->readonly?' formLocked':'').'"';
@@ -62,7 +62,6 @@ class ColorBox extends Box {
 		echo '</span>';
 
 		echo Js::BEGIN;
-		echo "jQuery('#$this->name-anchor').css({'margin-top':jQuery('#$this->name-box').css('padding-top'),'margin-right':jQuery('#$this->name-box').css('padding-right')});";
 		if (!$this->readonly){
 			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); });";
 			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
