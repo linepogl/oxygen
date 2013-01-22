@@ -78,10 +78,13 @@ class TimeBox extends Box {
 		echo '</span>';
 
 		echo Js::BEGIN;
-		echo "var x =  jQuery('#$this->name-box');";
-		echo "jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
-		echo "jQuery('#$this->name-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
-		echo "jQuery('#$this->name-span .formPaneInner').css({'line-height':x.height()+'px'});";
+		echo "var f = function(){";
+		echo "  var x =  jQuery('#$this->name-box');";
+		echo "  jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
+		echo "  jQuery('#$this->name-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
+		echo "  jQuery('#$this->name-span .formPaneInner').css({'height':x.height()+'px','line-height':x.height()+'px'});";
+		echo "};";
+		echo "jQuery(document).ready(f);f();";
 		if (!$this->readonly){
 			echo "jQuery('#$this->name-box,#$this->name-anchor,#$this->name-box-time,#$this->name-box-null').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); }).focus(function(e){ $this->name.ShowPseudoFocus(); });";
 			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";

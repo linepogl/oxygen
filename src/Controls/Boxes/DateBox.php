@@ -55,7 +55,7 @@ class DateBox extends Box {
 		echo new Html($n);
 		echo '</div></div>';
 
-		echo '<div id="'.$this->name.'-box-date" class="formPaneInnerWrap" style="'.(is_null($this->value)?'display:none;':'').'"><div class="formPane formPaneInner" style="background:none;border:0;margin:0;padding:0;">';
+		echo '<div id="'.$this->name.'-box-date" class="formPaneInnerWrap" style="'.(is_null($this->value)?'display:none;':'').'"><div class="formPane formPaneInner" style=";border:0;margin:0;padding:0;">';
 		echo '<span id="'.$this->name.'-d">'.$d.'</span>/<span id="'.$this->name.'-m">'.$m.'</span>/<span id="'.$this->name.'-y">'.$y.'</span>';
 		echo '</div></div>';
 
@@ -71,10 +71,13 @@ class DateBox extends Box {
 		echo '</span>';
 
 		echo Js::BEGIN;
-		echo "var x =  jQuery('#$this->name-box');";
-		echo "jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
-		echo "jQuery('#$this->name-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
-		echo "jQuery('#$this->name-span .formPaneInner').css({'line-height':x.height()+'px'});";
+		echo "var f = function(){";
+		echo "  var x =  jQuery('#$this->name-box');";
+		echo "  jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
+		echo "  jQuery('#$this->name-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
+		echo "  jQuery('#$this->name-span .formPaneInner').css({'height':x.height()+'px','line-height':x.height()+'px'});";
+		echo "};";
+		echo "jQuery(document).ready(f);f();";
 		if (!$this->readonly){
 			echo "jQuery('#$this->name-box,#$this->name-anchor,#$this->name-box-date,#$this->name-box-null').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); }).focus(function(e){ $this->name.ShowPseudoFocus(); });";
 			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
