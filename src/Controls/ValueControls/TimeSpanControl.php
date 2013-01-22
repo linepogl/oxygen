@@ -42,20 +42,20 @@ class TimeSpanControl extends ValueControl {
 		$s = is_null($v) ? null : ($this->show_minutes ? $v->GetSeconds() : $v->GetTotalSeconds());
 
 		if ($this->show_days){
-			echo TextboxControl::Make($this->name.'_days',$d)->WithWidth('20px')->WithStyle('text-align:center;')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
+			echo TextBox::Make($this->name.'_days',$d)->WithWidth('4em')->WithCssClass('contentbox hcenter')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
 			echo '&nbsp;'.Lemma::Pick('d.').'&nbsp;';
 		}
 		if ($this->show_hours){
-			echo TextboxControl::Make($this->name.'_hours',$h)->WithWidth('20px')->WithStyle('text-align:center;')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
+			echo TextBox::Make($this->name.'_hours',$h)->WithWidth('3em')->WithCssClass('contentbox hcenter')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
 			echo '&nbsp;'.Lemma::Pick('h.').'&nbsp;';
 		}
 		if ($this->show_minutes){
-			echo TextboxControl::Make($this->name.'_minutes',$m)->WithWidth('20px')->WithStyle('text-align:center;')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
+			echo TextBox::Make($this->name.'_minutes',$m)->WithWidth('3em')->WithCssClass('contentbox hcenter')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
 			echo '&nbsp;&prime;';
 		}
 		if ($this->show_seconds){
 			echo '&nbsp;';
-			echo TextboxControl::Make($this->name.'_seconds',$s)->WithWidth('20px')->WithStyle('text-align:center;')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
+			echo TextBox::Make($this->name.'_seconds',$s)->WithWidth('3em')->WithCssClass('contentbox hcenter')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
 			echo '&nbsp;&Prime;';
 		}
 

@@ -68,6 +68,8 @@ class ReportTableControl extends ValueControl {
 	/** @return ReportTableControl */ public function WithIsSortedBy($col,$desc=false){ $this->sorted_by = $col; $this->sorted_desc = $desc; return $this; }
 
 
+	private $enable_javascript_sort = false;
+	public function WithJavascriptSort( $value ){ $this->enable_javascript_sort = $value; return $this; }
 
 	const ROW_NORMAL = 0;
 	const ROW_SPECIAL = 1;
@@ -229,6 +231,7 @@ class ReportTableControl extends ValueControl {
 		$count_cols = 0; foreach ($this->cells as $a){ $x = count($a); if ($x > $count_cols) $count_cols = $x; }
 		$has_values = false; foreach ($this->row_has_value as $b) if ($b) { $has_values = true; break; }
 		$displayed_row_number = $this->begin_numbering_from;
+		$extra_front_columns =($this->show_numbers?1:0) + ($has_values&&$this->use_check_boxes ? 1 :0);
 
 
 
@@ -445,6 +448,37 @@ class ReportTableControl extends ValueControl {
 		echo $this->on_change;
 		echo "  }";
 
+		if ($this->enable_javascript_sort) {
+			echo " ,sorted_by_column : null";
+			echo " ,sorted_asc : false";
+			echo " ,SortByColumn : function(j){";
+			echo "    this.sorted_asc = j===this.sorted_by_column ? !this.sorted_asc : true;";
+			echo "    this.sorted_by_column = j;";
+
+			echo "    var a = jQuery('#{$this->name}_div tr.normal');";
+			echo "    var b = [];";
+			echo "    for(i = 0; i < a.length; i++){";
+			echo "      var tds = jQuery(a[i]).children('th,td');";
+			echo "      b.push( jQuery(tds[$extra_front_columns+j]).html() );";
+			echo "    }";
+
+			echo "    var t;";
+			echo "    for (x = 0; x < a.length; x++) {";
+			echo "      for (y = x + 1; y < a.length; y++) {";
+			echo "        if (this.sorted_asc ? b[x] > b[y] : b[x] < b[y]) {";
+			echo "          t = a[y]; a[y] = a[x]; a[x] = t;";
+			echo "          t = b[y]; b[y] = b[x]; b[x] = t;";
+			echo "        }";
+			echo "      }";
+			echo "    }";
+
+			echo "    a.detach().appendTo('#{$this->name}_div');";
+			echo "    for(i = 0; i < a.length; i++){";
+			echo "      if (i%2===0) jQuery(a[i]).removeClass('alt'); else jQuery(a[i]).addClass('alt')";
+			echo "    }";
+			echo "  }";
+		}
+
 		if (!is_null($this->menu_panel)){
 			echo " ,HideMenuPanel : function(){";
 			echo "    \$(".new Js($this->name.'_menu_panel_1').").hide();";
@@ -528,7 +562,7 @@ class ReportTableControl extends ValueControl {
 		if ($this->use_check_boxes && $has_values){
 			if ($this->is_multiple) {
 				echo '<th class="contract checkbox" style="cursor:pointer;"';
-				echo ' onclick="'.$this->name.'.OnCheckThClick(event)"';
+				echo ' onclick="window.'.$this->name.'.OnCheckThClick(event)"';
 				echo ' >';
 				ImageCheckboxControl::Make($this->name.'_check_all',false)
 					->WithOnChange($this->name.'.OnCheckAllChange();')
@@ -544,10 +578,13 @@ class ReportTableControl extends ValueControl {
 
 
 		for ($j = 0; $j < $count_cols; $j++){
+			$onclick = $this->enable_javascript_sort ? 'window.'.$this->name.'.SortByColumn('.$j.');' : '';
+			$css_style = '';
 			if ($j < count($this->cells[0])){
+				$onclick .= $this->cell_onclick[0][$j];
 				$css_class = $this->cell_css_class[0][$j];
-				$css_style = $this->cell_css_style[0][$j];
-				$onclick = $this->cell_onclick[0][$j];
+				if (!empty($onclick)) $css_style .= 'cursor:pointer;';
+				$css_style .= $this->cell_css_style[0][$j];
 				$fill_row = $this->cell_fill_row[0][$j];
 				$v = trim($this->cells[0][$j]);
 				$tag = $this->cell_tag[0][$j];
@@ -565,8 +602,13 @@ class ReportTableControl extends ValueControl {
 				echo '</'.$tag.'>';
 				if ($fill_row) break;
 			}
-			else
-				echo '<th class="contract">' . new Spacer(). '</th>';
+			else {
+				if (!empty($onclick)) $css_style .= 'cursor:pointer;';
+				echo '<th class="contract"';
+				if (!empty($css_style)) echo ' style="'.$css_style.'"';
+				if (!empty($onclick)) echo ' onclick="'.$onclick.'"';
+				echo '>' . new Spacer(). '</th>';
+			}
 		}
 		echo '</tr>';
 
@@ -591,13 +633,11 @@ class ReportTableControl extends ValueControl {
 			$css_class = $this->row_css_class[$i];
 			$css_style = $this->row_css_style[$i];
 			if ($this->row_mode[$i] == self::ROW_NORMAL){
-				if ($alt++%2==1){
-					if ($css_class !='') $css_class .= ' ';
-					$css_class .= 'alt';
-				}
+				$css_class .= ' normal';
+				if ($alt++%2==1) $css_class .= ' alt';
 			}
 			elseif ($this->row_mode[$i] == self::ROW_GROUP){
-				$css_class .= 'grp';
+				$css_class .= ' grp';
 			}
 			$selected = $this->row_has_value[$i] && $this->IsSelected($this->row_value[$i]);
 			if ($selected) $css_class .= ' selected';
@@ -608,15 +648,15 @@ class ReportTableControl extends ValueControl {
 
 			echo '<tr id="'.$this->name.'_tr_'.$i.'" class="'.$css_class.'" style="'.$css_style.'"';
 			if ($this->row_mode[$i] == self::ROW_NORMAL){
-				echo ' onmouseover="'.$this->name.'.OnMouseOver(event,'.$i.')"';
-				echo ' onmouseout="'.$this->name.'.OnMouseOut(event,'.$i.')"';
+				echo ' onmouseover="window.'.$this->name.'.OnMouseOver(event,'.$i.')"';
+				echo ' onmouseout="window.'.$this->name.'.OnMouseOut(event,'.$i.')"';
 				if ($this->IsClickable($i)){
-					echo ' onclick="'.$this->name.'.OnRowClick(event,'.$i.')"';
+					echo ' onclick="window.'.$this->name.'.OnRowClick(event,'.$i.')"';
 				}
 			}
 			elseif ($this->row_mode[$i] == self::ROW_GROUP){
 				if ($this->IsClickable($i)){
-					echo ' onclick="'.$this->name.'.OnGroupRowClick(event,'.$i.')"';
+					echo ' onclick="window.'.$this->name.'.OnGroupRowClick(event,'.$i.')"';
 				}
 			}
 			echo '>';
@@ -633,14 +673,14 @@ class ReportTableControl extends ValueControl {
 			if ($has_values && $this->use_check_boxes){
 				if ($this->IsClickable($i)){
 					if ($this->row_mode[$i] == self::ROW_NORMAL) {
-						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="'.$this->name.'.OnCheckTdClick(event,'.$i.')">';
+						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="window.'.$this->name.'.OnCheckTdClick(event,'.$i.')">';
 							ImageCheckboxControl::Make($this->name.'_check_'.$i,$selected)
 								->WithOnChange($this->name.'.OnCheckChange('.$i.');')
 								->Render();
 						echo '</td>';
 					}
 					elseif ($this->row_mode[$i] == self::ROW_GROUP){
-						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="'.$this->name.'.OnGroupCheckTdClick(event,'.$i.')">';
+						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="window.'.$this->name.'.OnGroupCheckTdClick(event,'.$i.')">';
 							ImageCheckboxControl::Make($this->name.'_check_'.$i,$selected)
 								->WithOnChange($this->name.'.OnGroupCheckChange('.$i.');')
 								->Render();

@@ -1,10 +1,10 @@
 <?php
 
 abstract class Action extends XValue {
-	//protected $name = null;
+	protected $name = null;
 	public function __construct(){
 		$this->mode = $this->GetDefaultMode();
-		//$this->name = 'a'.ID::Random()->AsHex();
+		$this->name = 'a'.Oxygen::Hash32(static::GetClassName());
 	}
 	public static function Make() { return new static(); }
 	public final static function GetName() { return substr(get_called_class(),6); }

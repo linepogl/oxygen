@@ -40,6 +40,8 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 .fclear              { clear:both!important;    }
 .nounderline         { text-decoration:none; }
 .nounderline:hover   { text-decoration:none; }
+.borderbox           { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; }
+.contentbox          { box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; }
 *:hover .nounderline { text-decoration:none; }
 
 
