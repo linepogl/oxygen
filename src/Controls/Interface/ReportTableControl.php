@@ -295,11 +295,11 @@ class ReportTableControl extends ValueControl {
 		echo "    if (this.event_running) return; this.event_running = true;";
 		if ($this->is_multiple) {
 			echo "var v = this.IsChecked(i);";
-			echo "if (this.AreMoreChecked(i)) v=false;";
+			echo "if (this.AreMoreVisibleChecked(i)) v=false;";
 			if ($has_values) echo "this.SetAllChecks(false);";
 			echo "this.SetCheck(i,!v);";
 			echo "this.UpdateValue();";
-			if ($has_values) echo "this.SetCheck('all',this.AreAllChecked());";
+			if ($has_values) echo "this.SetCheck('all',this.AreAllVisibleChecked());";
 		}
 		else {
 			if ($has_values) echo "this.SetAllChecks(false);";
@@ -353,7 +353,7 @@ class ReportTableControl extends ValueControl {
 		if (!$this->is_multiple) echo "v = true;";
 		if (!$this->is_multiple && $has_values) echo "this.SetAllChecks(false);";
 		echo "    this.SetCheck(i,v);";
-		if ($this->is_multiple && $has_values) echo "this.SetCheck('all',this.AreAllChecked());";
+		if ($this->is_multiple && $has_values) echo "this.SetCheck('all',this.AreAllVisibleChecked());";
 		foreach ($group_row_indices_to_row_with_values_indices_map as $ii=>$a){
 			echo "this.SetCheck(".new Js($ii).",this.AreAllInGroupChecked(".new Js($ii)."));";
 		}
@@ -376,23 +376,26 @@ class ReportTableControl extends ValueControl {
 		echo "    this.event_running = false;";
 		echo "  }";
 
+		echo " ,IsVisible : function(i){";
+		echo "    return jQuery('#{$this->name}_tr_'+i).is(':visible');";
+		echo "  }";
 		echo " ,IsChecked : function(i){";
 		echo "    var x = ".new Js($this->name)." + '_check_' + i;";
 		echo "    return \$F(x)=='true';";
 		echo "  }";
-		echo " ,AreAllChecked : function(){";
-		echo "    var r = true"; foreach ($row_with_values_indices as $i) echo "&&this.IsChecked(".new Js($i).")"; echo ";";
+		echo " ,AreAllVisibleChecked : function(){";
+		echo "    var r = true"; foreach ($row_with_values_indices as $i) echo "&&(!this.IsVisible(".new Js($i).")||this.IsChecked(".new Js($i)."))"; echo ";";
 		echo "    return r;";
 		echo "  }";
-		echo " ,AreAllInGroupChecked : function(i){";
+		echo " ,AreAllVisibleInGroupChecked : function(i){";
 		echo "    var r = true;";
 		foreach ($group_row_indices_to_row_with_values_indices_map as $i=>$a) {
-			echo "    if (i == ".new Js($i).") r = r"; foreach ($a as $j) echo "&&this.IsChecked(".new Js($j).")"; echo ";";
+			echo "    if (i == ".new Js($i).") r = r"; foreach ($a as $j) echo "&&(!this.IsVisible(".new Js($j).")||this.IsChecked(".new Js($j)."))"; echo ";";
 		}
 		echo "    return r;";
 		echo "  }";
-		echo " ,AreMoreChecked : function(i){";
-		echo "    var r = false"; foreach ($row_with_values_indices as $i) echo "||(i!=".$i."&&this.IsChecked(".new Js($i)."))"; echo ";";
+		echo " ,AreMoreVisibleChecked : function(i){";
+		echo "    var r = false"; foreach ($row_with_values_indices as $i) echo "||(i!=".$i."&&(!this.IsVisible(".new Js($i).")||this.IsChecked(".new Js($i).")))"; echo ";";
 		echo "    return r;";
 		echo "  }";
 		echo " ,SetCheck : function(i,v){";
@@ -405,19 +408,19 @@ class ReportTableControl extends ValueControl {
 		echo "  }";
 		echo " ,SetAllChecks : function(v){";
 		echo "    var a = [" . implode(',',$row_with_values_indices) ."];";
-		echo "    for (var i = 0; i < a.length; i++) this.SetCheck(a[i],v);";
+		echo "    for (var i = 0; i < a.length; i++) this.SetCheck(a[i],v&&this.IsVisible(a[i]));";
 		foreach ($group_row_indices_to_row_with_values_indices_map as $ii=>$a){
-			echo "this.SetCheck(".new Js($ii).",this.AreAllInGroupChecked(".new Js($ii)."));";
+			echo "this.SetCheck(".new Js($ii).",this.AreAllVisibleInGroupChecked(".new Js($ii)."));";
 		}
 		echo "  }";
 		echo " ,SetGroupChecks : function(i,v){";
 		foreach ($group_row_indices_to_row_with_values_indices_map as $i=>$a){
 			echo "    if(i==".new Js($i).") {";
 			echo "      var a = [" . implode(',',$a) ."];";
-			echo "      for (var j = 0; j < a.length; j++) this.SetCheck(a[j],v);";
+			echo "      for (var j = 0; j < a.length; j++) this.SetCheck(a[j],v&&this.IsVisible(a[i]));";
 			echo "    }";
 		}
-		if ($has_values) echo "this.SetCheck('all',this.AreAllChecked());";
+		if ($has_values) echo "this.SetCheck('all',this.AreAllVisibleChecked());";
 		echo "  }";
 		echo " ,UpdateValue : function(){";
 		echo "    var s = '';";
@@ -729,7 +732,7 @@ class ReportTableControl extends ValueControl {
 
 
 		echo Js::BEGIN;
-		if ($this->is_multiple && $has_values) echo $this->name . ".SetCheck('all',".$this->name.".AreAllChecked());";
+		if ($this->is_multiple && $has_values) echo $this->name . ".SetCheck('all',".$this->name.".AreAllVisibleChecked());";
 		echo $this->name.".UpdateValue();";
 		echo Js::END;
 	}
