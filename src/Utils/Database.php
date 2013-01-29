@@ -279,6 +279,7 @@ class Database {
 	 */
 	public static function ExecuteX($sql,$params=array()){
 		self::RequireConnection();
+		$t = microtime(true);
 		$q = self::Prepare($sql);
 		$z = count($params);
 		if ($z > 0){ for($i = 0; $i < $z; $i++) $q->bindValue($i+1, XType::Of($params[$i])->ExportPdoValue( $params[$i] , self::$type ) ); }
@@ -295,7 +296,11 @@ class Database {
 			foreach ($params as $p) $m .= '<br/>&bull; '.Debug::GetVariableAsString( XType::Of($p)->ExportPdoValue( $p , self::$type ) );
 			throw new Exception($m);
 		}
-		if ($q->columnCount() > 0) return new DBReader($q);
+		$r = null;
+		if ($q->columnCount() > 0) $r = new DBReader($q);
+		$t = microtime(true) - $t;
+		if ($t>2) Debug::RecordExceptionSilenced(new Exception('Long query: '.$t.'sec.'),'Execute timer');
+		return $r;
 	}
 
 	/**
@@ -305,6 +310,7 @@ class Database {
 	 */
 	public static function Execute($sql){
 		self::RequireConnection();
+		$t = microtime(true);
 		$q = self::Prepare($sql);
 		$z = func_num_args(); if ($z > 1){ $a = func_get_args(); for($i = 1; $i < $z; $i++) $q->bindValue($i, XType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) ); }
 		try {
@@ -320,7 +326,11 @@ class Database {
 			$z = func_num_args(); $a = func_get_args(); for($i = 1; $i < $z; $i++) $m .= '<br/>&bull; '.Debug::GetVariableAsString( XType::Of($a[$i])->ExportPdoValue($a[$i] , self::$type ) );
 			throw new Exception($m);
 		}
-		if ($q->columnCount() > 0) return new DBReader($q);
+		$r = null;
+		if ($q->columnCount() > 0) $r = new DBReader($q);
+		$t = microtime(true) - $t;
+		if ($t>2) Debug::RecordExceptionSilenced(new Exception('Long query: '.$t.'sec.'),'Execute timer');
+		return $r;
 	}
 
 
