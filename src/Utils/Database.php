@@ -807,7 +807,7 @@ class Database {
 	public static function ExecuteAddIndices($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		for($i=1;$i<$z;$i+=2){
+		for($i=1;$i<$z;$i++){
 			self::Execute('CREATE INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])).' ON '.new SqlIden($tablename).' ('.new SqlIden($a[$i]).')');
 		}
 	}
