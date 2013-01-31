@@ -87,9 +87,9 @@ class ImageCheckboxControl extends ValueControl {
 
 		/// Backwards compatibility:
 		echo $this->name . "_SetValue = function(value){".$this->name.".SetValue(value=='true');};";
-		echo $this->name . "_IsDirty = ".$this->name.".IsDirty;";
-		echo $this->name . "_SetDirty = ".$this->name.".SetDirty;";
-		echo $this->name . "_Toggle = ".$this->name.".Toggle;";
+		echo $this->name . "_IsDirty = function(){".$this->name.".IsDirty;};";
+		echo $this->name . "_SetDirty = function(value){".$this->name.".SetDirty(value);};";
+		echo $this->name . "_Toggle = function(){".$this->name.".Toggle();};";
 		//////////
 
 
