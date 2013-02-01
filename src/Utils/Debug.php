@@ -391,54 +391,21 @@ class Debug {
 			case 5: $way_handled_message = 'Served with generic message'; break;
 			case 6: $way_handled_message = 'Execution halted'; break;
 		}
-		$serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
+		$timestamp = microtime(true);
+		$serial = str_replace(',','.',sprintf('%0.3f',$timestamp));
 		$key = get_class($ex) . '_' . md5($ex->getFile() . $ex->getLine() . $ex->getMessage());
 
-
-
-		// accumulate exceptions
-		$now = XDateTime::Now();
-		$initial_time = $now;
-		$time_to_record = $now;
-		$hits = 1;
-		try {
-			/** @var $initial_time XDateTime */
-			$initial_time = Scope::$APPLICATION[$key . '_initial_time'];
-			if (is_null($initial_time)) {
-				$initial_time = $now;
-				Scope::$APPLICATION[$key . '_initial_time'] = $initial_time;
-			}
-			else {
-				$hits = Scope::$APPLICATION[$key . '_hits'] + 1;
-			}
-			Scope::$APPLICATION[$key . '_hits'] = $hits;
-		}
-		catch (Exception $ex){ }
-
-
-		$filename = Fs::GetSafeFilename($serial.'.'.get_class($ex).($hits<=1?'':'.x'.$hits).'.'.$way_handled_message).'.err';
 
 		$subject = Oxygen::IsDevelopment()?'[DEV]':'';
 		$subject .= '['.Oxygen::GetApplicationName().']';
 		$subject .= ' '.get_class($ex);
-		$subject .= $hits<=1?'':' x'.$hits;
+		// $subject .= $hits<=1?'':' x'.$hits;
 		$subject .= ' ('.$way_handled_message.')';
 		if (!is_null($extra_developer_message)) $subject .= ' '.$extra_developer_message;
 		$subject .= ' #'.$serial;
 
-		$head = Oxygen::GetInfo();
 
-		$body = '<div style="font:italic 11px/13px Courier New,monospace;color:#999999;padding:5px 5px 4px 5px;border:1px solid #cccccc;">';
-		$body .= '-- '.new Html($way_handled_message).' --';
-		$body .= is_null($extra_developer_message)?'':"<br/>".new Html($extra_developer_message);
-		$body .= '<br/>#'.$serial;
-		$body .= $hits<=1?'':' (x'.$hits.' in '.Language::FormatTimeSpan($time_to_record->Diff($initial_time),true,true).')';
-		$body .= '</div>';
-		$body .= '<br/>';
-		$body .= Debug::GetExceptionReportAsHtml($ex);
-
-
-		// error_log directly
+		// log to apache log directly
 		try {
 			$error_log_message = '';
 			for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()) {
@@ -451,22 +418,99 @@ class Debug {
 		}
 		catch (Exception $ex) {}
 
-		// record to file
+
+
+		$lck_filename = Oxygen::GetLogFolder().'/'.Fs::GetSafeFilename($key).'.lck';
+		$acc_filename = Oxygen::GetLogFolder().'/'.Fs::GetSafeFilename($key).'.acc';
+		$err_filename = Oxygen::GetLogFolder().'/'.Fs::GetSafeFilename($serial.'.'.get_class($ex).'.'.$way_handled_message).'.err';
+
+		$must_record_immediately = true;
+		$must_initiate_accumulator = true;
+
 		try {
-			$f = Oxygen::GetLogFolder(true);
-			file_put_contents( $f .'/'.$filename, serialize(array( 'head' => $head , 'body' => $body )));
-		}
-		catch (Exception $ex) {}
+			// check if an accumulator is running
+			$f = fopen($lck_filename,'a+');
+			if (!flock($f,LOCK_EX | LOCK_NB)) {
+				fclose($f);
 
-		// send e-mail
-		foreach (Oxygen::GetDeveloperEmails() as $email) {
-			try {
-				Oxygen::SendEmail( 'oxygen@'.Oxygen::GetApplicationName() , $email , $email , $subject , $body );
+				// we use deferred recording only if we know that an accumulator is running (therefore, we know that the creation of accumulators is supported and possible).
+				file_put_contents( $acc_filename , $serial . "\n" , FILE_APPEND|LOCK_EX );
+				$must_record_immediately = false;
+
+				// check again if the accumulator has stopped running!
+				$ff = fopen($lck_filename,'a+');
+				if (!flock($ff,LOCK_EX | LOCK_NB)) {
+					fclose($ff);
+					$must_initiate_accumulator = false; // is is running
+				}
+				else {
+					flock($ff,LOCK_UN);
+					fclose($ff);
+				}
 			}
-			catch (Exception $ex) {}
+			else {
+				flock($f,LOCK_UN);
+				fclose($f);
+			}
+		}
+		catch (Exception $ex) {
+			$must_record_immediately = true;
+			$must_initiate_accumulator = true;
 		}
 
-		return $serial.($hits<=1?'':' (x'.$hits.' in '.Language::FormatTimeSpan($now->Diff($initial_time),true,true).')');
+		$exception_recorded = false;
+		if ($must_record_immediately || $must_initiate_accumulator) {
+
+			$head = Oxygen::GetInfo();
+
+			$body = '<div style="font:italic 11px/13px Courier New,monospace;color:#999999;padding:5px 5px 4px 5px;border:1px solid #cccccc;">';
+			$body .= '-- '.new Html($way_handled_message).' --';
+			$body .= is_null($extra_developer_message)?'':"<br/>".new Html($extra_developer_message);
+			$body .= '<br/>#'.$serial;
+			$body .= '</div>';
+			$body .= '<br/>';
+			$body .= Debug::GetExceptionReportAsHtml($ex);
+
+
+			if ($must_record_immediately) {
+				// record to file
+				try {
+					Oxygen::EnsureLogFolder();
+					file_put_contents( $err_filename, serialize(array( 'head' => $head , 'body' => $body )));
+				}
+				catch (Exception $ex) {}
+
+				// send e-mail
+				foreach (Oxygen::GetDeveloperEmails() as $email) {
+					try {
+						Oxygen::SendEmail( 'oxygen@'.Oxygen::GetApplicationName() , $email , $email , $subject , $body );
+					}
+					catch (Exception $ex) {}
+				}
+				$exception_recorded = true;
+			}
+
+			if ($must_initiate_accumulator) { // initiate the accumulator
+				try {
+					Http::RequestAsync(Oxygen::GetHrefBaseFull().'oxy/record.php','POST',array(
+						 'serial' => $serial
+						,'exception_recorded' => $exception_recorded?'true':'false'
+						,'acc_filename' => $acc_filename
+						,'lck_filename' => $lck_filename
+						,'err_filename' => $err_filename
+						,'app_name' => Oxygen::GetApplicationName()
+						,'emails' => serialize(Oxygen::GetDeveloperEmails())
+						,'subject' => $subject
+						,'head' => serialize($head)
+						,'body' => $body
+						));
+				}
+				catch (Exception $ex) {}
+			}
+		}
+
+
+		return $serial.($exception_recorded?'':' (exception recording deferred)');
 	}
 
 

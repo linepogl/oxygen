@@ -14,12 +14,13 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 	public static function RequestAsync($url,$method='GET',$args = array()){
 		$post_args = array();
     foreach ($args as $key => &$val) {
-      $post_params[] = $key.'='.new Url($val);
+	    $post_args[] = $key.'='.new Url($val);
     }
     $post_string = implode('&', $post_args);
 
 		$method = strtoupper($method);
 
+		
     $parts = parse_url($url);
 		$host = $parts['host'];
 		$port = isset($parts['port'])?$parts['port']:80;
