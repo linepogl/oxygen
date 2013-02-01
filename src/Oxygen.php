@@ -191,7 +191,6 @@ class Oxygen {
 				else
 					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
 
-				error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
 				if ($ex instanceof ApplicationException || Oxygen::IsDevelopment())
 					Debug::RecordExceptionServed($ex,'Global Exception Handler ('.$served_as.')');
 				else
@@ -209,7 +208,6 @@ class Oxygen {
 					echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';
 				}
 				else {
-					error_log($ex->getMessage().' '.$ex->getFile().'['.$ex->getLine().']');
 					if (Oxygen::IsDevelopment()) {
 						$serial = Debug::RecordExceptionServed($ex,'Global Exception Handler');
 						echo '<div style="font:normal italic 11px/12px Trebuchet MS,sans-serif;margin:20px 0 0 0;color:#bbbbbb;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div>';
