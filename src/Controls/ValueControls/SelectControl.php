@@ -149,7 +149,7 @@ class SelectControl extends ValueControl {
 						echo '<optgroup label="'.new Html($this->list_groups[$i]).'">';
 					}
 					else
-						echo '<option value="'.new Html($this->list_values[$i]).'"'.($this->IsSelected($this->list_values[$i])?' selected="selected"':'').'>'.$this->list_captions[$i].'</option>';
+						echo '<option value="'.new Html(rawurldecode(new Url($this->list_values[$i]))).'"'.($this->IsSelected($this->list_values[$i])?' selected="selected"':'').'>'.$this->list_captions[$i].'</option>';
 
 					if ($group_count > 0) echo '</optgroup>';
 
