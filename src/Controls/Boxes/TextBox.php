@@ -30,7 +30,8 @@ class TextBox extends Box {
 				echo '*****';
 			else {
 				echo '<span id="'.$this->name.'"';
-				echo ' style="white-space:pre;'.($this->nowrap?'':'white-space:pre-wrap;').'"';
+				echo ' class="'.$this->css_class.'"';
+				echo ' style="white-space:pre;'.($this->nowrap?'':'white-space:pre-wrap;').$this->css_style.'"';
 				echo '>'.new Html( $this->value ).'</span>';
 			}
 			return;
