@@ -121,8 +121,8 @@ class MetaString extends XConcreteType {
 	 */
 	public static function ImportHttpValue($value) {
 		if (is_null($value)) return '';
-		if (is_array($value)) return self::DecodeHtmlString(self::DecodeUrlString( implode(',',$value) ) );
-		return self::DecodeHtmlString( self::DecodeUrlString( $value ) );
+		if (is_array($value)) return implode(',',$value);
+		return $value;
 	}
 }
 

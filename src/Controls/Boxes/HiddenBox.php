@@ -8,7 +8,7 @@ class HiddenBox extends Box {
 	public function Render(){
 		echo '<input type="'.($this->debug?'text':'hidden').'" id="'.$this->name.'"';
 		if ($this->mode == UIMode::Edit) echo ' name="'.$this->name.'"';
-		echo ' value="'.new Html(new Url($this->value)).'" />';
+		echo ' value="'.new Html(rawurldecode(new Url($this->value))).'" />';
 	}
 
 

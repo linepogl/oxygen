@@ -52,17 +52,7 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 
 final class HttpPost extends Http {
 	public final function OffsetExists($offset) { return isset($_POST[$offset]); }
-	/** @return HttpValue */ public function OffsetGet($offset) { return isset($_POST[$offset]) ? new HttpValue($this->url_encode($_POST[$offset])) : new HttpValue(null); }
-	private function url_encode($post_value){
-		if (is_array($post_value)){
-			$a = array();
-			foreach ($post_value as $key=>$x)
-				$a[$key] = rawurlencode($x);
-			return $a;
-		}
-		else
-			return rawurlencode($post_value);
-	}
+	/** @return HttpValue */ public function OffsetGet($offset) { return isset($_POST[$offset]) ? new HttpValue($_POST[$offset]) : new HttpValue(null); }
 	public function GetIterator(){
 		$r = array();
 		foreach (array_keys($_POST) as $key)

@@ -358,11 +358,11 @@ class Oxygen {
 	public static function SetTempFolder($local_temp_folder,$shared_temp_folder = null) { self::$temp_folder = $local_temp_folder; self::$shared_temp_folder = is_null($shared_temp_folder) ? $local_temp_folder : $shared_temp_folder; }
 	public static function HasTempFolder(){ return is_dir(self::$temp_folder); }
 	public static function HasSharedTempFolder(){ return is_dir(self::$shared_temp_folder); }
-	public static function EnsureTempFolder(){ if (!file_exists(self::$temp_folder)) mkdir(self::$temp_folder,0777,true); }
-	public static function EnsureSharedTempFolder(){ if (!file_exists(self::$shared_temp_folder)) mkdir(self::$shared_temp_folder,0777,true); }
+	public static function EnsureTempFolder(){ Fs::Ensure(self::$temp_folder); }
+	public static function EnsureSharedTempFolder(){ Fs::Ensure(self::$shared_temp_folder); }
 	public static function EnsureTempFolders(){ self::EnsureTempFolder(); self::EnsureSharedTempFolder(); }
-	public static function MakeTempFolder(){ mkdir(self::$temp_folder,0777,true); }
-	public static function MakeSharedTempFolder(){ mkdir(self::$shared_temp_folder,0777,true); }
+	public static function MakeTempFolder(){ Fs::Ensure(self::$temp_folder); }
+	public static function MakeSharedTempFolder(){ Fs::Ensure(self::$shared_temp_folder); }
 	public static function ClearTempFolders(){
 		$local_tmp = Oxygen::GetTempFolder();
 		foreach (scandir($local_tmp) as $f){ if (is_dir($f)) continue; try{ unlink($local_tmp.'/'.$f); } catch(Exception $ex){} }
@@ -410,8 +410,7 @@ class Oxygen {
 	public static function GetDataFolder($ensure = false){ if ($ensure) Oxygen::EnsureDataFolder(); return self::$data_folder; }
 	public static function SetDataFolder($value){ self::$data_folder = $value; }
 	public static function HasDataFolder(){ return is_dir(self::$data_folder); }
-	public static function EnsureDataFolder(){ if(!file_exists(self::$data_folder)) mkdir(self::$data_folder,0777,true); }
-	public static function MakeDataFolder(){ mkdir(self::$data_folder,0777,true); }
+	public static function EnsureDataFolder(){ Fs::Ensure(self::$data_folder); }
 
 
 
@@ -424,8 +423,7 @@ class Oxygen {
 	public static function GetLogFolder($ensure = false){ if ($ensure) Oxygen::EnsureLogFolder(); return self::$log_folder; }
 	public static function SetLogFolder($value) { self::$log_folder = $value; }
 	public static function HasLogFolder(){ return is_dir(self::$log_folder); }
-	public static function EnsureLogFolder(){ if(!file_exists(self::$log_folder)) mkdir(self::$log_folder,0777,true); }
-	public static function MakeLogFolder(){ mkdir(self::$log_folder,0777,true); }
+	public static function EnsureLogFolder(){ Fs::Ensure(self::$log_folder); }
 
 
 
@@ -511,6 +509,14 @@ class Oxygen {
 
 
 
+	public static function ResetHard(){
+		Scope::ResetAllWeak();
+		Scope::ResetAllHard();
+		Oxygen::ClearTempFolders();
+	}
+	public static function ResetSoft(){
+		Scope::ResetAllWeak();
+	}
 
 
 

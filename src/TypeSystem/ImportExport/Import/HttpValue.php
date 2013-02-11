@@ -2,17 +2,6 @@
 
 
 class HttpValue extends ImportValue {
-  public function __construct($value){
-  	if (is_array($value)){
-  		$a = array();
-  		foreach ($value as $key=>$s)
-  			$a[$key] = is_null($s) ? null : htmlspecialchars_decode( rawurldecode( $s) );
-  		parent::__construct($a);
-		}
-		else{
-    	parent::__construct( is_null($value) ? null : htmlspecialchars_decode( rawurldecode( $value ) ) ) ;
-		}
-  }
 
 	public function AsStringArray(){
 		if (empty($this->value))

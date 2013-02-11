@@ -22,6 +22,7 @@ require('oxy/src/TypeSystem/XValue.php');
 require('oxy/src/Types/ID.php');
 require('oxy/src/Actions/Action.php');
 require('oxy/src/Oxygen.php');
+require('oxy/src/Utils/Fs.php');
 require('oxy/src/Utils/Scope.php');
 require('oxy/src/Utils/Database.php');
 require('oxy/src/Engine/XMeta.php');

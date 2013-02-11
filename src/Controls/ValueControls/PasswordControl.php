@@ -12,7 +12,7 @@ class PasswordControl extends ValueControl {
 			echo ' name="'.$this->name.'"';
 			echo ' class="formPane"';
 			echo ' style="width:'.(empty($this->width)?'auto':$this->width).'"';
-			echo ' value="'.new Html(new Url($this->value)).'"';
+			echo ' value="'.new Html($this->value).'"';
 			echo ' />';
 		}
 		else {

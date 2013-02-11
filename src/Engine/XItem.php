@@ -703,10 +703,10 @@ abstract class XItem extends XValue implements Serializable {
 		return is_dir($this->GetDataFolder());
 	}
 	public function EnsureDataFolder(){
-		if (!is_dir($this->GetDataFolder())) $this->MakeDataFolder();
+		Fs::Ensure($this->GetDataFolder());
 	}
 	public function MakeDataFolder(){
-		return mkdir($this->GetDataFolder(),0777,true);
+		Fs::Ensure($this->GetDataFolder());
 	}
 	public function KillDataFolder(){
 		$f = $this->GetDataFolder();
@@ -723,7 +723,7 @@ abstract class XItem extends XValue implements Serializable {
 		rmdir($folder);
 	}
 	private static function copy_folder_recursive($src,$dst){
-		if (!is_dir($dst)) mkdir($dst,0777,true);
+		Fs::Ensure($dst);
 		foreach (scandir($src) as $f){
 			if ($f=='.'||$f=='..') continue;
 			if (is_dir("$src/$f")) self::copy_folder_recursive("$src/$f","$dst/$f");

@@ -6,7 +6,7 @@ class Fs {
 	public static function GetSafeFilename($filename) {
 		return Str::Replace(
 			array(" ","&","+","/","\\","'",'"')
-		 ,array("_","_","_","_","_","_","_")
+		 ,array("_","_","_","_","_" ,"_","_")
 		 ,$filename);
 	}
 
@@ -73,19 +73,21 @@ class Fs {
 		return $size;
 	}
 
-	public static function Destroy($path) {
-		if (is_dir($path) && !is_link($path)) {
-			if ($dh = opendir($path)) {
-				while (($sf = readdir($dh)) !== false) {
-					if ($sf == '.' || $sf == '..') continue;
-					self::Destroy($path.'/'.$sf);
+	public static function Unlink($path) {
+		if (file_exists($path)) {
+			if (is_dir($path) && !is_link($path)) {
+				if ($dh = opendir($path)) {
+					while (($sf = readdir($dh)) !== false) {
+						if ($sf == '.' || $sf == '..') continue;
+						self::Unlink($path.'/'.$sf);
+					}
+					closedir($dh);
 				}
-				closedir($dh);
+				rmdir($path);
 			}
-			rmdir($path);
-		}
-		else {
-			unlink($path);
+			else {
+				unlink($path);
+			}
 		}
 	}
 
@@ -93,8 +95,39 @@ class Fs {
 	public static function Ensure($path) {
 		$r = true;
 		if (!is_dir($path)) {
-			$r = mkdir($path,0777,true);
-			chmod($path,0777);
+			$r = mkdir($path,0755,true);
+			chmod($path,0755);
+		}
+		return $r;
+	}
+
+
+	public static function Browse($folder,$pattern='*'){
+		$r = array();
+		$regexp = $pattern == '*' ? null : '/^' . str_replace(array('\\*','\\?'),array('.*','.'),preg_quote($pattern)) . '$/';
+		if (is_dir($folder)) {
+			$a = scandir($folder);
+			if (is_array($a)) {
+				foreach ($a as $f) {
+					if ($f == '.' || $f == '..') continue;
+					if (is_null($regexp) || preg_match($regexp,$f))	$r[] = $f;
+				}
+			}
+		}
+		return $r;
+	}
+	public static function BrowseRecursively($folder,$pattern='*'){
+		$r = array();
+		$regexp = $pattern == '*' ? null : '/^' . str_replace(array('\\*','\\?'),array('.*','.'),preg_quote($pattern)) . '$/';
+		if (is_dir($folder)) {
+			$a = scandir($folder);
+			if (is_array($a)) {
+				foreach ($a as $f) {
+					if ($f == '.' || $f == '..') continue;
+					if (is_null($regexp) || preg_match($regexp,$f))	$r[] = $f;
+					if (is_dir("$folder/$f")) foreach (self::BrowseRecursively("$folder/$f",$pattern) as $ff) $r[] = "$f/$ff";
+				}
+			}
 		}
 		return $r;
 	}

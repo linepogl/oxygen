@@ -323,16 +323,8 @@ class XMeta extends stdClass {
 
 
 
-	private static function delete_folder_recursive($folder){
-		foreach (scandir($folder) as $f){
-			if ($f=='.'||$f=='..') continue;
-			if (is_dir("$folder/$f")) self::delete_folder_recursive("$folder/$f");
-			else unlink("$folder/$f");
-		}
-		rmdir($folder);
-	}
 	private static function copy_folder_recursive($src,$dst){
-		if (!is_dir($dst)) mkdir($dst,0777,true);
+		Fs::Ensure($dst);
 		foreach (scandir($src) as $f){
 			if ($f=='.'||$f=='..') continue;
 			if (is_dir("$src/$f")) self::copy_folder_recursive("$src/$f","$dst/$f");

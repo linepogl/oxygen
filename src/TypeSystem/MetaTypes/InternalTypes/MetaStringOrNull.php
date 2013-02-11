@@ -133,8 +133,8 @@ class MetaStringOrNull extends XNullableType {
 	 */
 	public static function ImportHttpValue($value) {
 		if (is_null($value)) return null;
-		if (is_array($value)) return self::DecodeHtmlString(self::DecodeUrlString( implode(',',$value) ) );
-		return self::DecodeHtmlString( self::DecodeUrlString( $value ) );
+		if (is_array($value)) return implode(',',$value);
+		return $value;
 	}
 }
 
