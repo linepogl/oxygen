@@ -81,7 +81,6 @@ var Oxygen = {
 			clearInterval(this.dialog_watchdog);
 			this.dialog_watchdog = null;
 		}
-		this.dialog_touchscroll = null;
 		this.dialog_width = null;
 		this.dialog_min_height = null;
 		jQuery('#OxygenDialogFrame').detach();
@@ -267,7 +266,6 @@ var Oxygen = {
 	,dialog_width : null
 	,dialog_height : null
 	,dialog_watchdog : null
-	,dialog_touchscroll : null
 	,ResizeDialog:function(){
 		if (!this.IsDialogOpen()) return ;
 		var dialog = jQuery('#OxygenDialog');
@@ -305,14 +303,10 @@ var Oxygen = {
 			this.dialog_height = h;
 			this.dialog_width = w;
 			if (Prototype.Browser.SafariIOS){
-				if (this.dialog_touchscroll === null) {
-					this.dialog_touchscroll = new TouchScroll(frame[0]);
-				}
 				if (viewport.height() - h < 40)
 					dialog.css({'margin-bottom':'100px'});
 				else
 					dialog.css({'margin-bottom':'0'});
-				this.dialog_touchscroll.setupScroller();
 			}
 		}
 	}

@@ -90,12 +90,12 @@ for($wave = 1; ; $wave++) {
 	// recording phase
 	//
 	$new_serial = str_replace(',','.',sprintf('%0.3f',microtime(true)));
-	$new_err_filename = str_replace('.err','.Deferred_wave_'.$wave.'.x'.count($a).'.err',str_replace($serial,$new_serial,$err_filename));
-	$new_subject = str_replace($serial,$new_serial,$subject) . 'x'.count($a).' (Deferred wave '.$wave.')';
+	$new_err_filename = str_replace('.err','.'.$serial.'~'.$wave.'.x'.count($a).'.err',str_replace($serial,$new_serial,$err_filename));
+	$new_subject = str_replace($serial,$serial.'~'.$wave,$subject) . ' (x'.count($a).')';
 
-	$i = 0;
+	$i = 1;
 	$wave_info = '<br/><br/>&bull;&bull;&bull;&gt; #'.$serial.' ('.date('Y-m-d H:i:s',intval($serial)).') x'.count($a).' (Deferred wave '.$wave.')';
-	foreach ($a as $t) $wave_info .= '<br/>'.str_repeat('&nbsp;',3-++$i/10).$i.'. #'.$t . ' (' . date('Y-m-d H:i:s',intval($t)).')';
+	foreach ($a as $t) $wave_info .= '<br/>'.str_repeat('&nbsp;',max(0,2-intval(log10($i)))).$i++.'. #'.$t . ' (' . date('Y-m-d H:i:s',intval($t)).')';
 
 	$new_body = str_replace($serial,$new_serial.$wave_info,$body);
 

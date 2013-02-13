@@ -792,8 +792,6 @@ class Oxygen {
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
 
 		if (Browser::IsIOS()) {
-			echo '<link href="'.__BASE__.'oxy/css/touchscroll.css" rel="stylesheet" type="text/css" />';
-			echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/touchscroll.js"></script>';
 			echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
 		}
 
