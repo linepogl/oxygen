@@ -59,7 +59,7 @@ class DateBox extends Box {
 		echo '<span id="'.$this->name.'-d">'.$d.'</span>/<span id="'.$this->name.'-m">'.$m.'</span>/<span id="'.$this->name.'-y">'.$y.'</span>';
 		echo '</div></div>';
 
-		echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formDateAnchorOuter"><div class="formPaneAnchor formDateAnchor"></div></div>';
+		echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formDateAnchorWrap"><div class="formPaneAnchor formDateAnchor"></div></div>';
 
 		echo '<input id="'.$this->name.'-box"';
 		echo ' class="formPane formDate'.($this->readonly?' formLocked':'').'"';

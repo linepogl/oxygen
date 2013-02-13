@@ -227,7 +227,8 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formSelectDropDown a.option.selected { background:#d3d6c2!important; color:#000000!important; }
 
 select[size="0"].formPane,select[size="1"].formPane { -webkit-appearance:none; }
-select[size="0"].formPane:after,select[size="1"].formPane:after { content:'....';}
+.chrome select[size="0"].formPane,.chrome select[size="1"].formPane, .safari select[size="0"].formPane,.safari select[size="1"].formPane { background-image:url(../img/form-pane-anchor.png);background-position:100% 50%;background-repeat:no-repeat; }
+
 
 
 /*
