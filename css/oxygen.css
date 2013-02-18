@@ -34,7 +34,7 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 .block               { display:block;         }
 .center              { margin:auto;   }
 .code                { font-family:Courier New,monospace; white-space:pre; }
-.notext              { font-size:1px;line-height:1px; }
+.notext              { font-size:1px!important;line-height:1px!important; }
 .fright              { float:right;   }
 .fleft               { float:left;    }
 .fclear              { clear:both!important;    }
