@@ -8,6 +8,4 @@ abstract class LoginControlBase extends Control {
 	protected $redirect_on_success;
 	public function WithRedirectOnSuccess($value){ $this->redirect_on_success = $value; return $this; }
 
-	public function WrapAsException(){ return true; }
-
 }

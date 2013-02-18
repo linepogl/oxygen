@@ -59,7 +59,7 @@ abstract class Action extends XValue {
 
 
 	/**
-	 * @deprecated
+	 * @deprecated - use GetParentAction() instead
 	 * @return Menu
 	 */
 	public function GetMenu(){ return new Menu(); }
@@ -94,7 +94,7 @@ abstract class Action extends XValue {
 		$this->content_compromised = false;
 		try {
 			if (!$this->IsPermitted()) throw new SecurityException();
-			if (!$this->IsLogical()) throw new ApplicationException(Lemma::Pick('MsgInvalidAction'));
+			if (!$this->IsLogical()) throw new PageNotFoundException(Lemma::Pick('MsgPageNotFound'));
 			$this->OnBeforeRender();
 			if ($this->IsModeLong()) {
 				ProgressControl::Make()->WithAction($this)->WithForwardRequest(true)->WithHeight( $this->GetHeight() < 180 ? 200 : $this->GetHeight()-150 )->Render();
@@ -103,96 +103,72 @@ abstract class Action extends XValue {
 				$this->Render();
 			$this->OnAfterRender();
 		}
-		catch (SecurityException $ex){ // <-- this has to go before ApplicationException
+		catch (SecurityException $ex){
 			$this->content_compromised = true;
+			$msg = $ex->getMessage();
 			if (ob_get_level()>0) ob_clean();
-
 			if ($this->IsModeRaw()){
 				Oxygen::SetResponseCode(403); // forbidden
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				$msg = $ex->getMessage();
-				echo empty($msg) ? Lemma::Pick('MsgAccessDenied') : $ex->getMessage();
+				echo empty($msg) ? Lemma::Pick('MsgAccessDenied') : $msg;
 			}
 			else {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
-					Debug::Write($ex->getMessage());
+					Debug::Write(empty($msg) ? Lemma::Pick('MsgAccessDenied') : $msg);
 				}
 				else {
-					$c = Oxygen::GetLoginControl();
-					if (is_null($c)){
-						echo $ex->getMessage();
+					$z = is_null(Oxygen::GetLoginControl()) ? '' : Oxygen::GetLoginControl()->WithMessage($msg)->WithRedirectOnSuccess($this)->GetContent();
+					if (!empty($z))
+						echo $z;
+					elseif ($this->IsAjaxDialog()){
+						echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgAccessDenied')) : $ex );
+						echo $this->GetFormButtons();
+						echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+						echo $this->EndFormButtons();
 					}
 					else {
-						$c = $c->WithMessage($ex->getMessage())->WithRedirectOnSuccess($this);
-						if ($c->WrapAsException()){
-							echo '<table class="center"><tr><td>';
-							echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
-							echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-							echo '<td style="text-align:right;vertical-align:top;padding:50px 15px 15px 15px;"><img src="oxy/ico/Warning32.gif" /></td>';
-							echo '<td style="padding:15px;">'.new Spacer(1,150).'</td>';
-							echo '<td style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
-							echo new Spacer(350);
-						}
-						$c->Render();
-						if ($c->WrapAsException()){
-							echo new Spacer(350);
-							echo '</td>';
-							echo '</tr></table>';
-							echo '</td></tr></table>';
-							echo '</td></tr></table>';
-						}
+						echo '<div class="exception">';
+						echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgAccessDenied')) : $ex );
+						echo '</div>';
 					}
 				}
 			}
 		}
 		catch (PageNotFoundException $ex){
 			$this->content_compromised = true;
+			$msg = $ex->getMessage();
 			if (ob_get_level()>0) ob_clean();
-
 			if ($this->IsModeRaw()){
-				Oxygen::SetResponseCode(404); // not allowed
+				Oxygen::SetResponseCode(404); // not found
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				$msg = $ex->getMessage();
-				echo empty($msg) ? Lemma::Pick('MsgPageNotFound') : $ex->getMessage();
+				echo empty($msg) ? Lemma::Pick('MsgPageNotFound') : $msg;
 			}
 			else {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
-					Debug::Write($ex->getMessage());
+					Debug::Write(empty($msg) ? Lemma::Pick('MsgPageNotFound') : $msg);
 				}
 				elseif ($this->IsAjaxDialog()){
-					echo new MessageControl($ex);
-					echo '<div class="buttons1"><div class="buttons3"><div class="buttons2">';
+					echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgPageNotFound')) : $ex );
+					echo $this->GetFormButtons();
 					echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
-					echo '</div></div></div>';
+					echo $this->EndFormButtons();
 				}
 				else {
-					echo '<table class="center"><tr><td>';
-					echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
-					echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-					echo '<td style="padding:15px;text-align:right;"><img src="oxy/ico/Warning32.gif" /></td>';
-					echo '<td style="padding:15px;">'.new Spacer(1,150).'</td>';
-					echo '<td style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
-					echo new Spacer(350);
-					echo new MessageControl($ex);
-					echo new Spacer(350);
-					//echo '<br/><br/><br/>' . ButtonControl::Make()->WithValue(Lemma::Pick('Back'))->WithOnClick('history.back();');
-					echo '</td>';
-					echo '</tr></table>';
-					echo '</td></tr></table>';
-					echo '</td></tr></table>';
+					echo '<div class="exception">';
+					echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgPageNotFound')) : $ex );
+					echo '</div>';
 				}
 			}
 		}
 		catch (ApplicationException $ex){
 			$this->content_compromised = true;
 			if (ob_get_level()>0) ob_clean();
-
 			if ($this->IsModeRaw()){
 				Oxygen::SetResponseCode(405); // not allowed
 				Oxygen::SetContentType('text/plain');
@@ -207,25 +183,14 @@ abstract class Action extends XValue {
 				}
 				elseif ($this->IsAjaxDialog()){
 					echo new MessageControl($ex);
-					echo '<div class="buttons1"><div class="buttons3"><div class="buttons2">';
+					echo $this->GetFormButtons();
 					echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
-					echo '</div></div></div>';
+					echo $this->EndFormButtons();
 				}
 				else {
-					echo '<table class="center"><tr><td>';
-					echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
-					echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-					echo '<td style="padding:15px;text-align:right;"><img src="oxy/ico/Warning32.gif" /></td>';
-					echo '<td style="padding:15px;">'.new Spacer(1,150).'</td>';
-					echo '<td style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
-					echo new Spacer(350);
+					echo '<div class="exception">';
 					echo new MessageControl($ex);
-					echo new Spacer(350);
-					//echo '<br/><br/><br/>' . ButtonControl::Make()->WithValue(Lemma::Pick('Back'))->WithOnClick('history.back();');
-					echo '</td>';
-					echo '</tr></table>';
-					echo '</td></tr></table>';
-					echo '</td></tr></table>';
+					echo '</div>';
 				}
 			}
 		}
@@ -257,29 +222,33 @@ abstract class Action extends XValue {
 					$exception_served_as = ' (Debug Immediate Flushing)';
 				}
 				else {
-					echo '<table class="center"><tr><td>';
-					echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
-					echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-					echo '<td class="vtop hright" style="padding:15px;">'.new Spacer(50,30).'<br/>'.new Icon('oxy/ico/Bug',32,'gif').'</td>';
-					echo '<td style="padding:15px;">'.new Spacer(1,100).'</td>';
-					echo '<td class="vtop" style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
-
 					if (Oxygen::IsDevelopment()) {
+						echo '<table class="center"><tr><td>';
+						echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
+						echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+						echo '<td class="vtop hright" style="padding:15px;">'.new Spacer(50,30).'<br/>'.new Icon('oxy/ico/Bug',32,'gif').'</td>';
+						echo '<td style="padding:15px;">'.new Spacer(1,100).'</td>';
+						echo '<td class="vtop" style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
 						echo new Spacer(350,12);
 						echo '<div style="font-weight:normal;font-style:italic;color:#cccccc;font-size:90%;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div><br/>';
 						echo Debug::GetExceptionReportAsHtml($ex);
 						echo new Spacer(350);
+						echo '</td>';
+						echo '</tr></table>';
+						echo '</td></tr></table>';
+						echo '</td></tr></table>';
+					}
+					elseif ($this->IsAjaxDialog()){
+						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurred') ) );
+						echo $this->GetFormButtons();
+						echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+						echo $this->EndFormButtons();
 					}
 					else {
-						echo new Spacer(350,33);
+						echo '<div class="exception">';
 						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurred') ) );
-						echo new Spacer(350);
+						echo '</div>';
 					}
-
-					echo '</td>';
-					echo '</tr></table>';
-					echo '</td></tr></table>';
-					echo '</td></tr></table>';
 					$exception_served_as = '';
 				}
 			}
@@ -385,8 +354,8 @@ abstract class Action extends XValue {
 			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" enctype="multipart/form-data"><div class="inline">';
 	}
 	public function EndForm(){ return '</div></form>'; }
-	public function GetFormButtons(){ return '<div class="buttons1"><div class="buttons3"><div class="buttons2">'; }
-	public function EndFormButtons(){ return '</div></div></div>'; }
+	public function GetFormButtons(){ return '<div class="buttons"><div class="buttons1"><div class="buttons3"><div class="buttons2">'; }
+	public function EndFormButtons(){ return '</div></div></div></div>'; }
 	protected function IsPostback() {
 		if ($this->IsAjaxDialog())
 			return Oxygen::IsPostback() && Http::$POST['AjaxDialogSubmition']->AsBoolean();

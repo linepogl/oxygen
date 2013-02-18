@@ -586,7 +586,7 @@ class Oxygen {
 	public static function Redirect(Action $action) {
 		while (ob_get_level()>0) ob_end_clean();
 		Oxygen::SendHttpHeaders();
-		echo Js::BEGIN."window.location.href=".new Js($action->GetHrefPlain()).";".Js::END;
+		echo Js::BEGIN."window.location.href=".new Js(__BASE__.$action->GetHrefPlain()).";".Js::END;
 		exit();
 	}
 	public static function RedirectBack(){
