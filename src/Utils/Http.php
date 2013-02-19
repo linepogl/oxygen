@@ -29,15 +29,23 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 		}
 		return stream_context_create($options);
 	}
-	public static function Request($url,$method='GET',$args = array()){
+	public static function Call($url,$method='GET',$args = array()){
 		$ctx = self::prepare_request($url,$method,$args);
 		return file_get_contents($url,false,$ctx);
   }
-	public static function RequestStream($url,$method='GET',$args = array()){
+	public static function Download($url,$filename,$method='GET',$args = array()){
 		$ctx = self::prepare_request($url,$method,$args);
-		return fopen($url,'rb',false,$ctx);
-  }
-	public static function RequestAsync($url,$method='GET',$args = array()){
+		$f_src = fopen($url,'rb',false,$ctx);
+		$f_dst = fopen($filename,'wb');
+		while (!feof($f_src)) {
+			$data = fread($f_src,1024);
+			if ($data === false) break;
+			fwrite($f_dst,$data);
+		}
+		fclose($f_src);
+		fclose($f_dst);
+	}
+	public static function Fire($url,$method='GET',$args = array()){
 		$ctx = self::prepare_request($url,$method,$args);
 		$f = fopen($url,'r',false,$ctx);
 		fclose($f);

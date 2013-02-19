@@ -216,15 +216,7 @@ class Fs {
 		if (is_null($destination_filename)) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
 		try {
 			set_time_limit(0);
-			$f_src = Http::RequestStream($url);
-			$f_dst = fopen($destination_filename,'w');
-			while (!feof($f_src)) {
-				$data = fread($f_src,1024);
-				if ($data === false) break;
-				fwrite($f_dst,$data);
-			}
-			fclose($f_src);
-			fclose($f_dst);
+			Http::Download($url,$destination_filename);
 		}
 		catch (Exception $ex){
 			Debug::RecordExceptionConverted($ex);
