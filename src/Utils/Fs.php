@@ -215,9 +215,16 @@ class Fs {
 	public static function ConsumeFileFromUrl( $url , $destination_filename = null ){
 		if (is_null($destination_filename)) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
 		try {
-			ini_set('memory_limit', '2G');
 			set_time_limit(0);
-			file_put_contents( $destination_filename , file_get_contents( $url ) );
+			$f_src = Http::RequestStream($url);
+			$f_dst = fopen($destination_filename,'w');
+			while (!feof($f_src)) {
+				$data = fread($f_src,1024);
+				if ($data === false) break;
+				fwrite($f_dst,$data);
+			}
+			fclose($f_src);
+			fclose($f_dst);
 		}
 		catch (Exception $ex){
 			Debug::RecordExceptionConverted($ex);

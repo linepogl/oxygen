@@ -10,44 +10,38 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 	/** @return HttpValue */ public static function Read($nane){ return Http::$ANY[$nane]; }
 
 
-
-	public static function RequestAsync($url,$method='GET',$args = array()){
-		$post_args = array();
-    foreach ($args as $key => &$val) {
-	    $post_args[] = $key.'='.new Url($val);
-    }
-    $post_string = implode('&', $post_args);
-
+	private static function prepare_request( &$url , &$method , $args){
 		$method = strtoupper($method);
-
-		
-    $parts = parse_url($url);
-		$host = $parts['host'];
-		$port = isset($parts['port'])?$parts['port']:80;
-		$path = $parts['path'];
-    $length = strlen($post_string);
-		$query = isset($parts['query'])?$parts['query']:'';
-
-		if ($method == 'GET') {
-			if (!empty($query)) $query .= '&';
-			$query .= $post_string;
+		$post_args = array();
+    foreach ($args as $key => &$val) $post_args[] = new Url($key).'='.new Url($val);
+    $extra_string = implode('&', $post_args);
+		$parts = parse_url($url);
+		$query_string = isset($parts['query'])?$parts['query']:'';
+		if ($method == 'GET' && !empty($extra_string)) $url .= (empty($query_string) ? '?' : '&') . $extra_string;
+		$options = array('http'=>array('method'=>$method
+			,'protocol_version' => '1.1'
+			,'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17'
+			,'header' => "Cache-Control: max-age=0\r\n"
+			));
+		if ($method === 'POST') {
+			$options['http']['header'] .= "Content-Type: application/x-www-form-urlencoded\r\n";
+			$options['http']['content'] = $extra_string;
 		}
-		if (!empty($query)) {
-			$path .= '?' . $query;
-		}
-
-		$fp = fsockopen($host,$port,$errno,$errstr,30);
-    $out = "$method $path HTTP/1.1\r\n";
-    $out.= "Host: $host\r\n";
-    $out.= "Content-Type: application/x-www-form-urlencoded\r\n";
-    $out.= "Content-Length: $length\r\n";
-    $out.= "Connection: Close\r\n\r\n";
-
-    if ($method == 'POST') $out.= $post_string;
-
-    fwrite($fp, $out);
-    fclose($fp);
+		return stream_context_create($options);
+	}
+	public static function Request($url,$method='GET',$args = array()){
+		$ctx = self::prepare_request($url,$method,$args);
+		return file_get_contents($url,false,$ctx);
   }
+	public static function RequestStream($url,$method='GET',$args = array()){
+		$ctx = self::prepare_request($url,$method,$args);
+		return fopen($url,'rb',false,$ctx);
+  }
+	public static function RequestAsync($url,$method='GET',$args = array()){
+		$ctx = self::prepare_request($url,$method,$args);
+		$f = fopen($url,'r',false,$ctx);
+		fclose($f);
+	}
 }
 
 final class HttpPost extends Http {
