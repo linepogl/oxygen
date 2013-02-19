@@ -393,7 +393,7 @@ class Debug {
 		}
 		$timestamp = microtime(true);
 		$serial = str_replace(',','.',sprintf('%0.3f',$timestamp));
-		$key = get_class($ex) . '_' . md5($ex->getFile() . $ex->getLine() . $ex->getMessage());
+		$key = get_class($ex) . '_' . md5($ex->getFile() . $ex->getLine() . substr($ex->getMessage(),0,20));
 
 
 		$subject = Oxygen::IsDevelopment()?'[DEV]':'';
