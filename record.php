@@ -50,11 +50,13 @@ for($wave = 1; ; $wave++) {
 	// waiting phase
 	//
 	switch($wave) {
-		case 1: sleep(60 * 1.0); break; // be conservative at start: each exception will keep a php process open for 60 seconds more than it should.
-		case 2: sleep(60 * 2.0); break; // then relax a little: this is a repeating exception, so it is better to keep a process open.
-		case 3: sleep(60 * 2.0); break;
-		case 4: sleep(60 * 5.0); break;
-		default:sleep(60 * 5.0); break;
+		case 1: sleep(60 *  1.0); break; // be conservative at start: each exception will keep a php process open for 60 seconds more than it should.
+		case 2: sleep(60 *  2.0); break; // then relax a little: this is a repeating exception, so it is better to keep a process open.
+		case 3: sleep(60 *  2.0); break;
+		case 4: sleep(60 *  5.0); break;
+		case 5: sleep(60 * 10.0); break;
+		case 6: sleep(60 * 10.0); break;
+		default:sleep(60 * 30.0); break; // if the error persists after 30 minutes...
 	}
 
 
