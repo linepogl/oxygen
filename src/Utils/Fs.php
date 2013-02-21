@@ -153,6 +153,57 @@ class Fs {
 		return $mime;
 	}
 
+	public static function GetExtension($filename) {
+		return pathinfo($filename,PATHINFO_EXTENSION);
+	}
+	public static function GetExtensionByMimeType($mime) {
+		switch (strtolower($mime)) {
+			case 'image/jpeg'                        : return 'jpg';
+			case 'image/gif'                         : return 'gif';
+			case 'image/png'                         : return 'png';
+			case 'text/css'                          : return 'css';
+			case 'text/html'                         : return 'html';
+			case 'video/x-flv'                       : return 'flv';
+			case 'text/plain'                        : return 'txt';
+			case 'image/bmp'                         : return 'bmp';
+			case 'image/tiff'                        : return 'tif';
+			case 'application/x-bzip'                : return 'bz2';
+			case 'application/x-gzip'                : return 'gz';
+			case 'application/x-tar'                 : return 'tar';
+			case 'application/zip'                   : return 'zip';
+			case 'audio/aiff'                        : return 'aif';
+			case 'audio/mid'                         : return 'mid';
+			case 'audio/mpeg'                        : return 'mp3';
+			case 'audio/ogg'                         : return 'ogg';
+			case 'audio/wav'                         : return 'wav';
+			case 'audio/x-ms-wma'                    : return 'wma';
+			case 'video/x-ms-asf'                    : return 'asf';
+			case 'video/avi'                         : return 'avi';
+			case 'video/mp4'                         : return 'mp4';
+			case 'video/x-m4v'                       : return 'm4v';
+			case 'video/mpeg'                        : return 'mpg';
+			case 'video/x-ms-wmv'                    : return 'wmv';
+			case 'video/x-ms-wmx'                    : return 'wmx';
+			case 'text/xml'                          : return 'xml';
+			case 'text/xsl'                          : return 'xsl';
+			case 'application/msword'                : return 'doc';
+			case 'application/excel'                 : return 'xls';
+			case 'application/vnd.ms-powerpoint'     : return 'ppt';
+			case 'application/pdf'                   : return 'pdf';
+			case 'application/postscript'            : return 'eps';
+			case 'image/psd'                         : return 'psd';
+			case 'application/x-shockwave-flash'     : return 'swf';
+			case 'audio/vnd.rn-realaudio'            : return 'ra';
+			case 'audio/x-pn-realaudio'              : return 'ram';
+			case 'application/vnd.rn-realmedia'      : return 'rm';
+			case 'video/vnd.rn-realvideo'            : return 'rv';
+			case 'application/x-msdownload'          : return 'exe';
+			case 'audio/scpls'                       : return 'pls';
+			case 'audio/x-mpegurl'                   : return 'm3u';
+		}
+		return '';
+	}
+
 	public static function GetMimeTypeByExtension($ext) {
 		switch (strtolower($ext)) {
 			case 'jpg': return 'image/jpeg';
