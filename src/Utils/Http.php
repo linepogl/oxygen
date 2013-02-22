@@ -38,7 +38,7 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 		$f_src = fopen($url,'rb',false,$ctx);
 		$f_dst = fopen($filename,'wb');
 		while (!feof($f_src)) {
-			$data = fread($f_src,1024);
+			$data = fread($f_src,1024*1024);
 			if ($data === false) break;
 			fwrite($f_dst,$data);
 		}
