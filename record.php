@@ -20,6 +20,7 @@ if (!$exception_recorded) {
 }
 
 $f_lck = fopen($lck_filename,'w');
+if ($f_lck === false) die;
 if (!flock($f_lck,LOCK_EX | LOCK_NB)) {  // some other accumulator is already running
 	fclose($f_lck);
 	die;
