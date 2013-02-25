@@ -589,6 +589,18 @@ class Oxygen {
 		echo Js::BEGIN."window.location.href=".new Js(__BASE__.$action->GetHrefPlain()).";".Js::END;
 		exit();
 	}
+	public static function RedirectDialog(Action $action) {
+		$current_action = Oxygen::GetAction();
+		if (!is_null($current_action) && $current_action->IsAjaxDialog()) {
+			while (ob_get_level()>0) ob_end_clean();
+			Oxygen::SendHttpHeaders();
+			echo Js::BEGIN."Oxygen.RedirectAjaxDialog(".new Js(__BASE__.$action->GetHrefPlain()).");".Js::END;
+			exit();
+		}
+		else {
+			Oxygen::Redirect($action);
+		}
+	}
 	public static function RedirectBack(){
 		while (ob_get_level()>0) ob_end_clean();
 		Oxygen::SendHttpHeaders();

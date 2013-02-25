@@ -223,6 +223,25 @@ var Oxygen = {
 		this.current_ajax_dialog_url = null;
 	}
 
+	,RedirectAjaxDialog: function(url){
+		var x = $('OxygenDialogInnerX');
+		x.update('<div style="text-align:center"><img src=\"oxy/img/ajax.gif\" hspace=\"10\" vspace=\"1\" align="absmiddle"/><br/><span id=\"OxygenDialogClock\">0:00</span></div>');
+		this.current_ajax_dialog_clock_value = 0;
+		this.current_ajax_dialog_clock_timer = setTimeout(function(){Oxygen.UpdateDialogClock();},1000);
+		this.ResizeDialog();
+		new Ajax.Request(url,{
+			method:'get'
+			,encoding:Oxygen.Encoding
+			,onSuccess:function(transport){
+				if (Oxygen.current_ajax_dialog_clock_timer != null) {
+					clearTimeout(Oxygen.current_ajax_dialog_clock_timer);
+					Oxygen.current_ajax_dialog_clock_timer = null;
+				}
+				$('OxygenDialogInnerX').update(transport.responseText);
+				Oxygen.ResizeDialog();
+			}
+		});
+	}
 	,SubmitAjaxDialog: function(form){
 		var params = $(form).serialize(true);
 		var x = $('OxygenDialogInnerX');
