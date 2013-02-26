@@ -173,7 +173,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDown a:hover  { color:#000000; text-decoration:none; }
 .formDropDownHook      { height:7px; background:url(../img/form-dropdown-hook.gif) 50% 0 no-repeat; margin-top:-7px; }
 .formDropDownHead      { height:16px; background:url(../img/form-dropdown-head-bg.gif) 0 0 repeat-x; border-bottom:1px solid #c5c0cf; border-radius:5px 5px 0 0; padding:8px 5px; font:normal 12px/18px Helvetica,Arial,sans-serif!important; text-transform:uppercase; text-decoration:none; text-align:center; color:#666666; }
-.formDropDownFoot      { height:16px; background:url(../img/form-dropdown-foot-bg.gif) 0 0 repeat-x; border-top:1px solid #dddddd; border-radius:0 0 5px 5px; padding:7px 5px; font:normal 12px/16px Helvetica,Arial,sans-serif!important; color:#666666; }
+.formDropDownFoot      { height:16px; background:url(../img/form-dropdown-foot-bg.gif) 0 0 repeat-x; border-top:1px solid #dddddd; border-radius:0 0 5px 5px; padding:7px 5px; font:normal 12px/18px Helvetica,Arial,sans-serif!important; color:#666666; }
 .formDropDownFootRight { float:right; margin-right:10px; }
 .formDropDownBody      { padding:10px; }
 
@@ -190,6 +190,8 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDownFoot a.button-am         { float:right; padding:0 3px; border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; margin:0; }
 .formDropDownFoot a.button-pm         { float:right; padding:0 3px; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
 .formDropDownFoot a.button-pm:hover   { border-left:1px dotted #aaaaaa; }
+.formDropDownFoot .formPane           { padding:1px; border:1px solid #bbbbbb!important; font:normal 10px/13px Andale Mono,monospace!important; letter-spacing:0!important; vertical-align:1px; border-radius:0!important; color:#666666!important; background:#ffffff!important; }
+.formDropDownFoot .formPane:focus     { border:1px solid #bbbbff!important; background:#ffffff!important;}
 
 .formDate                         { width:9.0em; text-align:left; cursor:pointer; }
 .formDateAnchor                   { background:url(../img/form-date-anchor.png) 50% 50% no-repeat; }
@@ -212,7 +214,6 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formColorDropDown td.color         { line-height:1px!important; width:100px; }
 .formColorDropDown td.color a       { display:block; width:12px; height:12px; border-radius:2px; margin:1px; }
 .formColorDropDown td.color a:hover { border:1px solid #000000; margin:0; }
-.formColorDropDown .formDropDownFoot input { float:right; width:40px; padding:1px; border:1px solid #bbbbbb; font:normal 10px/13px Andale Mono,monospace!important; letter-spacing:0!important; text-align:center; margin-top:-1px; }
 
 .formTime                             { width:7em; text-align:left; cursor:pointer; }
 .formTimeAnchor                       { background:url(../img/form-time-anchor.png) 50% 50% no-repeat; }

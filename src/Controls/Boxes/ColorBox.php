@@ -47,7 +47,7 @@ class ColorBox extends Box {
 				echo '<a class="fleft button" href="javascript:'.$this->name.'.SetColor(null);">'.($null_caption===''?'&empty;':new Html($null_caption)).'</a>';
 			}
 			echo '<div class="formDropDownFootRight">';
-			echo '# <input id="'.$this->name.'-text" type="text" onchange="window.'.$this->name.'.OnChange();" onkeyup="window.'.$this->name.'.OnChange();" />';
+			echo '# <input id="'.$this->name.'-text" type="text" class="formPane" style="width:45px;" onchange="window.'.$this->name.'.OnChange();" onkeyup="window.'.$this->name.'.OnChange();" />';
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
