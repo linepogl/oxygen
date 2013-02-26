@@ -202,7 +202,7 @@ class Oxygen {
 				echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
 				echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;background:#555577;">';
 				echo '<div style="position:fixed;top:30px;bottom:30px;left:30px;right:30px;z-index:1000;background:#dddddd;">';
-				echo '<div style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;overflow:auto;padding:30px;">';
+				echo '<div class="overflow" style="position:fixed;top:39px;bottom:39px;left:39px;right:39px;z-index:1000;border:1px solid #bbbbbb;background:#fafafa;padding:30px;">';
 				echo '<div style="font:bold 18px/22px Trebuchet MS,sans-serif;border-bottom:1px solid #bbbbbb;color:#555555;">Fatal error</div>';
 				if ($ex instanceof ApplicationException) {
 					echo '<div style="font:bold 13px/14px Trebuchet MS,sans-serif;margin:20px 0;">'.$Q.$ex->getMessage().$Q.'</div>';

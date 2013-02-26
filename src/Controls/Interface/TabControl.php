@@ -50,10 +50,9 @@ class TabControl extends Control {
 		$i = 0;
 		foreach ($this->pages as $name=>$title){
 			$is_selected = $this->selected_page==$name || (is_null($this->selected_page) && $i==0);
-			echo '<div class="tab_page"';
+			echo '<div class="tab_page'.($this->scrollbars?'':'overflow').'"';
 			echo ' id="'.$this->name.'_'.$name.'_tab_page"';
 			echo ' style="height:'.$this->height.';';
-			if ($this->scrollbars) echo 'overflow:auto;';
 			if (!$is_selected) echo 'display:none;';
 			echo '"';
 			echo '>';

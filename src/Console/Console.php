@@ -43,7 +43,7 @@ class Console {
 	private static function EndHeader($margin=20){
 		echo '</div>';
 		echo '<div style="position:fixed;bottom:'.$margin.'px;left:'.$margin.'px;right:'.$margin.'px;height:17px;background:url(oxy/img/console_bottom_bg.png) 0 0 repeat-x;border-bottom-left-radius:10px;border-bottom-right-radius:10px;text-shadow:#000000 1px 1px 0;color:#888888;font:10px/10px Trebuchet MS, sans-serif;text-transform:uppercase;padding-left:12px;padding-top:6px;">Oxygen</div>';
-		echo '<div class="console" style="position:fixed;top:'.(100+$margin).'px;left:'.$margin.'px;bottom:'.($margin+23).'px;right:'.$margin.'px;background:#f3f3f3;overflow:auto;padding:15px;">';
+		echo '<div class="console overflow" style="position:fixed;top:'.(100+$margin).'px;left:'.$margin.'px;bottom:'.($margin+23).'px;right:'.$margin.'px;background:#f3f3f3;padding:15px;">';
 	}
 
 	public static function BeginModal(){
@@ -97,7 +97,7 @@ class Console {
 
 
 	public static function RenderInfo( $info ){
-		echo '<div style="height:120px;overflow:auto;border:1px dotted #888888;background:#eeeeee;margin-bottom:10px;padding:5px;">';
+		echo '<div class="overflow" style="height:120px;border:1px dotted #888888;background:#eeeeee;margin-bottom:10px;padding:5px;">';
 		echo Oxygen::GetInfoAsHtml( $info );
 		echo '</div>';
 	}

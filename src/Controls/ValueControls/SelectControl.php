@@ -119,7 +119,7 @@ class SelectControl extends ValueControl {
 	public function Render(){
 		if ($this->mode == UIMode::Edit){
 			if ($this->use_check_boxes) {
-				echo '<div class="formPane" style="'.(empty($this->display)?'':'display:'.$this->display.';').'height:'.($this->rows*23).'px;width:'.(empty($this->width)?'auto':$this->width).';overflow:auto;white-space:nowrap;'.$this->style.'">';
+				echo '<div class="formPane overflow" style="'.(empty($this->display)?'':'display:'.$this->display.';').'height:'.($this->rows*23).'px;width:'.(empty($this->width)?'auto':$this->width).';white-space:nowrap;'.$this->style.'">';
 
 				if ( $this->allow_null )
 					echo '<div><input class="formCheck" type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->name.($this->is_multiple?'[]':'').'" id="'.$this->name.'_null" value=""'.($this->IsSelected(null)?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.'_null">' . $this->NullCaption . '</label></div>';

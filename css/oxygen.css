@@ -242,11 +242,15 @@ select[size="0"].formPane,select[size="1"].formPane { -webkit-appearance:none; }
  */
 .noprint       { }
 .printonly     { display:none;  }
-.overflow      { overflow:auto; }
+.overflow      { overflow:auto;   -webkit-overflow-scrolling: touch; }
+.overflow-x     { overflow-x:auto; -webkit-overflow-scrolling: touch; }
+.overflow-y     { overflow-y:auto; -webkit-overflow-scrolling: touch; }
 @media print {
     *            { overflow:visible; }
     body         { background:#ffffff; }
     .noprint     { display:none; }
     .printonly   { display:block; }
     .overflow    { overflow:visible; }
+    .overflowx   { overflow:visible; }
+    .overflowy   { overflow:visible; }
 }

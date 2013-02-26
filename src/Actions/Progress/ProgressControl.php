@@ -21,7 +21,7 @@ class ProgressControl extends Control {
 		$act2 = new ActionCancelProgress($this->name);
 		$href2 = $act2->GetHrefPlain();
 
-		echo '<div id="'.$this->name.'_log" style="height:'.$this->height.'px;border:1px solid #cccccc;overflow:auto;padding:2px;margin-bottom:10px;"></div>';
+		echo '<div id="'.$this->name.'_log" class="overflow" style="height:'.$this->height.'px;border:1px solid #cccccc;padding:2px;margin-bottom:10px;"></div>';
 		echo '<table id="'.$this->name.'_table" width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
 		echo '<td class="notext nowrap">'.ButtonControl::Make()->WithValue(Lemma::Pick('Cancel'))->WithOnClick($this->name.'_Cancel();').new Spacer(3).'</td>';
 		echo '<td class="nowrap hcenter" id="'.$this->name.'_clock">0:00</td>';

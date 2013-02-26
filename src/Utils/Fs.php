@@ -308,4 +308,29 @@ class Fs {
 		return $destination_filename;
 	}
 
+	public static function GetImageDimensions($filename,&$width,&$height) {
+		$a = @getimagesize($filename);
+		if (is_array($a) && count($a) > 1)
+			list($width,$height) = $a;
+		else
+			$width = $height = 0;
+	}
+	public static function FitImageDimensions($filename,$max_width,$max_height,&$width,&$height) {
+		if ($max_width <= 0 || $max_height <= 0) { $width = $height = 0; return; }
+		self::GetImageDimensions($filename,$width,$height);
+		if ($width <= 0 || $height <= 0) { $width = $height = 0; return; }
+		$width_ratio = $width / $max_width;
+		$height_ratio = $height / $max_height;
+		if ($width_ratio > $height_ratio) {
+			$width = $max_width;
+			$height = floor($height / $width_ratio);
+		}
+		else {
+			$height = $max_height;
+			$width = floor($width / $height_ratio);
+		}
+	}
+
+
+
 }

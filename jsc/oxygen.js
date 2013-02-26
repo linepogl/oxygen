@@ -87,7 +87,7 @@ var Oxygen = {
 
 		if (Prototype.Browser.IE6){
 			jQuery('body').append(''
-				+ '<div id="OxygenDialogFrame" style="z-index:100;position:absolute;top:0;left:0;overflow:auto;display:none;">'
+				+ '<div id="OxygenDialogFrame" class="overflow" style="z-index:100;position:absolute;top:0;left:0;display:none;">'
 				+ '<table id="OxygenDialogFrameX" cellspacing="20" cellpadding="0" border="0" style="width:100%;height:100%;"><tr><td style="vertical-align:middle;">'
 
 					+ '<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
@@ -113,7 +113,7 @@ var Oxygen = {
 		}
 		else {
 			jQuery('body').append(''
-				+ '<div id="OxygenDialogFrame" style="z-index:100;position:fixed;top:0;left:0;width:100%;height:100%;overflow:auto;display:none;">'
+				+ '<div id="OxygenDialogFrame" class="overflow" style="z-index:100;position:fixed;top:0;left:0;width:100%;height:100%;display:none;">'
 				+ '<table id="OxygenDialogFrameX" cellspacing="20" cellpadding="0" border="0" style="width:100%;height:100%;"><tr><td style="vertical-align:middle;">'
 
 					+ '<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
