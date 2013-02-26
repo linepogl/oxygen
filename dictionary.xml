@@ -53,7 +53,7 @@
 	<lemma name="Logoff"><en>Logoff</en><fr>Déconnexion</fr></lemma>
 	<lemma name="Back"><en>Back</en><fr>Retour</fr><el>Επιστροφή</el></lemma>
 	<lemma name="OK"><en>OK</en><fr>OK</fr><el>OK</el></lemma>
-	<lemma name="Apply"><en>Apply</en><fr>Valider</fr><el>Εφαρμογή</el></lemma>
+	<lemma name="Apply"><en>Apply</en><fr>Appliquer</fr><el>Εφαρμογή</el></lemma>
 	<lemma name="Cancel"><en>Cancel</en><fr>Annuler</fr><el>Άκυρο</el></lemma>
 	<lemma name="Send"><en>Send</en><fr>Envoyer</fr><el>Αποστολή</el></lemma>
 	<lemma name="Save"><en>Save</en><fr>Sauvegarder</fr><el>Αποθήκευση</el></lemma>
