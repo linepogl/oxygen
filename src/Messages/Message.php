@@ -41,7 +41,7 @@ abstract class Message {
 
 	public function GetCode(){ return self::ConvertTypeToCode($this->GetSeverity()); }
 	public abstract function GetDefaultIconName();
-	public function GetDefaultIconType(){ return 'gif'; }
+	public function GetDefaultIconType(){ return Oxygen::GetDefaultIconType(); }
 	public abstract function GetSeverity();
 	public abstract function GetBackgroundColor();
 	public abstract function GetBorderColor();
