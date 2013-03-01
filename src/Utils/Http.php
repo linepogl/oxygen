@@ -9,6 +9,12 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 
 	/** @return HttpValue */ public static function Read($nane){ return Http::$ANY[$nane]; }
 
+	public static function IsPost(){
+		return $_SERVER['REQUEST_METHOD']=='POST';
+	}
+	public static function IsGet(){
+		return $_SERVER['REQUEST_METHOD']=='GET';
+	}
 
 	private static function prepare_request( &$url , &$method , $args){
 		$method = strtoupper($method);
