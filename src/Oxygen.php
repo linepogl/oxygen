@@ -117,7 +117,7 @@ class Oxygen {
 			self::$action = new ActionOxygenThrowException($ex);
 		}
 		catch (Exception $ex){
-			Debug::RecordExceptionConverted($ex,'Action Initialisation Exception Handler');
+			//Debug::RecordExceptionConverted($ex,'Action Initialisation Exception Handler');
 			self::$action = new ActionOxygenThrowException(new PageNotFoundException(Lemma::Pick('MsgPageNotFound'),0,$ex));
 		}
 
