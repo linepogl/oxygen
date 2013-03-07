@@ -335,6 +335,13 @@ var Oxygen = {
 	,Refresh:function(){
 		window.location.href=window.location.href;
 	}
+	,OpenDynamicAction:function(js_command,mapper){
+		var map = mapper();
+		for (var xxx in map) {
+			js_command = js_command.replace(xxx,map[xxx]);
+		}
+		eval(js_command);
+	}
 };
 
 // for backwards compatibility:

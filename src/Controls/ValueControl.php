@@ -4,6 +4,9 @@ abstract class ValueControl extends Control {
 	public $value;
 	public function WithValue($value){ $this->value = $value; return $this; }
 
+	protected $http_name = null;
+	public function WithHttpName($value){ $this->http_name = $value; return $this; }
+
 	public function __construct(){
 		$a = func_get_args();
 		$z = func_num_args();
@@ -23,6 +26,7 @@ abstract class ValueControl extends Control {
 		parent::__construct($name);
 		$this->value = $value;
 		$this->label = $label;
+		$this->http_name = $name;
 	}
 
 	public $label;

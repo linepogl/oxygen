@@ -132,6 +132,7 @@ abstract class XType implements _XType {
 		if (is_float($value)) return MetaDecimal::Type();
 		if (is_bool($value)) return MetaBoolean::Type();
 		if (is_array($value)) return MetaArray::Type();
+		if ($value instanceof XList) return MetaList::Type();
 		if ($value instanceof Traversable) return MetaTraversable::Type();
 		return MetaStringable::Type();
 	}

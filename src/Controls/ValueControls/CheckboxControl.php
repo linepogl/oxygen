@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated */
 class CheckboxControl extends ValueControl {
 
 	private $show_label = false;

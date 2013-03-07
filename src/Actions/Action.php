@@ -68,7 +68,7 @@ abstract class Action extends XValue {
 	public function GetButtonTitle(){ return $this->GetTitle(); }
 	public function GetButtonCssClass(){ return ''; }
 	/** @return ButtonControl */
-	public function GetButton($args=array()) { return ButtonControl::Make()->WithValue($this->GetButtonTitle())->WithOnClick($this->GetJSCommand($args))->WithCssClass($this->GetButtonCssClass()); }
+	public function GetButton($args=array(),$dynamic_args=array()) { return ButtonControl::Make()->WithValue($this->GetButtonTitle())->WithOnClick($this->GetJSCommand($args,$dynamic_args))->WithCssClass($this->GetButtonCssClass()); }
 
 	public abstract function IsPermitted();
 	public function IsLogical(){ return true; }
@@ -326,18 +326,28 @@ abstract class Action extends XValue {
 	protected function GetDefaultMode(){ return Action::MODE_NORMAL; }
 	public final function WithMode($value){ $this->mode = $value; return $this; }
 	protected function UseJavascriptAsHref(){ return $this->IsAjaxDialog() || $this->IsIFrameDialog(); }
-	public final function GetHref($args=array()){ return $this->UseJavascriptAsHref() ? $this->GetHrefJavascript($args) : $this->GetHrefPlain($args); }
-	public final function GetHrefJavascript($args=array()){ return 'javascript:'.$this->GetJSCommand($args); }
-	public function GetJSCommand($args=array()){
+	public final function GetHref($args=array(),$dynamic_args=array()){ return $this->UseJavascriptAsHref() ? $this->GetHrefJavascript($args,$dynamic_args) : $this->GetHrefPlain($args,$dynamic_args); }
+	public final function GetHrefJavascript($args=array(),$dynamic_args=array()){ return 'javascript:'.$this->GetJSCommand($args,$dynamic_args); }
+	public function GetJSCommand($args=array(),$dynamic_args=array()){
+		$x = '';
+		$i = 0;
+		foreach ($dynamic_args as $value) $x .= ($i==0?'':',')."'XXX~".++$i."':$value";
+
 		if ($this->IsAjaxDialog())
-			return 'Oxygen.ShowAjaxDialog('.new Js($this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
+			$r = 'Oxygen.ShowAjaxDialog('.new Js($this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args,$dynamic_args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
 		elseif ($this->IsIFrameDialog())
-			return 'Oxygen.ShowIFrameDialog('.new Js($this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
+			$r = 'Oxygen.ShowIFrameDialog('.new Js($this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args,$dynamic_args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
 		else
-			return 'window.location.href='.new Js(__BASE__.$this->GetHrefPlain($args)).';';
+			$r = 'window.location.href='.new Js(__BASE__.$this->GetHrefPlain($args,$dynamic_args)).';';
+
+		if ($x=='')
+			return $r;
+		else
+			return "Oxygen.OpenDynamicAction(".new Js($r).",function(){return{ $x }; });";
 	}
 	protected function GetUrlArgs(){ $r = array(); return $r; }
-	public final function GetHrefPlain($args=array()){
+	public final function GetHrefPlain($args=array(),$dynamic_args=array()){
+		if (!empty($dynamic_args)) { $i=0; foreach ($dynamic_args as $key=>$value) $args[$key] = 'XXX~'.++$i; }
 		return Oxygen::MakeHref(
 			$args
 			+ array('action'=>$this->GetName(),'mode'=> $this->mode == Oxygen::GetDefaultActionMode() ? null : $this->mode)
