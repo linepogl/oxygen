@@ -4,7 +4,7 @@
 class HttpValue extends ImportValue {
 
 	public function AsStringArray(){
-		if (empty($this->value))
+		if (is_null($this->value) || $this->value==='')
 			return array();
 		else if (is_array($this->value))
 			return $this->value;
@@ -28,8 +28,8 @@ class HttpValue extends ImportValue {
 		}
 	}
   public function AsIDArray(){
-  	if (empty($this->value))
-  		return array();
+	  if (is_null($this->value) || $this->value==='')
+			return array();
   	else if (is_array($this->value)){
 			$r = array();
 			foreach ($this->value as $key=>$s) $r[$key]= is_null($s) || $s=='' ? null : ID::ParseHex($s);

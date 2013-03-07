@@ -46,7 +46,8 @@ class ListCheckBox extends Box {
 		echo "      }";
 		echo "      else all = false;";
 		echo "    });";
-		echo "    {$this->name}_all.SetValue(any&&all);";
+		echo "    {$this->name}_all.SetValue(any);";
+		echo "    {$this->name}_all.SetDirty(any&&!all);";
 		echo "    var old = jQuery('#$this->name').val();";
 		echo "    jQuery('#$this->name').val(s);";
 		echo "    if (old != s) this.OnChange();";

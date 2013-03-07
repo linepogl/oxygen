@@ -59,8 +59,8 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 }
 
 final class HttpPost extends Http {
-	public final function OffsetExists($offset) { return isset($_POST[$offset]); }
-	/** @return HttpValue */ public function OffsetGet($offset) { return isset($_POST[$offset]) ? new HttpValue($_POST[$offset]) : new HttpValue(null); }
+	public final function OffsetExists($offset) { return array_key_exists($offset,$_POST); }
+	/** @return HttpValue */ public function OffsetGet($offset) { return array_key_exists($offset,$_POST) ? new HttpValue($_POST[$offset]) : new HttpValue(null); }
 	public function GetIterator(){
 		$r = array();
 		foreach (array_keys($_POST) as $key)
@@ -70,8 +70,8 @@ final class HttpPost extends Http {
 	/** @return HttpValue */ public static function Read($nane){ return Http::$GET[$nane]; }
 }
 final class HttpGet extends Http {
-	public final function OffsetExists($offset) { return isset($_GET[$offset]); }
-	/** @return HttpValue */ public function OffsetGet($offset) { return isset($_GET[$offset]) ? new HttpValue($_GET[$offset]) : new HttpValue(null); }
+	public final function OffsetExists($offset) { return array_key_exists($offset,$_GET); }
+	/** @return HttpValue */ public function OffsetGet($offset) { return array_key_exists($offset,$_GET) ? new HttpValue($_GET[$offset]) : new HttpValue(null); }
 	public function GetIterator(){
 		$r = array();
 		foreach (array_keys($_GET) as $key)
@@ -81,7 +81,7 @@ final class HttpGet extends Http {
 	/** @return HttpValue */ public static function Read($nane){ return Http::$GET[$nane]; }
 }
 final class HttpAny extends Http {
-	public final function OffsetExists($offset) { return isset($_GET[$offset]) || isset($_POST[$offset]); }
+	public final function OffsetExists($offset) { return array_key_exists($offset,$_GET) || array_key_exists($offset,$_POST); }
 	/** @return HttpValue */ public function OffsetGet($offset) {
 		$a = Http::$GET[$offset]->AsStringOrNull();
 		$b = Http::$POST[$offset]->AsStringOrNull();
