@@ -67,6 +67,7 @@ abstract class XItem extends XValue implements Serializable {
 
 	public function MetaType(){ return MetaItem::Type(); }
 	public function Serialize(){
+		$this->OnBeforeCopy();
 		$meta = $this->Meta();
 		$a = array('id'=>Oxygen::SerializeWithTheCurrentMethod( $this->id ),'has_temp_id'=>Oxygen::SerializeWithTheCurrentMethod( $this->has_temp_id ) );
 		/** @var $f XMetaField */
