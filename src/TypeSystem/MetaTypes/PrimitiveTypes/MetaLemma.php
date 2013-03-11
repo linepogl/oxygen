@@ -111,6 +111,15 @@ class MetaLemma extends XNullableType {
 	}
 
 	/**
+	 * @param $value Lemma|null
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		if (is_null($value)) return '';
+		return $value->Encode();
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return Lemma|null
 	 */

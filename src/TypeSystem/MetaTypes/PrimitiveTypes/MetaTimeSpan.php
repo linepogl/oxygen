@@ -137,6 +137,16 @@ class MetaTimeSpan extends XNullableType {
 
 
 	/**
+	 * @param $value XTimeSpan|null
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		if (is_null($value)) return '';
+		return strval($value->GetTotalMilliseconds());
+	}
+
+
+	/**
 	 * @param $value string|null
 	 * @return XTimeSpan|null
 	 */

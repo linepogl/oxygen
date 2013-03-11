@@ -94,6 +94,13 @@ class MetaSqlIden extends XConcreteType {
 	public static function ExportUrlString($value) {
 		return self::EncodeAsUrlString($value->Export());
 	}
+	/**
+	 * @param $value SqlIden
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value->Export();
+	}
 
 	/**
 	 * @param $value string|null

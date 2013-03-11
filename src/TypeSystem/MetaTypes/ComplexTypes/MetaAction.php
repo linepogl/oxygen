@@ -98,6 +98,16 @@ class MetaAction extends XConcreteType {
 		return self::EncodeAsUrlString($value->GetHref());
 	}
 
+
+	/**
+	 * @param $value Action
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value->GetHref();
+	}
+
+
 	/**
 	 * @param $value string|null
 	 * @return Action

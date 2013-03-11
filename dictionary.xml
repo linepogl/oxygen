@@ -58,6 +58,7 @@
 	<lemma name="Send"><en>Send</en><fr>Envoyer</fr><el>Αποστολή</el></lemma>
 	<lemma name="Save"><en>Save</en><fr>Sauvegarder</fr><el>Αποθήκευση</el></lemma>
 	<lemma name="Delete"><en>Delete</en><fr>Supprimer</fr><el>Διαγραφή</el></lemma>
+	<lemma name="Rename"><en>Rename</en><fr>Renommer</fr><el>Μετονομασία</el></lemma>
 	<lemma name="Print"><en>Print</en><fr>Imprimer</fr><el>Εκτύπωση</el></lemma>
 	<lemma name="Close"><en>Close</en><fr>Fermer</fr><el>Κλείσιμο</el></lemma>
 	<lemma name="Ask"><en>Ask</en><fr>Demander</fr><el>Ερώτηση</el></lemma>

@@ -95,6 +95,14 @@ class MetaLemmaOrEmpty extends XConcreteType {
 	}
 
 	/**
+	 * @param $value Lemma
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value->Encode();
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return Lemma
 	 */

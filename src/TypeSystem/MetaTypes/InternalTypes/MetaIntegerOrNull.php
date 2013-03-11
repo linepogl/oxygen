@@ -109,6 +109,15 @@ class MetaIntegerOrNull extends XNullableType {
 	}
 
 	/**
+	 * @param $value int|null
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		if (is_null($value)) return '';
+		return sprintf('%d',$value);
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return int|null
 	 */

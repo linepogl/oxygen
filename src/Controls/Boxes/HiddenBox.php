@@ -12,7 +12,7 @@ class HiddenBox extends Box {
 		echo '<input type="'.($this->debug?'text':'hidden').'" id="'.$this->name.'"';
 		if ($this->mode == UIMode::Edit && !empty($this->http_name)) echo ' name="'.$this->name.'"';
 		if (!is_null($this->css_class)) echo ' class="'.$this->css_class.'"';
-		echo ' value="'.new Html(rawurldecode(new Url($this->value))).'" />';
+		echo ' value="'.new Html(new Val($this->value)).'" />';
 	}
 
 

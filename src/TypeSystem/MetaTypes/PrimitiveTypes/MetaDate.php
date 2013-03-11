@@ -140,6 +140,15 @@ class MetaDate extends MetaDateTime {
 		return $value->Format('YmdHis');
 	}
 
+	/**
+	 * @param $value XDate|null
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		if (is_null($value)) return '';
+		return $value->Format('YmdHis');
+	}
+
 
 	/**
 	 * @param $value string|null

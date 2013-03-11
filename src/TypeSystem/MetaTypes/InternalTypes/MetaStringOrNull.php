@@ -112,6 +112,15 @@ class MetaStringOrNull extends XNullableType {
 
 	/**
 	 * @param $value string|null
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		if (is_null($value)) return '';
+		return $value;
+	}
+
+	/**
+	 * @param $value string|null
 	 * @return string|null
 	 */
 	public static function ImportDBValue($value) {

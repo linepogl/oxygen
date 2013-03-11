@@ -103,6 +103,16 @@ class MetaList extends XConcreteType {
 	}
 
 	/**
+	 * @param $value XList
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		$ids = $value->ToIDList();
+		return implode(',',array_map(function($id){ return MetaID::ExportValString($id); },$ids));
+	}
+
+
+	/**
 	 * @param $value string|null
 	 * @return XList
 	 */

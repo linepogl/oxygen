@@ -96,6 +96,14 @@ class MetaHtml extends XConcreteType {
 	}
 
 	/**
+	 * @param $value Html
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value->Export();
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return Html
 	 */

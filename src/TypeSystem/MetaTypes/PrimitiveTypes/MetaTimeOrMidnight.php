@@ -103,6 +103,14 @@ class MetaTimeOrMidnight extends XConcreteType {
 	}
 
 	/**
+	 * @param $value XTime
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value->Format('YmdHis');
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return XTime
 	 */

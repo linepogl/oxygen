@@ -93,7 +93,15 @@ class MetaWrapField extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		return self::EncodeAsUrlString($value->GetLabel());
+		return self::EncodeAsUrlString($value->GetName());
+	}
+
+	/**
+	 * @param $value XWrapField
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value->GetName();
 	}
 
 	/**

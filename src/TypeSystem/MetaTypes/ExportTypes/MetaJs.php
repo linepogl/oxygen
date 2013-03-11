@@ -96,6 +96,14 @@ class MetaJs extends XConcreteType {
 	}
 
 	/**
+	 * @param $value Js
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value->Export();
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return Js
 	 */

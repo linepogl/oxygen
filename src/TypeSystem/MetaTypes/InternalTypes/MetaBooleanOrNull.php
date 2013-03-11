@@ -114,6 +114,16 @@ class MetaBooleanOrNull extends XNullableType {
 	}
 
 	/**
+	 * @param $value boolean|null
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		if (is_null($value)) return '';
+		if ($value) return 'true';
+		return 'false';
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return boolean|null
 	 */

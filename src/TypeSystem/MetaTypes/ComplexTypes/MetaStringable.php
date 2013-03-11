@@ -96,6 +96,14 @@ class MetaStringable extends XConcreteType {
 	}
 
 	/**
+	 * @param $value mixed
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return MetaString::ExportValString(strval($value));
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return Traversable
 	 */

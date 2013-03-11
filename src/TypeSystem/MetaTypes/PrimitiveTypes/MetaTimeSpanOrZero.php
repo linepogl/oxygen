@@ -132,6 +132,15 @@ class MetaTimeSpanOrZero extends XConcreteType {
 
 
 	/**
+	 * @param $value XTimeSpan
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return strval($value->GetTotalMilliseconds());
+	}
+
+
+	/**
 	 * @param $value string|null
 	 * @return XTimeSpan
 	 */

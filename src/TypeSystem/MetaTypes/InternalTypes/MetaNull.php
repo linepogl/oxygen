@@ -97,6 +97,14 @@ class MetaNull extends XNullableType {
 	}
 
 	/**
+	 * @param $value null
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return '';
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return null
 	 */

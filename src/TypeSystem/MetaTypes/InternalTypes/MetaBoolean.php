@@ -103,6 +103,15 @@ class MetaBoolean extends XConcreteType {
 	}
 
 	/**
+	 * @param $value boolean
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		if ($value) return 'true';
+		return 'false';
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return boolean
 	 */

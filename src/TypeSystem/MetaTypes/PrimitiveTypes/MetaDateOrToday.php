@@ -132,6 +132,14 @@ class MetaDateOrToday extends MetaDateTimeOrNow {
 		return $value->Format('YmdHis');
 	}
 
+	/**
+	 * @param $value XDate
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value->Format('YmdHis');
+	}
+
 
 	/**
 	 * @param $value string|null

@@ -100,6 +100,14 @@ class MetaInteger extends XConcreteType {
 	}
 
 	/**
+	 * @param $value int
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return sprintf('%d',$value);
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return int
 	 */

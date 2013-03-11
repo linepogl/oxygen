@@ -114,6 +114,17 @@ class MetaTraversable extends XConcreteType {
 	}
 
 	/**
+	 * @param $value Traversable
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		$a = array();
+		foreach ($value as $x)
+			$a[] = XType::Of($x)->ExportValString($x);
+		return implode(',',$a);
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return Traversable
 	 */

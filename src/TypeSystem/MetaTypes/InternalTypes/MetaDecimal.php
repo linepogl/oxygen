@@ -107,6 +107,14 @@ class MetaDecimal extends XConcreteType {
 	}
 
 	/**
+	 * @param $value float
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return Language::FormatDecimal($value);
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return float
 	 */

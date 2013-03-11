@@ -102,6 +102,14 @@ class MetaDateTimeOrNow extends XConcreteType {
 	}
 
 	/**
+	 * @param $value XDateTime
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value->Format('YmdHis');
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return XDateTime
 	 */

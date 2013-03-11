@@ -53,7 +53,7 @@ class CheckBox extends Box {
 		echo "window.".$this->name .'={';
 		echo "  is_readonly:".new Js($readonly);
 		echo " ,is_dirty:".new Js($this->is_dirty);
-		echo " ,list_value:".new Js( rawurldecode(new Url($this->list_value)) );
+		echo " ,list_value:".new Js(new Val($this->list_value));
 		echo " ,SetValue:function(value){";
 		echo "    var old = this.GetValue();";
 		echo "    $(".new Js($this->name).").value = value ? ".new Js(new Url(true))." : ".new Js(new Url(false)).";";

@@ -98,6 +98,14 @@ class MetaString extends XConcreteType {
 	}
 
 	/**
+	 * @param $value string
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		return $value;
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return string
 	 */

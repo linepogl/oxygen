@@ -1,19 +1,19 @@
 <?php
 
-class MetaSql extends XConcreteType {
+class MetaVal extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
-	/** @return MetaSql */ public static function Type() { return self::$instance; }
-	/** @return MetaSql */ public static function GetNullableType() { throw new ConvertionException(); }
-	/** @return Sql */ public static function GetDefaultValue() { throw new ConvertionException(); }
+	/** @return MetaVal */ public static function Type() { return self::$instance; }
+	/** @return MetaVal */ public static function GetNullableType() { throw new ConvertionException(); }
+	/** @return Val */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 
 
 
 
 	/**
-	 * @param $address Sql
+	 * @param $address Val
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
@@ -37,7 +37,7 @@ class MetaSql extends XConcreteType {
 	}
 
 	/**
-	 * @param $value Sql
+	 * @param $value Val
 	 * @param $platform int|null
 	 * @return mixed
 	 */
@@ -46,16 +46,16 @@ class MetaSql extends XConcreteType {
 	}
 
 	/**
-	 * @param $value Sql
+	 * @param $value Val
 	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		return $value->GetInnerType()->ExportSqlLiteral($value->GetInnerValue(),$platform);
+		return self::EncodeAsSqlStringLiteral($value->Export(),$platform);
 	}
 
 	/**
-	 * @param $value Sql
+	 * @param $value Val
 	 * @param $platform int|null
 	 * @return string
 	 */
@@ -64,7 +64,7 @@ class MetaSql extends XConcreteType {
 	}
 
 	/**
-	 * @param $value Sql
+	 * @param $value Val
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
@@ -72,7 +72,7 @@ class MetaSql extends XConcreteType {
 	}
 
 	/**
-	 * @param $value Sql
+	 * @param $value Val
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
@@ -80,7 +80,7 @@ class MetaSql extends XConcreteType {
 	}
 
 	/**
-	 * @param $value Sql
+	 * @param $value Val
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
@@ -88,7 +88,7 @@ class MetaSql extends XConcreteType {
 	}
 
 	/**
-	 * @param $value Sql
+	 * @param $value Val
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
@@ -96,7 +96,7 @@ class MetaSql extends XConcreteType {
 	}
 
 	/**
-	 * @param $value Sql
+	 * @param $value Val
 	 * @return string
 	 */
 	public static function ExportValString($value) {
@@ -105,7 +105,7 @@ class MetaSql extends XConcreteType {
 
 	/**
 	 * @param $value string|null
-	 * @return Sql
+	 * @return Val
 	 */
 	public static function ImportDBValue($value) {
 		throw new ConvertionException();
@@ -113,7 +113,7 @@ class MetaSql extends XConcreteType {
 
 	/**
 	 * @param $value string|null
-	 * @return Sql
+	 * @return Val
 	 */
 	public static function ImportDomValue($value) {
 		throw new ConvertionException();
@@ -121,11 +121,11 @@ class MetaSql extends XConcreteType {
 
 	/**
 	 * @param $value string|null|array
-	 * @return Sql
+	 * @return Val
 	 */
 	public static function ImportHttpValue($value) {
 		throw new ConvertionException();
 	}
 }
 
-MetaSql::Init();
+MetaVal::Init();

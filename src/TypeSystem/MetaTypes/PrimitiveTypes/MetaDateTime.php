@@ -109,6 +109,15 @@ class MetaDateTime extends XNullableType {
 	}
 
 	/**
+	 * @param $value XDateTime|null
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		if (is_null($value)) return '';
+		return $value->Format('YmdHis');
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return XDateTime|null
 	 */

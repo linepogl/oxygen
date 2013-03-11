@@ -103,6 +103,15 @@ class MetaID extends XNullableType {
 	}
 
 	/**
+	 * @param $value ID|null
+	 * @return string
+	 */
+	public static function ExportValString($value) {
+		if (is_null($value)) return '';
+		return $value->AsHex();
+	}
+
+	/**
 	 * @param $value string|null
 	 * @return ID|null
 	 */
