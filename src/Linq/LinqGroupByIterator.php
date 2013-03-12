@@ -1,6 +1,6 @@
 <?php
 
-class LinqGroupByIterator extends LinqIterator {
+class LinqGroupByIterator extends LinqIterator implements ArrayAccess {
 	private $hash_function;
 	public function __construct(Iterator $iterator, $hash_function){ parent::__construct($iterator); $this->hash_function = $hash_function; }
 
@@ -34,5 +34,10 @@ class LinqGroupByIterator extends LinqIterator {
 	public function Valid(){ return $this->inner_iterator->valid(); }
 	public function Current(){ return $this->inner_iterator->current(); }
 	public function Key(){ return $this->inner_iterator->key(); }
+
+	public function OffsetExists($offset) { $this->init(); return array_key_exists($offset,$this->groups); }
+	public function OffsetGet($offset) { $this->init(); return array_key_exists($offset,$this->groups) ? $this->groups[$offset] : new LinqIterator(new ArrayIterator([])); }
+	public function OffsetSet($offset,$value) { $this->init(); $this->groups[$offset] = $value; }
+	public function OffsetUnset($offset) { $this->init(); unset($this->groups[$offset]); }
 
 }

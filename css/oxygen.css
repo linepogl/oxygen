@@ -38,6 +38,7 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 .fright              { float:right;   }
 .fleft               { float:left;    }
 .fclear              { clear:both!important;    }
+.ellipsis             { overflow:hidden; text-overflow:ellipsis; }
 .nounderline         { text-decoration:none; }
 .nounderline:hover   { text-decoration:none; }
 .borderbox           { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; }
