@@ -20,7 +20,7 @@ class ListCheckBox extends Box {
 	public function Render(){
 
 		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name);
-		echo CheckBox::Make($this->name.'_all',false)->WithHttpName('')->WithOnChange("window.$this->name.OnChangeAll();");
+		echo CheckBox::Make($this->name.'_all',false)->WithHttpName('')->WithOnChange("window.$this->name.OnChangeAll();")->WithLabel($this->label)->WithShowLabel($this->show_label);
 
 		echo Js::BEGIN;
 		echo "window.$this->name = {";
