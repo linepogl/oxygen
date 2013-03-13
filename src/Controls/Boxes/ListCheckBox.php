@@ -17,6 +17,9 @@ class ListCheckBox extends Box {
 	private $css_class = '';
 	public function WithCssClass($value){ $this->css_class = $value; return $this; }
 
+	private $all_values = null;
+	public function WithAllValues($value){ $this->all_values = $value; return $this; }
+
 	public function Render(){
 
 		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name);
@@ -25,27 +28,27 @@ class ListCheckBox extends Box {
 		echo Js::BEGIN;
 		echo "window.$this->name = {";
 		echo "  running : false";
+		echo " ,all_values : ".new Js($this->all_values);
+		echo " ,selected_values : []";
 		echo " ,IsChecked : function(){ return {$this->name}_all.GetValue(); }";
 		echo " ,Check : function(value){ {$this->name}_all.SetValue(value); }";
 		echo " ,CountSelected : function(){";
-		echo "    var r = 0;";
+		echo "    return this.selected_values.length;";
+		echo "  }";
+		echo " ,Init : function(){";
+		echo "    if (this.all_values !== null) return;";
+		echo "    this.all_values = [];";
 		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);";
-		echo "      if (x.GetValue()) r++;";
+		echo "      $this->name.all_values.push(x.GetListValue());";
 		echo "    });";
-		echo "    return r;";
 		echo "  }";
 		echo " ,Update : function(){";
+		echo "    this.Init();";
 		echo "    var s = '';";
-		echo "    var all = true;";
-		echo "    var any = false;";
-		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);";
-		echo "      if (x.GetValue()) {";
-		echo "        if(s!='')s+=',';";
-		echo "        s+=x.GetListValue();";
-		echo "        any = true;";
-		echo "      }";
-		echo "      else all = false;";
-		echo "    });";
+		echo "    for (var i = 0; i < this.selected_values.length; i++)";
+		echo "      s +=(i>0?',':'')+this.selected_values[i];";
+		echo "    var all = this.selected_values.length == this.all_values.length;";
+		echo "    var any = this.selected_values.length > 0;";
 		echo "    {$this->name}_all.SetValue(any);";
 		echo "    {$this->name}_all.SetDirty(any&&!all);";
 		echo "    var old = jQuery('#$this->name').val();";
@@ -55,16 +58,27 @@ class ListCheckBox extends Box {
 		echo " ,OnChangeAll : function(){";
 		echo "    if(this.running) return;";
 		echo "    this.running = true;";
+		echo "    this.Init();";
 		echo "    var v = {$this->name}_all.GetValue();";
 		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);";
 		echo "      x.SetValue(v);";
 		echo "    });";
+		echo "    this.selected_values = v ? this.all_values : [];";
 		echo "    this.Update();";
 		echo "    this.running = false;";
 		echo "  }";
 		echo " ,OnChangeOne : function(){";
 		echo "    if(this.running) return;";
 		echo "    this.running = true;";
+		echo "    this.Init();";
+		echo "    var a = {};";
+		echo "    for (var i = 0; i < this.all_values.length; i++) a[this.selected_values[i]] = false;";
+		echo "    for (var i = 0; i < this.selected_values.length; i++) a[this.selected_values[i]] = true;";
+		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);";
+		echo "      a[x.GetListValue()] = x.GetValue();";
+		echo "    });";
+		echo "    this.selected_values = [];";
+		echo "    for (var key in a) if (a[key]) this.selected_values.push(key);";
 		echo "    this.Update();";
 		echo "    this.running = false;";
 		echo "  }";
