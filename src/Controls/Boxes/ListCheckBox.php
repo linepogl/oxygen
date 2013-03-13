@@ -28,12 +28,17 @@ class ListCheckBox extends Box {
 		echo Js::BEGIN;
 		echo "window.$this->name = {";
 		echo "  running : false";
+		echo " ,all_values_are_fixed : ".new Js(!is_null($this->all_values));
 		echo " ,all_values : ".new Js($this->all_values);
 		echo " ,selected_values : []";
 		echo " ,IsChecked : function(){ return {$this->name}_all.GetValue(); }";
 		echo " ,Check : function(value){ {$this->name}_all.SetValue(value); }";
 		echo " ,CountSelected : function(){";
 		echo "    return this.selected_values.length;";
+		echo "  }";
+		echo " ,Invalidate : function(){";
+		echo "    if (!this.all_values_are_fixed) this.all_values = null;";
+		echo "    this.OnChangeAll();";
 		echo "  }";
 		echo " ,Init : function(){";
 		echo "    if (this.all_values !== null) return;";
