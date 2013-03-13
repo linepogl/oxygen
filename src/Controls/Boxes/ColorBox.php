@@ -130,7 +130,7 @@ class ColorBox extends Box {
 			echo "    this.is_open = true;";
 			echo "    this.Update();";
 			echo "    jQuery('#$this->name-text').val(jQuery('#$this->name').val().replace('#','')).focus();";
-			echo "    jQuery('html').on('click.$this->name', function(e){ if ($this->name.Showing) { $this->name.Showing = false; return; } if($this->name.Clicking)retunr; if (jQuery('#$this->name-dropdown').has(e.target).length === 0) $this->name.HideDropDown(); });";
+			echo "    jQuery('html').on('click.$this->name', function(e){ if ($this->name.Showing) { $this->name.Showing = false; return; } if($this->name.Clicking)return; if (jQuery('#$this->name-dropdown').has(e.target).length === 0) $this->name.HideDropDown(); });";
 			echo "  }";
 			echo " ,HideDropDown : function(){";
 			echo "    this.keep_focus = false;";
