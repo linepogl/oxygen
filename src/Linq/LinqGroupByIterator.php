@@ -36,7 +36,7 @@ class LinqGroupByIterator extends LinqIterator implements ArrayAccess {
 	public function Key(){ return $this->inner_iterator->key(); }
 
 	public function OffsetExists($offset) { $this->init(); return array_key_exists($offset,$this->groups); }
-	public function OffsetGet($offset) { $this->init(); return array_key_exists($offset,$this->groups) ? $this->groups[$offset] : new LinqIterator(new ArrayIterator([])); }
+	public function OffsetGet($offset) { $this->init(); return array_key_exists($offset,$this->groups) ? $this->groups[$offset] : new LinqIterator(new ArrayIterator(array())); }
 	public function OffsetSet($offset,$value) { $this->init(); $this->groups[$offset] = $value; }
 	public function OffsetUnset($offset) { $this->init(); unset($this->groups[$offset]); }
 
