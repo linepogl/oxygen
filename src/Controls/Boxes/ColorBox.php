@@ -108,7 +108,7 @@ class ColorBox extends Box {
 			echo " ,KeepFocus : function(){ this.keep_focus = true; setTimeout(function(){ $this->name.Update(); },500); }";
 			echo " ,Update : function(){";
 			echo "    if (!this.is_open) return;";
-			echo "    jQuery('#$this->name-box').focus();";
+			echo "    jQuery('#$this->name-text').focus();";
 			echo "    this.keep_focus = false;";
 			echo "  }";
 
