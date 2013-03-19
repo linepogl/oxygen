@@ -4,8 +4,8 @@ class GenericID extends ID {
 	private $classname;
 
 	public function MetaType(){ return MetaGenericID::Type(); }
-	public function Serialize(){ return Oxygen::SerializeWithTheCurrentMethod(array($$this->classname,$this->value)); }
-	public function Unserialize($data){ list($this->classname,$this->value) = Oxygen::UnserializeWithTheCurrentMethod( $data ); }
+	public function Serialize(){ return serialize(array($$this->classname,$this->value)); }
+	public function Unserialize($data){ list($this->classname,$this->value) = unserialize( $data ); }
 
 	public function __construct($classname,$value=null){
 		parent::__construct($value);

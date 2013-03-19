@@ -151,11 +151,11 @@ abstract class MemoryScope extends Scope {
 	public function Reset() { $this->SoftReset(); }
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
-		return isset($this->data[$key]);
+		return array_key_exists($key,$this->data);
 	}
 	public function OffsetGet($offset) {
 		$key = $this->Hash($offset);
-		if (isset($this->data[$key]))
+		if (array_key_exists($key,$this->data))
 			return $this->data[$key];
 		else
 			return null;
@@ -171,7 +171,7 @@ abstract class MemoryScope extends Scope {
 	}
 	public function ForceGet($offset){
 		$key = $this->Hash($offset);
-		if (isset($this->data[$key]))
+		if (array_key_exists($key,$this->data))
 			return $this->data[$key];
 		else
 			return null;
@@ -196,7 +196,7 @@ abstract class ApcScope extends MemoryScope {
 	}
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
-		if (isset($this->data[$key]))
+		if (array_key_exists($key,$this->data))
 			return true;
 		elseif ($this->use_apc_storage)
 			return apc_exists($key);
@@ -205,7 +205,7 @@ abstract class ApcScope extends MemoryScope {
 	}
 	public function OffsetGet($offset) {
 		$key = $this->Hash($offset);
-		if (isset($this->data[$key]))
+		if (array_key_exists($key,$this->data))
 			return $this->data[$key];
 		elseif ($this->use_apc_storage && apc_exists($key)) {
 			$this->data[$key] = apc_fetch($key);
@@ -244,7 +244,7 @@ abstract class ApcScope extends MemoryScope {
 				return null;
 			}
 		}
-		elseif (isset($this->data[$key]))
+		elseif (array_key_exists($key,$this->data))
 			return $this->data[$key];
 		else
 			return null;
@@ -286,7 +286,7 @@ abstract class MemcachedScope extends MemoryScope {
 	}
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
-		if (isset($this->data[$key]))
+		if (array_key_exists($key,$this->data))
 			return true;
 		elseif ($this->use_memcached_storage) {
 			$r = self::$memcached->get( $key );
@@ -304,7 +304,7 @@ abstract class MemcachedScope extends MemoryScope {
 	}
 	public function OffsetGet($offset) {
 		$key = $this->Hash($offset);
-		if (isset($this->data[$key]))
+		if (array_key_exists($key,$this->data))
 			return $this->data[$key];
 		elseif ($this->use_memcached_storage) {
 			$r = self::$memcached->get( $key );
@@ -351,7 +351,7 @@ abstract class MemcachedScope extends MemoryScope {
 				return null;
 			}
 		}
-		elseif (isset($this->data[$key]))
+		if (array_key_exists($key,$this->data))
 			return $this->data[$key];
 		else
 			return null;
@@ -410,7 +410,7 @@ abstract class HddScope extends MemoryScope {
 	private function hdd_store($filename,$object){
 		$f = fopen($filename,'w');
 		if (flock($f,LOCK_EX)){
-			fwrite($f,Oxygen::SerializeWithTheBestAvailableMethod($object));
+			fwrite($f,serialize($object));
 			flock($f,LOCK_UN);
 			fclose($f);
 		}
@@ -424,7 +424,7 @@ abstract class HddScope extends MemoryScope {
 					try {
 						$size = filesize($filename);
 						if ($size > 0) {
-							$r = Oxygen::UnserializeWithTheBestAvailableMethod(fread($f, $size));
+							$r = unserialize(fread($f, $size));
 						}
 					}
 					catch(Exception $ex){}
@@ -437,7 +437,7 @@ abstract class HddScope extends MemoryScope {
 	}
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
-		if (isset($this->data[$key]))
+		if (array_key_exists($key,$this->data))
 			return true;
 		elseif ($this->use_hdd_storage)
 			return file_exists($this->get_filename($key));
@@ -446,7 +446,7 @@ abstract class HddScope extends MemoryScope {
 	}
 	public function OffsetGet($offset) {
 		$key = $this->Hash($offset);
-		if (isset($this->data[$key]))
+		if (array_key_exists($key,$this->data))
 			return $this->data[$key];
 		elseif ($this->use_hdd_storage){
 			$filename = $this->get_filename($key);
@@ -482,7 +482,7 @@ abstract class HddScope extends MemoryScope {
 			$this->data[$key] = $this->hdd_fetch($filename);
 			return $this->data[$key];
 		}
-		elseif (isset($this->data[$key]))
+		elseif (array_key_exists($key,$this->data))
 			return $this->data[$key];
 		else
 			return null;

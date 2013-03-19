@@ -313,7 +313,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 	public function GetIterator(){
 		$this->Evaluate();
-		return from(new XListIterator($this));
+		return new LinqIterator(new XListIterator($this));
 	}
 
 

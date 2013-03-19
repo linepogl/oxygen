@@ -65,6 +65,7 @@ function from($whatever){
 	if (count($a)!=1) return new LinqIterator(new ArrayIterator($a));
 	if ($whatever instanceof LinqIterator) return $whatever;
 	if (is_array($whatever)) return new LinqIterator(new ArrayIterator($whatever));
+	if ($whatever instanceof Iterator) return new LinqIterator($whatever);
 	if ($whatever instanceof Traversable) return new LinqIterator(new IteratorIterator($whatever));
 	return new LinqIterator(new ArrayIterator(array($whatever)));
 }

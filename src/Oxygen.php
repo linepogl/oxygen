@@ -707,7 +707,7 @@ class Oxygen {
 	public static function SetApplicationScoping( $mode = Scope::APC ){
 		Scope::$APPLICATION->SetMode($mode);
 	}
-	public static function SetDatabaseScoping( $mode = Scope::APC){
+	public static function SetDatabaseScoping( $mode = Scope::APC ){
 		Scope::$DATABASE->SetMode($mode);
 	}
 	public static function SetSessionScoping( $mode = Scope::APC , $enabled = true ){
@@ -905,63 +905,6 @@ class Oxygen {
 
 
 
-
-	//
-	//
-	// Serialization
-	//
-	//
-	private static $is_ig_active = false;
-	public static function SerializeWithIgBinary($data){
-		self::$is_ig_active = true;
-		$r = igbinary_serialize( $data );
-		self::$is_ig_active = false;
-		return $r;
-	}
-	public static function UnserializeWithIgBinary($data){
-		self::$is_ig_active = true;
-		$r = igbinary_unserialize( $data );
-		self::$is_ig_active = false;
-		return $r;
-	}
-	public static function SerializeWithPhp($data){
-		return serialize( $data );
-	}
-	public static function UnserializeWithPhp($data){
-		return unserialize( $data );
-	}
-	public static function SerializeWithTheBestAvailableMethod($data){
-		if (IS_IGBINARY_AVAILABLE) {
-			self::$is_ig_active = true;
-			$r = igbinary_serialize( $data );
-			self::$is_ig_active = false;
-			return $r;
-		}
-		else
-			return serialize( $data );
-	}
-	public static function UnserializeWithTheBestAvailableMethod($data){
-		if (IS_IGBINARY_AVAILABLE) {
-			self::$is_ig_active = true;
-			$r = igbinary_unserialize( $data );
-			self::$is_ig_active = false;
-			return $r;
-		}
-		else
-			return unserialize( $data );
-	}
-	public static function SerializeWithTheCurrentMethod($data){
-		if (self::$is_ig_active)
-			return igbinary_serialize( $data );
-		else
-			return serialize( $data );
-	}
-	public static function UnserializeWithTheCurrentMethod($data){
-		if (self::$is_ig_active)
-			return igbinary_unserialize($data);
-		else
-			return unserialize( $data );
-	}
 
 
 

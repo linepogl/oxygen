@@ -101,6 +101,19 @@ class Fs {
 		return $r;
 	}
 
+	public static function EnsureHardlink($original,$replica) {
+		if (file_exists($original)) return;
+		// There is a bug somewhere with link(), and sometimes it fails randomly.
+		// We will make 10 attempts to create the hardlink.
+		for ($i = 0; $i < 9; $i++) {
+			try {
+				link( $original , $replica );
+				return;
+			}
+			catch (Exception $ex) {}
+		}
+		link( $original , $replica );  // the 10th time do it without try-catch.
+	}
 
 	public static function Browse($folder,$pattern='*'){
 		$r = array();

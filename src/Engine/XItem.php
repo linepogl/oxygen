@@ -69,19 +69,22 @@ abstract class XItem extends XValue implements Serializable {
 	public function Serialize(){
 		$this->OnBeforeCopy();
 		$meta = $this->Meta();
-		$a = array('id'=>Oxygen::SerializeWithTheCurrentMethod( $this->id ),'has_temp_id'=>Oxygen::SerializeWithTheCurrentMethod( $this->has_temp_id ) );
+		$a = array('id'=>serialize( $this->id ),'has_temp_id'=>serialize( $this->has_temp_id ) );
 		/** @var $f XMetaField */
 		foreach ($meta->GetFields() as $f){
 			$n = $f->GetName();
-			$a[$n] = Oxygen::SerializeWithTheCurrentMethod( $this->$n );
+			$v = $this->$n;
+			$a[$n] = serialize( $v );
+			if ($a[$n][0] === 'r') $a[$n] = serialize(clone $v); // TODO: Remove this line. I have added it to avoid a PHP 5.4 bug in serialize()
 		}
-		return Oxygen::SerializeWithTheCurrentMethod($a);
+		return serialize($a);
 	}
 	public function Unserialize($data){
 		try {
-			$a = Oxygen::UnserializeWithTheCurrentMethod($data);
-			foreach ($a as $key=>$value)
-				$this->$key = Oxygen::UnserializeWithTheCurrentMethod($value);
+			$a = unserialize($data);
+			foreach ($a as $key=>$value) {
+				$this->$key = unserialize($value);
+			}
 			$c = $this->Meta();
 			for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
 				$slaves = $cx->GetDBSlaves();

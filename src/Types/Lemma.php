@@ -18,8 +18,8 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	private static function unescape($string) { return str_replace('\\'.self::DELIMETER,self::DELIMETER,$string); }
 
 
-	public function Serialize(){ return Oxygen::SerializeWithTheCurrentMethod( array($this->name,$this->data) ); }
-	public function Unserialize($data){ list($this->name,$this->data) = Oxygen::UnserializeWithTheCurrentMethod( $data ); }
+	public function Serialize(){ return serialize( array($this->name,$this->data) ); }
+	public function Unserialize($data){ list($this->name,$this->data) = unserialize( $data ); }
 
 	public function HasName(){ return $this->name !== self::DEFAULT_NAME; }
 	public function GetName(){ return $this->name; }
@@ -154,7 +154,7 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	private static function Unpack($name){
 		$l = new Lemma($name);
 		if (isset(self::$packed_dictionary[$name])) {
-			$l->data = Oxygen::UnserializeWithTheBestAvailableMethod(self::$packed_dictionary[$name]);
+			$l->data = unserialize(self::$packed_dictionary[$name]);
 			self::$dictionary[$name] = $l;
 		}
 		return $l;
@@ -202,7 +202,7 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 						$l->data[$ee->nodeName] = Oxygen::ReadUnicode( $ee->nodeValue );
 					}
 
-					self::$packed_dictionary[$name] = Oxygen::SerializeWithTheBestAvailableMethod($l->data);
+					self::$packed_dictionary[$name] = serialize($l->data);
 				}
 			}
 			self::SaveDictionaryInCache($files);

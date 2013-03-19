@@ -11,8 +11,8 @@ class XDateTime extends XValue implements Serializable {
 	}
 
 	public function MetaType(){ return MetaDateTime::Type(); }
-	public function Serialize(){ return Oxygen::SerializeWithTheCurrentMethod( $this->timestamp ); }
-	public function Unserialize($data){ $this->timestamp = Oxygen::UnserializeWithTheCurrentMethod( $data ); }
+	public function Serialize(){ return serialize( $this->timestamp ); }
+	public function Unserialize($data){ $this->timestamp = unserialize( $data ); }
 
 	public static function Now(){ return new XDateTime(); }
 
