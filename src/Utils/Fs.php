@@ -101,8 +101,11 @@ class Fs {
 		return $r;
 	}
 
-	public static function EnsureHardlink($original,$replica) {
-		if (file_exists($original)) return;
+	public static function CreateHardlink($original,$replica) {
+		if (!file_exists($original))
+			throw new Exception('Cannot create hardlink: the original file ('.$original.') was not found.');
+		if (file_exists($replica))
+			throw new Exception('Cannot create hardlink: there is already a file ('.$replica.') with this name.');
 		// There is a bug somewhere with link(), and sometimes it fails randomly.
 		// We will make 10 attempts to create the hardlink.
 		for ($i = 0; $i < 9; $i++) {
