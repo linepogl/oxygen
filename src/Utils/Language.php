@@ -46,6 +46,7 @@ final class Language {
 		}
 		return '';
 	}
+
 	/** @return float|null */
 	public static function ParseDecimal($string, $default = null) {
 		$string = strval($string);
@@ -88,7 +89,9 @@ final class Language {
 
 
 
-
+	public static function IsNumber($string) {
+		return 1 === preg_match('/-?[1234567890]+(\\'.self::GetDecimalSeparator().'[1234567890]+)?/',trim($string));
+	}
 	/** @return string */
 	public static function FormatNumber($value,$number_of_decimals=-1) {
 		if (is_int($value) || is_float($value)){
@@ -106,8 +109,6 @@ final class Language {
 		}
 		return '';
 	}
-
-
 	/** @return float|int|null */
 	public static function ParseNumber($string, $default = null) {
 		$string = strval($string);
@@ -122,6 +123,9 @@ final class Language {
 	}
 
 
+	public static function IsNumberInvariant($string) {
+		return 1 === preg_match('/-?[1234567890]+(\\.[1234567890]+)/',trim($string));
+	}
 	/** @return string */
 	public static function FormatNumberInvariant($value,$number_of_decimals=-1) {
 		if (is_int($value) || is_float($value)){
