@@ -302,11 +302,15 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
+	private $count = null;
 	public function Count(){
 		if (is_null($this->data)){
-			$sql = $this->MakeQuery($params);
-			$sql = 'SELECT COUNT(*) FROM ('.$sql.') c';
-			return Database::ExecuteScalarX($sql,$params)->AsInteger();
+			if (is_null($this->count)) {
+				$sql = $this->MakeQuery($params);
+				$sql = 'SELECT COUNT(*) FROM ('.$sql.') c';
+				$this->count = Database::ExecuteScalarX($sql,$params)->AsInteger();
+			}
+			return $this->count;
 		}
 		//$this->Evaluate();
 		return count($this->data);
