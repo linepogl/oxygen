@@ -1,6 +1,6 @@
 <?php
 
-/** @deprecated */
+/** @deprecated Use ColorBox instead */
 class ColorControl extends ValueControl {
 
 	private $allow_null = false;

@@ -1,5 +1,6 @@
 <?php
 
+/** @depricated Use LiteralBox instead */
 class LiteralControl extends ValueControl {
 
 	private $format;

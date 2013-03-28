@@ -1,6 +1,6 @@
 <?php
 
-/** @deprecated */
+/** @deprecated Use HiddenBox instead */
 class HiddenControl extends ValueControl {
 
 	public function Render(){

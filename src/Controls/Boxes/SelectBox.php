@@ -2,183 +2,163 @@
 
 class SelectBox extends Box {
 
+	private $width = '';
+	/** @return static */ public function WithWidth($value){ $this->width = $value; return $this; }
+
+	private $rows = 1;
+	/** @return static */ public function WithRows($value){ $this->rows = $value; return $this; }
+
+	private $css_style = '';
+	/** @return static */ public function WithCssStyle($value){ $this->css_style = $value; return $this; }
+
+	private $css_class = '';
+	/** @return static */ public function WithCssClass($value){ $this->css_class = $value; return $this; }
+
+	private $is_multiple = false;
+	/** @return static */ public function WithIsMultiple($value){ $this->is_multiple = $value; return $this; }
+
 	private $allow_null = false;
-	public function WithAllowNull($value){ $this->allow_null = $value; return $this; }
+	/** @return static */ public function WithAllowNull($value){ $this->allow_null = $value; return $this; }
 
-	private $null_option = null;
-	public function WithNullCaption($value){
-		if ($value instanceof SelectBoxOption)
-			$this->null_option = $value->WithValue(null);
-		else
-			$this->null_option = SelectBoxOption::Make()->WithValue(null)->WithCaption($value);
+	private $null_caption = '';
+	/** @return static */ public function WithNullCaption($value){ $this->null_caption = $value; return $this; }
+
+	private $list_values = array();
+	private $list_captions = array();
+	private $list_group_captions = array();
+	private $last_index_from = -1;
+
+	/** @return static */
+	public function Add($value,$caption=null){
+		$this->list_values[] = $value;
+		$this->list_captions[] = is_null($caption) ? new Html($value) : $caption;
+		$this->list_group_captions[] = count($this->list_group_captions) > 0 ? $this->list_group_captions[count($this->list_group_captions)-1] : null;
+		$this->last_index_from = count($this->list_values) - 1;
 		return $this;
 	}
-
-	private $options = array();
-	public function Add($value,$caption = null){
-		return $this->AddMany(array($value),$caption);
-	}
-	public function AddMany($values,$captions = null){
-		if (is_callable($captions)) {
-			foreach ($values as $key=>$value){
-				$x = $captions($value,$key);
-				if (is_null($x))
-					$this->options[] = SelectBoxOption::Make()->WithValue($value);
-				elseif ($x instanceof SelectBoxOption)
-					$this->options[] = $x->WithValue($value);
-				else
-					$this->options[] = SelectBoxOption::Make()->WithValue($value)->WithCaption($x);
+	/** @return static */
+	public function AddMany($values,$captions_or_caption_map=null){
+		$a = array();
+		if (!is_null($captions_or_caption_map)) {
+			if (!is_string($captions_or_caption_map) && !is_array($captions_or_caption_map) && is_callable($captions_or_caption_map)) {
+				foreach ($values as $value)
+					$a[] = $captions_or_caption_map($value);
+			}
+			else {
+				foreach ($captions_or_caption_map as $caption)
+					$a[] = $caption;
 			}
 		}
-		elseif (is_array($captions) || $captions instanceof Traversable) {
-			$o = from($captions);
-			$o->Rewind();
-			foreach ($values as $value){
-				$x = null;
-				if ($o->Valid()){
-					$x = $o->Current();
-					$o->Next();
-				}
-				if (is_null($x))
-					$this->options[] = SelectBoxOption::Make()->WithValue($value);
-				elseif ($x instanceof SelectBoxOption)
-					$this->options[] = $x->WithValue($value);
-				else
-					$this->options[] = SelectBoxOption::Make()->WithValue($value)->WithCaption($x);
-			}
-		}
-		else {
-			foreach ($values as $value){
-				if ($value instanceof SelectBoxOption)
-					$this->options[] = $value;
-				else
-					$this->options[] = SelectBoxOption::Make()->WithValue($value)->WithCaption($captions);
-			}
-		}
-		return $this;
-	}
-
-
-
-	
-	public function Render(){
-		if (is_null($this->null_option)) $this->null_option = SelectBoxOption::Make()->WithValue(null)->WithCaption('');
-
-		$options = array();
-		if ($this->allow_null || count($this->options) == 0) $options[] = $this->null_option;
-		foreach ($this->options as $option) $options[] = $option;
-
-
-		$selected_index = 0;
-		$url_value = strval(new Url($this->value));
 		$i = 0;
-		/** @var $option SelectBoxOption */
-		foreach ($options as $option) {
-			if ( $option->GetUrlValue() === $url_value ) {
-				$selected_index = $i;
-				break;
-			}
+		foreach ($values as $value) {
+			$this->Add( $value , $i < count($a) ? $a[$i] : null );
 			$i++;
 		}
-		/** @var $selected_option SelectBoxOption */
-		$selected_option = $options[$selected_index];
-
-		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
-			echo new Html( $selected_option->GetCaption() );
-			return;
-		}
-
-		$caption = new Html($selected_option->GetCaption());
-		echo '<span class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
-
-		if (!$this->readonly){
-			echo new HiddenBox($this->name,$this->value);
-			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formSelectDropDown" style="display:none;">';
-			echo '<div class="formDropDownHook"></div>';
-//    echo '<div class="formDropDownHead"></div>';
-			echo '<div class="formDropDownBody">';
-
-			foreach ($options as $option){
-				echo '<a class="option" href="#">';
-				echo new Html($option->GetCaption());
-				echo '</a>';
-			}
-
-			echo '</div>';
-//    echo '<div class="formDropDownFoot"></div>';
-			echo '</div>';
-		}
-
-		echo '<div id="'.$this->name.'-anchor" class="formPane formPaneAnchorWrap" style="background:none;border:0;margin:0;"><div class="formPaneAnchor"></div></div>';
-
-		echo '<input id="'.$this->name.'-box"';
-		echo ' class="formPane'.($this->readonly?' formLocked':'').'"';
-		echo ' style="width:100%;margin:0;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;"';
-		echo ' readonly="readonly"';
-		echo ' value="'.new Html($caption).'"';
-		echo '/>';
-
-		echo '</span>';
-
-		echo Js::BEGIN;
-		if (!$this->readonly){
-			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.ToggleDropDown(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); });";
-			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
-			echo "window.".$this->name." = {";
-			echo "  is_open : false";
-			echo " ,value : null";
-			echo " ,keep_focus : false";
-			echo " ,OnChange : function(){";
-			echo $this->on_change;
-			echo "  }";
-			echo " ,SetV : function(v){ this.OnChange(); }";
-			echo " ,OnKeyDown : function(ev){";
-			echo "    switch(ev.which){";
-			echo "      case 13:case 27:if(this.is_open){this.HideDropDown();ev.preventDefault();}break;";
-			echo "      case 32:this.ToggleDropDown();break;";
-			if ($this->allow_null){
-				echo "    case 8:case 46:this.SetV(null);ev.preventDefault();break;";
-			}
-			echo "      case 38:case 39:ev.preventDefault();break;";
-			echo "      case 40:case 37:ev.preventDefault();break;";
-			echo "    }";
-			echo "  }";
-			echo " ,OnBlur : function(ev){";
-			echo "    setTimeout(function(){if(!$this->name.keep_focus&&!jQuery('#$this->name-box').is(':focus')){ $this->name.HideDropDown(); }},200);";
-			echo "  }";
-			echo " ,KeepFocus : function(){ this.keep_focus = true; setTimeout(function(){ jQuery('#$this->name-box').focus(); this.keep_focus = false; },500); }";
-      echo " ,Update : function(){";
-      echo "  }";
-			echo " ,ToggleDropDown : function(){ if (jQuery('#$this->name-dropdown').is(':visible')) this.HideDropDown(); else this.ShowDropDown(); }";
-			echo " ,Showing : false";
-			echo " ,ShowDropDown : function(){";
-			echo "    this.Showing = true;";
-			echo "    var b = jQuery('#$this->name-box');";
-			echo "    var d = jQuery('#$this->name-dropdown');";
-			echo "    d.show();";
-			echo "    var w = d.width();";
-			echo "    var ww = b.outerWidth(false) - (d.outerWidth(false) - w);";
-			echo "    if (ww > w) d.css({width:ww+'px'});";
-			echo "    d.css({'margin-top':(1+b.outerHeight(false))+'px','margin-left':Math.floor((b.outerWidth(false)-d.outerWidth(false))/2)+'px'});";
-			echo "    this.is_open = true;";
-			echo "    this.Update();";
-			echo "    jQuery('html').on('click.$this->name', function(e){ if ($this->name.Showing) { $this->name.Showing = false; return; } if (jQuery('#$this->name-dropdown').has(e.target).length === 0) $this->name.HideDropDown(); });";
-			echo "  }";
-			echo " ,HideDropDown : function(){";
-			echo "    this.keep_focus = false;";
-			echo "    this.is_open = false;";
-			echo "    jQuery('#$this->name-dropdown').hide();";
-			echo "    jQuery('html').off('click.$this->name');";
-			echo "  }";
-			echo "};";
-
-		}
-		echo Js::END;
-
-
+		$this->last_index_from = count($this->list_values) - $i;
+		return $this;
 	}
-}
 
+	/** @return static */
+	public function WithCaption($value){
+		for ($i = $this->last_index_from; $i < count($this->list_captions); $i++)
+			$this->list_captions[ $i ] = $value;
+		return $this;
+	}
+	/** @return static */
+	public function WithCaptions($captions_or_caption_map){
+		if (!is_string($captions_or_caption_map) && !is_array($captions_or_caption_map) && is_callable($captions_or_caption_map)) {
+			for ($i = $this->last_index_from; $i < count($this->list_captions); $i++)
+				$this->list_captions[ $i ] = $captions_or_caption_map($this->list_values[$i]);
+		}
+		else {
+			$i = $this->last_index_from;
+			foreach ($captions_or_caption_map as $value)
+				if ($i < count($this->list_captions))
+					$this->list_captions[ $i++ ] = $value;
+		}
+		return $this;
+	}
+
+	/** @return static */
+	public function WithGroupCaption($value){
+		for ($i = $this->last_index_from; $i < count($this->list_captions); $i++)
+			$this->list_group_captions[ $i ] = strval($value);
+		return $this;
+	}
+	/** @return static */
+	public function WithGroupCaptions($group_captions_or_group_caption_map){
+		if (!is_string($group_captions_or_group_caption_map) && !is_array($group_captions_or_group_caption_map) && is_callable($group_captions_or_group_caption_map)) {
+			for ($i = $this->last_index_from; $i < count($this->list_group_groups); $i++)
+				$this->list_group_groups[ $i ] = strval($group_captions_or_group_caption_map($this->list_values[$i]));
+		}
+		else {
+			$i = $this->last_index_from;
+			foreach ($group_captions_or_group_caption_map as $value)
+				if ($i < count($this->list_group_groups))
+					$this->list_group_groups[ $i++ ] = strval($value);
+		}
+		return $this;
+	}
+
+
+
+	private function IsSelected($value){
+		if ($this->is_multiple){
+			if (!is_null($this->value)){
+				foreach ($this->value as $x) {
+					if ( strval(new Val($value)) === strval(new Val($x)))
+						return true;
+				}
+			}
+			return false;
+		}
+		else {
+			return strval(new Val($value)) === strval(new Val($this->value));
+		}
+	}
+
+
+
+	public function Render(){
+		if ($this->mode == UIMode::Edit){
+			echo '<select id="'.$this->name.($this->is_multiple?'[]':'').'"';
+			echo ' name="'.$this->name.'"';
+			echo ' class="'.($this->readonly?'formLocked':'formPane').'"';
+				echo ' onchange="'.$this->on_change.'"';
+				echo ' style="'.(empty($this->display)?'':'display:'.$this->display.';').'width:'.(empty($this->width)?'auto':$this->width).';'.$this->css_style.'"';
+			if ($this->is_multiple) echo ' multiple="multiple"';
+			if ($this->readonly) echo ' disabled="disabled"';
+			echo ' size="'.$this->rows.'">';
+
+			if ( $this->allow_null )
+				echo '<option value=""'.($this->IsSelected(null)?' selected="selected"':'').'>'.$this->null_caption.'</option>';
+
+			$previous_group_caption = null;
+			for ($i = 0; $i < count($this->list_values); $i++) {
+				if ($this->list_group_captions[$i] != $previous_group_caption) {
+					if (!is_null($previous_group_caption)) echo '</optgroup>';
+					echo '<optgroup label="'.new Html($this->list_group_captions[$i]).'">';
+				}
+				echo '<option value="'.new Html(new Val($this->list_values[$i])).'"'.($this->IsSelected($this->list_values[$i])?' selected="selected"':'').'>'.$this->list_captions[$i].'</option>';
+
+			}
+			if (!is_null($previous_group_caption)) echo '</optgroup>';
+
+			echo '</select>';
+		}
+		else {
+			$j = 0;
+			for ($i = 0; $i < count($this->list_values); $i++) {
+				if ($this->IsSelected($this->list_values[$i])) {
+					if ($j++>0) echo ', ';
+					echo $this->list_captions[$i];
+					break;
+				}
+			}
+		}
+	}
+
+}
 
 
 

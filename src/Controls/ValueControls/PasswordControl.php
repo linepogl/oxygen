@@ -1,6 +1,6 @@
 <?php
 
-/** @deprecated */
+/** @deprecated Use TextBox WithIsPassword(true) instead */
 class PasswordControl extends ValueControl {
 
  	private $width = '100%';

@@ -452,6 +452,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$a = array_reverse($a);
 		foreach ($a as $key)
 			unset($this[$key]);
+		return $this;
 	}
 
 	public function RemoveMany($traversable){
@@ -464,6 +465,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$a = array_reverse($a);
 		foreach ($a as $key)
 			unset($this[$key]);
+		return $this;
 	}
 
 	public function RemoveWhere($predicate_function){
@@ -475,6 +477,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$a = array_reverse($a);
 		foreach ($a as $key)
 			unset($this[$key]);
+		return $this;
 	}
 
 	public function IsEqualTo($list) {

@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated Use SelectBox instead */
 class SelectControl extends ValueControl {
 
 	private $width = '';
@@ -103,16 +104,14 @@ class SelectControl extends ValueControl {
 		if ($this->is_multiple){
 			if (!is_null($this->value)){
 				foreach ($this->value as $x) {
-					if ((is_null($x) || $x === '') && (is_null($value) || $value===''))
-						return true;
-					if ( strval(new Html($value)) === strval(new Html($x)))
+					if ( strval(new Val($value)) === strval(new Val($x)))
 						return true;
 				}
 			}
 			return false;
 		}
 		else {
-			return strval(new Html($value)) === strval(new Html($this->value));
+			return strval(new Val($value)) === strval(new Val($this->value));
 		}
 	}
 

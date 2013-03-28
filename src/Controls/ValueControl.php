@@ -2,10 +2,10 @@
 
 abstract class ValueControl extends Control {
 	public $value;
-	public function WithValue($value){ $this->value = $value; return $this; }
+	/** @return static */ public function WithValue($value){ $this->value = $value; return $this; }
 
 	protected $http_name = null;
-	public function WithHttpName($value){ $this->http_name = $value; return $this; }
+	/** @return static */ public function WithHttpName($value){ $this->http_name = $value; return $this; }
 
 	public function __construct(){
 		$a = func_get_args();
@@ -30,7 +30,7 @@ abstract class ValueControl extends Control {
 	}
 
 	public $label;
-	public function WithLabel($value){ $this->label = $value; return $this; }
+	/** @return static */ public function WithLabel($value){ $this->label = $value; return $this; }
 	public function GetLabel(){ return $this->label; }
 
 	public static function Fill(XWrapField $ui){

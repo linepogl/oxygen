@@ -85,7 +85,7 @@ class MetaItem extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		return $value->id->AsHex();
+		return self::EncodeAsHtmlString($value->GetTitle());
 	}
 
 	/**

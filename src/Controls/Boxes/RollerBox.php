@@ -28,14 +28,23 @@ class RollerBox extends Box {
 	}
 
 	/** @return static */
-	public function AddMany($values,$captions=null){
+	public function AddMany($values,$captions_or_caption_map=null){
 		$a = array();
-		if (!is_null($captions))
-			foreach ($captions as $caption)
-				$a[] = $caption;
+		if (!is_null($captions_or_caption_map)) {
+			if (!is_string($captions_or_caption_map) && !is_array($captions_or_caption_map) && is_callable($captions_or_caption_map)) {
+				foreach ($values as $value)
+					$a[] = $captions_or_caption_map($value);
+			}
+			else {
+				foreach ($captions_or_caption_map as $caption)
+					$a[] = $caption;
+			}
+		}
 		$i = 0;
-		foreach ($values as $value)
-			$this->Add( $value , $i++ < count($a) ? $a[$i] : null );
+		foreach ($values as $value) {
+			$this->Add( $value , $i < count($a) ? $a[$i] : null );
+			$i++;
+		}
 		$this->last_index_from = count($this->list_values) - $i;
 		return $this;
 	}
@@ -47,11 +56,17 @@ class RollerBox extends Box {
 		return $this;
 	}
 	/** @return static */
-	public function WithCaptions($values){
-		$i = $this->last_index_from;
-		foreach ($values as $value)
-			if ($i < count($this->list_captions))
-				$this->list_captions[ $i++ ] = $value;
+	public function WithCaptions($captions_or_caption_map){
+		if (!is_string($captions_or_caption_map) && !is_array($captions_or_caption_map) && is_callable($captions_or_caption_map)) {
+			for ($i = $this->last_index_from; $i < count($this->list_captions); $i++)
+				$this->list_captions[ $i ] = $captions_or_caption_map($this->list_values[$i]);
+		}
+		else {
+			$i = $this->last_index_from;
+			foreach ($captions_or_caption_map as $value)
+				if ($i < count($this->list_captions))
+					$this->list_captions[ $i++ ] = $value;
+		}
 		return $this;
 	}
 
@@ -65,11 +80,17 @@ class RollerBox extends Box {
 		return $this;
 	}
 	/** @return static */
-	public function WithCssStyles($values){
-		$i = $this->last_index_from;
-		foreach ($values as $value)
-			if ($i < count($this->list_css_styles))
-				$this->list_css_styles[ $i++ ] = $value;
+	public function WithCssStyles($css_styles_or_css_style_map){
+		if (!is_string($css_styles_or_css_style_map) && !is_array($css_styles_or_css_style_map) && is_callable($css_styles_or_css_style_map)) {
+			for ($i = $this->last_index_from; $i < count($this->list_css_classes); $i++)
+				$this->list_css_styles[ $i ] = $css_styles_or_css_style_map($this->list_values[$i]);
+		}
+		else {
+			$i = $this->last_index_from;
+			foreach ($css_styles_or_css_style_map as $value)
+				if ($i < count($this->list_css_styles))
+					$this->list_css_styles[ $i++ ] = $value;
+		}
 		return $this;
 	}
 
@@ -83,11 +104,17 @@ class RollerBox extends Box {
 		return $this;
 	}
 	/** @return static */
-	public function WithCssClasses($values){
-		$i = $this->last_index_from;
-		foreach ($values as $value)
-			if ($i < count($this->list_css_classes))
-				$this->list_css_classes[ $i++ ] = $value;
+	public function WithCssClasses($css_classes_or_css_class_map){
+		if (!is_string($css_classes_or_css_class_map) && !is_array($css_classes_or_css_class_map) && is_callable($css_classes_or_css_class_map)) {
+			for ($i = $this->last_index_from; $i < count($this->list_css_classes); $i++)
+				$this->list_css_classes[ $i ] = $css_classes_or_css_class_map($this->list_values[$i]);
+		}
+		else {
+			$i = $this->last_index_from;
+			foreach ($css_classes_or_css_class_map as $value)
+				if ($i < count($this->list_css_classes))
+					$this->list_css_classes[ $i++ ] = $value;
+		}
 		return $this;
 	}
 

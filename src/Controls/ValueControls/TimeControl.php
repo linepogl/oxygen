@@ -1,6 +1,6 @@
 <?php
 
-/** @deprecated */
+/** @deprecated Use TimeBox instead */
 class TimeControl extends ValueControl {
 
 	private $allow_null = false;

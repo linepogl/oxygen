@@ -1,6 +1,6 @@
 <?php
 
-/** @deprecated */
+/** @deprecated Use DateBox instead */
 class DateControl extends ValueControl {
 
 	private $allow_null = false;

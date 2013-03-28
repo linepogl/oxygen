@@ -59,7 +59,7 @@ along with the name. This time, the name of the control is important because thi
 </p>
 
 <p>
-There are several premade value controls, such as the <span class="code">TextBox</span>, the <span class="code">CheckboxControl</span>, the <span class="code">SelectControl</span> and others.
+There are several premade value controls, such as the <span class="code">TextBox</span>, the <span class="code">CheckBox</span>, the <span class="code">SelectBox</span> and others.
 </p>
 
 <p class="code">
@@ -118,13 +118,13 @@ TextBox::Make( 'password' , '' )->WithIsPassword(true)->Render();    // pre-fill
 </p>
 
 <p>
-The <span class="code">SelectControl</span> renders select input.
+The <span class="code">SelectBox</span> renders a select input.
 </p>
 
 <p class="code">
-SelectControl::Make( 'author' , $book->Author )
-	->WithOption( 'Lewis Carol')
-	->WithOption( 'J.R.Tolkien')
+SelectBox::Make( 'author' , $book->Author )
+	->Add( 'Lewis Carol')
+	->Add( 'J.R.Tolkien')
 	->Render();
 </p>
 
@@ -135,18 +135,18 @@ This is a more complex, but more sane use of the select control:
 <p class="code">
 // Select the id of the author in a list of XItems. Each option in the list will have
 // the the author's id as value and the author's GetTitle() as caption.
-SelectControl::Make( 'idAuthor' , $book->idAuthor )
-	->WithXList( Author::Seek() )
+SelectBox::Make( 'idAuthor' , $book->idAuthor )
+	->AddMany( Author::Seek() )
 	->Render();
 </p>
 
 <p>
-The <span class="code">DateControl</span>, the <span class="code">DateTimeControl</span>, <span class="code">TimeControl</span> and the <span class="code">TimeSpanControl</span> work on time
+The <span class="code">DateBox</span>, the <span class="code">DateTimeBox</span>, <span class="code">TimeBox</span> and the <span class="code">TimeSpanControl</span> work on time
 related values.
 </p>
 
 <p class="code">
-DateControl::Make( 'DatePublished' , $book->DatePublished )->Render();
+DateBox::Make( 'DatePublished' , $book->DatePublished )->Render();
 </p>
 
 
@@ -161,12 +161,12 @@ ButtonControl::Make()->WithValue('Click me!')->WithOnClick('Clicked();')->Render
 </p>
 
 <p>
-The <span class="code">CheckboxControl</span> and the <span class="code">ImageCheckboxControl</span> is for boolean values.
+The <span class="code">CheckBox</span> is for boolean values.
 </p>
 
 <p class="code">
 // This will render a check box along with a label.
-CheckboxControl::Make( 'IsMagazine' , $book->IsMagazine )
+CheckBox::Make( 'IsMagazine' , $book->IsMagazine )
 	->WithLabel('This is a magasine')
 	->WithShowLabel(true)
 	->Render();

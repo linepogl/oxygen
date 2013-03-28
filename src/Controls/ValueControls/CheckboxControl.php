@@ -1,6 +1,6 @@
 <?php
 
-/** @deprecated */
+/** @deprecated Use CheckBox instead */
 class CheckboxControl extends ValueControl {
 
 	private $show_label = false;
