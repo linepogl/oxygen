@@ -27,7 +27,7 @@ class DateBox extends Box {
 		echo '<span id="'.$this->name.'-span" class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 
 		if (!$this->readonly){
-			echo new HiddenBox($this->name,$this->value);
+			echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name);
 			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formDateDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
 			echo '<div class="formDropDownHead">';
