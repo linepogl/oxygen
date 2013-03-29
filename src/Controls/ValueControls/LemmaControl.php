@@ -1,6 +1,6 @@
 <?php
 
-
+/** @deprecated Use LemmaBox instead */
 class LemmaControl extends ValueControl {
 
 	private $width = '100%';
