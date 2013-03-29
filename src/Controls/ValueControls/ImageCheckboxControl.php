@@ -35,7 +35,7 @@ class ImageCheckboxControl extends ValueControl {
 
 	public function Render(){
 
-		echo HiddenControl::Make($this->name,$this->value)->WithHttpName($this->http_name);
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name);
 		$readonly = $this->is_readonly || $this->mode != UIMode::Edit;
 		$mode = ( $readonly ? 'readonly-' : '' ) . ( $this->is_dirty ? 'dirty-' : '' ) . ( $this->value ? 'checked' : 'unchecked' );
 

@@ -11,7 +11,7 @@ class CheckboxControl extends ValueControl {
 
 	public function Render(){
 		if ($this->mode == UIMode::Edit){
-			echo new HiddenControl($this->name,$this->value);
+			echo new HiddenBox($this->name,$this->value);
 			echo Js::BEGIN;
 			echo $this->name . "_OnClick = function(){";
 			echo "var x = \$(".new Js($this->name).");";

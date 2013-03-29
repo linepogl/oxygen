@@ -11,7 +11,7 @@ class ColorControl extends ValueControl {
 
 	public function Render(){
 		if ($this->mode==UIMode::Edit){
-			echo new HiddenControl($this->name,$this->value);
+			echo new HiddenBox($this->name,$this->value);
 			echo '<a id="'.$this->name.'angor" class="formPane" href="javascript:'.$this->name.'.TogglePalette();" style="padding:2px 0 4px 2px;">';
 		}
 

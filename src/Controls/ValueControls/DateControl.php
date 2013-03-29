@@ -24,7 +24,7 @@ class DateControl extends ValueControl {
 			return;
 		}
 
-		echo new HiddenControl($this->name,$this->value);
+		echo new HiddenBox($this->name,$this->value);
 
 		echo '<span class="nowrap';
 		if ($this->is_readonly)

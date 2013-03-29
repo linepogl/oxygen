@@ -23,6 +23,9 @@ class SelectBox extends Box {
 	private $null_caption = '';
 	/** @return static */ public function WithNullCaption($value){ $this->null_caption = $value; return $this; }
 
+	private $use_check_boxes = false;
+	/** @return static */ public function WithCheckBoxes($value){ $this->use_check_boxes = $value; return $this; }
+
 	private $list_values = array();
 	private $list_captions = array();
 	private $list_group_captions = array();
@@ -131,30 +134,42 @@ class SelectBox extends Box {
 
 	public function Render(){
 		if ($this->mode == UIMode::Edit){
-			echo '<select id="'.$this->name.($this->is_multiple?'[]':'').'"';
-			echo ' name="'.$this->name.'"';
-			echo ' class="'.($this->readonly?'formLocked':'formPane').'"';
-				echo ' onchange="'.$this->on_change.'"';
-				echo ' style="'.(empty($this->display)?'':'display:'.$this->display.';').'width:'.(empty($this->width)?'auto':$this->width).';'.$this->css_style.'"';
-			if ($this->is_multiple) echo ' multiple="multiple"';
-			if ($this->readonly) echo ' disabled="disabled"';
-			echo ' size="'.$this->rows.'">';
+			if ($this->use_check_boxes) {
+				echo '<div class="formPane overflow" style="height:'.Language::FormatDecimalInvariant($this->rows*1.6).'em;width:'.(empty($this->width)?'auto':$this->width).';white-space:nowrap;'.$this->css_style.'">';
 
-			if ( $this->allow_null )
-				echo '<option value=""'.($this->IsSelected(null)?' selected="selected"':'').'>'.$this->null_caption.'</option>';
+				if ( $this->allow_null )
+					echo '<div><input class="formCheck" type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->name.($this->is_multiple?'[]':'').'" id="'.$this->name.'_null" value=""'.($this->IsSelected(null)?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.'_null">' . $this->null_caption . '</label></div>';
 
-			$previous_group_caption = null;
-			for ($i = 0; $i < count($this->list_values); $i++) {
-				if ($this->list_group_captions[$i] != $previous_group_caption) {
-					if (!is_null($previous_group_caption)) echo '</optgroup>';
-					echo '<optgroup label="'.new Html($this->list_group_captions[$i]).'">';
-				}
-				echo '<option value="'.new Html(new Val($this->list_values[$i])).'"'.($this->IsSelected($this->list_values[$i])?' selected="selected"':'').'>'.$this->list_captions[$i].'</option>';
+				for ($i = 0; $i < count($this->list_values); $i++)
+					echo '<div><input class="formCheck" type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->name.($this->is_multiple?'[]':'').'" id="'.$this->name.$i.'" value="'.new Html(new Val($this->list_values[$i])).'"'.($this->IsSelected($this->list_values[$i])?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.$i.'">'.$this->list_captions[$i].'</label></div>';
 
+				echo '</div>';
 			}
-			if (!is_null($previous_group_caption)) echo '</optgroup>';
+			else {
+				echo '<select id="'.$this->name.($this->is_multiple?'[]':'').'"';
+				echo ' name="'.$this->name.'"';
+				echo ' class="'.($this->readonly?'formLocked':'formPane').'"';
+					echo ' onchange="'.$this->on_change.'"';
+					echo ' style="'.(empty($this->display)?'':'display:'.$this->display.';').'width:'.(empty($this->width)?'auto':$this->width).';'.$this->css_style.'"';
+				if ($this->is_multiple) echo ' multiple="multiple"';
+				if ($this->readonly) echo ' disabled="disabled"';
+				echo ' size="'.$this->rows.'">';
 
-			echo '</select>';
+				if ( $this->allow_null )
+					echo '<option value=""'.($this->IsSelected(null)?' selected="selected"':'').'>'.$this->null_caption.'</option>';
+
+				$previous_group_caption = null;
+				for ($i = 0; $i < count($this->list_values); $i++) {
+					if ($this->list_group_captions[$i] != $previous_group_caption) {
+						if (!is_null($previous_group_caption)) echo '</optgroup>';
+						echo '<optgroup label="'.new Html($this->list_group_captions[$i]).'">';
+					}
+					echo '<option value="'.new Html(new Val($this->list_values[$i])).'"'.($this->IsSelected($this->list_values[$i])?' selected="selected"':'').'>'.$this->list_captions[$i].'</option>';
+
+				}
+				if (!is_null($previous_group_caption)) echo '</optgroup>';
+				echo '</select>';
+			}
 		}
 		else {
 			$j = 0;

@@ -34,7 +34,7 @@ class TimeSpanControl extends ValueControl {
 			return;
 		}
 
-		echo new HiddenControl($this->name,$v);
+		echo new HiddenBox($this->name,$v);
 
 		$d = is_null($v) ? null : $v->GetDays();
 		$h = is_null($v) ? null : ($this->show_days ? $v->GetHours() : $v->GetTotalHours());

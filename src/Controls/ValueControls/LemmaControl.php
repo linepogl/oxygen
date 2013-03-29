@@ -15,15 +15,15 @@ class LemmaControl extends ValueControl {
 	public function Render(){
 
 
-		echo new HiddenControl($this->name,$this->value instanceof Lemma ? $this->value->Encode() : '');
+		echo new HiddenBox($this->name,$this->value instanceof Lemma ? $this->value->Encode() : '');
 		echo '<table class="formPane" style="width:'.$this->width.'" cellspacing="0" cellpadding="0" border="0"><tr>';
 		echo '<td class="expand" class="formPane" style="border:0;border-right-width:1px;">';
 		foreach (Oxygen::$langs as $lang){
-			TextboxControl::Make($this->name.'_'.$lang,$this->value[$lang])
-				->WithWidth('99%')
+			TextBox::Make($this->name.'_'.$lang,$this->value[$lang])
+				->WithWidth('100%')
 				->WithReadonly($this->readonly)
 				->WithOnChange($this->name.'_OnChange();')
-				->WithStyle('border:0;'.($lang==Oxygen::$lang?'':'display:none;') )
+				->WithCssStyle('border:0;'.($lang==Oxygen::$lang?'':'display:none;') )
 				->Render();
 		}
 		echo '</td>';

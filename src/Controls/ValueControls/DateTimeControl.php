@@ -15,7 +15,7 @@ class DateTimeControl extends ValueControl {
 	public function Render(){
 
 		if ($this->mode == UIMode::Edit){
-			HiddenControl::Make($this->name,$this->value)
+			HiddenBox::Make($this->name,$this->value)
 				->Render();
 		}
 
