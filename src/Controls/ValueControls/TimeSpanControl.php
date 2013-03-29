@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated Use TimeSpanBox instead */
 class TimeSpanControl extends ValueControl {
 
 	private $allow_null = false;

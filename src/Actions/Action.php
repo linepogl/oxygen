@@ -67,8 +67,8 @@ abstract class Action extends XValue {
 
 	public function GetButtonTitle(){ return $this->GetTitle(); }
 	public function GetButtonCssClass(){ return ''; }
-	/** @return ButtonControl */
-	public function GetButton($args=array(),$dynamic_args=array()) { return ButtonControl::Make()->WithValue($this->GetButtonTitle())->WithOnClick($this->GetJSCommand($args,$dynamic_args))->WithCssClass($this->GetButtonCssClass()); }
+	/** @return ButtonBox */
+	public function GetButton($args=array(),$dynamic_args=array()) { return ButtonBox::Make()->WithValue($this->GetButtonTitle())->WithOnClick($this->GetJSCommand($args,$dynamic_args))->WithCssClass($this->GetButtonCssClass()); }
 
 	public abstract function IsPermitted();
 	public function IsLogical(){ return true; }
@@ -126,7 +126,7 @@ abstract class Action extends XValue {
 					elseif ($this->IsAjaxDialog()){
 						echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgAccessDenied')) : $ex );
 						echo $this->GetFormButtons();
-						echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+						echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
 						echo $this->EndFormButtons();
 					}
 					else {
@@ -156,7 +156,7 @@ abstract class Action extends XValue {
 				elseif ($this->IsAjaxDialog()){
 					echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgPageNotFound')) : $ex );
 					echo $this->GetFormButtons();
-					echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+					echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
 					echo $this->EndFormButtons();
 				}
 				else {
@@ -184,7 +184,7 @@ abstract class Action extends XValue {
 				elseif ($this->IsAjaxDialog()){
 					echo new MessageControl($ex);
 					echo $this->GetFormButtons();
-					echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+					echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
 					echo $this->EndFormButtons();
 				}
 				else {
@@ -241,7 +241,7 @@ abstract class Action extends XValue {
 					elseif ($this->IsAjaxDialog()){
 						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurred') ) );
 						echo $this->GetFormButtons();
-						echo ButtonControl::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+						echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
 						echo $this->EndFormButtons();
 					}
 					else {

@@ -235,8 +235,8 @@ class ActionModifyBook extends Action {
 		if (!$v->Author->HasPassed()) echo new MessageControl($v->Author);
 		echo '&lt;br/&gt;'
 
-		ButtonControl::Make()->WithValue( Lemma::Pick('OK') )->WithIsSubmit( true )->Render();
-		ButtonControl::Make()->WithValue( Lemma::Pick('Cancel') )->WithIsCancel( true )->Render();
+		ButtonBox::Make()->WithValue( Lemma::Pick('OK') )->WithIsSubmit( true )->Render();
+		ButtonBox::Make()->WithValue( Lemma::Pick('Cancel') )->WithIsCancel( true )->Render();
 		echo $this->EndForm();
 	}
 }

@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated Use ButtonBox instead */
 class ButtonControl extends ValueControl {
 
   private $onclick;

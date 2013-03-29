@@ -151,13 +151,13 @@ DateBox::Make( 'DatePublished' , $book->DatePublished )->Render();
 
 
 <p>
-The <span class="code">ButtonControl</span> makes buttons.
+The <span class="code">ButtonBox</span> makes buttons.
 </p>
 
 <p class="code">
-ButtonControl::Make()->WithValue('OK')->WithIsSubmit(true)->Render();
-ButtonControl::Make()->WithValue('Cancel')->WithIsReset(true)->Render();
-ButtonControl::Make()->WithValue('Click me!')->WithOnClick('Clicked();')->Render();
+ButtonBox::Make()->WithValue('OK')->WithIsSubmit(true)->Render();
+ButtonBox::Make()->WithValue('Cancel')->WithIsReset(true)->Render();
+ButtonBox::Make()->WithValue('Click me!')->WithOnClick('Clicked();')->Render();
 </p>
 
 <p>
