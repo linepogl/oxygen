@@ -130,6 +130,7 @@ class TimeSpanBox extends Box {
 			echo "          if(x==='h'){".($this->show_days?"this.SetPseudoFocus('d');ev.preventDefault();return;":"x='d';")."}";
 			echo "        }";
 			echo "        return;";
+			echo "      case 61:case 109:this.Inv();ev.preventDefault();return;";
 			echo "      case 38:case 39:this.Inc();ev.preventDefault();return;";
 			echo "      case 40:case 37:this.Dec();ev.preventDefault();return;";
 			echo "      case 48:case  96:this.Press('0');ev.preventDefault();return;";
@@ -148,10 +149,11 @@ class TimeSpanBox extends Box {
 			echo "  }";
 			echo " ,get_s : function(){ return jQuery('#$this->name-'+this.pseudo_focus).html().replace('&nbsp;',''); }";
 			echo " ,set_s : function(s){ jQuery('#$this->name-'+this.pseudo_focus).html('&nbsp;'+(s===''?'&nbsp;':s)); this.Update(); }";
+			echo " ,Inv : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : -x ); }";
 			echo " ,Inc : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : x + 1 ); }";
 			echo " ,Dec : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : x - 1 ); }";
 			echo " ,Del : function(s){ this.set_s( '' ); }";
-			echo " ,Press : function(s){ var x = this.get_s(); if(x==='0'&&s==='0')return; this.set_s( x + s ); }";
+			echo " ,Press : function(s){ var x = this.get_s(); this.set_s( (x==='0' ? '' : x) + s ); }";
 			echo " ,Backspace : function(s){ var x = this.get_s(); if (x==='') return; this.set_s( x.slice(0,-1) ); }";
 			echo " ,OnFocus : function(ev){";
 			echo "    this.ShowPseudoFocus();";
