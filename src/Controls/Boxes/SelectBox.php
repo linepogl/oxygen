@@ -158,16 +158,18 @@ class SelectBox extends Box {
 				if ( $this->allow_null )
 					echo '<option value=""'.($this->IsSelected(null)?' selected="selected"':'').'>'.$this->null_caption.'</option>';
 
-				$previous_group_caption = null;
+				$previous_html_group_caption = null;
 				for ($i = 0; $i < count($this->list_values); $i++) {
-					if ($this->list_group_captions[$i] != $previous_group_caption) {
-						if (!is_null($previous_group_caption)) echo '</optgroup>';
-						echo '<optgroup label="'.new Html($this->list_group_captions[$i]).'">';
+					$html_group_caption = strval(new Html($this->list_group_captions[$i]));
+					if ($html_group_caption != $previous_html_group_caption) {
+						if (!is_null($previous_html_group_caption)) echo '</optgroup>';
+						echo '<optgroup label="'.$html_group_caption.'">';
+						$previous_html_group_caption = $html_group_caption;
 					}
 					echo '<option value="'.new Html(new Val($this->list_values[$i])).'"'.($this->IsSelected($this->list_values[$i])?' selected="selected"':'').'>'.$this->list_captions[$i].'</option>';
 
 				}
-				if (!is_null($previous_group_caption)) echo '</optgroup>';
+				if (!is_null($previous_html_group_caption)) echo '</optgroup>';
 				echo '</select>';
 			}
 		}
