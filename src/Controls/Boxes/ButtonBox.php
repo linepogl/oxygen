@@ -26,7 +26,7 @@ class ButtonBox extends Box {
   public function Render(){
 	  $type = 'button';
 	  if ($this->is_submit) $type = 'submit';
-	  elseif ($this->is_submit) $type = 'reset';
+	  elseif ($this->is_reset) $type = 'reset';
 
 	  if ($this->is_rich) {
 		  echo '<button type="'.$type.'" id="'.$this->name.'" onclick="'.new Html($this->on_click).'"'.($this->is_disabled?' class="formButtonDisabled '.$this->css_class.'" disabled="disabled"':' class="formButton '.$this->css_class.'"').' style="'.$this->css_style.'">'.$this->value.'</button>';
