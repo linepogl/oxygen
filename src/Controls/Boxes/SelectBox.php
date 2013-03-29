@@ -57,6 +57,16 @@ class SelectBox extends Box {
 		$this->last_index_from = count($this->list_values) - $i;
 		return $this;
 	}
+	/** @return static */
+	public function AddManyAssoc($value_caption_map){
+		$i = 0;
+		foreach ($value_caption_map as $value => $caption) {
+			$this->Add( $value , $caption );
+			$i++;
+		}
+		$this->last_index_from = count($this->list_values) - $i;
+		return $this;
+	}
 
 	/** @return static */
 	public function WithCaption($value){
