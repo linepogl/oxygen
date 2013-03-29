@@ -567,7 +567,7 @@ class ReportTableControl extends ValueControl {
 				echo '<th class="contract checkbox" style="cursor:pointer;"';
 				echo ' onclick="window.'.$this->name.'.OnCheckThClick(event)"';
 				echo ' >';
-				ImageCheckboxControl::Make($this->name.'_check_all',false)
+				CheckBox::Make($this->name.'_check_all',false)
 					->WithOnChange($this->name.'.OnCheckAllChange();')
 					->Render();
 				echo '</th>';
@@ -677,14 +677,14 @@ class ReportTableControl extends ValueControl {
 				if ($this->IsClickable($i)){
 					if ($this->row_mode[$i] == self::ROW_NORMAL) {
 						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="window.'.$this->name.'.OnCheckTdClick(event,'.$i.')">';
-							ImageCheckboxControl::Make($this->name.'_check_'.$i,$selected)
+							CheckBox::Make($this->name.'_check_'.$i,$selected)
 								->WithOnChange($this->name.'.OnCheckChange('.$i.');')
 								->Render();
 						echo '</td>';
 					}
 					elseif ($this->row_mode[$i] == self::ROW_GROUP){
 						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="window.'.$this->name.'.OnGroupCheckTdClick(event,'.$i.')">';
-							ImageCheckboxControl::Make($this->name.'_check_'.$i,$selected)
+							CheckBox::Make($this->name.'_check_'.$i,$selected)
 								->WithOnChange($this->name.'.OnGroupCheckChange('.$i.');')
 								->Render();
 						echo '</td>';
