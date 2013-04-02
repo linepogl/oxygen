@@ -95,7 +95,8 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	public function HasLang($lang = null){
 		return isset($this->data[  is_null($lang) ? Oxygen::$lang : $lang ]);
 	}
-	public function HasAllLangs(){
+	public function HasAllLangs($langs = null){
+		if (is_null($langs)) $langs = Oxygen::$langs;
 		foreach (Oxygen::$langs as $lang)
 			if (trim($this[$lang]) == '')
 				return false;

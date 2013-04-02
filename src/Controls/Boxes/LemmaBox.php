@@ -12,14 +12,14 @@ class LemmaBox extends Box {
 	public function Render(){
 		$langs = is_null($this->langs) ? Oxygen::$langs : $this->langs;
 
-		echo new HiddenBox($this->name,$this->value instanceof Lemma ? $this->value->Encode() : '');
+		echo HiddenBox::Make($this->name,$this->value instanceof Lemma ? $this->value->Encode() : '');
 		echo '<table class="formPane" style="width:'.$this->width.'" cellspacing="0" cellpadding="0" border="0"><tr>';
 		echo '<td class="expand" class="formPane" style="border:0;border-right-width:1px;">';
 		foreach ($langs as $lang){
 			TextBox::Make($this->name.'_'.$lang,$this->value[$lang])
 				->WithWidth('100%')
 				->WithReadonly($this->readonly)
-				->WithOnChange($this->name.'.OnChange();')
+				->WithOnChange("window.$this->name.OnChange();")
 				->WithCssStyle('border:0;'.($lang==Oxygen::$lang?'':'display:none;') )
 				->Render();
 		}
@@ -40,7 +40,7 @@ class LemmaBox extends Box {
 		echo '</tr></table>';
 
 		echo Js::BEGIN;
-		echo "$this->name = {";
+		echo "window.$this->name = {";
 		echo "  OnChange : function(){";
 		echo "    var s;";
 		echo "    var ss = '';";
