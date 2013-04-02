@@ -26,7 +26,7 @@ class CheckBox extends Box {
 
 	public function Render(){
 
-		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name)->WithCssClass('list-'.$this->list_name);
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name)->WithCssClass(empty($this->list_name)?'':'list-'.$this->list_name);
 
 		$readonly = $this->readonly || $this->mode != UIMode::Edit;
 		$mode = ( $readonly ? 'readonly-' : '' ) . ( $this->is_dirty ? 'dirty-' : '' ) . ( $this->value ? 'checked' : 'unchecked' );
@@ -34,7 +34,7 @@ class CheckBox extends Box {
 		if ($readonly)
 			echo '<span class="checkbox-anchor '.$this->css_class.'" style="'.$this->css_style.'">';
 		else
-			echo '<a class="checkbox-anchor '.$this->css_class.'" href="javascript:'.$this->name.'.Toggle();" style="'.$this->css_style.'">';
+			echo '<a class="checkbox-anchor '.$this->css_class.'" href="javascript:window.'.$this->name.'.Toggle();" style="'.$this->css_style.'">';
 
 		echo '<img src="oxy/img/spacer.gif" class="checkbox checkbox-'.$mode.'" id="'.$this->name.'-check" />';
 		if ($this->show_label){
@@ -49,44 +49,45 @@ class CheckBox extends Box {
 		else
 			echo '</a>';
 
+		if (!$readonly) {
 		echo Js::BEGIN;
-		echo "window.".$this->name .'={';
-		echo "  is_readonly:".new Js($readonly);
-		echo " ,is_dirty:".new Js($this->is_dirty);
-		echo " ,list_value:".new Js(new Val($this->list_value));
-		echo " ,SetValue:function(value){";
-		echo "    var old = this.GetValue();";
-		echo "    $(".new Js($this->name).").value = value ? ".new Js(new Url(true))." : ".new Js(new Url(false)).";";
-		echo "    this.Update();";
-		echo "    if (old!=value) this.OnChange();";
-		echo "  }";
-		echo " ,GetValue:function(){";
-		echo "    return \$F(".new Js($this->name).") == ".new Js(new Url(true)).";";
-		echo "  }";
-		echo " ,GetListValue:function(){";
-		echo "    return this.list_value;";
-		echo "  }";
-		echo " ,Update:function(){";
-		echo "    var value = this.GetValue();";
-		echo "    $(".new Js($this->name.'-check').").className = 'checkbox checkbox-' + ( this.is_readonly ? 'readonly-' : '' ) + ( this.is_dirty ? 'dirty-' : '' ) + ( value ? 'checked' : 'unchecked' );";
-		echo "  }";
-		echo " ,IsDirty:function(){";
-		echo "    return ".$this->name.".is_dirty;";
-		echo "  }";
-		echo " ,SetDirty:function(dirty){";
-		echo "    ".$this->name.".is_dirty = dirty;";
-		echo "    this.Update();";
-		echo "  }";
-		echo " ,Toggle:function(){";
-		echo "    ".$this->name.".SetValue(\$F(".new Js($this->name).")!='true');";
-		echo "  }";
-		echo " ,OnChange:function(){";
-		if (!is_null($this->list_name)) echo "$this->list_name.OnChangeOne();";
-		echo $this->on_change;
-		echo "  }";
-		echo "};";
-		echo Js::END;
-
+			echo "window.".$this->name .'={';
+			echo "  is_readonly:".new Js($readonly);
+			echo " ,is_dirty:".new Js($this->is_dirty);
+			echo " ,list_value:".new Js(new Val($this->list_value));
+			echo " ,SetValue:function(value){";
+			echo "    var old = this.GetValue();";
+			echo "    jQuery('#$this->name').val( value ? ".new Js(new Val(true))." : ".new Js(new Val(false))." );";
+			echo "    this.Update();";
+			echo "    if (old!=value) this.OnChange();";
+			echo "  }";
+			echo " ,GetValue:function(){";
+			echo "    return jQuery('#$this->name').val() == ".new Js(new Val(true)).";";
+			echo "  }";
+			echo " ,GetListValue:function(){";
+			echo "    return this.list_value;";
+			echo "  }";
+			echo " ,Update:function(){";
+			echo "    var value = this.GetValue();";
+			echo "    $(".new Js($this->name.'-check').").className = 'checkbox checkbox-' + ( this.is_readonly ? 'readonly-' : '' ) + ( this.is_dirty ? 'dirty-' : '' ) + ( value ? 'checked' : 'unchecked' );";
+			echo "  }";
+			echo " ,IsDirty:function(){";
+			echo "    return ".$this->name.".is_dirty;";
+			echo "  }";
+			echo " ,SetDirty:function(dirty){";
+			echo "    ".$this->name.".is_dirty = dirty;";
+			echo "    this.Update();";
+			echo "  }";
+			echo " ,Toggle:function(){";
+			echo "    ".$this->name.".SetValue(jQuery('#$this->name').val()!='true');";
+			echo "  }";
+			echo " ,OnChange:function(){";
+			if (!is_null($this->list_name)) echo "$this->list_name.OnChangeOne();";
+			echo $this->on_change;
+			echo "  }";
+			echo "};";
+			echo Js::END;
+		}
 	}
 
 
