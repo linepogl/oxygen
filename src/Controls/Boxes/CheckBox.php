@@ -26,10 +26,11 @@ class CheckBox extends Box {
 
 	public function Render(){
 
-		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name)->WithCssClass(empty($this->list_name)?'':'list-'.$this->list_name);
-
 		$readonly = $this->readonly || $this->mode != UIMode::Edit;
 		$mode = ( $readonly ? 'readonly-' : '' ) . ( $this->is_dirty ? 'dirty-' : '' ) . ( $this->value ? 'checked' : 'unchecked' );
+
+		if (!$readonly)
+			echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name)->WithCssClass(empty($this->list_name)?'':'list-'.$this->list_name);
 
 		if ($readonly)
 			echo '<span class="checkbox-anchor '.$this->css_class.'" style="'.$this->css_style.'">';
