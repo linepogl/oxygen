@@ -415,7 +415,10 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	/** @return XList */
 	public function Copy(){
-		return clone $this;
+		$r = clone $this;
+		if (!is_null($r->where)) $r->where = clone $r->where;
+		if (!is_null($r->order_by)) $r->order_by = clone $r->order_by;
+		return $r;
 	}
 
 	public function Merge($traversable){
