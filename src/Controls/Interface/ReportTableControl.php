@@ -61,6 +61,9 @@ class ReportTableControl extends ValueControl {
 	private $cell_css_style = array( array() );
 	private $cell_fill_row = array( array() );
 	private $cell_onclick = array( array() );
+	private $cell_tag = array( array() );
+	private $cell_col_span = array( array() );
+	private $cell_row_span = array( array() );
 
 
 	private $sorted_by = null;
@@ -88,6 +91,8 @@ class ReportTableControl extends ValueControl {
 		$this->cell_onclick[] = array();
 		$this->cell_tag[] = array();
 		$this->cell_fill_row[] = array();
+		$this->cell_col_span[] = array();
+		$this->cell_row_span[] = array();
 	}
 	/** @return ReportTableControl */ public function AddRow($value=null){ $this->add_row($value,self::ROW_NORMAL); return $this;}
 	/** @return ReportTableControl */ public function AddSpecialRow($value=null){ $this->add_row($value,self::ROW_SPECIAL); return $this; }
@@ -102,6 +107,8 @@ class ReportTableControl extends ValueControl {
 		$this->cell_css_style[$i+1][] = '';
 		$this->cell_fill_row[$i+1][] = false;
 		$this->cell_onclick[$i+1][] = '';
+		$this->cell_col_span[$i+1][] = 1;
+		$this->cell_row_span[$i+1][] = 1;
 	}
 	/** @return ReportTableControl */ public function AddTh($value=''){ $this->add_cell($value,'th'); return $this; }
 	/** @return ReportTableControl */ public function AddTd($value=''){ $this->add_cell($value,'td'); return $this; }
@@ -178,6 +185,25 @@ class ReportTableControl extends ValueControl {
 		return $this;
 	}
 
+	/** @return ReportTableControl */ public function WithColSpan($value){
+		$i = count($this->rows) - 1;
+		$j = count($this->cells[$i+1]) - 1;
+		if ($j < 0) {
+		}
+		else
+			$this->cell_col_span[$i+1][$j] = $value;
+		return $this;
+	}
+
+	/** @return ReportTableControl */ public function WithRowSpan($value){
+		$i = count($this->rows) - 1;
+		$j = count($this->cells[$i+1]) - 1;
+		if ($j < 0) {
+		}
+		else
+			$this->cell_row_span[$i+1][$j] = $value;
+		return $this;
+	}
 
 
 	private function IsClickable($row_index){
@@ -591,12 +617,15 @@ class ReportTableControl extends ValueControl {
 				$fill_row = $this->cell_fill_row[0][$j];
 				$v = trim($this->cells[0][$j]);
 				$tag = $this->cell_tag[0][$j];
+				$col_span = $this->cell_col_span[0][$j];
+				$row_span = $this->cell_row_span[0][$j];
 				echo '<';
 				echo $tag;
 				if (!empty($css_class)) echo ' class="'.$css_class.'"';
 				if (!empty($css_style)) echo ' style="'.$css_style.'"';
 				if (!empty($onclick)) echo ' onclick="'.$onclick.'"';
-				if ($fill_row) echo ' colspan="'.($count_cols-$j).'"';
+				if ($fill_row) echo ' colspan="'.($count_cols-$j).'"'; elseif ($col_span > 1) echo ' colspan="'.($col_span).'"';
+				if ($row_span > 1) echo ' rowspan="'.($col_span).'"';
 				echo '>';
 				echo $v == '' ? new Spacer() : $v;
 				if ($j === $this->sorted_by){
@@ -703,12 +732,15 @@ class ReportTableControl extends ValueControl {
 					$fill_row = $this->cell_fill_row[$i+1][$j];
 					$v = trim($this->cells[$i+1][$j]);
 					$tag = $this->cell_tag[$i+1][$j];
+					$col_span = $this->cell_col_span[$i+1][$j];
+					$row_span = $this->cell_row_span[$i+1][$j];
 					echo '<';
 					echo $tag;
 					if (!empty($css_class)) echo ' class="'.$css_class.'"';
 					if (!empty($css_style)) echo ' style="'.$css_style.'"';
 					if (!empty($onclick)) echo ' style="'.$onclick.'"';
-					if ($fill_row) echo ' colspan="'.($count_cols-$j).'"';
+					if ($fill_row) echo ' colspan="'.($count_cols-$j).'"'; elseif($col_span>1) echo ' colspan="'.$col_span.'"';
+					if ($row_span > 1) echo ' rowspan="'.$row_span.'";';
 					echo '>';
 					echo $v == '' ? new Spacer() : $v;
 					echo '</'.$tag.'>';
