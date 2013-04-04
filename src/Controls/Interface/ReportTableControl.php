@@ -625,7 +625,7 @@ class ReportTableControl extends ValueControl {
 				if (!empty($css_style)) echo ' style="'.$css_style.'"';
 				if (!empty($onclick)) echo ' onclick="'.$onclick.'"';
 				if ($fill_row) echo ' colspan="'.($count_cols-$j).'"'; elseif ($col_span > 1) echo ' colspan="'.($col_span).'"';
-				if ($row_span > 1) echo ' rowspan="'.($col_span).'"';
+				if ($row_span > 1) echo ' rowspan="'.($row_span).'"';
 				echo '>';
 				echo $v == '' ? new Spacer() : $v;
 				if ($j === $this->sorted_by){
