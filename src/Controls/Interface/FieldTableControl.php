@@ -26,6 +26,8 @@ class FieldTableControl extends Control {
 	private $asterisks = array();
 	private $validators = array();
 	private $row_names = array();
+	private $row_css_styles = array();
+	private $row_css_classes = array();
 
 	public function Add($that){
 		if ($that instanceof XWrapField || $that instanceof XMetaField || $that instanceof XWrapSlave || $that instanceof XMetaSlave){
@@ -43,6 +45,8 @@ class FieldTableControl extends Control {
 		$this->asterisks[] = false;
 		$this->validators[] = null;
 		$this->row_names[] = 'tr'.ID::Random()->AsHex();
+		$this->row_css_classes[] = '';
+		$this->row_css_styles[] = '';
 		return $this;
 	}
 
@@ -72,6 +76,14 @@ class FieldTableControl extends Control {
 	}
 	public function WithRowName($value){
 		$this->row_names[count($this->row_names) - 1] = $value;
+		return $this;
+	}
+	public function WithRowCssStyle($value){
+		$this->row_css_styles[count($this->row_css_styles) - 1] = $value;
+		return $this;
+	}
+	public function WithRowCssClass($value){
+		$this->row_css_classes[count($this->row_css_classes) - 1] = $value;
 		return $this;
 	}
 
@@ -114,7 +126,7 @@ class FieldTableControl extends Control {
 				}
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
-					echo '<tr id="'.$this->row_names[$i].'" class="'.$vcode.'">';
+					echo '<tr id="'.$this->row_names[$i].'" class="'.$vcode.' '.$this->row_css_classes[$i].'" style="'.$this->row_css_styles[$i].'">';
 					echo '<td class="vtop hright label" style="'.($this->label_nowrap?'white-space:nowrap;':'').'width:'.$this->label_width.';">'.($this->asterisks[$i]?'<span style="word-spacing:1px;font-size:1px;"><img src="oxy/img/asterisk.gif" />&nbsp;</span>':'').$this->labels[$i].'</td>';
 					echo '<td class="hleft value">'.$this->contents[$i];
 					if (!is_null($vcode) && !$this->hide_validators)
