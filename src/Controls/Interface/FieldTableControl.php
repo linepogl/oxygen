@@ -3,22 +3,22 @@
 class FieldTableControl extends Control {
 
 	private $width = '50px';
-	public function WithWidth($value){ $this->width = $value; return $this; }
+	/** @return static */ public function WithWidth($value){ $this->width = $value; return $this; }
 
 	private $label_width = '50px';
-	public function WithLabelWidth($value){ $this->label_width = $value; return $this; }
+	/** @return static */ public function WithLabelWidth($value){ $this->label_width = $value; return $this; }
 
 	private $labels_on_top = false;
-	public function WithLabelsOnTop($value){ $this->labels_on_top = $value; return $this; }
+	/** @return static */ public function WithLabelsOnTop($value){ $this->labels_on_top = $value; return $this; }
 
 	private $label_nowrap = false;
-	public function WithLabelNoWrap($value){ $this->label_nowrap = $value; return $this; }
+	/** @return static */ public function WithLabelNoWrap($value){ $this->label_nowrap = $value; return $this; }
 
 	private $title = null;
-	public function WithTitle($value){ $this->title = $value; return $this; }
+	/** @return static */ public function WithTitle($value){ $this->title = $value; return $this; }
 
 	private $hide_validators = false;
-	public function WithHideValidators($value){ $this->hide_validators = $value; return $this; }
+	/** @return static */ public function WithHideValidators($value){ $this->hide_validators = $value; return $this; }
 
 
 	private $labels = array();
