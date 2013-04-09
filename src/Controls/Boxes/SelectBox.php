@@ -174,12 +174,24 @@ class SelectBox extends Box {
 			}
 		}
 		else {
+			if ($this->use_check_boxes) {
+				// todo...
+			}
+			elseif ($this->is_multiple) {
+				// todo...
+			}
+			else {
+				HiddenBox::Make($this->name,$this->value)->WithHttpName(null);
+			}
 			$j = 0;
 			for ($i = 0; $i < count($this->list_values); $i++) {
 				if ($this->IsSelected($this->list_values[$i])) {
 					if ($j++>0) echo ', ';
 					echo $this->list_captions[$i];
+
 					break;
+
+
 				}
 			}
 		}
