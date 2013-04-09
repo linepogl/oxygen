@@ -8,14 +8,19 @@ class DateBox extends Box {
 	private $null_caption = '∅';
 	public function WithNullCaption($value){ $this->null_caption = $value; return $this; }
 
+	private $show_value = true;
+	public function WithShowValue($value){ $this->show_value = $value; return $this; }
+
 	public function Render(){
     if (!($this->value instanceof XDateTime)) {
       $this->value = $this->allow_null ? null : XDate::Today();
 		}
 
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
-			$caption = $this->value instanceof XDateTime ? Language::FormatDate($this->value) : ( $this->allow_null ? $this->null_caption : '' );
-			echo new Html($caption);
+			if ($this->show_value) {
+				$caption = $this->value instanceof XDateTime ? Language::FormatDate($this->value) : ( $this->allow_null ? $this->null_caption : '' );
+				echo new Html($caption);
+			}
 			return;
 		}
 
@@ -24,7 +29,12 @@ class DateBox extends Box {
 		$m = is_null($this->value) ? '' : $this->value->Format('m');
 		$d = is_null($this->value) ? '' : $this->value->Format('d');
 
-		echo '<span id="'.$this->name.'-span" class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
+		if ($this->show_value) {
+			echo '<span id="'.$this->name.'-span" class="formPane'.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
+		}
+		else {
+			echo '<span id="'.$this->name.'-span" style="position:relative;display:inline-block;">';
+		}
 
 		if (!$this->readonly){
 			echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name);
@@ -51,33 +61,40 @@ class DateBox extends Box {
 			echo '</div>';
 		}
 
-		echo '<div id="'.$this->name.'-box-null" class="formPaneInnerWrap" style="'.(is_null($this->value)?'':'display:none;').'"><div class="formPane formPaneInner" style="background:none;border:0;margin:0;padding:0;">';
-		echo new Html($n);
-		echo '</div></div>';
+		if ($this->show_value) {
+			echo '<div id="'.$this->name.'-box-null" class="formPaneInnerWrap" style="'.(is_null($this->value)?'':'display:none;').'"><div class="formPane formPaneInner" style="background:none;border:0;margin:0;padding:0;">';
+			echo new Html($n);
+			echo '</div></div>';
 
-		echo '<div id="'.$this->name.'-box-date" class="formPaneInnerWrap" style="'.(is_null($this->value)?'display:none;':'').'"><div class="formPane formPaneInner" style=";border:0;margin:0;padding:0;">';
-		echo '<span id="'.$this->name.'-d">'.$d.'</span>/<span id="'.$this->name.'-m">'.$m.'</span>/<span id="'.$this->name.'-y">'.$y.'</span>';
-		echo '</div></div>';
+			echo '<div id="'.$this->name.'-box-date" class="formPaneInnerWrap" style="'.(is_null($this->value)?'display:none;':'').'"><div class="formPane formPaneInner" style=";border:0;margin:0;padding:0;">';
+			echo '<span id="'.$this->name.'-d">'.$d.'</span>/<span id="'.$this->name.'-m">'.$m.'</span>/<span id="'.$this->name.'-y">'.$y.'</span>';
+			echo '</div></div>';
 
-		echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formDateAnchorWrap"><div class="formPaneAnchor formDateAnchor"></div></div>';
+			echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formDateAnchorWrap"><div class="formPaneAnchor formDateAnchor"></div></div>';
 
-		echo '<input id="'.$this->name.'-box"';
-		echo ' class="formPane formDate'.($this->readonly?' formLocked':'').'"';
-		echo ' style="margin:0;cursor:pointer;"';
-		echo ' value=""';
-		echo ' readonly="readonly"';
-		echo '/>';
-
+			echo '<input id="'.$this->name.'-box"';
+			echo ' class="formPane formDate'.($this->readonly?' formLocked':'').'"';
+			echo ' style="margin:0;cursor:pointer;"';
+			echo ' value=""';
+			echo ' readonly="readonly"';
+			echo '/>';
+		}
+		elseif (!$this->readonly) {
+			echo '<a id="'.$this->name.'-anchor" href="javascript:" class="formPaneAnchor formDateAnchor"></a>';
+		}
 		echo '</span>';
 
+
 		echo Js::BEGIN;
-		echo "var f = function(){";
-		echo "  var x =  jQuery('#$this->name-box');";
-		echo "  jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
-		echo "  jQuery('#$this->name-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
-		echo "  jQuery('#$this->name-span .formPaneInner').css({'height':x.height()+'px','line-height':x.height()+'px'});";
-		echo "};";
-		echo "jQuery(document).ready(f);f();";
+		if ($this->show_value) {
+			echo "var f = function(){";
+			echo "  var x =  jQuery('#$this->name-box');";
+			echo "  jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
+			echo "  jQuery('#$this->name-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
+			echo "  jQuery('#$this->name-span .formPaneInner').css({'height':x.height()+'px','line-height':x.height()+'px'});";
+			echo "};";
+			echo "jQuery(document).ready(f);f();";
+		}
 		if (!$this->readonly){
 			echo "jQuery('#$this->name-box,#$this->name-anchor,#$this->name-box-date,#$this->name-box-null').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); }).focus(function(e){ $this->name.ShowPseudoFocus(); });";
 			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
@@ -149,7 +166,9 @@ class DateBox extends Box {
 			echo "    }";
 			echo "  }";
 			echo " ,OnBlur : function(ev){";
-			echo "    setTimeout(function(){if(!$this->name.keep_focus&&!jQuery('#$this->name-box').is(':focus')){ $this->name.HideDropDown();$this->name.HidePseudoFocus();}},200);";
+			if ($this->show_value) {
+				echo "    setTimeout(function(){if(!$this->name.keep_focus&&!jQuery('#$this->name-box').is(':focus')){ $this->name.HideDropDown();$this->name.HidePseudoFocus();}},200);";
+			}
 			echo "  }";
 			echo " ,KeepFocus : function(){ this.keep_focus = true; setTimeout(function(){ $this->name.Update(); },500); }";
 			echo " ,Update : function(){";
@@ -202,7 +221,7 @@ class DateBox extends Box {
 			echo " ,Showing : false";
 			echo " ,ShowDropDown : function(){";
 			echo "    this.Showing = true;";
-			echo "    var b = jQuery('#$this->name-box');";
+			echo "    var b = jQuery('#$this->name".($this->show_value?'-box':'-anchor')."');";
 			echo "    var d = jQuery('#$this->name-dropdown');";
 			echo "    d.show();";
 			echo "    var w = d.width();";

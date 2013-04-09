@@ -164,7 +164,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .formPaneInnerWrap  { position:absolute; float:left; left:0; cursor:pointer; }
 .formPaneAnchorWrap { position:absolute; float:right; right:0; cursor:pointer; }
-.formPaneAnchor     { background:url(../img/form-pane-anchor.png) 50% 50% no-repeat; width:15px; height:15px; }
+.formPaneAnchor     { display:inline-block; background:url(../img/form-pane-anchor.png) 50% 50% no-repeat; width:15px; height:15px; }
 
 .formLocked       { background-color:#fbfbfb; border-color:#999999; color:#999999; }
 .formLocked:focus { background-color:#fafafa; border-color:#777777; color:#777777; }
