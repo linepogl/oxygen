@@ -138,16 +138,16 @@ class SelectBox extends Box {
 				echo '<div class="formPane overflow" style="height:'.Language::FormatDecimalInvariant($this->rows*1.6).'em;width:'.(empty($this->width)?'auto':$this->width).';white-space:nowrap;'.$this->css_style.'">';
 
 				if ( $this->allow_null )
-					echo '<div><input class="formCheck" type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->name.($this->is_multiple?'[]':'').'" id="'.$this->name.'_null" value=""'.($this->IsSelected(null)?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.'_null">' . $this->null_caption . '</label></div>';
+					echo '<div><input class="formCheck" type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->http_name.($this->is_multiple?'[]':'').'" id="'.$this->name.'_null" value=""'.($this->IsSelected(null)?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.'_null">' . $this->null_caption . '</label></div>';
 
 				for ($i = 0; $i < count($this->list_values); $i++)
-					echo '<div><input class="formCheck" type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->name.($this->is_multiple?'[]':'').'" id="'.$this->name.$i.'" value="'.new Html(new Val($this->list_values[$i])).'"'.($this->IsSelected($this->list_values[$i])?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.$i.'">'.$this->list_captions[$i].'</label></div>';
+					echo '<div><input class="formCheck" type="'.($this->is_multiple?'checkbox':'radio').'" name="'.$this->http_name.($this->is_multiple?'[]':'').'" id="'.$this->name.$i.'" value="'.new Html(new Val($this->list_values[$i])).'"'.($this->IsSelected($this->list_values[$i])?' checked="checked"':'').' onclick="'.$this->on_change.'" /><label for="'.$this->name.$i.'">'.$this->list_captions[$i].'</label></div>';
 
 				echo '</div>';
 			}
 			else {
 				echo '<select id="'.$this->name.($this->is_multiple?'[]':'').'"';
-				echo ' name="'.$this->name.'"';
+				echo ' name="'.$this->http_name.'"';
 				echo ' class="'.($this->readonly?'formLocked':'formPane').'"';
 					echo ' onchange="'.$this->on_change.'"';
 					echo ' style="'.(empty($this->display)?'':'display:'.$this->display.';').'width:'.(empty($this->width)?'auto':$this->width).';'.$this->css_style.'"';

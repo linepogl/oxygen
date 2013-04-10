@@ -16,6 +16,8 @@ class DateBox extends Box {
       $this->value = $this->allow_null ? null : XDate::Today();
 		}
 
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
+
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
 			if ($this->show_value) {
 				$caption = $this->value instanceof XDateTime ? Language::FormatDate($this->value) : ( $this->allow_null ? $this->null_caption : '' );
@@ -37,7 +39,6 @@ class DateBox extends Box {
 		}
 
 		if (!$this->readonly){
-			echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name);
 			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formDateDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
 			echo '<div class="formDropDownHead">';

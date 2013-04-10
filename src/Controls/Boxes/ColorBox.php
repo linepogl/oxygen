@@ -14,6 +14,8 @@ class ColorBox extends Box {
 		}
 		$is_null = is_null($this->value) || trim($this->value) === '';
 
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
+
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
 			if ($is_null) {
 				echo '<span style="background:url(oxy/img/checkers.gif) 50% 50% repeat;padding:0 0.65em;margin:0;border:1px solid #999999;">'.new Spacer().'</span>&nbsp;';
@@ -32,7 +34,6 @@ class ColorBox extends Box {
 		echo '>';
 
 		if (!$this->readonly){
-			echo new HiddenBox($this->name,$this->value);
 			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formColorDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
 //			echo '<div class="formDropDownHead">';

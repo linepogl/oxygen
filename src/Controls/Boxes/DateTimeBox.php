@@ -13,10 +13,7 @@ class DateTimeBox extends Box {
 
 	public function Render(){
 
-		if ($this->mode == UIMode::Edit && !$this->readonly){
-			HiddenBox::Make($this->name,$this->value)
-				->Render();
-		}
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
 
 		DateBox::Make($this->name . '_date' , $this->value )
 			->WithMode($this->mode)

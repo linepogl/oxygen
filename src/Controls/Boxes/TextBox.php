@@ -25,11 +25,13 @@ class TextBox extends Box {
 
 	public function Render(){
 
+
 		if ($this->mode != UIMode::Edit) {
 			if ($this->is_password)
 				echo '*****';
 			else {
-				echo '<span id="'.$this->name.'"';
+				echo HiddenBox::Make($this->name,$this->value)->WithHttpName(null);
+				echo '<span ';
 				echo ' class="'.$this->css_class.'"';
 				echo ' style="white-space:pre;'.($this->nowrap?'':'white-space:pre-wrap;').$this->css_style.'"';
 				echo '>'.new Html( $this->value ).'</span>';

@@ -23,6 +23,8 @@ class TimeSpanBox extends Box {
 	    $this->value = $this->allow_null ? null : new XTimeSpan();
 		}
 
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
+
 		if ($this->mode != UIMode::Edit){
 			echo Language::FormatTimeSpan($this->value);
 			return;
@@ -56,9 +58,6 @@ class TimeSpanBox extends Box {
 
 
 
-		if (!$this->readonly) {
-			echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name);
-		}
 		echo '<span id="'.$this->name.'-span" class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 
 

@@ -19,6 +19,8 @@ class TimeBox extends Box {
     $caption = !is_null($this->value) ? Language::FormatTime($this->value,$this->show_seconds?'H:i:s':'H:i') : ( $this->allow_null ? $this->null_caption : '' );
 		$null_caption = trim($this->null_caption);
 
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
+
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
 			echo new Html($caption);
 			return;
@@ -32,7 +34,6 @@ class TimeBox extends Box {
 		echo '<span id="'.$this->name.'-span" class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 
 		if (!$this->readonly){
-			echo new HiddenBox($this->name,$this->value);
 			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formTimeDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
 			echo '<div class="formDropDownBody">';
