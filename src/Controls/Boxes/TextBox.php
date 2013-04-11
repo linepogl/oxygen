@@ -31,7 +31,7 @@ class TextBox extends Box {
 				echo '*****';
 			else {
 				echo HiddenBox::Make($this->name,$this->value)->WithHttpName(null);
-				echo '<span ';
+				echo '<span id="'.$this->name.'-span"';
 				echo ' class="'.$this->css_class.'"';
 				echo ' style="white-space:pre;'.($this->nowrap?'':'white-space:pre-wrap;').$this->css_style.'"';
 				echo '>'.new Html( $this->value ).'</span>';
