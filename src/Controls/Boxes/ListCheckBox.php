@@ -33,6 +33,7 @@ class ListCheckBox extends Box {
 		echo " ,selected_values : []";
 		echo " ,IsChecked : function(){ return {$this->name}_all.GetValue(); }";
 		echo " ,Check : function(value){ {$this->name}_all.SetValue(value); }";
+		echo " ,Toggle : function(value){ {$this->name}_all.SetValue( !{$this->name}_all.GetValue() ); }";
 		echo " ,CountSelected : function(){";
 		echo "    return this.selected_values.length;";
 		echo "  }";

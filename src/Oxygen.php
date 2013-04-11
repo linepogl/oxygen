@@ -850,7 +850,7 @@ class Oxygen {
 	public static function HashRandom32(){ return ID::Random()->AsHex(); }
 
 	public static function SplitSearchString($searchstring){
-		return preg_split('/[\\s,]*\\"([^\\"]+)\\"[\\s,]*|[\\s,]*\'([^\']+)\'[\\s,]*|[\\s,]+/', $searchstring, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+		return preg_split('/[\\s]*\\"([^\\"]+)\\"[\\s]*|[\\s]*\'([^\']+)\'[\\s]*|[\\s]+/', $searchstring, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 	}
 	public static function IsID($that){
 		return 1==preg_match('/^[a-fA-F0-9]{8}$/',$that);
