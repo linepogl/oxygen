@@ -181,7 +181,7 @@ class SelectBox extends Box {
 				// todo...
 			}
 			else {
-				HiddenBox::Make($this->name,$this->value)->WithHttpName(null);
+				HiddenBox::Make($this->name,$this->value)->WithHttpName(null)->Render();
 			}
 			$j = 0;
 			for ($i = 0; $i < count($this->list_values); $i++) {
