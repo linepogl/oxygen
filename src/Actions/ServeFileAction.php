@@ -20,7 +20,12 @@ abstract class ServeFileAction extends Action  {
 	}
 
 	public function Render() {
-		Oxygen::ServeFile($this->GetFilename(),$this->GetSaveAsName(),$this->GetMimeType(),$this->RequiresCaching());
+		try {
+			Oxygen::ServeFile($this->GetFilename(),$this->GetSaveAsName(),$this->GetMimeType(),$this->RequiresCaching());
+		}
+		catch (Exception $ex){
+			throw new PageNotFoundException(Lemma::Pick('MsgFileNotFound'));
+		}
 	}
 	public function OnAfterRender(){
 		if ($this->IsModeRaw()) exit();
