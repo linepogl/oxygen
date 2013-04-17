@@ -1,17 +1,3 @@
-/*
- *
- * Reset
- *
- */
-* { vertical-align:baseline; }
-
-body { background:#ffffff; }
-th, td { vertical-align:middle; }
-th { text-align:center; }
-img { vertical-align:middle; }
-hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
-
-
 
 
 
@@ -38,12 +24,31 @@ hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 .fright              { float:right;   }
 .fleft               { float:left;    }
 .fclear              { clear:both!important;    }
-.ellipsis             { overflow:hidden; text-overflow:ellipsis; }
+.ellipsis            { overflow:hidden; text-overflow:ellipsis; }
 .nounderline         { text-decoration:none; }
 .nounderline:hover   { text-decoration:none; }
 .borderbox           { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; }
 .contentbox          { box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; }
 *:hover .nounderline { text-decoration:none; }
+
+.noprint        { }
+.printonly      { display:none;  }
+.overflow       { overflow:auto;   -webkit-overflow-scrolling: touch; }
+.overflow-x     { overflow-x:auto; -webkit-overflow-scrolling: touch; }
+.overflow-y     { overflow-y:auto; -webkit-overflow-scrolling: touch; }
+@media print {
+  .noprint      { display:none; }
+  .printonly    { display:block; }
+  .overflow     { overflow:visible; }
+  .overflowx    { overflow:visible; }
+  .overflowy    { overflow:visible; }
+}
+
+
+
+
+
+
 
 
 
@@ -238,25 +243,3 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 select[size="0"].formPane,select[size="1"].formPane { -webkit-appearance:none; }
 .chrome select[size="0"].formPane,.chrome select[size="1"].formPane, .safari select[size="0"].formPane,.safari select[size="1"].formPane { background-image:url(../img/form-pane-anchor.png);background-position:100% 50%;background-repeat:no-repeat; }
-
-
-
-/*
- *
- * Print
- *
- */
-.noprint       { }
-.printonly     { display:none;  }
-.overflow      { overflow:auto;   -webkit-overflow-scrolling: touch; }
-.overflow-x     { overflow-x:auto; -webkit-overflow-scrolling: touch; }
-.overflow-y     { overflow-y:auto; -webkit-overflow-scrolling: touch; }
-@media print {
-    *            { overflow:visible; }
-    body         { background:#ffffff; }
-    .noprint     { display:none; }
-    .printonly   { display:block; }
-    .overflow    { overflow:visible; }
-    .overflowx   { overflow:visible; }
-    .overflowy   { overflow:visible; }
-}

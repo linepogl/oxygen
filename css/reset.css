@@ -5,7 +5,13 @@ html { font-family: sans-serif; }
 html { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 
 /* Removes default margin. */
-body { margin: 0; }
+body { margin: 0; background:#ffffff; }
+
+/* general alignment */
+* { vertical-align:baseline; }
+img { vertical-align:middle; }
+th, td { vertical-align:middle; }
+th { text-align:center; }
 
 /* Addresses `outline` inconsistency between Chrome and other browsers. */
 *:focus { outline: 0; -moz-outline:0; }
@@ -125,3 +131,12 @@ textarea { vertical-align: top; }
 
 /* Remove most spacing between table cells. */
 /* table { border-collapse: collapse; border-spacing: 0; } */
+
+/* hr reset */
+hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
+
+/* print */
+@media print {
+    *            { overflow:visible; }
+    body         { background:#ffffff; }
+}
