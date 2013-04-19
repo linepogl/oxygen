@@ -51,7 +51,7 @@ class TextBox extends Box {
 		elseif ($this->rows == 1)
 			echo '<input type="text"';
 		else
-			echo '<textarea rows="'.$this->rows.'"';
+			echo '<textarea rows="'.intval($this->rows).'"';
 
 		echo ' id="'.$this->name.'"';
 

@@ -4,9 +4,9 @@ class Validator extends MultiMessage {
 
 	public function HasPassed(){ return $this->GetSeverity() <= Message::SUCCESS; }
 
-	public function Check($condition,$message){
+	public function Check($condition,$message=null){
 		if (!$condition)
-			$this[] =  $message instanceof Message ? $message : new WarningMessage($message) ;
+			$this[] =  is_null($message) ? new WarningMessage(Lemma::Pick('MsgInvalidValue')) : ($message instanceof Message ? $message : new WarningMessage($message)) ;
 		return $condition;
 	}
 

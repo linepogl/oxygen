@@ -121,6 +121,9 @@ final class Country {
 		'ISV'=>'VI','YEM'=>'YE','ZAM'=>'ZM','ZIM'=>'ZW'
 		);
 
+	public static function GetISO2Codes(){ return array_values(self::$Enum); }
+	public static function GetISO3Codes(){ return array_keys(self::$Enum); }
+	public static function GetIOCCodes(){ return array_keys(self::$EnumIOC); }
 
 	private static $ordered_enum = null;
 	public static function GetTranslatedOrderedEnum(){

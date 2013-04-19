@@ -71,4 +71,17 @@ function from($whatever){
 }
 
 
-
+function id( $iid_or_siid_or_null ){
+	if (is_null($iid_or_siid_or_null)) return null;
+	return new ID($iid_or_siid_or_null);
+}
+function iid( $id_or_item_or_null ){
+	if ($id_or_item_or_null instanceof ID) return $id_or_item_or_null->AsInt();
+	if ($id_or_item_or_null instanceof XItem) return $id_or_item_or_null->id->AsInt();
+	return null;
+}
+function hex( $id_or_item_or_null ){
+	if ($id_or_item_or_null instanceof ID) return $id_or_item_or_null->AsHex();
+	if ($id_or_item_or_null instanceof XItem) return $id_or_item_or_null->id->AsHex();
+	return null;
+}

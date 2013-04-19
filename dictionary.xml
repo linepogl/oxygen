@@ -184,6 +184,11 @@
 		<fr>L'adresse n'est pas valide.</fr>
 		<el>Λάθος διεύθυνση.</el>
 	</lemma>
+	<lemma name="MsgInvalidValue">
+		<en>Invalid value.</en>
+		<fr>Le valeur n'est pas valide.</fr>
+		<el>Λάθος τιμή.</el>
+	</lemma>
 
 	<lemma name="MsgAccountBanned">
 		<en>User account locked.</en>
