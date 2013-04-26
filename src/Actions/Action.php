@@ -295,7 +295,7 @@ abstract class Action extends XValue {
 	const MODE_HTML_DOCUMENT             = 0x01; // 1 (to be opened as a full frame)
 	const MODE_AJAX_DIALOG               = 0x02; // 2
 	const MODE_IFRAME_DIALOG             = 0x03; // 3
-	const MODE_HTML_FRAGMENT             = 0x05; // 4 (to be inserted into an html document)
+	const MODE_HTML_FRAGMENT             = 0x04; // 4 (to be inserted into an html document)
 
 	//const MODE_RAW_NORMAL              = 0x10; // 16 (not possible: the template needs html)
 	const MODE_RAW                       = 0x11; // 17
