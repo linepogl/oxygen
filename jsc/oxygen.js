@@ -173,7 +173,7 @@ var Oxygen = {
 		var dialogx = jQuery('#OxygenDialogX');
 		var dialog_extra_height = dialogx.outerHeight(true) - innerx.height();
 		var dialog_extra_width = dialogx.outerWidth(true) - inner.width();
-		$('OxygenDialogInnerX').appendChild(new Element('iframe',{'src':url,'width':width-dialog_extra_width,'height':height-dialog_extra_height}));
+		$('OxygenDialogInnerX').appendChild(new Element('iframe',{'src':url,'width':width-dialog_extra_width,'height':height-dialog_extra_height,'style':'border:0;'}));
 		this.current_ajax_dialog_url = url;
 	}
 	,ShowAjaxDialog: function(icon,title,url,width,height){
