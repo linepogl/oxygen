@@ -12,7 +12,7 @@ class HttpValue extends ImportValue {
 			return explode(',',$this->value);
 	}
 	public function AsIntegerArray(){
-		if (is_null($this->value))
+		if (is_null($this->value) || $this->value==='')
 			return array();
 		else if (is_array($this->value)){
 			$a = array();

@@ -446,6 +446,14 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		return false;
 	}
 
+	public function Pick($dbitem_or_id){
+		$this->Evaluate();
+		foreach ($this->data as $xx)
+			if ($xx->IsEqualTo($dbitem_or_id))
+				return $xx;
+		return null;
+	}
+
 	public function Remove($dbitem_or_id){
 		$this->Evaluate();
 		$a = array();
