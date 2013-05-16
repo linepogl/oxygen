@@ -36,7 +36,7 @@ class FieldTableControl extends Control {
 		}
 		elseif ($that instanceof ValueControl){
 			$this->labels[] = $that->label;
-			$this->contents[] = '' . $that;
+			$this->contents[] = $that->GetContent();
 		}
 		else {
 			$this->labels[] = $that;
