@@ -84,6 +84,6 @@ function iid( $id_or_item_or_null ){
 function hex( $id_or_item_or_null ){
 	if ($id_or_item_or_null instanceof ID) return $id_or_item_or_null->AsHex();
 	if ($id_or_item_or_null instanceof XItem) return $id_or_item_or_null->id->AsHex();
-	if (is_int($id_or_item_or_null)) return (new ID($id_or_item_or_null))->AsHex();
+	if (is_int($id_or_item_or_null)) { $id_or_item_or_null = new ID($id_or_item_or_null); return $id_or_item_or_null->AsHex(); }
 	return null;
 }
