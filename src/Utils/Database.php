@@ -813,8 +813,8 @@ class Database {
 	}
 	public static function ExecuteAddIndex($tablename){
 		$a = func_get_args();
-		$key = self::hash_index($tablename, implode('+',array_splice($a,1)));
-		$sql_fields = implode(',',array_map(function($x){return new SqlIden($x);},array_splice($a,1)));
+		$key = self::hash_index($tablename, implode('+',array_slice($a,1)));
+		$sql_fields = implode(',',array_map(function($x){return new SqlIden($x);},array_slice($a,1)));
 		self::Execute('CREATE INDEX '.new SqlIden($key).' ON '.new SqlIden($tablename).' ('.$sql_fields.')');
 	}
 	public static function ExecuteAddUniqueIndices($tablename){
@@ -826,8 +826,8 @@ class Database {
 	}
 	public static function ExecuteAddUniqueIndex($tablename){
 		$a = func_get_args();
-		$key = self::hash_index($tablename, implode('+',array_splice($a,1)));
-		$sql_fields = implode(',',array_map(function($x){return new SqlIden($x);},array_splice($a,1)));
+		$key = self::hash_index($tablename, implode('+',array_slice($a,1)));
+		$sql_fields = implode(',',array_map(function($x){return new SqlIden($x);},array_slice($a,1)));
 		self::Execute('CREATE UNIQUE INDEX '.new SqlIden($key).' ON '.new SqlIden($tablename).' ('.$sql_fields.')');
 	}
 	public static function ExecuteDropIndices($tablename){
@@ -840,7 +840,7 @@ class Database {
 	public static function ExecuteDropIndex($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
-		$key = self::hash_index($tablename, implode('+',array_splice($a,1)));
+		$key = self::hash_index($tablename, implode('+',array_slice($a,1)));
 		self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden($key));
 	}
 	public static function ExecuteDropIndicesRaw($tablename){
