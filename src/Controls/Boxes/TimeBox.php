@@ -140,8 +140,8 @@ class TimeBox extends Box {
 				echo " ,h : ".new Js(is_null($this->value) ? null : $this->value->Format('H'));
 				echo " ,m : ".new Js(is_null($this->value) ? null : $this->value->Format('i'));
 				echo " ,s : ".new Js(is_null($this->value) ? null : $this->value->Format('s'));
-				echo " ,SetDate:function(d){if(d===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{var x=d.getHours();if(x<0)x+=24;x%=24;this.h=x<10?'0'+x:''+x;var x=d.getMinutes();if(x<0)x+=60;x%=60;this.h=x<10?'0'+x:''+x;var x=d.getSeconds();if(x<0)x+=60;x%=60;this.h=x<10?'0'+x:''+x; this.OnChange(); this.Update(); }";
-				echo " ,GetDate:function(){if(this.h===null||this.m===null||this.s===null)return null;return new Date(2000,01,01,parseInt(this.h,10),parseInt(this.m,10),parseInt(this.s,10));}";
+				echo " ,SetDate:function(d){if(d===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{var x=d.getHours();this.h=x<10?'0'+x:''+x;var x=d.getMinutes();this.m=x<10?'0'+x:''+x;var x=d.getSeconds();this.s=x<10?'0'+x:''+x;} this.OnChange(); this.Update(); }";
+				echo " ,GetDate:function(){if(this.h===null||this.m===null||this.s===null)return null;return new Date(2000,1,1,parseInt(this.h,10),parseInt(this.m,10),parseInt(this.s,10));}";
 				echo " ,SetH : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=24;x%=24;this.h=x<10?'0'+x:''+x;if(this.m===null)this.m='00';if(this.s===null)this.s='00';this.pseudo_focus='h'; } this.OnChange(); this.Update(); }";
 				echo " ,SetM : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=60;x%=60;this.m=x<10?'0'+x:''+x;if(this.s===null)this.s='00';if(this.h===null)this.h='00';this.pseudo_focus='m'; } this.OnChange(); this.Update(); }";
 				echo " ,SetS : function(x){if(x===null){this.h=this.m=this.s=null;this.pseudo_focus='h';}else{ if(x<0)x+=60;x%=60;this.s=x<10?'0'+x:''+x;if(this.h===null)this.h='00';if(this.m===null)this.m='00';this.pseudo_focus='s'; } this.OnChange(); this.Update(); }";
