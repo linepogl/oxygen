@@ -9,7 +9,10 @@ class DateTimeBox extends Box {
 	public function WithNullCaption($value){ $this->null_caption = $value; return $this; }
 
 	private $show_seconds = false;
-	 public function WithShowSeconds($value){ $this->show_seconds = $value; return $this; }
+	public function WithShowSeconds($value){ $this->show_seconds = $value; return $this; }
+
+	private $simple = false;
+	public function WithSimple($value){ $this->simple = $value; return $this; }
 
 	public function Render(){
 
@@ -31,6 +34,7 @@ class DateTimeBox extends Box {
 			->WithOnChange('window.'.$this->name.'.UpdateT();')
 			->WithNullCaption($this->null_caption)
 			->WithAllowNull($this->allow_null)
+			->WithSimple($this->simple)
 			->WithShowSeconds($this->show_seconds)
 			->Render();
 
@@ -47,6 +51,8 @@ class DateTimeBox extends Box {
 		echo "    var t = jQuery('#{$this->name}_time').val();";
 		echo "    jQuery('#$this->name').val( t==='' ? '' : (d===''?".new Js(XDate::Today()->Format('Ymd')).":d.substring(0,8)) + t.substring(8) );";
 		echo "  }";
+		echo " ,SetDate:function(d){ {$this->name}_date.SetDate(d); {$this->name}_time.SetDate(d); }";
+		echo " ,GetDate:function(){ var d = {$this->name}_date.GetDate(); if(d===null)return null; var t = {$this->name}_time.GetDate(); if(t===null)return null; return new Date(d.getFullYear(),d.getMonth(),d.getDate(),t.getHours(),t.getMinutes(),t.getSeconds()); }";
 		echo "};";
 		echo Js::END;
 

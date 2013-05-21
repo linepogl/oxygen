@@ -106,6 +106,7 @@ class DateBox extends Box {
 			echo " ,pseudo_focus : 'd'";
 			echo " ,keep_focus : false";
 			echo " ,SetDate : function(x){this.SetD(x);this.HideDropDown();}";
+			echo " ,GetDate : function(){return this.date;}";
 			echo " ,SetD : function(x){";
 			echo "    this.date=x;";
 			echo "    if (x==null){";
