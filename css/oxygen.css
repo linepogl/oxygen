@@ -183,6 +183,9 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDownFootRight { float:right; margin-right:10px; }
 .formDropDownBody      { padding:10px; }
 
+.formDropDown a.option         { display:block; padding:5px 5px!important; text-align:left!important; margin:0!important; font-weight:normal!important; border-radius:3px!important; color:#777777!important; }
+.formDropDown a.option:hover   { color:#000000!important;background:#f0f0f0!important; }
+
 .formDropDownHead a.button            { float:left; display:block; color:#a8a5ad!important; cursor:pointer; border:1px solid #b0b0b0; border-radius:10px; background:#ffffff; text-decoration:none; }
 .formDropDownHead a.button:hover      { color:#666666!important; border-color:#777777; background-color:#f4f4f4; text-decoration:none; }
 .formDropDownFoot a.button            { float:left; display:block; color:#777777!important; cursor:pointer; border:1px solid #b0b0b0; border-radius:3px; background:#ffffff; font:normal 10px/15px Trebuchet MS, sans-serif!important; text-transform:uppercase; text-decoration:none; height:15px; padding:0 6px; margin-right:3px; }
