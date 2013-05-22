@@ -16,6 +16,10 @@ class Str {
 			return false;
 	}
 
+	public static function Limit($str,$number_of_chars){
+		return mb_strlen($str)>$number_of_chars ? mb_substr($str,0,$number_of_chars) : $str;
+	}
+
 	public static function Replace($search, $replace, $subject, &$count = 0) {
 		if (!is_array($subject)) {
 			// Normalize $search and $replace so they are both arrays of the same length
