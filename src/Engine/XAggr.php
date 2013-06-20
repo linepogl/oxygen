@@ -223,6 +223,14 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			return parent::Where($pred_or_function);
 	}
 
+	/** @return XAggr|LinqIterator */
+	public function WhereAny( /* ... */ ) { return $this->WhereAnyX( func_get_args() ); }
+	/** @return XAggr|LinqIterator */
+	public function WhereAnyX( $preds ) { return $this->Where(XPred::AnyX($preds)); }
+	/** @return XAggr|LinqIterator */
+	public function WhereAll( /* ... */ ) { return $this->WhereAllX( func_get_args() ); }
+	/** @return XAggr|LinqIterator */
+	public function WhereAllX( $preds ) { return $this->Where(XPred::AllX($preds)); }
 
 
 	/** @var XOrderBy */
