@@ -67,7 +67,7 @@ final class HttpPost extends Http {
 			$r[$key] = $this[$key];
 		return new ArrayIterator($r);
 	}
-	/** @return HttpValue */ public static function Read($nane){ return Http::$GET[$nane]; }
+	/** @return HttpValue */ public static function Read($nane){ return Http::$POST[$nane]; }
 }
 final class HttpGet extends Http {
 	public final function OffsetExists($offset) { return array_key_exists($offset,$_GET); }
