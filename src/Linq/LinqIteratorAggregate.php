@@ -209,7 +209,7 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		return $r;
 	}
 
-	/** Lazy O(n) @return LinqIteratorAggregate */
+	/** Lazy O(n) @return static */
 	public function Apply($function_apply){
 		$it = $this->getIterator();
 		for($it->rewind();$it->valid();$it->next())
