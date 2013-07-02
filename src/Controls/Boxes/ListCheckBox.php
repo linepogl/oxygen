@@ -20,9 +20,12 @@ class ListCheckBox extends Box {
 	private $all_values = null;
 	public function WithAllValues($value){ $this->all_values = $value; return $this; }
 
+	private $debug = false;
+	public function WithDebug( $value ) { $this->debug = $value; return $this; }
+
 	public function Render(){
 
-		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name);
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name)->WithDebug($this->debug);
 		echo CheckBox::Make($this->name.'_all',false)->WithHttpName('')->WithOnChange("window.$this->name.OnChangeAll();")->WithLabel($this->label)->WithShowLabel($this->show_label)->WithCssClass($this->css_class)->WithCssStyle($this->css_style);
 
 		echo Js::BEGIN;
