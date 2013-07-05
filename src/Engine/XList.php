@@ -30,6 +30,8 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$this->data = $auto_load ? null : array();
   }
 
+	/** @return XMeta */
+	public function GetMeta(){ return $this->meta; }
 
 
 

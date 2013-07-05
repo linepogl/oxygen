@@ -9,6 +9,8 @@
 .expand              { width:100%;            }
 .contract            { width:1px;             }
 .nowrap              { white-space:nowrap;    }
+.nopadding           { padding:0!important;   }
+.nomargin            { margin:0!important;    }
 .vtop                { vertical-align:top;    }
 .vbottom             { vertical-align:bottom; }
 .vmiddle             { vertical-align:middle; }
@@ -17,6 +19,7 @@
 .hjustify            { text-align:justify!important; }
 .hcenter             { text-align:center!important;  }
 .inline              { display:inline;        }
+.inline-block        { display:inline-block;        }
 .block               { display:block;         }
 .center              { margin:auto;   }
 .code                { font-family:Courier New,monospace; white-space:pre; }
