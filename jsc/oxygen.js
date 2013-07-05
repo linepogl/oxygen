@@ -267,7 +267,7 @@ var Oxygen = {
 		var dialog = $('OxygenDialog');
 		var a = dialog.descendants();
 		for(var i = 0; i<a.length; i++){
-			if ( (a[i].tagName==='INPUT' && a[i].type!=='hidden') || a[i].tagName==='SELECT' || a[i].tagName==='TEXTAREA' ) {
+			if ( (a[i].tagName==='INPUT' && a[i].type!=='hidden' && a[i].readonly != 'readonly') || a[i].tagName==='SELECT' || a[i].tagName==='TEXTAREA' ) {
 				try{
 					a[i].focus(); // nasty explorer bug...
 				}

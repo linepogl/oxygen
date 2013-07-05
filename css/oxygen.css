@@ -19,6 +19,8 @@
 .hjustify            { text-align:justify!important; }
 .hcenter             { text-align:center!important;  }
 .inline              { display:inline;        }
+.relative            { position:relative;        }
+.absolute            { position:absolute;        }
 .inline-block        { display:inline-block;        }
 .block               { display:block;         }
 .center              { margin:auto;   }
@@ -28,6 +30,7 @@
 .fleft               { float:left;    }
 .fclear              { clear:both!important;    }
 .ellipsis            { overflow:hidden; text-overflow:ellipsis; }
+.pointer             { cursor:pointer; }
 .nounderline         { text-decoration:none; }
 .nounderline:hover   { text-decoration:none; }
 .borderbox           { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; }
@@ -46,7 +49,6 @@
   .overflowx    { overflow:visible; }
   .overflowy    { overflow:visible; }
 }
-
 
 
 

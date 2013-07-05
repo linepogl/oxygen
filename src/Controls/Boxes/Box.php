@@ -2,7 +2,7 @@
 
 abstract class Box extends ValueControl {
 
-	protected $readonly = '';
+	protected $readonly = false;
 	/** @return static */ public function WithReadOnly($value) { $this->readonly = $value; return $this; }
 
 	protected $on_change = '';
