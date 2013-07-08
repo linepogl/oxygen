@@ -784,7 +784,7 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i+=2){
-            try { self::ExecuteAddIndices($tablename,$a[$i]); } catch (Exception $ex){}
+      try { self::ExecuteAddIndices($tablename,$a[$i]); } catch (Exception $ex){}
 			self::Execute('ALTER TABLE '.new SqlIden($tablename).' ADD CONSTRAINT '.new SqlIden( self::hash_foreign_key($tablename,$a[$i]) ).' FOREIGN KEY ('.new SqlIden($a[$i]).') REFERENCES '.new SqlIden($a[$i+1]).' ('.new SqlIden('id').')');
 		}
 	}
@@ -801,7 +801,10 @@ class Database {
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
 			try { self::ExecuteDropIndices($tablename,$a[$i]);  } catch (Exception $ex){}
-			self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP FOREIGN KEY '.new SqlIden(self::hash_foreign_key($tablename,$a[$i])));
+			if (self::$type == self::ORACLE)
+				self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP CONSTRAINT '.new SqlIden(self::hash_foreign_key($tablename,$a[$i])));
+			else
+				self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP FOREIGN KEY '.new SqlIden(self::hash_foreign_key($tablename,$a[$i])));
 		}
 	}
 	public static function ExecuteAddIndices($tablename){
