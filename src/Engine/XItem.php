@@ -608,7 +608,7 @@ abstract class XItem extends XValue implements Serializable {
 	/** @return XList */ public static final function SeekGeneric($classname){ return XMeta::Of($classname)->SeekItems(); }
 
 	/** @return static  */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
-	/** @return XItem  */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
+	/** @return static  */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return XMeta::Of($classname)->PickItem($id,$dr); }
 
 //	/** @return static|XItem */ public static final function Pick404($id,DBReader $dr=null){ $r = static::Meta()->PickItem($id,$dr); if (is_null($r)) throw new ApplicationException(Lemma::Pick('MsgObjectXNotFound')->Sprintf(static::GetClassTitle().' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
 //	/** @return XItem */ public static final function Pick404Generic($classname,$id,DBReader $dr=null){ $r = XMeta::Of($classname)->PickItem($id,$dr);  if (is_null($r)) throw new ApplicationException(Lemma::Pick('MsgObjectXNotFound')->Sprintf(self::GetClassTitleGeneric($classname).' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
