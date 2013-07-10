@@ -165,10 +165,14 @@ class RollerBox extends Box {
 		else
 			echo '</a>';
 
+		$vals = [];
+		foreach ($this->list_values as $value)
+			$vals[] = ''.new Val($value);
+
 		echo Js::BEGIN;
 		echo "window.".$this->name .'={';
 		echo "  is_readonly : ".new Js($readonly);
-		echo " ,values : ".new Js($this->list_values);
+		echo " ,values : ".new Js($vals);
 		echo " ,selected_index : ".new Js($selected_index);
 		echo " ,SetValue : function(value){";
 		echo "    var old = this.selected_index;";
