@@ -93,8 +93,8 @@ abstract class Action extends XValue {
 		ob_start();
 		$this->content_compromised = false;
 		try {
-			if (!$this->IsPermitted()) throw new SecurityException();
-			if (!$this->IsLogical()) throw new PageNotFoundException(Lemma::Pick('MsgPageNotFound'));
+			if (!$this->IsPermitted()) throw new SecurityException('');
+			if (!$this->IsLogical()) throw new PageNotFoundException();
 			$this->OnBeforeRender();
 			if ($this->IsModeLong()) {
 				ProgressControl::Make()->WithAction($this)->WithForwardRequest(true)->WithHeight( $this->GetHeight() < 180 ? 200 : $this->GetHeight()-150 )->Render();
