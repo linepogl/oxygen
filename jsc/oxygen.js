@@ -150,6 +150,8 @@ var Oxygen = {
 			document.body.scrollTop = 0;
 			document.documentElement.scrollTop = 0;
 		}
+	}
+	,WatchDialogSize: function(){
 		this.ResizeDialog();
 		Oxygen.dialog_watchdog = setInterval( function(){ Oxygen.ResizeDialog(); } , 250 );
 	}
@@ -163,6 +165,7 @@ var Oxygen = {
 		this.MakeDialog(icon,title,width,height);
 		$('OxygenDialogInnerX').update(content);
 		this.ShowDialog();
+		this.WatchDialogSize();
 	}
 	,ShowIFrameDialog: function(icon,title,url,width,height){
 		this.ShowFog();
@@ -175,6 +178,7 @@ var Oxygen = {
 		var dialog_extra_width = dialogx.outerWidth(true) - inner.width();
 		$('OxygenDialogInnerX').appendChild(new Element('iframe',{'src':url,'width':width-dialog_extra_width,'height':height-dialog_extra_height,'style':'border:0;'}));
 		this.current_ajax_dialog_url = url;
+		this.WatchDialogSize();
 	}
 	,ShowAjaxDialog: function(icon,title,url,width,height){
 		this.ShowFog();
@@ -183,6 +187,7 @@ var Oxygen = {
 		this.current_ajax_dialog_clock_value = 0;
 		this.current_ajax_dialog_clock_timer = setTimeout(function(){Oxygen.UpdateDialogClock();},1000);
 		this.ShowDialog();
+		this.WatchDialogSize();
 		if (url != null){
 			new Ajax.Request(url,{
 				method:'get'
