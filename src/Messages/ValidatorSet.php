@@ -1,7 +1,7 @@
 <?php
 
 
-class ValidatorSet {
+class ValidatorSet extends stdClass {
 	private $validators = array();
 
 	public function AsMessage(){ return new MultiMessage($this->validators); }
