@@ -29,10 +29,10 @@ class ButtonBox extends Box {
 	  elseif ($this->is_reset) $type = 'reset';
 
 	  if ($this->is_rich) {
-		  echo '<button type="'.$type.'" id="'.$this->name.'" onclick="'.new Html($this->on_click).'"'.($this->is_disabled?' class="formButtonDisabled '.$this->css_class.'" disabled="disabled"':' class="formButton '.$this->css_class.'"').' style="'.$this->css_style.'">'.$this->value.'</button>';
+		  echo '<button type="'.$type.'" id="'.$this->name.'" name="'.$this->http_name.'" onclick="'.new Html($this->on_click).'"'.($this->is_disabled?' class="formButtonDisabled '.$this->css_class.'" disabled="disabled"':' class="formButton '.$this->css_class.'"').' style="'.$this->css_style.'">'.$this->value.'</button>';
 	  }
 	  else {
-			echo '<input type="'.$type.'" id="'.$this->name.'" name="'.$this->name.'" value="'.$this->value.'" onclick="'.new Html($this->on_click).'"'.($this->is_disabled?' class="formButtonDisabled '.$this->css_class.'" disabled="disabled"':' class="formButton '.$this->css_class.'"').'  style="'.$this->css_style.'"/>';
+			echo '<input type="'.$type.'" id="'.$this->name.'" name="'.$this->http_name.'" value="'.$this->value.'" onclick="'.new Html($this->on_click).'"'.($this->is_disabled?' class="formButtonDisabled '.$this->css_class.'" disabled="disabled"':' class="formButton '.$this->css_class.'"').'  style="'.$this->css_style.'"/>';
 	  }
   }
 
