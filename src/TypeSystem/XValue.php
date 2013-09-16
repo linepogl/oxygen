@@ -9,12 +9,12 @@ abstract class XValue {
 
 	/** @return int */
 	public function CompareTo($x){
-		if (is_null($x)) return 1;
+		if ($x===null) return 1;
 		throw new InvalidArgumentException('Unsupported comparison: ' . get_class($this) . ' - ' . (is_object($x)?get_class($x):gettype($x))  );
 	}
 	/** @return bool */
 	public function IsEqualTo($x){
-		if (is_null($x)) return false;
+		if ($x===null) return false;
 		throw new InvalidArgumentException('Unsupported comparison: ' . get_class($this) . ' - ' . (is_object($x)?get_class($x):gettype($x))  );
 	}
 
@@ -48,11 +48,11 @@ abstract class XValue {
 		if ( $x2 instanceof XValue )
 			return $x2->CompareTo( $x1 );
 
-		if (is_null($x1)) {
-		  return is_null($x2) ? 0 : -1;
+		if ($x1===null) {
+		  return $x2===null ? 0 : -1;
 		}
 
-		elseif (is_null($x2)) {
+		elseif ($x2===null) {
 			return 1;
 		}
 
