@@ -61,7 +61,7 @@ class TimeSpanBox extends Box {
 		echo '<span id="'.$this->name.'-span" class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 
 
-		echo '<div id="'.$this->name.'-box-inner" class="formPaneInnerWrap" style="'.(is_null($this->value)?'display:none;':'').'"><div class="formPane formPaneInner formTimeSpanInner" style="border:0;margin:0;padding:0;">';
+		echo '<div id="'.$this->name.'-box-inner" class="formPaneInnerWrap" style="'.(is_null($this->value)?'display:none;':'').'"><div class="formPane '.($this->readonly?'formLocked':'').' formPaneInner formTimeSpanInner" style="border:0;margin:0;padding:0;">';
 		if ($this->show_days) {
 			echo '<span id="'.$this->name.'-d" style="padding:0 0.2em;">&nbsp;'.$d.'</span>';
 			echo Lemma::Pick('d.');
