@@ -297,7 +297,7 @@ abstract class Action extends XValue {
 	const MODE_IFRAME_DIALOG             = 0x03; // 3
 	const MODE_HTML_FRAGMENT             = 0x04; // 4 (to be inserted into an html document)
 
-	//const MODE_RAW_NORMAL              = 0x10; // 16 (not possible: the template needs html)
+	const MODE_RAW_CONTENT               = 0x10; // 16 (the template has to handle the raw content which might not be html)
 	const MODE_RAW                       = 0x11; // 17
 	//const MODE_RAW_AJAX_DIALOG         = 0x12; // 18 (not possible: the ajax dialog needs html)
 	const MODE_RAW_IFRAME_DIALOG         = 0x13; // 19 (todo: how do you close the dialog?)
