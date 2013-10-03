@@ -14,7 +14,9 @@ class ColorBox extends Box {
 		}
 		$is_null = is_null($this->value) || trim($this->value) === '';
 
-		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
+		if ($this->mode === UIMode::Edit) {
+			echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
+		}
 
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
 			if ($is_null) {
