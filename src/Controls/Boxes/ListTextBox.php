@@ -17,12 +17,12 @@ class ListTextBox extends Box {
 
 	public function Render(){
 
+		$ns = $this->mode !== UIMode::Edit || $this->readonly ? 'x'.Oxygen::HashRandom32() : $this->name;
 
-		TextBox::Make($this->name,$this->value)->WithWidth($this->width)->WithReadOnly($this->readonly || $this->mode !== UIMode::Edit)->Render();
-
+		TextBox::Make($ns,$this->value)->WithHttpName($ns)->WithWidth($this->width)->WithReadOnly($this->readonly || $this->mode !== UIMode::Edit)->Render();
 
 		echo Js::BEGIN;
-		echo "jQuery('#$this->name').tagsInput({defaultText:'+',width:".new Js($this->width).",height:".new Js($this->height).",interactive:".new Js(!$this->readonly && $this->mode==UIMode::Edit).",cssClass:".new Js($this->readonly?'formLocked':($this->mode==UIMode::Edit?'formPane':''))."});";
+		echo "jQuery('#$ns').tagsInput({defaultText:'+',width:".new Js($this->width).",height:".new Js($this->height).",interactive:".new Js(!$this->readonly && $this->mode==UIMode::Edit).",cssClass:".new Js($this->readonly?'formLocked':($this->mode==UIMode::Edit?'formPane':''))."});";
 		echo Js::END;
 
 	}
