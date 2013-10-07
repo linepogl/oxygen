@@ -37,7 +37,6 @@ var Lemma = function(){
 		return this.data[Oxygen.lang];
 	};
 };
-
 var Oxygen = {
 	 lang: oxygen_lang
 	,Lang: oxygen_lang
@@ -92,7 +91,8 @@ var Oxygen = {
 
 					+ '<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
 
-						+ '<div id="OxygenDialogX">'
+					+ '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogX">'
+//						+ '<div id="OxygenDialogX">'
 						+ '<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
 						+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5">'
 							+ '<div id="OxygenDialogInner" class="ajaxdialoginner">'
@@ -100,7 +100,8 @@ var Oxygen = {
 							+	'</div>'
 						+ '</div></div></div>'
 						+ '<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
-						+ '</div>'
+//						+ '</div>'
+						+ '</td></tr></table>'
 
 					+ '</div>'
 
@@ -118,7 +119,8 @@ var Oxygen = {
 
 					+ '<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
 
-						+ '<div id="OxygenDialogX">'
+						+ '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogX">'
+//						+ '<div id="OxygenDialogX">'
 						+ '<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
 						+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5">'
 							+ '<div id="OxygenDialogInner" class="ajaxdialoginner">'
@@ -126,7 +128,8 @@ var Oxygen = {
 							+	'</div>'
 						+ '</div></div></div>'
 						+ '<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
-						+ '</div>'
+//						+ '</div>'
+						+ '</td></tr></table>'
 
 					+ '</div>'
 
@@ -312,15 +315,13 @@ var Oxygen = {
 		else {
 			inner.height(innerx.outerHeight(true));
 			inner.width(innerx.outerWidth(true));
-			if (Prototype.Browser.Opera) {
-				dialogx.width(inner.outerWidth(true)); // I don't know why this is necessary. Normally dialogx should be resized automatically with its contents.
-			}
-			dialog.height(dialogx.outerHeight(true));
-			dialog.width(dialogx.outerWidth(true));
+			dialog.height( dialogx.outerHeight(true) );
+			dialog.width( dialogx.outerWidth(true) );
+//			dialog.height( Math.max( this.dialog_min_height , dialogx.outerHeight(true) ) );
+//			dialog.width( Math.max( this.dialog_min_width , dialogx.outerWidth(true) ) );
 
 			h = dialog.height();
 			w = dialog.width();
-
 		}
 
 		if (this.dialog_height !== h || this.dialog_width !== w) {
