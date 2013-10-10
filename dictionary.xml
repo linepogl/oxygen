@@ -173,7 +173,11 @@
 		<fr>Plusieurs utilisateurs trouvés.</fr>
 		<el>Βρέθηκαν πολλαπλοί χρήστες.</el>
 	</lemma>
-
+	<lemma name="MsgEmailSentSuccessfully">
+		<en>The e-mail has been sent successfully.</en>
+		<fr>Le message e-mail a été bien envoyé.</fr>
+		<el>Η αποστολή του e-mail έγινε επιτυχώς.</el>
+	</lemma>
 	<lemma name="MsgInvalidEmail">
 		<en>Invalid e-mail address.</en>
 		<fr>L'adresse e-mail n'est pas valide.</fr>
