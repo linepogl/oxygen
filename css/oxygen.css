@@ -172,6 +172,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formPane         { background-color:#ffffff; border-color:#999999; color:#666699; }
 .formPane:focus   { background-color:#fcfcfc; border-color:#666666; color:#444477; }
 
+
 .formPaneInnerWrap  { position:absolute; float:left; left:0; cursor:pointer; }
 .formPaneAnchorWrap { position:absolute; float:right; right:0; cursor:pointer; }
 .formPaneAnchor     { display:inline-block; background:url(../img/form-pane-anchor.png) 50% 50% no-repeat; width:15px; height:15px; }
@@ -251,7 +252,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 select[size="0"].formPane,select[size="1"].formPane { -webkit-appearance:none; }
 .chrome select[size="0"].formPane,.chrome select[size="1"].formPane, .safari select[size="0"].formPane,.safari select[size="1"].formPane { background-image:url(../img/form-pane-anchor.png);background-position:100% 50%;background-repeat:no-repeat; }
-
+.formDropDownPane { padding-right:20px; }
 
 .tagsinput                  { display:inline-block; overflow-y:auto; }
 .tagsinput span.tag         { border:1px solid #8eaeed; background:#c1d0ef; color:#40547d; border-radius:2px; display:block; float:left; padding:2px!important; text-decoration:none;  margin-right:1px; }
