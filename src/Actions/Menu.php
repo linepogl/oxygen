@@ -20,6 +20,10 @@ class Menu extends Action implements IteratorAggregate, ArrayAccess, Countable {
 	}
 
 
+	public function AddMany( $iterable ) {
+		foreach ($iterable as $act)
+			$this->Add($act);
+	}
 
 	public function AddSeparator(){
 		return $this->Add(new MenuSeparator());
