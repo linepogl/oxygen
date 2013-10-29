@@ -198,6 +198,7 @@ class RollerBox extends Box {
 		echo "  }";
 		echo " ,OnChange:function(){";
 		echo $this->on_change;
+		echo "    jQuery('#$this->name').trigger('change');";
 		echo "  }";
 		echo "};";
 		echo Js::END;
