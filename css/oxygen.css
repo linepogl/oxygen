@@ -35,6 +35,7 @@
 .nounderline:hover   { text-decoration:none; }
 .borderbox           { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; }
 .contentbox          { box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; }
+.hidden              { display:none; }
 *:hover .nounderline { text-decoration:none; }
 
 .noprint        { }
