@@ -10,7 +10,7 @@ class Html extends ExportValue {
 	public function MetaType(){
 		return MetaHtml::Type();
 	}
-	const DOCTYPE = '<!doctype html>';
+	const DOCTYPE = '<!DOCTYPE html>';
 
 
 }
