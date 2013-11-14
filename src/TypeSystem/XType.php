@@ -236,10 +236,11 @@ abstract class XType implements _XType {
 	 * @return string
 	 */
 	protected static function EncodeAsXmlString($string,$attr=false) {
+		$string = preg_replace('/[^\\x{0009}\\x{000A}\\x{000D}\\x{0020}-\\x{D7FF}\\x{E000}-\\x{FFFD}]/u', '',Oxygen::ToUnicode($string));
 		if ($attr)
-			return Oxygen::ToUnicode(str_replace(array('&','>','<','"',"\r\n","\n","\r","\t"),array('&amp;','&gt;','&lt;','&quot;','&#10;','&#10;','&#13;','&#9;'),$string));
+			return str_replace(array('&','>','<','"',"\r\n","\n","\r","\t"),array('&amp;','&gt;','&lt;','&quot;','&#10;','&#10;','&#13;','&#9;'),$string);
 		else
-			return Oxygen::ToUnicode(str_replace(array('&','>','<','"',"\r\n"),array('&amp;','&gt;','&lt;','&quot;',"\n"),$string));
+			return str_replace(array('&','>','<','"',"\r\n"),array('&amp;','&gt;','&lt;','&quot;',"\n"),$string);
 	}
 
 
