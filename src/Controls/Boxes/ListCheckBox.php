@@ -45,7 +45,7 @@ class ListCheckBox extends Box {
 		echo "    if(this.running) return;";
 		echo "    this.running = true;";
 		echo "    this.Init();";
-		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);";
+		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);if(!x.GetListValue)return;";
 		echo "      var list_value = x.GetListValue();";
 		echo "      var found = false;";
 		echo "      for (var i = 0; i < $this->name.selected_values.length; i++) {";
@@ -61,7 +61,7 @@ class ListCheckBox extends Box {
 		echo " ,Init : function(){";
 		echo "    if (this.all_values !== null) return;";
 		echo "    this.all_values = [];";
-		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);";
+		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);if(!x.GetListValue)return;";
 		echo "      $this->name.all_values.push(x.GetListValue());";
 		echo "    });";
 		echo "  }";
@@ -83,7 +83,7 @@ class ListCheckBox extends Box {
 		echo "    this.running = true;";
 		echo "    this.Init();";
 		echo "    var v = {$this->name}_all.GetValue();";
-		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);";
+		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);if(!x.GetListValue)return;";
 		echo "      x.SetValue(v);";
 		echo "    });";
 		echo "    this.selected_values = v ? this.all_values : [];";
@@ -97,7 +97,7 @@ class ListCheckBox extends Box {
 		echo "    var a = {};";
 		echo "    for (var i = 0; i < this.all_values.length; i++) a[this.selected_values[i]] = false;";
 		echo "    for (var i = 0; i < this.selected_values.length; i++) a[this.selected_values[i]] = true;";
-		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);";
+		echo "    jQuery('.list-$this->name').each(function(){var x;eval('x='+this.id);if(!x.GetListValue)return;";
 		echo "      a[x.GetListValue()] = x.GetValue();";
 		echo "    });";
 		echo "    this.selected_values = [];";

@@ -31,10 +31,7 @@ class CheckBox extends Box {
 
 		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($readonly?null:$this->http_name)->WithCssClass(empty($this->list_name)?'':'list-'.$this->list_name);
 
-		if ($readonly)
-			echo '<span class="checkbox-anchor '.$this->css_class.'" style="'.$this->css_style.'">';
-		else
-			echo '<a class="checkbox-anchor '.$this->css_class.'" href="javascript:window.'.$this->name.'.Toggle();" style="'.$this->css_style.'">';
+		echo '<a class="checkbox-anchor '.$this->css_class.'" href="javascript:'.($readonly?';':'window.'.$this->name.'.Toggle();').'" style="'.$this->css_style.'">';
 
 		echo '<img src="oxy/img/spacer.gif" class="checkbox checkbox-'.$mode.'" id="'.$this->name.'-check" />';
 		if ($this->show_label){
@@ -44,10 +41,7 @@ class CheckBox extends Box {
 				echo new Html($this->label);
 		}
 
-		if ($readonly)
-			echo '</span>';
-		else
-			echo '</a>';
+		echo '</a>';
 
 		if (!$readonly) {
 		echo Js::BEGIN;
