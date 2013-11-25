@@ -873,7 +873,7 @@ class Oxygen {
 		ini_set('memory_limit', '512M');
 		$boundary = Oxygen::HashRandom();
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: multipart/related; boundary="'.$boundary.'"; type="text/html"' . "\r\n";
+		$headers .= 'Content-type: multipart/related; boundary="'.$boundary.'"; type="text/html; charset=UTF-8"' . "\r\n";
 		$headers .= 'From: '. $from_name . ' <'. $from_email .'>'."\r\n";
 		$headers .= 'Sender: '. $from_email ."\r\n";
 
