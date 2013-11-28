@@ -81,6 +81,7 @@ abstract class Action extends XValue {
 	public abstract function Render();
 	public function OnBeforeRender() {}
 	public function OnAfterRender() {}
+	public function PostProcess($content) { return $content; }
 
 	public function GetHead(){
 		return Oxygen::GetHead();
@@ -102,6 +103,8 @@ abstract class Action extends XValue {
 			else
 				$this->Render();
 			$this->OnAfterRender();
+			$content = ob_get_clean();
+			$content = $this->PostProcess($content);
 		}
 		catch (SecurityException $ex){
 			$this->content_compromised = true;
@@ -136,6 +139,7 @@ abstract class Action extends XValue {
 					}
 				}
 			}
+			$content = ob_get_clean();
 		}
 		catch (PageNotFoundException $ex){
 			$this->content_compromised = true;
@@ -165,6 +169,7 @@ abstract class Action extends XValue {
 					echo '</div>';
 				}
 			}
+			$content = ob_get_clean();
 		}
 		catch (ApplicationException $ex){
 			$this->content_compromised = true;
@@ -193,6 +198,7 @@ abstract class Action extends XValue {
 					echo '</div>';
 				}
 			}
+			$content = ob_get_clean();
 		}
 		catch (Exception $ex){
 			$this->content_compromised = true;
@@ -256,9 +262,9 @@ abstract class Action extends XValue {
 				Debug::RecordExceptionServed($ex,'Action Exception Handler'.$exception_served_as.'.');
 			else
 				Debug::RecordExceptionServedGeneric($ex,'Action Exception Handler'.$exception_served_as.'.');
+			$content = ob_get_clean();
 		}
-		$result = ob_get_clean();
-		return $result;
+		return $content;
 	}
 
 	public function __toString() { return $this->GetHref();	}
