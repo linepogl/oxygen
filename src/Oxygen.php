@@ -282,6 +282,8 @@ class Oxygen {
 		Oxygen::AddHttpHeader('Cache-Control: no-cache, must-revalidate');
 		Oxygen::AddHttpHeader('Expires: 0');
 		Oxygen::AddHttpHeader('Pragma: No-cache');
+		Oxygen::AddHttpHeader('Access-Control-Allow-Origin: '.(isset($_SERVER['HTTP_ORIGIN'])?$_SERVER['HTTP_ORIGIN']:'*'));
+		Oxygen::AddHttpHeader('Access-Control-Allow-Credentials: true');
 	}
 	public static function AddHttpHeader($value){ self::$http_headers[] = $value; }
 	public static function SendHttpHeaders(){
