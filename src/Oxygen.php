@@ -125,9 +125,12 @@ class Oxygen {
 		Oxygen::SetContentType(self::$action->GetContentType());
 		Oxygen::SetCharset(self::$action->GetCharset());
 		Oxygen::ResetHttpHeaders();
+		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			Oxygen::SendHttpHeaders();
+			exit();
+		}
 
 		self::$content = self::$action->GetContent();
-
 
 		if (Debug::IsImmediateFlushingEnabled()) exit();
 		Oxygen::SendHttpHeaders();
@@ -282,8 +285,15 @@ class Oxygen {
 		Oxygen::AddHttpHeader('Cache-Control: no-cache, must-revalidate');
 		Oxygen::AddHttpHeader('Expires: 0');
 		Oxygen::AddHttpHeader('Pragma: No-cache');
-		Oxygen::AddHttpHeader('Access-Control-Allow-Origin: '.(isset($_SERVER['HTTP_ORIGIN'])?$_SERVER['HTTP_ORIGIN']:'*'));
-		Oxygen::AddHttpHeader('Access-Control-Allow-Credentials: true');
+		if (isset($_SERVER['HTTP_ORIGIN'])) {
+			Oxygen::AddHttpHeader('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
+			Oxygen::AddHttpHeader('Access-Control-Allow-Credentials: true');
+			Oxygen::AddHttpHeader('Access-Control-Max-Age: 86400');
+		}
+		if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) Oxygen::AddHttpHeader('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+			if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) Oxygen::AddHttpHeader('Access-Control-Allow-Headers: '.$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']);
+		}
 	}
 	public static function AddHttpHeader($value){ self::$http_headers[] = $value; }
 	public static function SendHttpHeaders(){
