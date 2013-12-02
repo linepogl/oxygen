@@ -375,9 +375,9 @@ class Oxygen {
 		if ($force || is_null($last_time) || $now - $last_time > 3600) {
 			$one_day_time = 86400;
 			$local_tmp = Oxygen::GetTempFolder();
-			foreach (scandir($local_tmp) as $f){ if (is_dir($f)) continue; try{ $then = filemtime($local_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($local_tmp.'/'.$f); } catch(Exception $ex){} }
+			foreach (scandir($local_tmp) as $f){ if (is_dir($local_tmp.'/'.$f)) continue; try{ $then = filemtime($local_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($local_tmp.'/'.$f); } catch(Exception $ex){} }
 			$shared_tmp = Oxygen::GetSharedTempFolder();
-			if ($shared_tmp != $local_tmp) { foreach (scandir($shared_tmp) as $f){ if (is_dir($f)) continue; try{ $then = filemtime($shared_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($shared_tmp.'/'.$f); } catch(Exception $ex){} } }
+			if ($shared_tmp != $local_tmp) { foreach (scandir($shared_tmp) as $f){ if (is_dir($shared_tmp.'/'.$f)) continue; try{ $then = filemtime($shared_tmp.'/'.$f); if ($now - $then > $one_day_time) unlink($shared_tmp.'/'.$f); } catch(Exception $ex){} } }
 			Scope::$APPLICATION['Oxygen::ClearTempFoldersFromOldFiles'] = $now;
 		}
 	}
