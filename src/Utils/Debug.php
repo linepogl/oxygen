@@ -298,12 +298,12 @@ class Debug {
 			if (!($ex instanceof JavascriptException)) {
 				$r .= '<div style="font-style:italic;color:#333333;margin:0;">'.$Q.new Html(basename($exx->getFile()).'['.$exx->getLine().']').$Q.'</div>';
 				$r .= '<div style="font-style:italic;color:#999999;margin:0;">'.new Html(Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']').'</div>';
-				$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;margin-bottom:30px;">'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
+				$r .= '<pre style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;margin-bottom:30px;">'.new Html(Debug::GetExceptionTraceAsText($exx)).'</pre>';
 			}
 		}
-		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
-		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Debug entries</b><br/><br/>'.new Html(Debug::GetEntriesAsText()).'</div>';
-		$r .= '<div style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
+		$r .= '<pre style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</pre>';
+		$r .= '<pre style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Debug entries</b><br/><br/>'.new Html(Debug::GetEntriesAsText()).'</pre>';
+		$r .= '<pre style="font:11px/13px Courier New,monospace;margin-top:20px;white-space:pre;color:#999999;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</pre>';
 		return $r;
 	}
 

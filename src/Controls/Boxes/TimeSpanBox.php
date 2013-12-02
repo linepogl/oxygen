@@ -146,7 +146,7 @@ class TimeSpanBox extends Box {
 			echo "      case 46:this.Del();ev.preventDefault();return;";
 			echo "    }";
 			echo "  }";
-			echo " ,get_s : function(){ return jQuery('#$this->name-'+this.pseudo_focus).html().replace('&nbsp;',''); }";
+			echo " ,get_s : function(){ return jQuery('#$this->name-'+this.pseudo_focus).html().replace(/&nbsp;/g,''); }";
 			echo " ,set_s : function(s){ jQuery('#$this->name-'+this.pseudo_focus).html('&nbsp;'+(s===''?'&nbsp;':s)); this.Update(); }";
 			echo " ,Inv : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : -x ); }";
 			echo " ,Inc : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : x + 1 ); }";
