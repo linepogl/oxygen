@@ -135,6 +135,8 @@ textarea { vertical-align: top; }
 /* hr reset */
 hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 
+form { margin:0; }
+
 /* print */
 @media print {
     *            { overflow:visible; }
