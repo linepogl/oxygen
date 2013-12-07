@@ -16,7 +16,7 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 		return $_SERVER['REQUEST_METHOD']=='GET';
 	}
 
-	private static function prepare_request( &$url , &$method , $args){
+	private static function prepare_request( &$url , &$method , $args, $timeout = null){
 		$method = strtoupper($method);
 		$post_args = array();
     foreach ($args as $key => &$val) $post_args[] = new Url($key).'='.new Url($val);
@@ -29,6 +29,7 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 			,'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17'
 			,'header' => "Cache-Control: max-age=0\r\n"
 			));
+		if ($timeout!==null) $options['http']['timeout'] = $timeout;
 		if ($method === 'POST') {
 			$options['http']['header'] .= "Content-Type: application/x-www-form-urlencoded\r\n";
 			$options['http']['content'] = $extra_string;
@@ -52,9 +53,12 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 		fclose($f_dst);
 	}
 	public static function Fire($url,$method='GET',$args = array()){
-		$ctx = self::prepare_request($url,$method,$args);
-		$f = fopen($url,'r',false,$ctx);
-		fclose($f);
+		$ctx = self::prepare_request($url,$method,$args,0.5);
+		try {
+			$f = fopen($url,'r',false,$ctx); // this will throw an exception on timeout!
+			fclose($f);
+		}
+		catch (Exception $ex){}
 	}
 }
 
