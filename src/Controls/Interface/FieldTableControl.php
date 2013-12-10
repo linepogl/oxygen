@@ -5,6 +5,9 @@ class FieldTableControl extends Control {
 	private $width = '50px';
 	/** @return static */ public function WithWidth($value){ $this->width = $value; return $this; }
 
+	private $css_class = '';
+	/** @return static */ public function WithCssClass($value){ $this->css_class = $value; return $this; }
+
 	private $label_width = '50px';
 	/** @return static */ public function WithLabelWidth($value){ $this->label_width = $value; return $this; }
 
@@ -90,14 +93,14 @@ class FieldTableControl extends Control {
 	public function Render(){
 
 		if ($this->labels_on_top){
-			echo '<table class="fieldtable" cellspacing="0" cellpadding="0" border="0" style="width:'.(empty($this->width)?'auto':$this->width).';">';
+			echo '<table class="fieldtable '.$this->css_class.'" cellspacing="0" cellpadding="0" border="0" style="width:'.(empty($this->width)?'auto':$this->width).';">';
 
 			if (!is_null($this->title)) echo '<tr><td><h2>'.$this->title.'</h2></td></tr>';
 
 			for ($i=0; $i<count($this->labels); $i++){
 				if ($this->labels[$i]=='-'){
 					echo '<tr><td class="notext" style="border-bottom:1px solid #cccccc;">'.new Spacer(1,10).'</td></tr>';
-					echo '<tr><td class="notext">'.new Spacer(1,5).'</td></tr>';
+					echo '<tr><td class="notext">'.new Spacer(1,10).'</td></tr>';
 				}
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
@@ -110,7 +113,7 @@ class FieldTableControl extends Control {
 			echo '</table>';
 		}
 		else {
-			echo '<table class="fieldtable" cellspacing="5" cellpadding="0" border="0" style="width:'.(empty($this->width)?'auto':$this->width).';">';
+			echo '<table class="fieldtable '.$this->css_class.'" cellspacing="5" cellpadding="0" border="0" style="width:'.(empty($this->width)?'auto':$this->width).';">';
 
 			echo '<tr><td class="notext">'.new Spacer(intval($this->label_width)).'</td>';
 			if (!is_null($this->title))
@@ -122,13 +125,13 @@ class FieldTableControl extends Control {
 			for ($i=0; $i<count($this->labels); $i++){
 				if ($this->labels[$i]=='-'){
 					echo '<tr><td class="notext">'.new Spacer().'</td><td class="notext" style="border-bottom:1px solid #cccccc;">'.new Spacer(1,10).'</td></tr>';
-					echo '<tr><td class="notext">'.new Spacer().'</td><td class="notext">'.new Spacer(1,5).'</td></tr>';
+					echo '<tr><td class="notext">'.new Spacer().'</td><td class="notext">'.new Spacer(1,10).'</td></tr>';
 				}
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
 					echo '<tr id="'.$this->row_names[$i].'" class="'.$vcode.' '.$this->row_css_classes[$i].'" style="'.$this->row_css_styles[$i].'">';
-					echo '<td class="vtop hright label" style="'.($this->label_nowrap?'white-space:nowrap;':'').'width:'.$this->label_width.';">'.($this->asterisks[$i]?'<span style="word-spacing:1px;font-size:1px;"><img src="oxy/img/asterisk.gif" />&nbsp;</span>':'').$this->labels[$i].'</td>';
-					echo '<td class="hleft value">'.$this->contents[$i];
+					echo '<td class="label" style="'.($this->label_nowrap?'white-space:nowrap;':'').'width:'.$this->label_width.';">'.($this->asterisks[$i]?'<span style="word-spacing:1px;font-size:1px;"><img src="oxy/img/asterisk.gif" />&nbsp;</span>':'').$this->labels[$i].'</td>';
+					echo '<td class="value">'.$this->contents[$i];
 					if (!is_null($vcode) && !$this->hide_validators)
 						echo '<div style="padding:2px 0 0 0">'.new MessageControl($this->validators[$i]).'</div>';
 					echo '</td>';

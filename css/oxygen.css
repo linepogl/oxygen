@@ -83,7 +83,8 @@ table.report .selected th { background:#eeeed6; }
 table.report .selected td { background:#fafaea; }
 
 .fieldtable td { padding:0; margin:0; }
-.fieldtable td.label { padding-top:2px }
+.fieldtable td.label { text-align:right; padding-top:2px; vertical-align:top; }
+.fieldtable td.value { text-align:left; }
 .ajaxdialog { border:5px solid #aaaaaa;padding:0; background:#ffffff; }
 .ajaxdialog h1 { font:24px/24px Trebuchet MS,sans-serif; color:#999999; padding:15px 20px 10px 15px; border-bottom:1px solid #999999; margin:0; }
 .ajaxdialoginner { padding:15px 20px 15px 15px; margin:0; }
@@ -254,19 +255,19 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formSelectDropDown a.option:hover    { background:#f0f0f0!important; color:#000000!important; }
 .formSelectDropDown a.option.selected { background:#d3d6c2!important; color:#000000!important; }
 
-select[size="0"].formPane,select[size="1"].formPane { -webkit-appearance:none; }
+select[size="0"].formPane,select[size="1"].formPane { -webkit-appearance:none!important; }
 .chrome select[size="0"].formPane,.chrome select[size="1"].formPane, .safari select[size="0"].formPane,.safari select[size="1"].formPane { background-image:url(../img/form-pane-anchor.png);background-position:100% 50%;background-repeat:no-repeat; }
 .formDropDownPane { padding-right:20px; }
 
 .tagsinput                  { display:inline-block; overflow-y:auto; }
-.tagsinput span.tag         { border:1px solid #8eaeed; background:#c1d0ef; color:#40547d; border-radius:2px; display:block; float:left; padding:2px!important; text-decoration:none;  margin-right:1px; }
-.tagsinput span.tag a       { font-weight:bold; color:#6179b1; text-decoration:none; }
+.tagsinput span.tag         { border:1px solid #8eaeed; background:#c1d0ef; color:#40547d; border-radius:2px; display:block; float:left; padding:2px!important; text-decoration:none; margin:0 1px 1px 0; }
+.tagsinput span.tag a       { font-weight:bold!important; color:#6179b1; text-decoration:none; }
 .tagsinput span.tag a:hover { color:#000000;  }
-.tagsinput input            { width:80px; margin:0; padding:3px 3px 2px 3px!important; background:transparent; outline:0; margin-right:1px; border-width:0!important; border-radius:2px!important; }
+.tagsinput input            { width:80px; margin:0; padding:3px!important; background:transparent; outline:0; margin:0 1px 1px 0; border-width:0!important; border-radius:2px!important; }
 .tagsinput input:focus      { border-width:0!important; }
 .tagsinput input.not_valid  { background:#FBD8DB!important; color:#90111A!important; }
-.tagsinput div              { display:block; float: left; }
-.tagsinput .tags_clear      { clear: both; width: 100%; height: 0px; }
+.tagsinput div              { display:block; float:left; }
+.tagsinput .tags_clear      { clear:both; width:100%; height:0; margin-top:-2px; }
 
 
 

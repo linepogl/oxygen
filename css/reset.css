@@ -131,6 +131,7 @@ textarea { vertical-align: top; }
 
 /* Remove most spacing between table cells. */
 /* table { border-collapse: collapse; border-spacing: 0; } */
+table { border-collapse:separate; border-spacing:0; border-color:#000000; }
 
 /* hr reset */
 hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
