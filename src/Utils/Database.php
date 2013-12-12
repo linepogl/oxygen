@@ -700,8 +700,14 @@ class Database {
 	}
 
 	public static function ExecuteRenameTable($tablename, $newName){
-		$sql = 'RENAME TABLE '.new SqlIden($tablename).' TO '.new SqlIden($newName);
-		self::Execute($sql);
+		switch(self::$type) {
+			case self::ORACLE:
+				self::Execute('RENAME '.new SqlIden($tablename).' TO '.new SqlIden($newName));
+				break;
+			default:
+				self::Execute('RENAME TABLE '.new SqlIden($tablename).' TO '.new SqlIden($newName));
+				break;
+		}
 	}
 
 	public static function ExecuteCreateStandardSequence($tablename,$from=0) {
