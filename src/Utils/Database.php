@@ -57,13 +57,14 @@ class Database {
 		return false;
 	}
 	private static $upgrade_running = false;
-	public static function Upgrade($force=false){
+	public static function Upgrade($force=false,MultiMessage $logger = null){
 		if (self::$upgrade_running) return;
 		if (is_null(self::$cx) || !self::$cx->is_managed) return;
 		self::$upgrade_running = true;
 
 		$needs_refresh = false;
 		if ($force || self::NeedsUpgrade()) {
+			Database::SetPatchingSystemLogger($logger);
 			$lock_filename = Oxygen::GetSharedTempFolder(true) .'/database.upgrade.lock';
 			$f = fopen($lock_filename,'w');
 			if (flock($f,LOCK_EX)){
@@ -410,24 +411,27 @@ class Database {
 	// Database patching system
 	//
 	//
+	/** @var MultiMessage */
+	private static $patching_system_logger = null;
 	private static $patching_system_name = null;
 	private static $patching_system_tablename = null;
 	private static $patching_system_fieldnames = array();
 	private static $patches = array();
-	private static $patching_system_dirty = false;
 	private static $patching_system_open_patcher = null;
 	private static $patching_system_open_patch = null;
+	private static $patching_system_is_dirty = false;
+	private static function SetPatchingSystemLogger(MultiMessage $logger = null){ self::$patching_system_logger = $logger; }
 	public static function ClearPatchingSystem(){
 		self::$patching_system_name = null;
 		self::$patching_system_tablename = null;
 		self::$patching_system_fieldnames = array();
-		self::$patching_system_dirty = false;
 		self::$patching_system_open_patcher = null;
 		self::$patching_system_open_patch = null;
+		self::$patching_system_is_dirty = false;
 		self::$patches = array();
 	}
 	public static function IsPatchingSystemDirty(){
-		return self::$patching_system_dirty;
+		return self::$patching_system_is_dirty;
 	}
 	public static function SetPatchingSystem($name,$tablename){
 		self::ClearPatchingSystem();
@@ -440,7 +444,7 @@ class Database {
 	}
 	public static function GetPatch($patcher){
 		$r = self::$patches[$patcher];
-		if (is_null($r)){
+		if ($r === null){
 			try{
 				$r = self::ExecuteScalar('SELECT '.new SqlIden(self::$patching_system_fieldnames[$patcher]).' FROM '.new SqlIden(self::$patching_system_tablename))->AsInteger();
 				self::$patches[$patcher] = $r;
@@ -460,33 +464,25 @@ class Database {
 		catch (Exception $ex){
 			$r = true;
 		}
-		if ($r){
-			self::$patching_system_dirty = true;
-			Debug::EnableImmediateFlushing();
-			Debug::Write('<b>Installing module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
-		}
+		if ($r) self::WriteToPatchingSystem('<b>Installing module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
 		return $r;
 	}
-	public static function WriteToPatchingSystem($message){
-		self::$patching_system_dirty = true;
-		if (!Debug::IsImmediateFlushingEnabled()) Debug::EnableImmediateFlushing();
-		Debug::Write($message);
+	public static function WriteToPatchingSystem($message) {
+		self::$patching_system_is_dirty = true;
+		if (self::$patching_system_logger === null) self::$patching_system_logger = new MultiMessage();
+		if (!($message instanceof Message)) $message = new InfoMessage($message);
+		self::$patching_system_logger[] = $message;
 	}
-	public static function HasPatch($patcher,$patch){
+	public static function HasPatch($patcher,$patch) {
 		$current = self::GetPatch($patcher);
 		return !is_null($current) && $current >= $patch;
 	}
 	public static function BeginPatch($patcher,$patch,$description=null){
 		if (!self::HasPatch($patcher,$patch)) {
 			if (!self::IsPatchingSystemDirty()){
-				self::$patching_system_dirty = true;
-				Debug::EnableImmediateFlushing();
-				Debug::Write('<b>Upgrading module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
+				self::WriteToPatchingSystem('<b>Upgrading module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
 			}
-			if (is_null($description))
-				Debug::Write('Applying patch {'.$patcher.':'.$patch.'}...');
-			else
-				Debug::Write('Applying patch {'.$patcher.':'.$patch.'}: '.$description.'...');
+			self::WriteToPatchingSystem('Applying patch {'.$patcher.':'.$patch.'}'.($description===null?'':': '.$description).'...');
 			self::$patching_system_open_patcher = $patcher;
 			self::$patching_system_open_patch = $patch;
 			return true;
@@ -495,7 +491,7 @@ class Database {
 	}
 	public static function ApplyPatch(){
 		self::SetPatch(self::$patching_system_open_patcher,self::$patching_system_open_patch);
-		Debug::Write('Patch {'.self::$patching_system_open_patcher.':'.self::$patching_system_open_patch.'} applied.');
+		self::WriteToPatchingSystem(new SuccessMessage('Patch {'.self::$patching_system_open_patcher.':'.self::$patching_system_open_patch.'} applied.'));
 		self::$patching_system_open_patcher = null;
 		self::$patching_system_open_patch = null;
 	}

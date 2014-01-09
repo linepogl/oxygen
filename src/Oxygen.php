@@ -99,7 +99,16 @@ class Oxygen {
 		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
 
 
-		Database::Upgrade();
+		$logger = new MultiMessage();
+		$logger->WithOnAdd(function(Message $m){
+			if (Oxygen::IsActionModeLong())
+				Progress::Write($m);
+			elseif (!Oxygen::IsActionModeRaw()) {
+				Debug::EnableImmediateFlushing();
+				Debug::Write($m->AsString());
+			}
+		});
+		Database::Upgrade(false,$logger);
 
 	}
 
@@ -801,25 +810,12 @@ class Oxygen {
 		echo "var oxygen_exceptions = {};";
 		echo "window.onerror = function(msg,url,line){ if (oxygen_exceptions[msg+url+line]===undefined) { new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); oxygen_exceptions[msg+url+line]=1; } else { oxygen_exceptions[msg+url+line]++; } };";
 		echo Js::END;
-
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery.js"></script>'.Js::BEGIN.'jQuery.noConflict();'.Js::END; // jQuery has to be loaded before prototype and set to no-conflict mode.
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery-ui.js"></script>';
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/jquery-tagsinput.js"></script>';
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/prototype.js"></script>';
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/scriptaculous-effects.js"></script>';
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/date.js"></script>';
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/fix.js"></script>';
-
-
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.js"></script>';
-		echo '<link href="'.__BASE__.'oxy/css/reset.css" rel="stylesheet" type="text/css" />';
 		echo '<link href="'.__BASE__.'oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
-
 		if (Browser::IsIOS()) {
 			echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
 		}
-
+		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.js"></script>';
 		$r = ob_get_clean();
 		return $r;
 	}
