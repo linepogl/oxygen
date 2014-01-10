@@ -12,7 +12,7 @@ class ActionOxygenErrs extends ConsoleAction {
 		$c = is_array($a) ? count($a) : 0;
 		return $c == 0 ? '' : strval($c);
 	}
-	public function GetTabTitle(){ return 'Erros'; }
+	public function GetTabTitle(){ return 'Errors'; }
 	public function GetTitle(){ return 'Error reports'; }
 
 	public function IsPermitted(){

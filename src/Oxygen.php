@@ -99,16 +99,15 @@ class Oxygen {
 		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
 
 
-		$logger = new MultiMessage();
-		$logger->WithOnAdd(function(Message $m){
-			if (Oxygen::IsActionModeLong())
-				Progress::Write($m);
-			elseif (!Oxygen::IsActionModeRaw()) {
-				Debug::EnableImmediateFlushing();
-				Debug::Write($m->AsString());
-			}
+		$logger = (new MultiMessage())->WithOnAdd(function(Message $m){
+			Debug::EnableImmediateFlushing();
+			Debug::Write($m->AsString());
 		});
 		Database::Upgrade(false,$logger);
+		if (!$logger->IsEmpty()){
+			echo '<br/><pre>Please refresh.</pre>';
+			die;
+		}
 
 	}
 

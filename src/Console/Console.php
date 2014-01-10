@@ -83,6 +83,10 @@ class Console {
 		echo '<img src="oxy/img/console_tab_reset.png" /><br/>';
 		echo 'Reset all';
 		echo '</a>';
+		echo '<a href="'.new Html(new ActionOxygenUpgrade()).'" style="float:right;">';
+		echo '<img src="oxy/img/console_tab_upgrade.png" /><br/>';
+		echo 'Upgrade';
+		echo '</a>';
 		echo '<div style="float:right;height:100px;background:url(oxy/img/console_tab_shadow.png);">'.new Spacer().'</div>';
 
 		self::EndHeader(self::$margin);

@@ -85,10 +85,9 @@ class Database {
 			try { unlink($lock_filename); } catch(Exception $ex){}
 		}
 		if ($needs_refresh){
-			Debug::Write('Upgrade complete.<br/>Total queries: '.(self::$count_queries).'.<br/><br/><br/>Please refresh.<br/><br/><br/><br/>');
-			exit();
+			Database::WriteToPatchingSystem(new SuccessMessage('Upgrade complete.'));
+			Database::WriteToPatchingSystem(new InfoMessage('Total queries: '.(self::$count_queries)));
 		}
-
 		self::$upgrade_running = false;
 	}
 
