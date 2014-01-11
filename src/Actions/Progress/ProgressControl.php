@@ -12,6 +12,12 @@ class ProgressControl extends Control {
 	private $forward_request = false;
 	public function WithForwardRequest($value){ $this->forward_request = $value; return $this; }
 
+	private $show_progress_bar = true;
+	public function WithShowProgressBar($value){ $this->show_progress_bar = $value; return $this; }
+
+	private $show_cancel_button = true;
+	public function WithShowCancelButton($value){ $this->show_cancel_button = $value; return $this; }
+
 	public function Render(){
 		//$window = ID::Random();
 		Progress::Clear();
@@ -23,10 +29,10 @@ class ProgressControl extends Control {
 
 		echo '<div id="'.$this->name.'_log" class="overflow" style="height:'.$this->height.'px;border:1px solid #cccccc;padding:2px;margin-bottom:10px;"></div>';
 		echo '<table id="'.$this->name.'_table" width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
-		echo '<td class="notext nowrap">'.ButtonBox::Make()->WithValue(Lemma::Pick('Cancel'))->WithOnClick($this->name.'_Cancel();').new Spacer(3).'</td>';
+		if ($this->show_cancel_button) echo '<td class="notext nowrap">'.ButtonBox::Make()->WithValue(Lemma::Pick('Cancel'))->WithOnClick($this->name.'_Cancel();').new Spacer(3).'</td>';
 		echo '<td class="nowrap hcenter" id="'.$this->name.'_clock">0:00</td>';
 		echo '<td class="notext nowrap">'.new Spacer(3).'</td>';
-		echo '<td class="expand notext"><div style="border:solid 1px #999999;"><div id="'.$this->name.'_progress_bar" class="notext" style="width:0%;background:#dddddd;">'.new Spacer(1,11).'</div></div></td>';
+		echo '<td class="expand notext"><div style="border:solid 1px #999999;'.($this->show_progress_bar?'':'display:none;').'"><div id="'.$this->name.'_progress_bar" class="notext" style="width:0%;background:#dddddd;">'.new Spacer(1,11).'</div></div></td>';
 		echo '<td class="notext nowrap">'.new Spacer(6).'<img src="oxy/img/ajax.gif" width="12" height="12" />'.new Spacer(3).'</td>';
 		echo '<td class="nowrap" id="'.$this->name.'_progress">0%</td>';
 		echo '</tr></table>';

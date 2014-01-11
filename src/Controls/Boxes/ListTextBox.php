@@ -5,7 +5,7 @@ class ListTextBox extends Box {
 	private $width = '100%';
 	public function WithWidth($value){ $this->width = $value; return $this; }
 
-	private $height = '20px';
+	private $height = '10px';
 	public function WithHeight($value){ $this->width = $value; return $this; }
 
 	private $css_style = '';
