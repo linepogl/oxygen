@@ -596,8 +596,8 @@ abstract class XItem extends XValue implements Serializable {
 	/** @return static */ public static final function Temp($id=null){ return static::Meta()->MakeTempItem($id); }
 	/** @return XItem */ public static final function TempGeneric($classname,$id=null){ return XMeta::Of($classname)->MakeTempItem($id); }
 
-	/** @return static */ public static final function Make(){ return static::Meta()->MakePermItem(); }
-	/** @return XItem */ public static final function MakeGeneric($classname){ return XMeta::Of($classname)->MakePermItem(); }
+	/** @return static */ public static final function Make($id=null){ return static::Meta()->MakePermItem($id); }
+	/** @return XItem */ public static final function MakeGeneric($classname,$id=null){ return XMeta::Of($classname)->MakePermItem($id); }
 
 
 	/** @return XAggr */ public static final function Aggr($selectors){ return static::Meta()->Aggr($selectors); }

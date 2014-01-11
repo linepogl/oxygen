@@ -222,7 +222,7 @@ class XMeta extends stdClass {
 	/** @return XItem */
 	public final function MakeTempItem($id = null){
 		$classname = $this->__classname;
-		if (is_null($id))
+		if ($id === null)
 			$id = $this->GetNextTempID();
 		elseif (!($id instanceof ID))
 			$id = new ID($id);
@@ -232,12 +232,14 @@ class XMeta extends stdClass {
 	}
 
 	/** @return XItem */
-	public final function MakePermItem(){
+	public final function MakePermItem($id = null){
 		$classname = $this->__classname;
-		if ($this->id->IsDBAliasComplex())
-			$id = $this->GetNextTempID();
-		else
-			$id = $this->GetNextPermID();
+		if ($id === null) {
+			if ($this->id->IsDBAliasComplex())
+				$id = $this->GetNextTempID();
+			else
+				$id = $this->GetNextPermID();
+		}
 		$r = new $classname($id,true);
 		if (!$this->id->IsDBAliasComplex()) $this->SaveInCache($id->AsInt(),$r);
 		return $r;

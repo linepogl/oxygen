@@ -68,7 +68,7 @@ class Database {
 			$f = fopen($lock_filename,'w');
 			if (flock($f,LOCK_EX)){
 				if ($force || self::NeedsUpgrade()) {
-					set_time_limit(0);
+					try{ set_time_limit(0); }catch(Exception $ex){}
 					Database::RequireConnection();
 					Database::ClearPatchingSystem();
 					foreach (Oxygen::GetDatabaseUpgradeFiles() as $filename){
