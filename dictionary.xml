@@ -20,7 +20,7 @@
 	<lemma name="Zip"><en>Postal code</en><fr>Code postal</fr><el>Τ.Κ.</el></lemma>
 	<lemma name="Country"><en>Country</en><fr>Pays</fr><el>Χώρα</el></lemma>
 	<lemma name="Comments"><en>Comments</en><fr>Commentaires</fr><el>Σχόλια</el></lemma>
-	<lemma name="Username"><en>Username</en><fr>Utilisateur</fr><el>Username</el></lemma>
+	<lemma name="Username"><en>Username</en><fr>Identifiant</fr><el>Username</el></lemma>
 	<lemma name="Password"><en>Password</en><fr>Mot de passe</fr><el>Κωδικός</el></lemma>
 	<lemma name="OldPassword"><en>Old password</en><fr>Ancien mot de passe</fr><el>Παλιός κωδικός</el></lemma>
 	<lemma name="NewPassword"><en>New password</en><fr>Nouveau mot de passe</fr><el>Νέος κωδικός</el></lemma>
@@ -127,6 +127,7 @@
 	<lemma name="ActionChangePassword"><en>Change password</en><fr>Mot de passe</fr><el>Αλλαγή κωδικού</el></lemma>
 	<lemma name="ActionChangeProfile"><en>Change profile</en><fr>Profil d'un utilisateur</fr><el>Προφίλ χρήστη</el></lemma>
 	<lemma name="ActionCreateUser"><en>Create user</en><fr>Création d'un utilisateur</fr><el>Δημιουργία χρήστη</el></lemma>
+	<lemma name="ActionForgottenPassword"><en>Forgotten your password?</en><fr>Mot de passe oublié ?</fr><el>Υπενθύμιση κωδικού</el></lemma>
 
 	<lemma name="MsgUnderConstruction">
 		<en>Under construction.</en>
