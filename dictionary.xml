@@ -71,6 +71,7 @@
 	<lemma name="Next"><en>Next</en><fr>Suivant</fr><el>Επόμενο</el></lemma>
 	<lemma name="Previous"><en>Previous</en><fr>Précédent</fr><el>Προηγούμενο</el></lemma>
 	<lemma name="Modify"><en>Modify</en><fr>Modifier</fr><el>Επεξεργασία</el></lemma>
+	<lemma name="Continue"><en>Continue</en><fr>Continuer</fr><el>Συνέχεια</el></lemma>
 
 	<lemma name="Settings"><en>Settings</en><fr>Paramètres</fr><el>Ρυθμίσεις</el></lemma>
 
