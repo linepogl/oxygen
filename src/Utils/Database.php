@@ -59,7 +59,8 @@ class Database {
 	private static $upgrade_running = false;
 	public static function Upgrade($force=false,MultiMessage $logger = null){
 		if (self::$upgrade_running) return;
-		if (is_null(self::$cx) || !self::$cx->is_managed) return;
+		if (is_null(self::$cx)) return;
+		if (!$force && !self::$cx->is_managed) return;
 		self::$upgrade_running = true;
 
 		$needs_refresh = false;
@@ -85,6 +86,7 @@ class Database {
 			try { unlink($lock_filename); } catch(Exception $ex){}
 		}
 		if ($needs_refresh){
+			self::ResetCaches();
 			Database::WriteToPatchingSystem(new SuccessMessage('Upgrade complete.'));
 			Database::WriteToPatchingSystem(new InfoMessage('Total queries: '.(self::$count_queries)));
 		}

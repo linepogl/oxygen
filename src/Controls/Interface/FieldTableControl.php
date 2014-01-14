@@ -99,15 +99,15 @@ class FieldTableControl extends Control {
 
 			for ($i=0; $i<count($this->labels); $i++){
 				if ($this->labels[$i]=='-'){
-					echo '<tr><td class="notext" style="border-bottom:1px solid #cccccc;">'.new Spacer(1,10).'</td></tr>';
-					echo '<tr><td class="notext">'.new Spacer(1,10).'</td></tr>';
+					echo '<tr><td class="notext '.$this->row_css_classes[$i].'" style="border-bottom:1px solid #cccccc;">'.new Spacer(1,10).'</td></tr>';
+					echo '<tr><td class="notext '.$this->row_css_classes[$i].'">'.new Spacer(1,10).'</td></tr>';
 				}
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
-					echo '<tr class="'.$vcode.'"><td style="text-align:left;padding:15px 1px 1px 1px;">'.$this->labels[$i].($this->asterisks[$i]?'<span style="word-spacing:1px;font-size:1px;">&nbsp;<img src="oxy/img/asterisk.gif" /></span>':'').'</td></tr>';
-					echo '<tr class="'.$vcode.'"><td style="text-align:left;">'.$this->contents[$i].'</td></tr>';
+					echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:15px 1px 1px 1px;">'.$this->labels[$i].($this->asterisks[$i]?'<span style="word-spacing:1px;font-size:1px;">&nbsp;<img src="oxy/img/asterisk.gif" /></span>':'').'</td></tr>';
+					echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;">'.$this->contents[$i].'</td></tr>';
 					if (!is_null($vcode) && !$this->hide_validators)
-						echo '<tr class="'.$vcode.'"><td style="text-align:left;padding:1px 0 0 0">'.new MessageControl($this->validators[$i]).'</td></tr>';
+						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:1px 0 0 0">'.new MessageControl($this->validators[$i]).'</td></tr>';
 				}
 			}
 			echo '</table>';

@@ -34,7 +34,7 @@ class ProgressControl extends Control {
 		echo '<td class="notext nowrap">'.new Spacer(3).'</td>';
 		echo '<td class="expand notext"><div style="border:solid 1px #999999;'.($this->show_progress_bar?'':'display:none;').'"><div id="'.$this->name.'_progress_bar" class="notext" style="width:0%;background:#dddddd;">'.new Spacer(1,11).'</div></div></td>';
 		echo '<td class="notext nowrap">'.new Spacer(6).'<img src="oxy/img/ajax.gif" width="12" height="12" />'.new Spacer(3).'</td>';
-		echo '<td class="nowrap" id="'.$this->name.'_progress">0%</td>';
+		echo '<td class="nowrap" id="'.$this->name.'_progress" style="'.($this->show_progress_bar?'':'display:none;').'">0%</td>';
 		echo '</tr></table>';
 
 		echo '<div id="'.$this->name.'_cancelling" style="display:none;"><img src="oxy/img/ajax.gif" /> '.Lemma::Pick('MsgCancelling').'</div>';

@@ -31,6 +31,8 @@ class SelectBox extends Box {
 	private $list_group_captions = array();
 	private $last_index_from = -1;
 
+	public function Count(){ return count($this->list_values); }
+
 	/** @return static */
 	public function Add($value,$caption=null){
 		$this->list_values[] = $value;
