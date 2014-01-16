@@ -1,3 +1,6 @@
+$BASE : '../../' !default;
+@function oxy-url($url){ @return url($BASE + $url);  }
+
 /*
  *
  * Reset
@@ -6,7 +9,7 @@
 html { font-family: sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 body { margin: 0; background:#ffffff; }
 * { vertical-align:baseline; }
-img { vertical-align:middle;  }
+img { vertical-align:middle; }
 th, td { vertical-align:middle; }
 th { text-align:center; }
 *:focus { outline: 0; -moz-outline:0; }
@@ -49,7 +52,6 @@ table { border-collapse:separate; border-spacing:0; border-color:#000000; }
 hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 form { margin:0; }
 @media print { * { overflow:visible; } body { background:#ffffff; } }
-
 
 
 
@@ -170,12 +172,12 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .message-panel-info     { background:#f4f4f4; border-color:#cccccc; }
 
 .message          { text-align:left; padding:2px 2px 2px 19px; background-position:1px 50%; background-repeat:no-repeat; }
-.message-bug      { background-image:url(../ico/Bug16.gif); }
-.message-error    { background-image:url(../ico/Error16.gif); }
-.message-warning  { background-image:url(../ico/Warning16.gif); }
-.message-question { background-image:url(../ico/Question16.gif); }
-.message-success  { background-image:url(../ico/Success16.gif); }
-.message-info     { background-image:url(../ico/Info16.gif); }
+.message-bug      { background-image:oxy-url('oxy/ico/Bug16.gif'); }
+.message-error    { background-image:oxy-url('oxy/ico/Error16.gif'); }
+.message-warning  { background-image:oxy-url('oxy/ico/Warning16.gif'); }
+.message-question { background-image:oxy-url('oxy/ico/Question16.gif'); }
+.message-success  { background-image:oxy-url('oxy/ico/Success16.gif'); }
+.message-info     { background-image:oxy-url('oxy/ico/Info16.gif'); }
 
 .progress-message { padding-top:2px; padding-bottom:2px; border-bottom:1px solid #fcfcfc; }
 
@@ -204,14 +206,14 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .checkbox-anchor                    { white-space:nowrap; }
 .checkbox                           { width:15px; height:15px; background-repeat:no-repeat; background-position:50% 50%; vertical-align:middle;}
-.checkbox-checked                   { background-image:url(../img/checkbox-checked.gif                  ); }
-.checkbox-unchecked                 { background-image:url(../img/checkbox-unchecked.gif                ); }
-.checkbox-dirty-checked             { background-image:url(../img/checkbox-dirty-checked.gif            ); }
-.checkbox-dirty-unchecked           { background-image:url(../img/checkbox-dirty-unchecked.gif          ); }
-.checkbox-readonly-checked          { background-image:url(../img/checkbox-readonly-checked.gif         ); }
-.checkbox-readonly-unchecked        { background-image:url(../img/checkbox-readonly-unchecked.gif       ); }
-.checkbox-readonly-dirty-checked    { background-image:url(../img/checkbox-readonly-dirty-checked.gif   ); }
-.checkbox-readonly-dirty-unchecked  { background-image:url(../img/checkbox-readonly-dirty-unchecked.gif ); }
+.checkbox-checked                   { background-image:oxy-url('oxy/img/checkbox-checked.gif'                  ); }
+.checkbox-unchecked                 { background-image:oxy-url('oxy/img/checkbox-unchecked.gif'                ); }
+.checkbox-dirty-checked             { background-image:oxy-url('oxy/img/checkbox-dirty-checked.gif'            ); }
+.checkbox-dirty-unchecked           { background-image:oxy-url('oxy/img/checkbox-dirty-unchecked.gif'          ); }
+.checkbox-readonly-checked          { background-image:oxy-url('oxy/img/checkbox-readonly-checked.gif'         ); }
+.checkbox-readonly-unchecked        { background-image:oxy-url('oxy/img/checkbox-readonly-unchecked.gif'       ); }
+.checkbox-readonly-dirty-checked    { background-image:oxy-url('oxy/img/checkbox-readonly-dirty-checked.gif'   ); }
+.checkbox-readonly-dirty-unchecked  { background-image:oxy-url('oxy/img/checkbox-readonly-dirty-unchecked.gif' ); }
 
 
 
@@ -236,7 +238,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .formPaneInnerWrap  { position:absolute; float:left; left:0; cursor:pointer; }
 .formPaneAnchorWrap { position:absolute; float:right; right:0; cursor:pointer; }
-.formPaneAnchor     { display:inline-block; background:url(../img/form-pane-anchor.png) 50% 50% no-repeat; width:15px; height:15px; }
+.formPaneAnchor     { display:inline-block; background:oxy-url('oxy/img/form-pane-anchor.png') 50% 50% no-repeat; width:15px; height:15px; }
 
 .formLocked       { background-color:#fbfbfb; border-color:#999999; color:#999999; }
 .formLocked:focus { background-color:#fafafa; border-color:#777777; color:#777777; }
@@ -244,9 +246,9 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDown          { position:absolute; display:block; z-index:1000; border-radius:5px; border:1px solid #b3b3b3; background-color:#ffffff; font:normal 12px/14px Helvetica,Arial,sans-serif; margin-top:0; }
 .formDropDown a        { color:#333333; text-decoration:none; }
 .formDropDown a:hover  { color:#000000; text-decoration:none; }
-.formDropDownHook      { height:7px; background:url(../img/form-dropdown-hook.gif) 50% 0 no-repeat; margin-top:-7px; }
-.formDropDownHead      { height:16px; background:url(../img/form-dropdown-head-bg.gif) 0 0 repeat-x; border-bottom:1px solid #c5c0cf; border-radius:5px 5px 0 0; padding:8px 5px; font:normal 12px/18px Helvetica,Arial,sans-serif!important; text-transform:uppercase; text-decoration:none; text-align:center; color:#666666; }
-.formDropDownFoot      { height:16px; background:url(../img/form-dropdown-foot-bg.gif) 0 0 repeat-x; border-top:1px solid #dddddd; border-radius:0 0 5px 5px; padding:7px 5px; font:normal 12px/18px Helvetica,Arial,sans-serif!important; color:#666666; }
+.formDropDownHook      { height:7px; background:oxy-url('oxy/img/form-dropdown-hook.gif') 50% 0 no-repeat; margin-top:-7px; }
+.formDropDownHead      { height:16px; background:oxy-url('oxy/img/form-dropdown-head-bg.gif') 0 0 repeat-x; border-bottom:1px solid #c5c0cf; border-radius:5px 5px 0 0; padding:8px 5px; font:normal 12px/18px Helvetica,Arial,sans-serif!important; text-transform:uppercase; text-decoration:none; text-align:center; color:#666666; }
+.formDropDownFoot      { height:16px; background:oxy-url('oxy/img/form-dropdown-foot-bg.gif') 0 0 repeat-x; border-top:1px solid #dddddd; border-radius:0 0 5px 5px; padding:7px 5px; font:normal 12px/18px Helvetica,Arial,sans-serif!important; color:#666666; }
 .formDropDownFootRight { float:right; margin-right:10px; }
 .formDropDownBody      { padding:10px; }
 
@@ -258,10 +260,10 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDownFoot a.button            { float:left; display:block; color:#777777!important; cursor:pointer; border:1px solid #b0b0b0; border-radius:3px; background:#ffffff; font:normal 10px/15px Trebuchet MS, sans-serif!important; text-transform:uppercase; text-decoration:none; height:15px; padding:0 6px; margin-right:3px; }
 .formDropDownFoot a.button:hover      { color:#666666!important; border-color:#777777; background-color:#f4f4f4; text-decoration:none; }
 .formDropDownFoot a.button.selected   { color:#000000!important; border-color:#333333; background-color:#d3d6c2; text-decoration:none; }
-.formDropDownHead a.button-prev       { float:left;  width:15px; height:15px; background:#ffffff url(../img/form-dropdown-prev.png) 50% 50% no-repeat; }
-.formDropDownHead a.button-next       { float:right; width:15px; height:15px; background:#ffffff url(../img/form-dropdown-next.png) 50% 50% no-repeat; }
-.formDropDownFoot a.button-prev       { float:right; width:18px; height:15px; padding:0; background:#ffffff url(../img/form-dropdown-pprev.png) 50% 50% no-repeat; border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; margin:0; }
-.formDropDownFoot a.button-next       { float:right; width:18px; height:15px; padding:0; background:#ffffff url(../img/form-dropdown-nnext.png) 50% 50% no-repeat; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
+.formDropDownHead a.button-prev       { float:left;  width:15px; height:15px; background:#ffffff oxy-url('oxy/img/form-dropdown-prev.png') 50% 50% no-repeat; }
+.formDropDownHead a.button-next       { float:right; width:15px; height:15px; background:#ffffff oxy-url('oxy/img/form-dropdown-next.png') 50% 50% no-repeat; }
+.formDropDownFoot a.button-prev       { float:right; width:18px; height:15px; padding:0; background:#ffffff oxy-url('oxy/img/form-dropdown-pprev.png') 50% 50% no-repeat; border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; margin:0; }
+.formDropDownFoot a.button-next       { float:right; width:18px; height:15px; padding:0; background:#ffffff oxy-url('oxy/img/form-dropdown-nnext.png') 50% 50% no-repeat; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
 .formDropDownFoot a.button-next:hover { border-left:1px dotted #aaaaaa; }
 .formDropDownFoot a.button-am         { float:right; padding:0 3px; border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; margin:0; }
 .formDropDownFoot a.button-pm         { float:right; padding:0 3px; border-left:1px dotted #aaaaaa; border-top-left-radius:0; border-bottom-left-radius:0; margin:0; }
@@ -270,7 +272,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDownFoot .formPane:focus     { border:1px solid #bbbbff!important; background:#ffffff!important;}
 
 .formDate                         { width:9.0em; text-align:left; cursor:pointer; }
-.formDateAnchor                   { background:url(../img/form-date-anchor.png) 50% 50% no-repeat; }
+.formDateAnchor                   { background:oxy-url('oxy/img/form-date-anchor.png') 50% 50% no-repeat; }
 .formDateDropDown                 { width:210px; }
 .formDateDropDown td              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }
 .formDateDropDown th              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }
@@ -292,7 +294,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formColorDropDown td.color a:hover { border:1px solid #000000; margin:0; }
 
 .formTime                             { width:7em; text-align:left; cursor:pointer; }
-.formTimeAnchor                       { background:url(../img/form-time-anchor.png) 50% 50% no-repeat; }
+.formTimeAnchor                       { background:oxy-url('oxy/img/form-time-anchor.png') 50% 50% no-repeat; }
 .formTimeDropDown                     { width:200px; }
 .formTimeDropDown .clock              { font:bold 18px/20px Helvetica,Arial,sans-serif!important; color:#666666!important; }
 .formTimeDropDown .clock span         { padding:3px 2px 1px 3px; border-radius:3px; cursor:pointer; }
@@ -303,7 +305,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .formTimeSpan                         { width:14.0em; text-align:center; cursor:pointer; }
 .formTimeSpanInner                    { text-align:center; white-space:nowrap; }
-.formTimeSpanAnchor                   { background:url(../img/form-time-anchor.png) 50% 50% no-repeat; }
+.formTimeSpanAnchor                   { background:oxy-url('oxy/img/form-time-anchor.png') 50% 50% no-repeat; }
 
 
 .formSelectDropDown .formDropDownBody { padding:0; }
@@ -312,7 +314,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formSelectDropDown a.option.selected { background:#d3d6c2!important; color:#000000!important; }
 
 select[size="0"].formPane,select[size="1"].formPane { -webkit-appearance:none!important; }
-.chrome select[size="0"].formPane,.chrome select[size="1"].formPane, .safari select[size="0"].formPane,.safari select[size="1"].formPane { background-image:url(../img/form-pane-anchor.png);background-position:100% 50%;background-repeat:no-repeat; }
+.chrome select[size="0"].formPane,.chrome select[size="1"].formPane, .safari select[size="0"].formPane,.safari select[size="1"].formPane { background-image:oxy-url('oxy/img/form-pane-anchor.png');background-position:100% 50%;background-repeat:no-repeat; }
 .formDropDownPane { padding-right:20px; }
 
 .tagsinput                  { display:inline-block; overflow-y:auto; }
