@@ -83,10 +83,6 @@ abstract class Action extends XValue {
 	public function OnAfterRender() {}
 	public function PostProcess($content) { return $content; }
 
-	public function GetHead(){
-		return Oxygen::GetHead();
-	}
-
 	private $content_compromised = false;
 	public function ContentCompromised(){ return $this->content_compromised; }
 

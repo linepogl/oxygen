@@ -781,7 +781,7 @@ class Oxygen {
 
 
 	/** @return string */
-	public static function GetHead(){
+	public static function GetHead($with_external_links = true){
 
 		ob_start();
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
@@ -809,7 +809,7 @@ class Oxygen {
 		echo "var oxygen_exceptions = {};";
 		echo "window.onerror = function(msg,url,line){ if (oxygen_exceptions[msg+url+line]===undefined) { new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); oxygen_exceptions[msg+url+line]=1; } else { oxygen_exceptions[msg+url+line]++; } };";
 		echo Js::END;
-		echo '<link href="'.__BASE__.'oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
+		if ($with_external_links) echo '<link href="'.__BASE__.'oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
 		if (Browser::IsIOS()) {
 			echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
