@@ -55,6 +55,34 @@ form { margin:0; }
 
 
 
+/*
+ *
+ * Font
+ *
+ */
+@font-face {
+	font-family: 'oxygen';
+	src:oxy-url('oxy/fon/oxygen.eot');
+	src:oxy-url('oxy/fon/oxygen.eot?#iefix') format('embedded-opentype'),
+	    oxy-url('oxy/fon/oxygen.woff') format('woff'),
+	    oxy-url('oxy/fon/oxygen.ttf') format('truetype'),
+	    oxy-url('oxy/fon/oxygen.svg#oxygen') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.oxy-ico {
+	font-family: 'oxygen';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
 
 
 /*
@@ -145,6 +173,7 @@ table.report .selected td { background:#fafaea; }
 .fieldtable td.value { text-align:left; }
 .ajaxdialog { border:5px solid #aaaaaa;padding:0; background:#ffffff; }
 .ajaxdialog h1 { font:24px/24px Trebuchet MS,sans-serif; color:#999999; padding:15px 20px 10px 15px; border-bottom:1px solid #999999; margin:0; }
+.ajaxdialog h1 .glyph { font-size:24px; }
 .ajaxdialoginner { padding:15px 20px 15px 15px; margin:0; }
 .ie7 .ajaxdialoginner { overflow-x:hidden; overflow-y:auto; }
 .ajaxdialogfog { background:#000000; }

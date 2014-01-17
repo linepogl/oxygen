@@ -33,10 +33,16 @@ abstract class Action extends XValue {
 	public function GetWidth(){ return 500; }
 	public function GetHeight(){ return 50; }
 
+	public function GetGlyphIcon(){ return new Glyph('oxy-ico',0xe601); }
+	public function UseGlyph(){ return Oxygen::AreGlyphsPreferred(); }
+
 	public function GetIconName() { return 'oxy/ico/Icon'; }
 	public function GetIconType() { return Oxygen::GetDefaultIconType(); }
 	public function GetIconSrc($size=16){ return $this->GetIconName().$size.'.'.$this->GetIconType(); }
-	public function GetIcon($size=16) { return '<img class="icon" src="'.$this->GetIconSrc($size).'" width="'.$size.'" height="'.$size.'" alt="" />'; }
+	public function GetImageIcon($size=16) { return new Icon($this->GetIconName(),$size,$this->GetIconType()); }
+
+	public function GetIcon() { return $this->UseGlyph() ? $this->GetGlyphIcon() : $this->GetImageIcon(); }
+
 	public final function GetIconScr16(){ return $this->GetIconSrc(16); }
 	public final function GetIconScr32(){ return $this->GetIconSrc(32); }
 	public final function GetIconScr48(){ return $this->GetIconSrc(48); }

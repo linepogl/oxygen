@@ -1,7 +1,6 @@
 <?php
 
 class Icon extends Control {
-
 	private $iconname;
 	private $iconsize;
 	private $icontype;
@@ -13,7 +12,4 @@ class Icon extends Control {
 	public function Render() {
 		echo '<img class="icon" src="'.$this->iconname.$this->iconsize.'.'.$this->icontype.'" width="'.$this->iconsize.'" height="'.$this->iconsize.'" alt="" />';
 	}
-
-
 }
-

@@ -933,6 +933,9 @@ class Oxygen {
 	public static function GetDefaultIconType(){ return self::$default_icon_type; }
 	public static function SetDefaultIconType($value){ self::$default_icon_type = $value; }
 
+	private static $glyphs_preferred = false;
+	public static function AreGlyphsPreferred(){ return self::$glyphs_preferred; }
+	public static function SetGlyphsPreferred($value){ self::$glyphs_preferred = $value; }
 
 
 
