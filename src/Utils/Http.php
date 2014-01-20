@@ -7,6 +7,9 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
   public final function OffsetSet($offset, $value) {	throw new Exception('Http arrays are readonly.'); }
 	public final function OffsetUnset($offset) { throw new Exception('Http arrays are readonly.'); }
 
+	/** @return HttpValue */ public static function POST($name){ return Http::$POST[$name]; }
+	/** @return HttpValue */ public static function GET($name){ return Http::$GET[$name]; }
+	/** @return HttpValue */ public static function ANY($name){ return Http::$ANY[$name]; }
 	/** @return HttpValue */ public static function Read($nane){ return Http::$ANY[$nane]; }
 
 	public static function IsPost(){
@@ -87,8 +90,8 @@ final class HttpGet extends Http {
 final class HttpAny extends Http {
 	public final function OffsetExists($offset) { return array_key_exists($offset,$_GET) || array_key_exists($offset,$_POST); }
 	/** @return HttpValue */ public function OffsetGet($offset) {
-		$a = Http::$GET[$offset]->AsStringOrNull();
-		$b = Http::$POST[$offset]->AsStringOrNull();
+		$a = Http::GET($offset)->AsStringOrNull();
+		$b = Http::POST($offset)->AsStringOrNull();
 		$v = null; if (!is_null($a) && !is_null($b)) $v = $a.','.$b;	elseif (!is_null($a)) $v = $a; elseif (!is_null($b)) $v = $b;
 		return new HttpValue($v);
 	}

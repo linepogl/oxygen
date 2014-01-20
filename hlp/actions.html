@@ -109,7 +109,7 @@ class ActionDisplayBook extends Action {
 	// by the controller, so it will have to retrieve the arguments from the query string.
 	//
 	public static function Make(){
-		return new static( Book::Pick( Http::$GET['id']->AsID() ) );   // call of the constructor.
+		return new static( Book::Pick( Http::GET('id')->AsID() ) );   // call of the constructor.
 	}
 
 

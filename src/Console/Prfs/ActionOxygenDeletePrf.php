@@ -9,7 +9,7 @@ class ActionOxygenDeletePrf extends Action {
 	private $prf;
 	public function __construct($prf){ parent::__construct(); $this->prf = $prf; }
 	public function GetUrlArgs(){ return array('prf'=>$this->prf) + parent::GetUrlArgs(); }
-	public static function Make(){ return new static(Http::$GET['prf']->AsString()); }
+	public static function Make(){ return new static(Http::GET('prf')->AsString()); }
 
 
 	public function IsPermitted(){

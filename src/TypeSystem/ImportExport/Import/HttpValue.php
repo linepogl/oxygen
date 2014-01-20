@@ -3,8 +3,10 @@
 
 class HttpValue extends ImportValue {
 
+	public function HasValue(){ return $this->value !== null; }
+
 	public function AsStringArray(){
-		if (is_null($this->value) || $this->value==='')
+		if ($this->value===null || $this->value==='')
 			return array();
 		else if (is_array($this->value))
 			return $this->value;
@@ -12,7 +14,7 @@ class HttpValue extends ImportValue {
 			return explode(',',$this->value);
 	}
 	public function AsIntegerArray(){
-		if (is_null($this->value) || $this->value==='')
+		if ($this->value===null || $this->value==='')
 			return array();
 		else if (is_array($this->value)){
 			$a = array();
@@ -28,16 +30,16 @@ class HttpValue extends ImportValue {
 		}
 	}
   public function AsIDArray(){
-	  if (is_null($this->value) || $this->value==='')
+	  if ($this->value===null || $this->value==='')
 			return array();
   	else if (is_array($this->value)){
 			$r = array();
-			foreach ($this->value as $key=>$s) $r[$key]= is_null($s) || $s=='' ? null : ID::ParseHex($s);
+			foreach ($this->value as $key=>$s) $r[$key]= $s===null||$s=='' ? null : ID::ParseHex($s);
   		return $r;
 		}
   	else {
 			$r = array();
-			foreach (explode(',',$this->value) as $s) $r[]= is_null($s) || $s=='' ? null : ID::ParseHex($s);
+			foreach (explode(',',$this->value) as $s) $r[]= $s===null||$s=='' ? null : ID::ParseHex($s);
   		return $r;
 		}
 	}

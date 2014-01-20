@@ -123,7 +123,7 @@ class ActionModifyBook extends Action {
 	private $book;
 	public function __construct(Book $book){ parent::__construct(); $this->book = $book; }
 	public function GetUrlArgs(){ return array('id'=>$this->book) + parent::GetUrlArgs(); }
-	public static function Make(){ return new static(Book::Pick(Http::$GET['id']->AsID())); }
+	public static function Make(){ return new static(Book::Pick(Http::GET('id')->AsID())); }
 
 	public function IsPermitted(){ return true; }
 

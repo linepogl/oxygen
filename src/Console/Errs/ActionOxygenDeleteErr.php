@@ -9,7 +9,7 @@ class ActionOxygenDeleteErr extends Action {
 	private $err;
 	public function __construct($err){ parent::__construct(); $this->err = $err; }
 	public function GetUrlArgs(){ return array('err'=>$this->err) + parent::GetUrlArgs(); }
-	public static function Make(){ return new static(Http::$GET['err']->AsString()); }
+	public static function Make(){ return new static(Http::GET('err')->AsString()); }
 
 
 	public function IsPermitted(){

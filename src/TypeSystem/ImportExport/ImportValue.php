@@ -34,7 +34,7 @@ abstract class ImportValue {
 
 	/** @return Lemma|null      */ public function AsLemma()                { return $this->CastTo(MetaLemma::Type()); }
 	/** @return Lemma           */ public function AsLemmaOrEmpty()         { return $this->CastTo(MetaLemmaOrEmpty::Type() ); }
-	/** @return GemnericID|null */ public function AsGenericID()            { return $this->CastTo(MetaGenericID::Type()); }
+	/** @return GenericID|null  */ public function AsGenericID()            { return $this->CastTo(MetaGenericID::Type()); }
   /** @return XItem|null      */ public function AsGenericXItem()         { $r = $this->AsGenericID(); return is_null($r) ? $r : $r->ToXItem(); }
 
 
