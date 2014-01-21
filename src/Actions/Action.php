@@ -33,15 +33,12 @@ abstract class Action extends XValue {
 	public function GetWidth(){ return 500; }
 	public function GetHeight(){ return 50; }
 
-	public function GetGlyphIcon(){ return new Glyph('oxy-ico',0xe601); }
-	public function UseGlyph(){ return Oxygen::AreGlyphsPreferred(); }
-
-	public function GetIconName() { return 'oxy/ico/Icon'; }
+	public function GetIconName() { return null; }
 	public function GetIconType() { return Oxygen::GetDefaultIconType(); }
-	public function GetIconSrc($size=16){ return $this->GetIconName().$size.'.'.$this->GetIconType(); }
-	public function GetImageIcon($size=16) { return new Icon($this->GetIconName(),$size,$this->GetIconType()); }
-
-	public function GetIcon() { return $this->UseGlyph() ? $this->GetGlyphIcon() : $this->GetImageIcon(); }
+	public function GetIconSrc($size=16){ $name = $this->GetIconName(); return $name===null ? null : $name.$size.'.'.$this->GetIconType(); }
+	public function GetImageIcon($size=16) { $name = $this->GetIconName(); return $name===null ? null : new Icon($this->GetIconName(),$size,$this->GetIconType()); }
+	public function GetGlyph(){ return oxy::GlyphBlock(); }
+	public function GetIcon($size=null) { $name = $this->GetIconName(); return $name===null ? $this->GetGlyph()->WithSize($size) : $this->GetImageIcon($size); }
 
 	public final function GetIconScr16(){ return $this->GetIconSrc(16); }
 	public final function GetIconScr32(){ return $this->GetIconSrc(32); }
@@ -50,9 +47,9 @@ abstract class Action extends XValue {
 	public final function GetIcon32() { return $this->GetIcon(32); }
 	public final function GetIcon48() { return $this->GetIcon(48); }
 
-	public final function GetLink($size=16){ return '<a'.($this->IsActive()?' class="active"':'').' href="'.new Html($this->GetHref()).'">'.$this->GetIcon($size).new Spacer(2).$this->GetTitle().'</a>'; }
+	public final function GetLink($size=null){ return '<a'.($this->IsActive()?' class="active"':'').' href="'.new Html($this->GetHref()).'">'.$this->GetIcon($size).new Spacer(2).$this->GetTitle().'</a>'; }
 	public final function GetLinkedTitle(){ return '<a'.($this->IsActive()?' class="active"':'').' href="'.new Html($this->GetHref()).'">'.$this->GetTitle().'</a>'; }
-	public final function GetLinkedIcon($size=16){ return '<a'.($this->IsActive()?' class="active"':'').' href="'.new Html($this->GetHref()).'">'.$this->GetIcon($size).'</a>'; }
+	public final function GetLinkedIcon($size=null){ return '<a'.($this->IsActive()?' class="active"':'').' href="'.new Html($this->GetHref()).'">'.$this->GetIcon($size).'</a>'; }
 
 
 	public function GetContentType(){ return Oxygen::GetContentType(); }
@@ -342,9 +339,9 @@ abstract class Action extends XValue {
 		foreach ($dynamic_args as $value) $x .= ($i==0?'':',')."'XXX~".++$i."':$value";
 
 		if ($this->IsAjaxDialog())
-			$r = 'Oxygen.ShowAjaxDialog('.new Js($this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args,$dynamic_args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
+			$r = 'Oxygen.ShowAjaxDialog('.new Js($this->GetIconName()===null?$this->GetGlyph():$this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args,$dynamic_args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
 		elseif ($this->IsIFrameDialog())
-			$r = 'Oxygen.ShowIFrameDialog('.new Js($this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args,$dynamic_args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
+			$r = 'Oxygen.ShowIFrameDialog('.new Js($this->GetIconName()===null?$this->GetGlyph():$this->GetIcon(32)).','.new Js($this->GetTitle()).','.new Js($this->GetHrefPlain($args,$dynamic_args)).','.new Js($this->GetWidth()).','.new Js($this->GetHeight()).');';
 		else
 			$r = 'window.location.href='.new Js(__BASE__.$this->GetHrefPlain($args,$dynamic_args)).';';
 

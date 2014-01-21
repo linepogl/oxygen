@@ -814,7 +814,7 @@ class Oxygen {
 		if (Browser::IsIOS()) {
 			echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
 		}
-		echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.js"></script>';
+		if ($with_external_links) echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.jsc"></script>';
 		$r = ob_get_clean();
 		return $r;
 	}

@@ -285,9 +285,9 @@
 		<el>Το αντικείμενο αυτό δεν βρέθηκε: [%s %s].</el>
 	</lemma>
 	<lemma name="MsgXItemAlreadyExists">
-		<fr>Cet objet existe déjà: %s "%s.</fr>
-		<en>This object already exists: %s "%s.</en>
-		<el>Το αντικείμενο αυτό υπάρχει ήδη: %s "%s.</el>
+		<fr>Cet objet existe déjà: %s.</fr>
+		<en>This object already exists: %s.</en>
+		<el>Το αντικείμενο αυτό υπάρχει ήδη: %s.</el>
 	</lemma>
 
 	<lemma name="MsgCancelling">
