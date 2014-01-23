@@ -1,0 +1,1296 @@
+﻿msgid ""
+msgstr ""
+"Project-Id-Version: oxygen\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
+"X-Generator: Poedit 1.6.3\n"
+
+msgid "en"
+msgstr "Anglais"
+
+msgid "fr"
+msgstr "Français"
+
+msgid "el"
+msgstr "Grec"
+
+msgid "locale"
+msgstr "fr_FR"
+
+msgid "Language"
+msgstr "Langue"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Surname"
+msgstr "Nom"
+
+msgid "FirstName"
+msgstr "Prénom"
+
+msgid "Company"
+msgstr "Société"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Gender"
+msgstr "Sexe"
+
+msgid "Male"
+msgstr "Homme"
+
+msgid "Female"
+msgstr "Femme"
+
+msgid "Phone"
+msgstr "Téléphone"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "City"
+msgstr "Ville"
+
+msgid "Zip"
+msgstr "Code postal"
+
+msgid "Country"
+msgstr "Pays"
+
+msgid "Comments"
+msgstr "Commentaires"
+
+msgid "Username"
+msgstr "Identifiant"
+
+msgid "Password"
+msgstr "Mot de passe"
+
+msgid "OldPassword"
+msgstr "Ancien mot de passe"
+
+msgid "NewPassword"
+msgstr "Nouveau mot de passe"
+
+msgid "ConfirmPassword"
+msgstr "Confirmer"
+
+msgid "DateCreated"
+msgstr "Date de création"
+
+msgid "DateModified"
+msgstr "Date de modification"
+
+msgid "EmailRcpt"
+msgstr "A"
+
+msgid "EmailSubject"
+msgstr "Sujet"
+
+msgid "EmailBody"
+msgstr "Message"
+
+msgid "EmailFrom"
+msgstr "De"
+
+msgid "DateSent"
+msgstr "Date d'envoi"
+
+msgid "LockedAccount"
+msgstr "Compte bloqué"
+
+msgid "File"
+msgstr "Fichier"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Time"
+msgstr "Heure"
+
+msgid "Today"
+msgstr "Aujourd'hui"
+
+msgid "Tomorrow"
+msgstr "Demain"
+
+msgid "Yesterday"
+msgstr "Hier"
+
+msgid "Now"
+msgstr "Maintenant"
+
+msgid "a.m."
+msgstr "avant-midi"
+
+msgid "p.m."
+msgstr "après-midi"
+
+msgid "xDays"
+msgstr "%s jours"
+
+msgid "xDaysAgo"
+msgstr "Il y a %s jours"
+
+msgid "Day"
+msgstr "Jour"
+
+msgid "Night"
+msgstr "Nuit"
+
+msgid "Submit"
+msgstr "Soumettre"
+
+msgid "Login"
+msgstr "Connexion"
+
+msgid "Logoff"
+msgstr "Déconnexion"
+
+msgid "Back"
+msgstr "Retour"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Send"
+msgstr "Envoyer"
+
+msgid "Save"
+msgstr "Sauvegarder"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Rename"
+msgstr "Renommer"
+
+msgid "Print"
+msgstr "Imprimer"
+
+msgid "Close"
+msgstr "Fermer"
+
+msgid "Ask"
+msgstr "Demander"
+
+msgid "Update"
+msgstr "Mettre-à-jour"
+
+msgid "Select"
+msgstr "Sélectionner"
+
+msgid "Compare"
+msgstr "Comparer"
+
+msgid "Search"
+msgstr "Rechercher"
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "No"
+msgstr "Non"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "Previous"
+msgstr "Précédent"
+
+msgid "Modify"
+msgstr "Modifier"
+
+msgid "Continue"
+msgstr "Continuer"
+
+msgid "Settings"
+msgstr "Paramètres"
+
+msgid "January"
+msgstr "janvier"
+
+msgid "February"
+msgstr "février"
+
+msgid "March"
+msgstr "mars"
+
+msgid "April"
+msgstr "avril"
+
+msgid "May"
+msgstr "mai"
+
+msgid "June"
+msgstr "juin"
+
+msgid "July"
+msgstr "juillet"
+
+msgid "August"
+msgstr "août"
+
+msgid "September"
+msgstr "septembre"
+
+msgid "October"
+msgstr "octobre"
+
+msgid "November"
+msgstr "novembre"
+
+msgid "December"
+msgstr "décembre"
+
+msgid "Jan."
+msgstr "jan."
+
+msgid "Feb."
+msgstr "fév."
+
+msgid "Mar."
+msgstr "mars"
+
+msgid "Apr."
+msgstr "avr."
+
+msgid "May."
+msgstr "mai"
+
+msgid "Jun."
+msgstr "juin"
+
+msgid "Jul."
+msgstr "juil"
+
+msgid "Aug."
+msgstr "août"
+
+msgid "Sep."
+msgstr "sep."
+
+msgid "Oct."
+msgstr "oct."
+
+msgid "Nov."
+msgstr "nov."
+
+msgid "Dec."
+msgstr "déc."
+
+msgid "Monday"
+msgstr "lundi"
+
+msgid "Tuesday"
+msgstr "mardi"
+
+msgid "Wednesday"
+msgstr "mercredi"
+
+msgid "Thursday"
+msgstr "jeudi"
+
+msgid "Friday"
+msgstr "vendredi"
+
+msgid "Saturday"
+msgstr "samedi"
+
+msgid "Sunday"
+msgstr "dimanche"
+
+msgid "Days"
+msgstr "Jours"
+
+msgid "d."
+msgstr "j"
+
+msgid "h."
+msgstr "h"
+
+msgid "Users"
+msgstr "Utilisateurs"
+
+msgid "ChangePassword"
+msgstr "Mot de passe"
+
+msgid "ResetPassword"
+msgstr "Mot de passe"
+
+msgid "ResetPasswordLong"
+msgstr "Réinitialiser le mot de passe"
+
+msgid "Reset"
+msgstr "Réinitialiser"
+
+msgid "ChangeProfile"
+msgstr "Profil"
+
+msgid "ModifyProfile"
+msgstr "Modifier profil"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "ActionLogin"
+msgstr "Connexion"
+
+msgid "ActionLogoff"
+msgstr "Déconnexion"
+
+msgid "ActionChangePassword"
+msgstr "Mot de passe"
+
+msgid "ActionChangeProfile"
+msgstr "Profil d'un utilisateur"
+
+msgid "ActionCreateUser"
+msgstr "Création d'un utilisateur"
+
+msgid "ActionForgottenPassword"
+msgstr "Mot de passe oublié ?"
+
+msgid "MsgUnderConstruction"
+msgstr "En construction."
+
+msgid "MsgNotImplemented"
+msgstr "Non implémenté."
+
+msgid "MsgPageNotFound"
+msgstr "La page n'était pas trouvée."
+
+msgid "MsgObjectNotFound"
+msgstr "L'objet n'était pas trouvé."
+
+msgid "MsgAccessDenied"
+msgstr "Accès refusé."
+
+msgid "MsgInvalidUsername"
+msgstr "Utilisateur inconnu."
+
+msgid "MsgInvalidPassword"
+msgstr "Mot de passe incorrect."
+
+msgid "MsgInvalidUsernameOrPassword"
+msgstr "Utilisateur inconnu ou mot de passe incorrect."
+
+msgid "MsgMultipleUsersFound"
+msgstr "Plusieurs utilisateurs trouvés."
+
+msgid "MsgEmailSentSuccessfully"
+msgstr "Le message e-mail a été bien envoyé."
+
+msgid "MsgInvalidEmail"
+msgstr "L'adresse e-mail n'est pas valide."
+
+msgid "MsgInvalidURL"
+msgstr "L'adresse n'est pas valide."
+
+msgid "MsgInvalidValue"
+msgstr "Le valeur n'est pas valide."
+
+msgid "MsgAccountBanned"
+msgstr "Compte utilisateur bloqué."
+
+msgid "MsgPasswordsDoNotMatch"
+msgstr "Les deux mots de passe ne sont pas identiques."
+
+msgid "MsgMandatoryFields"
+msgstr "Les champs avec * sont obligatoires."
+
+msgid "MsgMandatoryField"
+msgstr "Ce champ est obligatoire."
+
+msgid "MsgFieldMandatoryInAllLanguages"
+msgstr "Ce champ est obligatoire en toutes les langues."
+
+msgid "MsgPasswordChanged"
+msgstr "Le mot de passe a été changé."
+
+msgid "MsgProfileChanged"
+msgstr "Le profil de l'utilisateur a été changé."
+
+msgid "MsgUsernameExists"
+msgstr "Cet utilisateur existe déjà."
+
+msgid "MsgCannotSendEmail"
+msgstr "Erreur lors de l'envoi d'e-mail."
+
+msgid "MsgCannotConnectToDatabase"
+msgstr "Erreur lors de la connexion à la base de données."
+
+msgid "MsgCannotCreateDatabase"
+msgstr "Erreur lors de la création de la base de données."
+
+msgid "MsgCannotDeleteCurrentUser"
+msgstr "Il est impossible de supprimer l'utilisateur courant."
+
+msgid "MsgObjectXNotFound"
+msgstr "Objet non trouvé : %s."
+
+msgid "MsgObjectXAlreadyExists"
+msgstr "Cet objet existe déjà : %s."
+
+msgid "MsgXItemNotFound"
+msgstr "Objet non trouvé [%s %s]."
+
+msgid "MsgXItemAlreadyExists"
+msgstr "Cet objet existe déjà: %s."
+
+msgid "MsgCancelling"
+msgstr "Annulation..."
+
+msgid "MsgProgressCancelled"
+msgstr "Le processus a été annulé."
+
+msgid "MsgProgressCompleted"
+msgstr "Le processus est terminé."
+
+msgid "MsgNoObjectFound"
+msgstr "Pas d'objet trouvé."
+
+msgid "MsgInvalidAction"
+msgstr "Action invalide."
+
+msgid "MsgCannotConnectToLdapServer"
+msgstr "Erreur à la connexion à la base de données."
+
+msgid "MsgDevelopmentEnvironment"
+msgstr "Ce message s'affiche parce que l'application est en mode DEVELOPPEMENT."
+
+msgid "MsgAnErrorOccurred"
+msgstr "Il y avait une erreur inattendue."
+
+msgid "MsgErrorWhileUploadingFile"
+msgstr "Erreur pendant l'envoi du fichier."
+
+msgid "MsgErrorWhileDownloadingFile"
+msgstr "Erreur pendant le téléchargement du fichier."
+
+msgid "ThousandsSeparator"
+msgstr " "
+
+msgid "DecimalSeparator"
+msgstr ","
+
+msgid "DecimalPoint"
+msgstr ","
+
+msgid "unit:byte"
+msgstr "o"
+
+msgid "unit:sec"
+msgstr "sec"
+
+msgid "lang:en"
+msgstr "Anglais"
+
+msgid "lang:fr"
+msgstr "Français"
+
+msgid "lang:el"
+msgstr "Grec"
+
+msgid "lang:ar"
+msgstr "Arabic"
+
+msgid "lang:de"
+msgstr "Allemand"
+
+msgid "lang:es"
+msgstr "Espagnol"
+
+msgid "lang:it"
+msgstr "Italien"
+
+msgid "lang:fi"
+msgstr "Finnois"
+
+msgid "lang:ja"
+msgstr "Japonais"
+
+msgid "lang:ko"
+msgstr "Coréen"
+
+msgid "lang:nl"
+msgstr "Néerlandais"
+
+msgid "lang:no"
+msgstr "Norvégien"
+
+msgid "lang:pl"
+msgstr "Polonais"
+
+msgid "lang:pt"
+msgstr "Portugais"
+
+msgid "lang:ru"
+msgstr "Russe"
+
+msgid "lang:sv"
+msgstr "Suédois"
+
+msgid "lang:zh"
+msgstr "Chinois"
+
+msgid "country:AD"
+msgstr "ANDORRE"
+
+msgid "country:AE"
+msgstr "ÉMIRATS ARABES UNIS"
+
+msgid "country:AF"
+msgstr "AFGHANISTAN"
+
+msgid "country:AG"
+msgstr "ANTIGUA-ET-BARBUDA"
+
+msgid "country:AI"
+msgstr "ANGUILLA"
+
+msgid "country:AL"
+msgstr "ALBANIE"
+
+msgid "country:AM"
+msgstr "ARMÉNIE"
+
+msgid "country:AO"
+msgstr "ANGOLA"
+
+msgid "country:AQ"
+msgstr "ANTARCTIQUE"
+
+msgid "country:AR"
+msgstr "ARGENTINE"
+
+msgid "country:AS"
+msgstr "SAMOA AMÉRICAINES"
+
+msgid "country:AT"
+msgstr "AUTRICHE"
+
+msgid "country:AU"
+msgstr "AUSTRALIE"
+
+msgid "country:AW"
+msgstr "ARUBA"
+
+msgid "country:AX"
+msgstr "ÅLAND, ÎLES"
+
+msgid "country:AZ"
+msgstr "AZERBAÏDJAN"
+
+msgid "country:BA"
+msgstr "BOSNIE-HERZÉGOVINE"
+
+msgid "country:BB"
+msgstr "BARBADE"
+
+msgid "country:BD"
+msgstr "BANGLADESH"
+
+msgid "country:BE"
+msgstr "BELGIQUE"
+
+msgid "country:BF"
+msgstr "BURKINA FASO"
+
+msgid "country:BG"
+msgstr "BULGARIE"
+
+msgid "country:BH"
+msgstr "BAHREÏN"
+
+msgid "country:BI"
+msgstr "BURUNDI"
+
+msgid "country:BJ"
+msgstr "BÉNIN"
+
+msgid "country:BL"
+msgstr "SAINT-BARTHÉLEMY"
+
+msgid "country:BM"
+msgstr "BERMUDES"
+
+msgid "country:BN"
+msgstr "BRUNÉI DARUSSALAM"
+
+msgid "country:BO"
+msgstr "BOLIVIE, l'ÉTAT PLURINATIONAL DE"
+
+msgid "country:BQ"
+msgstr "BONAIRE, SAINT-EUSTACHE ET SABA"
+
+msgid "country:BR"
+msgstr "BRÉSIL"
+
+msgid "country:BS"
+msgstr "BAHAMAS"
+
+msgid "country:BT"
+msgstr "BHOUTAN"
+
+msgid "country:BV"
+msgstr "BOUVET, ÎLE"
+
+msgid "country:BW"
+msgstr "BOTSWANA"
+
+msgid "country:BY"
+msgstr "BÉLARUS"
+
+msgid "country:BZ"
+msgstr "BELIZE"
+
+msgid "country:CA"
+msgstr "CANADA"
+
+msgid "country:CC"
+msgstr "COCOS (KEELING), ÎLES"
+
+msgid "country:CD"
+msgstr "CONGO, LA RÉPUBLIQUE DÉMOCRATIQUE DU"
+
+msgid "country:CF"
+msgstr "CENTRAFRICAINE, RÉPUBLIQUE"
+
+msgid "country:CG"
+msgstr "CONGO"
+
+msgid "country:CH"
+msgstr "SUISSE"
+
+msgid "country:CI"
+msgstr "CÔTE D'IVOIRE"
+
+msgid "country:CK"
+msgstr "COOK, ÎLES"
+
+msgid "country:CL"
+msgstr "CHILI"
+
+msgid "country:CM"
+msgstr "CAMEROUN"
+
+msgid "country:CN"
+msgstr "CHINE"
+
+msgid "country:CO"
+msgstr "COLOMBIE"
+
+msgid "country:CR"
+msgstr "COSTA RICA"
+
+msgid "country:CU"
+msgstr "CUBA"
+
+msgid "country:CV"
+msgstr "CAP-VERT"
+
+msgid "country:CW"
+msgstr "CURAÇAO"
+
+msgid "country:CX"
+msgstr "CHRISTMAS, ÎLE"
+
+msgid "country:CY"
+msgstr "CHYPRE"
+
+msgid "country:CZ"
+msgstr "TCHÈQUE, RÉPUBLIQUE"
+
+msgid "country:DE"
+msgstr "ALLEMAGNE"
+
+msgid "country:DJ"
+msgstr "DJIBOUTI"
+
+msgid "country:DK"
+msgstr "DANEMARK"
+
+msgid "country:DM"
+msgstr "DOMINIQUE"
+
+msgid "country:DO"
+msgstr "DOMINICAINE, RÉPUBLIQUE"
+
+msgid "country:DZ"
+msgstr "ALGÉRIE"
+
+msgid "country:EC"
+msgstr "ÉQUATEUR"
+
+msgid "country:EE"
+msgstr "ESTONIE"
+
+msgid "country:EG"
+msgstr "ÉGYPTE"
+
+msgid "country:EH"
+msgstr "SAHARA OCCIDENTAL"
+
+msgid "country:ER"
+msgstr "ÉRYTHRÉE"
+
+msgid "country:ES"
+msgstr "ESPAGNE"
+
+msgid "country:ET"
+msgstr "ÉTHIOPIE"
+
+msgid "country:FI"
+msgstr "FINLANDE"
+
+msgid "country:FJ"
+msgstr "FIDJI"
+
+msgid "country:FK"
+msgstr "FALKLAND, ÎLES (MALVINAS)"
+
+msgid "country:FM"
+msgstr "MICRONÉSIE, ÉTATS FÉDÉRÉS DE"
+
+msgid "country:FO"
+msgstr "FÉROÉ, ÎLES"
+
+msgid "country:FR"
+msgstr "FRANCE"
+
+msgid "country:GA"
+msgstr "GABON"
+
+msgid "country:GB"
+msgstr "ROYAUME-UNI"
+
+msgid "country:GD"
+msgstr "GRENADE"
+
+msgid "country:GE"
+msgstr "GÉORGIE"
+
+msgid "country:GF"
+msgstr "GUYANE FRANÇAISE"
+
+msgid "country:GG"
+msgstr "GUERNESEY"
+
+msgid "country:GH"
+msgstr "GHANA"
+
+msgid "country:GI"
+msgstr "GIBRALTAR"
+
+msgid "country:GL"
+msgstr "GROENLAND"
+
+msgid "country:GM"
+msgstr "GAMBIE"
+
+msgid "country:GN"
+msgstr "GUINÉE"
+
+msgid "country:GP"
+msgstr "GUADELOUPE"
+
+msgid "country:GQ"
+msgstr "GUINÉE ÉQUATORIALE"
+
+msgid "country:GR"
+msgstr "GRÈCE"
+
+msgid "country:GS"
+msgstr "GÉORGIE DU SUD ET LES ÎLES SANDWICH DU SUD"
+
+msgid "country:GT"
+msgstr "GUATEMALA"
+
+msgid "country:GU"
+msgstr "GUAM"
+
+msgid "country:GW"
+msgstr "GUINÉE-BISSAU"
+
+msgid "country:GY"
+msgstr "GUYANA"
+
+msgid "country:HK"
+msgstr "HONG-KONG"
+
+msgid "country:HM"
+msgstr "HEARD, ÎLE ET MCDONALD, ÎLES"
+
+msgid "country:HN"
+msgstr "HONDURAS"
+
+msgid "country:HR"
+msgstr "CROATIE"
+
+msgid "country:HT"
+msgstr "HAÏTI"
+
+msgid "country:HU"
+msgstr "HONGRIE"
+
+msgid "country:ID"
+msgstr "INDONÉSIE"
+
+msgid "country:IE"
+msgstr "IRLANDE"
+
+msgid "country:IL"
+msgstr "ISRAËL"
+
+msgid "country:IM"
+msgstr "ÎLE DE MAN"
+
+msgid "country:IN"
+msgstr "INDE"
+
+msgid "country:IO"
+msgstr "OCÉAN INDIEN, TERRITOIRE BRITANNIQUE DE L'"
+
+msgid "country:IQ"
+msgstr "IRAQ"
+
+msgid "country:IR"
+msgstr "IRAN, RÉPUBLIQUE ISLAMIQUE D'"
+
+msgid "country:IS"
+msgstr "ISLANDE"
+
+msgid "country:IT"
+msgstr "ITALIE"
+
+msgid "country:JE"
+msgstr "JERSEY"
+
+msgid "country:JM"
+msgstr "JAMAÏQUE"
+
+msgid "country:JO"
+msgstr "JORDANIE"
+
+msgid "country:JP"
+msgstr "JAPON"
+
+msgid "country:KE"
+msgstr "KENYA"
+
+msgid "country:KG"
+msgstr "KIRGHIZISTAN"
+
+msgid "country:KH"
+msgstr "CAMBODGE"
+
+msgid "country:KI"
+msgstr "KIRIBATI"
+
+msgid "country:KM"
+msgstr "COMORES"
+
+msgid "country:KN"
+msgstr "SAINT-KITTS-ET-NEVIS"
+
+msgid "country:KP"
+msgstr "CORÉE, RÉPUBLIQUE POPULAIRE DÉMOCRATIQUE DE"
+
+msgid "country:KR"
+msgstr "CORÉE, RÉPUBLIQUE DE"
+
+msgid "country:KW"
+msgstr "KOWEÏT"
+
+msgid "country:KY"
+msgstr "CAÏMANES, ÎLES"
+
+msgid "country:KZ"
+msgstr "KAZAKHSTAN"
+
+msgid "country:LA"
+msgstr "LAO, RÉPUBLIQUE DÉMOCRATIQUE POPULAIRE"
+
+msgid "country:LB"
+msgstr "LIBAN"
+
+msgid "country:LC"
+msgstr "SAINTE-LUCIE"
+
+msgid "country:LI"
+msgstr "LIECHTENSTEIN"
+
+msgid "country:LK"
+msgstr "SRI LANKA"
+
+msgid "country:LR"
+msgstr "LIBÉRIA"
+
+msgid "country:LS"
+msgstr "LESOTHO"
+
+msgid "country:LT"
+msgstr "LITUANIE"
+
+msgid "country:LU"
+msgstr "LUXEMBOURG"
+
+msgid "country:LV"
+msgstr "LETTONIE"
+
+msgid "country:LY"
+msgstr "LIBYENNE, JAMAHIRIYA ARABE"
+
+msgid "country:MA"
+msgstr "MAROC"
+
+msgid "country:MC"
+msgstr "MONACO"
+
+msgid "country:MD"
+msgstr "MOLDOVA, RÉPUBLIQUE DE"
+
+msgid "country:ME"
+msgstr "MONTÉNÉGRO"
+
+msgid "country:MF"
+msgstr "SAINT-MARTIN(PARTIE FRANÇAISE)"
+
+msgid "country:MG"
+msgstr "MADAGASCAR"
+
+msgid "country:MH"
+msgstr "MARSHALL, ÎLES"
+
+msgid "country:MK"
+msgstr "MACÉDOINE, L'EX-RÉPUBLIQUE YOUGOSLAVE DE"
+
+msgid "country:ML"
+msgstr "MALI"
+
+msgid "country:MM"
+msgstr "MYANMAR"
+
+msgid "country:MN"
+msgstr "MONGOLIE"
+
+msgid "country:MO"
+msgstr "MACAO"
+
+msgid "country:MP"
+msgstr "MARIANNES DU NORD, ÎLES"
+
+msgid "country:MQ"
+msgstr "MARTINIQUE"
+
+msgid "country:MR"
+msgstr "MAURITANIE"
+
+msgid "country:MS"
+msgstr "MONTSERRAT"
+
+msgid "country:MT"
+msgstr "MALTE"
+
+msgid "country:MU"
+msgstr "MAURICE"
+
+msgid "country:MV"
+msgstr "MALDIVES"
+
+msgid "country:MW"
+msgstr "MALAWI"
+
+msgid "country:MX"
+msgstr "MEXIQUE"
+
+msgid "country:MY"
+msgstr "MALAISIE"
+
+msgid "country:MZ"
+msgstr "MOZAMBIQUE"
+
+msgid "country:NA"
+msgstr "NAMIBIE"
+
+msgid "country:NC"
+msgstr "NOUVELLE-CALÉDONIE"
+
+msgid "country:NE"
+msgstr "NIGER"
+
+msgid "country:NF"
+msgstr "NORFOLK, ÎLE"
+
+msgid "country:NG"
+msgstr "NIGÉRIA"
+
+msgid "country:NI"
+msgstr "NICARAGUA"
+
+msgid "country:NL"
+msgstr "PAYS-BAS"
+
+msgid "country:NO"
+msgstr "NORVÈGE"
+
+msgid "country:NP"
+msgstr "NÉPAL"
+
+msgid "country:NR"
+msgstr "NAURU"
+
+msgid "country:NU"
+msgstr "NIUÉ"
+
+msgid "country:NZ"
+msgstr "NOUVELLE-ZÉLANDE"
+
+msgid "country:OM"
+msgstr "OMAN"
+
+msgid "country:PA"
+msgstr "PANAMA"
+
+msgid "country:PE"
+msgstr "PÉROU"
+
+msgid "country:PF"
+msgstr "POLYNÉSIE FRANÇAISE"
+
+msgid "country:PG"
+msgstr "PAPOUASIE-NOUVELLE-GUINÉE"
+
+msgid "country:PH"
+msgstr "PHILIPPINES"
+
+msgid "country:PK"
+msgstr "PAKISTAN"
+
+msgid "country:PL"
+msgstr "POLOGNE"
+
+msgid "country:PM"
+msgstr "SAINT-PIERRE-ET-MIQUELON"
+
+msgid "country:PN"
+msgstr "PITCAIRN"
+
+msgid "country:PR"
+msgstr "PORTO RICO"
+
+msgid "country:PS"
+msgstr "PALESTINIEN OCCUPÉ, TERRITOIRE"
+
+msgid "country:PT"
+msgstr "PORTUGAL"
+
+msgid "country:PW"
+msgstr "PALAOS"
+
+msgid "country:PY"
+msgstr "PARAGUAY"
+
+msgid "country:QA"
+msgstr "QATAR"
+
+msgid "country:RE"
+msgstr "RÉUNION"
+
+msgid "country:RO"
+msgstr "ROUMANIE"
+
+msgid "country:RS"
+msgstr "SERBIE"
+
+msgid "country:RU"
+msgstr "RUSSIE, FÉDÉRATION DE"
+
+msgid "country:RW"
+msgstr "RWANDA"
+
+msgid "country:SA"
+msgstr "ARABIE SAOUDITE"
+
+msgid "country:SB"
+msgstr "SALOMON, ÎLES"
+
+msgid "country:SC"
+msgstr "SEYCHELLES"
+
+msgid "country:SD"
+msgstr "SOUDAN"
+
+msgid "country:SE"
+msgstr "SUÈDE"
+
+msgid "country:SG"
+msgstr "SINGAPOUR"
+
+msgid "country:SH"
+msgstr "SAINTE-HÉLÈNE, ASCENSION ET TRISTAN DA CUNHA"
+
+msgid "country:SI"
+msgstr "SLOVÉNIE"
+
+msgid "country:SJ"
+msgstr "SVALBARD ET ÎLE JAN MAYEN"
+
+msgid "country:SK"
+msgstr "SLOVAQUIE"
+
+msgid "country:SL"
+msgstr "SIERRA LEONE"
+
+msgid "country:SM"
+msgstr "SAINT-MARIN"
+
+msgid "country:SN"
+msgstr "SÉNÉGAL"
+
+msgid "country:SO"
+msgstr "SOMALIE"
+
+msgid "country:SR"
+msgstr "SURINAME"
+
+msgid "country:ST"
+msgstr "SAO TOMÉ-ET-PRINCIPE"
+
+msgid "country:SV"
+msgstr "EL SALVADOR"
+
+msgid "country:SX"
+msgstr "SAINT-MARTIN (PARTIE NÉERLANDAISE)"
+
+msgid "country:SY"
+msgstr "SYRIENNE, RÉPUBLIQUE ARABE"
+
+msgid "country:SZ"
+msgstr "SWAZILAND"
+
+msgid "country:TC"
+msgstr "TURKS ET CAÏQUES, ÎLES"
+
+msgid "country:TD"
+msgstr "TCHAD"
+
+msgid "country:TF"
+msgstr "TERRES AUSTRALES FRANÇAISES"
+
+msgid "country:TG"
+msgstr "TOGO"
+
+msgid "country:TH"
+msgstr "THAÏLANDE"
+
+msgid "country:TJ"
+msgstr "TADJIKISTAN"
+
+msgid "country:TK"
+msgstr "TOKELAU"
+
+msgid "country:TL"
+msgstr "TIMOR-LESTE"
+
+msgid "country:TM"
+msgstr "TURKMÉNISTAN"
+
+msgid "country:TN"
+msgstr "TUNISIE"
+
+msgid "country:TO"
+msgstr "TONGA"
+
+msgid "country:TR"
+msgstr "TURQUIE"
+
+msgid "country:TT"
+msgstr "TRINITÉ-ET-TOBAGO"
+
+msgid "country:TV"
+msgstr "TUVALU"
+
+msgid "country:TW"
+msgstr "TAÏWAN, PROVINCE DE CHINE"
+
+msgid "country:TZ"
+msgstr "TANZANIE, RÉPUBLIQUE-UNIE DE"
+
+msgid "country:UA"
+msgstr "UKRAINE"
+
+msgid "country:UG"
+msgstr "OUGANDA"
+
+msgid "country:UM"
+msgstr "ÎLES MINEURES ÉLOIGNÉES DES ÉTATS-UNIS"
+
+msgid "country:US"
+msgstr "ÉTATS-UNIS"
+
+msgid "country:UY"
+msgstr "URUGUAY"
+
+msgid "country:UZ"
+msgstr "OUZBÉKISTAN"
+
+msgid "country:VA"
+msgstr "SAINT-SIÈGE (ÉTAT DE LA CITÉ DU VATICAN)"
+
+msgid "country:VC"
+msgstr "SAINT-VINCENT-ET-LES GRENADINES"
+
+msgid "country:VE"
+msgstr "VENEZUELA, RÉPUBLIQUE BOLIVARIENNE DU"
+
+msgid "country:VG"
+msgstr "ÎLES VIERGES BRITANNIQUES"
+
+msgid "country:VI"
+msgstr "ÎLES VIERGES DES ÉTATS-UNIS"
+
+msgid "country:VN"
+msgstr "VIET NAM"
+
+msgid "country:VU"
+msgstr "VANUATU"
+
+msgid "country:WF"
+msgstr "WALLIS ET FUTUNA"
+
+msgid "country:WS"
+msgstr "SAMOA"
+
+msgid "country:YE"
+msgstr "YÉMEN"
+
+msgid "country:YT"
+msgstr "MAYOTTE"
+
+msgid "country:ZA"
+msgstr "AFRIQUE DU SUD"
+
+msgid "country:ZM"
+msgstr "ZAMBIE"
+
+msgid "country:ZW"
+msgstr "ZIMBABWE"

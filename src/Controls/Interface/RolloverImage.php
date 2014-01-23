@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated */
 class RolloverImage extends Control {
 	private $href;
 	private $image;

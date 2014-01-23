@@ -363,7 +363,7 @@ class Oxygen {
 	public static function GetDictionaryFiles(){ return self::$dictionary_files; }
 	public static function AddDictionaryFile($filename) { if (!in_array($filename,self::$dictionary_files)) self::$dictionary_files[] = $filename; }
 
-
+	public static function AddResourceFile($filename){ require($filename); }
 
 
 	//
@@ -809,12 +809,10 @@ class Oxygen {
 		echo "var oxygen_exceptions = {};";
 		echo "window.onerror = function(msg,url,line){ if (oxygen_exceptions[msg+url+line]===undefined) { new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); oxygen_exceptions[msg+url+line]=1; } else { oxygen_exceptions[msg+url+line]++; } };";
 		echo Js::END;
-		if ($with_external_links) echo '<link href="'.__BASE__.'oxy/css/oxygen.css" rel="stylesheet" type="text/css" />';
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
-		if (Browser::IsIOS()) {
-			echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
-		}
-		if ($with_external_links) echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/oxygen.jsc"></script>';
+		echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
+		if ($with_external_links) echo '<link href="'.__BASE__.'oxy/css/_.css" rel="stylesheet" type="text/css" />';
+		if ($with_external_links) echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/_.jsc"></script>';
 		$r = ob_get_clean();
 		return $r;
 	}
@@ -933,9 +931,6 @@ class Oxygen {
 	public static function GetDefaultIconType(){ return self::$default_icon_type; }
 	public static function SetDefaultIconType($value){ self::$default_icon_type = $value; }
 
-	private static $glyphs_preferred = false;
-	public static function AreGlyphsPreferred(){ return self::$glyphs_preferred; }
-	public static function SetGlyphsPreferred($value){ self::$glyphs_preferred = $value; }
 
 
 
