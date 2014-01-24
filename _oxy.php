@@ -1,5 +1,7 @@
 <?php
-class oxy extends ResourceManager {
+Oxygen::RegisterResourceManager('oxy','_oxy');
+if (false) { class oxy extends _oxy {} }
+abstract class _oxy {
 	//
 	// 000 - Basic
 	//
@@ -38,6 +40,7 @@ class oxy extends ResourceManager {
 	public static function GlyphRedo              (){ return new Glyph('oxy-icon',0xE205); }
 	public static function GlyphLogin             (){ return new Glyph('oxy-icon',0xE206); }
 	public static function GlyphLogoff            (){ return new Glyph('oxy-icon',0xE207); }
+	public static function GlyphSelect            (){ return new Glyph('oxy-icon',0xE208); }
 
 
 	//
@@ -94,8 +97,8 @@ class oxy extends ResourceManager {
 	// 900 - Interface
 	//
 	public static function GlyphContextMenuAnchor (){ return new Glyph('oxy-icon',0xE900); }
-	public static function GlyphMore              (){ return new Glyph('oxy-icon',0xE901); }
-	public static function GlyphClear             (){ return new Glyph('oxy-icon',0xE902); }
+	public static function GlyphMore              (){ return new Glyph('oxy-icon',0xE902); }
+	public static function GlyphClear             (){ return new Glyph('oxy-icon',0xE901); }
 	public static function GlyphDropTarget        (){ return new Glyph('oxy-icon',0xE903); }
 	public static function GlyphMenuUp            (){ return new Glyph('oxy-icon',0xE904); }
 	public static function GlyphMenuDown          (){ return new Glyph('oxy-icon',0xE905); }
@@ -108,9 +111,3 @@ class oxy extends ResourceManager {
 	public static function GlyphTreePlus          (){ return new Glyph('oxy-icon',0xE9A2); }
 	public static function GlyphTreeMinus         (){ return new Glyph('oxy-icon',0xE9A3); }
 }
-oxy::__register();
-
-
-
-
-

@@ -25,9 +25,7 @@ require('oxy/src/Oxygen.php');
 require('oxy/src/Utils/Fs.php');
 require('oxy/src/Utils/Scope.php');
 require('oxy/src/Utils/Database.php');
-require('oxy/src/Utils/ResourceManager.php');
 require('oxy/src/Engine/XMeta.php');
-require('oxy/oxy.php');
 
 function user_error_handler($severity, $msg, $filename, $linenum, $content) {
 	if (0 == (error_reporting() & $severity)) return;
@@ -89,3 +87,4 @@ function hex( $id_or_item_or_null ){
 	if (is_int($id_or_item_or_null)) { $id_or_item_or_null = new ID($id_or_item_or_null); return $id_or_item_or_null->AsHex(); }
 	return null;
 }
+

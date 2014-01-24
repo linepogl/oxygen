@@ -2,10 +2,15 @@
 class Oxygen {
 
 	public static function Init(){
+		// include code files
+		foreach (Oxygen::GetCodeFiles() as $filename) require($filename);
+		// init resource managers
+		foreach (self::$resource_managers as $alias => $class) class_alias( $class , $alias );
+
+		// set handlers
 		set_exception_handler('Oxygen::OnException');
 		register_shutdown_function('Oxygen::OnShutdown');
 		spl_autoload_register('Oxygen::OnAutoLoad');
-
 
 		// init session scoping
 		if (self::$session_scoping_enabled) {
@@ -363,7 +368,19 @@ class Oxygen {
 	public static function GetDictionaryFiles(){ return self::$dictionary_files; }
 	public static function AddDictionaryFile($filename) { if (!in_array($filename,self::$dictionary_files)) self::$dictionary_files[] = $filename; }
 
-	public static function AddResourceFile($filename){ require($filename); }
+	//
+	//
+	// Resource Managers
+	//
+	//
+	private static $resource_managers = array();
+	public static function RegisterResourceManager($class_alias,$class_name) {
+		$alias = $class_alias;
+		if (array_key_exists($alias,self::$resource_managers)) throw new Exception('There is already a resource manager with alias "'.$alias.'" registered.');
+		$old = end(self::$resource_managers);
+		if ($old!==false && !(new ReflectionClass($class_name))->isSubclassOf($old)) throw new Exception('The resource manager "'.$class_name.'" must inherit "'.$old.'".');
+		self::$resource_managers[$alias] = $class_name;
+	}
 
 
 	//
@@ -464,6 +481,9 @@ class Oxygen {
 	// Code loaders
 	//
 	//
+	private static $code_files = array('oxy/_oxy.php');
+	public static function GetCodeFiles(){ return self::$code_files; }
+	public static function AddCodeFile($filename) { self::$code_files[] = $filename; }
 	private static $code_folders = array('oxy/src');
 	public static function GetCodeFolders(){ return self::$code_folders; }
 	public static function AddCodeFolder($folder) { if (!in_array($folder,self::$code_folders)) self::$code_folders[] = $folder; }
