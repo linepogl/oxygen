@@ -831,8 +831,8 @@ class Oxygen {
 		echo Js::END;
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
 		echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
-		if ($with_external_links) echo '<link href="'.__BASE__.'oxy/css/_.css" rel="stylesheet" type="text/css" />';
-		if ($with_external_links) echo '<script type="text/javascript" src="'.__BASE__.'oxy/jsc/_.jsc"></script>';
+		if ($with_external_links) echo '<link href="'.__BASE__.'oxy/res/_.css" rel="stylesheet" type="text/css" />';
+		if ($with_external_links) echo '<script type="text/javascript" src="'.__BASE__.'oxy/res/_.js"></script>';
 		$r = ob_get_clean();
 		return $r;
 	}

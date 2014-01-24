@@ -10,6 +10,10 @@ final class Js extends ExportValue {
 		return MetaJs::Type();
 	}
 
+	public static function GetLink($href){
+		return '<script type="text/javascript" src="'.new Html($href).'"></script>';
+	}
+
 	const Null = 'null';
 
 	const BEGIN = "<script type=\"text/javascript\">\n/*<![CDATA[*/\n";
