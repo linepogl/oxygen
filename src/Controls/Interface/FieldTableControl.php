@@ -93,7 +93,7 @@ class FieldTableControl extends Control {
 	public function Render(){
 
 		if ($this->labels_on_top){
-			echo '<table class="fieldtable '.$this->css_class.'" cellspacing="0" cellpadding="0" border="0" style="width:'.(empty($this->width)?'auto':$this->width).';">';
+			echo '<table class="fieldtable '.$this->css_class.'" style="width:'.(empty($this->width)?'auto':$this->width).';">';
 
 			if (!is_null($this->title)) echo '<tr><td><h2>'.$this->title.'</h2></td></tr>';
 
@@ -104,7 +104,7 @@ class FieldTableControl extends Control {
 				}
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
-					echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:15px 1px 1px 1px;">'.$this->labels[$i].($this->asterisks[$i]?'<span style="word-spacing:1px;font-size:1px;">&nbsp;<img src="oxy/img/asterisk.gif" /></span>':'').'</td></tr>';
+					echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:15px 1px 1px 1px;">'.$this->labels[$i].($this->asterisks[$i]?oxy::icoRequired():'').'</td></tr>';
 					echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;">'.$this->contents[$i].'</td></tr>';
 					if (!is_null($vcode) && !$this->hide_validators)
 						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:1px 0 0 0">'.new MessageControl($this->validators[$i]).'</td></tr>';
@@ -113,7 +113,7 @@ class FieldTableControl extends Control {
 			echo '</table>';
 		}
 		else {
-			echo '<table class="fieldtable '.$this->css_class.'" cellspacing="5" cellpadding="0" border="0" style="width:'.(empty($this->width)?'auto':$this->width).';">';
+			echo '<table class="fieldtable '.$this->css_class.'" style="width:'.(empty($this->width)?'auto':$this->width).';">';
 
 			echo '<tr><td class="notext">'.new Spacer(intval($this->label_width)).'</td>';
 			if (!is_null($this->title))
@@ -130,7 +130,7 @@ class FieldTableControl extends Control {
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
 					echo '<tr id="'.$this->row_names[$i].'" class="'.$vcode.' '.$this->row_css_classes[$i].'" style="'.$this->row_css_styles[$i].'">';
-					echo '<td class="label" style="'.($this->label_nowrap?'white-space:nowrap;':'').'width:'.$this->label_width.';">'.($this->asterisks[$i]?'<span style="word-spacing:1px;font-size:1px;"><img src="oxy/img/asterisk.gif" />&nbsp;</span>':'').$this->labels[$i].'</td>';
+					echo '<td class="label" style="'.($this->label_nowrap?'white-space:nowrap;':'').'width:'.$this->label_width.';">'.($this->asterisks[$i]?oxy::icoRequired():'').$this->labels[$i].'</td>';
 					echo '<td class="value">'.$this->contents[$i];
 					if (!is_null($vcode) && !$this->hide_validators)
 						echo '<div style="padding:2px 0 0 0">'.new MessageControl($this->validators[$i]).'</div>';

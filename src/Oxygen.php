@@ -4,8 +4,12 @@ class Oxygen {
 	public static function Init(){
 		// include code files
 		foreach (Oxygen::GetCodeFiles() as $filename) require($filename);
+
+
 		// init resource managers
-		foreach (self::$resource_managers as $alias => $class) class_alias( $class , $alias );
+		$last_resource_manager_class = end(self::$resource_managers);
+		foreach (self::$resource_managers as $alias => $class)
+			class_alias( $last_resource_manager_class , $alias );
 
 		// set handlers
 		set_exception_handler('Oxygen::OnException');

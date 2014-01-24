@@ -3,9 +3,8 @@
 
 abstract class Message {
 	protected $value;
-	protected $icon_name;
-	protected $icon_type;
-	public function __construct($value,$icon_name=null,$icon_type=null){ $this->value = strval($value);$this->icon_name=$icon_name;$this->icon_type=$icon_type; }
+	protected $icon;
+	public function __construct($value,_Icon $icon=null){ $this->value = strval($value);$this->icon=$icon; }
 	public function __toString(){ return $this->value; }
 	public final function AsString(){ return $this->value; }
 
@@ -40,22 +39,10 @@ abstract class Message {
 	}
 
 	public function GetCode(){ return self::ConvertTypeToCode($this->GetSeverity()); }
-	public abstract function GetDefaultIconName();
-	public function GetDefaultIconType(){ return Oxygen::GetDefaultIconType(); }
+	public function GetDefaultIcon(){ return null; }
 	public abstract function GetSeverity();
-	public abstract function GetBackgroundColor();
-	public abstract function GetBorderColor();
 
-	public final function GetIconName(){ return is_null($this->icon_name) ? $this->GetDefaultIconName() : $this->icon_name; }
-	public final function GetIconType(){ return is_null($this->icon_type) ? $this->GetDefaultIconType() : $this->icon_type; }
-	public final function GetIconSrc($size){ return $this->GetIconName().$size.'.'.$this->GetIconType(); }
-	public final function GetIcon($size) { return new Icon($this->GetIconName(),$size,$this->GetIconType()); }
-	public final function GetIconScr16(){ return $this->GetIconSrc(16); }
-	public final function GetIconScr32(){ return $this->GetIconSrc(32); }
-	public final function GetIconScr48(){ return $this->GetIconSrc(48); }
-	public final function GetIcon16() { return $this->GetIcon(16); }
-	public final function GetIcon32() { return $this->GetIcon(32); }
-	public final function GetIcon48() { return $this->GetIcon(48); }
+	public function GetIcon() { return $this->icon===null?$this->GetDefaultIcon():$this->icon; }
 
 	public static function Cast($value){
 		if (is_null($value))

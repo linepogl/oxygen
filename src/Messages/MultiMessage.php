@@ -4,7 +4,7 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 	private $messages = array();
 	private $dominant = null;
 	public function __construct(){
-		parent::__construct('');
+		parent::__construct('',null);
 		$this->dominant = new InfoMessage('');
 		$a = func_get_args();
 		array_walk_recursive( $a , function($value,$key,$mm){
@@ -29,10 +29,8 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 		}
 	}
 	public function GetCode(){ return $this->dominant->GetCode(); }
-	public function GetDefaultIconName(){ return $this->dominant->GetIconName(); }
+	public function GetIcon(){ return $this->dominant->GetIcon(); }
 	public function GetSeverity(){ return $this->dominant->GetSeverity(); }
-	public function GetBackgroundColor(){ return $this->dominant->GetBackgroundColor(); }
-	public function GetBorderColor(){ return $this->dominant->GetBorderColor(); }
 
 
 	public function IsEmpty(){ return 0 == count($this->messages); }

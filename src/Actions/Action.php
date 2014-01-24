@@ -37,7 +37,7 @@ abstract class Action extends XValue {
 	public function GetIconType() { return Oxygen::GetDefaultIconType(); }
 	public function GetIconSrc($size=16){ $name = $this->GetIconName(); return $name===null ? null : $name.$size.'.'.$this->GetIconType(); }
 	public function GetImageIcon($size=16) { $name = $this->GetIconName(); return $name===null ? null : new Icon($this->GetIconName(),$size,$this->GetIconType()); }
-	public function GetGlyph(){ return oxy::GlyphBlock(); }
+	public function GetGlyph(){ return oxy::icoBlock(); }
 	public function GetIcon($size=16) { $name = $this->GetIconName(); return $name===null ? $this->GetGlyph()->WithSize($size) : $this->GetImageIcon($size); }
 
 	public final function GetIconScr16(){ return $this->GetIconSrc(16); }
@@ -231,7 +231,7 @@ abstract class Action extends XValue {
 						echo '<table class="center"><tr><td>';
 						echo '<table cellspacing="20" cellpadding="0" border="0"><tr><td>';
 						echo '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-						echo '<td class="vtop hright" style="padding:15px;">'.new Spacer(50,30).'<br/>'.oxy::GlyphBug()->WithSize(32).'</td>';
+						echo '<td class="vtop hright" style="padding:15px;">'.new Spacer(50,30).'<br/>'.oxy::icoBug()->WithSize(32).'</td>';
 						echo '<td style="padding:15px;">'.new Spacer(1,100).'</td>';
 						echo '<td class="vtop" style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
 						echo new Spacer(350,12);

@@ -31,7 +31,9 @@ class LemmaBox extends Box {
 			echo new Spacer(7,20);
 			echo '<img id="'.$this->name.'_'.$lang.'_flag" src="oxy/lng/'.$lang.($lang==Oxygen::$lang?'':'-').'.gif" />';
 			echo new Spacer(3,20);
-			echo '<img id="'.$this->name.'_'.$lang.'_check" src="oxy/ico/'.(''==trim($this->value[$lang])?'Warning':'OK').'16.gif" width="8" height="8" />';
+			$ok = ''!=trim($this->value[$lang]);
+			echo '<span id="'.$this->name.'_'.$lang.'_check_suc"'.($ok?'':' style="display:none;"').'>'.oxy::icoSuccess()->WithSize(8).'</span>';
+			echo '<span id="'.$this->name.'_'.$lang.'_check_err"'.($ok?' style="display:none;"':'').'>'.oxy::icoWarning()->WithSize(8).'</span>';
 			echo new Spacer(6,20);
 			echo '</a>';
 			echo '</td>';
@@ -46,7 +48,9 @@ class LemmaBox extends Box {
 		echo "    var ss = '';";
 		foreach ($langs as $lang){
 			echo "    s = \$F(".new Js($this->name.'_'.$lang).").trim();";
-			echo "    \$(".new Js($this->name.'_'.$lang.'_check').").src = s=='' ? 'oxy/ico/Warning16.gif' : 'oxy/ico/OK16.gif';";
+			echo "    var suc = \$(".new Js($this->name.'_'.$lang.'_check_suc').");";
+			echo "    var err = \$(".new Js($this->name.'_'.$lang.'_check_err').");";
+			echo "    if (s=='') {suc.hide();err.show();} else { suc.show();err.hide(); }";
 			echo "    if (s!='') { if (ss!='') ss+='~'; ss+=".new Js($lang)."+'~'+s; }";
 		}
 		echo "    $(".new Js($this->name).").value = ss;";

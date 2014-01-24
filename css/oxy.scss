@@ -194,13 +194,14 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .message-panel-bug      { background:#f4f4f4; border-color:#999999; }
 
 .message                 { text-align:left; padding-left:18px; text-indent:-18px; }
-.message:before          { @extend .oxy-icon; font-size:16px; margin-right:2px; color:#555555; }
-.message-info:before     { content: "\E101"; }
-.message-success:before  { content: "\E102"; }
-.message-question:before { content: "\E103"; }
-.message-warning:before  { content: "\E104"; }
-.message-error:before    { content: "\E105"; }
-.message-bug:before      { content: "\E106"; }
+.message .message-icon   { font-size:16px; margin-right:2px; color:#555555; }
+//.message:before          { @extend .oxy-icon; font-size:16px; margin-right:2px; color:#555555; }
+//.message-info:before     { content: "\E101"; }
+//.message-success:before  { content: "\E102"; }
+//.message-question:before { content: "\E103"; }
+//.message-warning:before  { content: "\E104"; }
+//.message-error:before    { content: "\E105"; }
+//.message-bug:before      { content: "\E106"; }
 
 .progress-message { padding-top:2px; padding-bottom:2px; border-bottom:1px solid #fcfcfc; }
 

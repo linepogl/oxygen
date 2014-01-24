@@ -35,14 +35,16 @@ abstract class XItem extends XValue implements Serializable {
 	public static function GetClassTitleGeneric($classname) { return $classname::GetClassTitle(); }
 	public static function GetClassTitlePluralGeneric($classname) { return $classname::GetClassTitlePlural(); }
 
-	public static function GetClassIconName() { return 'oxy/ico/Icon'; }
+	/** @return _Icon */ public static function GetClassGlyph() { return oxy::icoBlock(); }
+	/** @return _Icon */ public static final function GetClassGlyphGeneric($classname){ return $classname::GetClassGlyph(); }
+	public static function GetClassIconName() { return null; }
 	public static final function GetClassIconNameGeneric($classname){ return $classname::GetClassIconName(); }
-	public static function GetClassIconType() { return 'gif'; }
+	public static function GetClassIconType() { return Oxygen::GetDefaultIconType(); }
 	public static final function GetClassIconTypeGeneric($classname){ return $classname::GetClassIconType(); }
 	public static function GetClassIconSrc($size=16){ return static::GetClassIconName().$size.'.'.static::GetClassIconType(); }
 	public static final function GetClassIconSrcGeneric($classname,$size=16){ return self::GetClassIconNameGeneric($classname).$size.'.'.self::GetClassIconTypeGeneric($classname); }
-	public static function GetClassIcon($size=16) { return '<img src="'.static::GetClassIconSrc($size).'" width="'.$size.'" height="'.$size.'" alt="" />'; }
-	public static final function GetClassIconGeneric($classname,$size=16){ return '<img src="'.self::GetClassIconSrcGeneric($classname,$size).'" width="'.$size.'" height="'.$size.'" alt="" />'; }
+	/** @return _Icon */ public static function GetClassIcon($size=16) { $icon_name = static::GetClassIconName(); return $icon_name===null ? static::GetClassGlyph()->WithSize($size) : new Icon($icon_name,$size,static::GetClassIconType()); }
+	/** @return _Icon */ public static final function GetClassIconGeneric($classname,$size=16){ $classname::GetClassIcon($size); }
 
 
 
