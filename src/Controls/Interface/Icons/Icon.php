@@ -10,7 +10,7 @@ class Icon extends _Icon {
 	}
 	public function Render() {
 		$size = $this->size===null ? 16 : $this->size;
-		echo '<img class="icon '.$this->css_class.'"'
+		echo '<img class="icon'.$this->css_class.'"'
 				.($this->css_style==''?'':' style="'.$this->css_style.'"')
 				.($this->title===null?'':' title="'.new Html($this->title).'" alt="'.new Html($this->title).'"')
 				.' src="'.$this->icon_name.$this->size.'.'.$this->icon_type.'" width="'.$size.'" height="'.$size.'" />';
