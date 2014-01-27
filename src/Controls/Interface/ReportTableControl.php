@@ -586,7 +586,7 @@ class ReportTableControl extends ValueControl {
 		//
 		echo '<tr class="header" '.($this->show_header?'':' style="display:none;"').'>';
 		if ($this->show_numbers)
-			echo '<th class="number icon contract">'.(is_null($this->icon) ? new Spacer(16) : $this->icon).'</th>';
+			echo '<th class="number icon contract">'.(is_null($this->icon) ? oxy::icoSpacer() : $this->icon).'</th>';
 
 		if ($this->use_check_boxes && $has_values){
 			if ($this->is_multiple) {
@@ -600,7 +600,7 @@ class ReportTableControl extends ValueControl {
 			}
 			else {
 				echo '<th class="contract checkbox">';
-				echo new Spacer(16);
+				echo oxy::icoSpacer();
 				echo '</th>';
 			}
 		}
