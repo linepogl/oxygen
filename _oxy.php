@@ -2,9 +2,14 @@
 Oxygen::RegisterResourceManager('oxy','_oxy');
 if (false) { class oxy extends _oxy {} }
 abstract class _oxy {
+
 	//
+	//
+	// Icons
+	//
+	//
+
 	// 000 - Basic
-	//
 	public static function icoSpacer            (){ return new Glyph('oxy-icon',0xE000); }
 	public static function icoBlock             (){ return new Glyph('oxy-icon',0xE001); }
 	public static function icoItem              (){ return new Glyph('oxy-icon',0xE001); }
@@ -25,9 +30,7 @@ abstract class _oxy {
 	public static function icoNew               (){ return new Glyph('oxy-icon',0xE011); }
 	public static function icoForbidden         (){ return new Glyph('oxy-icon',0xE012); }
 
-	//
 	// 100 - Messages
-	//
 	public static function icoInfo              (){ return new Glyph('oxy-icon',0xE101); }
 	public static function icoSuccess           (){ return new Glyph('oxy-icon',0xE102); }
 	public static function icoQuestion          (){ return new Glyph('oxy-icon',0xE103); }
@@ -35,9 +38,7 @@ abstract class _oxy {
 	public static function icoError             (){ return new Glyph('oxy-icon',0xE105); }
 	public static function icoBug               (){ return new Glyph('oxy-icon',0xE106); }
 
-	//
 	// 200 - Basic Actions
-	//
 	public static function icoView              (){ return new Glyph('oxy-icon',0xE200); }
 	public static function icoModify            (){ return new Glyph('oxy-icon',0xE201); }
 	public static function icoRename            (){ return new Glyph('oxy-icon',0xE202); }
@@ -50,10 +51,7 @@ abstract class _oxy {
 	public static function icoFavoritize        (){ return new Glyph('oxy-icon',0xE00A); }
 	public static function icoUnfavoritize      (){ return new Glyph('oxy-icon',0xE00B); }
 
-
-	//
 	// 500/600 - Circle/Simple Actions
-	//
 	public static function icoBrowse            (){ return new Glyph('oxy-icon',0xE500); }
 	public static function icoList              (){ return new Glyph('oxy-icon',0xE600); }
 	public static function icoAdd               (){ return new Glyph('oxy-icon',0xE501); }
@@ -100,14 +98,11 @@ abstract class _oxy {
 	public static function icoBatch             (){ return new Glyph('oxy-icon',0xE50F); }
 	public static function icoThunder           (){ return new Glyph('oxy-icon',0xE60F); }
 
-
-	//
 	// 900 - Interface
-	//
 	public static function icoContextMenuAnchor (){ return new Glyph('oxy-icon',0xE900); }
 	public static function icoMore              (){ return new Glyph('oxy-icon',0xE902); }
 	public static function icoClear             (){ return new Glyph('oxy-icon',0xE901); }
-	public static function icoDropArea        (){ return new Glyph('oxy-icon',0xE903); }
+	public static function icoDropArea          (){ return new Glyph('oxy-icon',0xE903); }
 	public static function icoMenuUp            (){ return new Glyph('oxy-icon',0xE904); }
 	public static function icoMenuDown          (){ return new Glyph('oxy-icon',0xE905); }
 	public static function icoMenuLeft          (){ return new Glyph('oxy-icon',0xE906); }
@@ -118,4 +113,36 @@ abstract class _oxy {
 	public static function icoChecked           (){ return new Glyph('oxy-icon',0xE9A1); }
 	public static function icoTreePlus          (){ return new Glyph('oxy-icon',0xE9A2); }
 	public static function icoTreeMinus         (){ return new Glyph('oxy-icon',0xE9A3); }
+
+
+
+
+
+
+	//
+	//
+	// Formating
+	//
+	//
+	public static function FormatDate( XDateTime $date = null ){ return Language::FormatDate( $date  );	}
+	public static function FormatDateTime( XDateTime $date = null ){		return Language::FormatDateTime( $date );	}
+	public static function FormatTime( XDateTime $time = null ){		return Language::FormatDateTime( $time );	}
+	public static function FormatDateSpanSince( XDateTime $date = null ){		return Language::FormatDateSpanSince( $date );	}
+	public static function FormatTimeSpan( XTimeSpan $timespan = null ){		return Language::FormatTimeSpan( $timespan );	}
+	public static function FormatTimeSpanSince( XDateTime $date = null ){		return Language::FormatTimeSpanSince( $date );	}
+	public static function FormatDaysSince( XDateTime $date = null ){		return Language::FormatDaysSince( $date );	}
+	public static function FormatDateTimeRelatively( XDateTime $date = null ){		return Language::FormatDateTimeRelatively( $date );	}
+	public static function FormatBytes( $bytes ) {		return Language::FormatBytes($bytes);	}
+
+	public static function AbbrSeconds( XTimeSpan $timespan = null , $number_of_decimals = -1 ){ return $timespan===null ? null : '<span style="display:none;">'.sprintf('%020d',$timespan->GetTotalMilliSeconds()).'"</span><abbr title="'. new Html(Language::FormatTimeSpan($timespan)).'">'.new Html( Language::FormatNumber($timespan->GetTotalMilliSeconds()/1000,$number_of_decimals).'"').'</abbr>'; }
+	public static function AbbrDateTime( XDateTime $date_time = null , $default_value = ''){ return $date_time===null ? $default_value : '<abbr s="'.$date_time->Format('YmdHis').'" title="'. new Html(Lemma::Pick('xAgo')->Sprintf(static::FormatTimeSpanSince($date_time))).'">'.new Html(static::FormatDateTime($date_time)).'</abbr>'; }
+	public static function AbbrDaysSince( XDateTime $date_time = null , $default_value = '' ){ if ($date_time===null) return $default_value; /** @var $diff XTimeSpan */ return '<span style="display:none;">'.sprintf('%020d',XDateTime::Now()->Diff( $date_time )->GetTotalMilliSeconds()).'</span><abbr title="'. new Html(static::FormatDateTime($date_time).' - '.Lemma::Pick('xAgo')->Sprintf(static::FormatTimeSpanSince($date_time))).'">'.static::FormatDaysSince($date_time).'</abbr>'; }
+	public static function AbbrDate( XDateTime $date_time = null ){ return $date_time===null ? null : '<abbr s="'.$date_time->Format('YmdHis').'" title="'.new Html($date_time instanceof XDate ? static::FormatDate($date_time) . "\n" . Lemma::Pick('xAgo')->Sprintf( static::FormatDaysSince($date_time) ) : static::FormatDateTime($date_time) . "\n" . Lemma::Pick('xAgo')->Sprintf( static::FormatTimeSpanSince($date_time) )).'">'.new Html(static::FormatDate($date_time)).'</abbr>'; }
+	public static function AbbrByteRate( $byterate ){ return '<span style="display:none;">'.sprintf('%030d',$byterate).'</span><abbr title="'. new Html(Language::FormatNumber($byterate).' '.Lemma::Pick('unit:byte').'/'.Lemma::Pick('unit:sec')).'" class="nowrap">'.Language::FormatBytes($byterate).'/'.Lemma::Pick('unit:sec').'</abbr>'; }
+	public static function AbbrByte( $bytes ){ return '<span style="display:none;">'.sprintf('%030d',$bytes).'</span><abbr title="'. new Html(Language::FormatNumber($bytes).' '.Lemma::Pick('unit:byte')).'" class="nowrap">'.Language::FormatBytes($bytes).'</abbr>'; }
+
+
+
+
+
 }

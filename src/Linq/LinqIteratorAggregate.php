@@ -3,6 +3,7 @@
 
 abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 
+	/** @return Iterator */
 	public function GetIterator(){ throw new NonImplementedException(); }
 
 	/** Lazy O(n) @return LinqIterator */
@@ -68,20 +69,20 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		return new LinqUnionIterator($this->getIterator(),$other_iterator);
 	}
 
-	/** Aggressive O(1) @return value */
+	/** Aggressive O(1) @return mixed value */
 	public function GetFirst(){
 		$it = $this->getIterator();
 		$it->rewind();
 		return $it->valid() ? $it->current() : null;
 	}
-	/** Aggressive O(1) @return value */
+	/** Aggressive O(1) @return mixed value */
 	public function GetFirstOr($default){
 		$it = $this->getIterator();
 		$it->rewind();
 		return $it->valid() ? $it->current() : $default;
 	}
 
-	/** Aggressive O(n) @return value */
+	/** Aggressive O(n) @return mixed value */
 	public function GetLast(){
 		$it = $this->getIterator();
 		$r = null;
@@ -90,7 +91,7 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		return $r;
 	}
 
-	/** Aggressive O(n) @return value */
+	/** Aggressive O(n) @return mixed value */
 	public function GetLastOr($default){
 		$it = $this->getIterator();
 		$r = $default;
@@ -99,14 +100,14 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		return $r;
 	}
 
-	/** Aggressive O(1) @return key */
+	/** Aggressive O(1) @return mixed key */
 	public function GetFirstKey(){
 		$it = $this->getIterator();
 		$it->rewind();
 		return $it->valid() ? $it->key() : null;
 	}
 
-	/** Aggressive O(n) @return key */
+	/** Aggressive O(n) @return mixed key */
 	public function GetLastKey(){
 		$it = $this->getIterator();
 		$r = null;
@@ -161,7 +162,7 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		return $r;
 	}
 
-	/** O(n) @return value */
+	/** O(n) @return mixed value */
 	public function Sum(){
 		$r = 0;
 		$it = $this->getIterator();
@@ -169,7 +170,7 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 			$r += $it->current();
 		return $r;
 	}
-	/** O(n) @return value */
+	/** O(n) @return mixed value */
 	public function Max($default = null){
 		$r = null;
 		$it = $this->getIterator();
@@ -179,7 +180,7 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 		}
 		return is_null($r) ? $default : $r;
 	}
-	/** O(n) @return value */
+	/** O(n) @return mixed value */
 	public function Min($default = null){
 		$r = null;
 		$it = $this->getIterator();
