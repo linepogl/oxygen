@@ -994,7 +994,7 @@ class Oxygen {
 			}
 
 	    if (isset($_SERVER['HTTP_RANGE'])) {
-				list($a, $range) = explode("=",$_SERVER['HTTP_RANGE'],2);
+				list(,$range) = explode("=",$_SERVER['HTTP_RANGE'],2);
 				list($range) = explode(",",$range,2);
 				list($range, $range_end) = explode("-", $range);
 				$range = intval($range);

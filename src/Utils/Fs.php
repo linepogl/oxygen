@@ -40,7 +40,8 @@ class Fs {
 			$stack[]	= $dir;
 			while ($stack) {
 				$thisdir = array_pop($stack);
-				if ($dircont = scandir($thisdir)) {
+				$dircont = scandir($thisdir);
+				if ($dircont !== false) {
 					$i=0;
 					while (isset($dircont[$i])) {
 						if ($dircont[$i] !== '.' && $dircont[$i] !== '..') {
@@ -76,7 +77,8 @@ class Fs {
 	public static function Unlink($path) {
 		if (file_exists($path)) {
 			if (is_dir($path) && !is_link($path)) {
-				if ($dh = opendir($path)) {
+				$dh = opendir($path);
+				if ($dh !== false) {
 					while (($sf = readdir($dh)) !== false) {
 						if ($sf == '.' || $sf == '..') continue;
 						self::Unlink($path.'/'.$sf);

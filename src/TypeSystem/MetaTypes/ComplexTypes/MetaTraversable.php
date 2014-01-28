@@ -52,12 +52,10 @@ class MetaTraversable extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (count($value) == 0)
-			return '(-11111111)';
 		$a = array();
 		foreach ($value as $x)
 			$a[] = XType::Of($x)->ExportSqlLiteral($x,$platform);
-		return '('.implode(',',$a).')';
+		return empty($a) ? '(-11111111)' : '('.implode(',',$a).')';
 	}
 
 	/**

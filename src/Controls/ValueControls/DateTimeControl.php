@@ -19,6 +19,7 @@ class DateTimeControl extends ValueControl {
 				->Render();
 		}
 
+		/** @noinspection PhpDeprecationInspection */
 		DateControl::Make($this->name . '_date' , $this->value )
 			->WithMode($this->mode)
 			->WithReadOnly($this->is_readonly)
@@ -29,6 +30,7 @@ class DateTimeControl extends ValueControl {
 
 		echo '&nbsp;';
 
+		/** @noinspection PhpDeprecationInspection */
 		TimeControl::Make($this->name . '_time' , $this->value )
 			->WithMode($this->mode)
 			->WithReadOnly($this->is_readonly)

@@ -78,18 +78,18 @@ class LinqIterator implements Iterator, Countable {
 		return new LinqUnionIterator($this,$other_iterator);
 	}
 
-	/** Aggressive O(1) @return value */
+	/** Aggressive O(1) @return mixed value */
 	public function GetFirst(){
 		$this->rewind();
 		return $this->valid() ? $this->current() : null;
 	}
-	/** Aggressive O(1) @return value */
+	/** Aggressive O(1) @return mixed value */
 	public function GetFirstOr($default){
 		$this->rewind();
 		return $this->valid() ? $this->current() : $default;
 	}
 
-	/** Aggressive O(n) @return value */
+	/** Aggressive O(n) @return mixed value */
 	public function GetLast(){
 		$r = null;
 		for($this->rewind();$this->valid();$this->next())
@@ -97,7 +97,7 @@ class LinqIterator implements Iterator, Countable {
 		return $r;
 	}
 
-	/** Aggressive O(n) @return value */
+	/** Aggressive O(n) @return mixed value */
 	public function GetLastOr($default){
 		$r = $default;
 		for($this->rewind();$this->valid();$this->next())
@@ -106,13 +106,13 @@ class LinqIterator implements Iterator, Countable {
 	}
 
 
-	/** Aggressive O(1) @return key */
+	/** Aggressive O(1) @return mixed key */
 	public function GetFirstKey(){
 		$this->rewind();
 		return $this->valid() ? $this->key() : null;
 	}
 
-	/** Aggressive O(n) @return key */
+	/** Aggressive O(n) @return mixed key */
 	public function GetLastKey(){
 		$r = null;
 		for($this->rewind();$this->valid();$this->next())

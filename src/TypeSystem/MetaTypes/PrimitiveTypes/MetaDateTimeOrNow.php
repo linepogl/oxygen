@@ -43,7 +43,6 @@ class MetaDateTimeOrNow extends XConcreteType {
 			case Database::MYSQL:   return $value->Format('Y-m-d H:i:s');
 			case Database::ORACLE:  return $value->Format('Y-m-d H:i:s');
 		}
-		throw new ConvertionException();
 	}
 
 	/**
@@ -57,7 +56,6 @@ class MetaDateTimeOrNow extends XConcreteType {
 			case Database::MYSQL:   return '\''.$value->Format('Y-m-d H:i:s').'\'';
 			case Database::ORACLE:  return '\''.$value->Format('Y-m-d H:i:s').'\'';
 		}
-		throw new ConvertionException();
 	}
 
 	/**

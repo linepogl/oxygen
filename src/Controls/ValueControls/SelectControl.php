@@ -160,6 +160,7 @@ class SelectControl extends ValueControl {
 			$j = 0;
 			for ($i = 0; $i < count($this->list_values); $i++) {
 				if ($this->IsSelected($this->list_values[$i])) {
+					/** @noinspection PhpUnusedLocalVariableInspection */
 					if ($j++>0) echo ', ';
 					echo $this->list_captions[$i];
 					break;

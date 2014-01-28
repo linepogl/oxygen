@@ -344,7 +344,9 @@ class Database {
 	 * @param string $sql ... Pass the rest of the arguments after $sql
 	 * @return array
 	 */
-	public static function ExecuteListOf(XType $type,$sql){ return self::ExecuteListOfX($type,$sql,array_slice(func_get_args(),2)); }
+	public static function ExecuteListOf(XType $type,$sql){
+		/** @noinspection PhpDeprecationInspection */
+		return self::ExecuteListOfX($type,$sql,array_slice(func_get_args(),2)); }
 	/**
 	 * @deprecated Since 1.3
 	 * @param string $sql
@@ -758,7 +760,6 @@ class Database {
 				self::Execute('UNLOCK TABLES');
 				break;
 			case self::ORACLE:
-				$id = null;
 				try {
 					$id = self::ExecuteScalar('SELECT '.new SqlIden(self::hash_sequence($tablename,$primarykey)).'.NEXTVAL A FROM DUAL')->AsID();
 				}
@@ -845,7 +846,7 @@ class Database {
 	}
 	public static function ExecuteDropIndex($tablename){
 		$a = func_get_args();
-		$z = func_num_args();
+		//$z = func_num_args();
 		$key = self::hash_index($tablename, implode('+',array_slice($a,1)));
 		self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden($key));
 	}

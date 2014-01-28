@@ -39,6 +39,7 @@ abstract class XValue {
 		if ( $x1 instanceof DateTime && $x2 instanceof DateTime )
 			return $x1->getTimestamp() == $x2->getTimestamp();
 
+		/** @noinspection PhpParamsInspection */
 		throw new InvalidArgumentException('Unsupported comparison: ' . (is_object($x1)?get_class($x1):gettype($x1)) . ' - ' . (is_object($x2)?get_class($x2):gettype($x2))  );
 	}
 	public static function Compare($x1,$x2){

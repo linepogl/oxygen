@@ -30,6 +30,7 @@ class DBReader implements ArrayAccess {
 		}
 		catch (Exception $ex){
 			if (is_null($this->record)) throw new Exception('DBReader is not initialised');
+			throw $ex;
 		}
 	}
 	/** @return DBValue */
@@ -43,9 +44,20 @@ class DBReader implements ArrayAccess {
 			if (is_null($this->record)) throw new Exception('DBReader is not initialised');
 			if (!array_key_exists($offset,$this->record)) throw new Exception('Field '.$offset.' not found.');
 		}
+		return null;
 	}
-  public function OffsetSet($offset, $value) {	throw new Exception('DBReader is readonly.'); }
+	public function OffsetSet($offset,$value) { throw new Exception('DBReader is readonly.'); }
 	public function OffsetUnset($offset) { throw new Exception('DBReader is readonly.'); }
 
+	/** @return DBValue */
+	public function Get($offset){
+		try {
+			return array_key_exists($offset,$this->record);
+		}
+		catch (Exception $ex){
+			if (is_null($this->record)) throw new Exception('DBReader is not initialised');
+			throw $ex;
+		}
+	}
 }
 

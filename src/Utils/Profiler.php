@@ -7,6 +7,7 @@ class Profiler {
 	private static $serial = null;
 	public static function Start(){
 		if (!function_exists('xhprof_enable')) return;
+		/** @noinspection PhpUndefinedConstantInspection */
 		xhprof_enable(XHPROF_FLAGS_NO_BUILTINS);
 	}
 	

@@ -574,7 +574,7 @@ abstract class XItem extends XValue implements Serializable {
 	}
 
 	public final function Read(Http $http,$name=null){
-		return $this->Wrap($name)->Read($http);
+		$this->Wrap($name)->Read($http);
 	}
 
 

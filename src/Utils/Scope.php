@@ -530,6 +530,7 @@ class HybridScope extends Scope {
 			case Scope::MEMCACHED: return 'MEMCACHED';
 			case Scope::MEMCACHED_SHARED: return 'MEMCACHED_SHARED';
 		}
+		return '';
 	}
 	public function SetUseExternalStorage($value) {
 		$this->hdd_scope->SetUseHddStorage($value);

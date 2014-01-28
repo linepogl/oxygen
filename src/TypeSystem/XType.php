@@ -202,7 +202,6 @@ abstract class XType implements _XType {
 			case Database::MYSQL:   return '\''.str_replace('\'','\\\'',str_replace('\\','\\\\',$string)).'\'';
 			case Database::ORACLE:  return '\''.str_replace('\'','\'\'',$string).'\'';
 		}
-		throw new ConvertionException();
 	}
 
 
@@ -218,7 +217,6 @@ abstract class XType implements _XType {
 			case Database::MYSQL:   return '`'.str_replace(array( "`"  ,"/" ,"\\" ,"." ),array( "``" ,""  ,""   ,""  ),$string).'`';
 			case Database::ORACLE:  return '"'.str_replace('"','""',$string).'"';
 		}
-		throw new ConvertionException();
 	}
 
 

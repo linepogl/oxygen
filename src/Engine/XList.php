@@ -176,6 +176,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	/** @return XList */
 	public function LoadAll(){
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		foreach ($this as $x)
 			;
 		return $this;

@@ -419,22 +419,26 @@ class XMeta extends stdClass {
 		if (!is_null($r)) return $r;
 		$xml = $parent->ownerDocument;
 		$parent_choice = $this->get_choise_element($parent);
+		/** @var $r DOMElement */
 		$r = $parent_choice->appendChild($xml->createElementNS(Xml::XS,'xs:element'));
 		$r->setAttribute('name',$this->GetXmlTagName());
 		$r->setAttribute('minOccurs','0');
 		$r->setAttribute('maxOccurs','unbounded');
 		$e = $r->appendChild($xml->createElementNS(Xml::XS,'xs:complexType'));
+		/** @var $f XMetaField */
 		foreach ($this->GetXmlFields() as $f){
 			$found = false; foreach ($meta_fields_to_be_ignored as $ff) if ($f->IsEqualTo($ff)) { $found = true; break; }
 			if ($found) continue;
 			if ($f->GetXmlBehaviour() == Xml::Element){
 				$c = $this->get_choise_element($r);
+				/** @var $x DOMElement */
 				$x = $c->appendChild($xml->createElementNS(Xml::XS,'xs:element'));
 				$x->setAttribute('name',$f->GetXmlName());
 				$x->setAttribute('minOccurs','0');
 				$x->setAttribute('maxOccurs','1');
 			}
 			else {
+				/** @var $x DOMElement */
 				$x = $e->appendChild($xml->createElementNS(Xml::XS,'xs:attribute'));
 				$x->setAttribute('name',$f->GetXmlName());
 			}
@@ -445,12 +449,14 @@ class XMeta extends stdClass {
 				$x = $x->appendChild($xml->createElementNS(Xml::XS,'xs:simpleType'));
 				$x = $x->appendChild($xml->createElementNS(Xml::XS,'xs:restriction'));
 				$x->setAttribute('base','xs:string');
-				foreach ($enum as $key=>$value){
+				foreach ($enum as $value){
+					/** @var $xx DOMElement */
 					$xx = $x->appendChild($xml->createElementNS(Xml::XS,'xs:enumeration'));
 					$xx->setAttribute('value',$value);
 				}
 			}
 		}
+		/** @var $sl XMetaSlave */
 		foreach ($this->GetXmlSlaves() as $sl){
 			$sl->GetHookMeta()->ExportXsd($r,array($sl->GetHookField()));
 		}
