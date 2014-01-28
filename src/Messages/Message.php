@@ -12,13 +12,15 @@ abstract class Message {
 	const SUCCESS = 1;
 	const WARNING = 2;
 	const QUESTION = 3;
-	const ERROR = 4;
-	const BUG = 5;
+	const SECURITY = 4;
+	const ERROR = 5;
+	const BUG = 6;
 	private static $EnumType = array(
 		 self::INFO => 'info'
 		,self::SUCCESS => 'success'
 		,self::WARNING => 'warning'
 		,self::QUESTION => 'question'
+		,self::SECURITY => 'security'
 		,self::ERROR => 'error'
 		,self::BUG => 'bug'
 		);
@@ -29,10 +31,12 @@ abstract class Message {
 
 	public static function Make($severity,$value,$icon_name=null){
 		switch($severity){
+			default:
 			case self::INFO: return new InfoMessage($value,$icon_name);
 			case self::SUCCESS: return new SuccessMessage($value,$icon_name);
 			case self::WARNING: return new WarningMessage($value,$icon_name);
 			case self::QUESTION: return new QuestionMessage($value,$icon_name);
+			case self::SECURITY: return new SecurityMessage($value,$icon_name);
 			case self::ERROR: return new ErrorMessage($value,$icon_name);
 			case self::BUG: return new BugMessage($value,$icon_name);
 		}

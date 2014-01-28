@@ -31,10 +31,11 @@ abstract class _oxy {
 	public static function icoForbidden         (){ return new Glyph('oxy-icon',0xE012); }
 
 	// 100 - Messages
-	public static function icoInfo              (){ return new Glyph('oxy-icon',0xE101); }
-	public static function icoSuccess           (){ return new Glyph('oxy-icon',0xE102); }
+	public static function icoInfo              (){ return new Glyph('oxy-icon',0xE100); }
+	public static function icoSuccess           (){ return new Glyph('oxy-icon',0xE101); }
+	public static function icoWarning           (){ return new Glyph('oxy-icon',0xE102); }
 	public static function icoQuestion          (){ return new Glyph('oxy-icon',0xE103); }
-	public static function icoWarning           (){ return new Glyph('oxy-icon',0xE104); }
+	public static function icoSecurity          (){ return new Glyph('oxy-icon',0xE104); }
 	public static function icoError             (){ return new Glyph('oxy-icon',0xE105); }
 	public static function icoBug               (){ return new Glyph('oxy-icon',0xE106); }
 
