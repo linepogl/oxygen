@@ -22,8 +22,8 @@ abstract class _oxy {
 	public static function icoComment           (){ return new Glyph('oxy-icon',0xE008); }
 	public static function icoKey               (){ return new Glyph('oxy-icon',0xE009); }
 	public static function icoFavorite          (){ return new Glyph('oxy-icon',0xE00A); }
-	public static function icoDate              (){ return new Glyph('oxy-icon',0xE00C); }
-	public static function icoTime              (){ return new Glyph('oxy-icon',0xE00D); }
+	public static function icoTime              (){ return new Glyph('oxy-icon',0xE00C); }
+	public static function icoDate              (){ return new Glyph('oxy-icon',0xE00D); }
 	public static function icoEmpty             (){ return new Glyph('oxy-icon',0xE00E); }
 	public static function icoAll               (){ return new Glyph('oxy-icon',0xE00F); }
 	public static function icoRequired          (){ return new Glyph('oxy-icon',0xE010); }
