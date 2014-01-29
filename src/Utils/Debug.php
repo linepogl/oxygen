@@ -454,8 +454,10 @@ class Debug {
 			}
 		}
 		catch (Exception $ex) {
-			$must_record_immediately = true;
-			$must_initiate_accumulator = true;
+//			$must_record_immediately = true;
+//			$must_initiate_accumulator = true;
+			$must_record_immediately = false;   // TODO: fallback to memcached or apc?
+			$must_initiate_accumulator = false;
 		}
 
 		$exception_recorded = false;
