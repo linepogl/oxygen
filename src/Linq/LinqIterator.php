@@ -25,6 +25,7 @@ class LinqIterator implements Iterator, Countable {
 	}
 	/** Lazy O(n) @return LinqIterator */
 	public function WhereKeyNotNull(){
+		/** @noinspection PhpUnusedParameterInspection */
 		return new LinqWhereIterator($this,function($x,$key){return !is_null($key);});
 	}
 

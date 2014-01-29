@@ -52,12 +52,15 @@ class DBReader implements ArrayAccess {
 	/** @return DBValue */
 	public function Get($offset){
 		try {
-			return array_key_exists($offset,$this->record);
+			$r = $this->record[$offset];
+			if (!($r instanceof DBValue)) { $r = new DBValue($r); $this->record[$offset] = $r; }
+			return $r;
 		}
 		catch (Exception $ex){
 			if (is_null($this->record)) throw new Exception('DBReader is not initialised');
-			throw $ex;
+			if (!array_key_exists($offset,$this->record)) throw new Exception('Field '.$offset.' not found.');
 		}
+		return null;
 	}
 }
 

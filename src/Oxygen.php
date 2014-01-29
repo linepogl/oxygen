@@ -844,27 +844,6 @@ class Oxygen {
 
 
 
-	//
-	//
-	// LoginControl
-	//
-	//
-	/** @var LoginControlBase */
-	private static $login_control = null;
-	/** @return LoginControlBase */
-	public static function GetLoginControl(){
-		if (is_null(self::$login_control)){
-			try {
-				new ReflectionClass('LoginControl'); // <-- this will throw a mere exception if the class is not found, which will prevent a nasty FATAL php error in the next line.
-			}
-			catch (Exception $ex){
-				return null;
-			}
-			self::$login_control = new LoginControl();
-		}
-		return self::$login_control;
-	}
-	public static function SetLoginControl(LoginControlBase $value){ self::$login_control = $value; }
 
 
 
@@ -1098,7 +1077,6 @@ class Oxygen {
 		$r['Charset'] = Oxygen::GetCharset();
 		$r['Languages'] = implode(', ',Oxygen::GetLangs());
 		$r['Default action name'] = Oxygen::GetDefaultActionName();
-		$r['Login control name'] = get_class(Oxygen::GetLoginControl());
 		$r['Url pins'] = implode(', ',array_keys(Oxygen::GetUrlPins()));
 		$r['Code folders'] = implode("\n",Oxygen::GetCodeFolders());
 		$r['Dictionaries'] = implode("\n",Oxygen::GetDictionaryFiles());

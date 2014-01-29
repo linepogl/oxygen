@@ -144,6 +144,13 @@ abstract class _oxy {
 
 
 
+	//
+	//
+	// Interface
+	//
+	//
+	/** @return LoginControl */
+	public static function GetLoginControl(){ return new LoginControl(); }
 
 
 }

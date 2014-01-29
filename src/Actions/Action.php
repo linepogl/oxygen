@@ -107,35 +107,25 @@ abstract class Action extends XValue {
 		}
 		catch (SecurityException $ex){
 			$this->content_compromised = true;
-			$msg = $ex->getMessage();
+			$msg = $ex->GetInnerMessage();
 			if (ob_get_level()>0) ob_clean();
 			if ($this->IsModeRaw()){
 				Oxygen::SetResponseCode(403); // forbidden
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				echo empty($msg) ? Lemma::Pick('MsgAccessDenied') : $msg;
+				echo $msg->AsString();
 			}
 			else {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
-					Debug::Write(empty($msg) ? Lemma::Pick('MsgAccessDenied') : $msg);
+					Debug::Write($msg->AsString());
 				}
 				else {
-					$z = is_null(Oxygen::GetLoginControl()) ? '' : Oxygen::GetLoginControl()->WithMessage($msg)->WithRedirectOnSuccess($this)->GetContent();
-					if (!empty($z))
-						echo $z;
-					elseif ($this->IsAjaxDialog()){
-						echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgAccessDenied')) : $ex );
-						echo $this->GetFormButtons();
-						echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
-						echo $this->EndFormButtons();
-					}
-					else {
-						echo '<div class="exception">';
-						echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgAccessDenied')) : $ex );
-						echo '</div>';
-					}
+					oxy::GetLoginControl()
+						->WithMessage($msg)
+						->WithRedirectOnSuccess($this)
+						->Render();
 				}
 			}
 			$content = ob_get_clean();

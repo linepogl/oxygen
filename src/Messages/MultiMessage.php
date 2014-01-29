@@ -7,7 +7,8 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 		parent::__construct('',null);
 		$this->dominant = new InfoMessage('');
 		$a = func_get_args();
-		array_walk_recursive( $a , function($value,$key,$mm){
+		/** @noinspection PhpUnusedParameterInspection */
+		array_walk_recursive( $a , function($value,$key,MultiMessage $mm){
 			$mm->Add(Message::Cast($value));
 		},$this);
 	}

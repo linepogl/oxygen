@@ -17,6 +17,7 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 	}
 	/** Lazy O(n) @return LinqIterator */
 	public function WhereKeyNotNull(){
+		/** @noinspection PhpUnusedParameterInspection */
 		return new LinqWhereIterator($this->getIterator(),function($x,$key){return !is_null($key);});
 	}
 
