@@ -30,7 +30,7 @@ abstract class Http implements ArrayAccess, IteratorAggregate {
 		$options = array('http'=>array('method'=>$method
 			,'protocol_version' => '1.1'
 			,'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17'
-			,'header' => "Cache-Control: max-age=0\r\n"
+			,'header' => "Cache-Control: max-age=0\r\nConnection: close\r\n"
 			));
 		if ($timeout!==null) $options['http']['timeout'] = $timeout;
 		if ($method === 'POST') {

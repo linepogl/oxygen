@@ -492,7 +492,7 @@ class Debug {
 
 			if ($must_initiate_accumulator) { // initiate the accumulator
 				try {
-					Http::Fire(Oxygen::GetHrefBaseFull().'oxy/record.php','POST',array(
+					Http::Fire(Oxygen::GetHrefBaseFull('http',80).'oxy/record.php','POST',array( // TODO: this is troublesome! We should not change to http, but Fire has a problem with https...
 						 'serial' => $serial
 						,'exception_recorded' => $exception_recorded?'true':'false'
 						,'acc_filename' => $acc_filename
