@@ -962,6 +962,13 @@ class Oxygen {
 			while (ob_get_level()>0) ob_end_clean();
 			if(ini_get('zlib.output_compression')) ini_set('zlib.output_compression', 'Off');
 			Oxygen::ClearHttpHeaders();
+
+			if ($requires_caching && isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($filename)) {
+				Oxygen::AddHttpHeader('HTTP/1.1 304');
+				Oxygen::SendHttpHeaders();
+				return;
+			}
+
 			Oxygen::AddHttpHeader('Content-Type: '.$mime);
 			Oxygen::AddHttpHeader('Content-Disposition: attachment; filename="'.$save_as.'"');
 			Oxygen::AddHttpHeader("Content-Transfer-Encoding: binary");
