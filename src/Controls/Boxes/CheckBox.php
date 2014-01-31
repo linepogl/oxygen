@@ -38,7 +38,7 @@ class CheckBox extends Box {
 			if ($this->is_rich)
 				echo $this->label;
 			else
-				echo new Html($this->label);
+				echo '<span class="text">'.new Html($this->label).'</span>';
 		}
 
 		echo '</a>';
