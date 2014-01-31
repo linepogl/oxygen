@@ -841,14 +841,30 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
-			self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])));
+			switch (self::$type) {
+				default:
+				case self::MYSQL:
+					self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])));
+					break;
+				case self::ORACLE:
+					self::Execute('DROP INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])));
+					break;
+			}
 		}
 	}
 	public static function ExecuteDropIndex($tablename){
 		$a = func_get_args();
 		//$z = func_num_args();
 		$key = self::hash_index($tablename, implode('+',array_slice($a,1)));
-		self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden($key));
+		switch (self::$type) {
+			default:
+			case self::MYSQL:
+			self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden($key));
+				break;
+			case self::ORACLE:
+				self::Execute('DROP INDEX '.new SqlIden($key));
+				break;
+		}
 	}
 	public static function ExecuteDropIndicesRaw($tablename){
 		$a = func_get_args();
