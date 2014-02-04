@@ -138,10 +138,9 @@ class RollerBox extends Box {
 	}
 
 	public function Render(){
-
-		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->http_name);
-
 		$readonly = $this->readonly || $this->mode != UIMode::Edit;
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($readonly?null:$this->http_name);
+
 
 		if ($readonly)
 			echo '<span class="rollerbox-anchor '.$this->css_class.'" style="'.$this->css_style.'">';
@@ -171,35 +170,14 @@ class RollerBox extends Box {
 
 		echo Js::BEGIN;
 		echo "window.".$this->name .'={';
-		echo "  is_readonly : ".new Js($readonly);
-		echo " ,values : ".new Js($vals);
-		echo " ,selected_index : ".new Js($selected_index);
-		echo " ,SetValue : function(value){";
-		echo "    var old = this.selected_index;";
-		echo "    for(var i = 0; i < this.values.length; i++) if (this.values[i]===value) {";
-		echo "      this.selected_index = i;";
-		echo "      break;";
-		echo "    }";
-		echo "    this.Update();";
-		echo "    if (this.selected_index!=old) this.OnChange();";
-		echo "  }";
-		echo " ,GetValue : function(){";
-		echo "    return jQuery('#$this->name').val();";
-		echo "  }";
-		echo " ,Update:function(){";
-		echo "    jQuery('#$this->name').val(this.values[this.selected_index]);";
-		echo "    for(var i = 0; i < this.values.length; i++) if (i===this.selected_index) jQuery('#$this->name-'+i).show(); else jQuery('#$this->name-'+i).hide();";
-		echo "  }";
-		echo " ,Change:function(){";
-		echo "    this.selected_index++;";
-		echo "    if (this.selected_index >= this.values.length) this.selected_index = 0;";
-		echo "    this.Update();";
-		echo "    this.OnChange();";
-		echo "  }";
-		echo " ,OnChange:function(){";
-		echo $this->on_change;
-		echo "    jQuery('#$this->name').trigger('change');";
-		echo "  }";
+		echo "  is_readonly:".new Js($readonly);
+		echo " ,values:".new Js($vals);
+		echo " ,selected_index:".new Js($selected_index);
+		echo " ,SetValue:function(value){var old=this.selected_index;for(var i=0;i<this.values.length;i++)if(this.values[i]===value){this.selected_index=i;break;}this.Update();if(this.selected_index!=old)this.OnChange();}";
+		echo " ,GetValue:function(){return jQuery('#$this->name').val();}";
+		echo " ,Update:function(){jQuery('#$this->name').val(this.values[this.selected_index]);for(var i=0;i<this.values.length;i++)jQuery('#$this->name-'+i).toggle(i===this.selected_index);}";
+		echo " ,Change:function(){if(++this.selected_index>=this.values.length)this.selected_index=0;this.Update();this.OnChange();}";
+		echo " ,OnChange:function(){{$this->on_change};jQuery('#$this->name').trigger('change');}";
 		echo "};";
 		echo Js::END;
 

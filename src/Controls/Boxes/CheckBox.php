@@ -25,60 +25,40 @@ class CheckBox extends Box {
 
 
 	public function Render(){
-
 		$readonly = $this->readonly || $this->mode != UIMode::Edit;
-		$mode = ( $readonly ? 'readonly-' : '' ) . ( $this->is_dirty ? 'dirty-' : '' ) . ( $this->value ? 'checked' : 'unchecked' );
-
 		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($readonly?null:$this->http_name)->WithCssClass(empty($this->list_name)?'':'list-'.$this->list_name);
 
-		echo '<a class="checkbox-anchor '.$this->css_class.'" href="javascript:'.($readonly?';':'window.'.$this->name.'.Toggle();').'" style="'.$this->css_style.'">';
-
-		echo '<img src="oxy/img/spacer.gif" class="checkbox checkbox-'.$mode.'" id="'.$this->name.'-check" />';
-		if ($this->show_label){
-			if ($this->is_rich)
-				echo $this->label;
-			else
-				echo '<span class="text">'.new Html($this->label).'</span>';
+		if ($readonly) {
+			echo '<span class="checkbox-anchor '.$this->css_class.'" style="'.$this->css_style.'">';
+			echo $this->is_dirty ? oxy::icoMinus() : ( $this->value ? oxy::icoYes() : oxy::icoNo() );
+			if ($this->show_label) echo $this->is_rich ? $this->label : '<span class="text spacer2">'.new Html($this->label).'</span>';
+			echo '</span>';
 		}
+		else {
+			echo '<a class="checkbox-anchor '.$this->css_class.'" href="javascript:window.'.$this->name.'.Toggle();" style="'.$this->css_style.'">';
+			echo '<span id="'.$this->name.'-box">';
+			echo $this->is_dirty ? oxy::icoBoxDirty() : ( $this->value ? oxy::icoBoxChecked() : oxy::icoBoxUnchecked() );
+			echo '</span>';
+			if ($this->show_label) echo $this->is_rich ? $this->label : '<span class="text spacer2">'.new Html($this->label).'</span>';
+			echo '</a>';
 
-		echo '</a>';
 
-		if (!$readonly) {
-		echo Js::BEGIN;
+			echo Js::BEGIN;
 			echo "window.".$this->name .'={';
-			echo "  is_readonly:".new Js($readonly);
-			echo " ,is_dirty:".new Js($this->is_dirty);
+			echo "  is_dirty:".new Js($this->is_dirty);
 			echo " ,list_value:".new Js(new Val($this->list_value));
 			echo " ,SetValue:function(value){";
 			echo "    var old = this.GetValue();";
 			echo "    jQuery('#$this->name').val( value ? ".new Js(new Val(true))." : ".new Js(new Val(false))." );";
-			echo "    this.Update();";
-			echo "    if (old!=value) this.OnChange();";
+			echo "    this.Update();if(old!=value)this.OnChange();";
 			echo "  }";
-			echo " ,GetValue:function(){";
-			echo "    return jQuery('#$this->name').val() == ".new Js(new Val(true)).";";
-			echo "  }";
-			echo " ,GetListValue:function(){";
-			echo "    return this.list_value;";
-			echo "  }";
-			echo " ,Update:function(){";
-			echo "    var value = this.GetValue();";
-			echo "    $(".new Js($this->name.'-check').").className = 'checkbox checkbox-' + ( this.is_readonly ? 'readonly-' : '' ) + ( this.is_dirty ? 'dirty-' : '' ) + ( value ? 'checked' : 'unchecked' );";
-			echo "  }";
-			echo " ,IsDirty:function(){";
-			echo "    return ".$this->name.".is_dirty;";
-			echo "  }";
-			echo " ,SetDirty:function(dirty){";
-			echo "    ".$this->name.".is_dirty = dirty;";
-			echo "    this.Update();";
-			echo "  }";
-			echo " ,Toggle:function(){";
-			echo "    ".$this->name.".SetValue(jQuery('#$this->name').val()!='true');";
-			echo "  }";
-			echo " ,OnChange:function(){";
-			if (!is_null($this->list_name)) echo "$this->list_name.OnChangeOne();";
-			echo $this->on_change;
-			echo "  }";
+			echo " ,GetValue:function(){return jQuery('#$this->name').val()==".new Js(new Val(true)).";}";
+			echo " ,GetListValue:function(){return this.list_value;}";
+			echo " ,Update:function(){jQuery('#$this->name-box').html(this.is_dirty?".new Js(oxy::icoBoxDirty()).":this.GetValue()?".new Js(oxy::icoBoxChecked()).":".new Js(oxy::icoBoxUnchecked()).");}";
+			echo " ,IsDirty:function(){return $this->name.is_dirty;}";
+			echo " ,SetDirty:function(dirty){ $this->name.is_dirty=dirty;this.Update();}";
+			echo " ,Toggle:function(){ $this->name.SetValue(jQuery('#$this->name').val()!=".new Js(new Val(true)).");}";
+			echo " ,OnChange:function(){".($this->list_name===null?'':"$this->list_name.OnChangeOne();")."$this->on_change;jQuery('#$this->name').trigger('change');}";
 			echo "};";
 			echo Js::END;
 		}
