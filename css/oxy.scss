@@ -221,16 +221,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .colorbox-popup a.null       { display:block; padding:3px 0 2px 0; margin:0; text-align:center; text-decoration:none; background:#ffffff; color:#444444; font:normal 10px/12px Trebuchet MS, sans-serif; }
 .colorbox-popup a.null:hover { background:#f0f0f0; color:#000000; text-decoration:none; }
 
-.checkbox-anchor                    { white-space:nowrap; }
-.checkbox                           { width:15px; height:15px; background-repeat:no-repeat; background-position:50% 50%; vertical-align:middle;}
-.checkbox-checked                   { background-image:base-url('oxy/img/checkbox-checked.gif'                  ); }
-.checkbox-unchecked                 { background-image:base-url('oxy/img/checkbox-unchecked.gif'                ); }
-.checkbox-dirty-checked             { background-image:base-url('oxy/img/checkbox-dirty-checked.gif'            ); }
-.checkbox-dirty-unchecked           { background-image:base-url('oxy/img/checkbox-dirty-unchecked.gif'          ); }
-.checkbox-readonly-checked          { background-image:base-url('oxy/img/checkbox-readonly-checked.gif'         ); }
-.checkbox-readonly-unchecked        { background-image:base-url('oxy/img/checkbox-readonly-unchecked.gif'       ); }
-.checkbox-readonly-dirty-checked    { background-image:base-url('oxy/img/checkbox-readonly-dirty-checked.gif'   ); }
-.checkbox-readonly-dirty-unchecked  { background-image:base-url('oxy/img/checkbox-readonly-dirty-unchecked.gif' ); }
+.checkbox-anchor { white-space:nowrap; }
 
 
 
@@ -255,7 +246,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .formPaneInnerWrap  { position:absolute; float:left; left:0; cursor:pointer; }
 .formPaneAnchorWrap { position:absolute; float:right; right:0; cursor:pointer; }
-.formPaneAnchor     { display:inline-block; background:base-url('oxy/img/form-pane-anchor.png') 50% 50% no-repeat; width:15px; height:15px; }
+.formPaneAnchor     { display:inline-block; }
 
 .formLocked       { background-color:#fbfbfb; border-color:#999999; color:#999999; }
 .formLocked:focus { background-color:#fafafa; border-color:#777777; color:#777777; }
@@ -289,13 +280,12 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formDropDownFoot .formPane:focus     { border:1px solid #bbbbff!important; background:#ffffff!important;}
 
 .formDate                         { width:9.0em; text-align:left; cursor:pointer; }
-.formDateAnchor                   { background:base-url('oxy/img/form-date-anchor.png') 50% 50% no-repeat; }
-.formDateDropDown                 { width:210px; }
-.formDateDropDown td              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }
-.formDateDropDown th              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; }
+.formDateDropDown                 { width:215px; }
+.formDateDropDown th              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; min-width:28px!important; width:28px!important; height:14px!important; }
+.formDateDropDown td              { margin:0!important; padding:0!important; border:0!important; background:#ffffff!important; min-width:28px!important; width:28px!important; height:28px!important; }
 .formDateDropDown th.day          { font:normal 9px/9px Helvetica,Arial,sans-serif!important; padding-top:4px!important; padding-bottom:4px!important; color:#bbbbbb!important; text-transform:uppercase!important; text-align:center!important; }
 .formDateDropDown td.empty        { }
-.formDateDropDown td.day          { font:bold 11px/11px Helvetica,Arial,sans-serif!important; width:100px; }
+.formDateDropDown td.day          { font:bold 11px/11px Helvetica,Arial,sans-serif!important; }
 .formDateDropDown td.day a        { display:block; padding:7px 0 7px 0!important; text-align:center!important; margin:0 1px 1px 0!important; font-weight:bold!important; border-radius:3px!important; color:#777777!important; }
 .formDateDropDown td.past a       { color:#aaaaaa!important;}
 .formDateDropDown td.weekend a    { background:#f8f8f8!important;}
@@ -311,7 +301,6 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formColorDropDown td.color a:hover { border:1px solid #000000; margin:0; }
 
 .formTime                             { width:7em; text-align:left; cursor:pointer; }
-.formTimeAnchor                       { background:base-url('oxy/img/form-time-anchor.png') 50% 50% no-repeat; }
 .formTimeDropDown                     { width:200px; }
 .formTimeDropDown .clock              { font:bold 18px/20px Helvetica,Arial,sans-serif!important; color:#666666!important; }
 .formTimeDropDown .clock span         { padding:3px 2px 1px 3px; border-radius:3px; cursor:pointer; }
@@ -322,7 +311,6 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .formTimeSpan                         { width:14.0em; text-align:center; cursor:pointer; }
 .formTimeSpanInner                    { text-align:center; white-space:nowrap; }
-.formTimeSpanAnchor                   { background:base-url('oxy/img/form-time-anchor.png') 50% 50% no-repeat; }
 
 
 .formSelectDropDown .formDropDownBody { padding:0; }

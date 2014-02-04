@@ -71,7 +71,7 @@ class DateBox extends Box {
 			echo '<span id="'.$this->name.'-d">'.$d.'</span>/<span id="'.$this->name.'-m">'.$m.'</span>/<span id="'.$this->name.'-y">'.$y.'</span>';
 			echo '</div></div>';
 
-			echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formDateAnchorWrap"><div class="formPaneAnchor formDateAnchor"></div></div>';
+			echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formDateAnchorWrap"><div class="formPaneAnchor">'.oxy::icoDate().'</div></div>';
 
 			echo '<input id="'.$this->name.'-box"';
 			echo ' class="formPane formDate'.($this->readonly?' formLocked':'').'"';
@@ -81,7 +81,7 @@ class DateBox extends Box {
 			echo '/>';
 		}
 		elseif (!$this->readonly) {
-			echo '<a id="'.$this->name.'-anchor" href="javascript:" class="formPaneAnchor formDateAnchor"></a>';
+			echo '<a id="'.$this->name.'-anchor" href="javascript:" class="formPaneAnchor">'.oxy::icoDate().'</a>';
 		}
 		echo '</span>';
 
@@ -187,7 +187,7 @@ class DateBox extends Box {
 			echo "    var days=new Array(".new Js(substr(Lemma::Pick('Monday'),0,3)).",".new Js(substr(Lemma::Pick('Tuesday'),0,3)).",".new Js(substr(Lemma::Pick('Wednesday'),0,3)).",".new Js(substr(Lemma::Pick('Thursday'),0,3)).",".new Js(substr(Lemma::Pick('Friday'),0,3)).",".new Js(substr(Lemma::Pick('Saturday'),0,3)).",".new Js(substr(Lemma::Pick('Sunday'),0,3)).");";
 			echo "    jQuery('#$this->name-month').html(months[cm.getMonth()]+' '+cm.getFullYear());";
 			echo "    var s = '';";
-			echo "    s+='<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">';";
+			echo "    s+='<table class=\"calendar\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">';";
 			echo "    s+='<tr>';";
 			echo "    for (i=0;i<days.length;i++) s+='<th class=\"day\">'+days[i]+'</th>';";
 			echo "    s+='</tr>';";

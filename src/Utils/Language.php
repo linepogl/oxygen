@@ -191,7 +191,7 @@ final class Language {
 		    $r .= '\'\'';
 	    }
 
-			if ($value->GetSign()<0) $r = '-'.$r;
+//			if ($value->GetSign()<0) $r = '-'.$r;
 	    return $r;
 		}
 		return '';

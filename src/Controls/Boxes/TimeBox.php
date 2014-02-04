@@ -111,7 +111,7 @@ class TimeBox extends Box {
 			echo '<span id="'.$this->name.'-box-h">'.$h.'</span>:<span id="'.$this->name.'-box-m">'.$m.'</span>'.($this->show_seconds?':<span id="'.$this->name.'-box-s">'.$s.'</span>':'');
 			echo '</div></div>';
 
-			echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formTimeAnchorOuter"><div class="formPaneAnchor formTimeAnchor"></div></div>';
+			echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formTimeAnchorOuter"><div class="formPaneAnchor">'.oxy::icoTime().'</div></div>';
 
 			echo '<input id="'.$this->name.'-box"';
 			echo ' class="formPane formTime'.($this->readonly?' formLocked':'').'"';

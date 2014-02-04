@@ -84,7 +84,7 @@ class TimeSpanBox extends Box {
 		}
 		echo '</div></div>';
 
-		echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formTimeSpanAnchorWrap"><div class="formPaneAnchor formTimeSpanAnchor"></div></div>';
+		echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap formTimeSpanAnchorWrap"><div class="formPaneAnchor">'.oxy::icoTime().'</div></div>';
 
 		echo '<input id="'.$this->name.'-box"';
 		echo ' class="formPane formTimeSpan'.($this->readonly?' formLocked':'').'"';
