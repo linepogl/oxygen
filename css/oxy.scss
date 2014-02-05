@@ -63,11 +63,11 @@ form { margin:0; }
  */
 @font-face {
 	font-family: 'oxygen';
-	src:base-url('oxy/gly/oxygen.eot');
-	src:base-url('oxy/gly/oxygen.eot?#iefix') format('embedded-opentype'),
-	    base-url('oxy/gly/oxygen.woff') format('woff'),
-	    base-url('oxy/gly/oxygen.ttf') format('truetype'),
-	    base-url('oxy/gly/oxygen.svg#oxygen') format('svg');
+	src:base-url('oxy/fon/oxygen.eot');
+	src:base-url('oxy/fon/oxygen.eot?#iefix') format('embedded-opentype'),
+	    base-url('oxy/fon/oxygen.woff') format('woff'),
+	    base-url('oxy/fon/oxygen.ttf') format('truetype'),
+	    base-url('oxy/fon/oxygen.svg#oxygen') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
