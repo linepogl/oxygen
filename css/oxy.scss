@@ -318,8 +318,8 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formSelectDropDown a.option:hover    { background:#f0f0f0!important; color:#000000!important; }
 .formSelectDropDown a.option.selected { background:#d3d6c2!important; color:#000000!important; }
 
-select[size="0"].formPane,select[size="1"].formPane { -webkit-appearance:none!important; }
-.chrome select[size="0"].formPane,.chrome select[size="1"].formPane, .safari select[size="0"].formPane,.safari select[size="1"].formPane { background-image:base-url('oxy/img/form-pane-anchor.png');background-position:100% 50%;background-repeat:no-repeat; }
+select[size="0"].formPane,select[size="1"].formPane,select:not([size]).formPane { -webkit-appearance:none!important; }
+.chrome select[size="0"].formPane,.chrome select[size="1"].formPane,.chrome select:not([size]).formPane,.safari select[size="0"].formPane,.safari select[size="1"].formPane,.safari select:not([size]).formPane { background-image:base-url('oxy/img/form-pane-anchor.png');background-position:100% 50%;background-repeat:no-repeat; }
 .formDropDownPane { padding-right:20px; }
 
 .tagsinput                  { display:inline-block; overflow-y:auto; }
