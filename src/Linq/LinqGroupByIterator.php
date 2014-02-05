@@ -6,6 +6,7 @@ class LinqGroupByIterator extends LinqIterator implements ArrayAccess {
 
 	private $groups = null;
 	private $grouped_iterators = null;
+	/** @var Iterator */
 	private $inner_iterator = null;
 
 	private function init(){
