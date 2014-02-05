@@ -26,7 +26,7 @@ abstract class _oxy {
 	public static function icoDate              (){ return new Glyph('oxy-icon',0xE00D); }
 	public static function icoEmpty             (){ return new Glyph('oxy-icon',0xE00E); }
 	public static function icoAll               (){ return new Glyph('oxy-icon',0xE00F); }
-	public static function icoRequired          (){ return new Glyph('oxy-icon',0xE010); }
+	public static function icoAsterisk          (){ return new Glyph('oxy-icon',0xE010); }
 	public static function icoNew               (){ return new Glyph('oxy-icon',0xE011); }
 	public static function icoForbidden         (){ return new Glyph('oxy-icon',0xE012); }
 
@@ -115,6 +115,7 @@ abstract class _oxy {
 	public static function icoBoxDirty          (){ return new Glyph('oxy-icon',0xE9A3); }
 	public static function icoTreePlus          (){ return new Glyph('oxy-icon',0xE9A2); }
 	public static function icoTreeMinus         (){ return new Glyph('oxy-icon',0xE9A3); }
+	public static function icoTreeDot           (){ return new Glyph('oxy-icon',0xE9A4); }
 
 
 
