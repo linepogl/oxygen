@@ -72,7 +72,6 @@ class TimeBox extends Box {
 				echo "};";
 				echo Js::END;
 			}
-
 		}
 		else {
 			echo '<span id="'.$this->name.'-span" class="formPane '.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';

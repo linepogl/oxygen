@@ -130,6 +130,7 @@ abstract class _oxy {
 	public static function FormatDate( XDateTime $date = null ){ return Language::FormatDate( $date  );	}
 	public static function FormatDateTime( XDateTime $date = null ){		return Language::FormatDateTime( $date );	}
 	public static function FormatTime( XDateTime $time = null ){		return Language::FormatDateTime( $time );	}
+	public static function FormatDateTime24( XDateTime $date = null ){ if ($date!==null&&$date->Format('His')=='000000') return static::FormatDate( $date->AddDays(-1) ).' 24:00:00'; else return static::FormatDateTime( $date ); }
 	public static function FormatDateSpanSince( XDateTime $date = null ){		return Language::FormatDateSpanSince( $date );	}
 	public static function FormatTimeSpan( XTimeSpan $timespan = null ){		return Language::FormatTimeSpan( $timespan );	}
 	public static function FormatTimeSpanSince( XDateTime $date = null ){		return Language::FormatTimeSpanSince( $date );	}
@@ -137,8 +138,10 @@ abstract class _oxy {
 	public static function FormatDateTimeRelatively( XDateTime $date = null ){		return Language::FormatDateTimeRelatively( $date );	}
 	public static function FormatBytes( $bytes ) {		return Language::FormatBytes($bytes);	}
 
+
 	public static function AbbrSeconds( XTimeSpan $timespan = null , $number_of_decimals = -1 ){ return $timespan===null ? null : '<span style="display:none;">'.sprintf('%020d',$timespan->GetTotalMilliSeconds()).'"</span><abbr title="'. new Html(Language::FormatTimeSpan($timespan)).'">'.new Html( Language::FormatNumber($timespan->GetTotalMilliSeconds()/1000,$number_of_decimals).'"').'</abbr>'; }
 	public static function AbbrDateTime( XDateTime $date_time = null , $default_value = ''){ return $date_time===null ? $default_value : '<abbr s="'.$date_time->Format('YmdHis').'" title="'. new Html(Lemma::Pick('xAgo')->Sprintf(static::FormatTimeSpanSince($date_time))).'">'.new Html(static::FormatDateTime($date_time)).'</abbr>'; }
+	public static function AbbrDateTime24( XDateTime $date_time = null , $default_value = ''){ return $date_time===null ? $default_value : '<abbr s="'.$date_time->Format('YmdHis').'" title="'. new Html(Lemma::Pick('xAgo')->Sprintf(static::FormatTimeSpanSince($date_time))).'">'.new Html(static::FormatDateTime24($date_time)).'</abbr>';	}
 	public static function AbbrDaysSince( XDateTime $date_time = null , $default_value = '' ){ if ($date_time===null) return $default_value; /** @var $diff XTimeSpan */ return '<span style="display:none;">'.sprintf('%020d',XDateTime::Now()->Diff( $date_time )->GetTotalMilliSeconds()).'</span><abbr title="'. new Html(static::FormatDateTime($date_time).' - '.Lemma::Pick('xAgo')->Sprintf(static::FormatTimeSpanSince($date_time))).'">'.static::FormatDaysSince($date_time).'</abbr>'; }
 	public static function AbbrDate( XDateTime $date_time = null ){ return $date_time===null ? null : '<abbr s="'.$date_time->Format('YmdHis').'" title="'.new Html($date_time instanceof XDate ? static::FormatDate($date_time) . "\n" . Lemma::Pick('xAgo')->Sprintf( static::FormatDaysSince($date_time) ) : static::FormatDateTime($date_time) . "\n" . Lemma::Pick('xAgo')->Sprintf( static::FormatTimeSpanSince($date_time) )).'">'.new Html(static::FormatDate($date_time)).'</abbr>'; }
 	public static function AbbrByteRate( $byterate ){ return '<span style="display:none;">'.sprintf('%030d',$byterate).'</span><abbr title="'. new Html(Language::FormatNumber($byterate).' '.Lemma::Pick('unit:byte').'/'.Lemma::Pick('unit:sec')).'" class="nowrap">'.Language::FormatBytes($byterate).'/'.Lemma::Pick('unit:sec').'</abbr>'; }
