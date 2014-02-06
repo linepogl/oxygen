@@ -8,6 +8,12 @@ class Str {
 		else
 			return false;
 	}
+	public static function TrimStart($str,$tok) {
+		if (mb_strlen($str)>=mb_strlen($tok))
+			if (mb_substr($str,0,mb_strlen($tok))==$tok)
+				return mb_substr($str,mb_strlen($tok));
+		return $str;
+	}
 
 	public static function EndsWith($str,$tok) {
 		if (mb_strlen($str)>=mb_strlen($tok))
