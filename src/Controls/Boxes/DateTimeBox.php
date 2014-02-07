@@ -22,7 +22,7 @@ class DateTimeBox extends Box {
 
 	public function Render(){
 		$readonly = $this->readonly || $this->mode != UIMode::Edit;
-		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($readonly ? null : $this->http_name)->WithDebug(true);
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($readonly ? null : $this->http_name);
 
 		if ($readonly) {
 
