@@ -22,7 +22,7 @@ class DateTimeBox extends Box {
 
 	public function Render(){
 		$readonly = $this->readonly || $this->mode != UIMode::Edit;
-		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($readonly ? null : $this->http_name);
+		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($readonly ? null : $this->http_name)->WithDebug(true);
 
 		if ($readonly) {
 
@@ -41,7 +41,7 @@ class DateTimeBox extends Box {
 				$time = $this->value->GetTime();
 				if ($time->Format('His')==='000000') $date = $date->AddDays(-1);
 			}
-			elseif ($this->allow_null) {
+			elseif (!$this->allow_null) {
 				$date = XDate::Today();
 				$time = XTime::Midnight();
 			}
@@ -49,7 +49,6 @@ class DateTimeBox extends Box {
 			$m = $time === null ? '' : $time->Format('i');
 			$s = $time === null ? '' : $time->Format('s');
 			if ("$h$m$s" === '000000') $h = '24';
-
 
 
 			DateBox::Make($this->name . '_date' , $date )
@@ -67,7 +66,7 @@ class DateTimeBox extends Box {
 				echo $time === null ? '' : ($this->show_seconds?"$h:$m:$s":"$h:$m");
 			}
 			else {
-				echo SelectBox::Make($this->name.'_h',$h)->WithHttpName(null)->WithReadOnly($this->readonly)->WithOnChange("window.$this->name.OnChange();")->WithAllowNull($this->allow_null)->AddMany(array('00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'));
+				echo SelectBox::Make($this->name.'_h',$h)->WithHttpName(null)->WithReadOnly($this->readonly)->WithOnChange("window.$this->name.OnChangeH();")->WithAllowNull($this->allow_null)->AddMany(array('00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'));
 				echo SelectBox::Make($this->name.'_m',$m)->WithHttpName(null)->WithReadOnly($this->readonly)->WithOnChange("window.$this->name.OnChange();")->WithAllowNull($this->allow_null)->AddMany(array('00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59'));
 				echo SelectBox::Make($this->name.'_s',$s)->WithHttpName(null)->WithReadOnly($this->readonly)->WithOnChange("window.$this->name.OnChange();")->WithAllowNull($this->allow_null)->AddMany(array('00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59'))->WithCssStyle($this->show_seconds?'':'display:none;');
 
@@ -75,12 +74,22 @@ class DateTimeBox extends Box {
 					echo Js::BEGIN;
 					echo "window.".$this->name." = {";
 					echo "  changing : false";
-					echo " ,OnChange : function (){";
-					echo "    if(this.changing)return;";
-					echo "    var d = this.GetDate();";
-					echo "    jQuery('#$this->name').val(this.format_date(d));";
-					echo $this->on_change;
+					echo " ,OnChangeH : function (){";
+					echo "    this.changing = true;";
+					echo "    var h = jQuery('#{$this->name}_h').val();";
+					echo "    if (h==='24') {";
+					echo "      jQuery('#{$this->name}_m option').each(function(i,e){ var x = jQuery(e); if (x.val()!=='00' && x.val()!=='') x.remove(); });";
+					echo "      jQuery('#{$this->name}_s option').each(function(i,e){ var x = jQuery(e); if (x.val()!=='00' && x.val()!=='') x.remove(); });";
+					echo "    }";
+					echo "    else {";
+					echo "      if (jQuery('#{$this->name}_m option').length<60) { for(var i=1;i<60;i++){ var s =(i<10?'0':'')+i;jQuery('#{$this->name}_m').append('<option value=\\\"'+s+'\\\">'+s+'</option>'); }}";
+					echo "      if (jQuery('#{$this->name}_s option').length<60) { for(var i=1;i<60;i++){ var s =(i<10?'0':'')+i;jQuery('#{$this->name}_s').append('<option value=\\\"'+s+'\\\">'+s+'</option>'); }}";
+					echo "    }";
+					echo "    this.changing = false;";
+					echo "    this.OnChange();";
 					echo "  }";
+					echo " ,Update:function(){jQuery('#$this->name').val(this.format_date(this.GetDate()));}";
+					echo " ,OnChange : function (){if(this.changing)return;this.Update();$this->on_change;}";
 					echo " ,format_date:function(d){";
 					echo "    if(d===null)return'';";
 					echo "    var r='';var x;";
@@ -124,6 +133,7 @@ class DateTimeBox extends Box {
 					echo "    return r;";
 					echo "  }";
 					echo "};";
+					echo "window.$this->name.Update();";
 					echo Js::END;
 				}
 			}
