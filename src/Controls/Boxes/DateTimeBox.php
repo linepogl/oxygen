@@ -121,10 +121,10 @@ class DateTimeBox extends Box {
 					echo "    this.OnChange();";
 					echo "  }";
 					echo " ,GetDate:function(){";
-					echo "    var h = jQuery('#{$this->name}_h').val();if(h==='')return null;h=parseInt(h,10);";
-					echo "    var m = jQuery('#{$this->name}_m').val();if(m==='')return null;m=parseInt(m,10);";
-					echo "    var s = jQuery('#{$this->name}_s').val();if(s==='')return null;s=parseInt(s,10);";
 					echo "    var d = jQuery('#{$this->name}_date').val();if(d==='')return null;";
+					echo "    var h = jQuery('#{$this->name}_h').val();if(h==='')h='00';h=parseInt(h,10);";
+					echo "    var m = jQuery('#{$this->name}_m').val();if(m==='')m='00';m=parseInt(m,10);";
+					echo "    var s = jQuery('#{$this->name}_s').val();if(s==='')s='00';s=parseInt(s,10);";
 					echo "    var YY = parseInt(d.substring(0,4),10);";
 					echo "    var MM = parseInt(d.substring(4,6),10);";
 					echo "    var DD = parseInt(d.substring(6,8),10);";
@@ -177,7 +177,7 @@ class DateTimeBox extends Box {
 			echo " ,UpdateT : function(){";
 			echo "    var d = jQuery('#{$this->name}_date').val();";
 			echo "    var t = jQuery('#{$this->name}_time').val();";
-			echo "    jQuery('#$this->name').val( t==='' ? '' : (d===''?".new Js(XDate::Today()->Format('Ymd')).":d.substring(0,8)) + t.substring(8) );";
+			echo "    jQuery('#$this->name').val( d==='' ? '' : d.substring(0,8) + (t===''?'000000':t.substring(8)) );";
 			echo "  }";
 			echo " ,SetDate:function(d){ {$this->name}_date.SetDate(d); {$this->name}_time.SetDate(d); }";
 			echo " ,GetDate:function(){ var d = {$this->name}_date.GetDate(); if(d===null)return null; var t = {$this->name}_time.GetDate(); if(t===null)return null; return new Date(d.getFullYear(),d.getMonth(),d.getDate(),t.getHours(),t.getMinutes(),t.getSeconds()); }";

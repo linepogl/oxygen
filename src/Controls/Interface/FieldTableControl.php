@@ -8,6 +8,9 @@ class FieldTableControl extends Control {
 	private $css_class = '';
 	/** @return static */ public function WithCssClass($value){ $this->css_class = $value; return $this; }
 
+	private $css_style = '';
+	/** @return static */ public function WithCssStyle($value){ $this->css_style = $value; return $this; }
+
 	private $label_width = '50px';
 	/** @return static */ public function WithLabelWidth($value){ $this->label_width = $value; return $this; }
 
@@ -96,7 +99,7 @@ class FieldTableControl extends Control {
 	public function Render(){
 
 		if ($this->labels_on_top){
-			echo '<table class="fieldtable '.$this->css_class.'" style="width:'.(empty($this->width)?'auto':$this->width).';">';
+			echo '<table class="fieldtable '.$this->css_class.'" style="width:'.(empty($this->width)?'auto':$this->width).';'.$this->css_style.'">';
 
 			if (!is_null($this->title)) echo '<tr><td><h2>'.$this->title.'</h2></td></tr>';
 
@@ -116,7 +119,7 @@ class FieldTableControl extends Control {
 			echo '</table>';
 		}
 		else {
-			echo '<table class="fieldtable '.$this->css_class.'" style="width:'.(empty($this->width)?'auto':$this->width).';">';
+			echo '<table class="fieldtable '.$this->css_class.'" style="width:'.(empty($this->width)?'auto':$this->width).';'.$this->css_style.'">';
 
 			echo '<tr><td class="notext">'.new Spacer(intval($this->label_width)).'</td>';
 			if (!is_null($this->title))

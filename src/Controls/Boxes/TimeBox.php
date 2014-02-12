@@ -45,9 +45,11 @@ class TimeBox extends Box {
 				echo Js::BEGIN;
 				echo "window.".$this->name." = {";
 				echo "  OnChange : function(){";
-				echo "    jQuery('#$this->name').val('20000101'+";
-				echo "      jQuery('#{$this->name}_h').val() + jQuery('#{$this->name}_m').val() + jQuery('#{$this->name}_s').val()";
-				echo "    );";
+				echo "    var s = '20000101';";
+				echo "    s+=jQuery('#{$this->name}_h').val();";
+				echo "    s+=jQuery('#{$this->name}_m').val();";
+				echo "    s+=".($this->show_seconds?"jQuery('#{$this->name}_s').val()":"'00'").";";
+				echo "    jQuery('#$this->name').val( s.length===14 ? s : '' );";
 				echo $this->on_change;
 				echo "  }";
 				echo " ,SetDate:function(d){";
