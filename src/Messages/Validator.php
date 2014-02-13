@@ -23,6 +23,9 @@ class Validator extends MultiMessage {
 	public function CheckEmail($that,$message=null){
 		return $this->Check( Oxygen::IsEmail($that), is_null($message) ? Lemma::Pick('MsgInvalidEmail') : $message);
 	}
+	public function CheckPhone($that,$message=null){
+		return $this->Check( Oxygen::IsPhone($that), is_null($message) ? Lemma::Pick('MsgInvalidPhone') : $message);
+	}
 	public function CheckURL($that,$message=null){
 		return $this->Check( Oxygen::IsURL($that), is_null($message) ? Lemma::Pick('MsgInvalidURL') : $message);
 	}

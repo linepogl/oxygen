@@ -186,6 +186,11 @@
 		<fr>L'adresse e-mail n'est pas valide.</fr>
 		<el>Λάθος διεύθυνση e-mail.</el>
 	</lemma>
+	<lemma name="MsgInvalidPhone">
+		<en>Invalid phone number.</en>
+		<fr>Le numéro n'est pas valide.</fr>
+		<el>Λάθος αριθμός τηλεφώνου.</el>
+	</lemma>
 	<lemma name="MsgInvalidURL">
 		<en>Invalid address.</en>
 		<fr>L'adresse n'est pas valide.</fr>
