@@ -187,9 +187,9 @@
 		<el>Λάθος διεύθυνση e-mail.</el>
 	</lemma>
 	<lemma name="MsgInvalidPhone">
-		<en>Invalid phone number.</en>
-		<fr>Le numéro n'est pas valide.</fr>
-		<el>Λάθος αριθμός τηλεφώνου.</el>
+		<en>Invalid phone number. Please use international format (+123456789).</en>
+		<fr>Le numéro n'est pas valide. Veuillez utilisez le format international (+123456789).</fr>
+		<el>Λάθος αριθμός τηλεφώνου. Χρησιμοποιήστε το διεθνές πρότυπο (+123456789).</el>
 	</lemma>
 	<lemma name="MsgInvalidURL">
 		<en>Invalid address.</en>
