@@ -57,7 +57,7 @@ class ColorBox extends Box {
 		}
 
 
-		echo '<div id="'.$this->name.'-anchor" class="formPane formPaneAnchorWrap formColorAnchorOuter" style="background:none;border:0;margin:0;"><div class="formPaneAnchor formColorAnchor"></div></div>';
+		echo '<div id="'.$this->name.'-anchor" class="formPane formPaneAnchorWrap formColorAnchorOuter" style="background:none;border:0;margin:0;"><div class="formPaneAnchor formColorAnchor">'.oxy::icoMenuDown().'</div></div>';
 
 		echo '<input id="'.$this->name.'-box"';
 		echo ' class="formPane formColor'.($this->readonly?' formLocked':'').'"';

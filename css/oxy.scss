@@ -247,7 +247,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .formPaneInnerWrap  { position:absolute; float:left; left:0; cursor:pointer; }
 .formPaneAnchorWrap { position:absolute; float:right; right:0; cursor:pointer; }
-.formPaneAnchor     { display:inline-block; }
+.formPaneAnchor     { display:inline-block; text-shadow:0 0 2px #ffffff; }
 
 .formLocked       { background-color:#fbfbfb; border-color:#999999; color:#999999; }
 .formLocked:focus { background-color:#fafafa; border-color:#777777; color:#777777; }
@@ -320,7 +320,14 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 .formSelectDropDown a.option.selected { background:#d3d6c2!important; color:#000000!important; }
 
 select[size="0"].formPane,select[size="1"].formPane,select:not([size]).formPane { -webkit-appearance:none!important; }
-.chrome select[size="0"].formPane,.chrome select[size="1"].formPane,.chrome select:not([size]).formPane,.safari select[size="0"].formPane,.safari select[size="1"].formPane,.safari select:not([size]).formPane { background-image:base-url('oxy/img/form-pane-anchor.png');background-position:100% 50%;background-repeat:no-repeat; }
+.chrome select[size="0"].formPane,
+.chrome select[size="1"].formPane,
+.chrome select:not([size]).formPane,
+.safari select[size="0"].formPane,
+.safari select[size="1"].formPane,
+.safari select:not([size]).formPane {
+	background-image:base-url('oxy/img/form-pane-anchor.png');background-position:100% 50%;background-repeat:no-repeat;
+}
 .formDropDownPane { padding-right:20px; }
 
 .tagsinput                  { display:inline-block; overflow-y:auto; }
