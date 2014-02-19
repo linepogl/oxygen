@@ -805,7 +805,7 @@ class Oxygen {
 
 
 	/** @return string */
-	public static function GetHead($with_external_links = true){
+	public static function GetHead($css = 'oxy/res/_.css',$jsc = 'oxy/res/_.js'){
 
 		ob_start();
 		echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
@@ -819,24 +819,21 @@ class Oxygen {
 			echo "  window.location.href=".new Js(__BASE__.Oxygen::MakeHrefPreservingValues(array('window'=>'X','old_window'=>Oxygen::$window_hash))) . ".replace('window=X','window='+window_hash);";
 			echo "}";
 		}
-
 		// fix for Javascript for non unicode encodings
 		if (!Oxygen::IsCharsetUnicode()){
 			echo "encodeURIComponent=function(s){s=escape(s);while(s.indexOf('/')>= 0)s=s.replace('/','%2F');while(s.indexOf('+')>=0)s=s.replace('+','%2B');return s;};";
 			echo "decodeURIComponent=function(s){while(s.indexOf('%2B')>=0)s=s.replace('%2B','+');while(s.indexOf('%2F')>=0)s=s.replace('%2F','/');return unescape(s);};";
 		}
-
 		echo "var oxygen_encoding = ".new Js(Oxygen::GetCharset()).";";
 		echo "var oxygen_lang = ".new Js(Oxygen::GetLang()).";";
 		echo "var oxygen_base = ".new Js(__BASE__).";";
-
 		echo "var oxygen_exceptions = {};";
 		echo "window.onerror = function(msg,url,line){ if (oxygen_exceptions[msg+url+line]===undefined) { new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); oxygen_exceptions[msg+url+line]=1; } else { oxygen_exceptions[msg+url+line]++; } };";
 		echo Js::END;
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
 		echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';
-		if ($with_external_links) echo '<link href="'.__BASE__.'oxy/res/_.css" rel="stylesheet" type="text/css" />';
-		if ($with_external_links) echo '<script type="text/javascript" src="'.__BASE__.'oxy/res/_.js"></script>';
+		echo '<link href="'.__BASE__.$css.'" rel="stylesheet" type="text/css" />';
+		echo '<script type="text/javascript" src="'.__BASE__.$jsc.'"></script>';
 		$r = ob_get_clean();
 		return $r;
 	}
