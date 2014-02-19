@@ -275,22 +275,30 @@ class XMeta extends stdClass {
 
 
 	/** @return XItem */
-	public function CopyItem( XItem $item, $with_a_perm_id = false , XMetaField $slave_hook_field = null, $slave_hook_id = null){
+	public function CopyItem( XItem $item, $with_a_perm_id = false , $id = null , XMetaField $slave_hook_field = null, $slave_hook_id = null){
 		$r = clone $item;
+		if ($id !== null) {
+			if ($id instanceof ID)
+				$r->id = $id;
+			else
+				$r->id = new ID($id);
+		}
 		if (!is_null($slave_hook_field)) {
 			$n = $slave_hook_field->GetName();
 			$r->$n = $slave_hook_id;
 		}
 
 		if ($this->id->IsDBAliasComplex()) {
-			$r->id = $this->GetNextTempID();
+			if ($id === null) $r->id = $this->GetNextTempID();
 			$r->has_temp_id = !$with_a_perm_id;
 		}
 		else {
-			if ( $with_a_perm_id )
-				$r->id = $this->GetNextPermID();
-			else
-				$r->id = $this->GetNextTempID();
+			if ($id === null ) {
+				if ( $with_a_perm_id )
+					$r->id = $this->GetNextPermID();
+				else
+					$r->id = $this->GetNextTempID();
+			}
 			$r->has_temp_id = !$with_a_perm_id;
 
 			// 1. Clone data folder
@@ -308,7 +316,7 @@ class XMeta extends stdClass {
 					$aa = $sl->MakeItemList();
 					/** @var $x XItem */
 					foreach ($a as $x)
-						$aa[] = $x->Copy($with_a_perm_id,$sl->GetHookField(),$r->id);
+						$aa[] = $x->Copy($with_a_perm_id,null,$sl->GetHookField(),$r->id);
 					$r->$n = $aa;
 				}
 			}

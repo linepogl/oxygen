@@ -283,6 +283,11 @@
 		<fr>Cet objet existe déjà : %s.</fr>
 		<el>Το αντικείμενο αυτό υπάρχει ήδη: %s.</el>
 	</lemma>
+	<lemma name="MsgCannotDeleteSystemObject">
+		<en>This object is used by the system.</en>
+		<fr>Cet objet est utilisé par le système.</fr>
+		<el>Το αντικείμενο είναι απαραίτητο για την ομαλή λειτουργεία του συστήματος.</el>
+	</lemma>
 
 
 	<lemma name="MsgXItemNotFound">
