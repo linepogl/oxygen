@@ -150,7 +150,7 @@ class SelectBox extends Box {
 			else {
 				echo '<select id="'.$this->name.($this->is_multiple?'[]':'').'"';
 				echo ' name="'.$this->http_name.'"';
-				echo ' class="'.($this->readonly?'formLocked':'formPane').' formDropDownPane"';
+				echo ' class="formPane '.($this->readonly?' formLocked':'').' formDropDownPane"';
 					echo ' onchange="'.$this->on_change.'"';
 					echo ' style="'.(empty($this->display)?'':'display:'.$this->display.';').'width:'.(empty($this->width)?'auto':$this->width).';'.$this->css_style.'"';
 				if ($this->is_multiple) echo ' multiple="multiple"';
