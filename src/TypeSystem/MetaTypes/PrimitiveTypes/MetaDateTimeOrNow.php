@@ -38,7 +38,6 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		if (is_null($value)) return null;
 		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
@@ -55,7 +54,6 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
 		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
