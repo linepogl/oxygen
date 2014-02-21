@@ -168,6 +168,12 @@ class XDateTime extends XValue implements Serializable {
 
 
 
+
+
+	public static function GetTimeZones(){
+		return timezone_identifiers_list();
+	}
+
 }
 
 

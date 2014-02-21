@@ -132,7 +132,7 @@ abstract class _oxy {
 	//
 	//
 	public static function FormatDate( XDateTime $date = null ){ return Language::FormatDate( $date  );	}
-	public static function FormatDateTime( XDateTime $date = null ){		return Language::FormatDateTime( $date );	}
+	public static function FormatDateTime( XDateTime $date = null){ return Language::FormatDateTime( $date ); }
 	public static function FormatTime( XDateTime $time = null ){		return Language::FormatDateTime( $time );	}
 	public static function FormatDateTime24( XDateTime $date = null ){ if ($date!==null&&$date->Format('His')=='000000') return static::FormatDate( $date->AddDays(-1) ).' 24:00:00'; else return static::FormatDateTime( $date ); }
 	public static function FormatDateSpanSince( XDateTime $date = null ){		return Language::FormatDateSpanSince( $date );	}

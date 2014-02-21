@@ -40,11 +40,14 @@ class MetaTime extends XNullableType {
 	 */
 	public static function ExportPdoValue($value, $platform) {
 		if (is_null($value)) return null;
+		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   return $value->Format('Y-m-d H:i:s');
-			case Database::ORACLE:  return $value->Format('Y-m-d H:i:s');
+			case Database::MYSQL:   $r = date('Y-m-d H:i:s',$value->AsInt()); break;
+			case Database::ORACLE:  $r = date('Y-m-d H:i:s',$value->AsInt()); break;
 		}
+		Oxygen::UseClientTimeZone();
+		return $r;
 	}
 
 	/**
@@ -54,11 +57,14 @@ class MetaTime extends XNullableType {
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
 		if (is_null($value)) return Sql::Null;
+		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   return '\''.$value->Format('Y-m-d H:i:s').'\'';
-			case Database::ORACLE:  return '\''.$value->Format('Y-m-d H:i:s').'\'';
+			case Database::MYSQL:   $r = '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; break;
+			case Database::ORACLE:  $r = '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; break;
 		}
+		Oxygen::UseClientTimeZone();
+		return $r;
 	}
 
 	/**

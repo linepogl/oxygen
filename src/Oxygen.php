@@ -71,6 +71,9 @@ class Oxygen {
 			self::$window_hash = Oxygen::Hash32(self::$session_hash);
 		}
 
+		// set the time zone
+		if (isset($_GET['zone'])) self::SetClientTimeZone($_GET['zone']);
+
 		// set the current language
 		$lang = '';
 		if (count(self::$langs)==0) self::$langs[] = 'en';
@@ -549,7 +552,23 @@ class Oxygen {
 	}
 
 
+	//
+	// Timezone
+	//
+	private static $server_time_zone = null;
+	public static function GetServerTimeZone(){ return self::$server_time_zone; }
+	public static function SetServerTimeZone($time_zone){ self::$server_time_zone = $time_zone; }
+	public static function UseServerTimeZone(){ if (self::$client_time_zone !== null) date_default_timezone_set(self::$server_time_zone); }
 
+	private static $client_time_zone = null;
+	public static function GetClientTimeZone(){ return self::$client_time_zone; }
+	public static function UseClientTimeZone(){ if (self::$client_time_zone !== null) date_default_timezone_set(self::$client_time_zone); }
+	public static function SetClientTimeZone($time_zone){
+		if ($time_zone == '') $time_zone = self::$server_time_zone;
+		if (!@date_default_timezone_set($time_zone)) { $time_zone = self::$server_time_zone; date_default_timezone_set($time_zone); }
+		self::$client_time_zone = self::$server_time_zone===$time_zone ? null : $time_zone;
+		Oxygen::SetUrlPin('zone',self::$client_time_zone);
+	}
 
 
 
@@ -593,7 +612,7 @@ class Oxygen {
 	//
 	private static $php_controller;
 	private static $php_managed_controller = null;
-	private static $url_pins = array('action'=>null,'lang'=>null,'window'=>null);
+	private static $url_pins = array('action'=>null,'lang'=>null,'zone'=>null,'window'=>null);
 	public static function AddUrlPin($key) { self::$url_pins[$key] = null; }
 	public static function GetUrlPin($key) { return self::$url_pins[$key]; }
 	public static function GetUrlPins() { return self::$url_pins; }
@@ -606,8 +625,7 @@ class Oxygen {
 	}
 	public static function MakeHref(array $url_args = array() , $use_managed_controller = false ){
 		$s = '';
-		foreach ( ($url_args
-				+ self::$url_pins) as $key=>$value) { // <-- array + operator here again.
+		foreach ( ($url_args + self::$url_pins) as $key=>$value) { // <-- array + operator here again.
 			if (is_null($value)) continue;
 			$s .= ($s===''?'?':'&');
 			$s .= rawurlencode( $key ); /// <-- huge savings by using this directly here... CORRECTION: this is not true, it was because of false info from XDebug
@@ -1139,8 +1157,4 @@ class Oxygen {
 		return $r;
 	}
 }
-
-
-
-
-
+Oxygen::SetServerTimeZone(date_default_timezone_get());

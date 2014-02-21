@@ -47,6 +47,7 @@
 
 	<lemma name="Day"><en>Day</en><fr>Jour</fr><el>Ημέρα</el></lemma>
 	<lemma name="Night"><en>Night</en><fr>Nuit</fr><el>Νύχτα</el></lemma>
+	<lemma name="TimeZone"><en>Time zone</en><fr>Fuseau horaire</fr><el>Ζώνη ώρας</el></lemma>
 
 	<lemma name="Submit"><en>Submit</en><fr>Soumettre</fr><el>Αποστολή</el></lemma>
 	<lemma name="Login"><en>Login</en><fr>Connexion</fr></lemma>
