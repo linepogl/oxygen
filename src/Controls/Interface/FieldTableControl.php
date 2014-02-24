@@ -130,8 +130,8 @@ class FieldTableControl extends Control {
 
 			for ($i=0; $i<count($this->labels); $i++){
 				if ($this->labels[$i]=='-'){
-					echo '<tr><td class="notext">'.new Spacer().'</td><td class="notext" style="border-bottom:1px solid #cccccc;">'.new Spacer(1,10).'</td></tr>';
-					echo '<tr><td class="notext">'.new Spacer().'</td><td class="notext">'.new Spacer(1,10).'</td></tr>';
+					echo '<tr class="'.$this->row_css_classes[$i].'"><td class="notext">'.new Spacer().'</td><td class="notext" style="border-bottom:1px solid #cccccc;">'.new Spacer(1,10).'</td></tr>';
+					echo '<tr class="'.$this->row_css_classes[$i].'"><td class="notext">'.new Spacer().'</td><td class="notext">'.new Spacer(1,10).'</td></tr>';
 				}
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
