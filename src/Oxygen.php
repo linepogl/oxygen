@@ -561,7 +561,7 @@ class Oxygen {
 	public static function UseServerTimeZone(){ if (self::$client_time_zone !== null) date_default_timezone_set(self::$server_time_zone); }
 
 	private static $client_time_zone = null;
-	public static function GetClientTimeZone(){ return self::$client_time_zone; }
+	public static function GetClientTimeZone(){ return self::$client_time_zone === null ? self::$server_time_zone : self::$client_time_zone; }
 	public static function UseClientTimeZone(){ if (self::$client_time_zone !== null) date_default_timezone_set(self::$client_time_zone); }
 	public static function SetClientTimeZone($time_zone){
 		if ($time_zone == '') $time_zone = self::$server_time_zone;

@@ -19,7 +19,7 @@ audio,canvas,video { display: inline-block; }
 audio:not([controls]) { display: none; height: 0; }
 [hidden] { display: none; }
 h1 { font-size: 2em; }
-abbr[title] { border-bottom: 1px dotted; }
+abbr[title] { border-bottom: 1px dotted; cursor:help; }
 b, strong { font-weight: bold; }
 dfn { font-style: italic; }
 mark { background: #ff0; color: #000; }

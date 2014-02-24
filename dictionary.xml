@@ -112,6 +112,7 @@
 	<lemma name="Sunday"><en>Sunday</en><fr>dimanche</fr><el>Κυριακή</el></lemma>
 
 	<lemma name="Days"><en>Days</en><fr>Jours</fr><el>Ημέρες</el></lemma>
+	<lemma name="xAgo"><en>%s ago</en><fr>Il y a %s</fr><el>Πριν από %s</el></lemma>
 	<lemma name="d."><en>d</en><fr>j</fr><el>ημ</el></lemma>
 	<lemma name="h."><en>h</en><fr>h</fr><el>ώρ</el></lemma>
 
