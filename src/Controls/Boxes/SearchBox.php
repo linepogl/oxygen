@@ -28,14 +28,14 @@ class SearchBox extends Box {
 			return;
 		}
 
-		echo '<span id="'.$this->name.'-span" class="formPane'.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
+		echo '<span id="'.$this->name.'-span" class="formPane formDropDownPane'.($this->readonly?' formLocked':'').'" style="padding:0;border:0;position:relative;display:inline-block;">';
 
 
 		if (!$this->readonly){
 			echo '<div id="'.$this->name.'-dropdown" class="formDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
 			echo '<div class="formDropDownHead" style="text-align:left;">';
-			echo TextBox::Make($this->name.'_search_string')->WithHttpName(null)->WithWidth('200px')->WithOnChange("window.$this->name.Search();");
+			echo TextBox::Make($this->name.'_search_string')->WithHttpName(null)->WithWidth('100%')->WithOnChange("window.$this->name.Search();");
 //			echo '<a class="button button-next" href="javascript:;"></a>';
 			echo '</div>';
 			echo '<div class="formDropDownBody">';
@@ -50,10 +50,10 @@ class SearchBox extends Box {
 		}
 
 
-		echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap"><div class="formPaneAnchor"></div></div>';
+		echo '<div id="'.$this->name.'-anchor" class="formPaneAnchorWrap"><div class="formPaneAnchor">'.oxy::icoMenuDown().'</div></div>';
 
 		echo '<input id="'.$this->name.'-box"';
-		echo ' class="formPane '.($this->readonly?' formLocked':'').'"';
+		echo ' class="formPane formDropDownPane'.($this->readonly?' formLocked':'').'"';
 		echo ' style="margin:0;cursor:pointer;width:'.$this->width.'"';
 		echo ' value="'.$html_caption.'"';
 		echo ' readonly="readonly"';
@@ -65,7 +65,7 @@ class SearchBox extends Box {
 		echo Js::BEGIN;
 		echo "var f = function(){";
 		echo "  var x =  jQuery('#$this->name-box');";
-		echo "  jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
+		echo "  jQuery('#$this->name-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-rightt':x.css('padding-right')});";
 		echo "};";
 		echo "jQuery(document).ready(f);f();";
 
