@@ -586,6 +586,18 @@ class Database {
 		self::Execute($sql);
 	}
 
+	public static function ExecuteUpdateLine($tablename,$id){
+		$a = func_get_args();
+		$z = func_num_args();
+		$sql = 'UPDATE '.new SqlIden($tablename).' SET ';
+		for($i=2;$i<$z;$i+=2){
+			if ($i>2) $sql.=',';
+			$sql.=new SqlIden($a[$i]) .'='. new Sql($a[$i+1]);
+		}
+		$sql .=' WHERE '.new SqlIden('id').'='.new Sql($id);
+		self::Execute($sql);
+	}
+
 	public static function ExecuteDropTable($tablename) {
 		$sql = 'DROP TABLE '.new SqlIden($tablename);
 		self::Execute($sql);
