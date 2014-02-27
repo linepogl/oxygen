@@ -387,7 +387,8 @@ class Oxygen {
 		$alias = $class_alias;
 		if (array_key_exists($alias,self::$resource_managers)) throw new Exception('There is already a resource manager with alias "'.$alias.'" registered.');
 		$old = end(self::$resource_managers);
-		if ($old!==false && !(new ReflectionClass($class_name))->isSubclassOf($old)) throw new Exception('The resource manager "'.$class_name.'" must inherit "'.$old.'".');
+		$reflection_class = new ReflectionClass($class_name);
+		if ($old!==false && !$reflection_class->isSubclassOf($old)) throw new Exception('The resource manager "'.$class_name.'" must inherit "'.$old.'".');
 		self::$resource_managers[$alias] = $class_name;
 	}
 
