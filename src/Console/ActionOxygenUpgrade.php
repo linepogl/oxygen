@@ -15,7 +15,8 @@ class ActionOxygenUpgrade extends Action {
 
 		Progress::Start(new InfoMessage('Upgrading database...'),true);
 		try{
-			Database::Upgrade(true,(new MultiMessage())->WithOnAdd(function(Message $m){ Progress::Write($m); }));
+			$logger = new MultiMessage();
+			Database::Upgrade(true,$logger->WithOnAdd(function(Message $m){ Progress::Write($m); }));
 			Progress::Finish();
 		}
 		catch (Exception $ex){

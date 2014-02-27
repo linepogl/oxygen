@@ -111,7 +111,8 @@ class Oxygen {
 		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
 
 
-		$logger = (new MultiMessage())->WithOnAdd(function(Message $m){
+		$logger = new MultiMessage();
+		$logger = $logger->WithOnAdd(function(Message $m){
 			Debug::EnableImmediateFlushing();
 			Debug::Write($m->AsString());
 		});
