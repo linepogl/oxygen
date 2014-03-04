@@ -72,7 +72,7 @@ class SearchBox extends Box {
 		if (!$this->readonly){
 			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); });";
 			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
-			echo "window.".$this->name." = {";
+			echo "window.$this->name = {";
 			echo "  is_open : false";
 			echo " ,keep_focus : false";
 			echo " ,OnKeyDown : function(ev){";
@@ -96,11 +96,13 @@ class SearchBox extends Box {
 			echo "    jQuery('#$this->name-box').val(c);";
 			echo "    jQuery('#$this->name').val(v);";
 			echo "    this.HideDropDown();";
+			echo $this->on_change;
 			echo "  }";
 			echo " ,SetNull:function(){";
 			echo "    jQuery('#$this->name-box').val(".new Js($null_caption===''?'∅':$null_caption).");";
 			echo "    jQuery('#$this->name').val('');";
 			echo "    this.HideDropDown();";
+			echo $this->on_change;
 			echo "  }";
 
 
