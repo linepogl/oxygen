@@ -33,6 +33,7 @@ class Database {
 	private static $prepared = array();
 
 	// duplicates, for speed:
+	/** @var PDO */
 	private static $cn = null;
 	private static $server = null;
 	private static $schema = null;
@@ -357,7 +358,7 @@ class Database {
 	public static function ExecuteListOfX(XType $type,$sql,$params=array()){
 		$dr = self::ExecuteX($sql,$params);
 		$r = array();
-		while ($dr->Read())	$r[] = $dr[0]->CastTo($type);
+		while ($dr->Read())	$r[] = $dr->Get(0)->CastTo($type);
 		$dr->Close();
 		return $r;
 	}
@@ -380,7 +381,7 @@ class Database {
 	public static function ExecuteColumnOfX(XType $type, $sql,$params=array()){
 		$dr = self::ExecuteX($sql,$params);
 		$r = array();
-		while ($dr->Read())	$r[] = $dr[0]->CastTo($type);
+		while ($dr->Read())	$r[] = $dr->Get(0)->CastTo($type);
 		$dr->Close();
 		return $r;
 	}
