@@ -42,12 +42,11 @@ button,input { line-height: normal; }
 button,html input[type="button"],input[type="reset"],input[type="submit"] {-webkit-appearance: button;cursor: pointer;}
 button[disabled], input[disabled] { cursor: default; }
 input[type="checkbox"],input[type="radio"] { box-sizing: border-box; padding: 0; }
-input[type="search"] { -webkit-appearance: textfield; }
-input[type="search"] { -moz-box-sizing: content-box; -webkit-box-sizing: content-box; box-sizing: content-box; }
+input[type="search"] { -webkit-appearance:textfield; }
+input[type="search"] { -moz-box-sizing:content-box; -webkit-box-sizing:content-box; box-sizing:content-box; }
 input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; }
 button::-moz-focus-inner,input::-moz-focus-inner { border: 0; padding: 0; }
-textarea { overflow: auto; }
-textarea { vertical-align: top; }
+textarea { overflow: auto; vertical-align: top; -webkit-appearance:none; }
 table { border-collapse:separate; border-spacing:0; border-color:#000000; }
 hr { border:0; height:1px; width:95%; background:#333333; margin:3px 0;}
 form { margin:0; }
@@ -240,7 +239,7 @@ div.tab_page { background:#fdfdfd; border:solid #cccccc; border-width:0 1px 1px 
 
 .formButton       { vertical-align:baseline; }
 
-.formPane         { vertical-align:baseline; border-radius:3px; border:1px solid #999999; font:normal 12px/14px Trebuchet MS, sans-serif; padding:4px; }
+.formPane         { vertical-align:baseline; border-radius:3px; border:1px solid #999999; font:normal 12px/14px Trebuchet MS, sans-serif; padding:4px; -webkit-appearance:none; }
 .formPane         { background-color:#ffffff; border-color:#999999; color:#666699; }
 .formPane:focus   { background-color:#fcfcfc; border-color:#666666; color:#444477; }
 
