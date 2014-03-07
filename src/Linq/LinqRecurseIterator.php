@@ -2,12 +2,12 @@
 
 class LinqRecurseIterator extends LinqIterator {
 	private $function_children;
+	/** @var Iterator */
 	private $nested_iterator;
 	private $checked_children;
 	public function __construct(Iterator $iterator, $function_children){ parent::__construct($iterator); $this->function_children = $function_children; }
 
 	public function Rewind(){
-		$this->stack = array();
 		$this->nested_iterator = null;
 		$this->checked_children = false;
 		$this->iterator->rewind();

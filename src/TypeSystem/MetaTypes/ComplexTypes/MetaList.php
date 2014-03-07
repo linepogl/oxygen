@@ -54,7 +54,7 @@ class MetaList extends XConcreteType {
 	public static function ExportSqlLiteral($value, $platform) {
 		$ids = $value->ToIDList();
 		if (count($ids) == 0) $ids[] = new ID(-11111111);
-		return '('.implode(',',array_map(function($id){ return strval($id->AsInt()); },$ids)).')';
+		return '('.implode(',',array_map(function(ID $id){ return strval($id->AsInt()); },$ids)).')';
 	}
 
 	/**

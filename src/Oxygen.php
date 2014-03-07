@@ -132,6 +132,7 @@ class Oxygen {
 
 		try {
 			new ReflectionClass($classname); // <-- this will throw a mere exception if the class is not found, which will prevent a nasty FATAL php error in the next line.
+			/** @noinspection PhpUndefinedMethodInspection */
 			self::$action = $classname::Make();
 		}
 		catch (ApplicationException $ex){

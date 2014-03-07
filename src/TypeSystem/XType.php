@@ -147,6 +147,8 @@ abstract class XType implements _XType {
 
 
 
+	/** @return XType */
+	public static function Type(){ throw new NonImplementedException(); }
 
 
 

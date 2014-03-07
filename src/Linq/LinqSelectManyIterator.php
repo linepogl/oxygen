@@ -2,6 +2,7 @@
 
 class LinqSelectManyIterator extends LinqIterator {
 	private $function_select_many;
+	/** @var Iterator|null */
 	private $nested_iterator = null;
 	private $index = -1;
 	public function __construct(Iterator $iterator, $function_select_many){ parent::__construct($iterator); $this->function_select_many = $function_select_many; }
