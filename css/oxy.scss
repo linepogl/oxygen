@@ -139,13 +139,13 @@ table.simple th { border:0!important; padding:0!important; margin:0!important; }
 
 @mixin bg1x2x4x($file1,$file2,$file4) {
 	background-image: base-url($file1); background-repeat:no-repeat; -webkit-background-size: 100.0%; -moz-background-size: 100.0%; -o-background-size: 100.0%; background-size: 100.0%;
-	@media all and (-webkit-min-device-pixel-ratio: 2.2), all and (-moz-min-device-pixel-ratio: 2.2), all and (min-device-pixel-ratio: 2.2), all and (min-resolution: 210dpi), all and (min-resolution: 2.2dppx){&{ background-image: base-url($file2); }}
-	@media all and (-webkit-min-device-pixel-ratio: 1.2), all and (-moz-min-device-pixel-ratio: 1.2), all and (min-device-pixel-ratio: 1.2), all and (min-resolution: 115dpi), all and (min-resolution: 1.2dppx){&{ background-image: base-url($file4); }}
+	@media all and (-webkit-min-device-pixel-ratio: 2.2), all and (-moz-min-device-pixel-ratio: 2.2), all and (min-device-pixel-ratio: 2.2), all and (min-resolution: 2.2dppx){&{ background-image: base-url($file2); }}
+	@media all and (-webkit-min-device-pixel-ratio: 1.2), all and (-moz-min-device-pixel-ratio: 1.2), all and (min-device-pixel-ratio: 1.2), all and (min-resolution: 1.2dppx){&{ background-image: base-url($file4); }}
 }
-@mixin bg2x($file){ @media all and (-webkit-min-device-pixel-ratio: 1.2), all and (-moz-min-device-pixel-ratio: 1.2), all and (min-device-pixel-ratio: 1.2), all and (min-resolution: 115dpi), all and (min-resolution: 1.2dppx){
+@mixin bg2x($file){ @media all and (-webkit-min-device-pixel-ratio: 1.2), all and (-moz-min-device-pixel-ratio: 1.2), all and (min-device-pixel-ratio: 1.2), all and (min-resolution: 1.2dppx){
 	&{ background-image: base-url($file); background-repeat:no-repeat; background-position:0 0; -webkit-background-size: 100.0%; -moz-background-size: 100.0%; -o-background-size: 100.0%; background-size: 100.0%; }
 }}
-@mixin bg4x($file){ @media all and (-webkit-min-device-pixel-ratio: 2.2), all and (-moz-min-device-pixel-ratio: 2.2), all and (min-device-pixel-ratio: 2.2), all and (min-resolution: 210dpi), all and (min-resolution: 2.2dppx){
+@mixin bg4x($file){ @media all and (-webkit-min-device-pixel-ratio: 2.2), all and (-moz-min-device-pixel-ratio: 2.2), all and (min-device-pixel-ratio: 2.2), all and (min-resolution: 2.2dppx){
 	&{ background-image: base-url($file); background-repeat:no-repeat; background-position:0 0; -webkit-background-size: 100.0%; -moz-background-size: 100.0%; -o-background-size: 100.0%; background-size: 100.0%; }
 }}
 
