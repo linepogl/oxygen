@@ -934,7 +934,7 @@ class Oxygen {
 		$subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
 		mail($rcpt, $subject, $body, $headers);
 	}
-	public static function SendEmailTweeked($from_name,$from_email,$rcpt,$subject,$body,$attachements=array()){
+	public static function SendEmail2($from_name,$from_email,$reply_to_name,$reply_to_email,$rcpt,$subject,$body,$attachements=array()){
 		set_time_limit(0);
 		ini_set('memory_limit', '512M');
 		$boundary = Oxygen::HashRandom();
@@ -942,7 +942,7 @@ class Oxygen {
 		$headers .= 'Content-type: multipart/related; boundary="'.$boundary.'"; type="text/html; charset=UTF-8"' . "\r\n";
 		$headers .= 'From: '. $from_name . ' <'. $from_email .'>'."\r\n";
 		$headers .= 'Sender: '. $from_email ."\r\n";
-		$headers .= 'Reply-To: '. $rcpt ."\r\n";
+		$headers .= 'Reply-To: '. $reply_to_name . ' <'. $reply_to_email .'>'."\r\n";
 
 		$msg = '<html><head>';
 		$msg .= "\r\n".'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
