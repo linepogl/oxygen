@@ -88,6 +88,7 @@ class Database {
 		}
 		if ($needs_refresh){
 			self::ResetCaches();
+			Oxygen::ResetSoft();
 			Database::WriteToPatchingSystem(new SuccessMessage('Upgrade complete.'));
 			Database::WriteToPatchingSystem(new InfoMessage('Total queries: '.(self::$count_queries)));
 		}
