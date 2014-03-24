@@ -63,7 +63,7 @@ var Oxygen = {
 	,ShowFog: function(){
 		if (Prototype.Browser.IE6) return;
 		var fog = $('OxygenDialogFog');
-		if (fog==null) fog = $( document.body.appendChild(new Element('div',{'id':'OxygenDialogFog','class':'ajaxdialogfog','style':'position:fixed;top:0;left:0;width:100%;height:100%;z-index:90;display:none;'})) );
+		if (fog==null) fog = $( document.body.appendChild(new Element('div',{'id':'OxygenDialogFog','class':'ajaxdialogfog','style':'position:fixed;top:0;left:0;width:100%;height:100%;z-index:99;display:none;'})) );
 		if (this.fog_appearing) return;
 		if (this.fog_disapearing) setTimeout( function(){Oxygen.ShowFog();} );
 		if (this.fog_visible) return;
