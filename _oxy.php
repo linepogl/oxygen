@@ -99,6 +99,17 @@ abstract class _oxy {
 	public static function icoBatch              (){ return new Glyph('oxy-icon',0xE50F); }
 	public static function icoThunder            (){ return new Glyph('oxy-icon',0xE60F); }
 
+	public static function icoPlay               (){ return new Glyph('oxy-icon',0xE510); }
+	public static function icoPlaySymbol         (){ return new Glyph('oxy-icon',0xE610); }
+	public static function icoPause              (){ return new Glyph('oxy-icon',0xE511); }
+	public static function icoPauseSymbol        (){ return new Glyph('oxy-icon',0xE611); }
+	public static function icoStop               (){ return new Glyph('oxy-icon',0xE512); }
+	public static function icoStopSymbol         (){ return new Glyph('oxy-icon',0xE612); }
+	public static function icoPlayPrev           (){ return new Glyph('oxy-icon',0xE513); }
+	public static function icoPlayPrevSymbol     (){ return new Glyph('oxy-icon',0xE613); }
+	public static function icoPlayNext           (){ return new Glyph('oxy-icon',0xE514); }
+	public static function icoPlayNextSymbol     (){ return new Glyph('oxy-icon',0xE614); }
+
 	// 900 - Interface
 	public static function icoContextMenuAnchor  (){ return new Glyph('oxy-icon',0xE900); }
 	public static function icoMore               (){ return new Glyph('oxy-icon',0xE902); }
@@ -110,6 +121,10 @@ abstract class _oxy {
 	public static function icoMenuRight          (){ return new Glyph('oxy-icon',0xE907); }
 	public static function icoOrderAsc           (){ return new Glyph('oxy-icon',0xE908); }
 	public static function icoOrderDesc          (){ return new Glyph('oxy-icon',0xE909); }
+	public static function icoWideView           (){ return new Glyph('oxy-icon',0xE910); }
+	public static function icoVolume             (){ return new Glyph('oxy-icon',0xE911); }
+	public static function icoNoVolume           (){ return new Glyph('oxy-icon',0xE912); }
+
 	public static function icoBoxUnchecked       (){ return new Glyph('oxy-icon',0xE9A0); }
 	public static function icoBoxChecked         (){ return new Glyph('oxy-icon',0xE9A1); }
 	public static function icoBoxDirty           (){ return new Glyph('oxy-icon',0xE9A3); }
