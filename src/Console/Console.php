@@ -29,21 +29,21 @@ class Console {
 	}
 
 	private static function BeginHeader($margin=20){
-		echo '<div style="position:fixed;top:0;left:0;width:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_1.png) '.($margin-40).'px '.($margin-40).'px no-repeat;"></div>';
-		echo '<div style="position:fixed;top:0;right:0;width:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_3.png) 0 '.($margin-40).'px no-repeat;"></div>';
-		echo '<div style="position:fixed;top:0;left:'.(20+$margin).'px;right:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_2.png) 0 '.($margin-40).'px repeat-x;"></div>';
-		echo '<div style="position:fixed;left:0;top:'.(20+$margin).'px;bottom:'.(20+$margin).'px;width:'.(20+$margin).'px;background:url(oxy/img/console_4.png) '.($margin-40).'px 0 repeat-y;"></div>';
-		echo '<div style="position:fixed;right:0;top:'.(20+$margin).'px;bottom:'.(20+$margin).'px;width:'.(20+$margin).'px;background:url(oxy/img/console_6.png) 0 0 repeat-y;"></div>';
-		echo '<div style="position:fixed;bottom:0;left:0;width:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_7.png) '.($margin-40).'px 0 no-repeat;"></div>';
-		echo '<div style="position:fixed;bottom:0;right:0;width:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_9.png) 0 0 no-repeat;"></div>';
-		echo '<div style="position:fixed;bottom:0;left:'.(20+$margin).'px;right:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_8.png) 0 0 repeat-x;"></div>';
-		echo '<div class="console-top" style="position:fixed;top:'.$margin.'px;left:'.$margin.'px;right:'.$margin.'px;height:100px;background:url(oxy/img/console_top_bg.png) 0 0 repeat-x;border-top-left-radius:10px;border-top-right-radius:10px;">';
+		echo '<div style="position:fixed;z-index:50;top:0;left:0;width:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_1.png) '.($margin-40).'px '.($margin-40).'px no-repeat;"></div>';
+		echo '<div style="position:fixed;z-index:50;top:0;right:0;width:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_3.png) 0 '.($margin-40).'px no-repeat;"></div>';
+		echo '<div style="position:fixed;z-index:50;top:0;left:'.(20+$margin).'px;right:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_2.png) 0 '.($margin-40).'px repeat-x;"></div>';
+		echo '<div style="position:fixed;z-index:50;left:0;top:'.(20+$margin).'px;bottom:'.(20+$margin).'px;width:'.(20+$margin).'px;background:url(oxy/img/console_4.png) '.($margin-40).'px 0 repeat-y;"></div>';
+		echo '<div style="position:fixed;z-index:50;right:0;top:'.(20+$margin).'px;bottom:'.(20+$margin).'px;width:'.(20+$margin).'px;background:url(oxy/img/console_6.png) 0 0 repeat-y;"></div>';
+		echo '<div style="position:fixed;z-index:50;bottom:0;left:0;width:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_7.png) '.($margin-40).'px 0 no-repeat;"></div>';
+		echo '<div style="position:fixed;z-index:50;bottom:0;right:0;width:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_9.png) 0 0 no-repeat;"></div>';
+		echo '<div style="position:fixed;z-index:50;bottom:0;left:'.(20+$margin).'px;right:'.(20+$margin).'px;height:'.(20+$margin).'px;background:url(oxy/img/console_8.png) 0 0 repeat-x;"></div>';
+		echo '<div class="console-top" style="position:fixed;z-index:50;top:'.$margin.'px;left:'.$margin.'px;right:'.$margin.'px;height:100px;background:url(oxy/img/console_top_bg.png) 0 0 repeat-x;border-top-left-radius:10px;border-top-right-radius:10px;">';
 	}
 
 	private static function EndHeader($margin=20){
 		echo '</div>';
-		echo '<div style="position:fixed;bottom:'.$margin.'px;left:'.$margin.'px;right:'.$margin.'px;height:17px;background:url(oxy/img/console_bottom_bg.png) 0 0 repeat-x;border-bottom-left-radius:10px;border-bottom-right-radius:10px;text-shadow:#000000 1px 1px 0;color:#888888;font:10px/10px Trebuchet MS, sans-serif;text-transform:uppercase;padding-left:12px;padding-top:6px;">Oxygen</div>';
-		echo '<div class="console overflow" style="position:fixed;top:'.(100+$margin).'px;left:'.$margin.'px;bottom:'.($margin+23).'px;right:'.$margin.'px;background:#f3f3f3;padding:15px;">';
+		echo '<div style="position:fixed;z-index:50;bottom:'.$margin.'px;left:'.$margin.'px;right:'.$margin.'px;height:17px;background:url(oxy/img/console_bottom_bg.png) 0 0 repeat-x;border-bottom-left-radius:10px;border-bottom-right-radius:10px;text-shadow:#000000 1px 1px 0;color:#888888;font:10px/10px Trebuchet MS, sans-serif;text-transform:uppercase;padding-left:12px;padding-top:6px;">Oxygen</div>';
+		echo '<div class="console overflow" style="position:fixed;z-index:50;top:'.(100+$margin).'px;left:'.$margin.'px;bottom:'.($margin+23).'px;right:'.$margin.'px;background:#f3f3f3;padding:15px;">';
 	}
 
 	public static function BeginModal(){
