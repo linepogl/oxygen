@@ -588,6 +588,40 @@ class Database {
 		self::Execute($sql);
 	}
 
+	/** @return DBReader */
+	public static function ExecuteSelect($tablename,$where){
+		$a = func_get_args();
+		$z = func_num_args();
+		if ($z === 2)
+			$sql = 'SELECT *';
+		else {
+			$sql = 'SELECT ';
+			for ($i = 2; $i < $z; $i++) {
+				if ($i > 2) $sql .= ',';
+				$sql .= new SqlIden($a[$i]);
+			}
+		}
+		$sql .= ' FROM '.new SqlIden($tablename);
+		if (!is_null($where)) $sql .=' WHERE '.$where;
+		return self::Execute($sql);
+	}
+	/** @return DBReader */
+	public static function ExecuteSelectAll($tablename){
+		$a = func_get_args();
+		$z = func_num_args();
+		if ($z === 1)
+			$sql = 'SELECT *';
+		else {
+			$sql = 'SELECT ';
+			for ($i = 1; $i < $z; $i++) {
+				if ($i > 1) $sql .= ',';
+				$sql .= new SqlIden($a[$i]);
+			}
+		}
+		$sql .= ' FROM '.new SqlIden($tablename);
+		return self::Execute($sql);
+	}
+
 	public static function ExecuteUpdateLine($tablename,$id){
 		$a = func_get_args();
 		$z = func_num_args();
