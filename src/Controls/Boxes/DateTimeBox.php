@@ -57,7 +57,7 @@ class DateTimeBox extends Box {
 				->WithReadOnly($this->readonly)
 				->WithAllowNull($this->allow_null)
 				->WithNullCaption($this->null_caption)
-				->WithOnChange('window.'.$this->name.'.OnChange();')
+				->WithOnChange('window.'.$this->name.'.OnChangeD();')
 				->Render();
 
 			echo '&nbsp;';
@@ -74,6 +74,22 @@ class DateTimeBox extends Box {
 					echo Js::BEGIN;
 					echo "window.".$this->name." = {";
 					echo "  changing : false";
+					echo " ,OnChangeD : function (){";
+					echo "    this.changing = true;";
+					echo "    var d = window.{$this->name}_date.GetDate();";
+					echo "    if (d===null){";
+					echo "      jQuery('#{$this->name}_h').val('');";
+					echo "      jQuery('#{$this->name}_m').val('');";
+					echo "      jQuery('#{$this->name}_s').val('');";
+					echo "    }";
+					echo "    else if (jQuery('#{$this->name}_h').val()===''||jQuery('#{$this->name}_m').val()===''".($this->show_seconds?"||jQuery('#{$this->name}_s').val()===''":"")."){";
+					echo "      jQuery('#{$this->name}_h').val('24');";
+					echo "      jQuery('#{$this->name}_m').val('00');";
+					echo "      jQuery('#{$this->name}_s').val('00');";
+					echo "    }";
+					echo "    this.changing = false;";
+					echo "    this.OnChange();";
+					echo "  }";
 					echo " ,OnChangeH : function (){";
 					echo "    this.changing = true;";
 					echo "    var h = jQuery('#{$this->name}_h').val();";
@@ -150,7 +166,7 @@ class DateTimeBox extends Box {
 				->WithReadOnly($this->readonly)
 				->WithAllowNull($this->allow_null)
 				->WithNullCaption($this->null_caption)
-				->WithOnChange('window.'.$this->name.'.UpdateD();')
+				->WithOnChange('window.'.$this->name.'.OnChangeD();')
 				->Render();
 
 			echo '&nbsp;';
@@ -159,7 +175,7 @@ class DateTimeBox extends Box {
 				->WithHttpName(null)
 				->WithMode($this->mode)
 				->WithReadOnly($this->readonly)
-				->WithOnChange('window.'.$this->name.'.UpdateT();')
+				->WithOnChange('window.'.$this->name.'.OnChangeT();')
 				->WithNullCaption($this->null_caption)
 				->WithAllowNull($this->allow_null)
 				->WithSimple($this->simple)
@@ -169,17 +185,27 @@ class DateTimeBox extends Box {
 
 			echo Js::BEGIN;
 			echo "window.$this->name = {";
-			echo "  UpdateD : function(){";
+			echo "  changing : false";
+			echo " ,simulated_change : false";
+			echo " ,OnChangeD : function(){";
+			echo "    if(this.changing)return;this.changing=true;";
 			echo "    var d = jQuery('#{$this->name}_date').val();";
 			echo "    var t = jQuery('#{$this->name}_time').val();";
 			echo "    jQuery('#$this->name').val( d==='' ? '' : d.substring(0,8) + (t===''?'000000':t.substring(8)) );";
+			echo "    if (t==='') {$this->name}_time.SetDate({$this->name}_date.GetDate());";
+			echo "    this.changing=false;";
+			echo "    this.OnChange();";
 			echo "  }";
-			echo " ,UpdateT : function(){";
+			echo " ,OnChangeT : function(){";
+			echo "    if(this.changing)return;this.changing=true;";
 			echo "    var d = jQuery('#{$this->name}_date').val();";
 			echo "    var t = jQuery('#{$this->name}_time').val();";
 			echo "    jQuery('#$this->name').val( d==='' ? '' : d.substring(0,8) + (t===''?'000000':t.substring(8)) );";
+			echo "    this.changing=false;";
+			echo "    this.OnChange();";
 			echo "  }";
-			echo " ,SetDate:function(d){ {$this->name}_date.SetDate(d); {$this->name}_time.SetDate(d); }";
+			echo " ,OnChange:function(){ if(this.simulated_change)return; $this->on_change; }";
+			echo " ,SetDate:function(d){ this.simulated_change=true; {$this->name}_date.SetDate(d); {$this->name}_time.SetDate(d); this.simulated_change=false; this.OnChange(); }";
 			echo " ,GetDate:function(){ var d = {$this->name}_date.GetDate(); if(d===null)return null; var t = {$this->name}_time.GetDate(); if(t===null)return null; return new Date(d.getFullYear(),d.getMonth(),d.getDate(),t.getHours(),t.getMinutes(),t.getSeconds()); }";
 			echo "};";
 			echo Js::END;
