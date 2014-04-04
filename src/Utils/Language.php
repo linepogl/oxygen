@@ -122,6 +122,16 @@ final class Language {
 		return $x1 == $x2 ? $x2 : $x1;
 	}
 
+	/** @return string */
+	public static function FormatNumberSI($value,$number_of_decimals=-1) {
+		$s='';
+		if($value>1000){$value/=1000;$s='K';}
+		if($value>1000){$value/=1000;$s='M';}
+		if($value>1000){$value/=1000;$s='G';}
+		if($value>1000){$value/=1000;$s='T';}
+		return Language::FormatNumber($value,$s==''?-1:1).$s;
+	}
+
 
 	public static function IsNumberInvariant($string) {
 		return 1 === preg_match('/-?[1234567890]+(\\.[1234567890]+)/',trim($string));
