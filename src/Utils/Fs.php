@@ -10,25 +10,6 @@ class Fs {
 		 ,$filename);
 	}
 
-	public static function GetAllFilePathsRecursively( $dir ) {
-		$r = array();
-		if (is_dir($dir)) {
-			$stack = array($dir);
-			while(!empty($stack)) {
-				$f = array_pop($stack);
-				$a = scandir($f);
-				if (is_array($a)) foreach ($a as $ff) {
-					if ($ff == '.' || $ff == '..') continue;
-					$fff = "$f/$ff";
-					if (is_dir($fff))
-						array_push($stack,$fff);
-					else
-						$r[$fff] = $fff;
-				}
-			}
-		}
-		return $r;
-	}
 
 	/**
 	 * @param $dir string the directory to be scanned
@@ -120,33 +101,108 @@ class Fs {
 		link( $original , $replica );  // the 10th time do it without try-catch.
 	}
 
-	public static function Browse($folder,$pattern='*'){
+	const BROWSE_ALL = 0x00;
+	const BROWSE_NO_FILES = 0x01;
+	const BROWSE_NO_FOLDERS = 0x02;
+	public static function Browse($folder,$pattern='*',$flags = self::BROWSE_ALL){
 		$r = array();
-		$regexp = $pattern == '*' ? null : '/^' . str_replace(array('\\*','\\?'),array('.*','.'),preg_quote($pattern)) . '$/';
+		$len = strlen($folder)+1;
 		if (is_dir($folder)) {
-			$a = scandir($folder);
-			if (is_array($a)) {
-				foreach ($a as $f) {
-					if ($f == '.' || $f == '..') continue;
-					if (is_null($regexp) || preg_match($regexp,$f))	$r[] = $f;
-				}
+			if($flags&self::BROWSE_NO_FOLDERS) {
+				// Version 1: FILES ONLY
+				$a=glob("$folder/$pattern");
+				if(is_array($a)) foreach($a as $p) if(!is_dir($p)) $r[$p]=substr($p,$len);
+				///.
+			}
+			elseif($flags&self::BROWSE_NO_FILES) {
+				// Version 2: FOLDERS ONLY
+				$a=glob("$folder/$pattern",GLOB_ONLYDIR);
+				if(is_array($a)) foreach($a as $p) $r[$p]=substr($p,$len);
+				///.
+			}
+			else {
+				// Version 3: FILES & FOLDERS
+				$a=glob("$folder/$pattern");
+				if(is_array($a)) foreach($a as $p) $r[$p]=substr($p,$len);
+				///.
 			}
 		}
 		return $r;
 	}
-	public static function BrowseRecursively($folder,$pattern='*'){
-		$r = array();
-		$regexp = $pattern == '*' ? null : '/^' . str_replace(array('\\*','\\?'),array('.*','.'),preg_quote($pattern)) . '$/';
-		if (is_dir($folder)) {
-			$a = scandir($folder);
-			if (is_array($a)) {
-				foreach ($a as $f) {
-					if ($f == '.' || $f == '..') continue;
-					if (is_null($regexp) || preg_match($regexp,$f))	$r[] = $f;
-					if (is_dir("$folder/$f")) foreach (self::BrowseRecursively("$folder/$f",$pattern) as $ff) $r[] = "$f/$ff";
-				}
+
+	public static function BrowseRecursively($folder,$pattern='*',$flags = self::BROWSE_ALL) {
+		$r=array();
+		$len=strlen($folder)+1;
+		$stack=array();
+		if(is_dir($folder)) $stack[]=$folder;
+
+		if($flags&self::BROWSE_NO_FOLDERS) {
+			if($pattern==='*') {
+				// Version 1a: ONLY FILES, without pattern
+				while(!empty($stack)) {
+					$folder=array_pop($stack);
+					$a=glob("$folder/*");
+					if(is_array($a)) foreach($a as $p) {
+						if(is_dir($p))
+							$stack[]=$p;
+						else
+							$r[$p]=substr($p,$len);
+					}
+				} ///.
+			}
+			else {
+				// Version 1b: ONLY FILES, with pattern
+				while(!empty($stack)) {
+					$folder=array_pop($stack);
+					$a=glob("$folder/$pattern");
+					if(is_array($a)) foreach($a as $p) if(!is_dir($p)) $r[$p]=substr($p,$len);
+					$a=glob("$folder/*",GLOB_ONLYDIR);
+					if(is_array($a)) foreach($a as $p) $stack[]=$p;
+				} ///.
 			}
 		}
+		elseif($flags&self::BROWSE_NO_FILES) {
+			if($pattern==='*') {
+				// Version 2a: FOLDERS ONLY, without pattern
+				while(!empty($stack)) {
+					$folder=array_pop($stack);
+					$a=glob("$folder/*",GLOB_ONLYDIR);
+					if(is_array($a)) foreach($a as $p) { $r[$p]=substr($p,$len); $stack[]=$p; }
+				}
+				///.
+			}
+			else {
+				// Version 2b: FOLDERS ONLY, with pattern
+				while(!empty($stack)) {
+					$folder=array_pop($stack);
+					$a=glob("$folder/$pattern",GLOB_ONLYDIR);
+					if(is_array($a)) foreach($a as $p) $r[$p]=substr($p,$len);
+					$a=glob("$folder/*",GLOB_ONLYDIR);
+					if(is_array($a)) foreach($a as $p) $stack[]=$p;
+				} ///.
+			}
+		}
+		else {
+			if($pattern==='*') {
+				// Version 3a: FILES & FOLDERS, without pattern
+				while(!empty($stack)) {
+					$folder=array_pop($stack);
+					$a=glob("$folder/*");
+					if(is_array($a)) foreach($a as $p) { $r[$p]=substr($p,$len); if(is_dir($p)) $stack[]=$p; }
+				} ///.
+			}
+			else {
+				// Version 3b: FILES & FOLDERS, with pattern
+				while(!empty($stack)) {
+					$folder=array_pop($stack);
+					$a=glob("$folder/$pattern");
+					if(is_array($a)) foreach($a as $p) $r[$p]=substr($p,$len);
+					$a=glob("$folder/*",GLOB_ONLYDIR);
+					if(is_array($a)) foreach($a as $p) $stack[]=$p;
+				} ///.
+			}
+		}
+
 		return $r;
 	}
 
@@ -161,7 +217,7 @@ class Fs {
 			finfo_close($finfo);
 		}
 		if ($mime == 'application/octet-stream') { // fail-over
-			$s = is_null($fail_over_virtual_filename) ? $filename : $fail_over_virtual_filename;
+			$s = $fail_over_virtual_filename===null ? $filename : $fail_over_virtual_filename;
 			$x = strrpos($s,'.');
 			if ($x !== false){
 				$ext = substr($s,$x+1);
@@ -282,7 +338,7 @@ class Fs {
 
 
 	public static function ConsumeFileFromUrl( $url , $destination_filename = null ){
-		if (is_null($destination_filename)) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
+		if ($destination_filename===null) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
 		try {
 			set_time_limit(0);
 			Http::Download($url,$destination_filename);
@@ -295,7 +351,7 @@ class Fs {
 		return $destination_filename;
 	}
 	public static function ConsumePostedFile( $posted_file , $destination_filename = null){
-		if (is_null($destination_filename)) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
+		if ($destination_filename===null) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
 		try{
 			if (!is_file($posted_file['tmp_name'])) throw new Exception('The $posted_file[\'tmp_name\'] is not a file.');
 			$size = filesize($posted_file['tmp_name']);
@@ -312,7 +368,7 @@ class Fs {
 		return $destination_filename;
 	}
 	public static function ConsumeRawData( $raw_data , $destination_filename = null ){
-		if (is_null($destination_filename)) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
+		if ($destination_filename===null) $destination_filename = Oxygen::GetTempFolder().'/'.ID::Random()->AsHex().'.dat';
 		try {
 			$file = fopen( $destination_filename , 'w' );
 			fwrite( $file , $raw_data );
