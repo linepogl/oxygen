@@ -81,10 +81,10 @@ class Database {
 					}
 					if (Database::IsPatchingSystemDirty()) $needs_refresh = true;
 				}
-				flock($f,LOCK_UN);
-			}
-			fclose($f);
-			try { unlink($lock_filename); } catch(Exception $ex){}
+                // try { unlink($lock_filename); } catch(Exception $ex){}
+                flock($f,LOCK_UN);
+            }
+            fclose($f);
 		}
 		if ($needs_refresh){
 			self::ResetCaches();
