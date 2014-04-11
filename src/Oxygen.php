@@ -48,12 +48,12 @@ class Oxygen {
 
 		// init window scoping
 		if (self::$window_scoping_enabled) {
-			self::$window_hash = Http::GET('window')->AsStringOrNull();
+			self::$window_hash = Http::GET('wnd')->AsStringOrNull();
 			if (is_null(self::$window_hash)) {
 				self::$window_hash = Oxygen::HashRandom32();
 			}
 			else {
-				$old_window_hash = Http::GET('old_window')->AsStringOrNull();
+				$old_window_hash = Http::GET('wndx')->AsStringOrNull();
 				if (!is_null($old_window_hash)){
 					$new_window_hash = self::$window_hash;
 					self::$window_hash = $old_window_hash;
@@ -62,10 +62,10 @@ class Oxygen {
 					self::$window_hash = $new_window_hash;
 					foreach ($hard as $key=>$value) Scope::$WINDOW->HARD[$key] = $value;
 					foreach ($weak as $key=>$value) Scope::$WINDOW->WEAK[$key] = $value;
-					Oxygen::RedirectRaw( __BASE__ . Oxygen::MakeHrefPreservingValues(array('old_window'=>null)) );
+					Oxygen::RedirectRaw( __BASE__ . Oxygen::MakeHrefPreservingValues(array('wndx'=>null)) );
 				}
 			}
-			self::$url_pins['window'] = self::$window_hash;
+			self::$url_pins['wnd'] = self::$window_hash;
 		}
 		else {
 			self::$window_hash = Oxygen::Hash32(self::$session_hash);
@@ -615,7 +615,7 @@ class Oxygen {
 	//
 	private static $php_controller;
 	private static $php_managed_controller = null;
-	private static $url_pins = array('action'=>null,'lang'=>null,'zone'=>null,'window'=>null);
+	private static $url_pins = array('action'=>null,'lang'=>null,'zone'=>null,'wnd'=>null);
 	public static function AddUrlPin($key) { self::$url_pins[$key] = null; }
 	public static function GetUrlPin($key) { return self::$url_pins[$key]; }
 	public static function GetUrlPins() { return self::$url_pins; }
@@ -839,7 +839,7 @@ class Oxygen {
 			echo "if(window.name!=".new Js(self::$window_hash)."){";
 			echo "  var window_hash=".new Js(Oxygen::HashRandom32()).";";
 			echo "  window.name=window_hash;";
-			echo "  window.location.href=".new Js(__BASE__.Oxygen::MakeHrefPreservingValues(array('window'=>'X','old_window'=>Oxygen::$window_hash))) . ".replace('window=X','window='+window_hash);";
+			echo "  window.location.href=".new Js(__BASE__.Oxygen::MakeHrefPreservingValues(array('wnd'=>'X','wndx'=>Oxygen::$window_hash))) . ".replace('wnd=X','wnd='+window_hash);";
 			echo "}";
 		}
 		// fix for Javascript for non unicode encodings

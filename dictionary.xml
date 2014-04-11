@@ -63,7 +63,7 @@
 	<lemma name="Print"><en>Print</en><fr>Imprimer</fr><el>Εκτύπωση</el></lemma>
 	<lemma name="Close"><en>Close</en><fr>Fermer</fr><el>Κλείσιμο</el></lemma>
 	<lemma name="Ask"><en>Ask</en><fr>Demander</fr><el>Ερώτηση</el></lemma>
-	<lemma name="Update"><en>Update</en><fr>Mettre-à-jour</fr><el>Ανανέωση</el></lemma>
+	<lemma name="Update"><en>Update</en><fr>Mettre à jour</fr><el>Ανανέωση</el></lemma>
 	<lemma name="Select"><en>Select</en><fr>Sélectionner</fr><el>Επιλογή</el></lemma>
 	<lemma name="Compare"><en>Compare</en><fr>Comparer</fr><el>Σύγκριση</el></lemma>
 	<lemma name="Search"><en>Search</en><fr>Rechercher</fr><el>Αναζήτηση</el></lemma>
