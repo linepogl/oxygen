@@ -133,6 +133,10 @@
 	<lemma name="ActionCreateUser"><en>Create user</en><fr>Création d'un utilisateur</fr><el>Δημιουργία χρήστη</el></lemma>
 	<lemma name="ActionForgottenPassword"><en>Forgotten your password?</en><fr>Mot de passe oublié ?</fr><el>Υπενθύμιση κωδικού</el></lemma>
 
+	<lemma name="MsgCannotDisplayWebPage">
+		<en>Cannot display the web page.</en>
+		<fr>La page ne peut pas être affichée.</fr>
+	</lemma>
 	<lemma name="MsgUnderConstruction">
 		<en>Under construction.</en>
 		<fr>En construction.</fr>
@@ -345,6 +349,11 @@
 		<en>An unexpected server error has occurred.</en>
 		<fr>Il y avait une erreur inattendue.</fr>
 		<el>Προέκυψε ένα σφάλμα στον διακομιστή.</el>
+	</lemma>
+	<lemma name="MsgAnErrorOccurredAndTeamNotified">
+		<en>An unexpected server error has occurred. The support team has been notified.</en>
+		<fr>Il y avait une erreur inattendue. L'équipe de support vient d'en être notifié.</fr>
+		<el>Προέκυψε ένα σφάλμα στον διακομιστή. Η ομάδα υποστήριξης ειδοποιήθηκε.</el>
 	</lemma>
 
 

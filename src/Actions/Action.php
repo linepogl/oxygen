@@ -200,7 +200,7 @@ abstract class Action extends XValue {
 					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
 				}
 				else {
-					echo Lemma::Pick('MsgAnErrorOccurred');
+					echo Lemma::Pick('MsgAnErrorOccurredAndTeamNotified');
 				}
 				$exception_served_as = ' (HTTP 500)';
 			}
@@ -212,7 +212,7 @@ abstract class Action extends XValue {
 						Debug::Write( '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) );
 					}
 					else {
-						Debug::Write( Lemma::Pick('MsgAnErrorOccurred') );
+						Debug::Write( Lemma::Pick('MsgAnErrorOccurredAndTeamNotified') );
 					}
 					$exception_served_as = ' (Debug Immediate Flushing)';
 				}
@@ -234,14 +234,14 @@ abstract class Action extends XValue {
 						echo '</td></tr></table>';
 					}
 					elseif ($this->IsAjaxDialog()){
-						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurred') ) );
+						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurredAndTeamNotified') ) );
 						echo $this->GetFormButtons();
 						echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
 						echo $this->EndFormButtons();
 					}
 					else {
 						echo '<div class="exception">';
-						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurred') ) );
+						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurredAndTeamNotified') ) );
 						echo '</div>';
 					}
 					$exception_served_as = '';
