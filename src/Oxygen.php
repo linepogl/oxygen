@@ -1037,6 +1037,7 @@ class Oxygen {
 				Oxygen::AddHttpHeader("Cache-control: private");
 				Oxygen::AddHttpHeader('Pragma: private');
 				Oxygen::AddHttpHeader('Expires: ' . gmdate('D, d M Y H:i:s', time() + 60 * 60 * 24 * 100) . ' GMT'); // 100 days
+				Oxygen::AddHttpHeader('Last-Modified: ' . gmdate('D, d M Y H:i:s', time() ) . ' GMT');
 			}
 
 	    if (isset($_SERVER['HTTP_RANGE'])) {
