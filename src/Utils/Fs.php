@@ -58,15 +58,29 @@ class Fs {
 	public static function Unlink($path) {
 		if (file_exists($path)) {
 			if (is_dir($path) && !is_link($path)) {
+				$messages = array();
 				$dh = opendir($path);
 				if ($dh !== false) {
 					while (($sf = readdir($dh)) !== false) {
 						if ($sf == '.' || $sf == '..') continue;
-						self::Unlink($path.'/'.$sf);
+						try {
+							self::Unlink($path.'/'.$sf);
+						}
+						catch (Exception $ex) {
+							$messages[] = $ex->getMessage();
+						}
 					}
 					closedir($dh);
 				}
-				rmdir($path);
+				try {
+					rmdir($path);
+				}
+				catch (Exception $ex) {
+					$messages[] = $ex->getMessage();
+				}
+				if (!empty($messages)) {
+					throw new Exception( implode('',$messages) );
+				}
 			}
 			else {
 				unlink($path);
