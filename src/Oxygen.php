@@ -226,7 +226,7 @@ class Oxygen {
 				$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
 				echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
 				echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
-				echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:1000;background: #739baa; background:linear-gradient(to bottom, #a1b9b6 0%,#739baa 100%);padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
+				echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background: #739baa; background:linear-gradient(to bottom, #a1b9b6 0%,#739baa 100%);padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
 
 				echo '<div style="color:#ffffff;font:bold 50px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:150px;width:80%;letter-spacing:-2px;">'.Lemma::Pick('MsgCannotDisplayWebPage').'</div>';
 

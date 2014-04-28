@@ -82,6 +82,16 @@ form { margin:0; }
 
 /*
  *
+ * z-indexing
+ *
+ */
+.zdialog             { z-index:100;  }
+.zdialogfog          { z-index:99;   }
+.zpopup              { z-index:1000; }
+.zpopupfog           { z-index:999;  }
+
+/*
+ *
  * Common helpers
  *
  */
@@ -162,7 +172,6 @@ table.simple th { border:0!important; padding:0!important; margin:0!important; }
 
 
 
-
 table.report    { width:100%; }
 table.report th { background:#e0e0e0; font:bold 11px/13px Trebuchet MS, sans-serif; color:#333333; padding:3px; border-right:1px solid #ffffff; border-bottom:1px solid #ffffff; }
 table.report td { background:#f0f0f0; font:normal 11px/13px Trebuchet MS, sans-serif; color:#555555; padding:3px; border-right:1px solid #ffffff; border-bottom:1px solid #ffffff; }
@@ -184,7 +193,8 @@ table.report .selected td { background:#fafaea; }
 .ajaxdialoginner { padding:15px 20px 15px 15px; margin:0; }
 .ie7 .ajaxdialoginner { overflow-x:hidden; overflow-y:auto; }
 .ajaxdialogfog { background:#000000; }
-#AjaxDialogClock { font:bold 10px/13px Courier New, monospace; color:#888888; }
+
+#AjaxDialogClock    { font:bold 10px/13px Courier New, monospace; color:#888888; }
 
 table.tab_buttons td { border-bottom:1px solid #cccccc; padding:0 3px; }
 table.tab_buttons td.tab_button { padding:0; border-bottom-width:0; }

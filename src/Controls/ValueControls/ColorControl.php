@@ -56,7 +56,7 @@ class ColorControl extends ValueControl {
 			echo "  }";
 			echo " ,TogglePalette : function(){";
 			echo "    var p = $('".$this->name."palette');";
-			echo "    if (p == null) $(document.body).insert(". new Js('<div class="colorbox-popup" id="'.$this->name.'palette" style="position:absolute;display:none;z-index:1000;"></div>').');';
+			echo "    if (p == null) $(document.body).insert(". new Js('<div class="colorbox-popup zpopup" id="'.$this->name.'palette" style="position:absolute;display:none;"></div>').');';
 			echo "    var p = $('".$this->name."palette');";
 			echo "    if (p.style.display!='none'){ p.hide(); return; }";
 			echo "    var s = '<table cellspacing=\"1\" cellpadding=\"0\" border=\"0\" style=\"background:#ffffff;border:1px solid #666666;\">';";
