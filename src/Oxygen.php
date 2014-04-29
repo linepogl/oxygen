@@ -106,10 +106,12 @@ class Oxygen {
 
 		// set the action
 		self::$actionmode = Http::GET('mode')->AsIntegerOrNull();
-		if (is_null(self::$actionmode)) self::$actionmode = self::$default_actionmode;
+		if (self::$actionmode === null) self::$actionmode = self::$default_actionmode;
 		self::$actionname = Http::GET('action')->AsStringOrNull();
-		if (is_null(self::$actionname)) self::$actionname = self::$default_actionname;
-
+		if (self::$actionname == '') {
+			self::$actionname = self::$default_actionname;
+			self::SetUrlPin('action',self::$actionname);
+		}
 
 		$logger = new MultiMessage();
 		$logger = $logger->WithOnAdd(function(Message $m){
@@ -626,16 +628,44 @@ class Oxygen {
 	public static function MakeHrefPreservingValues(array $params = array()){
 		return Oxygen::MakeHref( $params + $_GET );    // <-- array + operator is a better array_merge($b,$a)...
 	}
+
+	private static $url_rewrite = false;
+	private static $url_rewrite_pseudo_folders = null;
+	public static function SetUrlRewritePseudoFolders(  ) {
+		$pseudo_folders = func_get_args();
+		if (count($pseudo_folders)>0) {
+			self::$url_rewrite = true;
+			self::$url_rewrite_pseudo_folders = $pseudo_folders;
+		}
+		else {
+			self::$url_rewrite = false;
+			self::$url_rewrite_pseudo_folders = null;
+		}
+	}
 	public static function MakeHref(array $url_args = array() , $use_managed_controller = false ){
+		$p = '';
 		$s = '';
-		foreach ( ($url_args + self::$url_pins) as $key=>$value) { // <-- array + operator here again.
+		$a = $url_args + self::$url_pins;
+		if (self::$url_rewrite) {
+			foreach (self::$url_rewrite_pseudo_folders as $k) {
+				if (array_key_exists($k,$a)) {
+					$p .= new Url($a[$k]);
+					unset($a[$k]);
+				}
+				$p.='/';
+			}
+			$p = rtrim($p,'/');
+		}
+		foreach ($a as $key=>$value) {
 			if (is_null($value)) continue;
 			$s .= ($s===''?'?':'&');
-			$s .= rawurlencode( $key ); /// <-- huge savings by using this directly here... CORRECTION: this is not true, it was because of false info from XDebug
+			$s .= rawurlencode( $key );
 			$s .= '=';
-			$s .= new Url( $value );  // <---- this one costs a lot!
+			$s .= new Url( $value );
 		}
-		if ($use_managed_controller)
+		if (self::$url_rewrite)
+			return $p.$s;
+		elseif ($use_managed_controller)
 			return self::$php_managed_controller . $s;
 		else
 			return self::$php_controller . $s;
