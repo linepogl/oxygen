@@ -340,7 +340,7 @@ abstract class Action extends XValue {
 		else
 			return "Oxygen.OpenDynamicAction(".new Js($r).",function(){return{ $x }; });";
 	}
-	protected function GetUrlArgs(){ $r = array(); return $r; }
+	public function GetUrlArgs(){ $r = array(); return $r; }
 	public final function GetHrefPlain($args=array(),$dynamic_args=array()){
 		if (!empty($dynamic_args)) { $i=0; foreach ($dynamic_args as $key=>$value) $args[$key] = 'XXX~'.++$i; }
 		return Oxygen::MakeHref(
