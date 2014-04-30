@@ -630,16 +630,15 @@ class Oxygen {
 	}
 
 	private static $url_rewrite = false;
-	private static $url_rewrite_pseudo_folders = null;
-	public static function SetUrlRewritePseudoFolders(  ) {
-		$pseudo_folders = func_get_args();
-		if (count($pseudo_folders)>0) {
+	private static $url_rewrite_folder_rules = null;
+	public static function SetUrlRewriteFolderRules( $rules ) {
+		if (count($rules)>0) {
 			self::$url_rewrite = true;
-			self::$url_rewrite_pseudo_folders = $pseudo_folders;
+			self::$url_rewrite_folder_rules = $rules;
 		}
 		else {
 			self::$url_rewrite = false;
-			self::$url_rewrite_pseudo_folders = null;
+			self::$url_rewrite_folder_rules = null;
 		}
 	}
 	public static function MakeHref(array $url_args = array() , $use_managed_controller = false ){
@@ -647,12 +646,18 @@ class Oxygen {
 		$s = '';
 		$a = $url_args + self::$url_pins;
 		if (self::$url_rewrite) {
-			foreach (self::$url_rewrite_pseudo_folders as $k) {
-				if (array_key_exists($k,$a)) {
-					$p .= new Url($a[$k]);
-					unset($a[$k]);
+			foreach (self::$url_rewrite_folder_rules as $key => $empty_value) {
+				if (array_key_exists($key,$a) ) {
+					$v = new Url($a[$key]).'/';
+					if ($v!=='/')
+						$p .= $v;
+					elseif ($empty_value !== null)
+						$p .= new Url($empty_value).'/';
+					unset($a[$key]);
 				}
-				$p.='/';
+				elseif ($empty_value !== null) {
+					$p .= new Url($empty_value).'/';
+				}
 			}
 			$p = rtrim($p,'/');
 		}
