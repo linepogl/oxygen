@@ -1039,14 +1039,17 @@ class Oxygen {
 	// Serve file
 	//
 	//
-	public static function ServeData( $data , $save_as , $mime = null , $requires_caching = true ){
+	public static function ServeData( $data , $save_as , $mime = null , $requires_caching = true , $on_bytes_sent = null){
 		$filename = Oxygen::GetTempFolder(true).Oxygen::HashRandom32().'.dat';
 		file_put_contents($filename,$data);
-		Oxygen::ServeFile($filename,$save_as,$mime,$requires_caching);
+		$r = Oxygen::ServeFile($filename,$save_as,$mime,$requires_caching,$on_bytes_sent);
 		try {unlink($filename);} catch(Exception $ex){}
+		return $r;
 	}
-	public static function ServeFile( $filename , $save_as = null , $mime = null , $requires_caching = true ){
+	public static function ServeFile( $filename , $save_as = null , $mime = null , $requires_caching = true , $on_bytes_sent = null){
 		if (!is_readable($filename)) throw new Exception('File not found: '. $filename);
+		$bytes_sent = 0;
+		$starting_time = microtime(true);
 		try {
 			$size = filesize($filename);
 			$mime = is_null($mime) ? Fs::GetMimeType($filename) : $mime;
@@ -1061,7 +1064,7 @@ class Oxygen {
 			if ($requires_caching && isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($filename)) {
 				Oxygen::AddHttpHeader('HTTP/1.1 304');
 				Oxygen::SendHttpHeaders();
-				return;
+				return $bytes_sent;
 			}
 
 			Oxygen::AddHttpHeader('Content-Type: '.$mime);
@@ -1096,15 +1099,16 @@ class Oxygen {
 
 			set_time_limit(0);
 			$chunksize = 1 * 1024 * 1024;
-			$bytes_send = 0;
+			$bytes_sent = 0;
 			$f = fopen($filename, 'r');
 			if ($f === false) throw new Exception('Cannot open file: '.$filename);
 			if ($range > 0) fseek($f, $range);
-			while (!feof($f) && (!connection_aborted()) && ($bytes_send<$length)) {
+			while (!feof($f) && (!connection_aborted()) && ($bytes_sent<$length)) {
 				$buffer = fread($f, $chunksize);
 				print($buffer);
 				flush();
-				$bytes_send += strlen($buffer);
+				$bytes_sent += strlen($buffer);
+				if (is_callable($on_bytes_sent)) $on_bytes_sent($bytes_sent,microtime(true)-$starting_time);
 			}
 			fclose($f);
 		}
@@ -1112,6 +1116,7 @@ class Oxygen {
 			// we cannot send the exceptions along with the files...
 			Debug::RecordExceptionAndDie($ex,'File Server Exception Handler ('.$filename.')');
 		}
+		return $bytes_sent;
 	}
 
 	

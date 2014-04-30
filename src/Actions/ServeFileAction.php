@@ -19,9 +19,10 @@ abstract class ServeFileAction extends Action  {
 //		}
 	}
 
+	protected function OnBytesSent( $total_bytes_sent_so_far , $seconds_ellapsed ){}
 	public function Render() {
 		try {
-			Oxygen::ServeFile($this->GetFilename(),$this->GetSaveAsName(),$this->GetMimeType(),$this->RequiresCaching());
+			Oxygen::ServeFile($this->GetFilename(),$this->GetSaveAsName(),$this->GetMimeType(),$this->RequiresCaching(),function($bytes_sent,$seconds){$this->OnBytesSent($bytes_sent,$seconds);});
 		}
 		catch (Exception $ex){
 			throw new PageNotFoundException(Lemma::Pick('MsgFileNotFound'));
@@ -30,4 +31,5 @@ abstract class ServeFileAction extends Action  {
 	public function OnAfterRender(){
 		if ($this->IsModeRaw()) exit();
 	}
+
 }
