@@ -19,7 +19,7 @@ abstract class ServeFileAction extends Action  {
 //		}
 	}
 
-	protected function OnBytesSent( $total_bytes_sent_so_far , $seconds_ellapsed ){}
+	public function OnBytesSent( $total_bytes_sent_so_far , $seconds_ellapsed ){}
 	public function Render() {
 		try {
 			$self = $this;
