@@ -724,7 +724,7 @@ class Oxygen {
 		return $_SERVER["SERVER_NAME"] == 'localhost';
 	}
 	public static function IsHttps(){
-		return isset($_SERVER["HTTPS"]);
+		return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 	}
 	public static function GetApplicationName(){
 		$r = $_SERVER["SERVER_NAME"];
