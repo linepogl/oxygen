@@ -8,6 +8,9 @@ class CheckBox extends Box {
 	private $is_rich = false;
 	public function WithIsRich($value){ $this->is_rich = $value; return $this; }
 
+	private $is_button = false;
+	public function WithIsButton( $value ) { $this->is_button = $value; return $this; }
+
 	private $is_dirty = false;
 	public function WithIsDirty($value) { $this->is_dirty = $value; return $this; }
 
@@ -38,13 +41,23 @@ class CheckBox extends Box {
 			echo '</span>';
 		}
 		else {
-			echo '<a class="checkbox checkbox-anchor '.$this->css_class.'" href="javascript:window.'.$this->name.'.Toggle();" style="'.$this->css_style.'">';
-			echo '<span id="'.$this->name.'-box">';
-			echo $this->is_dirty ? oxy::icoBoxDirty() : ( $this->value ? oxy::icoBoxChecked() : oxy::icoBoxUnchecked() );
-			echo '</span>';
-			if ($this->show_label) echo $this->is_rich ? $this->label : '<span class="text spacer2">'.new Html($this->label).'</span>';
-			echo '</a>';
-
+			if ($this->is_button) {
+				echo ButtonBox::Make()->WithCssClass(' '.$this->css_class)->WithCssStyle($this->css_style)->WithIsRich(true)->WithOnClick('window.'.$this->name.'.Toggle();')
+					->WithValue(
+						'<span class="checkbox checkbox-anchor">'
+						.'<span id="'.$this->name.'-box">'.($this->is_dirty?oxy::icoBoxDirty():($this->value?oxy::icoBoxChecked():oxy::icoBoxUnchecked())).'</span>'
+						.($this->show_label?($this->is_rich?$this->label:'<span class="text spacer2">'.new Html($this->label).'</span>') : '')
+						.'</span>'
+						);
+			}
+			else {
+				echo '<a class="checkbox checkbox-anchor '.$this->css_class.'" href="javascript:window.'.$this->name.'.Toggle();" style="'.$this->css_style.'">';
+				echo '<span id="'.$this->name.'-box">';
+				echo $this->is_dirty?oxy::icoBoxDirty():($this->value?oxy::icoBoxChecked():oxy::icoBoxUnchecked());
+				echo '</span>';
+				if ($this->show_label) echo $this->is_rich?$this->label:'<span class="text spacer2">'.new Html($this->label).'</span>';
+				echo '</a>';
+			}
 
 			echo Js::BEGIN;
 			echo "window.".$this->name .'={';
