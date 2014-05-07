@@ -93,6 +93,14 @@ class MetaString extends XConcreteType {
 	 * @param $value string
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return $value;
+	}
+
+	/**
+	 * @param $value string
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return self::EncodeAsUrlString($value);
 	}
@@ -110,7 +118,7 @@ class MetaString extends XConcreteType {
 	 * @return string
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value;
 	}
 
@@ -119,7 +127,7 @@ class MetaString extends XConcreteType {
 	 * @return string
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return self::DecodeXmlString($value);
 	}
 
@@ -128,7 +136,7 @@ class MetaString extends XConcreteType {
 	 * @return string
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		if (is_array($value)) return implode(',',$value);
 		return $value;
 	}

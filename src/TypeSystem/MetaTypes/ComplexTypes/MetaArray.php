@@ -96,6 +96,15 @@ class MetaArray extends XConcreteType {
 	 * @param $value array
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return implode(',',array_map(function($x){ return XType::Of($x)->ExportTextString($x); },$value));
+	}
+
+
+	/**
+	 * @param $value array
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return implode(',',array_map(function($x){ return XType::Of($x)->ExportUrlString($x); },$value));
 	}

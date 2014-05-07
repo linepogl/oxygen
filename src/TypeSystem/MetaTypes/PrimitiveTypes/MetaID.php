@@ -18,7 +18,7 @@ class MetaID extends XNullableType {
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (is_null($value)) $address = $value;
+		if ($value===null) $address = $value;
 		if ($value instanceof ID) $address = $value;
 		throw new ValidationException();
 	}
@@ -43,7 +43,7 @@ class MetaID extends XNullableType {
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		return $value->AsInt();
 	}
 
@@ -53,7 +53,7 @@ class MetaID extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
+		if ($value===null) return Sql::Null;
 		return strval($value->AsInt());
 	}
 
@@ -71,7 +71,7 @@ class MetaID extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
+		if ($value===null) return Js::Null;
 		return '\''.$value->AsHex().'\'';
 	}
 
@@ -80,7 +80,7 @@ class MetaID extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value->AsHex();
 	}
 
@@ -89,7 +89,16 @@ class MetaID extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
+		return $value->AsHex();
+	}
+
+	/**
+	 * @param $value ID|null
+	 * @return string
+	 */
+	public static function ExportTextString($value) {
+		if ($value===null) return '';
 		return $value->AsHex();
 	}
 
@@ -98,7 +107,7 @@ class MetaID extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value->AsHex();
 	}
 
@@ -107,7 +116,7 @@ class MetaID extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportValString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value->AsHex();
 	}
 
@@ -116,7 +125,7 @@ class MetaID extends XNullableType {
 	 * @return ID|null
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		return new ID($value);
 	}
 
@@ -125,7 +134,7 @@ class MetaID extends XNullableType {
 	 * @return ID|null
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		return ID::ParseHex($value);
 	}
@@ -135,7 +144,7 @@ class MetaID extends XNullableType {
 	 * @return ID|null
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();
 		return ID::ParseHex($value);

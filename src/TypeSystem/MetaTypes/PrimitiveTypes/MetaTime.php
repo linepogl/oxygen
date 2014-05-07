@@ -27,7 +27,7 @@ class MetaTime extends XNullableType {
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (is_null($value)) { $address = $value; return; }
+		if ($value===null) { $address = $value; return; }
 		if ($value instanceof XTime) { $address = $value; return; }
 		throw new ValidationException();
 	}
@@ -39,7 +39,7 @@ class MetaTime extends XNullableType {
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
@@ -56,7 +56,7 @@ class MetaTime extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
+		if ($value===null) return Sql::Null;
 		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
@@ -81,7 +81,7 @@ class MetaTime extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
+		if ($value===null) return Js::Null;
 		return 'new Date('.$value->GetYear().','.($value->GetMonth()-1).','.$value->GetDay().','.$value->GetHours().','.$value->GetMinutes().','.$value->GetSeconds().')';
 	}
 
@@ -90,7 +90,7 @@ class MetaTime extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value->Format('H:i:s');
 	}
 
@@ -99,7 +99,7 @@ class MetaTime extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return self::EncodeAsHtmlString( Language::FormatTime($value) );
 	}
 
@@ -107,8 +107,17 @@ class MetaTime extends XNullableType {
 	 * @param $value XTime|null
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		if ($value===null) return '';
+		return Language::FormatTime($value);
+	}
+
+	/**
+	 * @param $value XTime|null
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value->Format('YmdHis');
 	}
 
@@ -117,7 +126,7 @@ class MetaTime extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportValString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value->Format('YmdHis');
 	}
 
@@ -126,7 +135,7 @@ class MetaTime extends XNullableType {
 	 * @return XTime|null
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value == '0000-00-00 00:00:00') return null;
 		return XTime::Parse($value,'Y-m-d H:i:s');
 	}
@@ -136,7 +145,7 @@ class MetaTime extends XNullableType {
 	 * @return XTime|null
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		return XDateTime::Parse($value,'H:i:s');
 	}
@@ -146,7 +155,7 @@ class MetaTime extends XNullableType {
 	 * @return XTime|null
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();
 		return XTime::Parse($value,'YmdHis');

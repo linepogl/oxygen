@@ -18,7 +18,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (is_null($value)) { $address = $value; return; }
+		if ($value===null) { $address = $value; return; }
 		if ($value instanceof XTimeSpan) { $address = $value; return; }
 		throw new ValidationException();
 	}
@@ -41,7 +41,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		return $value->GetTotalMilliSeconds();
 	}
 
@@ -51,7 +51,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
+		if ($value===null) return Sql::Null;
 		return strval($value->GetTotalMilliSeconds());
 	}
 
@@ -69,7 +69,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return XTimeSpan|null
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		return new XTimeSpan(intval($value));
 	}
 
@@ -97,7 +97,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
+		if ($value===null) return Js::Null;
 		return strval($value->GetTotalMilliseconds());
 	}
 
@@ -106,7 +106,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value->AsString();
 	}
 
@@ -115,7 +115,23 @@ class MetaTimeSpan extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
+		$d = $value->GetDays();
+		$h = $value->GetHours();
+		$m = $value->GetMinutes();
+		$s = $value->GetSeconds();
+		return ($d==0?'':$d.Lemma::Pick('d.'))
+				 . ($h==0?'':$h.Lemma::Pick('h.'))
+				 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
+				 ;
+	}
+
+	/**
+	 * @param $value XTimeSpan|null
+	 * @return string
+	 */
+	public static function ExportTextString($value) {
+		if ($value===null) return '';
 		$d = $value->GetDays();
 		$h = $value->GetHours();
 		$m = $value->GetMinutes();
@@ -131,7 +147,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return strval($value->GetTotalMilliseconds());
 	}
 
@@ -141,7 +157,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportValString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return strval($value->GetTotalMilliseconds());
 	}
 
@@ -151,7 +167,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return XTimeSpan|null
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		return XTimeSpan::Parse($value);
 	}
@@ -161,7 +177,7 @@ class MetaTimeSpan extends XNullableType {
 	 * @return XTimeSpan|null
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();
 		return new XTimeSpan(intval($value));

@@ -40,9 +40,9 @@ class ListCheckBox extends Box {
 		echo " ,IsChecked : function(){ return {$this->name}_all.GetValue(); }";
 		echo " ,Check : function(value){ {$this->name}_all.SetValue(value); }";
 		echo " ,Toggle : function(value){ {$this->name}_all.SetValue( !{$this->name}_all.GetValue() ); }";
-		echo " ,CountSelected : function(){";
-		echo "    return this.selected_values.length;";
-		echo "  }";
+		echo " ,CountSelected:function(){ return this.selected_values.length; }";
+		echo " ,GetAllValues:function(){return this.all_values;}";
+		echo " ,GetSelectedValues:function(){return this.selected_values;}";
 		echo " ,Invalidate : function(){";
 		echo "    if (!this.all_values_are_fixed) this.all_values = null;";
 		echo "    if(this.running) return;";

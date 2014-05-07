@@ -26,7 +26,7 @@ class MetaStringOrNull extends XNullableType {
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (!is_null($value) && !is_string($value)) throw new ValidationException();
+		if ($value!==null && !is_string($value)) throw new ValidationException();
 		$address = $value;
 	}
 
@@ -59,7 +59,7 @@ class MetaStringOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
+		if ($value===null) return Sql::Null;
 		return self::EncodeAsSqlStringLiteral($value,$platform);
 	}
 
@@ -69,7 +69,7 @@ class MetaStringOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value, $platform) {
-		if (is_null($value)) throw new ConvertionException();
+		if ($value===null) throw new ConvertionException();
 		if ($value === '') throw new ConvertionException();
 		return self::EncodeAsSqlIdentifier($value,$platform);
 	}
@@ -79,7 +79,7 @@ class MetaStringOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
+		if ($value===null) return Js::Null;
 		return self::EncodeAsJsStringLiteral($value);
 	}
 
@@ -88,7 +88,7 @@ class MetaStringOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return self::EncodeAsXmlString($value,$attr);
 	}
 
@@ -97,7 +97,7 @@ class MetaStringOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return self::EncodeAsHtmlString($value);
 	}
 
@@ -105,8 +105,17 @@ class MetaStringOrNull extends XNullableType {
 	 * @param $value string|null
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		if ($value===null) return '';
+		return $value;
+	}
+
+	/**
+	 * @param $value string|null
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return self::EncodeAsUrlString($value);
 	}
 
@@ -115,7 +124,7 @@ class MetaStringOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportValString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value;
 	}
 
@@ -132,7 +141,7 @@ class MetaStringOrNull extends XNullableType {
 	 * @return string|null
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		return self::DecodeXmlString($value);
 	}
 
@@ -141,7 +150,7 @@ class MetaStringOrNull extends XNullableType {
 	 * @return string|null
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if (is_array($value)) return implode(',',$value);
 		return $value;
 	}

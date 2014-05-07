@@ -101,6 +101,14 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @param $value XDateTime
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return Language::FormatDateTime($value);
+	}
+
+	/**
+	 * @param $value XDateTime
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return $value->Format('YmdHis');
 	}
@@ -118,7 +126,7 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @return XDateTime
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return self::GetDefaultValue();
+		if ($value===null) return self::GetDefaultValue();
 		if ($value == '0000-00-00 00:00:00') return self::GetDefaultValue();
 		return XDateTime::Parse($value,'Y-m-d H:i:s');
 	}
@@ -128,7 +136,7 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @return XDateTime
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return self::GetDefaultValue();
+		if ($value===null) return self::GetDefaultValue();
 		if ($value === '') return self::GetDefaultValue();
 		return XDateTime::Parse($value,'Y-m-d\TH:i:s');
 	}
@@ -138,7 +146,7 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @return XDateTime
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return self::GetDefaultValue();
+		if ($value===null) return self::GetDefaultValue();
 		if ($value === '') return self::GetDefaultValue();
 		if (is_array($value)) throw new ConvertionException();
 		return XDateTime::Parse($value,'YmdHis');

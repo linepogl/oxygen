@@ -90,6 +90,14 @@ class MetaLemmaOrEmpty extends XConcreteType {
 	 * @param $value Lemma
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return $value->Translate();
+	}
+
+	/**
+	 * @param $value Lemma
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return self::EncodeAsUrlString( $value->Encode() );
 	}
@@ -107,7 +115,7 @@ class MetaLemmaOrEmpty extends XConcreteType {
 	 * @return Lemma
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return self::GetDefaultValue();
+		if ($value===null) return self::GetDefaultValue();
 		return Lemma::Decode($value);
 	}
 
@@ -116,7 +124,7 @@ class MetaLemmaOrEmpty extends XConcreteType {
 	 * @return Lemma
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return self::GetDefaultValue();
+		if ($value===null) return self::GetDefaultValue();
 		return Lemma::Decode($value);
 	}
 
@@ -125,7 +133,7 @@ class MetaLemmaOrEmpty extends XConcreteType {
 	 * @return Lemma
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return self::GetDefaultValue();
+		if ($value===null) return self::GetDefaultValue();
 		if (is_array($value)) throw new ConvertionException();
 		return Lemma::Decode($value);
 	}

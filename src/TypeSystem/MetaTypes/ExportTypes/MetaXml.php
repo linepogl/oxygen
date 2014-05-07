@@ -91,6 +91,14 @@ class MetaXml extends XConcreteType {
 	 * @param $value Xml
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return strval($value->Export());
+	}
+
+	/**
+	 * @param $value Xml
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return self::EncodeAsUrlString($value->Export());
 	}

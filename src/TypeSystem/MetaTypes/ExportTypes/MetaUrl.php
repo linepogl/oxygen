@@ -91,6 +91,14 @@ class MetaUrl extends XConcreteType {
 	 * @param $value Url
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return strval($value->Export());
+	}
+
+	/**
+	 * @param $value Url
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return $value->Export();
 	}

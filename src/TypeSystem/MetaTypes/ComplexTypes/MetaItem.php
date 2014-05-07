@@ -92,6 +92,14 @@ class MetaItem extends XNullableType {
 	 * @param $value XItem
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return strval($value->GetTitle());
+	}
+
+	/**
+	 * @param $value XItem
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return $value->id->AsHex();
 	}

@@ -95,6 +95,14 @@ class MetaInteger extends XConcreteType {
 	 * @param $value int
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return sprintf('%d',$value);
+	}
+
+	/**
+	 * @param $value int
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return sprintf('%d',$value);
 	}

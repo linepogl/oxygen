@@ -26,7 +26,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (!is_null($value) && !is_int($value)) throw new ValidationException();
+		if ($value!==null && !is_int($value)) throw new ValidationException();
 		$address = $value;
 	}
 
@@ -59,7 +59,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
+		if ($value===null) return Sql::Null;
 		return sprintf('%d',$value);
 	}
 
@@ -77,7 +77,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
+		if ($value===null) return Js::Null;
 		return sprintf('%d',$value);
 	}
 
@@ -86,7 +86,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return sprintf('%d',$value);
 	}
 
@@ -95,7 +95,16 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
+		return sprintf('%d',$value);
+	}
+
+	/**
+	 * @param $value int|null
+	 * @return string
+	 */
+	public static function ExportTextString($value) {
+		if ($value===null) return '';
 		return sprintf('%d',$value);
 	}
 
@@ -104,7 +113,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return sprintf('%d',$value);
 	}
 
@@ -113,7 +122,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportValString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return sprintf('%d',$value);
 	}
 
@@ -122,7 +131,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return int|null
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		return intval($value);
 	}
 
@@ -131,7 +140,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return int|null
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		return intval($value);
 	}
@@ -141,7 +150,7 @@ class MetaIntegerOrNull extends XNullableType {
 	 * @return int|null
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if (is_array($value)) throw new ConvertionException();
         if (!is_numeric($value)) return null;
 		return intval($value);

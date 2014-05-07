@@ -26,7 +26,7 @@ class MetaLemma extends XNullableType {
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (is_null($value)) $address = $value;
+		if ($value===null) $address = $value;
 		if ($value instanceof Lemma) $address = $value;
 		throw new ValidationException();
 	}
@@ -51,7 +51,7 @@ class MetaLemma extends XNullableType {
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		return $value->Encode();
 	}
 
@@ -61,7 +61,7 @@ class MetaLemma extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
+		if ($value===null) return Sql::Null;
 		return self::EncodeAsSqlStringLiteral( $value->Encode() , $platform );
 	}
 
@@ -79,7 +79,7 @@ class MetaLemma extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
+		if ($value===null) return Js::Null;
 		return self::EncodeAsJsStringLiteral( $value->Translate() ); /// ?
 	}
 
@@ -88,7 +88,7 @@ class MetaLemma extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return self::EncodeAsXmlString( $value->Encode() , $attr );
 	}
 
@@ -97,7 +97,7 @@ class MetaLemma extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return self::EncodeAsHtmlString( $value->Translate() );
 	}
 
@@ -105,8 +105,17 @@ class MetaLemma extends XNullableType {
 	 * @param $value Lemma|null
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		if ($value===null) return '';
+		return $value->Translate();
+	}
+
+	/**
+	 * @param $value Lemma|null
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return self::EncodeAsUrlString( $value->Encode() );
 	}
 
@@ -115,7 +124,7 @@ class MetaLemma extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportValString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return $value->Encode();
 	}
 
@@ -124,7 +133,7 @@ class MetaLemma extends XNullableType {
 	 * @return Lemma|null
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		return Lemma::Decode($value);
 	}
 
@@ -133,7 +142,7 @@ class MetaLemma extends XNullableType {
 	 * @return Lemma|null
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		return Lemma::Decode($value);
 	}
@@ -143,7 +152,7 @@ class MetaLemma extends XNullableType {
 	 * @return Lemma|null
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();
 		return Lemma::Decode($value);

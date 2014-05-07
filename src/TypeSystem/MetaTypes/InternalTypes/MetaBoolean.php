@@ -97,6 +97,15 @@ class MetaBoolean extends XConcreteType {
 	 * @param $value boolean
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		if ($value) return (string)Lemma::Pick('Yes');
+		return (string)Lemma::Pick('No');
+	}
+
+	/**
+	 * @param $value boolean
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		if ($value) return 'true';
 		return 'false';

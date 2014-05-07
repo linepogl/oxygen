@@ -91,6 +91,14 @@ class MetaVal extends XConcreteType {
 	 * @param $value Val
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return strval($value->Export());
+	}
+
+	/**
+	 * @param $value Val
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return self::EncodeAsUrlString($value->Export());
 	}

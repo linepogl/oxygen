@@ -26,7 +26,7 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (is_null($value)) $address = $value;
+		if ($value===null) $address = $value;
 		if (is_float($value)) $address = $value;
 		if (is_int($value)) $address = $value; // implicit casting!!!
 		throw new ValidationException();
@@ -61,7 +61,7 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
+		if ($value===null) return Sql::Null;
 		return Language::FormatDecimalInvariant($value);
 	}
 
@@ -79,7 +79,7 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
+		if ($value===null) return Js::Null;
 		return Language::FormatDecimalInvariant($value);
 	}
 
@@ -88,7 +88,7 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return Language::FormatDecimalInvariant($value);
 	}
 
@@ -98,7 +98,16 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
+		return Language::FormatDecimal($value);
+	}
+
+	/**
+	 * @param $value float|null
+	 * @return string
+	 */
+	public static function ExportTextString($value) {
+		if ($value===null) return '';
 		return Language::FormatDecimal($value);
 	}
 
@@ -107,7 +116,7 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return Language::FormatDecimal($value);
 	}
 
@@ -116,7 +125,7 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportValString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		return Language::FormatDecimal($value);
 	}
 
@@ -125,7 +134,7 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return float|null
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		return Language::ParseDecimalInvariant($value);
 	}
 
@@ -134,7 +143,7 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return float|null
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '') return null;
 		return Language::ParseDecimalInvariant($value);
 	}
@@ -144,7 +153,7 @@ class MetaDecimalOrNull extends XNullableType {
 	 * @return float|null
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
     if (!Language::IsNumber($value)) return null;
 		if ($value === '') return null;
 		if (is_array($value)) throw new ConvertionException();

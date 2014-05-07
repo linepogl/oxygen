@@ -68,7 +68,7 @@ class MetaTimeSpanOrZero extends XConcreteType {
 	 * @return XTimeSpan
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return self::GetDefaultValue();
+		if ($value===null) return self::GetDefaultValue();
 		return new XTimeSpan(intval($value));
 	}
 
@@ -126,6 +126,21 @@ class MetaTimeSpanOrZero extends XConcreteType {
 	 * @param $value XTimeSpan
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		$d = $value->GetDays();
+		$h = $value->GetHours();
+		$m = $value->GetMinutes();
+		$s = $value->GetSeconds();
+		return ($d==0?'':$d.Lemma::Pick('d.'))
+				 . ($h==0?'':$h.Lemma::Pick('h.'))
+				 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
+				 ;
+	}
+
+	/**
+	 * @param $value XTimeSpan
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return strval($value->GetTotalMilliseconds());
 	}
@@ -145,7 +160,7 @@ class MetaTimeSpanOrZero extends XConcreteType {
 	 * @return XTimeSpan
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return self::GetDefaultValue();
+		if ($value===null) return self::GetDefaultValue();
 		if ($value === '') return new XTimeSpan(0);
 		return XTimeSpan::Parse($value);
 	}

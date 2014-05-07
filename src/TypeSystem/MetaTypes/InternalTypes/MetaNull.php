@@ -18,7 +18,7 @@ class MetaNull extends XNullableType {
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (!is_null($value)) throw new ValidationException();
+		if ($value!==null) throw new ValidationException();
 		$address = $value;
 	}
 
@@ -85,6 +85,14 @@ class MetaNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
+		return '';
+	}
+
+	/**
+	 * @param $value null
+	 * @return string
+	 */
+	public static function ExportTextString($value) {
 		return '';
 	}
 

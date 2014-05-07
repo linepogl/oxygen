@@ -1,27 +1,25 @@
 <?php
 
-class MetaAction extends XConcreteType {
+class MetaText extends XConcreteType {
 
 	private static $instance;
 	public static function Init(){ self::$instance = new self(); }
-	/** @return MetaAction */ public static function Type() { return self::$instance; }
-	/** @return MetaAction */ public static function GetNullableType() { throw new ConvertionException(); }
-	/** @return Action */ public static function GetDefaultValue() { throw new ConvertionException(); }
+	/** @return MetaText */ public static function Type() { return self::$instance; }
+	/** @return MetaText */ public static function GetNullableType() { throw new ConvertionException(); }
+	/** @return Text */ public static function GetDefaultValue() { throw new ConvertionException(); }
 
 
 
 
 
-	
 	/**
-	 * @param $address Action
+	 * @param $address Text
 	 * @param $value mixed
 	 * @throws ValidationException
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if ($value instanceof Action) $address = $value;
-		throw new ValidationException();
+		$address = $value;
 	}
 
 	/**
@@ -39,7 +37,7 @@ class MetaAction extends XConcreteType {
 	}
 
 	/**
-	 * @param $value Action
+	 * @param $value Text
 	 * @param $platform int|null
 	 * @return mixed
 	 */
@@ -48,77 +46,74 @@ class MetaAction extends XConcreteType {
 	}
 
 	/**
-	 * @param $value Action
+	 * @param $value Text
 	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		throw new ConvertionException();
+		return self::EncodeAsSqlStringLiteral($value->Export(),$platform);
 	}
 
 	/**
-	 * @param $value Action
+	 * @param $value Text
 	 * @param $platform int|null
 	 * @return string
 	 */
 	public static function ExportSqlIdentifier($value, $platform) {
-		throw new ConvertionException();
+		return self::EncodeAsSqlIdentifier($value->Export(),$platform);
 	}
 
 	/**
-	 * @param $value Action
+	 * @param $value Text
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		return self::EncodeAsJsStringLiteral($value->GetHref());
+		return self::EncodeAsJsStringLiteral($value->Export());
 	}
 
 	/**
-	 * @param $value Action
-	 * @return string
-	 */
-	public static function ExportHtmlString($value) {
-		return self::EncodeAsHtmlString($value->GetHref());
-	}
-
-	/**
-	 * @param $value Action
-	 * @return string
-	 */
-	public static function ExportTextString($value) {
-		return $value->GetHref();
-	}
-
-	/**
-	 * @param $value Action
+	 * @param $value Text
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
-		throw new ConvertionException();
+		return self::EncodeAsXmlString($value->Export(),$attr);
 	}
 
+	/**
+	 * @param $value Text
+	 * @return string
+	 */
+	public static function ExportHtmlString($value) {
+		return self::EncodeAsHtmlString($value->Export());
+	}
 
 	/**
-	 * @param $value Action
+	 * @param $value Text
+	 * @return string
+	 */
+	public static function ExportTextString($value) {
+		return $value->Export();
+	}
+
+	/**
+	 * @param $value Text
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		return self::EncodeAsUrlString($value->GetHref());
+		return self::EncodeAsUrlString($value->Export());
 	}
 
-
 	/**
-	 * @param $value Action
+	 * @param $value Text
 	 * @return string
 	 */
 	public static function ExportValString($value) {
-		return $value->GetHref();
+		return $value->Export();
 	}
-
 
 	/**
 	 * @param $value string|null
-	 * @return Action
+	 * @return Text
 	 */
 	public static function ImportDBValue($value) {
 		throw new ConvertionException();
@@ -126,7 +121,7 @@ class MetaAction extends XConcreteType {
 
 	/**
 	 * @param $value string|null
-	 * @return Action
+	 * @return Text
 	 */
 	public static function ImportDomValue($value) {
 		throw new ConvertionException();
@@ -134,11 +129,11 @@ class MetaAction extends XConcreteType {
 
 	/**
 	 * @param $value string|null|array
-	 * @return Action
+	 * @return Text
 	 */
 	public static function ImportHttpValue($value) {
 		throw new ConvertionException();
 	}
 }
 
-MetaAction::Init();
+MetaText::Init();

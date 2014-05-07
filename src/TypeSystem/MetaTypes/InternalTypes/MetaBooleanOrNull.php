@@ -26,7 +26,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return void
 	 */
 	public static function Assign(&$address,$value) {
-		if (!is_null($value) && !is_bool($value)) throw new ValidationException();
+		if ($value!==null && !is_bool($value)) throw new ValidationException();
 		$address = $value;
 	}
 
@@ -59,7 +59,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		if (is_null($value)) return Sql::Null;
+		if ($value===null) return Sql::Null;
 		if ($value) return '1';
 		return '0';
 	}
@@ -78,7 +78,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportJsLiteral($value) {
-		if (is_null($value)) return Js::Null;
+		if ($value===null) return Js::Null;
 		if ($value) return 'true';
 		return 'false';
 	}
@@ -88,7 +88,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportXmlString($value,$attr=false) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		if ($value) return 'true';
 		return 'false';
 	}
@@ -98,7 +98,17 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
+		if ($value) return (string)Lemma::Pick('Yes');
+		return (string)Lemma::Pick('No');
+	}
+
+	/**
+	 * @param $value boolean|null
+	 * @return string
+	 */
+	public static function ExportTextString($value) {
+		if ($value===null) return '';
 		if ($value) return (string)Lemma::Pick('Yes');
 		return (string)Lemma::Pick('No');
 	}
@@ -108,7 +118,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportUrlString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		if ($value) return 'true';
 		return 'false';
 	}
@@ -118,7 +128,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return string
 	 */
 	public static function ExportValString($value) {
-		if (is_null($value)) return '';
+		if ($value===null) return '';
 		if ($value) return 'true';
 		return 'false';
 	}
@@ -128,7 +138,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return boolean|null
 	 */
 	public static function ImportDBValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === '1') return true; /// TODO: this needs testing
 		return false;
 	}
@@ -138,7 +148,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return boolean|null
 	 */
 	public static function ImportDomValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if ($value === 'true') return true;
 		if ($value === 'false') return false;
 		return null;
@@ -149,7 +159,7 @@ class MetaBooleanOrNull extends XNullableType {
 	 * @return boolean|null
 	 */
 	public static function ImportHttpValue($value) {
-		if (is_null($value)) return null;
+		if ($value===null) return null;
 		if (is_array($value)) throw new ConvertionException();
 		if ($value === 'true') return true;
 		if ($value === 'false') return false;

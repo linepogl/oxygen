@@ -95,6 +95,14 @@ class MetaMetaField extends XConcreteType {
 	 * @param $value XMetaField
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return strval($value->GetLabel());
+	}
+
+	/**
+	 * @param $value XMetaField
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return self::EncodeAsUrlString($value->GetName());
 	}

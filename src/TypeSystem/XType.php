@@ -87,6 +87,13 @@ interface _XType {
 	 * @param $value mixed <T>
 	 * @return string
 	 */
+	public static function ExportTextString($value);
+
+
+	/**
+	 * @param $value mixed <T>
+	 * @return string
+	 */
 	public static function ExportUrlString($value);
 
 

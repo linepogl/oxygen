@@ -251,6 +251,8 @@ class Fs {
 			case 'image/png'                         : return 'png';
 			case 'text/css'                          : return 'css';
 			case 'text/html'                         : return 'html';
+			case 'text/javascript'                   : return 'js';
+			case 'application/json'                  : return 'json';
 			case 'video/x-flv'                       : return 'flv';
 			case 'text/plain'                        : return 'txt';
 			case 'image/bmp'                         : return 'bmp';
@@ -274,6 +276,7 @@ class Fs {
 			case 'video/x-ms-wmx'                    : return 'wmx';
 			case 'text/xml'                          : return 'xml';
 			case 'text/xsl'                          : return 'xsl';
+			case 'text/csv'                          : return 'csv';
 			case 'application/msword'                : return 'doc';
 			case 'application/excel'                 : return 'xls';
 			case 'application/vnd.ms-powerpoint'     : return 'ppt';
@@ -301,6 +304,8 @@ class Fs {
 			case 'css': return 'text/css';
 			case 'htm': return 'text/html';
 			case 'html': return 'text/html';
+			case 'js': return 'text/javascript';
+			case 'json': return 'application/json';
 			case 'flv': return 'video/x-flv';
 			case 'txt': return 'text/plain';
 			case 'bmp': return 'image/bmp';
@@ -329,6 +334,7 @@ class Fs {
 			case 'xml': return 'text/xml';
 			case 'xsd': return 'text/xml';
 			case 'xsl': return 'text/xsl';
+			case 'csv': return 'text/csv';
 			case 'doc': return 'application/msword';
 			case 'rtf': return 'application/msword';
 			case 'xls': return 'application/excel';

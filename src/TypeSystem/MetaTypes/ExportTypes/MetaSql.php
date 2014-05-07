@@ -91,6 +91,14 @@ class MetaSql extends XConcreteType {
 	 * @param $value Sql
 	 * @return string
 	 */
+	public static function ExportTextString($value) {
+		return strval($value->Export());
+	}
+
+	/**
+	 * @param $value Sql
+	 * @return string
+	 */
 	public static function ExportUrlString($value) {
 		return self::EncodeAsUrlString($value->Export());
 	}
