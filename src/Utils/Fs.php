@@ -270,6 +270,7 @@ class Fs {
 			case 'video/x-ms-asf'                    : return 'asf';
 			case 'video/avi'                         : return 'avi';
 			case 'video/mp4'                         : return 'mp4';
+			case 'video/quicktime'                   : return 'mov';
 			case 'video/x-m4v'                       : return 'm4v';
 			case 'video/mpeg'                        : return 'mpg';
 			case 'video/x-ms-wmv'                    : return 'wmv';
@@ -326,6 +327,7 @@ class Fs {
 			case 'asx': return 'video/x-ms-asf';
 			case 'avi': return 'video/avi';
 			case 'mp4': return 'video/mp4';
+			case 'mov': return 'video/quicktime';
 			case 'm4v': return 'video/x-m4v';
 			case 'mpg': return 'video/mpeg';
 			case 'mpeg': return 'video/mpeg';
