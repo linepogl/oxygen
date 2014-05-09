@@ -1040,7 +1040,7 @@ class Oxygen {
 	//
 	//
 	public static function ServeData( $data , $save_as , $mime = null , $requires_caching = true , $on_bytes_sent = null){
-		$filename = Oxygen::GetTempFolder(true).Oxygen::HashRandom32().'.dat';
+		$filename = Oxygen::GetTempFolder(true).'/'.Oxygen::HashRandom32().'.dat';
 		file_put_contents($filename,$data);
 		$r = Oxygen::ServeFile($filename,$save_as,$mime,$requires_caching,$on_bytes_sent);
 		try {unlink($filename);} catch(Exception $ex){}
