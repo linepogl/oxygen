@@ -70,6 +70,11 @@ class ListCheckBox extends Box {
 		echo "  }";
 		echo " ,Update : function(){";
 		echo "    this.Init();";
+		echo "    if(this.selected_values.length>1){"; //let's sort...
+		echo "      var a = [];";
+		echo "      for(var i=0;i<this.all_values.length;i++)if(jQuery.inArray(this.all_values[i],this.selected_values)>=0)a.push(this.all_values[i]);";
+		echo "      this.selected_values = a;";
+		echo "    }";
 		echo "    var s = '';";
 		echo "    for (var i = 0; i < this.selected_values.length; i++)";
 		echo "      s +=(i>0?',':'')+this.selected_values[i];";
