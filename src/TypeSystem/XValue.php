@@ -23,6 +23,7 @@ abstract class XValue {
 
 
 
+	/** @return boolean */
 	public static function AreEqual($x1,$x2){
 		if ( $x1 instanceof XValue )
 			return $x1->IsEqualTo( $x2 );
@@ -42,6 +43,7 @@ abstract class XValue {
 		/** @noinspection PhpParamsInspection */
 		throw new InvalidArgumentException('Unsupported comparison: ' . (is_object($x1)?get_class($x1):gettype($x1)) . ' - ' . (is_object($x2)?get_class($x2):gettype($x2))  );
 	}
+	/** @return int */
 	public static function Compare($x1,$x2){
 		if ( $x1 instanceof XValue )
 			return $x1->CompareTo( $x2 );
