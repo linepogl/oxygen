@@ -9,13 +9,12 @@ class ColorBox extends Box {
 	public function WithNullCaption($value){ $this->null_caption = $value; return $this; }
 
 	public function Render(){
-		if ((is_null($this->value) || trim($this->value) === '') && !$this->allow_null) {
-			$this->value = '#ffffff';
-		}
+		$ns = $this->name;
+		if (( $this->value===null || trim($this->value) === '') && !$this->allow_null) $this->value = '#ffffff';
 		$is_null = is_null($this->value) || trim($this->value) === '';
 
 		if ($this->mode === UIMode::Edit) {
-			echo HiddenBox::Make($this->name,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
+			echo HiddenBox::Make($ns,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
 		}
 
 		if ($this->mode == UIMode::View || $this->mode == UIMode::Printer) {
@@ -36,30 +35,30 @@ class ColorBox extends Box {
 		echo '>';
 
 		if (!$this->readonly){
-			echo '<div id="'.$this->name.'-dropdown" class="formDropDown formColorDropDown" style="display:none;">';
+			echo '<div id="'.$ns.'-dropdown" class="formDropDown formColorDropDown" style="display:none;">';
 			echo '<div class="formDropDownHook"></div>';
 //			echo '<div class="formDropDownHead">';
-//			echo '<div id="'.$this->name.'-dropdown-header"></div>';
+//			echo '<div id="'.$ns.'-dropdown-header"></div>';
 //			echo '</div>';
 			echo '<div class="formDropDownBody">';
-			echo '<div id="'.$this->name.'-dropdown-body"></div>';
+			echo '<div id="'.$ns.'-dropdown-body"></div>';
 			echo '</div>';
 			echo '<div class="formDropDownFoot">';
 			if ($this->allow_null){
 				$null_caption = trim($this->null_caption);
-				echo '<a class="fleft button" href="javascript:'.$this->name.'.SetColor(null);">'.($null_caption===''?'&empty;':new Html($null_caption)).'</a>';
+				echo '<a class="fleft button" href="javascript:window.'.$ns.'.SetColor(null);">'.($null_caption===''?'&empty;':new Html($null_caption)).'</a>';
 			}
 			echo '<div class="formDropDownFootRight">';
-			echo '# <input id="'.$this->name.'-text" type="text" class="formPane" style="width:45px;" onchange="window.'.$this->name.'.OnChange();" onkeyup="window.'.$this->name.'.OnChange();" />';
+			echo '# <input id="'.$ns.'-text" type="text" class="formPane" style="width:45px;" onchange="window.'.$ns.'.OnChange();" onkeyup="window.'.$ns.'.OnChange();" />';
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
 		}
 
 
-		echo '<div id="'.$this->name.'-anchor" class="formPane formPaneAnchorWrap formColorAnchorOuter" style="background:none;border:0;margin:0;"><div class="formPaneAnchor formColorAnchor">'.oxy::icoMenuDown().'</div></div>';
+		echo '<div id="'.$ns.'-anchor" class="formPane formPaneAnchorWrap formColorAnchorOuter" style="background:none;border:0;margin:0;"><div class="formPaneAnchor formColorAnchor">'.oxy::icoMenuDown().'</div></div>';
 
-		echo '<input id="'.$this->name.'-box"';
+		echo '<input id="'.$ns.'-box"';
 		echo ' class="formPane formColor'.($this->readonly?' formLocked':'').'"';
 		echo ' style="margin:0;background:'.($is_null?'url(oxy/img/checkers.gif) 50% 50% repeat':$this->value).';"';
 		echo ' readonly="readonly"';
@@ -69,22 +68,22 @@ class ColorBox extends Box {
 
 		echo Js::BEGIN;
 		if (!$this->readonly){
-			echo "jQuery('#$this->name-box,#$this->name-anchor').click(function(e){ $this->name.OnClick(); }).keydown(function(e){ $this->name.OnKeyDown(e); }).blur(function(e){ $this->name.OnBlur(e); });";
-			echo "jQuery('#$this->name-dropdown').mousedown(function(e){ window.$this->name.KeepFocus(); });";
-			echo "window.".$this->name." = {";
+			echo "jQuery('#$ns-box,#$ns-anchor').click(function(e){ $ns.OnClick(); }).keydown(function(e){ $ns.OnKeyDown(e); }).blur(function(e){ $ns.OnBlur(e); });";
+			echo "jQuery('#$ns-dropdown').mousedown(function(e){ window.$ns.KeepFocus(); });";
+			echo "window.".$ns." = {";
 			echo "  is_open : false";
 			echo " ,keep_focus : false";
 			echo " ,IntToHex : function(d){return (d<0x10?'0':'')+d.toString(16).toUpperCase();}";
 			echo " ,RgbToColor : function(r,g,b){return '#'+this.IntToHex(r)+this.IntToHex(g)+this.IntToHex(b);}";
-			echo " ,RgbToCell : function(r,g,b){return '<td class=\"color\"><a style=\"background:'+this.RgbToColor(r,g,b)+'\" href=\"javascript:$this->name.SetColor(\\''+$this->name.RgbToColor(r,g,b)+'\\');\">".new Spacer(1,1)."</a></td>';}";
+			echo " ,RgbToCell : function(r,g,b){return '<td class=\"color\"><a style=\"background:'+this.RgbToColor(r,g,b)+'\" href=\"javascript:$ns.SetColor(\\''+$ns.RgbToColor(r,g,b)+'\\');\">".new Spacer(1,1)."</a></td>';}";
 			echo " ,SetColor : function(x,keep_open){";
 			echo "    if (x==null){";
-			echo "      jQuery('#$this->name-box').css({background:'url(oxy/img/checkers.gif) 50% 50% repeat'});";
-			echo "      jQuery('#$this->name').val('');";
+			echo "      jQuery('#$ns-box').css({background:'url(oxy/img/checkers.gif) 50% 50% repeat'});";
+			echo "      jQuery('#$ns').val('');";
 			echo "    }";
 			echo "    else {";
-			echo "      jQuery('#$this->name-box').css({background:x});";
-			echo "      jQuery('#$this->name').val(x);";
+			echo "      jQuery('#$ns-box').css({background:x});";
+			echo "      jQuery('#$ns').val(x);";
 			echo "    }";
 			echo $this->on_change;
 			echo "    if (!keep_open) { this.Update(); this.HideDropDown(); }";
@@ -101,29 +100,29 @@ class ColorBox extends Box {
 			echo "    }";
 			echo "  }";
 			echo " ,OnBlur : function(ev){";
-			echo "    setTimeout(function(){if(!$this->name.keep_focus&&!jQuery('#$this->name-box').is(':focus')&&!jQuery('#$this->name-text').is(':focus')){ $this->name.HideDropDown(); }},200);";
+			echo "    setTimeout(function(){if(!$ns.keep_focus&&!jQuery('#$ns-box').is(':focus')&&!jQuery('#$ns-text').is(':focus')){ $ns.HideDropDown(); }},200);";
 			echo "  }";
 			echo " ,OnChange : function(ev){";
-			echo "    var x = jQuery('#$this->name-text');";
+			echo "    var x = jQuery('#$ns-text');";
 			echo "    if (x.val().match(/[a-fA-F0-9]{6}/)!=x.val()) return;";
 			echo "    this.SetColor('#'+x.val(),true);";
 			echo "  }";
-			echo " ,KeepFocus : function(){ this.keep_focus = true; setTimeout(function(){ $this->name.Update(); },500); }";
+			echo " ,KeepFocus : function(){ this.keep_focus = true; setTimeout(function(){ $ns.Update(); },500); }";
 			echo " ,Update : function(){";
 			echo "    if (!this.is_open) return;";
-			echo "    jQuery('#$this->name-text').focus();";
+			echo "    jQuery('#$ns-text').focus();";
 			echo "    this.keep_focus = false;";
 			echo "  }";
 
 
 			echo " ,Clicking : false";
-			echo " ,OnClick : function (){ if(this.Clicking) return; this.Clicking = true; this.ToggleDropDown(); setTimeout(function(){ $this->name.Clicking = false; },500); }";
-			echo " ,ToggleDropDown : function(){ if (jQuery('#$this->name-dropdown').is(':visible')) this.HideDropDown(); else this.ShowDropDown(); }";
+			echo " ,OnClick : function (){ if(this.Clicking) return; this.Clicking = true; this.ToggleDropDown(); setTimeout(function(){ $ns.Clicking = false; },500); }";
+			echo " ,ToggleDropDown : function(){ if (jQuery('#$ns-dropdown').is(':visible')) this.HideDropDown(); else this.ShowDropDown(); }";
 			echo " ,Showing : false";
 			echo " ,ShowDropDown : function(){";
 			echo "    this.Showing = true;";
-			echo "    var b = jQuery('#$this->name-box');";
-			echo "    var d = jQuery('#$this->name-dropdown');";
+			echo "    var b = jQuery('#$ns-box');";
+			echo "    var d = jQuery('#$ns-dropdown');";
 			echo "    d.show();";
 			echo "    var w = d.width();";
 			echo "    var ww = b.outerWidth(false) - (d.outerWidth(false) - w);";
@@ -132,14 +131,14 @@ class ColorBox extends Box {
 			echo "    this.FillPalette();";
 			echo "    this.is_open = true;";
 			echo "    this.Update();";
-			echo "    jQuery('#$this->name-text').val(jQuery('#$this->name').val().replace('#','')).focus();";
-			echo "    jQuery('html').on('click.$this->name', function(e){ if ($this->name.Showing) { $this->name.Showing = false; return; } if($this->name.Clicking)return; if (jQuery('#$this->name-dropdown').has(e.target).length === 0) $this->name.HideDropDown(); });";
+			echo "    jQuery('#$ns-text').val(jQuery('#$ns').val().replace('#','')).focus();";
+			echo "    jQuery('html').on('click.$ns', function(e){ if ($ns.Showing) { $ns.Showing = false; return; } if($ns.Clicking)return; if (jQuery('#$ns-dropdown').has(e.target).length === 0) $ns.HideDropDown(); });";
 			echo "  }";
 			echo " ,HideDropDown : function(){";
 			echo "    this.keep_focus = false;";
 			echo "    this.is_open = false;";
-			echo "    jQuery('#$this->name-dropdown').hide();";
-			echo "    jQuery('html').off('click.$this->name');";
+			echo "    jQuery('#$ns-dropdown').hide();";
+			echo "    jQuery('html').off('click.$ns');";
 			echo "  }";
 			echo " ,FillPalette : function(){";
 			echo "    var s = '<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">';";
@@ -166,7 +165,7 @@ class ColorBox extends Box {
 			echo "    if(i%a.length==a.length-1)s+='</tr>';";
 			echo "    }";
 			echo "    s+='</table>';";
-			echo "    jQuery('#$this->name-dropdown-body').html(s);";
+			echo "    jQuery('#$ns-dropdown-body').html(s);";
 			echo "  }";
 			echo "};";
 		}
@@ -175,7 +174,4 @@ class ColorBox extends Box {
 
 	}
 }
-
-
-
 

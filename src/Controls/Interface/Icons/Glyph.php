@@ -9,9 +9,9 @@ class Glyph extends _Icon {
 	}
 
 	public function Render() {
-		echo '<span class="icon '.$this->base_css_class.$this->css_class.'" style="'
-				.($this->size===null?'':'font-size:'.$this->size.'px;')
-				.$this->css_style.'"'
+		$class='icon'.($this->base_css_class==''?'':' '.$this->base_css_class).($this->css_class==''?'':' '.$this->css_class); if($class!='')$class=' class="'.$class.'"';
+		$style=($this->size===null?'':'font-size:'.$this->size.'px;').$this->css_style; if($style!='')$style=' style="'.$style.'"';
+		echo '<span'.$class.$style
 				.($this->title===null?'':' title="'.new Html($this->title).'"')
 				.'>&#x'.sprintf('%x',$this->code).';</span>';
 	}

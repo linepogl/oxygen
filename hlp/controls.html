@@ -77,7 +77,7 @@ The value of a control passed through HTTP, can be retrieved by the name:
 </p>
 
 <p class="code">
-$book->Title = Http::POST( 'title' )->AsString();
+$book->Title =          Http::$POST[ 'title' ]->AsString();
 </p>
 
 <p>
@@ -87,7 +87,7 @@ The conversion of the value to HTML is done according to the rules of the Oxygen
 <p class="code">
 TextBox::Make( 'NumberOfPages' , $book->NumberOfPages )->Render();
 ...
-$book->NumberOfPages = Http::POST('NumberOfPages')->AsIntegerOrNull();
+$book->NumberOfPages = Http::$POST['NumberOfPages']->AsIntegerOrNull();
 </p>
 
 

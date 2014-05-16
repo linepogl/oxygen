@@ -363,7 +363,7 @@ abstract class Action extends XValue {
 	public function EndFormButtons(){ return '</div></div></div></div>'; }
 	protected function IsPostback() {
 		if ($this->IsAjaxDialog())
-			return Oxygen::IsPostback() && Http::POST('AjaxDialogSubmition')->AsBoolean();
+			return Oxygen::IsPostback() && Http::$POST['AjaxDialogSubmition']->AsBoolean();
 		else
 			return Oxygen::IsPostback();
 	}

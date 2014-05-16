@@ -72,7 +72,7 @@ The easiest way to load an object from the database is the <span class="code">Pi
 </p>
 
 <p class="code">
-$id = Http::GET('id')->AsID();
+$id = Http::$GET['id']->AsID();
 $book = Book::Pick( $id );
 echo $book->Title;
 </p>

@@ -9,7 +9,7 @@ class ActionOxygenDeleteLog extends Action {
 	private $log;
 	public function __construct($log){ parent::__construct(); $this->log = $log; }
 	public function GetUrlArgs(){ return array('log'=>$this->log) + parent::GetUrlArgs(); }
-	public static function Make(){ return new static(Http::GET('log')->AsString()); }
+	public static function Make(){ return new static(Http::$GET['log']->AsString()); }
 
 
 	public function IsPermitted(){

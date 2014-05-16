@@ -38,28 +38,17 @@ Prototype.Browser.SafariIOS = Prototype.Browser.SafariIPad || Prototype.Browser.
 var Html = function(value){
 	this.value = value.isHtmlObject ? value.value : value;
 	this.isHtmlObject = true;
-	this.toString = function(){
-		return this.value.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-	};
+	this.toString = function(){return this.value.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');};
 };
 var Js = function(value){
 	this.value = value.isJsObject ? value.value : value;
 	this.isJsObject = true;
-	this.toString = function(){
-		if (typeof(this.value) == 'number')
-			return this.value.toString();
-		else
-			return '\'' + this.value.toString().replace(/'/g,'\\\'') + '\'';
-	};
+	this.toString = function(){ if (typeof(this.value) == 'number') return this.value.toString(); else return '\'' + this.value.toString().replace(/'/g,'\\\'') + '\''; };
 };
 var Lemma = function(){
 	this.data = {};
-	for (var i = 1; i < arguments.length; i += 2) {
-		this.data[ arguments[i-1] ] = arguments[i];
-	}
-	this.toString = function(){
-		return this.data[Oxygen.lang];
-	};
+	for (var i = 1; i < arguments.length; i += 2) this.data[ arguments[i-1] ] = arguments[i];
+	this.toString = function(){ return this.data[Oxygen.lang]; };
 };
 var Oxygen = {
 	 lang: oxygen_lang
@@ -107,65 +96,40 @@ var Oxygen = {
 		this.dialog_width = null;
 		this.dialog_min_height = null;
 		jQuery('#OxygenDialogFrame').detach();
-
-		if (Prototype.Browser.IE6){
-			jQuery('body').append(''
-				+ '<div id="OxygenDialogFrame" class="zdialog overflow" style="position:absolute;top:0;left:0;display:none;">'
-				+ '<table id="OxygenDialogFrameX" cellspacing="20" cellpadding="0" border="0" style="width:100%;height:100%;"><tr><td style="vertical-align:middle;">'
-
-					+ '<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
-
-					+ '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogX">'
-//						+ '<div id="OxygenDialogX">'
-						+ '<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
-						+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5">'
-							+ '<div id="OxygenDialogInner" class="ajaxdialoginner">'
-							+	'<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogInnerX"></td></tr></table>'
-							+	'</div>'
-						+ '</div></div></div>'
-						+ '<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
-//						+ '</div>'
-						+ '</td></tr></table>'
-
-					+ '</div>'
-
-
-				+ '</td></tr></table>'
-				+ '</div>'
-				);
-
-
-		}
-		else {
-			jQuery('body').append(''
-				+ '<div id="OxygenDialogFrame" class="zdialog overflow" style="position:fixed;top:0;left:0;width:100%;height:100%;display:none;">'
-				+ '<table id="OxygenDialogFrameX" cellspacing="20" cellpadding="0" border="0" style="width:100%;height:100%;"><tr><td style="vertical-align:middle;">'
-
-					+ '<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
-
-						+ '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogX">'
-//						+ '<div id="OxygenDialogX">'
-						+ '<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
-						+ '<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5">'
-							+ '<div id="OxygenDialogInner" class="ajaxdialoginner">'
-							+	'<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogInnerX"></td></tr></table>'
-							+	'</div>'
-						+ '</div></div></div>'
-						+ '<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
-//						+ '</div>'
-						+ '</td></tr></table>'
-
-					+ '</div>'
-
-				+ '</td></tr></table>'
-				+ '</div>'
-				);
-
-		}
-
-
-
-
+		if (Prototype.Browser.IE6) jQuery('body').append(''
+			+'<div id="OxygenDialogFrame" class="zdialog overflow" style="position:absolute;top:0;left:0;display:none;">'
+			+'<table id="OxygenDialogFrameX" cellspacing="20" cellpadding="0" border="0" style="width:100%;height:100%;"><tr><td style="vertical-align:middle;">'
+			+'<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
+			+'<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogX">'
+			+'<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
+			+'<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5">'
+			+'<div id="OxygenDialogInner" class="ajaxdialoginner">'
+			+'<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogInnerX"></td></tr></table>'
+			+'</div>'
+			+'</div></div></div>'
+			+'<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
+			+'</td></tr></table>'
+			+'</div>'
+			+'</td></tr></table>'
+			+'</div>'
+			);
+		else jQuery('body').append(''
+			+'<div id="OxygenDialogFrame" class="zdialog overflow" style="position:fixed;top:0;left:0;width:100%;height:100%;display:none;">'
+			+'<table id="OxygenDialogFrameX" cellspacing="20" cellpadding="0" border="0" style="width:100%;height:100%;"><tr><td style="vertical-align:middle;">'
+			+'<div id="OxygenDialog" class="ajaxdialog" style="width:'+width+'px;height:'+height+'px;margin:0 auto;">'
+			+'<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogX">'
+			+'<div class="ajaxdialog1"><div class="ajaxdialog3"><div class="ajaxdialog2"><h1>'+icon+'&nbsp;'+title+'</h1></div></div></div>'
+			+'<div class="ajaxdialog4"><div class="ajaxdialog6"><div class="ajaxdialog5">'
+			+'<div id="OxygenDialogInner" class="ajaxdialoginner">'
+			+'<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td id="OxygenDialogInnerX"></td></tr></table>'
+			+'</div>'
+			+'</div></div></div>'
+			+'<div class="ajaxdialog7"><div class="ajaxdialog9"><div class="ajaxdialog8"></div><div></div>'
+			+'</td></tr></table>'
+			+'</div>'
+			+'</td></tr></table>'
+			+'</div>'
+			);
 		this.dialog_min_width = width;
 		this.dialog_min_height = height;
 	}
@@ -182,9 +146,6 @@ var Oxygen = {
 		this.ResizeDialog();
 		Oxygen.dialog_watchdog = setInterval( function(){ Oxygen.ResizeDialog(); } , 250 );
 	}
-
-
-
 	,ShowSimpleDialog: function(icon,title,content,width,height){
 		this.ShowFog();
 		if (!width) width=500;
@@ -307,7 +268,6 @@ var Oxygen = {
 				break;
 			}
 		}
-
 		dialog = jQuery('#OxygenDialog');
 		dialog.scrollTop(0);
 		dialog.scrollLeft(0);
@@ -341,13 +301,9 @@ var Oxygen = {
 			inner.width(innerx.outerWidth(true));
 			dialog.height( dialogx.outerHeight(true) );
 			dialog.width( dialogx.outerWidth(true) );
-//			dialog.height( Math.max( this.dialog_min_height , dialogx.outerHeight(true) ) );
-//			dialog.width( Math.max( this.dialog_min_width , dialogx.outerWidth(true) ) );
-
 			h = dialog.height();
 			w = dialog.width();
 		}
-
 		if (this.dialog_height !== h || this.dialog_width !== w) {
 			this.dialog_height = h;
 			this.dialog_width = w;
@@ -360,49 +316,58 @@ var Oxygen = {
 		}
 	}
 	,IsDialogOpen:function(){
-		return $('OxygenDialog') != null;
+		return $('OxygenDialog')!=null;
 	}
 	,Refresh:function(){
 		window.location.href=window.location.href;
 	}
 	,OpenDynamicAction:function(js_command,mapper){
-		var map = mapper();
-		for (var xxx in map) {
-			js_command = js_command.replace(xxx,map[xxx]);
-		}
+		var map=mapper();
+		for(var xxx in map)js_command=js_command.replace(xxx,map[xxx]);
 		eval(js_command);
 	}
-};
+	,AjaxUpdater:function(e,act,opt) { var o={method:'get',encoding:Oxygen.Encoding,evalScripts:true}; if(opt)for(var key in opt)o[key]=opt[key]; return new Ajax.Updater(e,act,o); }
+	,AjaxRequest:function(e,act,opt) { var o={method:'get',encoding:Oxygen.Encoding,evalScripts:true}; if(opt)for(var key in opt)o[key]=opt[key]; return new Ajax.Request(e,act,o); }
+	,RollerBox:function(opt){var ns=opt.ns;var r={ns:ns
+		,is_readonly:false
+		,values:[]
+		,selected_index:0
+		,on_change:function(){}
+		,SetValue:function(value){var old=this.selected_index;for(var i=0;i<this.values.length;i++)if(this.values[i]===value){this.selected_index=i;break;}this.Update();if(this.selected_index!=old)this.OnChange();}
+		,GetValue:function(){return jQuery('#'+ns).val();}
+		,Update:function(){jQuery('#'+ns).val(this.values[this.selected_index]);for(var i=0;i<this.values.length;i++)jQuery('#'+ns+'-'+i).toggle(i===this.selected_index);}
+		,Change:function(){if(++this.selected_index>=this.values.length)this.selected_index=0;this.Update();this.OnChange();}
+		,OnChange:function(){this.on_change();jQuery('#'+ns).trigger('change');}
+	};for(var key in opt)r[key]=opt[key];window[ns]=r;return r;}
 
-// for backwards compatibility:
-Oxygen.HideAjaxDialog = Oxygen.HideDialog;
-//jQuery(window).resize(function(){ Oxygen.ResizeDialog(); });
+	,CheckBox:function(opt){var ns=opt.ns;var r={ns:ns
+		,ico_checked:'',ico_unchecked:'',ico_dirty:''
+		,is_dirty:false
+		,list_ns:null
+		,list_value:''
+		,on_change:function(){}
+		,SetValue:function(value){var old = this.GetValue();jQuery('#'+ns).val(value?'true':'false');this.Update();if(old!=value)this.OnChange();}
+		,GetValue:function(){return jQuery('#'+ns).val()==='true';}
+		,GetListValue:function(){return this.list_value;}
+		,Update:function(){jQuery('#'+ns+'-box').html(this.is_dirty?this.ico_dirty:this.GetValue()?this.ico_checked:this.ico_unchecked);}
+		,IsDirty:function(){return this.is_dirty;}
+		,SetDirty:function(dirty){this.is_dirty=dirty;this.Update();}
+		,Toggle:function(){this.SetValue(jQuery('#'+ns).val()!=='true');}
+		,OnChange:function(){if(this.list_ns!==null)window[this.list_ns].OnChangeOne();this.on_change();jQuery('#'+ns).trigger('change');}
+	};for(var key in opt)r[key]=opt[key];window[ns]=r;return r;}
+};
+Oxygen.HideAjaxDialog=Oxygen.HideDialog;//BC
+
+
 
 function dump2(x,level){
-	var s = typeof x;
+	var s = typeof x+': ';
 	switch (typeof x){
-		case 'string':
-			s += ': "' + x + '"';
-			break;
-		case 'number':
-			s += ': ' + x + '';
-			break;
-		case 'boolean':
-			s += ': ' + (x?'true':'false') + '';
-			break;
-		case 'object':
-			s += ':';
-			for (var p in x) {
-				s += '\n  ';
-				for (var i = 0; i < level; i++) {
-					s += '  ';
-				}
-				s += p + ': ' + dump2(x[p],level+1);
-			}
-			break;
+		case 'string':s+='"'+x+'"';break;
+		case 'number':s+=x;break;
+		case 'boolean':s+=x?'true':'false';break;
+		case 'object':for(var p in x){s+='\n  ';for(var i=0;i<level;i++)s+='  ';s+=p+': '+dump2(x[p],level+1);}break;
 	}
 	return s;
 }
-function dump(x){
-	alert(dump2(x,0));
-}
+function dump(x){alert(dump2(x,0));}

@@ -9,7 +9,7 @@ class ActionUpdateProgress extends Action{
 	private $progress_name;
 	public function __construct($name){$this->progress_name = $name; parent::__construct();}
 	public function GetUrlArgs(){ return array('name'=>$this->progress_name); }
-	public static function Make(){ return new static(Http::GET('name')->AsString()); }
+	public static function Make(){ return new static(Http::$GET['name']->AsString()); }
 
 	public function Render(){
 		$finished = Progress::HasFinished();

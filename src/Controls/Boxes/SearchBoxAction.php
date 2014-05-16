@@ -7,7 +7,7 @@ abstract class SearchBoxAction extends Action{
 	private $namespace;
 	public function __construct($namespace=null,$search_string=null){ parent::__construct(); $this->namespace = $namespace; $this->search_string = $search_string; }
 	public function GetUrlArgs(){ return array('namespace'=>$this->namespace,'search_string'=>$this->search_string)+parent::GetUrlArgs(); }
-	public static function Make(){ return new static(Http::GET('namespace')->AsString(),Http::GET('search_string')->AsString()); }
+	public static function Make(){ return new static(Http::$GET['namespace']->AsString(),Http::$GET['search_string']->AsString()); }
 
 
 	public abstract function GetResults();

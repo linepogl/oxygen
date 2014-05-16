@@ -138,18 +138,25 @@ class RollerBox extends Box {
 	}
 
 	public function Render(){
+		$ns = $this->name;
+		ob_start();
+
+
 		$readonly = $this->readonly || $this->mode != UIMode::Edit;
-		echo HiddenBox::Make($this->name,$this->value)->WithHttpName($readonly?null:$this->http_name);
+		echo HiddenBox::Make($ns,$this->value)->WithHttpName($readonly?null:$this->http_name);
 
 
+		$class=' class="rollerbox-anchor'.($this->css_class==''?'':' '.$this->css_class).'"';
+		$style=$this->css_style==''?'':' style="'.$this->css_style.'"';
 		if ($readonly)
-			echo '<span class="rollerbox-anchor '.$this->css_class.'" style="'.$this->css_style.'">';
+			echo '<span'.$class.$style.'>';
 		else
-			echo '<a class="rollerbox-anchor '.$this->css_class.'" href="javascript:'.$this->name.'.Change();" style="'.$this->css_style.'">';
+			echo '<a'.$class.$style.' href="javascript:'.$ns.'.Change();">';
 
 		$selected_index = $this->GetSelectedIndex();
 		for ($i = 0; $i < count($this->list_values); $i++) {
-			echo '<span id="'.$this->name.'-'.$i.'" style="'.$this->list_css_styles[$i].($i==$selected_index?'':'display:none;').'">';
+			$style = ' style="'.$this->list_css_styles[$i].($i==$selected_index?'':'display:none;').'"'; if ($style==' style=""') $style = '';
+			echo '<span'.$style.' id="'.$ns.'-'.$i.'">';
 			if ($this->show_captions){
 				if ($this->is_rich)
 					echo $this->list_captions[$i];
@@ -169,17 +176,21 @@ class RollerBox extends Box {
 			$vals[] = ''.new Val($value);
 
 		echo Js::BEGIN;
-		echo "window.".$this->name .'={';
-		echo "  is_readonly:".new Js($readonly);
-		echo " ,values:".new Js($vals);
-		echo " ,selected_index:".new Js($selected_index);
-		echo " ,SetValue:function(value){var old=this.selected_index;for(var i=0;i<this.values.length;i++)if(this.values[i]===value){this.selected_index=i;break;}this.Update();if(this.selected_index!=old)this.OnChange();}";
-		echo " ,GetValue:function(){return jQuery('#$this->name').val();}";
-		echo " ,Update:function(){jQuery('#$this->name').val(this.values[this.selected_index]);for(var i=0;i<this.values.length;i++)jQuery('#$this->name-'+i).toggle(i===this.selected_index);}";
-		echo " ,Change:function(){if(++this.selected_index>=this.values.length)this.selected_index=0;this.Update();this.OnChange();}";
-		echo " ,OnChange:function(){{$this->on_change};jQuery('#$this->name').trigger('change');}";
-		echo "};";
+		echo "Oxygen.RollerBox({ns:".new Js($ns);
+		if($readonly)            echo ",is_readonly:".new Js($readonly);
+		if(!empty($vals))        echo ",values:".new Js($vals);
+		if($selected_index!==0)  echo ",selected_index:".new Js($selected_index);
+		if($this->on_change!='') echo ",on_change:function(){{$this->on_change}}";
+		echo "});";
 		echo Js::END;
+
+		$r = ob_get_clean();
+		echo $r;
+		static $inst = 0;
+		static $total = 0;
+		$inst++;
+		$total += strlen($r);
+		error_log('RollerBox #'.$inst.':'.$total);
 
 	}
 

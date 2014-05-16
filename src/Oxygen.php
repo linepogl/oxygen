@@ -44,16 +44,16 @@ class Oxygen {
 		self::$php_controller = substr( $_SERVER['SCRIPT_NAME'] , strlen(__BASE__) );
 		if (is_null(self::$php_managed_controller)) self::$php_managed_controller = self::$php_controller;
 		foreach (self::$url_pins as $key=>$value)
-			self::$url_pins[$key] = Http::GET($key)->AsStringOrNull();
+			self::$url_pins[$key] = Http::$GET[$key]->AsStringOrNull();
 
 		// init window scoping
 		if (self::$window_scoping_enabled) {
-			self::$window_hash = Http::GET('wnd')->AsStringOrNull();
+			self::$window_hash = Http::$GET['wnd']->AsStringOrNull();
 			if (is_null(self::$window_hash)) {
 				self::$window_hash = Oxygen::HashRandom32();
 			}
 			else {
-				$old_window_hash = Http::GET('wndx')->AsStringOrNull();
+				$old_window_hash = Http::$GET['wndx']->AsStringOrNull();
 				if (!is_null($old_window_hash)){
 					$new_window_hash = self::$window_hash;
 					self::$window_hash = $old_window_hash;
@@ -105,9 +105,9 @@ class Oxygen {
 		Oxygen::SetLang($lang);
 
 		// set the action
-		self::$actionmode = Http::GET('mode')->AsIntegerOrNull();
+		self::$actionmode = Http::$GET['mode']->AsIntegerOrNull();
 		if (self::$actionmode === null) self::$actionmode = self::$default_actionmode;
-		self::$actionname = Http::GET('action')->AsStringOrNull();
+		self::$actionname = Http::$GET['action']->AsStringOrNull();
 		if (self::$actionname == '') {
 			self::$actionname = self::$default_actionname;
 			self::SetUrlPin('action',self::$actionname);

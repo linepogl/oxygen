@@ -161,8 +161,8 @@ Another import source is the Http class with the arrays <span class="code">Http:
 </p>
 
 <p class="code">
-$id = Http::GET('id')->CastTo( MetaID::Type() );
-$username = Http::POST('username')->CastTo( MetaString::Type() );
+$id = Http::$GET['id']->CastTo( MetaID::Type() );
+$username = Http::$POST['username']->CastTo( MetaString::Type() );
 </p>
 
 <p>
@@ -170,7 +170,7 @@ There are also some shortcut methods for the basic types, that can be used inste
 </p>
 
 <p class="code">
-$offset = Http::GET('offset')->AsInteger();
+$offset = Http::$GET['offset']->AsInteger();
 </p>
 
 
