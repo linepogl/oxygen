@@ -35,7 +35,7 @@ class CheckBox extends Box {
 		echo HiddenBox::Make($ns,$this->value)->WithHttpName($readonly?null:$this->http_name)->WithCssClass(empty($this->list_name)?'':'list-'.$this->list_name);
 
 		if ($readonly) {
-			$class='checkbox checkbox-anchor'.($this->css_class==''?'':' '.$this->css_class); if($class!='')$class=' class"'.$class.'"';
+			$class='checkbox checkbox-anchor'.($this->css_class==''?'':' '.$this->css_class); if($class!='')$class=' class="'.$class.'"';
 			$style=$this->css_style; if($style!='')$style=' style"'.$style.'"';
 			echo '<span'.$class.$style.'>';
 			if ($this->readonly)
@@ -56,8 +56,9 @@ class CheckBox extends Box {
 						);
 			}
 			else {
-				$class='checkbox checkbox-anchor'.($this->css_class==''?'':' '.$this->css_class); if($class!='')$class=' class"'.$class.'"';
+				$class='checkbox checkbox-anchor'.($this->css_class==''?'':' '.$this->css_class); if($class!='')$class=' class="'.$class.'"';
 				$style=$this->css_style; if($style!='')$style=' style"'.$style.'"';
+				dump($style);
 				echo '<a'.$class.$style.' href="javascript:window.'.$ns.'.Toggle();">';
 				echo '<span id="'.$ns.'-box">';
 				echo $this->is_dirty?oxy::icoBoxDirty():($this->value?oxy::icoBoxChecked():oxy::icoBoxUnchecked());
