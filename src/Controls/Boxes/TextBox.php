@@ -23,6 +23,9 @@ class TextBox extends Box {
 	private $is_password = false;
 	public function WithIsPassword($value){ $this->is_password = $value; return $this; }
 
+	private $autocomplete = true;
+	public function WithAutoComplete($value){ $this->autocomplete = $value; return $this; }
+
 	public function Render(){
 
 
@@ -68,6 +71,8 @@ class TextBox extends Box {
 
 		if ($this->nowrap && $this->rows != 1 && !$this->is_password)
 			echo ' wrap="off"';
+
+		if (!$this->autocomplete) echo ' autocomplete="off"';
 
 		if (!is_null($this->on_change)){
 			echo ' onchange="'.$this->on_change.'"';
