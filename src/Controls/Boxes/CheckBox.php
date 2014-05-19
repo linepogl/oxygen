@@ -36,7 +36,7 @@ class CheckBox extends Box {
 
 		if ($readonly) {
 			$class='checkbox checkbox-anchor'.($this->css_class==''?'':' '.$this->css_class); if($class!='')$class=' class="'.$class.'"';
-			$style=$this->css_style; if($style!='')$style=' style"'.$style.'"';
+			$style=$this->css_style; if($style!='')$style=' style="'.$style.'"';
 			echo '<span'.$class.$style.'>';
 			if ($this->readonly)
 				echo $this->is_dirty ? oxy::icoBoxDirtyLocked() : ( $this->value ? oxy::icoBoxCheckedLocked() : oxy::icoBoxUncheckedLocked() );
@@ -57,7 +57,7 @@ class CheckBox extends Box {
 			}
 			else {
 				$class='checkbox checkbox-anchor'.($this->css_class==''?'':' '.$this->css_class); if($class!='')$class=' class="'.$class.'"';
-				$style=$this->css_style; if($style!='')$style=' style"'.$style.'"';
+				$style=$this->css_style; if($style!='')$style=' style="'.$style.'"';
 				echo '<a'.$class.$style.' href="javascript:window.'.$ns.'.Toggle();">';
 				echo '<span id="'.$ns.'-box">';
 				echo $this->is_dirty?oxy::icoBoxDirty():($this->value?oxy::icoBoxChecked():oxy::icoBoxUnchecked());
