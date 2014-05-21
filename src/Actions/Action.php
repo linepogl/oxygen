@@ -261,6 +261,7 @@ abstract class Action extends XValue {
 
 
 
+	protected function GetNamespace($ns=''){ return 'a'.Oxygen::Hash32(get_called_class().$ns); }
 
 
 

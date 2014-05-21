@@ -436,6 +436,16 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			if (!$this->Contains( $x ) )
 				$this[] = $x;
 	}
+	public function Append($dbitem_or_id){
+		$this->Evaluate();
+		$this[] = $dbitem_or_id;
+	}
+
+	public function AppendNewOnly($dbitem_or_id) {
+		$this->Evaluate();
+		if (!$this->Contains( $dbitem_or_id ) )
+			$this[] = $dbitem_or_id;
+	}
 
 	public function Clear(){
 		$this->data = array();
