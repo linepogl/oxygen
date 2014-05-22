@@ -312,7 +312,7 @@ var Oxygen = {
 		eval(js_command);
 	}
 	,AjaxUpdater:function(e,act,opt) { var o={method:'get',encoding:Oxygen.Encoding,evalScripts:true}; if(opt)for(var key in opt)o[key]=opt[key]; return new Ajax.Updater(e,act,o); }
-	,AjaxRequest:function(e,act,opt) { var o={method:'get',encoding:Oxygen.Encoding,evalScripts:true}; if(opt)for(var key in opt)o[key]=opt[key]; return new Ajax.Request(e,act,o); }
+	,AjaxRequest:function(act,opt) { var o={method:'get',encoding:Oxygen.Encoding,evalScripts:true}; if(opt)for(var key in opt)o[key]=opt[key]; return new Ajax.Request(act,o); }
 	,RollerBox:function(opt){var ns=opt.ns;var r={ns:ns
 		,is_readonly:false
 		,values:[]

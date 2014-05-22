@@ -13,6 +13,8 @@ class ColorBox extends Box {
 		if (( $this->value===null || trim($this->value) === '') && !$this->allow_null) $this->value = '#ffffff';
 		$is_null = is_null($this->value) || trim($this->value) === '';
 
+		$favorites = $this->mode !== UIMode::Edit || $this->readonly ? null : oxy::GetFavoriteColors();
+
 		if ($this->mode === UIMode::Edit) {
 			echo HiddenBox::Make($ns,$this->value)->WithHttpName($this->readonly || $this->mode != UIMode::Edit ? null : $this->http_name);
 		}
@@ -42,8 +44,16 @@ class ColorBox extends Box {
 //			echo '</div>';
 			echo '<div class="formDropDownBody">';
 			echo '<div id="'.$ns.'-dropdown-body"></div>';
+			if ($favorites !== null) {
+				echo '<div id="'.$ns.'-dropdown-favs" style="margin-top:10px;padding-top:10px;border-top:1px dashed #eeeeee;'.(empty($favorites)?'display:none;':'').'"></div>';
+			}
 			echo '</div>';
 			echo '<div class="formDropDownFoot">';
+			if ($favorites!==null) {
+				$is_favorite = in_array($this->value,$favorites);
+				echo '<a id="'.$ns.'-append-fav"class="fleft button" href="javascript:window.'.$ns.'.AppendFav();"'.($is_favorite?' style="display:none;"':'').'>'.oxy::icoFavoritize().'</a>';
+				echo '<a id="'.$ns.'-remove-fav"class="fleft button" href="javascript:window.'.$ns.'.RemoveFav();"'.($is_favorite?'':' style="display:none;"').'>'.oxy::icoUnfavoritize().'</a>';
+			}
 			if ($this->allow_null){
 				$null_caption = trim($this->null_caption);
 				echo '<a class="fleft button" href="javascript:window.'.$ns.'.SetColor(null);">'.($null_caption===''?'&empty;':new Html($null_caption)).'</a>';
@@ -76,7 +86,8 @@ class ColorBox extends Box {
 			echo " ,IntToHex : function(d){return (d<0x10?'0':'')+d.toString(16).toUpperCase();}";
 			echo " ,RgbToColor : function(r,g,b){return '#'+this.IntToHex(r)+this.IntToHex(g)+this.IntToHex(b);}";
 			echo " ,RgbToCell : function(r,g,b){return '<td class=\"color\"><a style=\"background:'+this.RgbToColor(r,g,b)+'\" href=\"javascript:$ns.SetColor(\\''+$ns.RgbToColor(r,g,b)+'\\');\">".new Spacer(1,1)."</a></td>';}";
-			echo " ,SetColor : function(x,keep_open){";
+			echo " ,GetColor:function(){return jQuery('#$ns').val();}";
+			echo " ,SetColor:function(x,keep_open){";
 			echo "    if (x==null){";
 			echo "      jQuery('#$ns-box').css({background:'url(oxy/img/checkers.gif) 50% 50% repeat'});";
 			echo "      jQuery('#$ns').val('');";
@@ -85,6 +96,7 @@ class ColorBox extends Box {
 			echo "      jQuery('#$ns-box').css({background:x});";
 			echo "      jQuery('#$ns').val(x);";
 			echo "    }";
+			if ($favorites!==null) echo "this.UpdateFavs();";
 			echo $this->on_change;
 			echo "    if (!keep_open) { this.Update(); this.HideDropDown(); }";
 			echo "  }";
@@ -129,6 +141,7 @@ class ColorBox extends Box {
 			echo "    if (ww > w) d.css({width:ww+'px'});";
 			echo "    d.css({'margin-top':(1+b.outerHeight(false))+'px','margin-left':Math.floor((b.outerWidth(false)-d.outerWidth(false))/2)+'px'});";
 			echo "    this.FillPalette();";
+			if ($favorites!==null) echo "this.UpdateFavs();";
 			echo "    this.is_open = true;";
 			echo "    this.Update();";
 			echo "    jQuery('#$ns-text').val(jQuery('#$ns').val().replace('#','')).focus();";
@@ -160,13 +173,37 @@ class ColorBox extends Box {
 			echo "    for(i=a.length;i<5*a.length;i++)z.push(new Array(z[i][2],z[i][0],z[i][1]));";
 			echo "    for(i=a.length;i<5*a.length;i++)z.push(new Array(z[i][1],z[i][2],z[i][0]));";
 			echo "    for(i=0;i<z.length;i++){";
-			echo "    if(i%a.length==0)s+='<tr>';";
+			echo "    if(i%16==0)s+='<tr>';";
 			echo "    s+=this.RgbToCell(z[i][0],z[i][1],z[i][2]);";
-			echo "    if(i%a.length==a.length-1)s+='</tr>';";
+			echo "    if(i%16==15)s+='</tr>';";
 			echo "    }";
 			echo "    s+='</table>';";
 			echo "    jQuery('#$ns-dropdown-body').html(s);";
 			echo "  }";
+			if ($favorites !== null){
+				$act = new ActionFavoriteColors(null,null);
+				echo ",favorites:".new Js($favorites);
+				echo ",AppendFav:function(){this.UpdateFavs('append');}";
+				echo ",RemoveFav:function(){this.UpdateFavs('remove');}";
+				echo ",UpdateFavs:function(verb){";
+				echo "   var c=this.GetColor().toUpperCase();";
+				echo "   if(verb==='append'||verb==='remove'){if(c.length===7){var p={};p[verb]=c;Oxygen.AjaxRequest(".new Js($act).",{parameters:p,onSuccess:function(t){var x=window.$ns;x.favorites=t.responseJSON;x.UpdateFavs();}});}}";
+				echo "   if(this.favorites===null)this.favorites=[];";
+				echo "   var found=false;for(var i=0;i<this.favorites.length;i++)if(c===this.favorites[i].toUpperCase()){found=true;break;}";
+				echo "   jQuery('#$ns-append-fav').toggle(!found);";
+				echo "   jQuery('#$ns-remove-fav').toggle(found);";
+				echo "   var s = '<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">';";
+				echo "   for(i=0;i<this.favorites.length;i++){";
+				echo "     var fav=this.favorites[i];";
+				echo "     if(i%16===0)s+='<tr>';";
+				echo "     s+='<td class=\"color\"><a style=\"background:'+fav+'\" href=\"javascript:$ns.SetColor(\\''+fav+'\\');\">".new Spacer(1,1)."</a></td>';";
+				echo "     if(i%16===15)s+='</tr>';";
+				echo "   }";
+				echo "   if (i%16!==0){for(;i%16!==0;i++)s+='<td class=\"color\"><a>".new Spacer(1,1)."</a></td>';s+='</tr>';}";
+				echo "   s+='</table>';";
+				echo "   jQuery('#$ns-dropdown-favs').html(s).toggle(this.favorites.length!==0);";
+				echo " }";
+			}
 			echo "};";
 		}
 		echo Js::END;

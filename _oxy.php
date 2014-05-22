@@ -176,5 +176,7 @@ abstract class _oxy {
 	/** @return LoginControl */
 	public static function GetLoginControl(){ return new LoginControl(); }
 
+	/** @return array|null */
+	public static function GetFavoriteColors(array $append = array(), array $remove = array()){ return null; }
 
 }
