@@ -141,7 +141,7 @@ class ColorBox extends Box {
 			echo "    if (ww > w) d.css({width:ww+'px'});";
 			echo "    d.css({'margin-top':(1+b.outerHeight(false))+'px','margin-left':Math.floor((b.outerWidth(false)-d.outerWidth(false))/2)+'px'});";
 			echo "    this.FillPalette();";
-			if ($favorites!==null) echo "this.UpdateFavs();";
+			if ($favorites!==null) echo "this.UpdateFavs('update');";
 			echo "    this.is_open = true;";
 			echo "    this.Update();";
 			echo "    jQuery('#$ns-text').val(jQuery('#$ns').val().replace('#','')).focus();";
@@ -187,7 +187,7 @@ class ColorBox extends Box {
 				echo ",RemoveFav:function(){this.UpdateFavs('remove');}";
 				echo ",UpdateFavs:function(verb){";
 				echo "   var c=this.GetColor().toUpperCase();";
-				echo "   if(verb==='append'||verb==='remove'){if(c.length===7){var p={};p[verb]=c;Oxygen.AjaxRequest(".new Js($act).",{parameters:p,onSuccess:function(t){var x=window.$ns;x.favorites=t.responseJSON;x.UpdateFavs();}});}}";
+				echo "   if(''+verb!='undefined'){var p={};p[verb]=c;Oxygen.AjaxRequest(".new Js($act).",{parameters:p,onSuccess:function(t){var x=window.$ns;x.favorites=t.responseJSON;x.UpdateFavs();}});}";
 				echo "   if(this.favorites===null)this.favorites=[];";
 				echo "   var found=false;for(var i=0;i<this.favorites.length;i++)if(c===this.favorites[i].toUpperCase()){found=true;break;}";
 				echo "   jQuery('#$ns-append-fav').toggle(!found);";
