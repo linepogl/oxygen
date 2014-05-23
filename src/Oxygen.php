@@ -912,16 +912,6 @@ class Oxygen {
 	public static function Hash32($value){ return strtoupper(substr(md5(strval($value)),0,8)); }
 	public static function HashRandom(){ return ID::Random()->AsHex() . ID::Random()->AsHex() . ID::Random()->AsHex() . ID::Random()->AsHex(); }
 	public static function HashRandom32(){ return ID::Random()->AsHex(); }
-	public static function Encrypt($string,$key) {
-		$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128,MCRYPT_MODE_CBC);
-		$iv = mcrypt_create_iv($iv_size,MCRYPT_DEV_RANDOM);
-		return $iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, md5($key), base64_encode($string), MCRYPT_MODE_CBC, $iv);
-  }
-	public static function Decrypt($cipher,$key){
-		$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128,MCRYPT_MODE_CBC);
-		$iv = substr($cipher,0,$iv_size);
-		return base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, md5($key), substr($cipher,$iv_size), MCRYPT_MODE_CBC, $iv));
-	}
 
 	public static function SplitSearchString($searchstring){
 		return preg_split('/[\\s]*\\"([^\\"]+)\\"[\\s]*|[\\s]*\'([^\']+)\'[\\s]*|[\\s]+/', $searchstring, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
