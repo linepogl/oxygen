@@ -264,14 +264,6 @@ class Oxygen {
 		}
 	}
 
-	function user_shutdown_function() {
-		chdir(__ROOT__);
-		Progress::Shutdown();
-		if (PROFILE) Profiler::StopAndSave();
-		if (DEBUG) Debug::StopAndSave();
-		if (DEBUG) Debug::ShowConsole();
-		if (PROFILE) Profiler::ShowConsole();
-	}
 
 
 
@@ -498,8 +490,10 @@ class Oxygen {
 	public static function GetCodeFiles(){ return self::$code_files; }
 	public static function AddCodeFile($filename) { self::$code_files[] = $filename; }
 	private static $code_folders = array('oxy/src');
+	private static $code_namespaced_folders = array();
 	public static function GetCodeFolders(){ return self::$code_folders; }
 	public static function AddCodeFolder($folder) { if (!in_array($folder,self::$code_folders)) self::$code_folders[] = $folder; }
+	public static function AddCodeNamespacedFolder($folder) { if (!in_array($folder,self::$code_namespaced_folders)) self::$code_namespaced_folders[] = $folder; }
 	private static $class_files = null;
 	private static $class_files_reloaded = false;
 	private static function ReloadClassFiles(){
@@ -510,26 +504,24 @@ class Oxygen {
 		self::$class_files = Scope::$APPLICATION['Oxygen::ClassFiles'];
 		if (is_null(self::$class_files)) {
 			self::$class_files = array();
-			foreach (self::$code_folders as $folder) {
-				if (is_dir($folder)) { // important!
-					Oxygen::LoadClassFilesRecursively($folder);
-				}
-			}
+			foreach (self::$code_folders as $folder) if (is_dir($folder)) Oxygen::LoadClassFilesRecursively($folder,null);
+			foreach (self::$code_namespaced_folders as $folder) if (is_dir($folder)) Oxygen::LoadClassFilesRecursively($folder,'');
 			Scope::$APPLICATION['Oxygen::ClassFiles'] = self::$class_files;
 			self::$class_files_reloaded = true;
 		}
 	}
-	private static function LoadClassFilesRecursively($folder){
+	private static function LoadClassFilesRecursively($folder,$ns=null){
 		foreach (scandir($folder) as $x) if ($x!='.'&&$x!='..') {
 			$ff = $folder.'/'.$x;
 			if (is_dir($ff))
-				Oxygen::LoadClassFilesRecursively($folder.'/'.$x);
+				Oxygen::LoadClassFilesRecursively($folder.'/'.$x,$ns===null?null:($ns===''?$x:$ns.'\\'.$x));
 			else {
 				$l = strlen($x);
 				if ($l > 4) {
 					$ext = substr($x,$l-4);
 					if ($ext == '.php') {
-						self::$class_files[basename($x,$ext)] = $ff;
+						$s = basename($x,$ext);
+						self::$class_files[ $ns===null ? $s : $ns.'\\'.$s ] = $ff;
 					}
 				}
 			}
