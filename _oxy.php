@@ -29,6 +29,8 @@ abstract class _oxy {
 	public static function icoAsterisk           (){ return new Glyph('oxy-icon',0xE010); }
 	public static function icoNew                (){ return new Glyph('oxy-icon',0xE011); }
 	public static function icoForbidden          (){ return new Glyph('oxy-icon',0xE012); }
+	public static function icoDocument           (){ return new Glyph('oxy-icon',0xE013); }
+	public static function icoAttachment         (){ return new Glyph('oxy-icon',0xE014); }
 
 	// 100 - Messages
 	public static function icoInfo               (){ return new Glyph('oxy-icon',0xE100); }
