@@ -30,6 +30,11 @@ var Js = function(value){
 	this.isJsObject = true;
 	this.toString = function(){ if (typeof(this.value) == 'number') return this.value.toString(); else return '\'' + this.value.toString().replace(/'/g,'\\\'') + '\''; };
 };
+var Url = function(value){
+	this.value = value.isUrlObject ? value.value : value;
+	this.isUrlObject = true;
+	this.toString = function(){return encodeURIComponent(this.value.toString()).replace(/%2C/g,',');};
+};
 var Lemma = function(){
 	this.data = {};
 	for (var i = 1; i < arguments.length; i += 2) this.data[ arguments[i-1] ] = arguments[i];
