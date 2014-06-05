@@ -13,7 +13,7 @@ class XPath implements IteratorAggregate,ArrayAccess,Countable {
 	/** @return XPath */ public function OffsetExists($offset){ return !$this->XPath($offset)->IsEmpty(); }
 	/** @return XPath */ public function OffsetUnset($offset){ throw new NonImplementedException(); }
 	public function GetIterator() {
-		$a = [];
+		$a = array();
 		if ($this->data instanceof Traversable) {
 			foreach ($this->data as $data)
 				$a[] = $this->unit($data);
