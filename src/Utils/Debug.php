@@ -157,7 +157,7 @@ class Debug {
 			$r .= "\n" . str_repeat(' ',$level*2).'}';
 			return $r;
 		}
-		if ($value instanceof IteratorAggregate || $value instanceof Iterator) {
+		if ($value instanceof Traversable) {
 			$r = '{'.get_class($value).':';
 			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
