@@ -1,22 +1,65 @@
 <?php
 
-class XPath implements IteratorAggregate,ArrayAccess,Countable {
-	private $dom;
-	private $eng;
-	private $data;  // DOMNode | DOMNodeList | scalar | null
-	private function __construct(){}
-	private function unit( $data ){ $r = new XPath(); $r->dom = $this->dom; $r->eng = $this->eng; $r->data = $data; return $r; }
-	public static function FromString( $xml_string ) { $dom = new DOMDocument(); $dom->loadXML($xml_string); $r = new XPath(); $r->data = $dom->documentElement; $r->dom = $dom; $r->eng = new XPath($dom); return $r; }
-	public static function FromFile( $xml_filename ) { $dom = new DOMDocument(); $dom->load($xml_filename);  $r = new XPath(); $r->data = $dom->documentElement; $r->dom = $dom; $r->eng = new XPath($dom); return $r; }
-	/** @return XPath */ public function OffsetGet($offset){ return $this->XPath($offset); }
-	/** @return XPath */ public function OffsetSet($offset,$value){ throw new NonImplementedException(); }
-	/** @return XPath */ public function OffsetExists($offset){ return !$this->XPath($offset)->IsEmpty(); }
-	/** @return XPath */ public function OffsetUnset($offset){ throw new NonImplementedException(); }
+class XPath implements ArrayAccess,IteratorAggregate,Countable {
+
+	/** @var DOMXPath */
+	private $engine;
+
+	/** @var DOMNode|array|string|float|null */
+	private $data;
+
+	private function __construct(DOMXPath $engine,$data){
+		$this->engine = $engine;
+		$this->data = $data;
+	}
+	/** @return XPath */
+	public static function FromString( $xml_string ) {
+		$dom = new DOMDocument();
+		$dom->loadXML($xml_string);
+		return new XPath(new DOMXPath($dom),$dom->documentElement);
+	}
+	/** @return XPath */
+	public static function FromFile( $xml_filename ) {
+		$dom = new DOMDocument();
+		$dom->load($xml_filename);
+		return new XPath(new DOMXPath($dom),$dom->documentElement);
+	}
+	/** @return XPath */
+	public static function FromNode( DOMNode $xml_node ) {
+		$dom = $xml_node->ownerDocument;
+		return new XPath(new DOMXPath($dom),$dom->documentElement);
+	}
+
+
+	//
+	//
+	// Interfaces
+	//
+	//
+	/** @return XPath */
+	public function OffsetGet($offset){
+		if (is_int($offset)) {
+			if (is_array($this->data) && isset($this->data[$offset]))
+				return $this->Unit($this->data[$offset]);
+			else
+				return $this->Unit(null);
+		}
+		return $this->Select($offset);
+	}
+	public function OffsetExists($offset){
+		if (is_int($offset))
+			return is_array($this->data) && isset($this->data[$offset]);
+		return !$this->Select($offset)->IsEmpty();
+	}
+	public function OffsetSet($offset,$value){ throw new NonImplementedException(); }
+	public function OffsetUnset($offset){ throw new NonImplementedException(); }
+
+	/** @return Iterator */
 	public function GetIterator() {
 		$a = array();
-		if ($this->data instanceof Traversable) {
+		if (is_array($this->data)) {
 			foreach ($this->data as $data)
-				$a[] = $this->unit($data);
+				$a[] = $this->Unit($data);
 		}
 		elseif ($this->data !== null) {
 			$a[] = $this;
@@ -24,32 +67,86 @@ class XPath implements IteratorAggregate,ArrayAccess,Countable {
 		return new ArrayIterator($a);
 	}
 	public function Count() {
-		if ($this->data instanceof DOMNodeList) return $this->data->length;
-		if ($this->data instanceof Countable)   return $this->data->Count();
-		if ($this->data === null)               return 0;
+		if (is_array($this->data)) return count($this->data);
+		if ($this->data === null)  return 0;
 		return 1;
 	}
-	private function evaluate($node,$xpath){ if($node instanceof DOMDocument){$x=new DOMXPath($node);return$x->evaluate($xpath);}else{$x=new DOMXPath($node->ownerDocument);return $x->evaluate($xpath,$node);} }
+
+
+	//
+	//
+	// Monad
+	//
+	//
 	/** @return XPath */
-	public function XPath($xpath='.') {
-		if ($xpath === '.') return $this;
-		$node = $this->GetNode();
-		return $this->unit( $node === null ? null : $this->evaluate($node,$xpath) );
+	private function Unit( $data ){
+		return new XPath($this->engine,$data);
 	}
+	/** @return XPath */
+	public function Select($xpath='.') {
+		if ($xpath === '.') return $this;
+		$r = null;
+		if (is_array($this->data)) {
+			$r = [];
+			foreach ($this->data as $node) {
+				$rr = $this->engine->evaluate($xpath,$node);
+				if ($rr instanceof DOMNodeList) { // flatMap, removing duplicates
+					foreach ($rr as $x) {
+						$found = false; foreach ($r as $xx) if ($x === $xx) { $found = true; break; }
+						if (!$found) $r[] = $x;
+					}
+				}
+				else $r[] = $rr;
+			}
+		}
+		elseif ($this->data instanceof DOMNode) {
+			$rr = $this->engine->evaluate($xpath,$this->data);
+			if ($rr instanceof DOMNodeList) {
+				$r = [];
+				foreach ($rr as $x) $r[] = $x;
+			}
+			else
+				$r = $rr;
+		}
+		return $this->Unit($r);
+	}
+
+
+	//
+	//
+	// Unboxing the first
+	//
+	//
 	/** @return string|float|null */
 	public function GetValue() {
-		if ($this->data instanceof DOMNodeList) {
-			if ($this->data->length === 0)
+		if (is_array($this->data)) {
+			if (empty($this->data))
 				return null;
+			elseif ($this->data[0] instanceof DOMNode)
+				return $this->engine->evaluate('string(.)',$this->data[0]);
 			else
-				return $this->evaluate($this->data->item(0),'string(.)');
+				return $this->data[0];
 		}
 		if ($this->data instanceof DOMNode) {
-			return $this->evaluate($this->data,'string(.)');
+			return $this->engine->evaluate('string(.)',$this->data);
 		}
 		return $this->data;
 	}
-	/** @return DOMNode|null */ public function GetNode() { if ($this->data instanceof DOMNode) return $this->data; if ($this->data instanceof DOMNodeList && $this->data->length !== 0) return $this->data->item(0); return null; }
+	/** @return DOMNode|null */
+	public function GetNode() {
+		if ($this->data instanceof DOMNode)
+			return $this->data;
+		if (is_array($this->data) && count($this->data)>0 && $this->data[0] instanceof DOMNode)
+			return $this->data[0];
+		return null;
+	}
+
+
+	//
+	//
+	// Other helping methods
+	//
+	//
 	/** @return string|null */  public function GetName() { $node = $this->GetNode(); return $node instanceof DOMElement || $node instanceof DOMAttr ? $node->nodeName : null; }
 	/** @return string|null */  public function GetAttr($attr) { $node = $this->GetNode(); return $node instanceof DOMElement && $node->hasAttribute($attr) ? $node->getAttribute($attr) : null; }
 	/** @return string  */      public function __toString(){ return strval($this->GetValue()); }
