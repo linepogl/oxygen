@@ -87,7 +87,7 @@ class XPath implements ArrayAccess,IteratorAggregate,Countable {
 		if ($xpath === '.') return $this;
 		$r = null;
 		if (is_array($this->data)) {
-			$r = [];
+			$r = array();
 			foreach ($this->data as $node) {
 				$rr = $this->engine->evaluate($xpath,$node);
 				if ($rr instanceof DOMNodeList) { // flatMap, removing duplicates
@@ -102,7 +102,7 @@ class XPath implements ArrayAccess,IteratorAggregate,Countable {
 		elseif ($this->data instanceof DOMNode) {
 			$rr = $this->engine->evaluate($xpath,$this->data);
 			if ($rr instanceof DOMNodeList) {
-				$r = [];
+				$r = array();
 				foreach ($rr as $x) $r[] = $x;
 			}
 			else
@@ -114,7 +114,7 @@ class XPath implements ArrayAccess,IteratorAggregate,Countable {
 
 	//
 	//
-	// Unboxing the first
+	// Unboxing (the first)
 	//
 	//
 	/** @return string|float|null */

@@ -183,14 +183,12 @@ class RollerBox extends Box {
 		if($this->on_change!='') echo ",on_change:function(){{$this->on_change}}";
 		echo "});";
 		echo Js::END;
-
 		$r = ob_get_clean();
 		echo $r;
 		static $inst = 0;
 		static $total = 0;
 		$inst++;
 		$total += strlen($r);
-		error_log('RollerBox #'.$inst.':'.$total);
 
 	}
 
