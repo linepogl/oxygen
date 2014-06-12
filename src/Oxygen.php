@@ -935,17 +935,22 @@ class Oxygen {
 		$headers .= 'From: '. $from_name . ' <'. $from_email .'>'."\r\n";
 		$headers .= 'Sender: '. $from_email ."\r\n";
 
-		$msg = '<html><head>';
-		$msg .= "\r\n".'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-		$msg .= "\r\n".'<title>'.wordwrap($subject,70).'</title>';
-		$msg .= "\r\n".'</head><body>';
-		$msg .= "\r\n".wordwrap($body,70,"\r\n");
-		$msg .= "\r\n".'</body></html>';
+		$body = str_replace("\r\n","\n",$body);
+		$body = str_replace("\r","\n",$body);
+		$body = str_replace("\n","\r\n",$body);
+		$body = wordwrap($body,970,"\r\n",true);
+
+		$html = '<html><head>';
+		$html .= "\r\n".'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
+		$html .= "\r\n".'<title>'.wordwrap($subject,70).'</title>';
+		$html .= "\r\n".'</head><body>';
+		$html .= "\r\n".$body;
+		$html .= "\r\n".'</body></html>';
 
 		$body = "\r\n--$boundary";
 		$body .= "\r\nContent-Type: text/html; charset=UTF-8";
 		$body .= "\r\n";
-		$body .= "\r\n$msg";
+		$body .= "\r\n$html";
 		$body .= "\r\n";
 		foreach ($attachements as $cid => $filename){
 			if (is_int($cid)) $cid = basename($filename);
@@ -1126,6 +1131,10 @@ class Oxygen {
 	public static function GetInfo(){
 		$rr = array();
 
+		$r = Oxygen::GetApplicationInfo();
+		if (!is_null($r))
+			$rr[] = $r;
+
 		$r = array();
 		$r['Date and time'] = Language::FormatDateTime(XDateTime::Now());
 		$r['Current action'] = Oxygen::GetActionName();
@@ -1183,18 +1192,12 @@ class Oxygen {
 		$r['Database upgrade scripts'] = implode("\n",Oxygen::GetDatabaseUpgradeFiles());
 		$rr[] = $r;
 
-		$r = Oxygen::GetApplicationInfo();
-		if (!is_null($r))
-			$rr[] = $r;
-
 		// extra info:
-		$r = array();
-		$r['$_SERVER'] = var_export($_SERVER,true);
-		$r['$_GET'] = var_export($_GET,true);
-		$r['$_POST'] = var_export($_POST,true);
-		$r['$_FILES'] = var_export($_FILES,true);
-		$r['$_COOKIE'] = var_export($_COOKIE,true);
-		$rr[] = $r;
+		$r = array(); $r['$_SERVER'] = ''; foreach ($_SERVER as $key=>$value) $r['S:'.$key] = var_export($value,true); $rr[] = $r;
+		$r = array(); $r['$_GET'] = '';    foreach ($_GET    as $key=>$value) $r['G:'.$key] = var_export($value,true); $rr[] = $r;
+		$r = array(); $r['$_POST'] = '';   foreach ($_POST   as $key=>$value) $r['P:'.$key] = var_export($value,true); $rr[] = $r;
+		$r = array(); $r['$_FILES'] = '';  foreach ($_FILES  as $key=>$value) $r['F:'.$key] = var_export($value,true); $rr[] = $r;
+		$r = array(); $r['$_COOKIE'] = ''; foreach ($_COOKIE as $key=>$value) $r['C:'.$key] = var_export($value,true); $rr[] = $r;
 
 		return $rr;
 	}
