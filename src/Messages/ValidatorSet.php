@@ -6,6 +6,7 @@ class ValidatorSet extends stdClass {
 
 	public function AsMessage(){ return new MultiMessage($this->validators); }
 
+	/** @return Validator */
 	public function __get($name) {
 		if (!isset($this->validators[$name])) $this->validators[$name] = new Validator();
 		return $this->validators[$name];
