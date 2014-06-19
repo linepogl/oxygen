@@ -331,12 +331,14 @@ class Oxygen {
 	public static function IsCharsetUnicode(){ return self::$charset == 'UTF-8'; }
 	public static function SetCharset($value) { self::$charset = strtoupper($value); }
 	public static function GetCharset(){ return self::$charset; }
+	/** @return string */
 	public static function ReadUnicode($value){
 //		return Oxygen::IsCharsetUnicode() ? $value : iconv('UTF-8',self::$charset,$value);
 		if (self::$charset == 'UTF-8') return $value;
 		if (self::$charset == 'ISO-8859-1') return utf8_decode($value);
 		throw new Exception('PHP versions before 6.0 do not support the converting of unicode to '.self::$charset.'.');
 	}
+	/** @return string */
 	public static function ToUnicode($value){
 //		return Oxygen::IsCharsetUnicode() ? $value : iconv('UTF-8',self::$charset,$value);
 		if (self::$charset == 'UTF-8') return $value;
