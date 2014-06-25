@@ -1,5 +1,8 @@
 <?php
-define('__ROOT__',substr(__FILE__,0,-10));  // 10==strlen('/oxy/_.php')
+
+$f = getcwd(); while(!is_dir("$f/oxy")) { $f.='/..'; if (!is_dir($f)) die("Cannot find directory oxy."); }
+define('__ROOT__',realpath($f));
+//define('__ROOT__',substr(__FILE__,0,-10));  // 10==strlen('/oxy/_.php')
 define('__BASE__',substr($_SERVER['SCRIPT_NAME'],0,1-(strlen(realpath($_SERVER['SCRIPT_FILENAME']))-strlen(__ROOT__))));
 define('__OFFSET__',substr($_SERVER['SCRIPT_NAME'],strlen(__BASE__),strrpos($_SERVER['SCRIPT_NAME'],'/')-strlen(__BASE__)+1));
 
