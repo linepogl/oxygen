@@ -243,6 +243,12 @@ class Oxygen {
 						echo '<div style="color:#f0f0f0;font:12px/14px Courier New,monospace;margin-top:60px;width:70%;"> *'.Lemma::Pick('MsgDevelopmentEnvironment').'<br/>'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
 						echo '<div style="color:#f0f0f0;font:bold 40px/44px Courier New,monospace;margin-top:10px;width:70%;">'.$Q.$ex->getMessage().$Q.'</div>';
 						echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
+						if (!($ex instanceof JavascriptException)) {
+							for ($exx = $ex->getPrevious();!is_null($exx);$exx = $exx->getPrevious()) {
+								echo '<div style="color:#f0f0f0;font:bold 40px/44px Courier New,monospace;margin-top:10px;width:70%;">'.$Q.$exx->getMessage().$Q.'</div>';
+								echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
+							}
+						}
 						echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
 						echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Debug entries</b><br/><br/>'.new Html(Debug::GetEntriesAsText()).'</div>';
 						echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
@@ -443,6 +449,13 @@ class Oxygen {
 	public static function SetDevelopment($value){ self::$development = $value; }
 	public static function IsDevelopment(){ return self::$development; }
 
+	private static $exception_recorder = null;
+	public static function SetExceptionRecorder($function) { self::$exception_recorder = $function; }
+	public static function GetExceptionRecorder(){ return self::$exception_recorder; }
+
+	private static $javacript_exception_recorder = null;
+	public static function SetJavascriptExceptionRecorder($function) { self::$javacript_exception_recorder = $function; }
+	public static function GetJavascriptExceptionRecorder(){ return self::$javacript_exception_recorder; }
 
 
 	//
@@ -879,8 +892,13 @@ class Oxygen {
 		echo "var oxygen_encoding = ".new Js(Oxygen::GetCharset()).";";
 		echo "var oxygen_lang = ".new Js(Oxygen::GetLang()).";";
 		echo "var oxygen_base = ".new Js(__BASE__).";";
-		echo "var oxygen_exceptions = {};";
-		echo "window.onerror = function(msg,url,line){ if (oxygen_exceptions[msg+url+line]===undefined) { new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); oxygen_exceptions[msg+url+line]=1; } else { oxygen_exceptions[msg+url+line]++; } };";
+		if (self::$javacript_exception_recorder===null) {
+			echo "var oxygen_exceptions = {};";
+			echo "window.onerror = function(msg,url,line){ if (oxygen_exceptions[msg+url+line]===undefined) { new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); oxygen_exceptions[msg+url+line]=1; } else { oxygen_exceptions[msg+url+line]++; } };";
+		}
+		else {
+			echo self::$javacript_exception_recorder;
+		}
 		echo Js::END;
 		echo '<link href="'.__BASE__.'favicon.ico" rel="icon" type="image/x-icon" />';
 		echo '<link href="'.__BASE__.'favicon.png" rel="apple-touch-icon" type="image/png" />';

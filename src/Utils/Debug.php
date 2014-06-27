@@ -266,6 +266,24 @@ class Debug {
 		return null;
 	}
 
+	public static function GetExceptionReportAsArray(Exception $ex) {
+		$r = array();
+		for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()){
+			$a = array();
+			$a['class_name'] = get_class($exx);
+			$a['message'] = $exx->getMessage();
+			if (!($ex instanceof JavascriptException)) {
+				$a['file'] = basename($exx->getFile());
+				$a['line'] = $exx->getLine();
+				$a['code'] = Debug::GetExceptionTraceAsText($exx);
+			}
+			$r['trace'][] = $a;
+		}
+		$r['oxygen_info'] = Oxygen::GetInfo();
+		$r['debug_entries'] = self::$entries;
+		$r['database_queries'] = Database::GetQueries();
+		return $r;
+	}
 	public static function GetExceptionReportAsText(Exception $ex){
 		$r = '';
 		for ($exx = $ex; !is_null($exx); $exx = $exx->getPrevious()){
@@ -275,6 +293,7 @@ class Debug {
 				$r .= "\n\n". basename($exx->getFile()).'['.$exx->getLine().']';
 				$r .= "\n".Oxygen::GetActionName() .'['. Debug::GetActionLine($exx) .']';
 				$r .= "\n\n".Debug::GetExceptionTraceAsText($exx);
+				$r .= "\n";
 			}
 		}
 		$r .= "\n\n";
@@ -420,6 +439,24 @@ class Debug {
 
 
 
+		// external logger, maybe
+		$external_recorder = Oxygen::GetExceptionRecorder();
+		if (is_callable($external_recorder)) {
+			try {
+				$continue = $external_recorder($ex,array('serial' => $serial
+					,'way_handled_message' => $way_handled_message
+					,'extra_developer_message' => $extra_developer_message
+					,'report'=> self::GetExceptionReportAsText($ex)
+				));
+				if ($continue === false) return $serial.' (exception sent to external recorder)';
+			}
+			catch (Exception $exxxxxxxxx){}
+		}
+
+
+
+
+
 		$lck_filename = Oxygen::GetLogFolder().'/'.Fs::GetSafeFilename($key).'.lck';
 		$acc_filename = Oxygen::GetLogFolder().'/'.Fs::GetSafeFilename($key).'.acc';
 		$err_filename = Oxygen::GetLogFolder().'/'.Fs::GetSafeFilename($serial.'.'.get_class($ex).'.'.$way_handled_message).'.err';
@@ -454,8 +491,6 @@ class Debug {
 			}
 		}
 		catch (Exception $ex) {
-//			$must_record_immediately = true;
-//			$must_initiate_accumulator = true;
 			$must_record_immediately = false;   // TODO: fallback to memcached or apc?
 			$must_initiate_accumulator = false;
 		}
@@ -514,9 +549,4 @@ class Debug {
 
 		return $serial.($exception_recorded?'':' (exception recording deferred)');
 	}
-
-
-
-
 }
-

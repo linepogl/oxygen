@@ -245,6 +245,7 @@ class Database {
 	// Database queries
 	//
 	//
+	public static function GetQueries(){ return self::$queries; }
 	public static function GetQueriesAsText(){
 		$r = '';
 		foreach ( self::$queries as $i => $q ) {
