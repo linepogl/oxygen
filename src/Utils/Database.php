@@ -636,7 +636,14 @@ class Database {
 	}
 
 	public static function ExecuteDropTable($tablename) {
-		$sql = 'DROP TABLE '.new SqlIden($tablename);
+		switch (self::$type) {
+			case self::ORACLE:
+				$sql = 'DROP TABLE '.new SqlIden($tablename).' PURGE';
+				break;
+			default:
+				$sql = 'DROP TABLE '.new SqlIden($tablename);
+				break;
+		}
 		self::Execute($sql);
 	}
 
@@ -769,6 +776,17 @@ class Database {
 			break;
 		}
   }
+	public static function ExecuteDropStandardSequence($tablename) {
+		self::ExecuteDropSequence(self::hash_sequence($tablename,'id'));
+	}
+  public static function ExecuteDropSequence($sequence_name) {
+		switch(self::$type) {
+			case self::ORACLE:
+				$sql = 'DROP SEQUENCE '.new SqlIden($sequence_name);
+				self::Execute($sql);
+			break;
+		}
+  }
 
 	/**
 	 * @api Since 1.3
@@ -797,9 +815,9 @@ class Database {
 			case self::MYSQL:
 				self::Execute('LOCK TABLES oxy_ids WRITE,'.$tablename.' WRITE');
 				$id = self::ExecuteScalar('SELECT LastID FROM oxy_ids WHERE TableName=?',$tablename)->AsID();
-				if (is_null($id)){
+				if ($id===null){
 					$id = self::ExecuteScalar('SELECT MAX('.$primarykey.') FROM '.$tablename)->AsID();
-					$id = is_null($id) ? new ID(0) : new ID($id->AsInt() + 1);
+					$id = $id===null ? new ID(0) : new ID($id->AsInt() + 1);
 					self::Execute('INSERT INTO oxy_ids (TableName,LastID) VALUES (?,?)',$tablename,$id);
 				}
 				else {
@@ -814,13 +832,54 @@ class Database {
 				}
 				catch (Exception $ex) {
 					$id = self::ExecuteScalar('SELECT MAX('.new SqlIden($primarykey).') FROM '.new SqlIden($tablename))->AsID();
-					$id = is_null($id) ? new ID(0) : new ID($id->AsInt() + 1);
+					$id = $id===null ? new ID(0) : new ID($id->AsInt() + 1);
 					Database::ExecuteCreateSequence(self::hash_sequence($tablename,$primarykey),$id->AsInt());
 					$id = self::ExecuteScalar('SELECT '.new SqlIden(self::hash_sequence($tablename,$primarykey)).'.NEXTVAL A FROM DUAL')->AsID();
 				}
 				break;
 		}
 		return $id;
+	}
+
+	/** @return ID */
+	public static function ExecuteAdvanceNextIDTo($table_name,$next_iid,$primarykey='id') {
+		if ($next_iid<= 0) return;
+		switch (self::$type) {
+			default:
+			case self::MYSQL:
+				self::Execute('LOCK TABLES oxy_ids WRITE,'.$table_name.' WRITE');
+				$id = self::ExecuteScalar('SELECT LastID FROM oxy_ids WHERE TableName=?',$table_name)->AsID();
+				if ($id===null){
+					$id = self::ExecuteScalar('SELECT MAX('.$primarykey.') FROM '.$table_name)->AsID();
+					if ($id===null || $id->AsInt() < $next_iid) {
+						$id = new ID($next_iid - 1);
+						self::Execute('INSERT INTO oxy_ids (TableName,LastID) VALUES (?,?)',$table_name,$id);
+					}
+				}
+				elseif ($id->AsInt() < $next_iid-1) {
+					$id = new ID($next_iid-1);
+					self::Execute('UPDATE oxy_ids SET LastID=? WHERE TableName=?',$id,$table_name);
+				}
+				self::Execute('UNLOCK TABLES');
+				break;
+			case self::ORACLE:
+				$seq = self::hash_sequence($table_name,$primarykey);
+				$id = self::ExecuteScalar('SELECT "LAST_NUMBER" FROM "USER_SEQUENCES" WHERE "SEQUENCE_NAME"='.new Sql($seq))->AsID();
+				if ($id !== null) {
+					while($id->AsInt() < $next_iid-1) {
+						$id = self::ExecuteScalar('SELECT '.new SqlIden($seq).'.NEXTVAL A FROM DUAL')->AsID();
+					}
+				}
+				else {
+					$id = self::ExecuteScalar('SELECT MAX('.new SqlIden($primarykey).') FROM '.new SqlIden($table_name))->AsID();
+					try { Database::ExecuteDropSequence($seq); } catch (Exception $ex){}
+					if ($id===null||$id->AsInt()<$next_iid)
+						Database::ExecuteCreateSequence($seq,$next_iid);
+					else
+						Database::ExecuteCreateSequence($seq,$id->AsInt()+1);
+				}
+				break;
+		}
 	}
 
 	/** @return ID */

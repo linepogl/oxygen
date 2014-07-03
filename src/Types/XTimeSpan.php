@@ -20,6 +20,7 @@ class XTimeSpan extends XValue implements Serializable {
 	const MILLISECONDS_IN_MINUTE = 60000;
 	const MILLISECONDS_IN_SECOND = 1000;
 
+	/** @return XTimeSpan */ public static function Zero(){ static $r=null; if($r===null)$r=new XTimeSpan(); return $r; }
 
 	public function GetTotalWeeks(){ return intval($this->value/self::MILLISECONDS_IN_WEEK); }
 	public function GetTotalDays(){ return intval($this->value/self::MILLISECONDS_IN_DAY); }
