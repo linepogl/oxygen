@@ -428,6 +428,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		$this->Evaluate();
 		foreach ($traversable as $x)
 			$this[] = $x;
+		return $this;
 	}
 
 	public function MergeNewOnly($traversable) {
@@ -435,20 +436,24 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		foreach ($traversable as $x)
 			if (!$this->Contains( $x ) )
 				$this[] = $x;
+		return $this;
 	}
 	public function Append($dbitem_or_id){
 		$this->Evaluate();
 		$this[] = $dbitem_or_id;
+		return $this;
 	}
 
 	public function AppendNewOnly($dbitem_or_id) {
 		$this->Evaluate();
 		if (!$this->Contains( $dbitem_or_id ) )
 			$this[] = $dbitem_or_id;
+		return $this;
 	}
 
 	public function Clear(){
 		$this->data = array();
+		return $this;
 	}
 
 	public function Contains($dbitem_or_id){
