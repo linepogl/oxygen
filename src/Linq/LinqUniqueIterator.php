@@ -16,19 +16,20 @@ class LinqUniqueIterator extends LinqIterator {
 
 
 	public function Rewind(){
+		$this->served = array();
 		$this->iterator->rewind();
 		if ($this->iterator->valid()){
 			$f = $this->hash_function;
 			$hash = $f($this->iterator->current(),$this->iterator->key());
-			$this->served[] = $hash;
+			$this->served[$hash] = $hash;
 		}
 	}
 	public function Next(){
 		for($this->iterator->next();$this->iterator->valid();$this->iterator->next()){
 			$f = $this->hash_function;
 			$hash = $f($this->iterator->current(),$this->iterator->key());
-			if (!in_array($hash,$this->served)) {
-				$this->served[] = $hash;
+			if (!array_key_exists($hash,$this->served)) {
+				$this->served[$hash] = $hash;
 				break;
 			}
 		}

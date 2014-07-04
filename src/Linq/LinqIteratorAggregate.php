@@ -64,6 +64,14 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 	public function Recurse($function_children){
 		return new LinqRecurseIterator($this->getIterator(),$function_children);
 	}
+	/** Lazy O(n) @return LinqIterator */
+	public function Wave($function_children){
+		return new LinqWaveIterator($this->getIterator(),$function_children);
+	}
+	/** Lazy O(n) @return LinqIterator */
+	public function WaveUnique($function_children,$hash_function = null){
+		return new LinqWaveUniqueIterator($this->getIterator(),$function_children,$hash_function);
+	}
 
 	/** Lazy O(n) @return LinqIterator */
 	public function Union(Traversable $other_iterator){

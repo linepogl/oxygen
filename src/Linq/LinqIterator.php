@@ -73,6 +73,14 @@ class LinqIterator implements Iterator, Countable {
 	public function Recurse($function_children){
 		return new LinqRecurseIterator($this,$function_children);
 	}
+	/** Lazy O(n) @return LinqIterator */
+	public function Wave($function_children){
+		return new LinqWaveIterator($this,$function_children);
+	}
+	/** Lazy O(n) @return LinqIterator */
+	public function WaveUnique($function_children,$hash_function = null){
+		return new LinqWaveUniqueIterator($this,$function_children,$hash_function);
+	}
 
 	/** Lazy O(n) @return LinqIterator */
 	public function Union(Traversable $other_iterator){

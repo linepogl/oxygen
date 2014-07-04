@@ -4,20 +4,20 @@ class LinqRecurseIterator extends LinqIterator {
 	private $function_children;
 	/** @var Iterator */
 	private $nested_iterator;
-	private $checked_children;
+	private $have_children_been_checked;
 	public function __construct(Iterator $iterator, $function_children){ parent::__construct($iterator); $this->function_children = $function_children; }
 
 	public function Rewind(){
 		$this->nested_iterator = null;
-		$this->checked_children = false;
+		$this->have_children_been_checked = false;
 		$this->iterator->rewind();
 	}
 	public function Next(){
-		if (!$this->checked_children){
+		if (!$this->have_children_been_checked){
 			$f = $this->function_children;
 			$children = $f($this->iterator->current(),$this->iterator->key());
 			$this->nested_iterator = from($children)->Recurse($f);
-			$this->checked_children = true;
+			$this->have_children_been_checked = true;
 			$this->nested_iterator->rewind();
 			if (!$this->nested_iterator->valid()) $this->nested_iterator = null;
 		}
@@ -25,13 +25,13 @@ class LinqRecurseIterator extends LinqIterator {
 			$this->nested_iterator->next();
 			if (!$this->nested_iterator->valid()) $this->nested_iterator = null;
 		}
-		if (is_null($this->nested_iterator)){
+		if ($this->nested_iterator===null){
 			$this->iterator->next();
-			$this->checked_children = false;
+			$this->have_children_been_checked = false;
 		}
 	}
-	public function Current(){ return is_null($this->nested_iterator) ? $this->iterator->current() : $this->nested_iterator->current(); }
-	public function Key(){ return is_null($this->nested_iterator) ? $this->iterator->key() : $this->nested_iterator->key(); }
+	public function Current(){ return $this->nested_iterator===null ? $this->iterator->current() : $this->nested_iterator->current(); }
+	public function Key(){ return $this->nested_iterator===null ? $this->iterator->key() : $this->nested_iterator->key(); }
 
 
 }
