@@ -119,8 +119,8 @@ abstract class _oxy {
 	public static function icoDropArea              (){ return new Glyph('oxy-icon',0xE903); }
 	public static function icoMenuUp                (){ return new Glyph('oxy-icon',0xE904); }
 	public static function icoMenuDown              (){ return new Glyph('oxy-icon',0xE905); }
-	public static function icoMenuLeft              (){ return new Glyph('oxy-icon',0xE906); }
-	public static function icoMenuRight             (){ return new Glyph('oxy-icon',0xE907); }
+	public static function icoMenuRight             (){ return new Glyph('oxy-icon',0xE906); }
+	public static function icoMenuLeft              (){ return new Glyph('oxy-icon',0xE907); }
 	public static function icoOrderAsc              (){ return new Glyph('oxy-icon',0xE908); }
 	public static function icoOrderDesc             (){ return new Glyph('oxy-icon',0xE909); }
 	public static function icoWideView              (){ return new Glyph('oxy-icon',0xE910); }

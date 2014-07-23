@@ -692,10 +692,7 @@ class Oxygen {
 		exit();
 	}
 	public static function Redirect(Action $action) {
-		while (ob_get_level()>0) ob_end_clean();
-		Oxygen::SendHttpHeaders();
-		echo Js::BEGIN."window.location.href=".new Js(__BASE__.$action->GetHrefPlain()).";".Js::END;
-		exit();
+		Oxygen::RedirectRaw(__BASE__.$action->GetHrefPlain());
 	}
 	public static function RedirectDialog(Action $action) {
 		$current_action = Oxygen::GetAction();
@@ -710,10 +707,7 @@ class Oxygen {
 		}
 	}
 	public static function RedirectBack(){
-		while (ob_get_level()>0) ob_end_clean();
-		Oxygen::SendHttpHeaders();
-		echo Js::BEGIN."window.location.href=".new Js($_SERVER['HTTP_REFERER']).";".Js::END;
-		exit();
+		Oxygen::RedirectRaw($_SERVER['HTTP_REFERER']);
 	}
 	public static function Refresh(){
 		while (ob_get_level()>0) ob_end_clean();
