@@ -343,12 +343,12 @@ abstract class XItem extends XValue implements Serializable {
 
 
 	protected function OnBeforeCopy(){}
-	protected function OnAfterCopy(){}
+	protected function OnAfterCopy($original){}
 	/** @return static */
 	public function Copy( $with_a_perm_id = false , $id = null , XMetaField $slave_hook_field = null , $slave_hook_id = null ){
 		$this->OnBeforeCopy();
 		$r = $this->Meta()->CopyItem($this,$with_a_perm_id,$id,$slave_hook_field,$slave_hook_id);
-		$r->OnAfterCopy();
+		$r->OnAfterCopy($this);
 		return $r;
 	}
 

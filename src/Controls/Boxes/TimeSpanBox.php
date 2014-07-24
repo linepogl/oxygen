@@ -154,6 +154,7 @@ class TimeSpanBox extends Box {
 			echo " ,Del : function(s){ this.set_s( '' ); }";
 			echo " ,Press : function(s){ var x = this.get_s(); this.set_s( (x==='0' ? '' : x) + s ); }";
 			echo " ,Backspace : function(s){ var x = this.get_s(); if (x==='') return; this.set_s( x.slice(0,-1) ); }";
+			echo " ,Focus : function(){ jQuery('#$this->name-box').trigger('focus'); }";
 			echo " ,OnFocus : function(ev){";
 			echo "    this.ShowPseudoFocus();";
 			echo $this->on_focus;
@@ -161,6 +162,18 @@ class TimeSpanBox extends Box {
 			echo " ,OnBlur : function(ev){";
 			echo "    this.HidePseudoFocus();";
 			echo $this->on_blur;
+			echo "  }";
+
+			echo " ,GetValue : function(){ var s = jQuery('#$this->name').val(); if (s==='') return null; var v = parseInt(s,10); if(''+v==='NaN') return null; return v; }";
+			echo " ,SetValue : function(v){";
+			echo "    if (v!==null) { v=parseInt(v,10); if(''+v==='NaN') v = null; }";
+			echo "    var old_pseudo_focus = this.pseudo_focus;";
+			if ($this->show_days)    echo "this.pseudo_focus='d'; if (v===null) this.set_s(''); else { this.set_s( Math.floor(v/(24*60*60*1000))); v = v % (24*60*60*1000); }";
+			if ($this->show_hours)   echo "this.pseudo_focus='h'; if (v===null) this.set_s(''); else { this.set_s( Math.floor(v/(   60*60*1000))); v = v % (   60*60*1000); }";
+			if ($this->show_minutes) echo "this.pseudo_focus='m'; if (v===null) this.set_s(''); else { this.set_s( Math.floor(v/(      60*1000))); v = v % (      60*1000); }";
+			if ($this->show_seconds) echo "this.pseudo_focus='s'; if (v===null) this.set_s(''); else { this.set_s( Math.floor(v/(         1000))); v = v % (         1000); }";
+			echo "    this.pseudo_focus = old_pseudo_focus;";
+			echo "    this.Update();";
 			echo "  }";
 			echo " ,Update : function(){";
 			echo "    this.ShowPseudoFocus();";

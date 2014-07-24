@@ -60,8 +60,8 @@ class TextBox extends Box {
 
 		if ($this->readonly)
 			echo ' readonly="readonly"';
-		else
-			echo ' name="'.$this->name.'"';
+		elseif ($this->http_name !== null)
+			echo ' name="'.$this->http_name.'"';
 
 		echo ' class="'.$css_class.'"';
 		echo ' style="'.$css_style.'"';
