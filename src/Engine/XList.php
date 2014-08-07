@@ -392,9 +392,12 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 
 	/** @return XList */
-	public function Sort(){
+	public function Sort($compare_function=null){
 		$this->LoadAllAggressively();
-		usort($this->data, array($this->meta->GetClassName(),'Compare'));
+		if ($compare_function === null)
+			usort($this->data, array($this->meta->GetClassName(),'Compare'));
+		else
+			usort($this->data, $compare_function);
 		return $this;
 	}
 	/** @return XList */
