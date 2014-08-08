@@ -48,6 +48,8 @@ class XDateTime extends XValue implements Serializable {
 		return parent::CompareTo($x);
 	}
 
+    public function FromLess( XDateTime $that = null ){ return $that === null ? false : $this->timestamp < $that->timestamp; }
+    public function TillLess( XDateTime $that = null ){ return $that === null ? true : $this->timestamp < $that->timestamp; }
 
 
 	/** @return XTimeSpan */
