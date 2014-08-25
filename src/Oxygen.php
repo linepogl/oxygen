@@ -890,6 +890,11 @@ class Oxygen {
 			echo "var oxygen_exceptions = {};";
 			echo "window.onerror = function(msg,url,line){ if (oxygen_exceptions[msg+url+line]===undefined) { new Ajax.Request(".new Js(new ActionOxygenRecordJavascriptException('XXX1','XXX2')).".replace('XXX1',encodeURIComponent(msg)).replace('XXX2',encodeURIComponent(line)),{method:'GET',encoding:oxygen_encoding}); oxygen_exceptions[msg+url+line]=1; } else { oxygen_exceptions[msg+url+line]++; } };";
 		}
+		elseif (is_callable(self::$javacript_exception_recorder)) {
+			/** @var $f callable */
+			$f = self::$javacript_exception_recorder;
+			echo $f();
+		}
 		else {
 			echo self::$javacript_exception_recorder;
 		}
