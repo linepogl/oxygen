@@ -59,6 +59,10 @@ class ListCheckBox extends Box {
 		echo "      }";
 		echo "      x.SetValue(found);";
 		echo "    });";
+		echo "    var a=[];";
+		echo "    for(var i=0;i<this.selected_values.length;i++){var x=this.selected_values[i];for(var j=0;j<this.all_values.length;j++)if(x===this.all_values[j]){a.push(x);break;}}";
+		echo "    this.selected_values = a;";
+		echo "    this.Update();";
 		echo "    this.running = false;";
 		echo "  }";
 		echo " ,Init : function(){";

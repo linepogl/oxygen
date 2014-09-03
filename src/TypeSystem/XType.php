@@ -234,7 +234,7 @@ abstract class XType implements _XType {
 	 * @return string
 	 */
 	protected static function EncodeAsJsStringLiteral($string){
-		return '\''.str_replace(array('\\','\'',"\n"),array('\\\\','\\\'','\\n'),$string).'\'';
+		return '\''.str_replace(array('\\','\'',"\n",'</script>','<![CDATA[',']]>'),array('\\\\','\\\'','\\n','</*script>','<!*[CDATA[',']]*>'),$string).'\'';
 	}
 
 

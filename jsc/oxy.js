@@ -46,6 +46,12 @@ var Oxygen = {
 	,Base: oxygen_base
 	,Encoding: oxygen_encoding
 
+	,EncodeTemplate:function(s) {
+		return s.replace(/<\/(\**)script>/g,'</$1*script>').replace(/<!(\**)\[CDATA\[/g,'<!$1*[CDATA[').replace(/\]\](\**)>/g,']]$1*>');
+	}
+	,DecodeTemplate:function(s) {
+		return s.replace(/<\/(\**)\*script>/g,'</$1script>').replace(/<!(\**)\*\[CDATA\[/g,'<!$1[CDATA[').replace(/\]\](\**)\*>/g,']]$1>');
+	}
 	,current_ajax_dialog_url: null
 	,current_ajax_dialog_clock_timer: null
 	,current_ajax_dialog_clock_value: 0
