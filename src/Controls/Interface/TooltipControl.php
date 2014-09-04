@@ -19,6 +19,12 @@ class TooltipControl extends Control {
 	private $valign = self::VALIGN_BOTTOM;
 	public function WithVAlign($value){ $this->valign = $value; return $this; }
 
+	const ALIGN_CENTER = 0;
+	const ALIGN_LEFT = 1;
+	const ALIGN_RIGHT = 2;
+	private $align = self::ALIGN_CENTER;
+	public function WithAlign($value){ $this->align = $value; return $this; }
+
 	public function Render() {
 		$ns = $this->name;
 
