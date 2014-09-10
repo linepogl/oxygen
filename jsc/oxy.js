@@ -339,7 +339,7 @@ var Oxygen = {
 	,CheckBox:function(opt){var ns=opt.ns;var r={ns:ns
 		,ico_checked:'',ico_unchecked:'',ico_dirty:''
 		,is_dirty:false
-		,list_ns:null
+		,list_ns:[]
 		,list_value:''
 		,on_change:function(){}
 		,SetValue:function(value){var old = this.GetValue();jQuery('#'+ns).val(value?'true':'false');this.Update();if(old!=value)this.OnChange();}
@@ -349,7 +349,7 @@ var Oxygen = {
 		,IsDirty:function(){return this.is_dirty;}
 		,SetDirty:function(dirty){this.is_dirty=dirty;this.Update();}
 		,Toggle:function(){this.SetValue(jQuery('#'+ns).val()!=='true');}
-		,OnChange:function(){if(this.list_ns!==null)window[this.list_ns].OnChangeOne();this.on_change();jQuery('#'+ns).trigger('change');}
+		,OnChange:function(){for(var i=0;i<this.list_ns.length;i++)window[this.list_ns[i]].OnChangeOne();this.on_change();jQuery('#'+ns).trigger('change');}
 	};for(var key in opt)r[key]=opt[key];window[ns]=r;return r;}
 };
 Oxygen.HideAjaxDialog=Oxygen.HideDialog;//BC
