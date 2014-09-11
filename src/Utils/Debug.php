@@ -120,7 +120,7 @@ class Debug {
 		Console::EndPopup();
 	}
 
-	public static function GetVariableAsString($value,$detail=array(10,5,5),$level=0){
+	public static function GetVariableAsString($value,$detail=array(20,10,5),$level=0){
 		if (is_null($value)) return '{null}';
 		if (is_string($value)) return '{string:'.strlen($value).':\''.$value.'\'}';
 		if (is_int($value)) return '{int:'.$value.'}';
