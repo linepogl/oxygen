@@ -262,27 +262,33 @@ abstract class XItem extends XValue implements Serializable {
 		// Save slaves
 		//
 		//
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		// first delete all removed slaves (in reverse order)
+		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()) {
 			$slaves = $cx->GetDBSlaves();
-			/** @var $sl XMetaSlave */
-			foreach ($slaves as $sl) {
+			for (end($slaves);key($slaves) !== null;prev($slaves)) { // in reverse order
+				/** @var $sl XMetaSlave */
+				$sl = current($slaves);
 				$n = $sl->GetName();
 				$a = $this->$n;
-
-				/** @var $a XList */
 				if ($a instanceof XList && !$a->IsEvaluated()) continue; // no need to load and re-save unevaluated slaves (probably buggy because of potential OnBeforeSave and OnAfterSave events...)
-
-				// delete removed slaves
 				$hook_field = $sl->GetHookField();
 				$hook_class = $hook_field->GetMeta();
 				$to_be_deleted = $hook_class->SeekItems()
 					->Where($hook_field->Eq($this))
 					->Where($hook_class->id->NotIn($a));
-				if (!is_null($sl->Where))
+				if ($sl->Where !== null)
 					$to_be_deleted->Where($sl->Where);
-
 				$to_be_deleted->KillAll();
-
+			}
+		}
+		// then save all remaining slaves
+		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+			/** @var $sl XMetaSlave */
+			foreach ($cx->GetDBSlaves() as $sl) {
+				$n = $sl->GetName();
+				$a = $this->$n;
+				/** @var $a XList */
+				if ($a instanceof XList && !$a->IsEvaluated()) continue; // no need to load and re-save unevaluated slaves (probably buggy because of potential OnBeforeSave and OnAfterSave events...)
 				/** @var $x XItem */
 				foreach ($a as $i=>$x) {
 					if ($x->IsTemporary()){
@@ -307,16 +313,17 @@ abstract class XItem extends XValue implements Serializable {
 		$this->OnBeforeKill();
 		$c = $this->Meta();
 
-
 		// 1. Delete slaves
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		/** @var $cs = XMeta */
+		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()) {
 			$slaves = $cx->GetDBSlaves();
-			/** @var $sl XMetaSlave */
-			foreach ($slaves as $sl) {
+			for (end($slaves); key($slaves)!==null; prev($slaves)) { // in reverse order
+				/** @var $sl XMetaSlave */
+				$sl = current($slaves);
 				$n = $sl->GetName();
-				$a = $this->$n;
+				$aa = $this->$n;
 				/** @var $x XItem */
-				foreach ($a as $x)
+				foreach ($aa as $x)
 					$x->Kill();
 			}
 		}

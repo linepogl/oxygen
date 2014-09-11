@@ -100,7 +100,6 @@ abstract class _oxy {
 	public static function icoApply                 (){ return new Glyph('oxy-icon',0xE50F); }
 	public static function icoBatch                 (){ return new Glyph('oxy-icon',0xE50F); }
 	public static function icoThunder               (){ return new Glyph('oxy-icon',0xE60F); }
-
 	public static function icoPlay                  (){ return new Glyph('oxy-icon',0xE510); }
 	public static function icoPlaySymbol            (){ return new Glyph('oxy-icon',0xE610); }
 	public static function icoPause                 (){ return new Glyph('oxy-icon',0xE511); }
@@ -111,6 +110,10 @@ abstract class _oxy {
 	public static function icoPlayPrevSymbol        (){ return new Glyph('oxy-icon',0xE613); }
 	public static function icoPlayNext              (){ return new Glyph('oxy-icon',0xE514); }
 	public static function icoPlayNextSymbol        (){ return new Glyph('oxy-icon',0xE614); }
+	public static function icoZoomIn                (){ return new Glyph('oxy-icon',0xE515); }
+	public static function icoZoomInSymbol          (){ return new Glyph('oxy-icon',0xE615); }
+	public static function icoZoomOut               (){ return new Glyph('oxy-icon',0xE516); }
+	public static function icoZoomOutSymbol         (){ return new Glyph('oxy-icon',0xE616); }
 
 	// 900 - Interface
 	public static function icoContextMenuAnchor     (){ return new Glyph('oxy-icon',0xE900); }

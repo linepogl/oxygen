@@ -48,7 +48,7 @@ function user_shutdown_function(){
 register_shutdown_function('user_shutdown_function');
 
 
-function dump($var,$detail=array(10,5,5)){
+function dump($var,$detail=array(50,10,10)){
 	$root = realpath('.');
 	list($callee) = debug_backtrace();
   echo '<div style="border:solid 1px #bbbbbb;">';
