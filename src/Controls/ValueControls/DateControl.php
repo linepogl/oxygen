@@ -89,18 +89,18 @@ class DateControl extends ValueControl {
 		echo "var dyp = new Date(cm.getFullYear(),cm.getMonth(),1).add({years:-1});";
 		echo "var dyn = new Date(cm.getFullYear(),cm.getMonth(),1).add({years:1});";
 
-		echo "var months=new Array(".new Js(Lemma::Pick('Jan.'))
-														.",".new Js(Lemma::Pick('Feb.'))
-														.",".new Js(Lemma::Pick('Mar.'))
-														.",".new Js(Lemma::Pick('Apr.'))
-														.",".new Js(Lemma::Pick('May.'))
-														.",".new Js(Lemma::Pick('Jun.'))
-														.",".new Js(Lemma::Pick('Jul.'))
-														.",".new Js(Lemma::Pick('Aug.'))
-														.",".new Js(Lemma::Pick('Sep.'))
-														.",".new Js(Lemma::Pick('Oct.'))
-														.",".new Js(Lemma::Pick('Nov.'))
-														.",".new Js(Lemma::Pick('Dec.'))
+		echo "var months=new Array(".new Js(Lemma::Pick('Jan_'))
+														.",".new Js(Lemma::Pick('Feb_'))
+														.",".new Js(Lemma::Pick('Mar_'))
+														.",".new Js(Lemma::Pick('Apr_'))
+														.",".new Js(Lemma::Pick('May_'))
+														.",".new Js(Lemma::Pick('Jun_'))
+														.",".new Js(Lemma::Pick('Jul_'))
+														.",".new Js(Lemma::Pick('Aug_'))
+														.",".new Js(Lemma::Pick('Sep_'))
+														.",".new Js(Lemma::Pick('Oct_'))
+														.",".new Js(Lemma::Pick('Nov_'))
+														.",".new Js(Lemma::Pick('Dec_'))
 														.");";
 		echo "s+='<tr>';";
 		echo "s+='<td class=\"monthx\"><a href=\"javascript:".$this->name."ShowMonth(new Date('+dyp.getFullYear()+','+dyp.getMonth()+','+dyp.getDate()+'));\">&laquo;</a></td>';";

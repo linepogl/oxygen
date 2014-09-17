@@ -1,0 +1,3062 @@
+﻿
+msgid "en"
+#. en: "English"
+#. fr: "Anglais"
+#. el: "Αγγλικά"
+msgstr ""
+
+msgid "fr"
+#. en: "French"
+#. fr: "Français"
+#. el: "Γαλλικά"
+msgstr ""
+
+msgid "el"
+#. en: "Greek"
+#. fr: "Grec"
+#. el: "Ελληνικά"
+msgstr ""
+
+msgid "_locale"
+#. en: "en_GB"
+#. fr: "fr_FR"
+#. el: "el_GR"
+msgstr ""
+
+msgid "_thousands_separator"
+#. en: ","
+#. fr: " "
+#. el: "."
+msgstr ""
+
+msgid "_decimal_separator"
+#. en: "."
+#. fr: ","
+#. el: ","
+msgstr ""
+
+msgid "Language"
+#. en: "Language"
+#. fr: "Langue"
+#. el: "Γλώσσα"
+msgstr ""
+
+msgid "Name"
+#. en: "Name"
+#. fr: "Nom"
+#. el: "Όνομα"
+msgstr ""
+
+msgid "Surname"
+#. en: "Surname"
+#. fr: "Nom"
+#. el: "Επίθετο"
+msgstr ""
+
+msgid "FirstName"
+#. en: "Name"
+#. fr: "Prénom"
+#. el: "Όνομα"
+msgstr ""
+
+msgid "Company"
+#. en: "Company"
+#. fr: "Société"
+#. el: "Εταιρία"
+msgstr ""
+
+msgid "Position"
+#. en: "Position"
+#. fr: "Position"
+#. el: "Θέση"
+msgstr ""
+
+msgid "Gender"
+#. en: "Gender"
+#. fr: "Sexe"
+#. el: "Φύλο"
+msgstr ""
+
+msgid "Male"
+#. en: "Male"
+#. fr: "Homme"
+#. el: "Άρρεν"
+msgstr ""
+
+msgid "Female"
+#. en: "Female"
+#. fr: "Femme"
+#. el: "Θύλη"
+msgstr ""
+
+msgid "Phone"
+#. en: "Phone"
+#. fr: "Téléphone"
+#. el: "Τηλέφωνο"
+msgstr ""
+
+msgid "Email"
+#. en: "E-mail"
+#. fr: "E-mail"
+#. el: "E-mail"
+msgstr ""
+
+msgid "Address"
+#. en: "Address"
+#. fr: "Adresse"
+#. el: "Διεύθυνση"
+msgstr ""
+
+msgid "City"
+#. en: "City"
+#. fr: "Ville"
+#. el: "Πόλη"
+msgstr ""
+
+msgid "Zip"
+#. en: "Postal code"
+#. fr: "Code postal"
+#. el: "Τ.Κ."
+msgstr ""
+
+msgid "Country"
+#. en: "Country"
+#. fr: "Pays"
+#. el: "Χώρα"
+msgstr ""
+
+msgid "Comments"
+#. en: "Comments"
+#. fr: "Commentaires"
+#. el: "Σχόλια"
+msgstr ""
+
+msgid "Username"
+#. en: "Username"
+#. fr: "Identifiant"
+#. el: "Username"
+msgstr ""
+
+msgid "Password"
+#. en: "Password"
+#. fr: "Mot de passe"
+#. el: "Κωδικός"
+msgstr ""
+
+msgid "OldPassword"
+#. en: "Old password"
+#. fr: "Ancien mot de passe"
+#. el: "Παλιός κωδικός"
+msgstr ""
+
+msgid "NewPassword"
+#. en: "New password"
+#. fr: "Nouveau mot de passe"
+#. el: "Νέος κωδικός"
+msgstr ""
+
+msgid "ConfirmPassword"
+#. en: "Confirm"
+#. fr: "Confirmer"
+#. el: "Επιβεβαίωση"
+msgstr ""
+
+msgid "DateCreated"
+#. en: "Date created"
+#. fr: "Date de création"
+#. el: "Ημ.δημιουργίας"
+msgstr ""
+
+msgid "DateModified"
+#. en: "Date modified"
+#. fr: "Date de modification"
+#. el: "Ημ.μεταβολής"
+msgstr ""
+
+msgid "EmailRcpt"
+#. en: "To"
+#. fr: "A"
+#. el: "Πρoς"
+msgstr ""
+
+msgid "EmailSubject"
+#. en: "Subject"
+#. fr: "Sujet"
+#. el: "Θέμα"
+msgstr ""
+
+msgid "EmailBody"
+#. en: "Body"
+#. fr: "Message"
+#. el: "Κείμενο"
+msgstr ""
+
+msgid "EmailFrom"
+#. en: "From"
+#. fr: "De"
+#. el: "Από"
+msgstr ""
+
+msgid "DateSent"
+#. en: "Date sent"
+#. fr: "Date d'envoi"
+#. el: "Ημ.αποστολής"
+msgstr ""
+
+msgid "LockedAccount"
+#. en: "Locked account"
+#. fr: "Compte bloqué"
+#. el: "Κλειδωμένος λογαριασμός"
+msgstr ""
+
+msgid "File"
+#. en: "File"
+#. fr: "Fichier"
+#. el: "Αρχείο"
+msgstr ""
+
+msgid "Date"
+#. en: "Date"
+#. fr: "Date"
+#. el: "Ημερομηνία"
+msgstr ""
+
+msgid "Time"
+#. en: "Time"
+#. fr: "Heure"
+#. el: "Ώρα"
+msgstr ""
+
+msgid "Today"
+#. en: "Today"
+#. fr: "Aujourd'hui"
+#. el: "Σήμερα"
+msgstr ""
+
+msgid "Tomorrow"
+#. en: "Tomorrow"
+#. fr: "Demain"
+#. el: "Αύριο"
+msgstr ""
+
+msgid "Yesterday"
+#. en: "Yesterday"
+#. fr: "Hier"
+#. el: "Xθες"
+msgstr ""
+
+msgid "Now"
+#. en: "Now"
+#. fr: "Maintenant"
+#. el: "Τώρα"
+msgstr ""
+
+msgid "AM"
+#. en: "a.m."
+#. fr: "avant-midi"
+#. el: "π.μ."
+msgstr ""
+
+msgid "PM"
+#. en: "p.m."
+#. fr: "après-midi"
+#. el: "μ.μ."
+msgstr ""
+
+msgid "XDays"
+#. en: "%s days"
+#. fr: "%s jours"
+#. el: "%s ημέρες"
+msgstr ""
+
+msgid "XDaysAgo"
+#. en: "%s days ago"
+#. fr: "Il y a %s jours"
+#. el: "Πριν από %s ημέρες"
+msgstr ""
+
+msgid "Day"
+#. en: "Day"
+#. fr: "Jour"
+#. el: "Ημέρα"
+msgstr ""
+
+msgid "DayOfWeek"
+#. en: "Day of week"
+#. fr: "Jour de la semaine"
+#. el: "Ημέρα της εβδομάδας"
+msgstr ""
+
+msgid "Night"
+#. en: "Night"
+#. fr: "Nuit"
+#. el: "Νύχτα"
+msgstr ""
+
+msgid "TimeZone"
+#. en: "Time zone"
+#. fr: "Fuseau horaire"
+#. el: "Ζώνη ώρας"
+msgstr ""
+
+msgid "Submit"
+#. en: "Submit"
+#. fr: "Soumettre"
+#. el: "Αποστολή"
+msgstr ""
+
+msgid "Login"
+#. en: "Login"
+#. fr: "Connexion"
+msgstr ""
+
+msgid "Logoff"
+#. en: "Logoff"
+#. fr: "Déconnexion"
+msgstr ""
+
+msgid "Back"
+#. en: "Back"
+#. fr: "Retour"
+#. el: "Επιστροφή"
+msgstr ""
+
+msgid "OK"
+#. en: "OK"
+#. fr: "OK"
+#. el: "OK"
+msgstr ""
+
+msgid "Apply"
+#. en: "Apply"
+#. fr: "Appliquer"
+#. el: "Εφαρμογή"
+msgstr ""
+
+msgid "Cancel"
+#. en: "Cancel"
+#. fr: "Annuler"
+#. el: "Άκυρο"
+msgstr ""
+
+msgid "Send"
+#. en: "Send"
+#. fr: "Envoyer"
+#. el: "Αποστολή"
+msgstr ""
+
+msgid "Save"
+#. en: "Save"
+#. fr: "Sauvegarder"
+#. el: "Αποθήκευση"
+msgstr ""
+
+msgid "Delete"
+#. en: "Delete"
+#. fr: "Supprimer"
+#. el: "Διαγραφή"
+msgstr ""
+
+msgid "Rename"
+#. en: "Rename"
+#. fr: "Renommer"
+#. el: "Μετονομασία"
+msgstr ""
+
+msgid "Print"
+#. en: "Print"
+#. fr: "Imprimer"
+#. el: "Εκτύπωση"
+msgstr ""
+
+msgid "Close"
+#. en: "Close"
+#. fr: "Fermer"
+#. el: "Κλείσιμο"
+msgstr ""
+
+msgid "Ask"
+#. en: "Ask"
+#. fr: "Demander"
+#. el: "Ερώτηση"
+msgstr ""
+
+msgid "Update"
+#. en: "Update"
+#. fr: "Mettre à jour"
+#. el: "Ανανέωση"
+msgstr ""
+
+msgid "Select"
+#. en: "Select"
+#. fr: "Sélectionner"
+#. el: "Επιλογή"
+msgstr ""
+
+msgid "Compare"
+#. en: "Compare"
+#. fr: "Comparer"
+#. el: "Σύγκριση"
+msgstr ""
+
+msgid "Search"
+#. en: "Search"
+#. fr: "Rechercher"
+#. el: "Αναζήτηση"
+msgstr ""
+
+msgid "Yes"
+#. en: "Yes"
+#. fr: "Oui"
+#. el: "Ναι"
+msgstr ""
+
+msgid "No"
+#. en: "No"
+#. fr: "Non"
+#. el: "Όχι"
+msgstr ""
+
+msgid "Next"
+#. en: "Next"
+#. fr: "Suivant"
+#. el: "Επόμενο"
+msgstr ""
+
+msgid "Previous"
+#. en: "Previous"
+#. fr: "Précédent"
+#. el: "Προηγούμενο"
+msgstr ""
+
+msgid "Modify"
+#. en: "Modify"
+#. fr: "Modifier"
+#. el: "Επεξεργασία"
+msgstr ""
+
+msgid "Continue"
+#. en: "Continue"
+#. fr: "Continuer"
+#. el: "Συνέχεια"
+msgstr ""
+
+msgid "Home"
+#. en: "Home"
+#. fr: "Accueil"
+#. el: "Αρχική"
+msgstr ""
+
+msgid "Settings"
+#. en: "Settings"
+#. fr: "Paramètres"
+#. el: "Ρυθμίσεις"
+msgstr ""
+
+msgid "January"
+#. en: "January"
+#. fr: "janvier"
+#. el: "Ιανουάριος"
+msgstr ""
+
+msgid "February"
+#. en: "February"
+#. fr: "février"
+#. el: "Φεβρουάριος"
+msgstr ""
+
+msgid "March"
+#. en: "March"
+#. fr: "mars"
+#. el: "Μάρτιος"
+msgstr ""
+
+msgid "April"
+#. en: "April"
+#. fr: "avril"
+#. el: "Απρίλιος"
+msgstr ""
+
+msgid "May"
+#. en: "May"
+#. fr: "mai"
+#. el: "Μάιος"
+msgstr ""
+
+msgid "June"
+#. en: "June"
+#. fr: "juin"
+#. el: "Ιούνιος"
+msgstr ""
+
+msgid "July"
+#. en: "July"
+#. fr: "juillet"
+#. el: "Ιούλιος"
+msgstr ""
+
+msgid "August"
+#. en: "August"
+#. fr: "août"
+#. el: "Αύγουστος"
+msgstr ""
+
+msgid "September"
+#. en: "September"
+#. fr: "septembre"
+#. el: "Σεπτέμβριος"
+msgstr ""
+
+msgid "October"
+#. en: "October"
+#. fr: "octobre"
+#. el: "Οκτώβριος"
+msgstr ""
+
+msgid "November"
+#. en: "November"
+#. fr: "novembre"
+#. el: "Νοέμβριος"
+msgstr ""
+
+msgid "December"
+#. en: "December"
+#. fr: "décembre"
+#. el: "Δεκέμβριος"
+msgstr ""
+
+msgid "Jan_"
+#. en: "Jan"
+#. fr: "jan."
+#. el: "Ιαν."
+msgstr ""
+
+msgid "Feb_"
+#. en: "Feb"
+#. fr: "fév."
+#. el: "Φεβ."
+msgstr ""
+
+msgid "Mar_"
+#. en: "Mar"
+#. fr: "mars"
+#. el: "Μάρ."
+msgstr ""
+
+msgid "Apr_"
+#. en: "Apr"
+#. fr: "avr."
+#. el: "Απρ."
+msgstr ""
+
+msgid "May_"
+#. en: "May"
+#. fr: "mai"
+#. el: "Μάι."
+msgstr ""
+
+msgid "Jun_"
+#. en: "Jun"
+#. fr: "juin"
+#. el: "Ιούν."
+msgstr ""
+
+msgid "Jul_"
+#. en: "Jul"
+#. fr: "juil"
+#. el: "Ιούλ."
+msgstr ""
+
+msgid "Aug_"
+#. en: "Aug"
+#. fr: "août"
+#. el: "Αύγ."
+msgstr ""
+
+msgid "Sep_"
+#. en: "Sep"
+#. fr: "sep."
+#. el: "Σεπ."
+msgstr ""
+
+msgid "Oct_"
+#. en: "Oct"
+#. fr: "oct."
+#. el: "Οκτ."
+msgstr ""
+
+msgid "Nov_"
+#. en: "Nov"
+#. fr: "nov."
+#. el: "Νοέ."
+msgstr ""
+
+msgid "Dec_"
+#. en: "Dec"
+#. fr: "déc."
+#. el: "Δεκ."
+msgstr ""
+
+msgid "Monday"
+#. en: "Monday"
+#. fr: "lundi"
+#. el: "Δευτέρα"
+msgstr ""
+
+msgid "Tuesday"
+#. en: "Tuesday"
+#. fr: "mardi"
+#. el: "Τρίτη"
+msgstr ""
+
+msgid "Wednesday"
+#. en: "Wednesday"
+#. fr: "mercredi"
+#. el: "Τετάρτη"
+msgstr ""
+
+msgid "Thursday"
+#. en: "Thursday"
+#. fr: "jeudi"
+#. el: "Πέμπτη"
+msgstr ""
+
+msgid "Friday"
+#. en: "Friday"
+#. fr: "vendredi"
+#. el: "Παρασκευή"
+msgstr ""
+
+msgid "Saturday"
+#. en: "Saturday"
+#. fr: "samedi"
+#. el: "Σάββατο"
+msgstr ""
+
+msgid "Sunday"
+#. en: "Sunday"
+#. fr: "dimanche"
+#. el: "Κυριακή"
+msgstr ""
+
+msgid "Mon_"
+#. en: "Mon"
+#. fr: "lun."
+#. el: "Δευ."
+msgstr ""
+
+msgid "Tue_"
+#. en: "Tue"
+#. fr: "mar."
+#. el: "Τρί."
+msgstr ""
+
+msgid "Wed_"
+#. en: "Wed"
+#. fr: "mer."
+#. el: "Τετ."
+msgstr ""
+
+msgid "Thu_"
+#. en: "Thu"
+#. fr: "jeu."
+#. el: "Πέμ."
+msgstr ""
+
+msgid "Fri_"
+#. en: "Fri"
+#. fr: "ven."
+#. el: "Παρ."
+msgstr ""
+
+msgid "Sat_"
+#. en: "Sat"
+#. fr: "sam."
+#. el: "Σάβ."
+msgstr ""
+
+msgid "Sun_"
+#. en: "Sun"
+#. fr: "dim."
+#. el: "Κυρ."
+msgstr ""
+
+msgid "Days"
+#. en: "Days"
+#. fr: "Jours"
+#. el: "Ημέρες"
+msgstr ""
+
+msgid "XAgo"
+#. en: "%s ago"
+#. fr: "Il y a %s"
+#. el: "Πριν από %s"
+msgstr ""
+
+msgid "User"
+#. en: "User"
+#. fr: "Utilisateur"
+#. el: "Χρήστης"
+msgstr ""
+
+msgid "Users"
+#. en: "Users"
+#. fr: "Utilisateurs"
+#. el: "Χρήστες"
+msgstr ""
+
+msgid "ChangePassword"
+#. en: "Change password"
+#. fr: "Mot de passe"
+#. el: "Αλλαγή κωδικού"
+msgstr ""
+
+msgid "ResetPassword"
+#. en: "Reset password"
+#. fr: "Mot de passe"
+#. el: "Αλλαγή κωδικού"
+msgstr ""
+
+msgid "ResetPasswordLong"
+#. en: "Reset password"
+#. fr: "Réinitialiser le mot de passe"
+#. el: "Αλλαγή κωδικού"
+msgstr ""
+
+msgid "Reset"
+#. en: "Reset"
+#. fr: "Réinitialiser"
+#. el: "Αλλαγή"
+msgstr ""
+
+msgid "ChangeProfile"
+#. en: "Change profile"
+#. fr: "Profil"
+#. el: "Αλλαγή προφίλ"
+msgstr ""
+
+msgid "ModifyProfile"
+#. en: "Modify profile"
+#. fr: "Modifier profil"
+#. el: "Αλλαγή προφίλ"
+msgstr ""
+
+msgid "Error"
+#. en: "Error"
+#. fr: "Erreur"
+#. el: "Σφάλμα"
+msgstr ""
+
+msgid "ActionLogin"
+#. en: "Login"
+#. fr: "Connexion"
+msgstr ""
+
+msgid "ActionLogoff"
+#. en: "Logoff"
+#. fr: "Déconnexion"
+msgstr ""
+
+msgid "ActionChangePassword"
+#. en: "Change password"
+#. fr: "Mot de passe"
+#. el: "Αλλαγή κωδικού"
+msgstr ""
+
+msgid "ActionChangeProfile"
+#. en: "Change profile"
+#. fr: "Profil d'un utilisateur"
+#. el: "Προφίλ χρήστη"
+msgstr ""
+
+msgid "ActionCreateUser"
+#. en: "Create user"
+#. fr: "Création d'un utilisateur"
+#. el: "Δημιουργία χρήστη"
+msgstr ""
+
+msgid "ActionForgottenPassword"
+#. en: "Forgotten your password?"
+#. fr: "Mot de passe oublié ?"
+#. el: "Υπενθύμιση κωδικού"
+msgstr ""
+
+msgid "MsgCannotDisplayWebPage"
+#. en: "Cannot display the web page."
+#. fr: "La page ne peut pas être affichée."
+msgstr ""
+
+msgid "MsgUnderConstruction"
+#. en: "Under construction."
+#. fr: "En construction."
+#. el: "Υπό κατασκευή."
+msgstr ""
+
+msgid "MsgNotImplemented"
+#. en: "Not implemented."
+#. fr: "Non implémenté."
+#. el: "Μη υλοποιημένο."
+msgstr ""
+
+msgid "MsgPageNotFound"
+#. en: "Page not found."
+#. fr: "La page n'était pas trouvée."
+#. el: "Η σελίδα δεν βρέθηκε."
+msgstr ""
+
+msgid "MsgObjectNotFound"
+#. en: "Object not found."
+#. fr: "L'objet n'était pas trouvé."
+#. el: "Το αντικείμενο δεν βρέθηκε."
+msgstr ""
+
+msgid "MsgAccessDenied"
+#. en: "Access denied."
+#. fr: "Accès refusé."
+#. el: "Μη επιτρεπτή πρόσβαση."
+msgstr ""
+
+msgid "MsgInvalidUsername"
+#. en: "Unknown user."
+#. fr: "Utilisateur inconnu."
+#. el: "Λάθος όνομα χρήστη."
+msgstr ""
+
+msgid "MsgInvalidPassword"
+#. en: "Invalid password."
+#. fr: "Mot de passe incorrect."
+#. el: "Λάθος κωδικός πρόσβασης."
+msgstr ""
+
+msgid "MsgInvalidUsernameOrPassword"
+#. en: "Invalid username or password."
+#. fr: "Utilisateur inconnu ou mot de passe incorrect."
+#. el: "Λάθος όνομα χρήστη ή λάθος κωδικός πρόσβασης."
+msgstr ""
+
+msgid "MsgMultipleUsersFound"
+#. en: "Multiple users found."
+#. fr: "Plusieurs utilisateurs trouvés."
+#. el: "Βρέθηκαν πολλαπλοί χρήστες."
+msgstr ""
+
+msgid "MsgEmailSentSuccessfully"
+#. en: "The e-mail has been sent successfully."
+#. fr: "Le message e-mail a été bien envoyé."
+#. el: "Η αποστολή του e-mail έγινε επιτυχώς."
+msgstr ""
+
+msgid "MsgInvalidEmail"
+#. en: "Invalid e-mail address."
+#. fr: "L'adresse e-mail n'est pas valide."
+#. el: "Λάθος διεύθυνση e-mail."
+msgstr ""
+
+msgid "MsgInvalidPhone"
+#. en: "Invalid phone number. Please use international format (+123456789)."
+#. fr: "Le numéro n'est pas valide. Veuillez utilisez le format international (+123456789)."
+#. el: "Λάθος αριθμός τηλεφώνου. Χρησιμοποιήστε το διεθνές πρότυπο (+123456789)."
+msgstr ""
+
+msgid "MsgInvalidURL"
+#. en: "Invalid address."
+#. fr: "L'adresse n'est pas valide."
+#. el: "Λάθος διεύθυνση."
+msgstr ""
+
+msgid "MsgInvalidValue"
+#. en: "Invalid value."
+#. fr: "Le valeur n'est pas valide."
+#. el: "Λάθος τιμή."
+msgstr ""
+
+msgid "MsgAccountBanned"
+#. en: "User account locked."
+#. fr: "Compte utilisateur bloqué."
+#. el: "Kλειδωμένος λογαριασμός χρήστη."
+msgstr ""
+
+msgid "MsgPasswordsDoNotMatch"
+#. en: "The passwords do not match."
+#. fr: "Les deux mots de passe ne sont pas identiques."
+#. el: "Οι κωδικοί δεν είναι ίδιοι."
+msgstr ""
+
+msgid "MsgMandatoryFields"
+#. en: "The fields with * are mandatory."
+#. fr: "Les champs avec * sont obligatoires."
+#. el: "Τα πεδία με * είναι υποχρεωτικά."
+msgstr ""
+
+msgid "MsgMandatoryField"
+#. en: "This field is mandatory."
+#. fr: "Ce champ est obligatoire."
+#. el: "Το πεδίο αυτό είναι υποχρεωτικό."
+msgstr ""
+
+msgid "MsgFieldMandatoryInAllLanguages"
+#. en: "This field is mandatory in all languages."
+#. fr: "Ce champ est obligatoire en toutes les langues."
+#. el: "Το πεδίο αυτό είναι υποχρεωτικό σε όλες τις γλώσσες."
+msgstr ""
+
+msgid "MsgPasswordChanged"
+#. en: "The password has been changed."
+#. fr: "Le mot de passe a été changé."
+#. el: "Ο κωδικός πρόσβασης άλλαξε."
+msgstr ""
+
+msgid "MsgProfileChanged"
+#. en: "The user profile has been changed."
+#. fr: "Le profil de l'utilisateur a été changé."
+#. el: ""
+#. "Το προφίλ χρήστη\n"
+#. "			άλλαξε.\n"
+msgstr ""
+
+msgid "MsgUsernameExists"
+#. en: "This username already exists."
+#. fr: "Cet utilisateur existe déjà."
+#. el: "Αυτό το όνομα χρήστη υπάρχει ήδη."
+msgstr ""
+
+msgid "MsgCannotSendEmail"
+#. en: "Error while sending e-mail."
+#. fr: "Erreur lors de l'envoi d'e-mail."
+#. el: "Σφάλμα κατά την αποστολή e-mail."
+msgstr ""
+
+msgid "MsgCannotConnectToDatabase"
+#. en: "Error while connecting to the database."
+#. fr: "Erreur lors de la connexion à la base de données."
+#. el: "Σφάλμα κατά την σύνδεση με τη βάση δεδομένων."
+msgstr ""
+
+msgid "MsgCannotCreateDatabase"
+#. en: "Error while creating database schema."
+#. fr: "Erreur lors de la création de la base de données."
+#. el: "Σφάλμα κατά την δημιουργία νέας βάσης δεδομένων."
+msgstr ""
+
+msgid "MsgCannotDeleteCurrentUser"
+#. en: "Cannot delete current user."
+#. fr: "Il est impossible de supprimer l'utilisateur courant."
+#. el: "Δεν είναι δυνατό να διαγραφεί ο τρέχον χρήστης."
+msgstr ""
+
+msgid "MsgObjectXNotFound"
+#. en: "This object was not found: %s."
+#. fr: "Objet non trouvé : %s."
+#. el: "Το αντικείμενο αυτό δεν βρέθηκε: [%s]."
+msgstr ""
+
+msgid "MsgObjectXAlreadyExists"
+#. en: "This object already exists: %s."
+#. fr: "Cet objet existe déjà : %s."
+#. el: "Το αντικείμενο αυτό υπάρχει ήδη: %s."
+msgstr ""
+
+msgid "MsgCannotDeleteSystemObject"
+#. en: "This object is used by the system."
+#. fr: "Cet objet est utilisé par le système."
+#. el: "Το αντικείμενο είναι απαραίτητο για την ομαλή λειτουργεία του συστήματος."
+msgstr ""
+
+msgid "MsgXItemNotFound"
+#. en: "This object was not found [%s %s]."
+#. fr: "Objet non trouvé [%s %s]."
+#. el: "Το αντικείμενο αυτό δεν βρέθηκε: [%s %s]."
+msgstr ""
+
+msgid "MsgXItemAlreadyExists"
+#. fr: "Cet objet existe déjà: %s."
+#. en: "This object already exists: %s."
+#. el: "Το αντικείμενο αυτό υπάρχει ήδη: %s."
+msgstr ""
+
+msgid "MsgCancelling"
+#. en: "Cancelling..."
+#. fr: "Annulation..."
+#. el: "Ακύρωση..."
+msgstr ""
+
+msgid "MsgProgressCancelled"
+#. en: "The process has been cancelled."
+#. fr: "Le processus a été annulé."
+#. el: "Η διαδικασία ακυρώθηκε."
+msgstr ""
+
+msgid "MsgProgressCompleted"
+#. en: "The process is completed."
+#. fr: "Le processus est terminé."
+#. el: "Η διαδικασία ολοκληρώθηκε."
+msgstr ""
+
+msgid "MsgNoObjectFound"
+#. en: "No object found."
+#. fr: "Pas d'objet trouvé."
+#. el: "Δε βρέθηκε κανένα αντικείμενο."
+msgstr ""
+
+msgid "MsgInvalidAction"
+#. en: "Invalid action."
+#. fr: "Action invalide."
+#. el: "Εσφαλμένη εντολή."
+msgstr ""
+
+msgid "MsgCannotConnectToLdapServer"
+#. en: "Cannot connect to the database."
+#. fr: "Erreur à la connexion à la base de données."
+#. el: "Σφάλμα σύνδεσης με την βάση δεδομένων."
+msgstr ""
+
+msgid "MsgDevelopmentEnvironment"
+#. en: "You are viewing this message because the application runs in DEVELOPMENT mode."
+#. fr: "Ce message s'affiche parce que l'application est en mode DEVELOPPEMENT."
+#. el: "Το μήνυμα αυτό εμφανίζεται γιατί η εφαρμογή τρέχει σε περιβάλλον ανάπτυξης."
+msgstr ""
+
+msgid "MsgAnErrorOccurred"
+#. en: "An unexpected server error has occurred."
+#. fr: "Il y avait une erreur inattendue."
+#. el: "Προέκυψε ένα σφάλμα στον διακομιστή."
+msgstr ""
+
+msgid "MsgAnErrorOccurredAndTeamNotified"
+#. en: "An unexpected server error has occurred. The support team has been notified."
+#. fr: "Il y avait une erreur inattendue. L'équipe de support vient d'en être notifié."
+#. el: "Προέκυψε ένα σφάλμα στον διακομιστή. Η ομάδα υποστήριξης ειδοποιήθηκε."
+msgstr ""
+
+msgid "MsgErrorWhileUploadingFile"
+#. en: "An error occurred while uploading file."
+#. fr: "Erreur pendant l'envoi du fichier."
+#. el: "Σφάλμα κατά την αποστολή του αρχείου."
+msgstr ""
+
+msgid "MsgErrorWhileDownloadingFile"
+#. en: "An error occurred while downloading file."
+#. fr: "Erreur pendant le téléchargement du fichier."
+#. el: "Σφάλμα κατά την λήψη του αρχείου."
+msgstr ""
+
+msgid "Unit_byte"
+#. en: "B"
+#. fr: "o"
+#. el: "B"
+msgstr ""
+
+msgid "Unit_sec"
+#. en: "sec"
+#. fr: "sec"
+#. el: "sec"
+msgstr ""
+
+msgid "Unit_day"
+#. en: "d"
+#. fr: "j"
+#. el: "ημ"
+msgstr ""
+
+msgid "Unit_hour"
+#. en: "h"
+#. fr: "h"
+#. el: "ώρ"
+msgstr ""
+
+msgid "Lang_en"
+#. en: "English"
+#. fr: "Anglais"
+#. el: "Αγγλικά"
+msgstr ""
+
+msgid "Lang_fr"
+#. en: "French"
+#. fr: "Français"
+#. el: "Γαλλικά"
+msgstr ""
+
+msgid "Lang_el"
+#. en: "Greek"
+#. fr: "Grec"
+#. el: "Ελληνικά"
+msgstr ""
+
+msgid "Lang_ar"
+#. en: "Arabic"
+#. fr: "Arabic"
+msgstr ""
+
+msgid "Lang_de"
+#. en: "German"
+#. fr: "Allemand"
+msgstr ""
+
+msgid "Lang_es"
+#. en: "Spanish"
+#. fr: "Espagnol"
+msgstr ""
+
+msgid "Lang_it"
+#. en: "Italian"
+#. fr: "Italien"
+msgstr ""
+
+msgid "Lang_fi"
+#. en: "Finnish"
+#. fr: "Finnois"
+msgstr ""
+
+msgid "Lang_ja"
+#. en: "Japanese"
+#. fr: "Japonais"
+msgstr ""
+
+msgid "Lang_ko"
+#. en: "Korean"
+#. fr: "Coréen"
+msgstr ""
+
+msgid "Lang_nl"
+#. en: "Dutch"
+#. fr: "Néerlandais"
+msgstr ""
+
+msgid "Lang_no"
+#. en: "Norwegian"
+#. fr: "Norvégien"
+msgstr ""
+
+msgid "Lang_pl"
+#. en: "Polish"
+#. fr: "Polonais"
+msgstr ""
+
+msgid "Lang_pt"
+#. en: "Portuguese"
+#. fr: "Portugais"
+msgstr ""
+
+msgid "Lang_ru"
+#. en: "Russian"
+#. fr: "Russe"
+msgstr ""
+
+msgid "Lang_sv"
+#. en: "Swedish"
+#. fr: "Suédois"
+msgstr ""
+
+msgid "Lang_zh"
+#. en: "Chinese"
+#. fr: "Chinois"
+msgstr ""
+
+msgid "Lang_ab"
+#. en: "Abkhaz"
+msgstr ""
+
+msgid "Lang_aa"
+#. en: "Afar"
+msgstr ""
+
+msgid "Lang_af"
+#. en: "Afrikaans"
+msgstr ""
+
+msgid "Lang_ak"
+#. en: "Akan"
+msgstr ""
+
+msgid "Lang_sq"
+#. en: "Albanian"
+msgstr ""
+
+msgid "Lang_am"
+#. en: "Amharic"
+msgstr ""
+
+msgid "Lang_an"
+#. en: "Aragonese"
+msgstr ""
+
+msgid "Lang_hy"
+#. en: "Armenian"
+msgstr ""
+
+msgid "Lang_as"
+#. en: "Assamese"
+msgstr ""
+
+msgid "Lang_av"
+#. en: "Avaric"
+msgstr ""
+
+msgid "Lang_ae"
+#. en: "Avestan"
+msgstr ""
+
+msgid "Lang_ay"
+#. en: "Aymara"
+msgstr ""
+
+msgid "Lang_az"
+#. en: "Azerbaijani"
+msgstr ""
+
+msgid "Lang_bm"
+#. en: "Bambara"
+msgstr ""
+
+msgid "Lang_ba"
+#. en: "Bashkir"
+msgstr ""
+
+msgid "Lang_eu"
+#. en: "Basque"
+msgstr ""
+
+msgid "Lang_be"
+#. en: "Belarusian"
+msgstr ""
+
+msgid "Lang_bn"
+#. en: "Bengali"
+msgstr ""
+
+msgid "Lang_bh"
+#. en: "Bihari"
+msgstr ""
+
+msgid "Lang_bi"
+#. en: "Bislama"
+msgstr ""
+
+msgid "Lang_bs"
+#. en: "Bosnian"
+msgstr ""
+
+msgid "Lang_br"
+#. en: "Breton"
+msgstr ""
+
+msgid "Lang_bg"
+#. en: "Bulgarian"
+msgstr ""
+
+msgid "Lang_my"
+#. en: "Burmese"
+msgstr ""
+
+msgid "Lang_ca"
+#. en: "Catalan"
+msgstr ""
+
+msgid "Lang_ch"
+#. en: "Chamorro"
+msgstr ""
+
+msgid "Lang_ce"
+#. en: "Chechen"
+msgstr ""
+
+msgid "Lang_ny"
+#. en: "Chichewa"
+msgstr ""
+
+msgid "Lang_cv"
+#. en: "Chuvash"
+msgstr ""
+
+msgid "Lang_kw"
+#. en: "Cornish"
+msgstr ""
+
+msgid "Lang_co"
+#. en: "Corsican"
+msgstr ""
+
+msgid "Lang_cr"
+#. en: "Cree"
+msgstr ""
+
+msgid "Lang_hr"
+#. en: "Croatian"
+msgstr ""
+
+msgid "Lang_cs"
+#. en: "Czech"
+msgstr ""
+
+msgid "Lang_da"
+#. en: "Danish"
+msgstr ""
+
+msgid "Lang_dv"
+#. en: "Divehi"
+msgstr ""
+
+msgid "Lang_dz"
+#. en: "Dzongkha"
+msgstr ""
+
+msgid "Lang_eo"
+#. en: "Esperanto"
+msgstr ""
+
+msgid "Lang_et"
+#. en: "Estonian"
+msgstr ""
+
+msgid "Lang_ee"
+#. en: "Ewe"
+msgstr ""
+
+msgid "Lang_fo"
+#. en: "Faroese"
+msgstr ""
+
+msgid "Lang_fj"
+#. en: "Fijian"
+msgstr ""
+
+msgid "Lang_ff"
+#. en: "Fula"
+msgstr ""
+
+msgid "Lang_gl"
+#. en: "Galician"
+msgstr ""
+
+msgid "Lang_ka"
+#. en: "Georgian"
+msgstr ""
+
+msgid "Lang_gn"
+#. en: "Guaraní"
+msgstr ""
+
+msgid "Lang_gu"
+#. en: "Gujarati"
+msgstr ""
+
+msgid "Lang_ht"
+#. en: "Haitian"
+msgstr ""
+
+msgid "Lang_ha"
+#. en: "Hausa"
+msgstr ""
+
+msgid "Lang_he"
+#. en: "Hebrew"
+msgstr ""
+
+msgid "Lang_hz"
+#. en: "Herero"
+msgstr ""
+
+msgid "Lang_hi"
+#. en: "Hindi"
+msgstr ""
+
+msgid "Lang_ho"
+#. en: "Hiri Motu"
+msgstr ""
+
+msgid "Lang_hu"
+#. en: "Hungarian"
+msgstr ""
+
+msgid "Lang_ia"
+#. en: "Interlingua"
+msgstr ""
+
+msgid "Lang_id"
+#. en: "Indonesian"
+msgstr ""
+
+msgid "Lang_ie"
+#. en: "Interlingue"
+msgstr ""
+
+msgid "Lang_ga"
+#. en: "Irish"
+msgstr ""
+
+msgid "Lang_ig"
+#. en: "Igbo"
+msgstr ""
+
+msgid "Lang_ik"
+#. en: "Inupiaq"
+msgstr ""
+
+msgid "Lang_io"
+#. en: "Ido"
+msgstr ""
+
+msgid "Lang_is"
+#. en: "Icelandic"
+msgstr ""
+
+msgid "Lang_iu"
+#. en: "Inuktitut"
+msgstr ""
+
+msgid "Lang_jv"
+#. en: "Javanese"
+msgstr ""
+
+msgid "Lang_kl"
+#. en: "Kalaallisut"
+msgstr ""
+
+msgid "Lang_kn"
+#. en: "Kannada"
+msgstr ""
+
+msgid "Lang_kr"
+#. en: "Kanuri"
+msgstr ""
+
+msgid "Lang_ks"
+#. en: "Kashmiri"
+msgstr ""
+
+msgid "Lang_kk"
+#. en: "Kazakh"
+msgstr ""
+
+msgid "Lang_km"
+#. en: "Khmer"
+msgstr ""
+
+msgid "Lang_ki"
+#. en: "Kikuyu"
+msgstr ""
+
+msgid "Lang_rw"
+#. en: "Kinyarwanda"
+msgstr ""
+
+msgid "Lang_ky"
+#. en: "Kyrgyz"
+msgstr ""
+
+msgid "Lang_kv"
+#. en: "Komi"
+msgstr ""
+
+msgid "Lang_kg"
+#. en: "Kongo"
+msgstr ""
+
+msgid "Lang_ku"
+#. en: "Kurdish"
+msgstr ""
+
+msgid "Lang_kj"
+#. en: "Kwanyama"
+msgstr ""
+
+msgid "Lang_la"
+#. en: "Latin"
+msgstr ""
+
+msgid "Lang_lb"
+#. en: "Luxembourgish"
+msgstr ""
+
+msgid "Lang_lg"
+#. en: "Ganda"
+msgstr ""
+
+msgid "Lang_li"
+#. en: "Limburgish"
+msgstr ""
+
+msgid "Lang_ln"
+#. en: "Lingala"
+msgstr ""
+
+msgid "Lang_lo"
+#. en: "Lao"
+msgstr ""
+
+msgid "Lang_lt"
+#. en: "Lithuanian"
+msgstr ""
+
+msgid "Lang_lu"
+#. en: "Luba-Katanga"
+msgstr ""
+
+msgid "Lang_lv"
+#. en: "Latvian"
+msgstr ""
+
+msgid "Lang_gv"
+#. en: "Manx"
+msgstr ""
+
+msgid "Lang_mk"
+#. en: "Macedonian"
+msgstr ""
+
+msgid "Lang_mg"
+#. en: "Malagasy"
+msgstr ""
+
+msgid "Lang_ms"
+#. en: "Malay"
+msgstr ""
+
+msgid "Lang_ml"
+#. en: "Malayalam"
+msgstr ""
+
+msgid "Lang_mt"
+#. en: "Maltese"
+msgstr ""
+
+msgid "Lang_mi"
+#. en: "Māori"
+msgstr ""
+
+msgid "Lang_mr"
+#. en: "Marathi"
+msgstr ""
+
+msgid "Lang_mh"
+#. en: "Marshallese"
+msgstr ""
+
+msgid "Lang_mn"
+#. en: "Mongolian"
+msgstr ""
+
+msgid "Lang_na"
+#. en: "Nauru"
+msgstr ""
+
+msgid "Lang_nv"
+#. en: "Navajo"
+msgstr ""
+
+msgid "Lang_nb"
+#. en: "Norwegian Bokmål"
+msgstr ""
+
+msgid "Lang_nd"
+#. en: "North Ndebele"
+msgstr ""
+
+msgid "Lang_ne"
+#. en: "Nepali"
+msgstr ""
+
+msgid "Lang_ng"
+#. en: "Ndonga"
+msgstr ""
+
+msgid "Lang_nn"
+#. en: "Norwegian Nynorsk"
+msgstr ""
+
+msgid "Lang_ii"
+#. en: "Nuosu"
+msgstr ""
+
+msgid "Lang_nr"
+#. en: "South Ndebele"
+msgstr ""
+
+msgid "Lang_oc"
+#. en: "Occitan"
+msgstr ""
+
+msgid "Lang_oj"
+#. en: "Ojibwe"
+msgstr ""
+
+msgid "Lang_cu"
+#. en: "Old Slavonic"
+msgstr ""
+
+msgid "Lang_om"
+#. en: "Oromo"
+msgstr ""
+
+msgid "Lang_or"
+#. en: "Oriya"
+msgstr ""
+
+msgid "Lang_os"
+#. en: "Ossetian"
+msgstr ""
+
+msgid "Lang_pa"
+#. en: "Panjabi"
+msgstr ""
+
+msgid "Lang_pi"
+#. en: "Pāli"
+msgstr ""
+
+msgid "Lang_fa"
+#. en: "Farsi"
+msgstr ""
+
+msgid "Lang_ps"
+#. en: "Pashto"
+msgstr ""
+
+msgid "Lang_qu"
+#. en: "Quechua"
+msgstr ""
+
+msgid "Lang_rm"
+#. en: "Romansh"
+msgstr ""
+
+msgid "Lang_rn"
+#. en: "Kirundi"
+msgstr ""
+
+msgid "Lang_ro"
+#. en: "Romanian"
+msgstr ""
+
+msgid "Lang_sa"
+#. en: "Sanskrit"
+msgstr ""
+
+msgid "Lang_sc"
+#. en: "Sardinian"
+msgstr ""
+
+msgid "Lang_sd"
+#. en: "Sindhi"
+msgstr ""
+
+msgid "Lang_se"
+#. en: "Northern Sami"
+msgstr ""
+
+msgid "Lang_sm"
+#. en: "Samoan"
+msgstr ""
+
+msgid "Lang_sg"
+#. en: "Sango"
+msgstr ""
+
+msgid "Lang_sr"
+#. en: "Serbian"
+msgstr ""
+
+msgid "Lang_gd"
+#. en: "Scottish Gaelic"
+msgstr ""
+
+msgid "Lang_sn"
+#. en: "Shona"
+msgstr ""
+
+msgid "Lang_si"
+#. en: "Sinhala"
+msgstr ""
+
+msgid "Lang_sk"
+#. en: "Slovak"
+msgstr ""
+
+msgid "Lang_sl"
+#. en: "Slovene"
+msgstr ""
+
+msgid "Lang_so"
+#. en: "Somali"
+msgstr ""
+
+msgid "Lang_st"
+#. en: "Southern Sotho"
+msgstr ""
+
+msgid "Lang_su"
+#. en: "Sundanese"
+msgstr ""
+
+msgid "Lang_sw"
+#. en: "Swahili"
+msgstr ""
+
+msgid "Lang_ss"
+#. en: "Swati"
+msgstr ""
+
+msgid "Lang_ta"
+#. en: "Tamil"
+msgstr ""
+
+msgid "Lang_te"
+#. en: "Telugu"
+msgstr ""
+
+msgid "Lang_tg"
+#. en: "Tajik"
+msgstr ""
+
+msgid "Lang_th"
+#. en: "Thai"
+msgstr ""
+
+msgid "Lang_ti"
+#. en: "Tigrinya"
+msgstr ""
+
+msgid "Lang_bo"
+#. en: "Tibetan"
+msgstr ""
+
+msgid "Lang_tk"
+#. en: "Turkmen"
+msgstr ""
+
+msgid "Lang_tl"
+#. en: "Tagalog"
+msgstr ""
+
+msgid "Lang_tn"
+#. en: "Tswana"
+msgstr ""
+
+msgid "Lang_to"
+#. en: "Tonga"
+msgstr ""
+
+msgid "Lang_tr"
+#. en: "Turkish"
+msgstr ""
+
+msgid "Lang_ts"
+#. en: "Tsonga"
+msgstr ""
+
+msgid "Lang_tt"
+#. en: "Tatar"
+msgstr ""
+
+msgid "Lang_tw"
+#. en: "Twi"
+msgstr ""
+
+msgid "Lang_ty"
+#. en: "Tahitian"
+msgstr ""
+
+msgid "Lang_ug"
+#. en: "Uyghur"
+msgstr ""
+
+msgid "Lang_uk"
+#. en: "Ukrainian"
+msgstr ""
+
+msgid "Lang_ur"
+#. en: "Urdu"
+msgstr ""
+
+msgid "Lang_uz"
+#. en: "Uzbek"
+msgstr ""
+
+msgid "Lang_ve"
+#. en: "Venda"
+msgstr ""
+
+msgid "Lang_vi"
+#. en: "Vietnamese"
+msgstr ""
+
+msgid "Lang_vo"
+#. en: "Volapük"
+msgstr ""
+
+msgid "Lang_wa"
+#. en: "Walloon"
+msgstr ""
+
+msgid "Lang_cy"
+#. en: "Welsh"
+msgstr ""
+
+msgid "Lang_wo"
+#. en: "Wolof"
+msgstr ""
+
+msgid "Lang_fy"
+#. en: "Western Frisian"
+msgstr ""
+
+msgid "Lang_xh"
+#. en: "Xhosa"
+msgstr ""
+
+msgid "Lang_yi"
+#. en: "Yiddish"
+msgstr ""
+
+msgid "Lang_yo"
+#. en: "Yoruba"
+msgstr ""
+
+msgid "Lang_za"
+#. en: "Zhuang"
+msgstr ""
+
+msgid "Lang_zu"
+#. en: "Zulu"
+msgstr ""
+
+msgid "Country_AD"
+#. en: "ANDORRA"
+#. fr: "ANDORRE"
+msgstr ""
+
+msgid "Country_AE"
+#. en: "UNITED ARAB EMIRATES"
+#. fr: "ÉMIRATS ARABES UNIS"
+msgstr ""
+
+msgid "Country_AF"
+#. en: "AFGHANISTAN"
+#. fr: "AFGHANISTAN"
+msgstr ""
+
+msgid "Country_AG"
+#. en: "ANTIGUA AND BARBUDA"
+#. fr: "ANTIGUA-ET-BARBUDA"
+msgstr ""
+
+msgid "Country_AI"
+#. en: "ANGUILLA"
+#. fr: "ANGUILLA"
+msgstr ""
+
+msgid "Country_AL"
+#. en: "ALBANIA"
+#. fr: "ALBANIE"
+msgstr ""
+
+msgid "Country_AM"
+#. en: "ARMENIA"
+#. fr: "ARMÉNIE"
+msgstr ""
+
+msgid "Country_AO"
+#. en: "ANGOLA"
+#. fr: "ANGOLA"
+msgstr ""
+
+msgid "Country_AQ"
+#. en: "ANTARCTICA"
+#. fr: "ANTARCTIQUE"
+msgstr ""
+
+msgid "Country_AR"
+#. en: "ARGENTINA"
+#. fr: "ARGENTINE"
+msgstr ""
+
+msgid "Country_AS"
+#. en: "AMERICAN SAMOA"
+#. fr: "SAMOA AMÉRICAINES"
+msgstr ""
+
+msgid "Country_AT"
+#. en: "AUSTRIA"
+#. fr: "AUTRICHE"
+msgstr ""
+
+msgid "Country_AU"
+#. en: "AUSTRALIA"
+#. fr: "AUSTRALIE"
+msgstr ""
+
+msgid "Country_AW"
+#. en: "ARUBA"
+#. fr: "ARUBA"
+msgstr ""
+
+msgid "Country_AX"
+#. en: "ÅLAND ISLANDS"
+#. fr: "ÅLAND, ÎLES"
+msgstr ""
+
+msgid "Country_AZ"
+#. en: "AZERBAIJAN"
+#. fr: "AZERBAÏDJAN"
+msgstr ""
+
+msgid "Country_BA"
+#. en: "BOSNIA AND HERZEGOVINA"
+#. fr: "BOSNIE-HERZÉGOVINE"
+msgstr ""
+
+msgid "Country_BB"
+#. en: "BARBADOS"
+#. fr: "BARBADE"
+msgstr ""
+
+msgid "Country_BD"
+#. en: "BANGLADESH"
+#. fr: "BANGLADESH"
+msgstr ""
+
+msgid "Country_BE"
+#. en: "BELGIUM"
+#. fr: "BELGIQUE"
+msgstr ""
+
+msgid "Country_BF"
+#. en: "BURKINA FASO"
+#. fr: "BURKINA FASO"
+msgstr ""
+
+msgid "Country_BG"
+#. en: "BULGARIA"
+#. fr: "BULGARIE"
+msgstr ""
+
+msgid "Country_BH"
+#. en: "BAHRAIN"
+#. fr: "BAHREÏN"
+msgstr ""
+
+msgid "Country_BI"
+#. en: "BURUNDI"
+#. fr: "BURUNDI"
+msgstr ""
+
+msgid "Country_BJ"
+#. en: "BENIN"
+#. fr: "BÉNIN"
+msgstr ""
+
+msgid "Country_BL"
+#. en: "SAINT BARTHÉLEMY"
+#. fr: "SAINT-BARTHÉLEMY"
+msgstr ""
+
+msgid "Country_BM"
+#. en: "BERMUDA"
+#. fr: "BERMUDES"
+msgstr ""
+
+msgid "Country_BN"
+#. en: "BRUNEI DARUSSALAM"
+#. fr: "BRUNÉI DARUSSALAM"
+msgstr ""
+
+msgid "Country_BO"
+#. en: "BOLIVIA, PLURINATIONAL STATE OF"
+#. fr: "BOLIVIE, l'ÉTAT PLURINATIONAL DE"
+msgstr ""
+
+msgid "Country_BQ"
+#. en: "BONAIRE, SAINT EUSTATIUS AND SABA"
+#. fr: "BONAIRE, SAINT-EUSTACHE ET SABA"
+msgstr ""
+
+msgid "Country_BR"
+#. en: "BRAZIL"
+#. fr: "BRÉSIL"
+msgstr ""
+
+msgid "Country_BS"
+#. en: "BAHAMAS"
+#. fr: "BAHAMAS"
+msgstr ""
+
+msgid "Country_BT"
+#. en: "BHUTAN"
+#. fr: "BHOUTAN"
+msgstr ""
+
+msgid "Country_BV"
+#. en: "BOUVET ISLAND"
+#. fr: "BOUVET, ÎLE"
+msgstr ""
+
+msgid "Country_BW"
+#. en: "BOTSWANA"
+#. fr: "BOTSWANA"
+msgstr ""
+
+msgid "Country_BY"
+#. en: "BELARUS"
+#. fr: "BÉLARUS"
+msgstr ""
+
+msgid "Country_BZ"
+#. en: "BELIZE"
+#. fr: "BELIZE"
+msgstr ""
+
+msgid "Country_CA"
+#. en: "CANADA"
+#. fr: "CANADA"
+msgstr ""
+
+msgid "Country_CC"
+#. en: "COCOS (KEELING) ISLANDS"
+#. fr: "COCOS (KEELING), ÎLES"
+msgstr ""
+
+msgid "Country_CD"
+#. en: "CONGO, THE DEMOCRATIC REPUBLIC OF THE"
+#. fr: "CONGO, LA RÉPUBLIQUE DÉMOCRATIQUE DU"
+msgstr ""
+
+msgid "Country_CF"
+#. en: "CENTRAL AFRICAN REPUBLIC"
+#. fr: "CENTRAFRICAINE, RÉPUBLIQUE"
+msgstr ""
+
+msgid "Country_CG"
+#. en: "CONGO"
+#. fr: "CONGO"
+msgstr ""
+
+msgid "Country_CH"
+#. en: "SWITZERLAND"
+#. fr: "SUISSE"
+msgstr ""
+
+msgid "Country_CI"
+#. en: "CÔTE D'IVOIRE"
+#. fr: "CÔTE D'IVOIRE"
+msgstr ""
+
+msgid "Country_CK"
+#. en: "COOK ISLANDS"
+#. fr: "COOK, ÎLES"
+msgstr ""
+
+msgid "Country_CL"
+#. en: "CHILE"
+#. fr: "CHILI"
+msgstr ""
+
+msgid "Country_CM"
+#. en: "CAMEROON"
+#. fr: "CAMEROUN"
+msgstr ""
+
+msgid "Country_CN"
+#. en: "CHINA"
+#. fr: "CHINE"
+msgstr ""
+
+msgid "Country_CO"
+#. en: "COLOMBIA"
+#. fr: "COLOMBIE"
+msgstr ""
+
+msgid "Country_CR"
+#. en: "COSTA RICA"
+#. fr: "COSTA RICA"
+msgstr ""
+
+msgid "Country_CU"
+#. en: "CUBA"
+#. fr: "CUBA"
+msgstr ""
+
+msgid "Country_CV"
+#. en: "CAPE VERDE"
+#. fr: "CAP-VERT"
+msgstr ""
+
+msgid "Country_CW"
+#. en: "CURAÇAO"
+#. fr: "CURAÇAO"
+msgstr ""
+
+msgid "Country_CX"
+#. en: "CHRISTMAS ISLAND"
+#. fr: "CHRISTMAS, ÎLE"
+msgstr ""
+
+msgid "Country_CY"
+#. en: "CYPRUS"
+#. fr: "CHYPRE"
+msgstr ""
+
+msgid "Country_CZ"
+#. en: "CZECH REPUBLIC"
+#. fr: "TCHÈQUE, RÉPUBLIQUE"
+msgstr ""
+
+msgid "Country_DE"
+#. en: "GERMANY"
+#. fr: "ALLEMAGNE"
+msgstr ""
+
+msgid "Country_DJ"
+#. en: "DJIBOUTI"
+#. fr: "DJIBOUTI"
+msgstr ""
+
+msgid "Country_DK"
+#. en: "DENMARK"
+#. fr: "DANEMARK"
+msgstr ""
+
+msgid "Country_DM"
+#. en: "DOMINICA"
+#. fr: "DOMINIQUE"
+msgstr ""
+
+msgid "Country_DO"
+#. en: "DOMINICAN REPUBLIC"
+#. fr: "DOMINICAINE, RÉPUBLIQUE"
+msgstr ""
+
+msgid "Country_DZ"
+#. en: "ALGERIA"
+#. fr: "ALGÉRIE"
+msgstr ""
+
+msgid "Country_EC"
+#. en: "ECUADOR"
+#. fr: "ÉQUATEUR"
+msgstr ""
+
+msgid "Country_EE"
+#. en: "ESTONIA"
+#. fr: "ESTONIE"
+msgstr ""
+
+msgid "Country_EG"
+#. en: "EGYPT"
+#. fr: "ÉGYPTE"
+msgstr ""
+
+msgid "Country_EH"
+#. en: "WESTERN SAHARA"
+#. fr: "SAHARA OCCIDENTAL"
+msgstr ""
+
+msgid "Country_ER"
+#. en: "ERITREA"
+#. fr: "ÉRYTHRÉE"
+msgstr ""
+
+msgid "Country_ES"
+#. en: "SPAIN"
+#. fr: "ESPAGNE"
+msgstr ""
+
+msgid "Country_ET"
+#. en: "ETHIOPIA"
+#. fr: "ÉTHIOPIE"
+msgstr ""
+
+msgid "Country_FI"
+#. en: "FINLAND"
+#. fr: "FINLANDE"
+msgstr ""
+
+msgid "Country_FJ"
+#. en: "FIJI"
+#. fr: "FIDJI"
+msgstr ""
+
+msgid "Country_FK"
+#. en: "FALKLAND ISLANDS (MALVINAS)"
+#. fr: "FALKLAND, ÎLES (MALVINAS)"
+msgstr ""
+
+msgid "Country_FM"
+#. en: "MICRONESIA, FEDERATED STATES OF"
+#. fr: "MICRONÉSIE, ÉTATS FÉDÉRÉS DE"
+msgstr ""
+
+msgid "Country_FO"
+#. en: "FAROE ISLANDS"
+#. fr: "FÉROÉ, ÎLES"
+msgstr ""
+
+msgid "Country_FR"
+#. en: "FRANCE"
+#. fr: "FRANCE"
+msgstr ""
+
+msgid "Country_GA"
+#. en: "GABON"
+#. fr: "GABON"
+msgstr ""
+
+msgid "Country_GB"
+#. en: "UNITED KINGDOM"
+#. fr: "ROYAUME-UNI"
+msgstr ""
+
+msgid "Country_GD"
+#. en: "GRENADA"
+#. fr: "GRENADE"
+msgstr ""
+
+msgid "Country_GE"
+#. en: "GEORGIA"
+#. fr: "GÉORGIE"
+msgstr ""
+
+msgid "Country_GF"
+#. en: "FRENCH GUIANA"
+#. fr: "GUYANE FRANÇAISE"
+msgstr ""
+
+msgid "Country_GG"
+#. en: "GUERNSEY"
+#. fr: "GUERNESEY"
+msgstr ""
+
+msgid "Country_GH"
+#. en: "GHANA"
+#. fr: "GHANA"
+msgstr ""
+
+msgid "Country_GI"
+#. en: "GIBRALTAR"
+#. fr: "GIBRALTAR"
+msgstr ""
+
+msgid "Country_GL"
+#. en: "GREENLAND"
+#. fr: "GROENLAND"
+msgstr ""
+
+msgid "Country_GM"
+#. en: "GAMBIA"
+#. fr: "GAMBIE"
+msgstr ""
+
+msgid "Country_GN"
+#. en: "GUINEA"
+#. fr: "GUINÉE"
+msgstr ""
+
+msgid "Country_GP"
+#. en: "GUADELOUPE"
+#. fr: "GUADELOUPE"
+msgstr ""
+
+msgid "Country_GQ"
+#. en: "EQUATORIAL GUINEA"
+#. fr: "GUINÉE ÉQUATORIALE"
+msgstr ""
+
+msgid "Country_GR"
+#. en: "GREECE"
+#. fr: "GRÈCE"
+msgstr ""
+
+msgid "Country_GS"
+#. en: "SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS"
+#. fr: "GÉORGIE DU SUD ET LES ÎLES SANDWICH DU SUD"
+msgstr ""
+
+msgid "Country_GT"
+#. en: "GUATEMALA"
+#. fr: "GUATEMALA"
+msgstr ""
+
+msgid "Country_GU"
+#. en: "GUAM"
+#. fr: "GUAM"
+msgstr ""
+
+msgid "Country_GW"
+#. en: "GUINEA-BISSAU"
+#. fr: "GUINÉE-BISSAU"
+msgstr ""
+
+msgid "Country_GY"
+#. en: "GUYANA"
+#. fr: "GUYANA"
+msgstr ""
+
+msgid "Country_HK"
+#. en: "HONG KONG"
+#. fr: "HONG-KONG"
+msgstr ""
+
+msgid "Country_HM"
+#. en: "HEARD ISLAND AND MCDONALD ISLANDS"
+#. fr: "HEARD, ÎLE ET MCDONALD, ÎLES"
+msgstr ""
+
+msgid "Country_HN"
+#. en: "HONDURAS"
+#. fr: "HONDURAS"
+msgstr ""
+
+msgid "Country_HR"
+#. en: "CROATIA"
+#. fr: "CROATIE"
+msgstr ""
+
+msgid "Country_HT"
+#. en: "HAITI"
+#. fr: "HAÏTI"
+msgstr ""
+
+msgid "Country_HU"
+#. en: "HUNGARY"
+#. fr: "HONGRIE"
+msgstr ""
+
+msgid "Country_ID"
+#. en: "INDONESIA"
+#. fr: "INDONÉSIE"
+msgstr ""
+
+msgid "Country_IE"
+#. en: "IRELAND"
+#. fr: "IRLANDE"
+msgstr ""
+
+msgid "Country_IL"
+#. en: "ISRAEL"
+#. fr: "ISRAËL"
+msgstr ""
+
+msgid "Country_IM"
+#. en: "ISLE OF MAN"
+#. fr: "ÎLE DE MAN"
+msgstr ""
+
+msgid "Country_IN"
+#. en: "INDIA"
+#. fr: "INDE"
+msgstr ""
+
+msgid "Country_IO"
+#. en: "BRITISH INDIAN OCEAN TERRITORY"
+#. fr: "OCÉAN INDIEN, TERRITOIRE BRITANNIQUE DE L'"
+msgstr ""
+
+msgid "Country_IQ"
+#. en: "IRAQ"
+#. fr: "IRAQ"
+msgstr ""
+
+msgid "Country_IR"
+#. en: "IRAN, ISLAMIC REPUBLIC OF"
+#. fr: "IRAN, RÉPUBLIQUE ISLAMIQUE D'"
+msgstr ""
+
+msgid "Country_IS"
+#. en: "ICELAND"
+#. fr: "ISLANDE"
+msgstr ""
+
+msgid "Country_IT"
+#. en: "ITALY"
+#. fr: "ITALIE"
+msgstr ""
+
+msgid "Country_JE"
+#. en: "JERSEY"
+#. fr: "JERSEY"
+msgstr ""
+
+msgid "Country_JM"
+#. en: "JAMAICA"
+#. fr: "JAMAÏQUE"
+msgstr ""
+
+msgid "Country_JO"
+#. en: "JORDAN"
+#. fr: "JORDANIE"
+msgstr ""
+
+msgid "Country_JP"
+#. en: "JAPAN"
+#. fr: "JAPON"
+msgstr ""
+
+msgid "Country_KE"
+#. en: "KENYA"
+#. fr: "KENYA"
+msgstr ""
+
+msgid "Country_KG"
+#. en: "KYRGYZSTAN"
+#. fr: "KIRGHIZISTAN"
+msgstr ""
+
+msgid "Country_KH"
+#. en: "CAMBODIA"
+#. fr: "CAMBODGE"
+msgstr ""
+
+msgid "Country_KI"
+#. en: "KIRIBATI"
+#. fr: "KIRIBATI"
+msgstr ""
+
+msgid "Country_KM"
+#. en: "COMOROS"
+#. fr: "COMORES"
+msgstr ""
+
+msgid "Country_KN"
+#. en: "SAINT KITTS AND NEVIS"
+#. fr: "SAINT-KITTS-ET-NEVIS"
+msgstr ""
+
+msgid "Country_KP"
+#. en: "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+#. fr: "CORÉE, RÉPUBLIQUE POPULAIRE DÉMOCRATIQUE DE"
+msgstr ""
+
+msgid "Country_KR"
+#. en: "KOREA, REPUBLIC OF"
+#. fr: "CORÉE, RÉPUBLIQUE DE"
+msgstr ""
+
+msgid "Country_KW"
+#. en: "KUWAIT"
+#. fr: "KOWEÏT"
+msgstr ""
+
+msgid "Country_KY"
+#. en: "CAYMAN ISLANDS"
+#. fr: "CAÏMANES, ÎLES"
+msgstr ""
+
+msgid "Country_KZ"
+#. en: "KAZAKHSTAN"
+#. fr: "KAZAKHSTAN"
+msgstr ""
+
+msgid "Country_LA"
+#. en: "LAO PEOPLE'S DEMOCRATIC REPUBLIC"
+#. fr: "LAO, RÉPUBLIQUE DÉMOCRATIQUE POPULAIRE"
+msgstr ""
+
+msgid "Country_LB"
+#. en: "LEBANON"
+#. fr: "LIBAN"
+msgstr ""
+
+msgid "Country_LC"
+#. en: "SAINT LUCIA"
+#. fr: "SAINTE-LUCIE"
+msgstr ""
+
+msgid "Country_LI"
+#. en: "LIECHTENSTEIN"
+#. fr: "LIECHTENSTEIN"
+msgstr ""
+
+msgid "Country_LK"
+#. en: "SRI LANKA"
+#. fr: "SRI LANKA"
+msgstr ""
+
+msgid "Country_LR"
+#. en: "LIBERIA"
+#. fr: "LIBÉRIA"
+msgstr ""
+
+msgid "Country_LS"
+#. en: "LESOTHO"
+#. fr: "LESOTHO"
+msgstr ""
+
+msgid "Country_LT"
+#. en: "LITHUANIA"
+#. fr: "LITUANIE"
+msgstr ""
+
+msgid "Country_LU"
+#. en: "LUXEMBOURG"
+#. fr: "LUXEMBOURG"
+msgstr ""
+
+msgid "Country_LV"
+#. en: "LATVIA"
+#. fr: "LETTONIE"
+msgstr ""
+
+msgid "Country_LY"
+#. en: "LIBYAN ARAB JAMAHIRIYA"
+#. fr: "LIBYENNE, JAMAHIRIYA ARABE"
+msgstr ""
+
+msgid "Country_MA"
+#. en: "MOROCCO"
+#. fr: "MAROC"
+msgstr ""
+
+msgid "Country_MC"
+#. en: "MONACO"
+#. fr: "MONACO"
+msgstr ""
+
+msgid "Country_MD"
+#. en: "MOLDOVA, REPUBLIC OF"
+#. fr: "MOLDOVA, RÉPUBLIQUE DE"
+msgstr ""
+
+msgid "Country_ME"
+#. en: "MONTENEGRO"
+#. fr: "MONTÉNÉGRO"
+msgstr ""
+
+msgid "Country_MF"
+#. en: "SAINT MARTIN (FRENCH PART)"
+#. fr: "SAINT-MARTIN(PARTIE FRANÇAISE)"
+msgstr ""
+
+msgid "Country_MG"
+#. en: "MADAGASCAR"
+#. fr: "MADAGASCAR"
+msgstr ""
+
+msgid "Country_MH"
+#. en: "MARSHALL ISLANDS"
+#. fr: "MARSHALL, ÎLES"
+msgstr ""
+
+msgid "Country_MK"
+#. en: "MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF"
+#. fr: "MACÉDOINE, L'EX-RÉPUBLIQUE YOUGOSLAVE DE"
+msgstr ""
+
+msgid "Country_ML"
+#. en: "MALI"
+#. fr: "MALI"
+msgstr ""
+
+msgid "Country_MM"
+#. en: "MYANMAR"
+#. fr: "MYANMAR"
+msgstr ""
+
+msgid "Country_MN"
+#. en: "MONGOLIA"
+#. fr: "MONGOLIE"
+msgstr ""
+
+msgid "Country_MO"
+#. en: "MACAO"
+#. fr: "MACAO"
+msgstr ""
+
+msgid "Country_MP"
+#. en: "NORTHERN MARIANA ISLANDS"
+#. fr: "MARIANNES DU NORD, ÎLES"
+msgstr ""
+
+msgid "Country_MQ"
+#. en: "MARTINIQUE"
+#. fr: "MARTINIQUE"
+msgstr ""
+
+msgid "Country_MR"
+#. en: "MAURITANIA"
+#. fr: "MAURITANIE"
+msgstr ""
+
+msgid "Country_MS"
+#. en: "MONTSERRAT"
+#. fr: "MONTSERRAT"
+msgstr ""
+
+msgid "Country_MT"
+#. en: "MALTA"
+#. fr: "MALTE"
+msgstr ""
+
+msgid "Country_MU"
+#. en: "MAURITIUS"
+#. fr: "MAURICE"
+msgstr ""
+
+msgid "Country_MV"
+#. en: "MALDIVES"
+#. fr: "MALDIVES"
+msgstr ""
+
+msgid "Country_MW"
+#. en: "MALAWI"
+#. fr: "MALAWI"
+msgstr ""
+
+msgid "Country_MX"
+#. en: "MEXICO"
+#. fr: "MEXIQUE"
+msgstr ""
+
+msgid "Country_MY"
+#. en: "MALAYSIA"
+#. fr: "MALAISIE"
+msgstr ""
+
+msgid "Country_MZ"
+#. en: "MOZAMBIQUE"
+#. fr: "MOZAMBIQUE"
+msgstr ""
+
+msgid "Country_NA"
+#. en: "NAMIBIA"
+#. fr: "NAMIBIE"
+msgstr ""
+
+msgid "Country_NC"
+#. en: "NEW CALEDONIA"
+#. fr: "NOUVELLE-CALÉDONIE"
+msgstr ""
+
+msgid "Country_NE"
+#. en: "NIGER"
+#. fr: "NIGER"
+msgstr ""
+
+msgid "Country_NF"
+#. en: "NORFOLK ISLAND"
+#. fr: "NORFOLK, ÎLE"
+msgstr ""
+
+msgid "Country_NG"
+#. en: "NIGERIA"
+#. fr: "NIGÉRIA"
+msgstr ""
+
+msgid "Country_NI"
+#. en: "NICARAGUA"
+#. fr: "NICARAGUA"
+msgstr ""
+
+msgid "Country_NL"
+#. en: "NETHERLANDS"
+#. fr: "PAYS-BAS"
+msgstr ""
+
+msgid "Country_NO"
+#. en: "NORWAY"
+#. fr: "NORVÈGE"
+msgstr ""
+
+msgid "Country_NP"
+#. en: "NEPAL"
+#. fr: "NÉPAL"
+msgstr ""
+
+msgid "Country_NR"
+#. en: "NAURU"
+#. fr: "NAURU"
+msgstr ""
+
+msgid "Country_NU"
+#. en: "NIUE"
+#. fr: "NIUÉ"
+msgstr ""
+
+msgid "Country_NZ"
+#. en: "NEW ZEALAND"
+#. fr: "NOUVELLE-ZÉLANDE"
+msgstr ""
+
+msgid "Country_OM"
+#. en: "OMAN"
+#. fr: "OMAN"
+msgstr ""
+
+msgid "Country_PA"
+#. en: "PANAMA"
+#. fr: "PANAMA"
+msgstr ""
+
+msgid "Country_PE"
+#. en: "PERU"
+#. fr: "PÉROU"
+msgstr ""
+
+msgid "Country_PF"
+#. en: "FRENCH POLYNESIA"
+#. fr: "POLYNÉSIE FRANÇAISE"
+msgstr ""
+
+msgid "Country_PG"
+#. en: "PAPUA NEW GUINEA"
+#. fr: "PAPOUASIE-NOUVELLE-GUINÉE"
+msgstr ""
+
+msgid "Country_PH"
+#. en: "PHILIPPINES"
+#. fr: "PHILIPPINES"
+msgstr ""
+
+msgid "Country_PK"
+#. en: "PAKISTAN"
+#. fr: "PAKISTAN"
+msgstr ""
+
+msgid "Country_PL"
+#. en: "POLAND"
+#. fr: "POLOGNE"
+msgstr ""
+
+msgid "Country_PM"
+#. en: "SAINT PIERRE AND MIQUELON"
+#. fr: "SAINT-PIERRE-ET-MIQUELON"
+msgstr ""
+
+msgid "Country_PN"
+#. en: "PITCAIRN"
+#. fr: "PITCAIRN"
+msgstr ""
+
+msgid "Country_PR"
+#. en: "PUERTO RICO"
+#. fr: "PORTO RICO"
+msgstr ""
+
+msgid "Country_PS"
+#. en: "PALESTINIAN TERRITORY, OCCUPIED"
+#. fr: "PALESTINIEN OCCUPÉ, TERRITOIRE"
+msgstr ""
+
+msgid "Country_PT"
+#. en: "PORTUGAL"
+#. fr: "PORTUGAL"
+msgstr ""
+
+msgid "Country_PW"
+#. en: "PALAU"
+#. fr: "PALAOS"
+msgstr ""
+
+msgid "Country_PY"
+#. en: "PARAGUAY"
+#. fr: "PARAGUAY"
+msgstr ""
+
+msgid "Country_QA"
+#. en: "QATAR"
+#. fr: "QATAR"
+msgstr ""
+
+msgid "Country_RE"
+#. en: "RÉUNION"
+#. fr: "RÉUNION"
+msgstr ""
+
+msgid "Country_RO"
+#. en: "ROMANIA"
+#. fr: "ROUMANIE"
+msgstr ""
+
+msgid "Country_RS"
+#. en: "SERBIA"
+#. fr: "SERBIE"
+msgstr ""
+
+msgid "Country_RU"
+#. en: "RUSSIAN FEDERATION"
+#. fr: "RUSSIE, FÉDÉRATION DE"
+msgstr ""
+
+msgid "Country_RW"
+#. en: "RWANDA"
+#. fr: "RWANDA"
+msgstr ""
+
+msgid "Country_SA"
+#. en: "SAUDI ARABIA"
+#. fr: "ARABIE SAOUDITE"
+msgstr ""
+
+msgid "Country_SB"
+#. en: "SOLOMON ISLANDS"
+#. fr: "SALOMON, ÎLES"
+msgstr ""
+
+msgid "Country_SC"
+#. en: "SEYCHELLES"
+#. fr: "SEYCHELLES"
+msgstr ""
+
+msgid "Country_SD"
+#. en: "SUDAN"
+#. fr: "SOUDAN"
+msgstr ""
+
+msgid "Country_SE"
+#. en: "SWEDEN"
+#. fr: "SUÈDE"
+msgstr ""
+
+msgid "Country_SG"
+#. en: "SINGAPORE"
+#. fr: "SINGAPOUR"
+msgstr ""
+
+msgid "Country_SH"
+#. en: "SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA"
+#. fr: "SAINTE-HÉLÈNE, ASCENSION ET TRISTAN DA CUNHA"
+msgstr ""
+
+msgid "Country_SI"
+#. en: "SLOVENIA"
+#. fr: "SLOVÉNIE"
+msgstr ""
+
+msgid "Country_SJ"
+#. en: "SVALBARD AND JAN MAYEN"
+#. fr: "SVALBARD ET ÎLE JAN MAYEN"
+msgstr ""
+
+msgid "Country_SK"
+#. en: "SLOVAKIA"
+#. fr: "SLOVAQUIE"
+msgstr ""
+
+msgid "Country_SL"
+#. en: "SIERRA LEONE"
+#. fr: "SIERRA LEONE"
+msgstr ""
+
+msgid "Country_SM"
+#. en: "SAN MARINO"
+#. fr: "SAINT-MARIN"
+msgstr ""
+
+msgid "Country_SN"
+#. en: "SENEGAL"
+#. fr: "SÉNÉGAL"
+msgstr ""
+
+msgid "Country_SO"
+#. en: "SOMALIA"
+#. fr: "SOMALIE"
+msgstr ""
+
+msgid "Country_SR"
+#. en: "SURINAME"
+#. fr: "SURINAME"
+msgstr ""
+
+msgid "Country_ST"
+#. en: "SAO TOME AND PRINCIPE"
+#. fr: "SAO TOMÉ-ET-PRINCIPE"
+msgstr ""
+
+msgid "Country_SV"
+#. en: "EL SALVADOR"
+#. fr: "EL SALVADOR"
+msgstr ""
+
+msgid "Country_SX"
+#. en: "SINT MAARTEN (DUTCH PART)"
+#. fr: "SAINT-MARTIN (PARTIE NÉERLANDAISE)"
+msgstr ""
+
+msgid "Country_SY"
+#. en: "SYRIAN ARAB REPUBLIC"
+#. fr: "SYRIENNE, RÉPUBLIQUE ARABE"
+msgstr ""
+
+msgid "Country_SZ"
+#. en: "SWAZILAND"
+#. fr: "SWAZILAND"
+msgstr ""
+
+msgid "Country_TC"
+#. en: "TURKS AND CAICOS ISLANDS"
+#. fr: "TURKS ET CAÏQUES, ÎLES"
+msgstr ""
+
+msgid "Country_TD"
+#. en: "CHAD"
+#. fr: "TCHAD"
+msgstr ""
+
+msgid "Country_TF"
+#. en: "FRENCH SOUTHERN TERRITORIES"
+#. fr: "TERRES AUSTRALES FRANÇAISES"
+msgstr ""
+
+msgid "Country_TG"
+#. en: "TOGO"
+#. fr: "TOGO"
+msgstr ""
+
+msgid "Country_TH"
+#. en: "THAILAND"
+#. fr: "THAÏLANDE"
+msgstr ""
+
+msgid "Country_TJ"
+#. en: "TAJIKISTAN"
+#. fr: "TADJIKISTAN"
+msgstr ""
+
+msgid "Country_TK"
+#. en: "TOKELAU"
+#. fr: "TOKELAU"
+msgstr ""
+
+msgid "Country_TL"
+#. en: "TIMOR-LESTE"
+#. fr: "TIMOR-LESTE"
+msgstr ""
+
+msgid "Country_TM"
+#. en: "TURKMENISTAN"
+#. fr: "TURKMÉNISTAN"
+msgstr ""
+
+msgid "Country_TN"
+#. en: "TUNISIA"
+#. fr: "TUNISIE"
+msgstr ""
+
+msgid "Country_TO"
+#. en: "TONGA"
+#. fr: "TONGA"
+msgstr ""
+
+msgid "Country_TR"
+#. en: "TURKEY"
+#. fr: "TURQUIE"
+msgstr ""
+
+msgid "Country_TT"
+#. en: "TRINIDAD AND TOBAGO"
+#. fr: "TRINITÉ-ET-TOBAGO"
+msgstr ""
+
+msgid "Country_TV"
+#. en: "TUVALU"
+#. fr: "TUVALU"
+msgstr ""
+
+msgid "Country_TW"
+#. en: "TAIWAN, PROVINCE OF CHINA"
+#. fr: "TAÏWAN, PROVINCE DE CHINE"
+msgstr ""
+
+msgid "Country_TZ"
+#. en: "TANZANIA, UNITED REPUBLIC OF"
+#. fr: "TANZANIE, RÉPUBLIQUE-UNIE DE"
+msgstr ""
+
+msgid "Country_UA"
+#. en: "UKRAINE"
+#. fr: "UKRAINE"
+msgstr ""
+
+msgid "Country_UG"
+#. en: "UGANDA"
+#. fr: "OUGANDA"
+msgstr ""
+
+msgid "Country_UM"
+#. en: "UNITED STATES MINOR OUTLYING ISLANDS"
+#. fr: "ÎLES MINEURES ÉLOIGNÉES DES ÉTATS-UNIS"
+msgstr ""
+
+msgid "Country_US"
+#. en: "UNITED STATES"
+#. fr: "ÉTATS-UNIS"
+msgstr ""
+
+msgid "Country_UY"
+#. en: "URUGUAY"
+#. fr: "URUGUAY"
+msgstr ""
+
+msgid "Country_UZ"
+#. en: "UZBEKISTAN"
+#. fr: "OUZBÉKISTAN"
+msgstr ""
+
+msgid "Country_VA"
+#. en: "HOLY SEE (VATICAN CITY STATE)"
+#. fr: "SAINT-SIÈGE (ÉTAT DE LA CITÉ DU VATICAN)"
+msgstr ""
+
+msgid "Country_VC"
+#. en: "SAINT VINCENT AND THE GRENADINES"
+#. fr: "SAINT-VINCENT-ET-LES GRENADINES"
+msgstr ""
+
+msgid "Country_VE"
+#. en: "VENEZUELA, BOLIVARIAN REPUBLIC OF"
+#. fr: "VENEZUELA, RÉPUBLIQUE BOLIVARIENNE DU"
+msgstr ""
+
+msgid "Country_VG"
+#. en: "VIRGIN ISLANDS, BRITISH"
+#. fr: "ÎLES VIERGES BRITANNIQUES"
+msgstr ""
+
+msgid "Country_VI"
+#. en: "VIRGIN ISLANDS, U.S."
+#. fr: "ÎLES VIERGES DES ÉTATS-UNIS"
+msgstr ""
+
+msgid "Country_VN"
+#. en: "VIET NAM"
+#. fr: "VIET NAM"
+msgstr ""
+
+msgid "Country_VU"
+#. en: "VANUATU"
+#. fr: "VANUATU"
+msgstr ""
+
+msgid "Country_WF"
+#. en: "WALLIS AND FUTUNA"
+#. fr: "WALLIS ET FUTUNA"
+msgstr ""
+
+msgid "Country_WS"
+#. en: "SAMOA"
+#. fr: "SAMOA"
+msgstr ""
+
+msgid "Country_YE"
+#. en: "YEMEN"
+#. fr: "YÉMEN"
+msgstr ""
+
+msgid "Country_YT"
+#. en: "MAYOTTE"
+#. fr: "MAYOTTE"
+msgstr ""
+
+msgid "Country_ZA"
+#. en: "SOUTH AFRICA"
+#. fr: "AFRIQUE DU SUD"
+msgstr ""
+
+msgid "Country_ZM"
+#. en: "ZAMBIA"
+#. fr: "ZAMBIE"
+msgstr ""
+
+msgid "Country_ZW"
+#. en: "ZIMBABWE"
+#. fr: "ZIMBABWE"
+msgstr ""
+

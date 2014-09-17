@@ -116,8 +116,8 @@ class MetaTimeSpanOrZero extends XConcreteType {
 		$h = $value->GetHours();
 		$m = $value->GetMinutes();
 		$s = $value->GetSeconds();
-		return ($d==0?'':$d.Lemma::Pick('d.'))
-				 . ($h==0?'':$h.Lemma::Pick('h.'))
+		return ($d==0?'':$d.Lemma::Pick('Unit_day'))
+				 . ($h==0?'':$h.Lemma::Pick('Unit_hour'))
 				 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
 				 ;
 	}
@@ -131,8 +131,8 @@ class MetaTimeSpanOrZero extends XConcreteType {
 		$h = $value->GetHours();
 		$m = $value->GetMinutes();
 		$s = $value->GetSeconds();
-		return ($d==0?'':$d.Lemma::Pick('d.'))
-				 . ($h==0?'':$h.Lemma::Pick('h.'))
+		return ($d==0?'':$d.Lemma::Pick('Unit_day'))
+				 . ($h==0?'':$h.Lemma::Pick('Unit_hour'))
 				 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
 				 ;
 	}

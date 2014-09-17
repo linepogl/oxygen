@@ -98,8 +98,8 @@ class TimeBox extends Box {
 				if ($this->allow_null){
 	          echo '<a id="'.$this->name.'-null" class="fleft button" href="javascript:'.$this->name.'.SetH(null);'.$this->name.'.HideDropDown();">'.new Html($null_caption===''?'∅':$null_caption).'</a>';
 	      }
-				echo '<a class="button button-pm" href="javascript:'.$this->name.'.SetPM();">'.Lemma::Pick('p.m.').'</a>';
-				echo '<a class="button button-am" href="javascript:'.$this->name.'.SetAM();">'.Lemma::Pick('a.m.').'</a>';
+				echo '<a class="button button-pm" href="javascript:'.$this->name.'.SetPM();">'.Lemma::Pick('PM').'</a>';
+				echo '<a class="button button-am" href="javascript:'.$this->name.'.SetAM();">'.Lemma::Pick('AM').'</a>';
 	      echo '</div>';
 	      echo '</div>';
 			}

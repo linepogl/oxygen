@@ -41,7 +41,7 @@ var Lemma = function(){
 	this.toString = function(){ return this.data[Oxygen.lang]; };
 };
 var Oxygen = {
-	 lang: oxygen_lang
+	 Lang_ oxygen_lang
 	,Lang: oxygen_lang
 	,Base: oxygen_base
 	,Encoding: oxygen_encoding

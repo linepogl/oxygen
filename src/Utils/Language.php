@@ -9,12 +9,12 @@ final class Language {
 
 	/** @return string */
 	public static function GetDecimalSeparator(){
-		$l = Lemma::Pick('DecimalSeparator');
+		$l = Lemma::Pick('_decimal_separator');
 		return $l->HasLang() ? $l->Translate() : self::GetDecimalSeparatorInvariant();
 	}
 	/** @return string */
 	public static function GetThousandsSeparator(){
-		$l = Lemma::Pick('ThousandsSeparator');
+		$l = Lemma::Pick('_thousands_separator');
 		return $l->HasLang() ? $l->Translate() : self::GetThousandsSeparatorInvariant();
 	}
 
@@ -181,12 +181,12 @@ final class Language {
 	    $r = '';
 
 	    if ($d != 0) {
-		    $r .= $d.Lemma::Pick('d.');
+		    $r .= $d.Lemma::Pick('Unit_day');
 	    }
 
 	    if ($h != 0) {
 		    if ($r !== '') $r .= ' ';
-		    $r .= $h.Lemma::Pick('h.');
+		    $r .= $h.Lemma::Pick('Unit_hour');
 	    }
 
 	    if ($m != 0) {
@@ -267,17 +267,17 @@ final class Language {
 		elseif ($hours < 0 && $hours >= -25)
 			return Lemma::Pick('Tomorrow');
 		elseif ($hours < -25 && $hours >= -49)
-			return Lemma::Pick('xDays')->Sprintf(2);
+			return Lemma::Pick('XDays')->Sprintf(2);
 		elseif ($hours < -49 && $hours >= -73)
-			return Lemma::Pick('xDays')->Sprintf(3);
+			return Lemma::Pick('XDays')->Sprintf(3);
 		elseif ($hours < -73 && $hours >= -97)
-			return Lemma::Pick('xDays')->Sprintf(4);
+			return Lemma::Pick('XDays')->Sprintf(4);
 		elseif ($hours < -97 && $hours >= -121)
-			return Lemma::Pick('xDays')->Sprintf(5);
+			return Lemma::Pick('XDays')->Sprintf(5);
 		elseif ($hours < -121 && $hours >= -145)
-			return Lemma::Pick('xDays')->Sprintf(6);
+			return Lemma::Pick('XDays')->Sprintf(6);
 		elseif ($hours < -145 && $hours >= -169)
-			return Lemma::Pick('xDays')->Sprintf(7);
+			return Lemma::Pick('XDays')->Sprintf(7);
 		else
 			return $value->GetDay().' '.$value->Format('F');
 	}
@@ -312,17 +312,17 @@ final class Language {
 		elseif ($hours < 0 && $hours >= -25)
 			return Lemma::Pick('Tomorrow');
 		elseif ($hours < -25 && $hours >= -49)
-			return Lemma::Pick('xDays')->Sprintf(2);
+			return Lemma::Pick('XDays')->Sprintf(2);
 		elseif ($hours < -49 && $hours >= -73)
-			return Lemma::Pick('xDays')->Sprintf(3);
+			return Lemma::Pick('XDays')->Sprintf(3);
 		elseif ($hours < -73 && $hours >= -97)
-			return Lemma::Pick('xDays')->Sprintf(4);
+			return Lemma::Pick('XDays')->Sprintf(4);
 		elseif ($hours < -97 && $hours >= -121)
-			return Lemma::Pick('xDays')->Sprintf(5);
+			return Lemma::Pick('XDays')->Sprintf(5);
 		elseif ($hours < -121 && $hours >= -145)
-			return Lemma::Pick('xDays')->Sprintf(6);
+			return Lemma::Pick('XDays')->Sprintf(6);
 		elseif ($hours < -145 && $hours >= -169)
-			return Lemma::Pick('xDays')->Sprintf(7);
+			return Lemma::Pick('XDays')->Sprintf(7);
 		else
 			return $value->GetDay().' '.$value->Format('F');
 	}
@@ -351,7 +351,7 @@ final class Language {
 		if ($d == 1)
 			return Lemma::Pick('Tomorrow');
 
-		return Lemma::Pick('xDaysAgo')->Sprintf(-$d);
+		return Lemma::Pick('XDaysAgo')->Sprintf(-$d);
 	}
 	/** @return string */
 	public static function FormatTimeSpanSince($value,$null_caption = ''){
@@ -372,27 +372,27 @@ final class Language {
 			$value = new XDateTime($value);
 		if (!($value instanceof XDateTime))
 			return $null_caption;
-		return XDateTime::Now()->Diff( $value )->GetDays() . Lemma::Pick('d.');
+		return XDateTime::Now()->Diff( $value )->GetDays() . Lemma::Pick('Unit_day');
 	}
 
 
 
 
 	public static function FormatBytes($size){
-		$unit = Lemma::Pick('unit:byte');
-		if ($size >= 1000) { $size /= 1000; $unit = 'K'.Lemma::Pick('unit:byte'); }
-		if ($size >= 1000) { $size /= 1000; $unit = 'M'.Lemma::Pick('unit:byte');	}
-		if ($size >= 1000) { $size /= 1000; $unit = 'G'.Lemma::Pick('unit:byte');	}
-		if ($size >= 1000) { $size /= 1000; $unit = 'T'.Lemma::Pick('unit:byte');	}
+		$unit = Lemma::Pick('Unit_byte');
+		if ($size >= 1000) { $size /= 1000; $unit = 'K'.Lemma::Pick('Unit_byte'); }
+		if ($size >= 1000) { $size /= 1000; $unit = 'M'.Lemma::Pick('Unit_byte');	}
+		if ($size >= 1000) { $size /= 1000; $unit = 'G'.Lemma::Pick('Unit_byte');	}
+		if ($size >= 1000) { $size /= 1000; $unit = 'T'.Lemma::Pick('Unit_byte');	}
 		$size = round($size,1);
 		return Language::FormatNumber($size).' '.$unit;
 	}
 	public static function FormatSizeBinary($size){
-		$unit = Lemma::Pick('unit:byte');
-		if ($size >= 1024) { $size /= 1024; $unit = 'Ki'.Lemma::Pick('unit:byte'); }
-		if ($size >= 1024) { $size /= 1024; $unit = 'Mi'.Lemma::Pick('unit:byte');	}
-		if ($size >= 1024) { $size /= 1024; $unit = 'Gi'.Lemma::Pick('unit:byte');	}
-		if ($size >= 1024) { $size /= 1024; $unit = 'Ti'.Lemma::Pick('unit:byte');	}
+		$unit = Lemma::Pick('Unit_byte');
+		if ($size >= 1024) { $size /= 1024; $unit = 'Ki'.Lemma::Pick('Unit_byte'); }
+		if ($size >= 1024) { $size /= 1024; $unit = 'Mi'.Lemma::Pick('Unit_byte');	}
+		if ($size >= 1024) { $size /= 1024; $unit = 'Gi'.Lemma::Pick('Unit_byte');	}
+		if ($size >= 1024) { $size /= 1024; $unit = 'Ti'.Lemma::Pick('Unit_byte');	}
 		$size = round($size,1);
 		return Language::FormatNumber($size).' '.$unit;
 	}
@@ -402,6 +402,6 @@ final class Language {
 		);
 
 	public static function Translate($lang) {
-		return Lemma::Pick('lang:'.$lang);
+		return Lemma::Pick('Lang_'.$lang);
 	}
 }

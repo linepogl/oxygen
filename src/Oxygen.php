@@ -282,7 +282,7 @@ class Oxygen {
 	public static $lang = null;
 	public static $lang_auto_selection = false;
 	public static function AddLang($lang) { if (!in_array($lang,self::$langs,true)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
-	public static function SetLang($lang) { if (Oxygen::HasLang($lang)) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Pick('locale')); } }
+	public static function SetLang($lang) { if (Oxygen::HasLang($lang)) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Lemma::Pick('_locale')); } }
 	public static function HasLang($lang) { return in_array($lang,self::$langs,true); }
 	public static function HasLangAutoSelection() { return self::$lang_auto_selection; }
 	public static function GetLang(){ return self::$lang; }
@@ -376,7 +376,7 @@ class Oxygen {
 	// Dictionary
 	//
 	//
-	private static $dictionary_files = array('oxy/dictionary.xml');
+	private static $dictionary_files = array('oxy/oxy_dictionary.xml');
 	public static function GetDictionaryFiles(){ return self::$dictionary_files; }
 	public static function AddDictionaryFile($filename) { if (!in_array($filename,self::$dictionary_files)) self::$dictionary_files[] = $filename; }
 
@@ -501,7 +501,7 @@ class Oxygen {
 	// Code loaders
 	//
 	//
-	private static $code_files = array('oxy/_oxy.php');
+	private static $code_files = array();
 	public static function GetCodeFiles(){ return self::$code_files; }
 	public static function AddCodeFile($filename) { self::$code_files[] = $filename; }
 	private static $code_folders = array('oxy/src');
@@ -780,7 +780,7 @@ class Oxygen {
 	// Database upgrade
 	//
 	//
-	private static $database_upgrade_files = array('oxy/_upgrade.php');
+	private static $database_upgrade_files = array('oxy/oxy_upgrade.php');
 	public static function GetDatabaseUpgradeFiles() { return self::$database_upgrade_files; }
 	public static function AddDatabaseUpgradeFile($filename) { if (!in_array($filename,self::$database_upgrade_files)) self::$database_upgrade_files[] = $filename; }
 

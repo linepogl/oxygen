@@ -1,0 +1,829 @@
+<dictionary>
+	<lemma name="en"><en>English</en><fr>Anglais</fr><el>Αγγλικά</el></lemma>
+	<lemma name="fr"><en>French</en><fr>Français</fr><el>Γαλλικά</el></lemma>
+	<lemma name="el"><en>Greek</en><fr>Grec</fr><el>Ελληνικά</el></lemma>
+	<lemma name="_locale"><en>en_GB</en><fr>fr_FR</fr><el>el_GR</el></lemma>
+	<lemma name="_thousands_separator"><en>,</en><fr> </fr><el>.</el></lemma>
+	<lemma name="_decimal_separator"><en>.</en><fr>,</fr><el>,</el></lemma>
+
+	<lemma name="Language"><en>Language</en><fr>Langue</fr><el>Γλώσσα</el></lemma>
+	<lemma name="Name"><en>Name</en><fr>Nom</fr><el>Όνομα</el></lemma>
+	<lemma name="Surname"><en>Surname</en><fr>Nom</fr><el>Επίθετο</el></lemma>
+	<lemma name="FirstName"><en>Name</en><fr>Prénom</fr><el>Όνομα</el></lemma>
+	<lemma name="Company"><en>Company</en><fr>Société</fr><el>Εταιρία</el></lemma>
+	<lemma name="Position"><en>Position</en><fr>Position</fr><el>Θέση</el></lemma>
+	<lemma name="Gender"><en>Gender</en><fr>Sexe</fr><el>Φύλο</el></lemma>
+	<lemma name="Male"><en>Male</en><fr>Homme</fr><el>Άρρεν</el></lemma>
+	<lemma name="Female"><en>Female</en><fr>Femme</fr><el>Θύλη</el></lemma>
+	<lemma name="Phone"><en>Phone</en><fr>Téléphone</fr><el>Τηλέφωνο</el></lemma>
+	<lemma name="Email"><en>E-mail</en><fr>E-mail</fr><el>E-mail</el></lemma>
+	<lemma name="Address"><en>Address</en><fr>Adresse</fr><el>Διεύθυνση</el></lemma>
+	<lemma name="City"><en>City</en><fr>Ville</fr><el>Πόλη</el></lemma>
+	<lemma name="Zip"><en>Postal code</en><fr>Code postal</fr><el>Τ.Κ.</el></lemma>
+	<lemma name="Country"><en>Country</en><fr>Pays</fr><el>Χώρα</el></lemma>
+	<lemma name="Comments"><en>Comments</en><fr>Commentaires</fr><el>Σχόλια</el></lemma>
+	<lemma name="Username"><en>Username</en><fr>Identifiant</fr><el>Username</el></lemma>
+	<lemma name="Password"><en>Password</en><fr>Mot de passe</fr><el>Κωδικός</el></lemma>
+	<lemma name="OldPassword"><en>Old password</en><fr>Ancien mot de passe</fr><el>Παλιός κωδικός</el></lemma>
+	<lemma name="NewPassword"><en>New password</en><fr>Nouveau mot de passe</fr><el>Νέος κωδικός</el></lemma>
+	<lemma name="ConfirmPassword"><en>Confirm</en><fr>Confirmer</fr><el>Επιβεβαίωση</el></lemma>
+	<lemma name="DateCreated"><en>Date created</en><fr>Date de création</fr><el>Ημ.δημιουργίας</el></lemma>
+	<lemma name="DateModified"><en>Date modified</en><fr>Date de modification</fr><el>Ημ.μεταβολής</el></lemma>
+	<lemma name="EmailRcpt"><en>To</en><fr>A</fr><el>Πρoς</el></lemma>
+	<lemma name="EmailSubject"><en>Subject</en><fr>Sujet</fr><el>Θέμα</el></lemma>
+	<lemma name="EmailBody"><en>Body</en><fr>Message</fr><el>Κείμενο</el></lemma>
+	<lemma name="EmailFrom"><en>From</en><fr>De</fr><el>Από</el></lemma>
+	<lemma name="DateSent"><en>Date sent</en><fr>Date d'envoi</fr><el>Ημ.αποστολής</el></lemma>
+	<lemma name="LockedAccount"><en>Locked account</en><fr>Compte bloqué</fr><el>Κλειδωμένος λογαριασμός</el></lemma>
+	<lemma name="File"><en>File</en><fr>Fichier</fr><el>Αρχείο</el></lemma>
+	<lemma name="Date"><en>Date</en><fr>Date</fr><el>Ημερομηνία</el></lemma>
+	<lemma name="Time"><en>Time</en><fr>Heure</fr><el>Ώρα</el></lemma>
+	<lemma name="Today"><en>Today</en><fr>Aujourd'hui</fr><el>Σήμερα</el></lemma>
+	<lemma name="Tomorrow"><en>Tomorrow</en><fr>Demain</fr><el>Αύριο</el></lemma>
+	<lemma name="Yesterday"><en>Yesterday</en><fr>Hier</fr><el>Xθες</el></lemma>
+	<lemma name="Now"><en>Now</en><fr>Maintenant</fr><el>Τώρα</el></lemma>
+	<lemma name="AM"><en>a.m.</en><fr>avant-midi</fr><el>π.μ.</el></lemma>
+	<lemma name="PM"><en>p.m.</en><fr>après-midi</fr><el>μ.μ.</el></lemma>
+	<lemma name="XDays"><en>%s days</en><fr>%s jours</fr><el>%s ημέρες</el></lemma>
+	<lemma name="XDaysAgo"><en>%s days ago</en><fr>Il y a %s jours</fr><el>Πριν από %s ημέρες</el></lemma>
+
+	<lemma name="Day"><en>Day</en><fr>Jour</fr><el>Ημέρα</el></lemma>
+	<lemma name="DayOfWeek"><en>Day of week</en><fr>Jour de la semaine</fr><el>Ημέρα της εβδομάδας</el></lemma>
+	<lemma name="Night"><en>Night</en><fr>Nuit</fr><el>Νύχτα</el></lemma>
+	<lemma name="TimeZone"><en>Time zone</en><fr>Fuseau horaire</fr><el>Ζώνη ώρας</el></lemma>
+
+	<lemma name="Submit"><en>Submit</en><fr>Soumettre</fr><el>Αποστολή</el></lemma>
+	<lemma name="Login"><en>Login</en><fr>Connexion</fr></lemma>
+	<lemma name="Logoff"><en>Logoff</en><fr>Déconnexion</fr></lemma>
+	<lemma name="Back"><en>Back</en><fr>Retour</fr><el>Επιστροφή</el></lemma>
+	<lemma name="OK"><en>OK</en><fr>OK</fr><el>OK</el></lemma>
+	<lemma name="Apply"><en>Apply</en><fr>Appliquer</fr><el>Εφαρμογή</el></lemma>
+	<lemma name="Cancel"><en>Cancel</en><fr>Annuler</fr><el>Άκυρο</el></lemma>
+	<lemma name="Send"><en>Send</en><fr>Envoyer</fr><el>Αποστολή</el></lemma>
+	<lemma name="Save"><en>Save</en><fr>Sauvegarder</fr><el>Αποθήκευση</el></lemma>
+	<lemma name="Delete"><en>Delete</en><fr>Supprimer</fr><el>Διαγραφή</el></lemma>
+	<lemma name="Rename"><en>Rename</en><fr>Renommer</fr><el>Μετονομασία</el></lemma>
+	<lemma name="Print"><en>Print</en><fr>Imprimer</fr><el>Εκτύπωση</el></lemma>
+	<lemma name="Close"><en>Close</en><fr>Fermer</fr><el>Κλείσιμο</el></lemma>
+	<lemma name="Ask"><en>Ask</en><fr>Demander</fr><el>Ερώτηση</el></lemma>
+	<lemma name="Update"><en>Update</en><fr>Mettre à jour</fr><el>Ανανέωση</el></lemma>
+	<lemma name="Select"><en>Select</en><fr>Sélectionner</fr><el>Επιλογή</el></lemma>
+	<lemma name="Compare"><en>Compare</en><fr>Comparer</fr><el>Σύγκριση</el></lemma>
+	<lemma name="Search"><en>Search</en><fr>Rechercher</fr><el>Αναζήτηση</el></lemma>
+	<lemma name="Yes"><en>Yes</en><fr>Oui</fr><el>Ναι</el></lemma>
+	<lemma name="No"><en>No</en><fr>Non</fr><el>Όχι</el></lemma>
+	<lemma name="Next"><en>Next</en><fr>Suivant</fr><el>Επόμενο</el></lemma>
+	<lemma name="Previous"><en>Previous</en><fr>Précédent</fr><el>Προηγούμενο</el></lemma>
+	<lemma name="Modify"><en>Modify</en><fr>Modifier</fr><el>Επεξεργασία</el></lemma>
+	<lemma name="Continue"><en>Continue</en><fr>Continuer</fr><el>Συνέχεια</el></lemma>
+
+	<lemma name="Home"><en>Home</en><fr>Accueil</fr><el>Αρχική</el></lemma>
+	<lemma name="Settings"><en>Settings</en><fr>Paramètres</fr><el>Ρυθμίσεις</el></lemma>
+
+	<lemma name="January"><en>January</en><fr>janvier</fr><el>Ιανουάριος</el></lemma>
+	<lemma name="February"><en>February</en><fr>février</fr><el>Φεβρουάριος</el></lemma>
+	<lemma name="March"><en>March</en><fr>mars</fr><el>Μάρτιος</el></lemma>
+	<lemma name="April"><en>April</en><fr>avril</fr><el>Απρίλιος</el></lemma>
+	<lemma name="May"><en>May</en><fr>mai</fr><el>Μάιος</el></lemma>
+	<lemma name="June"><en>June</en><fr>juin</fr><el>Ιούνιος</el></lemma>
+	<lemma name="July"><en>July</en><fr>juillet</fr><el>Ιούλιος</el></lemma>
+	<lemma name="August"><en>August</en><fr>août</fr><el>Αύγουστος</el></lemma>
+	<lemma name="September"><en>September</en><fr>septembre</fr><el>Σεπτέμβριος</el></lemma>
+	<lemma name="October"><en>October</en><fr>octobre</fr><el>Οκτώβριος</el></lemma>
+	<lemma name="November"><en>November</en><fr>novembre</fr><el>Νοέμβριος</el></lemma>
+	<lemma name="December"><en>December</en><fr>décembre</fr><el>Δεκέμβριος</el></lemma>
+
+	<lemma name="Jan_"><en>Jan</en><fr>jan.</fr><el>Ιαν.</el></lemma>
+	<lemma name="Feb_"><en>Feb</en><fr>fév.</fr><el>Φεβ.</el></lemma>
+	<lemma name="Mar_"><en>Mar</en><fr>mars</fr><el>Μάρ.</el></lemma>
+	<lemma name="Apr_"><en>Apr</en><fr>avr.</fr><el>Απρ.</el></lemma>
+	<lemma name="May_"><en>May</en><fr>mai</fr><el>Μάι.</el></lemma>
+	<lemma name="Jun_"><en>Jun</en><fr>juin</fr><el>Ιούν.</el></lemma>
+	<lemma name="Jul_"><en>Jul</en><fr>juil</fr><el>Ιούλ.</el></lemma>
+	<lemma name="Aug_"><en>Aug</en><fr>août</fr><el>Αύγ.</el></lemma>
+	<lemma name="Sep_"><en>Sep</en><fr>sep.</fr><el>Σεπ.</el></lemma>
+	<lemma name="Oct_"><en>Oct</en><fr>oct.</fr><el>Οκτ.</el></lemma>
+	<lemma name="Nov_"><en>Nov</en><fr>nov.</fr><el>Νοέ.</el></lemma>
+	<lemma name="Dec_"><en>Dec</en><fr>déc.</fr><el>Δεκ.</el></lemma>
+
+	<lemma name="Monday"><en>Monday</en><fr>lundi</fr><el>Δευτέρα</el></lemma>
+	<lemma name="Tuesday"><en>Tuesday</en><fr>mardi</fr><el>Τρίτη</el></lemma>
+	<lemma name="Wednesday"><en>Wednesday</en><fr>mercredi</fr><el>Τετάρτη</el></lemma>
+	<lemma name="Thursday"><en>Thursday</en><fr>jeudi</fr><el>Πέμπτη</el></lemma>
+	<lemma name="Friday"><en>Friday</en><fr>vendredi</fr><el>Παρασκευή</el></lemma>
+	<lemma name="Saturday"><en>Saturday</en><fr>samedi</fr><el>Σάββατο</el></lemma>
+	<lemma name="Sunday"><en>Sunday</en><fr>dimanche</fr><el>Κυριακή</el></lemma>
+
+	<lemma name="Mon_"><en>Mon</en><fr>lun.</fr><el>Δευ.</el></lemma>
+	<lemma name="Tue_"><en>Tue</en><fr>mar.</fr><el>Τρί.</el></lemma>
+	<lemma name="Wed_"><en>Wed</en><fr>mer.</fr><el>Τετ.</el></lemma>
+	<lemma name="Thu_"><en>Thu</en><fr>jeu.</fr><el>Πέμ.</el></lemma>
+	<lemma name="Fri_"><en>Fri</en><fr>ven.</fr><el>Παρ.</el></lemma>
+	<lemma name="Sat_"><en>Sat</en><fr>sam.</fr><el>Σάβ.</el></lemma>
+	<lemma name="Sun_"><en>Sun</en><fr>dim.</fr><el>Κυρ.</el></lemma>
+
+	<lemma name="Days"><en>Days</en><fr>Jours</fr><el>Ημέρες</el></lemma>
+	<lemma name="XAgo"><en>%s ago</en><fr>Il y a %s</fr><el>Πριν από %s</el></lemma>
+
+	<lemma name="User"><en>User</en><fr>Utilisateur</fr><el>Χρήστης</el></lemma>
+	<lemma name="Users"><en>Users</en><fr>Utilisateurs</fr><el>Χρήστες</el></lemma>
+	<lemma name="ChangePassword"><en>Change password</en><fr>Mot de passe</fr><el>Αλλαγή κωδικού</el></lemma>
+	<lemma name="ResetPassword"><en>Reset password</en><fr>Mot de passe</fr><el>Αλλαγή κωδικού</el></lemma>
+	<lemma name="ResetPasswordLong"><en>Reset password</en><fr>Réinitialiser le mot de passe</fr><el>Αλλαγή κωδικού</el></lemma>
+	<lemma name="Reset"><en>Reset</en><fr>Réinitialiser</fr><el>Αλλαγή</el></lemma>
+	<lemma name="ChangeProfile"><en>Change profile</en><fr>Profil</fr><el>Αλλαγή προφίλ</el></lemma>
+	<lemma name="ModifyProfile"><en>Modify profile</en><fr>Modifier profil</fr><el>Αλλαγή προφίλ</el></lemma>
+
+	<lemma name="Error"><en>Error</en><fr>Erreur</fr><el>Σφάλμα</el></lemma>
+
+	<lemma name="ActionLogin"><en>Login</en><fr>Connexion</fr></lemma>
+	<lemma name="ActionLogoff"><en>Logoff</en><fr>Déconnexion</fr></lemma>
+	<lemma name="ActionChangePassword"><en>Change password</en><fr>Mot de passe</fr><el>Αλλαγή κωδικού</el></lemma>
+	<lemma name="ActionChangeProfile"><en>Change profile</en><fr>Profil d'un utilisateur</fr><el>Προφίλ χρήστη</el></lemma>
+	<lemma name="ActionCreateUser"><en>Create user</en><fr>Création d'un utilisateur</fr><el>Δημιουργία χρήστη</el></lemma>
+	<lemma name="ActionForgottenPassword"><en>Forgotten your password?</en><fr>Mot de passe oublié ?</fr><el>Υπενθύμιση κωδικού</el></lemma>
+
+	<lemma name="MsgCannotDisplayWebPage">
+		<en>Cannot display the web page.</en>
+		<fr>La page ne peut pas être affichée.</fr>
+	</lemma>
+	<lemma name="MsgUnderConstruction">
+		<en>Under construction.</en>
+		<fr>En construction.</fr>
+		<el>Υπό κατασκευή.</el>
+	</lemma>
+	<lemma name="MsgNotImplemented">
+		<en>Not implemented.</en>
+		<fr>Non implémenté.</fr>
+		<el>Μη υλοποιημένο.</el>
+	</lemma>
+	<lemma name="MsgPageNotFound">
+		<en>Page not found.</en>
+		<fr>La page n'était pas trouvée.</fr>
+		<el>Η σελίδα δεν βρέθηκε.</el>
+	</lemma>
+	<lemma name="MsgObjectNotFound">
+		<en>Object not found.</en>
+		<fr>L'objet n'était pas trouvé.</fr>
+		<el>Το αντικείμενο δεν βρέθηκε.</el>
+	</lemma>
+	<lemma name="MsgAccessDenied">
+		<en>Access denied.</en>
+		<fr>Accès refusé.</fr>
+		<el>Μη επιτρεπτή πρόσβαση.</el>
+	</lemma>
+	<lemma name="MsgInvalidUsername">
+		<en>Unknown user.</en>
+		<fr>Utilisateur inconnu.</fr>
+		<el>Λάθος όνομα χρήστη.</el>
+	</lemma>
+	<lemma name="MsgInvalidPassword">
+		<en>Invalid password.</en>
+		<fr>Mot de passe incorrect.</fr>
+		<el>Λάθος κωδικός πρόσβασης.</el>
+	</lemma>
+	<lemma name="MsgInvalidUsernameOrPassword">
+		<en>Invalid username or password.</en>
+		<fr>Utilisateur inconnu ou mot de passe incorrect.</fr>
+		<el>Λάθος όνομα χρήστη ή λάθος κωδικός πρόσβασης.</el>
+	</lemma>
+	<lemma name="MsgMultipleUsersFound">
+		<en>Multiple users found.</en>
+		<fr>Plusieurs utilisateurs trouvés.</fr>
+		<el>Βρέθηκαν πολλαπλοί χρήστες.</el>
+	</lemma>
+	<lemma name="MsgEmailSentSuccessfully">
+		<en>The e-mail has been sent successfully.</en>
+		<fr>Le message e-mail a été bien envoyé.</fr>
+		<el>Η αποστολή του e-mail έγινε επιτυχώς.</el>
+	</lemma>
+	<lemma name="MsgInvalidEmail">
+		<en>Invalid e-mail address.</en>
+		<fr>L'adresse e-mail n'est pas valide.</fr>
+		<el>Λάθος διεύθυνση e-mail.</el>
+	</lemma>
+	<lemma name="MsgInvalidPhone">
+		<en>Invalid phone number. Please use international format (+123456789).</en>
+		<fr>Le numéro n'est pas valide. Veuillez utilisez le format international (+123456789).</fr>
+		<el>Λάθος αριθμός τηλεφώνου. Χρησιμοποιήστε το διεθνές πρότυπο (+123456789).</el>
+	</lemma>
+	<lemma name="MsgInvalidURL">
+		<en>Invalid address.</en>
+		<fr>L'adresse n'est pas valide.</fr>
+		<el>Λάθος διεύθυνση.</el>
+	</lemma>
+	<lemma name="MsgInvalidValue">
+		<en>Invalid value.</en>
+		<fr>Le valeur n'est pas valide.</fr>
+		<el>Λάθος τιμή.</el>
+	</lemma>
+
+	<lemma name="MsgAccountBanned">
+		<en>User account locked.</en>
+		<fr>Compte utilisateur bloqué.</fr>
+		<el>Kλειδωμένος λογαριασμός χρήστη.</el>
+	</lemma>
+
+	<lemma name="MsgPasswordsDoNotMatch">
+		<en>The passwords do not match.</en>
+		<fr>Les deux mots de passe ne sont pas identiques.</fr>
+		<el>Οι κωδικοί δεν είναι ίδιοι.</el>
+	</lemma>
+
+	<lemma name="MsgMandatoryFields">
+		<en>The fields with * are mandatory.</en>
+		<fr>Les champs avec * sont obligatoires.</fr>
+		<el>Τα πεδία με * είναι υποχρεωτικά.</el>
+	</lemma>
+
+	<lemma name="MsgMandatoryField">
+		<en>This field is mandatory.</en>
+		<fr>Ce champ est obligatoire.</fr>
+		<el>Το πεδίο αυτό είναι υποχρεωτικό.</el>
+	</lemma>
+
+	<lemma name="MsgFieldMandatoryInAllLanguages">
+		<en>This field is mandatory in all languages.</en>
+		<fr>Ce champ est obligatoire en toutes les langues.</fr>
+		<el>Το πεδίο αυτό είναι υποχρεωτικό σε όλες τις γλώσσες.</el>
+	</lemma>
+
+	<lemma name="MsgPasswordChanged">
+		<en>The password has been changed.</en>
+		<fr>Le mot de passe a été changé.</fr>
+		<el>Ο κωδικός πρόσβασης άλλαξε.</el>
+	</lemma>
+
+	<lemma name="MsgProfileChanged">
+		<en>The user profile has been changed.</en>
+		<fr>Le profil de l'utilisateur a été changé.</fr>
+		<el>Το προφίλ χρήστη
+			άλλαξε.</el>
+	</lemma>
+
+	<lemma name="MsgUsernameExists">
+		<en>This username already exists.</en>
+		<fr>Cet utilisateur existe déjà.</fr>
+		<el>Αυτό το όνομα χρήστη υπάρχει ήδη.</el>
+	</lemma>
+
+	<lemma name="MsgCannotSendEmail">
+		<en>Error while sending e-mail.</en>
+		<fr>Erreur lors de l'envoi d'e-mail.</fr>
+		<el>Σφάλμα κατά την αποστολή e-mail.</el>
+	</lemma>
+
+	<lemma name="MsgCannotConnectToDatabase">
+		<en>Error while connecting to the database.</en>
+		<fr>Erreur lors de la connexion à la base de données.</fr>
+		<el>Σφάλμα κατά την σύνδεση με τη βάση δεδομένων.</el>
+	</lemma>
+	<lemma name="MsgCannotCreateDatabase">
+		<en>Error while creating database schema.</en>
+		<fr>Erreur lors de la création de la base de données.</fr>
+		<el>Σφάλμα κατά την δημιουργία νέας βάσης δεδομένων.</el>
+	</lemma>
+
+	<lemma name="MsgCannotDeleteCurrentUser">
+		<en>Cannot delete current user.</en>
+		<fr>Il est impossible de supprimer l'utilisateur courant.</fr>
+		<el>Δεν είναι δυνατό να διαγραφεί ο τρέχον χρήστης.</el>
+	</lemma>
+
+	<lemma name="MsgObjectXNotFound">
+		<en>This object was not found: %s.</en>
+		<fr>Objet non trouvé : %s.</fr>
+		<el>Το αντικείμενο αυτό δεν βρέθηκε: [%s].</el>
+	</lemma>
+	<lemma name="MsgObjectXAlreadyExists">
+		<en>This object already exists: %s.</en>
+		<fr>Cet objet existe déjà : %s.</fr>
+		<el>Το αντικείμενο αυτό υπάρχει ήδη: %s.</el>
+	</lemma>
+	<lemma name="MsgCannotDeleteSystemObject">
+		<en>This object is used by the system.</en>
+		<fr>Cet objet est utilisé par le système.</fr>
+		<el>Το αντικείμενο είναι απαραίτητο για την ομαλή λειτουργεία του συστήματος.</el>
+	</lemma>
+
+
+	<lemma name="MsgXItemNotFound">
+		<en>This object was not found [%s %s].</en>
+		<fr>Objet non trouvé [%s %s].</fr>
+		<el>Το αντικείμενο αυτό δεν βρέθηκε: [%s %s].</el>
+	</lemma>
+	<lemma name="MsgXItemAlreadyExists">
+		<fr>Cet objet existe déjà: %s.</fr>
+		<en>This object already exists: %s.</en>
+		<el>Το αντικείμενο αυτό υπάρχει ήδη: %s.</el>
+	</lemma>
+
+	<lemma name="MsgCancelling">
+		<en>Cancelling...</en>
+		<fr>Annulation...</fr>
+		<el>Ακύρωση...</el>
+	</lemma>
+	<lemma name="MsgProgressCancelled">
+		<en>The process has been cancelled.</en>
+		<fr>Le processus a été annulé.</fr>
+		<el>Η διαδικασία ακυρώθηκε.</el>
+	</lemma>
+	<lemma name="MsgProgressCompleted">
+		<en>The process is completed.</en>
+		<fr>Le processus est terminé.</fr>
+		<el>Η διαδικασία ολοκληρώθηκε.</el>
+	</lemma>
+	<lemma name="MsgNoObjectFound">
+		<en>No object found.</en>
+		<fr>Pas d'objet trouvé.</fr>
+		<el>Δε βρέθηκε κανένα αντικείμενο.</el>
+	</lemma>
+	<lemma name="MsgInvalidAction">
+		<en>Invalid action.</en>
+		<fr>Action invalide.</fr>
+		<el>Εσφαλμένη εντολή.</el>
+	</lemma>
+
+	<lemma name="MsgCannotConnectToLdapServer">
+		<en>Cannot connect to the database.</en>
+		<fr>Erreur à la connexion à la base de données.</fr>
+		<el>Σφάλμα σύνδεσης με την βάση δεδομένων.</el>
+	</lemma>
+
+
+	<lemma name="MsgDevelopmentEnvironment">
+		<en>You are viewing this message because the application runs in DEVELOPMENT mode.</en>
+		<fr>Ce message s'affiche parce que l'application est en mode DEVELOPPEMENT.</fr>
+		<el>Το μήνυμα αυτό εμφανίζεται γιατί η εφαρμογή τρέχει σε περιβάλλον ανάπτυξης.</el>
+	</lemma>
+	<lemma name="MsgAnErrorOccurred">
+		<en>An unexpected server error has occurred.</en>
+		<fr>Il y avait une erreur inattendue.</fr>
+		<el>Προέκυψε ένα σφάλμα στον διακομιστή.</el>
+	</lemma>
+	<lemma name="MsgAnErrorOccurredAndTeamNotified">
+		<en>An unexpected server error has occurred. The support team has been notified.</en>
+		<fr>Il y avait une erreur inattendue. L'équipe de support vient d'en être notifié.</fr>
+		<el>Προέκυψε ένα σφάλμα στον διακομιστή. Η ομάδα υποστήριξης ειδοποιήθηκε.</el>
+	</lemma>
+
+
+	<lemma name="MsgErrorWhileUploadingFile">
+		<en>An error occurred while uploading file.</en>
+		<fr>Erreur pendant l'envoi du fichier.</fr>
+		<el>Σφάλμα κατά την αποστολή του αρχείου.</el>
+	</lemma>
+
+	<lemma name="MsgErrorWhileDownloadingFile">
+		<en>An error occurred while downloading file.</en>
+		<fr>Erreur pendant le téléchargement du fichier.</fr>
+		<el>Σφάλμα κατά την λήψη του αρχείου.</el>
+	</lemma>
+
+
+
+	<lemma name="Unit_byte"><en>B</en><fr>o</fr><el>B</el></lemma>
+	<lemma name="Unit_sec"><en>sec</en><fr>sec</fr><el>sec</el></lemma>
+	<lemma name="Unit_day"><en>d</en><fr>j</fr><el>ημ</el></lemma>
+	<lemma name="Unit_hour"><en>h</en><fr>h</fr><el>ώρ</el></lemma>
+
+	<!-- LANGUAGES -->
+	<lemma name="Lang_en"><en>English</en><fr>Anglais</fr><el>Αγγλικά</el></lemma>
+	<lemma name="Lang_fr"><en>French</en><fr>Français</fr><el>Γαλλικά</el></lemma>
+	<lemma name="Lang_el"><en>Greek</en><fr>Grec</fr><el>Ελληνικά</el></lemma>
+	<lemma name="Lang_ar"><en>Arabic</en><fr>Arabic</fr></lemma>
+	<lemma name="Lang_de"><en>German</en><fr>Allemand</fr></lemma>
+	<lemma name="Lang_es"><en>Spanish</en><fr>Espagnol</fr></lemma>
+	<lemma name="Lang_it"><en>Italian</en><fr>Italien</fr></lemma>
+	<lemma name="Lang_fi"><en>Finnish</en><fr>Finnois</fr></lemma>
+	<lemma name="Lang_ja"><en>Japanese</en><fr>Japonais</fr></lemma>
+	<lemma name="Lang_ko"><en>Korean</en><fr>Coréen</fr></lemma>
+	<lemma name="Lang_nl"><en>Dutch</en><fr>Néerlandais</fr></lemma>
+	<lemma name="Lang_no"><en>Norwegian</en><fr>Norvégien</fr></lemma>
+	<lemma name="Lang_pl"><en>Polish</en><fr>Polonais</fr></lemma>
+	<lemma name="Lang_pt"><en>Portuguese</en><fr>Portugais</fr></lemma>
+	<lemma name="Lang_ru"><en>Russian</en><fr>Russe</fr></lemma>
+	<lemma name="Lang_sv"><en>Swedish</en><fr>Suédois</fr></lemma>
+	<lemma name="Lang_zh"><en>Chinese</en><fr>Chinois</fr></lemma>
+
+	<lemma name="Lang_ab"><en>Abkhaz</en></lemma>
+	<lemma name="Lang_aa"><en>Afar</en></lemma>
+	<lemma name="Lang_af"><en>Afrikaans</en></lemma>
+	<lemma name="Lang_ak"><en>Akan</en></lemma>
+	<lemma name="Lang_sq"><en>Albanian</en></lemma>
+	<lemma name="Lang_am"><en>Amharic</en></lemma>
+	<lemma name="Lang_an"><en>Aragonese</en></lemma>
+	<lemma name="Lang_hy"><en>Armenian</en></lemma>
+	<lemma name="Lang_as"><en>Assamese</en></lemma>
+	<lemma name="Lang_av"><en>Avaric</en></lemma>
+	<lemma name="Lang_ae"><en>Avestan</en></lemma>
+	<lemma name="Lang_ay"><en>Aymara</en></lemma>
+	<lemma name="Lang_az"><en>Azerbaijani</en></lemma>
+	<lemma name="Lang_bm"><en>Bambara</en></lemma>
+	<lemma name="Lang_ba"><en>Bashkir</en></lemma>
+	<lemma name="Lang_eu"><en>Basque</en></lemma>
+	<lemma name="Lang_be"><en>Belarusian</en></lemma>
+	<lemma name="Lang_bn"><en>Bengali</en></lemma>
+	<lemma name="Lang_bh"><en>Bihari</en></lemma>
+	<lemma name="Lang_bi"><en>Bislama</en></lemma>
+	<lemma name="Lang_bs"><en>Bosnian</en></lemma>
+	<lemma name="Lang_br"><en>Breton</en></lemma>
+	<lemma name="Lang_bg"><en>Bulgarian</en></lemma>
+	<lemma name="Lang_my"><en>Burmese</en></lemma>
+	<lemma name="Lang_ca"><en>Catalan</en></lemma>
+	<lemma name="Lang_ch"><en>Chamorro</en></lemma>
+	<lemma name="Lang_ce"><en>Chechen</en></lemma>
+	<lemma name="Lang_ny"><en>Chichewa</en></lemma>
+	<lemma name="Lang_cv"><en>Chuvash</en></lemma>
+	<lemma name="Lang_kw"><en>Cornish</en></lemma>
+	<lemma name="Lang_co"><en>Corsican</en></lemma>
+	<lemma name="Lang_cr"><en>Cree</en></lemma>
+	<lemma name="Lang_hr"><en>Croatian</en></lemma>
+	<lemma name="Lang_cs"><en>Czech</en></lemma>
+	<lemma name="Lang_da"><en>Danish</en></lemma>
+	<lemma name="Lang_dv"><en>Divehi</en></lemma>
+	<lemma name="Lang_dz"><en>Dzongkha</en></lemma>
+	<lemma name="Lang_eo"><en>Esperanto</en></lemma>
+	<lemma name="Lang_et"><en>Estonian</en></lemma>
+	<lemma name="Lang_ee"><en>Ewe</en></lemma>
+	<lemma name="Lang_fo"><en>Faroese</en></lemma>
+	<lemma name="Lang_fj"><en>Fijian</en></lemma>
+	<lemma name="Lang_ff"><en>Fula</en></lemma>
+	<lemma name="Lang_gl"><en>Galician</en></lemma>
+	<lemma name="Lang_ka"><en>Georgian</en></lemma>
+	<lemma name="Lang_gn"><en>Guaraní</en></lemma>
+	<lemma name="Lang_gu"><en>Gujarati</en></lemma>
+	<lemma name="Lang_ht"><en>Haitian</en></lemma>
+	<lemma name="Lang_ha"><en>Hausa</en></lemma>
+	<lemma name="Lang_he"><en>Hebrew</en></lemma>
+	<lemma name="Lang_hz"><en>Herero</en></lemma>
+	<lemma name="Lang_hi"><en>Hindi</en></lemma>
+	<lemma name="Lang_ho"><en>Hiri Motu</en></lemma>
+	<lemma name="Lang_hu"><en>Hungarian</en></lemma>
+	<lemma name="Lang_ia"><en>Interlingua</en></lemma>
+	<lemma name="Lang_id"><en>Indonesian</en></lemma>
+	<lemma name="Lang_ie"><en>Interlingue</en></lemma>
+	<lemma name="Lang_ga"><en>Irish</en></lemma>
+	<lemma name="Lang_ig"><en>Igbo</en></lemma>
+	<lemma name="Lang_ik"><en>Inupiaq</en></lemma>
+	<lemma name="Lang_io"><en>Ido</en></lemma>
+	<lemma name="Lang_is"><en>Icelandic</en></lemma>
+	<lemma name="Lang_iu"><en>Inuktitut</en></lemma>
+	<lemma name="Lang_jv"><en>Javanese</en></lemma>
+	<lemma name="Lang_kl"><en>Kalaallisut</en></lemma>
+	<lemma name="Lang_kn"><en>Kannada</en></lemma>
+	<lemma name="Lang_kr"><en>Kanuri</en></lemma>
+	<lemma name="Lang_ks"><en>Kashmiri</en></lemma>
+	<lemma name="Lang_kk"><en>Kazakh</en></lemma>
+	<lemma name="Lang_km"><en>Khmer</en></lemma>
+	<lemma name="Lang_ki"><en>Kikuyu</en></lemma>
+	<lemma name="Lang_rw"><en>Kinyarwanda</en></lemma>
+	<lemma name="Lang_ky"><en>Kyrgyz</en></lemma>
+	<lemma name="Lang_kv"><en>Komi</en></lemma>
+	<lemma name="Lang_kg"><en>Kongo</en></lemma>
+	<lemma name="Lang_ku"><en>Kurdish</en></lemma>
+	<lemma name="Lang_kj"><en>Kwanyama</en></lemma>
+	<lemma name="Lang_la"><en>Latin</en></lemma>
+	<lemma name="Lang_lb"><en>Luxembourgish</en></lemma>
+	<lemma name="Lang_lg"><en>Ganda</en></lemma>
+	<lemma name="Lang_li"><en>Limburgish</en></lemma>
+	<lemma name="Lang_ln"><en>Lingala</en></lemma>
+	<lemma name="Lang_lo"><en>Lao</en></lemma>
+	<lemma name="Lang_lt"><en>Lithuanian</en></lemma>
+	<lemma name="Lang_lu"><en>Luba-Katanga</en></lemma>
+	<lemma name="Lang_lv"><en>Latvian</en></lemma>
+	<lemma name="Lang_gv"><en>Manx</en></lemma>
+	<lemma name="Lang_mk"><en>Macedonian</en></lemma>
+	<lemma name="Lang_mg"><en>Malagasy</en></lemma>
+	<lemma name="Lang_ms"><en>Malay</en></lemma>
+	<lemma name="Lang_ml"><en>Malayalam</en></lemma>
+	<lemma name="Lang_mt"><en>Maltese</en></lemma>
+	<lemma name="Lang_mi"><en>Māori</en></lemma>
+	<lemma name="Lang_mr"><en>Marathi</en></lemma>
+	<lemma name="Lang_mh"><en>Marshallese</en></lemma>
+	<lemma name="Lang_mn"><en>Mongolian</en></lemma>
+	<lemma name="Lang_na"><en>Nauru</en></lemma>
+	<lemma name="Lang_nv"><en>Navajo</en></lemma>
+	<lemma name="Lang_nb"><en>Norwegian Bokmål</en></lemma>
+	<lemma name="Lang_nd"><en>North Ndebele</en></lemma>
+	<lemma name="Lang_ne"><en>Nepali</en></lemma>
+	<lemma name="Lang_ng"><en>Ndonga</en></lemma>
+	<lemma name="Lang_nn"><en>Norwegian Nynorsk</en></lemma>
+	<lemma name="Lang_ii"><en>Nuosu</en></lemma>
+	<lemma name="Lang_nr"><en>South Ndebele</en></lemma>
+	<lemma name="Lang_oc"><en>Occitan</en></lemma>
+	<lemma name="Lang_oj"><en>Ojibwe</en></lemma>
+	<lemma name="Lang_cu"><en>Old Slavonic</en></lemma>
+	<lemma name="Lang_om"><en>Oromo</en></lemma>
+	<lemma name="Lang_or"><en>Oriya</en></lemma>
+	<lemma name="Lang_os"><en>Ossetian</en></lemma>
+	<lemma name="Lang_pa"><en>Panjabi</en></lemma>
+	<lemma name="Lang_pi"><en>Pāli</en></lemma>
+	<lemma name="Lang_fa"><en>Farsi</en></lemma>
+	<lemma name="Lang_ps"><en>Pashto</en></lemma>
+	<lemma name="Lang_qu"><en>Quechua</en></lemma>
+	<lemma name="Lang_rm"><en>Romansh</en></lemma>
+	<lemma name="Lang_rn"><en>Kirundi</en></lemma>
+	<lemma name="Lang_ro"><en>Romanian</en></lemma>
+	<lemma name="Lang_sa"><en>Sanskrit</en></lemma>
+	<lemma name="Lang_sc"><en>Sardinian</en></lemma>
+	<lemma name="Lang_sd"><en>Sindhi</en></lemma>
+	<lemma name="Lang_se"><en>Northern Sami</en></lemma>
+	<lemma name="Lang_sm"><en>Samoan</en></lemma>
+	<lemma name="Lang_sg"><en>Sango</en></lemma>
+	<lemma name="Lang_sr"><en>Serbian</en></lemma>
+	<lemma name="Lang_gd"><en>Scottish Gaelic</en></lemma>
+	<lemma name="Lang_sn"><en>Shona</en></lemma>
+	<lemma name="Lang_si"><en>Sinhala</en></lemma>
+	<lemma name="Lang_sk"><en>Slovak</en></lemma>
+	<lemma name="Lang_sl"><en>Slovene</en></lemma>
+	<lemma name="Lang_so"><en>Somali</en></lemma>
+	<lemma name="Lang_st"><en>Southern Sotho</en></lemma>
+	<lemma name="Lang_su"><en>Sundanese</en></lemma>
+	<lemma name="Lang_sw"><en>Swahili</en></lemma>
+	<lemma name="Lang_ss"><en>Swati</en></lemma>
+	<lemma name="Lang_ta"><en>Tamil</en></lemma>
+	<lemma name="Lang_te"><en>Telugu</en></lemma>
+	<lemma name="Lang_tg"><en>Tajik</en></lemma>
+	<lemma name="Lang_th"><en>Thai</en></lemma>
+	<lemma name="Lang_ti"><en>Tigrinya</en></lemma>
+	<lemma name="Lang_bo"><en>Tibetan</en></lemma>
+	<lemma name="Lang_tk"><en>Turkmen</en></lemma>
+	<lemma name="Lang_tl"><en>Tagalog</en></lemma>
+	<lemma name="Lang_tn"><en>Tswana</en></lemma>
+	<lemma name="Lang_to"><en>Tonga</en></lemma>
+	<lemma name="Lang_tr"><en>Turkish</en></lemma>
+	<lemma name="Lang_ts"><en>Tsonga</en></lemma>
+	<lemma name="Lang_tt"><en>Tatar</en></lemma>
+	<lemma name="Lang_tw"><en>Twi</en></lemma>
+	<lemma name="Lang_ty"><en>Tahitian</en></lemma>
+	<lemma name="Lang_ug"><en>Uyghur</en></lemma>
+	<lemma name="Lang_uk"><en>Ukrainian</en></lemma>
+	<lemma name="Lang_ur"><en>Urdu</en></lemma>
+	<lemma name="Lang_uz"><en>Uzbek</en></lemma>
+	<lemma name="Lang_ve"><en>Venda</en></lemma>
+	<lemma name="Lang_vi"><en>Vietnamese</en></lemma>
+	<lemma name="Lang_vo"><en>Volapük</en></lemma>
+	<lemma name="Lang_wa"><en>Walloon</en></lemma>
+	<lemma name="Lang_cy"><en>Welsh</en></lemma>
+	<lemma name="Lang_wo"><en>Wolof</en></lemma>
+	<lemma name="Lang_fy"><en>Western Frisian</en></lemma>
+	<lemma name="Lang_xh"><en>Xhosa</en></lemma>
+	<lemma name="Lang_yi"><en>Yiddish</en></lemma>
+	<lemma name="Lang_yo"><en>Yoruba</en></lemma>
+	<lemma name="Lang_za"><en>Zhuang</en></lemma>
+	<lemma name="Lang_zu"><en>Zulu</en></lemma>
+
+
+
+	<!-- COUNTRIES -->
+	<lemma name="Country_AD"><en>ANDORRA</en><fr>ANDORRE</fr></lemma>
+	<lemma name="Country_AE"><en>UNITED ARAB EMIRATES</en><fr>ÉMIRATS ARABES UNIS</fr></lemma>
+	<lemma name="Country_AF"><en>AFGHANISTAN</en><fr>AFGHANISTAN</fr></lemma>
+	<lemma name="Country_AG"><en>ANTIGUA AND BARBUDA</en><fr>ANTIGUA-ET-BARBUDA</fr></lemma>
+	<lemma name="Country_AI"><en>ANGUILLA</en><fr>ANGUILLA</fr></lemma>
+	<lemma name="Country_AL"><en>ALBANIA</en><fr>ALBANIE</fr></lemma>
+	<lemma name="Country_AM"><en>ARMENIA</en><fr>ARMÉNIE</fr></lemma>
+	<lemma name="Country_AO"><en>ANGOLA</en><fr>ANGOLA</fr></lemma>
+	<lemma name="Country_AQ"><en>ANTARCTICA</en><fr>ANTARCTIQUE</fr></lemma>
+	<lemma name="Country_AR"><en>ARGENTINA</en><fr>ARGENTINE</fr></lemma>
+	<lemma name="Country_AS"><en>AMERICAN SAMOA</en><fr>SAMOA AMÉRICAINES</fr></lemma>
+	<lemma name="Country_AT"><en>AUSTRIA</en><fr>AUTRICHE</fr></lemma>
+	<lemma name="Country_AU"><en>AUSTRALIA</en><fr>AUSTRALIE</fr></lemma>
+	<lemma name="Country_AW"><en>ARUBA</en><fr>ARUBA</fr></lemma>
+	<lemma name="Country_AX"><en>ÅLAND ISLANDS</en><fr>ÅLAND, ÎLES</fr></lemma>
+	<lemma name="Country_AZ"><en>AZERBAIJAN</en><fr>AZERBAÏDJAN</fr></lemma>
+	<lemma name="Country_BA"><en>BOSNIA AND HERZEGOVINA</en><fr>BOSNIE-HERZÉGOVINE</fr></lemma>
+	<lemma name="Country_BB"><en>BARBADOS</en><fr>BARBADE</fr></lemma>
+	<lemma name="Country_BD"><en>BANGLADESH</en><fr>BANGLADESH</fr></lemma>
+	<lemma name="Country_BE"><en>BELGIUM</en><fr>BELGIQUE</fr></lemma>
+	<lemma name="Country_BF"><en>BURKINA FASO</en><fr>BURKINA FASO</fr></lemma>
+	<lemma name="Country_BG"><en>BULGARIA</en><fr>BULGARIE</fr></lemma>
+	<lemma name="Country_BH"><en>BAHRAIN</en><fr>BAHREÏN</fr></lemma>
+	<lemma name="Country_BI"><en>BURUNDI</en><fr>BURUNDI</fr></lemma>
+	<lemma name="Country_BJ"><en>BENIN</en><fr>BÉNIN</fr></lemma>
+	<lemma name="Country_BL"><en>SAINT BARTHÉLEMY</en><fr>SAINT-BARTHÉLEMY</fr></lemma>
+	<lemma name="Country_BM"><en>BERMUDA</en><fr>BERMUDES</fr></lemma>
+	<lemma name="Country_BN"><en>BRUNEI DARUSSALAM</en><fr>BRUNÉI DARUSSALAM</fr></lemma>
+	<lemma name="Country_BO"><en>BOLIVIA, PLURINATIONAL STATE OF</en><fr>BOLIVIE, l'ÉTAT PLURINATIONAL DE</fr></lemma>
+	<lemma name="Country_BQ"><en>BONAIRE, SAINT EUSTATIUS AND SABA</en><fr>BONAIRE, SAINT-EUSTACHE ET SABA</fr></lemma>
+	<lemma name="Country_BR"><en>BRAZIL</en><fr>BRÉSIL</fr></lemma>
+	<lemma name="Country_BS"><en>BAHAMAS</en><fr>BAHAMAS</fr></lemma>
+	<lemma name="Country_BT"><en>BHUTAN</en><fr>BHOUTAN</fr></lemma>
+	<lemma name="Country_BV"><en>BOUVET ISLAND</en><fr>BOUVET, ÎLE</fr></lemma>
+	<lemma name="Country_BW"><en>BOTSWANA</en><fr>BOTSWANA</fr></lemma>
+	<lemma name="Country_BY"><en>BELARUS</en><fr>BÉLARUS</fr></lemma>
+	<lemma name="Country_BZ"><en>BELIZE</en><fr>BELIZE</fr></lemma>
+	<lemma name="Country_CA"><en>CANADA</en><fr>CANADA</fr></lemma>
+	<lemma name="Country_CC"><en>COCOS (KEELING) ISLANDS</en><fr>COCOS (KEELING), ÎLES</fr></lemma>
+	<lemma name="Country_CD"><en>CONGO, THE DEMOCRATIC REPUBLIC OF THE</en><fr>CONGO, LA RÉPUBLIQUE DÉMOCRATIQUE DU</fr></lemma>
+	<lemma name="Country_CF"><en>CENTRAL AFRICAN REPUBLIC</en><fr>CENTRAFRICAINE, RÉPUBLIQUE</fr></lemma>
+	<lemma name="Country_CG"><en>CONGO</en><fr>CONGO</fr></lemma>
+	<lemma name="Country_CH"><en>SWITZERLAND</en><fr>SUISSE</fr></lemma>
+	<lemma name="Country_CI"><en>CÔTE D'IVOIRE</en><fr>CÔTE D'IVOIRE</fr></lemma>
+	<lemma name="Country_CK"><en>COOK ISLANDS</en><fr>COOK, ÎLES</fr></lemma>
+	<lemma name="Country_CL"><en>CHILE</en><fr>CHILI</fr></lemma>
+	<lemma name="Country_CM"><en>CAMEROON</en><fr>CAMEROUN</fr></lemma>
+	<lemma name="Country_CN"><en>CHINA</en><fr>CHINE</fr></lemma>
+	<lemma name="Country_CO"><en>COLOMBIA</en><fr>COLOMBIE</fr></lemma>
+	<lemma name="Country_CR"><en>COSTA RICA</en><fr>COSTA RICA</fr></lemma>
+	<lemma name="Country_CU"><en>CUBA</en><fr>CUBA</fr></lemma>
+	<lemma name="Country_CV"><en>CAPE VERDE</en><fr>CAP-VERT</fr></lemma>
+	<lemma name="Country_CW"><en>CURAÇAO</en><fr>CURAÇAO</fr></lemma>
+	<lemma name="Country_CX"><en>CHRISTMAS ISLAND</en><fr>CHRISTMAS, ÎLE</fr></lemma>
+	<lemma name="Country_CY"><en>CYPRUS</en><fr>CHYPRE</fr></lemma>
+	<lemma name="Country_CZ"><en>CZECH REPUBLIC</en><fr>TCHÈQUE, RÉPUBLIQUE</fr></lemma>
+	<lemma name="Country_DE"><en>GERMANY</en><fr>ALLEMAGNE</fr></lemma>
+	<lemma name="Country_DJ"><en>DJIBOUTI</en><fr>DJIBOUTI</fr></lemma>
+	<lemma name="Country_DK"><en>DENMARK</en><fr>DANEMARK</fr></lemma>
+	<lemma name="Country_DM"><en>DOMINICA</en><fr>DOMINIQUE</fr></lemma>
+	<lemma name="Country_DO"><en>DOMINICAN REPUBLIC</en><fr>DOMINICAINE, RÉPUBLIQUE</fr></lemma>
+	<lemma name="Country_DZ"><en>ALGERIA</en><fr>ALGÉRIE</fr></lemma>
+	<lemma name="Country_EC"><en>ECUADOR</en><fr>ÉQUATEUR</fr></lemma>
+	<lemma name="Country_EE"><en>ESTONIA</en><fr>ESTONIE</fr></lemma>
+	<lemma name="Country_EG"><en>EGYPT</en><fr>ÉGYPTE</fr></lemma>
+	<lemma name="Country_EH"><en>WESTERN SAHARA</en><fr>SAHARA OCCIDENTAL</fr></lemma>
+	<lemma name="Country_ER"><en>ERITREA</en><fr>ÉRYTHRÉE</fr></lemma>
+	<lemma name="Country_ES"><en>SPAIN</en><fr>ESPAGNE</fr></lemma>
+	<lemma name="Country_ET"><en>ETHIOPIA</en><fr>ÉTHIOPIE</fr></lemma>
+	<lemma name="Country_FI"><en>FINLAND</en><fr>FINLANDE</fr></lemma>
+	<lemma name="Country_FJ"><en>FIJI</en><fr>FIDJI</fr></lemma>
+	<lemma name="Country_FK"><en>FALKLAND ISLANDS (MALVINAS)</en><fr>FALKLAND, ÎLES (MALVINAS)</fr></lemma>
+	<lemma name="Country_FM"><en>MICRONESIA, FEDERATED STATES OF</en><fr>MICRONÉSIE, ÉTATS FÉDÉRÉS DE</fr></lemma>
+	<lemma name="Country_FO"><en>FAROE ISLANDS</en><fr>FÉROÉ, ÎLES</fr></lemma>
+	<lemma name="Country_FR"><en>FRANCE</en><fr>FRANCE</fr></lemma>
+	<lemma name="Country_GA"><en>GABON</en><fr>GABON</fr></lemma>
+	<lemma name="Country_GB"><en>UNITED KINGDOM</en><fr>ROYAUME-UNI</fr></lemma>
+	<lemma name="Country_GD"><en>GRENADA</en><fr>GRENADE</fr></lemma>
+	<lemma name="Country_GE"><en>GEORGIA</en><fr>GÉORGIE</fr></lemma>
+	<lemma name="Country_GF"><en>FRENCH GUIANA</en><fr>GUYANE FRANÇAISE</fr></lemma>
+	<lemma name="Country_GG"><en>GUERNSEY</en><fr>GUERNESEY</fr></lemma>
+	<lemma name="Country_GH"><en>GHANA</en><fr>GHANA</fr></lemma>
+	<lemma name="Country_GI"><en>GIBRALTAR</en><fr>GIBRALTAR</fr></lemma>
+	<lemma name="Country_GL"><en>GREENLAND</en><fr>GROENLAND</fr></lemma>
+	<lemma name="Country_GM"><en>GAMBIA</en><fr>GAMBIE</fr></lemma>
+	<lemma name="Country_GN"><en>GUINEA</en><fr>GUINÉE</fr></lemma>
+	<lemma name="Country_GP"><en>GUADELOUPE</en><fr>GUADELOUPE</fr></lemma>
+	<lemma name="Country_GQ"><en>EQUATORIAL GUINEA</en><fr>GUINÉE ÉQUATORIALE</fr></lemma>
+	<lemma name="Country_GR"><en>GREECE</en><fr>GRÈCE</fr></lemma>
+	<lemma name="Country_GS"><en>SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS</en><fr>GÉORGIE DU SUD ET LES ÎLES SANDWICH DU SUD</fr></lemma>
+	<lemma name="Country_GT"><en>GUATEMALA</en><fr>GUATEMALA</fr></lemma>
+	<lemma name="Country_GU"><en>GUAM</en><fr>GUAM</fr></lemma>
+	<lemma name="Country_GW"><en>GUINEA-BISSAU</en><fr>GUINÉE-BISSAU</fr></lemma>
+	<lemma name="Country_GY"><en>GUYANA</en><fr>GUYANA</fr></lemma>
+	<lemma name="Country_HK"><en>HONG KONG</en><fr>HONG-KONG</fr></lemma>
+	<lemma name="Country_HM"><en>HEARD ISLAND AND MCDONALD ISLANDS</en><fr>HEARD, ÎLE ET MCDONALD, ÎLES</fr></lemma>
+	<lemma name="Country_HN"><en>HONDURAS</en><fr>HONDURAS</fr></lemma>
+	<lemma name="Country_HR"><en>CROATIA</en><fr>CROATIE</fr></lemma>
+	<lemma name="Country_HT"><en>HAITI</en><fr>HAÏTI</fr></lemma>
+	<lemma name="Country_HU"><en>HUNGARY</en><fr>HONGRIE</fr></lemma>
+	<lemma name="Country_ID"><en>INDONESIA</en><fr>INDONÉSIE</fr></lemma>
+	<lemma name="Country_IE"><en>IRELAND</en><fr>IRLANDE</fr></lemma>
+	<lemma name="Country_IL"><en>ISRAEL</en><fr>ISRAËL</fr></lemma>
+	<lemma name="Country_IM"><en>ISLE OF MAN</en><fr>ÎLE DE MAN</fr></lemma>
+	<lemma name="Country_IN"><en>INDIA</en><fr>INDE</fr></lemma>
+	<lemma name="Country_IO"><en>BRITISH INDIAN OCEAN TERRITORY</en><fr>OCÉAN INDIEN, TERRITOIRE BRITANNIQUE DE L'</fr></lemma>
+	<lemma name="Country_IQ"><en>IRAQ</en><fr>IRAQ</fr></lemma>
+	<lemma name="Country_IR"><en>IRAN, ISLAMIC REPUBLIC OF</en><fr>IRAN, RÉPUBLIQUE ISLAMIQUE D'</fr></lemma>
+	<lemma name="Country_IS"><en>ICELAND</en><fr>ISLANDE</fr></lemma>
+	<lemma name="Country_IT"><en>ITALY</en><fr>ITALIE</fr></lemma>
+	<lemma name="Country_JE"><en>JERSEY</en><fr>JERSEY</fr></lemma>
+	<lemma name="Country_JM"><en>JAMAICA</en><fr>JAMAÏQUE</fr></lemma>
+	<lemma name="Country_JO"><en>JORDAN</en><fr>JORDANIE</fr></lemma>
+	<lemma name="Country_JP"><en>JAPAN</en><fr>JAPON</fr></lemma>
+	<lemma name="Country_KE"><en>KENYA</en><fr>KENYA</fr></lemma>
+	<lemma name="Country_KG"><en>KYRGYZSTAN</en><fr>KIRGHIZISTAN</fr></lemma>
+	<lemma name="Country_KH"><en>CAMBODIA</en><fr>CAMBODGE</fr></lemma>
+	<lemma name="Country_KI"><en>KIRIBATI</en><fr>KIRIBATI</fr></lemma>
+	<lemma name="Country_KM"><en>COMOROS</en><fr>COMORES</fr></lemma>
+	<lemma name="Country_KN"><en>SAINT KITTS AND NEVIS</en><fr>SAINT-KITTS-ET-NEVIS</fr></lemma>
+	<lemma name="Country_KP"><en>KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF</en><fr>CORÉE, RÉPUBLIQUE POPULAIRE DÉMOCRATIQUE DE</fr></lemma>
+	<lemma name="Country_KR"><en>KOREA, REPUBLIC OF</en><fr>CORÉE, RÉPUBLIQUE DE</fr></lemma>
+	<lemma name="Country_KW"><en>KUWAIT</en><fr>KOWEÏT</fr></lemma>
+	<lemma name="Country_KY"><en>CAYMAN ISLANDS</en><fr>CAÏMANES, ÎLES</fr></lemma>
+	<lemma name="Country_KZ"><en>KAZAKHSTAN</en><fr>KAZAKHSTAN</fr></lemma>
+	<lemma name="Country_LA"><en>LAO PEOPLE'S DEMOCRATIC REPUBLIC</en><fr>LAO, RÉPUBLIQUE DÉMOCRATIQUE POPULAIRE</fr></lemma>
+	<lemma name="Country_LB"><en>LEBANON</en><fr>LIBAN</fr></lemma>
+	<lemma name="Country_LC"><en>SAINT LUCIA</en><fr>SAINTE-LUCIE</fr></lemma>
+	<lemma name="Country_LI"><en>LIECHTENSTEIN</en><fr>LIECHTENSTEIN</fr></lemma>
+	<lemma name="Country_LK"><en>SRI LANKA</en><fr>SRI LANKA</fr></lemma>
+	<lemma name="Country_LR"><en>LIBERIA</en><fr>LIBÉRIA</fr></lemma>
+	<lemma name="Country_LS"><en>LESOTHO</en><fr>LESOTHO</fr></lemma>
+	<lemma name="Country_LT"><en>LITHUANIA</en><fr>LITUANIE</fr></lemma>
+	<lemma name="Country_LU"><en>LUXEMBOURG</en><fr>LUXEMBOURG</fr></lemma>
+	<lemma name="Country_LV"><en>LATVIA</en><fr>LETTONIE</fr></lemma>
+	<lemma name="Country_LY"><en>LIBYAN ARAB JAMAHIRIYA</en><fr>LIBYENNE, JAMAHIRIYA ARABE</fr></lemma>
+	<lemma name="Country_MA"><en>MOROCCO</en><fr>MAROC</fr></lemma>
+	<lemma name="Country_MC"><en>MONACO</en><fr>MONACO</fr></lemma>
+	<lemma name="Country_MD"><en>MOLDOVA, REPUBLIC OF</en><fr>MOLDOVA, RÉPUBLIQUE DE</fr></lemma>
+	<lemma name="Country_ME"><en>MONTENEGRO</en><fr>MONTÉNÉGRO</fr></lemma>
+	<lemma name="Country_MF"><en>SAINT MARTIN (FRENCH PART)</en><fr>SAINT-MARTIN(PARTIE FRANÇAISE)</fr></lemma>
+	<lemma name="Country_MG"><en>MADAGASCAR</en><fr>MADAGASCAR</fr></lemma>
+	<lemma name="Country_MH"><en>MARSHALL ISLANDS</en><fr>MARSHALL, ÎLES</fr></lemma>
+	<lemma name="Country_MK"><en>MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF</en><fr>MACÉDOINE, L'EX-RÉPUBLIQUE YOUGOSLAVE DE</fr></lemma>
+	<lemma name="Country_ML"><en>MALI</en><fr>MALI</fr></lemma>
+	<lemma name="Country_MM"><en>MYANMAR</en><fr>MYANMAR</fr></lemma>
+	<lemma name="Country_MN"><en>MONGOLIA</en><fr>MONGOLIE</fr></lemma>
+	<lemma name="Country_MO"><en>MACAO</en><fr>MACAO</fr></lemma>
+	<lemma name="Country_MP"><en>NORTHERN MARIANA ISLANDS</en><fr>MARIANNES DU NORD, ÎLES</fr></lemma>
+	<lemma name="Country_MQ"><en>MARTINIQUE</en><fr>MARTINIQUE</fr></lemma>
+	<lemma name="Country_MR"><en>MAURITANIA</en><fr>MAURITANIE</fr></lemma>
+	<lemma name="Country_MS"><en>MONTSERRAT</en><fr>MONTSERRAT</fr></lemma>
+	<lemma name="Country_MT"><en>MALTA</en><fr>MALTE</fr></lemma>
+	<lemma name="Country_MU"><en>MAURITIUS</en><fr>MAURICE</fr></lemma>
+	<lemma name="Country_MV"><en>MALDIVES</en><fr>MALDIVES</fr></lemma>
+	<lemma name="Country_MW"><en>MALAWI</en><fr>MALAWI</fr></lemma>
+	<lemma name="Country_MX"><en>MEXICO</en><fr>MEXIQUE</fr></lemma>
+	<lemma name="Country_MY"><en>MALAYSIA</en><fr>MALAISIE</fr></lemma>
+	<lemma name="Country_MZ"><en>MOZAMBIQUE</en><fr>MOZAMBIQUE</fr></lemma>
+	<lemma name="Country_NA"><en>NAMIBIA</en><fr>NAMIBIE</fr></lemma>
+	<lemma name="Country_NC"><en>NEW CALEDONIA</en><fr>NOUVELLE-CALÉDONIE</fr></lemma>
+	<lemma name="Country_NE"><en>NIGER</en><fr>NIGER</fr></lemma>
+	<lemma name="Country_NF"><en>NORFOLK ISLAND</en><fr>NORFOLK, ÎLE</fr></lemma>
+	<lemma name="Country_NG"><en>NIGERIA</en><fr>NIGÉRIA</fr></lemma>
+	<lemma name="Country_NI"><en>NICARAGUA</en><fr>NICARAGUA</fr></lemma>
+	<lemma name="Country_NL"><en>NETHERLANDS</en><fr>PAYS-BAS</fr></lemma>
+	<lemma name="Country_NO"><en>NORWAY</en><fr>NORVÈGE</fr></lemma>
+	<lemma name="Country_NP"><en>NEPAL</en><fr>NÉPAL</fr></lemma>
+	<lemma name="Country_NR"><en>NAURU</en><fr>NAURU</fr></lemma>
+	<lemma name="Country_NU"><en>NIUE</en><fr>NIUÉ</fr></lemma>
+	<lemma name="Country_NZ"><en>NEW ZEALAND</en><fr>NOUVELLE-ZÉLANDE</fr></lemma>
+	<lemma name="Country_OM"><en>OMAN</en><fr>OMAN</fr></lemma>
+	<lemma name="Country_PA"><en>PANAMA</en><fr>PANAMA</fr></lemma>
+	<lemma name="Country_PE"><en>PERU</en><fr>PÉROU</fr></lemma>
+	<lemma name="Country_PF"><en>FRENCH POLYNESIA</en><fr>POLYNÉSIE FRANÇAISE</fr></lemma>
+	<lemma name="Country_PG"><en>PAPUA NEW GUINEA</en><fr>PAPOUASIE-NOUVELLE-GUINÉE</fr></lemma>
+	<lemma name="Country_PH"><en>PHILIPPINES</en><fr>PHILIPPINES</fr></lemma>
+	<lemma name="Country_PK"><en>PAKISTAN</en><fr>PAKISTAN</fr></lemma>
+	<lemma name="Country_PL"><en>POLAND</en><fr>POLOGNE</fr></lemma>
+	<lemma name="Country_PM"><en>SAINT PIERRE AND MIQUELON</en><fr>SAINT-PIERRE-ET-MIQUELON</fr></lemma>
+	<lemma name="Country_PN"><en>PITCAIRN</en><fr>PITCAIRN</fr></lemma>
+	<lemma name="Country_PR"><en>PUERTO RICO</en><fr>PORTO RICO</fr></lemma>
+	<lemma name="Country_PS"><en>PALESTINIAN TERRITORY, OCCUPIED</en><fr>PALESTINIEN OCCUPÉ, TERRITOIRE</fr></lemma>
+	<lemma name="Country_PT"><en>PORTUGAL</en><fr>PORTUGAL</fr></lemma>
+	<lemma name="Country_PW"><en>PALAU</en><fr>PALAOS</fr></lemma>
+	<lemma name="Country_PY"><en>PARAGUAY</en><fr>PARAGUAY</fr></lemma>
+	<lemma name="Country_QA"><en>QATAR</en><fr>QATAR</fr></lemma>
+	<lemma name="Country_RE"><en>RÉUNION</en><fr>RÉUNION</fr></lemma>
+	<lemma name="Country_RO"><en>ROMANIA</en><fr>ROUMANIE</fr></lemma>
+	<lemma name="Country_RS"><en>SERBIA</en><fr>SERBIE</fr></lemma>
+	<lemma name="Country_RU"><en>RUSSIAN FEDERATION</en><fr>RUSSIE, FÉDÉRATION DE</fr></lemma>
+	<lemma name="Country_RW"><en>RWANDA</en><fr>RWANDA</fr></lemma>
+	<lemma name="Country_SA"><en>SAUDI ARABIA</en><fr>ARABIE SAOUDITE</fr></lemma>
+	<lemma name="Country_SB"><en>SOLOMON ISLANDS</en><fr>SALOMON, ÎLES</fr></lemma>
+	<lemma name="Country_SC"><en>SEYCHELLES</en><fr>SEYCHELLES</fr></lemma>
+	<lemma name="Country_SD"><en>SUDAN</en><fr>SOUDAN</fr></lemma>
+	<lemma name="Country_SE"><en>SWEDEN</en><fr>SUÈDE</fr></lemma>
+	<lemma name="Country_SG"><en>SINGAPORE</en><fr>SINGAPOUR</fr></lemma>
+	<lemma name="Country_SH"><en>SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA</en><fr>SAINTE-HÉLÈNE, ASCENSION ET TRISTAN DA CUNHA</fr></lemma>
+	<lemma name="Country_SI"><en>SLOVENIA</en><fr>SLOVÉNIE</fr></lemma>
+	<lemma name="Country_SJ"><en>SVALBARD AND JAN MAYEN</en><fr>SVALBARD ET ÎLE JAN MAYEN</fr></lemma>
+	<lemma name="Country_SK"><en>SLOVAKIA</en><fr>SLOVAQUIE</fr></lemma>
+	<lemma name="Country_SL"><en>SIERRA LEONE</en><fr>SIERRA LEONE</fr></lemma>
+	<lemma name="Country_SM"><en>SAN MARINO</en><fr>SAINT-MARIN</fr></lemma>
+	<lemma name="Country_SN"><en>SENEGAL</en><fr>SÉNÉGAL</fr></lemma>
+	<lemma name="Country_SO"><en>SOMALIA</en><fr>SOMALIE</fr></lemma>
+	<lemma name="Country_SR"><en>SURINAME</en><fr>SURINAME</fr></lemma>
+	<lemma name="Country_ST"><en>SAO TOME AND PRINCIPE</en><fr>SAO TOMÉ-ET-PRINCIPE</fr></lemma>
+	<lemma name="Country_SV"><en>EL SALVADOR</en><fr>EL SALVADOR</fr></lemma>
+	<lemma name="Country_SX"><en>SINT MAARTEN (DUTCH PART)</en><fr>SAINT-MARTIN (PARTIE NÉERLANDAISE)</fr></lemma>
+	<lemma name="Country_SY"><en>SYRIAN ARAB REPUBLIC</en><fr>SYRIENNE, RÉPUBLIQUE ARABE</fr></lemma>
+	<lemma name="Country_SZ"><en>SWAZILAND</en><fr>SWAZILAND</fr></lemma>
+	<lemma name="Country_TC"><en>TURKS AND CAICOS ISLANDS</en><fr>TURKS ET CAÏQUES, ÎLES</fr></lemma>
+	<lemma name="Country_TD"><en>CHAD</en><fr>TCHAD</fr></lemma>
+	<lemma name="Country_TF"><en>FRENCH SOUTHERN TERRITORIES</en><fr>TERRES AUSTRALES FRANÇAISES</fr></lemma>
+	<lemma name="Country_TG"><en>TOGO</en><fr>TOGO</fr></lemma>
+	<lemma name="Country_TH"><en>THAILAND</en><fr>THAÏLANDE</fr></lemma>
+	<lemma name="Country_TJ"><en>TAJIKISTAN</en><fr>TADJIKISTAN</fr></lemma>
+	<lemma name="Country_TK"><en>TOKELAU</en><fr>TOKELAU</fr></lemma>
+	<lemma name="Country_TL"><en>TIMOR-LESTE</en><fr>TIMOR-LESTE</fr></lemma>
+	<lemma name="Country_TM"><en>TURKMENISTAN</en><fr>TURKMÉNISTAN</fr></lemma>
+	<lemma name="Country_TN"><en>TUNISIA</en><fr>TUNISIE</fr></lemma>
+	<lemma name="Country_TO"><en>TONGA</en><fr>TONGA</fr></lemma>
+	<lemma name="Country_TR"><en>TURKEY</en><fr>TURQUIE</fr></lemma>
+	<lemma name="Country_TT"><en>TRINIDAD AND TOBAGO</en><fr>TRINITÉ-ET-TOBAGO</fr></lemma>
+	<lemma name="Country_TV"><en>TUVALU</en><fr>TUVALU</fr></lemma>
+	<lemma name="Country_TW"><en>TAIWAN, PROVINCE OF CHINA</en><fr>TAÏWAN, PROVINCE DE CHINE</fr></lemma>
+	<lemma name="Country_TZ"><en>TANZANIA, UNITED REPUBLIC OF</en><fr>TANZANIE, RÉPUBLIQUE-UNIE DE</fr></lemma>
+	<lemma name="Country_UA"><en>UKRAINE</en><fr>UKRAINE</fr></lemma>
+	<lemma name="Country_UG"><en>UGANDA</en><fr>OUGANDA</fr></lemma>
+	<lemma name="Country_UM"><en>UNITED STATES MINOR OUTLYING ISLANDS</en><fr>ÎLES MINEURES ÉLOIGNÉES DES ÉTATS-UNIS</fr></lemma>
+	<lemma name="Country_US"><en>UNITED STATES</en><fr>ÉTATS-UNIS</fr></lemma>
+	<lemma name="Country_UY"><en>URUGUAY</en><fr>URUGUAY</fr></lemma>
+	<lemma name="Country_UZ"><en>UZBEKISTAN</en><fr>OUZBÉKISTAN</fr></lemma>
+	<lemma name="Country_VA"><en>HOLY SEE (VATICAN CITY STATE)</en><fr>SAINT-SIÈGE (ÉTAT DE LA CITÉ DU VATICAN)</fr></lemma>
+	<lemma name="Country_VC"><en>SAINT VINCENT AND THE GRENADINES</en><fr>SAINT-VINCENT-ET-LES GRENADINES</fr></lemma>
+	<lemma name="Country_VE"><en>VENEZUELA, BOLIVARIAN REPUBLIC OF</en><fr>VENEZUELA, RÉPUBLIQUE BOLIVARIENNE DU</fr></lemma>
+	<lemma name="Country_VG"><en>VIRGIN ISLANDS, BRITISH</en><fr>ÎLES VIERGES BRITANNIQUES</fr></lemma>
+	<lemma name="Country_VI"><en>VIRGIN ISLANDS, U.S.</en><fr>ÎLES VIERGES DES ÉTATS-UNIS</fr></lemma>
+	<lemma name="Country_VN"><en>VIET NAM</en><fr>VIET NAM</fr></lemma>
+	<lemma name="Country_VU"><en>VANUATU</en><fr>VANUATU</fr></lemma>
+	<lemma name="Country_WF"><en>WALLIS AND FUTUNA</en><fr>WALLIS ET FUTUNA</fr></lemma>
+	<lemma name="Country_WS"><en>SAMOA</en><fr>SAMOA</fr></lemma>
+	<lemma name="Country_YE"><en>YEMEN</en><fr>YÉMEN</fr></lemma>
+	<lemma name="Country_YT"><en>MAYOTTE</en><fr>MAYOTTE</fr></lemma>
+	<lemma name="Country_ZA"><en>SOUTH AFRICA</en><fr>AFRIQUE DU SUD</fr></lemma>
+	<lemma name="Country_ZM"><en>ZAMBIA</en><fr>ZAMBIE</fr></lemma>
+	<lemma name="Country_ZW"><en>ZIMBABWE</en><fr>ZIMBABWE</fr></lemma>
+
+</dictionary>

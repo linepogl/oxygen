@@ -29,6 +29,7 @@ require('oxy/src/Utils/Fs.php');
 require('oxy/src/Utils/Scope.php');
 require('oxy/src/Utils/Database.php');
 require('oxy/src/Engine/XMeta.php');
+require('oxy/oxy.php');
 
 function user_error_handler($severity, $msg, $filename, $linenum, /** @noinspection PhpUnusedParameterInspection */ $content) {
 	if (0 == (error_reporting() & $severity)) return;
