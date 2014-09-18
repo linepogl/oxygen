@@ -29,7 +29,7 @@ class TooltipControl extends Control {
 		$ns = $this->name;
 
 
-		echo '<div id="'.$ns.'"  style="display:none;position:absolute;">';
+		echo '<div id="'.$ns.'"  style="display:none;position:absolute;z-index:1;">';
 		if ($this->valign === self::VALIGN_BOTTOM) echo '<div class="tooltip-arrow top"></div>';
 		echo '<div class="tooltip">';
 
