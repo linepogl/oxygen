@@ -352,27 +352,28 @@ abstract class Action extends XValue {
 			);
 	}
 	public function GetForm($name=null){
+		$hidden = $name === null ? '' : new HiddenBox($name,true);
 		if ($this->IsAjaxDialog())
-			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" onsubmit="Oxygen.SubmitAjaxDialog(this);return false;" onreset="Oxygen.HideDialog();"><div class="inline">'.new HiddenBox('AjaxDialogSubmition',true);
+			return '<form'.($name===null?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" onsubmit="Oxygen.SubmitAjaxDialog(this);return false;" onreset="Oxygen.HideDialog();"><div class="inline">'.new HiddenBox('AjaxDialogSubmition',true).$hidden;
 		elseif ($this->IsIFrameDialog())
-			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" onreset="parent.Oxygen.HideDialog();" enctype="multipart/form-data"><div class="inline">';
+			return '<form'.($name===null?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" onreset="parent.Oxygen.HideDialog();" enctype="multipart/form-data"><div class="inline">'.$hidden;
 		else
-			return '<form'.(is_null($name)?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" enctype="multipart/form-data"><div class="inline">';
+			return '<form'.($name===null?'':' id="'.$name.'" name="'.$name.'"').' method="post" action="" enctype="multipart/form-data"><div class="inline">'.$hidden;
 	}
 	public function EndForm(){ return '</div></form>'; }
 	public function GetFormButtons(){ return '<div class="buttons"><div class="buttons1"><div class="buttons3"><div class="buttons2">'; }
 	public function EndFormButtons(){ return '</div></div></div></div>'; }
-	protected function IsPostback() {
+	protected function IsPostback($form_name = null) {
 		if ($this->IsAjaxDialog())
-			return Oxygen::IsPostback() && Http::$POST['AjaxDialogSubmition']->AsBoolean();
+			return Oxygen::IsPostback() && Http::$POST['AjaxDialogSubmition']->AsBoolean() && ($form_name===null || Http::$POST[$form_name]->AsBoolean());
 		else
-			return Oxygen::IsPostback();
+			return Oxygen::IsPostback() && ($form_name===null || Http::$POST[$form_name]->AsBoolean());
 	}
 
 
 
 	public function GetFilterForm($name) {
-		$r = '<form'.(is_null($name)?'':' id="'.$name.'"').' method="get" action="'.new Html(Oxygen::GetCurrentPhpScript()).'"><div class="inline">';
+		$r = '<form'.($name===null?'':' id="'.$name.'"').' method="get" action="'.new Html(Oxygen::GetCurrentPhpScript()).'"><div class="inline">';
 		$a = func_get_args();
 		array_splice($a,1);
 		foreach ($_GET as $key=>$value) if (!in_array($key,$a,true)) $r .= HiddenBox::Make(null,$value)->WithHttpName($key);

@@ -927,6 +927,11 @@ abstract class _oxy_dictionary {
 		,'fr',"Erreur pendant le téléchargement du fichier."
 		,'el',"Σφάλμα κατά την λήψη του αρχείου."
 		);}
+	public static function txtMsgUnsavedChanges(){ return new Lemma(__FUNCTION__
+		,'en',"There are unsaved changes."
+		,'fr',"Il y a de changements qui ne sont pas sauvegardés."
+		,'el',"Υπάρχουν μη αποθηκευμένες αλλαγές."
+		);}
 
 
 

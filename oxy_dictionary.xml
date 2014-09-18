@@ -379,6 +379,11 @@
 		<fr>Erreur pendant le téléchargement du fichier.</fr>
 		<el>Σφάλμα κατά την λήψη του αρχείου.</el>
 	</lemma>
+	<lemma name="MsgUnsavedChanged">
+		<en>There are unsaved changes.</en>
+		<fr>Il y a de changements qui ne sont pas sauvegardés.</fr>
+		<el>Υπάρχουν μη αποθηκευμένες αλλαγές.</el>
+	</lemma>
 
 
 
