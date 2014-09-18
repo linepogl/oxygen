@@ -393,6 +393,8 @@
 	<lemma name="Unit_sec"><en>sec</en><fr>sec</fr><el>sec</el></lemma>
 	<lemma name="Unit_day"><en>d</en><fr>j</fr><el>ημ</el></lemma>
 	<lemma name="Unit_hour"><en>h</en><fr>h</fr><el>ώρ</el></lemma>
+	<lemma name="Unit_min"><en>m</en><fr>m</fr><el>λεπ</el></lemma>
+	<lemma name="Unit_week"><en>w</en><fr>sem</fr><el>εβ</el></lemma>
 
 	<!-- LANGUAGES -->
 	<lemma name="Lang_en"><en>English</en><fr>Anglais</fr><el>Αγγλικά</el></lemma>
