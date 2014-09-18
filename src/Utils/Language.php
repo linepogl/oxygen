@@ -372,7 +372,7 @@ final class Language {
 
 		$now = XDateTime::Now();
 		if ($now->CompareTo($value) > 0)
-			return Lemma::Pick('XAgo')->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
+			return Lemma::Pick('XTimeAgo')->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
 		else
 			return Lemma::Pick('InXTime')->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
 	}
