@@ -356,7 +356,10 @@ final class Language {
 		if ($d == 1)
 			return Lemma::Pick('Tomorrow');
 
-		return Lemma::Pick('XDaysAgo')->Sprintf(-$d);
+		if ($d > 0)
+			return Lemma::Pick('InXDays')->Sprintf($d);
+		else
+			return Lemma::Pick('XDaysAgo')->Sprintf(-$d);
 	}
 	/** @return string */
 	public static function FormatTimeSpanSince($value,$null_caption = ''){
@@ -367,17 +370,11 @@ final class Language {
 		if (!($value instanceof XDateTime))
 			return $null_caption;
 
-		return Language::FormatTimeSpan( XDateTime::Now()->Diff( $value ) , false );
-	}
-	/** @return string */
-	public static function FormatDaysSince($value,$null_caption = ''){
-		if (is_int( $value ))
-			$value = new XDateTime($value);
-		if ($value instanceof DateTime)
-			$value = new XDateTime($value);
-		if (!($value instanceof XDateTime))
-			return $null_caption;
-		return XDateTime::Now()->Diff( $value )->GetDays() . Lemma::Pick('Unit_day');
+		$now = XDateTime::Now();
+		if ($now->CompareTo($value) > 0)
+			return Lemma::Pick('XAgo')->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
+		else
+			return Lemma::Pick('InXTime')->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
 	}
 
 

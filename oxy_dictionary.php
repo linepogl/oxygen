@@ -205,6 +205,9 @@ abstract class _oxy_dictionary {
 		,'fr',"Fichier"
 		,'el',"Αρχείο"
 		);}
+
+
+
 	public static function txtDate(){ return new Lemma(__FUNCTION__
 		,'en',"Date"
 		,'fr',"Date"
@@ -245,17 +248,6 @@ abstract class _oxy_dictionary {
 		,'fr',"après-midi"
 		,'el',"μ.μ."
 		);}
-	public static function txtXDays(){ return new Lemma(__FUNCTION__
-		,'en',"%s days"
-		,'fr',"%s jours"
-		,'el',"%s ημέρες"
-		);}
-	public static function txtXDaysAgo(){ return new Lemma(__FUNCTION__
-		,'en',"%s days ago"
-		,'fr',"Il y a %s jours"
-		,'el',"Πριν από %s ημέρες"
-		);}
-
 	public static function txtDay(){ return new Lemma(__FUNCTION__
 		,'en',"Day"
 		,'fr',"Jour"
@@ -271,144 +263,41 @@ abstract class _oxy_dictionary {
 		,'fr',"Nuit"
 		,'el',"Νύχτα"
 		);}
+	public static function txtDays(){ return new Lemma(__FUNCTION__
+		,'en',"Days"
+		,'fr',"Jours"
+		,'el',"Ημέρες"
+		);}
+	public static function txtXDays(){ return new Lemma(__FUNCTION__
+		,'en',"%s days"
+		,'fr',"%s jours"
+		,'el',"%s ημέρες"
+		);}
+	public static function txtXDaysAgo(){ return new Lemma(__FUNCTION__
+		,'en',"%s days ago"
+		,'fr',"Il y a %s jours"
+		,'el',"Πριν από %s ημέρες"
+		);}
+	public static function txtXTimeAgo(){ return new Lemma(__FUNCTION__
+		,'en',"%s ago"
+		,'fr',"Il y a %s"
+		,'el',"Πριν από %s"
+		);}
+	public static function txtInXDays(){ return new Lemma(__FUNCTION__
+		,'en',"In %s days"
+		,'fr',"Dans %s jours"
+		,'el',"Σε %s ημέρες"
+		);}
+	public static function txtInXTime(){ return new Lemma(__FUNCTION__
+		,'en',"In %s"
+		,'fr',"Dans %s"
+		,'el',"Σε %s"
+		);}
 	public static function txtTimeZone(){ return new Lemma(__FUNCTION__
 		,'en',"Time zone"
 		,'fr',"Fuseau horaire"
 		,'el',"Ζώνη ώρας"
 		);}
-
-	public static function txtSubmit(){ return new Lemma(__FUNCTION__
-		,'en',"Submit"
-		,'fr',"Soumettre"
-		,'el',"Αποστολή"
-		);}
-	public static function txtLogin(){ return new Lemma(__FUNCTION__
-		,'en',"Login"
-		,'fr',"Connexion"
-		,'el',"Login"
-		);}
-	public static function txtLogoff(){ return new Lemma(__FUNCTION__
-		,'en',"Logoff"
-		,'fr',"Déconnexion"
-		,'el',"Logoff"
-		);}
-	public static function txtBack(){ return new Lemma(__FUNCTION__
-		,'en',"Back"
-		,'fr',"Retour"
-		,'el',"Επιστροφή"
-		);}
-	public static function txtOK(){ return new Lemma(__FUNCTION__
-		,'en',"OK"
-		,'fr',"OK"
-		,'el',"OK"
-		);}
-	public static function txtApply(){ return new Lemma(__FUNCTION__
-		,'en',"Apply"
-		,'fr',"Appliquer"
-		,'el',"Εφαρμογή"
-		);}
-	public static function txtCancel(){ return new Lemma(__FUNCTION__
-		,'en',"Cancel"
-		,'fr',"Annuler"
-		,'el',"Άκυρο"
-		);}
-	public static function txtSend(){ return new Lemma(__FUNCTION__
-		,'en',"Send"
-		,'fr',"Envoyer"
-		,'el',"Αποστολή"
-		);}
-	public static function txtSave(){ return new Lemma(__FUNCTION__
-		,'en',"Save"
-		,'fr',"Sauvegarder"
-		,'el',"Αποθήκευση"
-		);}
-	public static function txtDelete(){ return new Lemma(__FUNCTION__
-		,'en',"Delete"
-		,'fr',"Supprimer"
-		,'el',"Διαγραφή"
-		);}
-	public static function txtRename(){ return new Lemma(__FUNCTION__
-		,'en',"Rename"
-		,'fr',"Renommer"
-		,'el',"Μετονομασία"
-		);}
-	public static function txtPrint(){ return new Lemma(__FUNCTION__
-		,'en',"Print"
-		,'fr',"Imprimer"
-		,'el',"Εκτύπωση"
-		);}
-	public static function txtClose(){ return new Lemma(__FUNCTION__
-		,'en',"Close"
-		,'fr',"Fermer"
-		,'el',"Κλείσιμο"
-		);}
-	public static function txtAsk(){ return new Lemma(__FUNCTION__
-		,'en',"Ask"
-		,'fr',"Demander"
-		,'el',"Ερώτηση"
-		);}
-	public static function txtUpdate(){ return new Lemma(__FUNCTION__
-		,'en',"Update"
-		,'fr',"Mettre à jour"
-		,'el',"Ανανέωση"
-		);}
-	public static function txtSelect(){ return new Lemma(__FUNCTION__
-		,'en',"Select"
-		,'fr',"Sélectionner"
-		,'el',"Επιλογή"
-		);}
-	public static function txtCompare(){ return new Lemma(__FUNCTION__
-		,'en',"Compare"
-		,'fr',"Comparer"
-		,'el',"Σύγκριση"
-		);}
-	public static function txtSearch(){ return new Lemma(__FUNCTION__
-		,'en',"Search"
-		,'fr',"Rechercher"
-		,'el',"Αναζήτηση"
-		);}
-	public static function txtYes(){ return new Lemma(__FUNCTION__
-		,'en',"Yes"
-		,'fr',"Oui"
-		,'el',"Ναι"
-		);}
-	public static function txtNo(){ return new Lemma(__FUNCTION__
-		,'en',"No"
-		,'fr',"Non"
-		,'el',"Όχι"
-		);}
-	public static function txtNext(){ return new Lemma(__FUNCTION__
-		,'en',"Next"
-		,'fr',"Suivant"
-		,'el',"Επόμενο"
-		);}
-	public static function txtPrevious(){ return new Lemma(__FUNCTION__
-		,'en',"Previous"
-		,'fr',"Précédent"
-		,'el',"Προηγούμενο"
-		);}
-	public static function txtModify(){ return new Lemma(__FUNCTION__
-		,'en',"Modify"
-		,'fr',"Modifier"
-		,'el',"Επεξεργασία"
-		);}
-	public static function txtContinue(){ return new Lemma(__FUNCTION__
-		,'en',"Continue"
-		,'fr',"Continuer"
-		,'el',"Συνέχεια"
-		);}
-
-	public static function txtHome(){ return new Lemma(__FUNCTION__
-		,'en',"Home"
-		,'fr',"Accueil"
-		,'el',"Αρχική"
-		);}
-	public static function txtSettings(){ return new Lemma(__FUNCTION__
-		,'en',"Settings"
-		,'fr',"Paramètres"
-		,'el',"Ρυθμίσεις"
-		);}
-
 	public static function txtJanuary(){ return new Lemma(__FUNCTION__
 		,'en',"January"
 		,'fr',"janvier"
@@ -603,16 +492,142 @@ abstract class _oxy_dictionary {
 		,'el',"Κυρ."
 		);}
 
-	public static function txtDays(){ return new Lemma(__FUNCTION__
-		,'en',"Days"
-		,'fr',"Jours"
-		,'el',"Ημέρες"
+
+
+
+
+	public static function txtSubmit(){ return new Lemma(__FUNCTION__
+		,'en',"Submit"
+		,'fr',"Soumettre"
+		,'el',"Αποστολή"
 		);}
-	public static function txtXAgo(){ return new Lemma(__FUNCTION__
-		,'en',"%s ago"
-		,'fr',"Il y a %s"
-		,'el',"Πριν από %s"
+	public static function txtLogin(){ return new Lemma(__FUNCTION__
+		,'en',"Login"
+		,'fr',"Connexion"
+		,'el',"Login"
 		);}
+	public static function txtLogoff(){ return new Lemma(__FUNCTION__
+		,'en',"Logoff"
+		,'fr',"Déconnexion"
+		,'el',"Logoff"
+		);}
+	public static function txtBack(){ return new Lemma(__FUNCTION__
+		,'en',"Back"
+		,'fr',"Retour"
+		,'el',"Επιστροφή"
+		);}
+	public static function txtOK(){ return new Lemma(__FUNCTION__
+		,'en',"OK"
+		,'fr',"OK"
+		,'el',"OK"
+		);}
+	public static function txtApply(){ return new Lemma(__FUNCTION__
+		,'en',"Apply"
+		,'fr',"Appliquer"
+		,'el',"Εφαρμογή"
+		);}
+	public static function txtCancel(){ return new Lemma(__FUNCTION__
+		,'en',"Cancel"
+		,'fr',"Annuler"
+		,'el',"Άκυρο"
+		);}
+	public static function txtSend(){ return new Lemma(__FUNCTION__
+		,'en',"Send"
+		,'fr',"Envoyer"
+		,'el',"Αποστολή"
+		);}
+	public static function txtSave(){ return new Lemma(__FUNCTION__
+		,'en',"Save"
+		,'fr',"Sauvegarder"
+		,'el',"Αποθήκευση"
+		);}
+	public static function txtDelete(){ return new Lemma(__FUNCTION__
+		,'en',"Delete"
+		,'fr',"Supprimer"
+		,'el',"Διαγραφή"
+		);}
+	public static function txtRename(){ return new Lemma(__FUNCTION__
+		,'en',"Rename"
+		,'fr',"Renommer"
+		,'el',"Μετονομασία"
+		);}
+	public static function txtPrint(){ return new Lemma(__FUNCTION__
+		,'en',"Print"
+		,'fr',"Imprimer"
+		,'el',"Εκτύπωση"
+		);}
+	public static function txtClose(){ return new Lemma(__FUNCTION__
+		,'en',"Close"
+		,'fr',"Fermer"
+		,'el',"Κλείσιμο"
+		);}
+	public static function txtAsk(){ return new Lemma(__FUNCTION__
+		,'en',"Ask"
+		,'fr',"Demander"
+		,'el',"Ερώτηση"
+		);}
+	public static function txtUpdate(){ return new Lemma(__FUNCTION__
+		,'en',"Update"
+		,'fr',"Mettre à jour"
+		,'el',"Ανανέωση"
+		);}
+	public static function txtSelect(){ return new Lemma(__FUNCTION__
+		,'en',"Select"
+		,'fr',"Sélectionner"
+		,'el',"Επιλογή"
+		);}
+	public static function txtCompare(){ return new Lemma(__FUNCTION__
+		,'en',"Compare"
+		,'fr',"Comparer"
+		,'el',"Σύγκριση"
+		);}
+	public static function txtSearch(){ return new Lemma(__FUNCTION__
+		,'en',"Search"
+		,'fr',"Rechercher"
+		,'el',"Αναζήτηση"
+		);}
+	public static function txtYes(){ return new Lemma(__FUNCTION__
+		,'en',"Yes"
+		,'fr',"Oui"
+		,'el',"Ναι"
+		);}
+	public static function txtNo(){ return new Lemma(__FUNCTION__
+		,'en',"No"
+		,'fr',"Non"
+		,'el',"Όχι"
+		);}
+	public static function txtNext(){ return new Lemma(__FUNCTION__
+		,'en',"Next"
+		,'fr',"Suivant"
+		,'el',"Επόμενο"
+		);}
+	public static function txtPrevious(){ return new Lemma(__FUNCTION__
+		,'en',"Previous"
+		,'fr',"Précédent"
+		,'el',"Προηγούμενο"
+		);}
+	public static function txtModify(){ return new Lemma(__FUNCTION__
+		,'en',"Modify"
+		,'fr',"Modifier"
+		,'el',"Επεξεργασία"
+		);}
+	public static function txtContinue(){ return new Lemma(__FUNCTION__
+		,'en',"Continue"
+		,'fr',"Continuer"
+		,'el',"Συνέχεια"
+		);}
+
+	public static function txtHome(){ return new Lemma(__FUNCTION__
+		,'en',"Home"
+		,'fr',"Accueil"
+		,'el',"Αρχική"
+		);}
+	public static function txtSettings(){ return new Lemma(__FUNCTION__
+		,'en',"Settings"
+		,'fr',"Paramètres"
+		,'el',"Ρυθμίσεις"
+		);}
+
 
 	public static function txtUser(){ return new Lemma(__FUNCTION__
 		,'en',"User"

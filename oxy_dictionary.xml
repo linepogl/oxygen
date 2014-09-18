@@ -44,8 +44,6 @@
 	<lemma name="Now"><en>Now</en><fr>Maintenant</fr><el>Τώρα</el></lemma>
 	<lemma name="AM"><en>a.m.</en><fr>avant-midi</fr><el>π.μ.</el></lemma>
 	<lemma name="PM"><en>p.m.</en><fr>après-midi</fr><el>μ.μ.</el></lemma>
-	<lemma name="XDays"><en>%s days</en><fr>%s jours</fr><el>%s ημέρες</el></lemma>
-	<lemma name="XDaysAgo"><en>%s days ago</en><fr>Il y a %s jours</fr><el>Πριν από %s ημέρες</el></lemma>
 
 	<lemma name="Day"><en>Day</en><fr>Jour</fr><el>Ημέρα</el></lemma>
 	<lemma name="DayOfWeek"><en>Day of week</en><fr>Jour de la semaine</fr><el>Ημέρα της εβδομάδας</el></lemma>
@@ -123,7 +121,11 @@
 	<lemma name="Sun_"><en>Sun</en><fr>dim.</fr><el>Κυρ.</el></lemma>
 
 	<lemma name="Days"><en>Days</en><fr>Jours</fr><el>Ημέρες</el></lemma>
-	<lemma name="XAgo"><en>%s ago</en><fr>Il y a %s</fr><el>Πριν από %s</el></lemma>
+	<lemma name="XDays"><en>%s days</en><fr>%s jours</fr><el>%s ημέρες</el></lemma>
+	<lemma name="XDaysAgo"><en>%s days ago</en><fr>Il y a %s jours</fr><el>Πριν από %s ημέρες</el></lemma>
+	<lemma name="InXDays"><en>In %s days</en><fr>Dans %s jours</fr><el>Σε %s ημέρες</el></lemma>
+	<lemma name="XTimeAgo"><en>%s ago</en><fr>Il y a %s</fr><el>Πριν από %s</el></lemma>
+	<lemma name="InXTime"><en>In %s</en><fr>Dans %s</fr><el>Σε %s</el></lemma>
 
 	<lemma name="User"><en>User</en><fr>Utilisateur</fr><el>Χρήστης</el></lemma>
 	<lemma name="Users"><en>Users</en><fr>Utilisateurs</fr><el>Χρήστες</el></lemma>
