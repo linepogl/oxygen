@@ -14,13 +14,16 @@ class FormMonitoringControl extends Control {
 	private $on_form_unchanged = null;
 	public function WithOnFormUnchanged($value){ $this->on_form_unchanged = $value; return $this; }
 
+	private $is_blocked = false;
+	public function WithIsBlocked($value){ $this->is_blocked = $value; return $this; }
+
 	public function Render() {
 		$ns = $this->name;
 		$message = $this->message === null ? oxy::txtMsgUnsavedChanges() : $this->message;
 
 		echo Js::BEGIN;
 		echo "window.$ns = {";
-		echo "  initial_form_serialization:null";
+		echo "  initial_form_serialization:".new Js($this->is_blocked?'!':null);
 		echo " ,form_has_changed:false";
 		echo " ,CheckFormChanged:function(){";
 		echo "    var s = jQuery('#$this->form_name').serialize();";
