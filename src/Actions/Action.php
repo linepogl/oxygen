@@ -149,7 +149,7 @@ abstract class Action extends XValue {
 				elseif ($this->IsAjaxDialog()){
 					echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgPageNotFound')) : $ex );
 					echo $this->GetFormButtons();
-					echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+					echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
 					echo $this->EndFormButtons();
 				}
 				else {
@@ -178,7 +178,7 @@ abstract class Action extends XValue {
 				elseif ($this->IsAjaxDialog()){
 					echo new MessageControl($ex);
 					echo $this->GetFormButtons();
-					echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+					echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
 					echo $this->EndFormButtons();
 				}
 				else {
@@ -236,7 +236,7 @@ abstract class Action extends XValue {
 					elseif ($this->IsAjaxDialog()){
 						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurredAndTeamNotified') ) );
 						echo $this->GetFormButtons();
-						echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+						echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
 						echo $this->EndFormButtons();
 					}
 					else {

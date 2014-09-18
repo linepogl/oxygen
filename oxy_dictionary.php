@@ -1,2095 +1,2527 @@
 <?php
 
 abstract class _oxy_dictionary {
-	protected static function _() { list(,$caller) = debug_backtrace(false); return new Lemma($caller); }
-	/** @return Lemma */ protected static function __($x) { list(,$caller) = debug_backtrace(false); return forward_static_call([get_called_class(),$caller.'_'.$x]); }
+	//protected static function _() { list(,$caller) = debug_backtrace(false); return new Lemma($caller); }
+	///** @return Lemma */ protected static function __($x) { list(,$caller) = debug_backtrace(false); return forward_static_call([get_called_class(),$caller.'_'.$x]); }
 
-	public static function txtLang($x) { return static::__($x); }
-	public static function txtLang_en(){ return static::_('en','English','fr','Anglais','el','Αγγλικά'); }
-	public static function txtLang_fr(){ return static::_('en','French','fr','Français','el','Γαλλικά'); }
-	public static function txtLang_el(){ return static::_('en','Greek','fr','Grec','el','Ελληνικά'); }
-
-
-	public static function txtLocale() { return new Lemma('Locale','en','en_GB','fr','fr_FR','el','el_GR'); }
-
-	public static function txtCountry($x){ switch($x) {
-		case '00': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '01': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '02': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '03': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '04': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '05': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '06': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '07': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '08': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '09': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '10': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '11': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '12': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '13': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '14': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '15': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '16': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '17': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '18': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '19': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '20': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '21': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '22': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '23': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '24': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '25': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '26': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '27': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '28': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '29': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '40': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '41': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '42': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '43': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '44': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '45': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '46': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '47': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '48': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '49': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '50': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '51': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '52': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '53': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '54': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '55': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '56': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '57': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '58': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '59': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '60': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '61': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '62': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '63': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '64': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '65': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '66': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '67': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '68': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-		case '69': return self::_('en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα','en','Language','fr','Langue','el','Γλώσσα');
-	};return _($x);}
-
-	public static function txtLanguage000(){ return new Lemma(__FUNCTION__
-		,'en','Language'
-		,'fr','Langue'
-		,'el','Γλώσσα'
-	);}
-	public static function txtLanguage001(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage002(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage003(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage004(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage005(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage006(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage007(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage008(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage009(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage010(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage011(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage012(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage013(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage014(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage015(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage016(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage017(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage018(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage019(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage020(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage021(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage022(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage023(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage024(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage025(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage026(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage027(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage028(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage029(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage030(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage031(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage032(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage033(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage034(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage035(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage036(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage037(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage038(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage039(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage040(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage041(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage042(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage043(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage044(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage045(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage046(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage047(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage048(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage049(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage050(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage051(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage052(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage053(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage054(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage055(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage056(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage057(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage058(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage059(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage060(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage061(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage062(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage063(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage064(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage065(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage066(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage067(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage068(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage069(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage070(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage071(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage072(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage073(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage074(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage075(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage076(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage077(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage078(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage079(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage080(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage081(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage082(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage083(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage084(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage085(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage086(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage087(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage088(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage089(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage090(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage091(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage092(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage093(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage094(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage095(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage096(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage097(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage098(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage099(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-
-
-	public static function txtLanguage100(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage101(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage102(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage103(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage104(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage105(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage106(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage107(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage108(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage109(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage110(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage111(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage112(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage113(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage114(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage115(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage116(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage117(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage118(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage119(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage120(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage121(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage122(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage123(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage124(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage125(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage126(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage127(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage128(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage129(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage130(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage131(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage132(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage133(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage134(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage135(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage136(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage137(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage138(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage139(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage140(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage141(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage142(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage143(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage144(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage145(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage146(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage147(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage148(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage149(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage150(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage151(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage152(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage153(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage154(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage155(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage156(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage157(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage158(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage159(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage160(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage161(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage162(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage163(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage164(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage165(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage166(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage167(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage168(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage169(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage170(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage171(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage172(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage173(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage174(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage175(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage176(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage177(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage178(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage179(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage180(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage181(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage182(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage183(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage184(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage185(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage186(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage187(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage188(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage189(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage190(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage191(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage192(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage193(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage194(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage195(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage196(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage197(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage198(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage199(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-
-	public static function txtLanguage200(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage201(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage202(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage203(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage204(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage205(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage206(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage207(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage208(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage209(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage210(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage211(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage212(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage213(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage214(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage215(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage216(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage217(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage218(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage219(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage220(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage221(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage222(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage223(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage224(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage225(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage226(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage227(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage228(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage229(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage230(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage231(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage232(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage233(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage234(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage235(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage236(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage237(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage238(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage239(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage240(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage241(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage242(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage243(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage244(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage245(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage246(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage247(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage248(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage249(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage250(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage251(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage252(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage253(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage254(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage255(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage256(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage257(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage258(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage259(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage260(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage261(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage262(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage263(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage264(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage265(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage266(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage267(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage268(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage269(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage270(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage271(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage272(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage273(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage274(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage275(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage276(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage277(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage278(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage279(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage280(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage281(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage282(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage283(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage284(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage285(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage286(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage287(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage288(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage289(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage290(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage291(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage292(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage293(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage294(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage295(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage296(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage297(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage298(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage299(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-
-	public static function txtLanguage300(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage301(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage302(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage303(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage304(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage305(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage306(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage307(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage308(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage309(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage310(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage311(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage312(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage313(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage314(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage315(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage316(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage317(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage318(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage319(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage320(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage321(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage322(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage323(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage324(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage325(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage326(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage327(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage328(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage329(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage330(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage331(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage332(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage333(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage334(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage335(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage336(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage337(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage338(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage339(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage340(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage341(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage342(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage343(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage344(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage345(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage346(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage347(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage348(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage349(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage350(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage351(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage352(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage353(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage354(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage355(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage356(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage357(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage358(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage359(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage360(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage361(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage362(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage363(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage364(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage365(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage366(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage367(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage368(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage369(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage370(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage371(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage372(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage373(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage374(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage375(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage376(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage377(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage378(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage379(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage380(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage381(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage382(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage383(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage384(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage385(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage386(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage387(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage388(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage389(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage390(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage391(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage392(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage393(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage394(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage395(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage396(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage397(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage398(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage399(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-
-	public static function txtLanguage400(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage401(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage402(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage403(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage404(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage405(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage406(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage407(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage408(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage409(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage410(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage411(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage412(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage413(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage414(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage415(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage416(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage417(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage418(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage419(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage420(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage421(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage422(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage423(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage424(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage425(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage426(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage427(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage428(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage429(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage430(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage431(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage432(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage433(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage434(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage435(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage436(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage437(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage438(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage439(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage440(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage441(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage442(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage443(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage444(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage445(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage446(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage447(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage448(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage449(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage450(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage451(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage452(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage453(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage454(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage455(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage456(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage457(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage458(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage459(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage460(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage461(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage462(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage463(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage464(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage465(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage466(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage467(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage468(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage469(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage470(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage471(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage472(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage473(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage474(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage475(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage476(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage477(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage478(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage479(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage480(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage481(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage482(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage483(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage484(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage485(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage486(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage487(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage488(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage489(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage490(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage491(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage492(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage493(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage494(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage495(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage496(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage497(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage498(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage499(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-
-	public static function txtLanguage500(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage501(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage502(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage503(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage504(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage505(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage506(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage507(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage508(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage509(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage510(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage511(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage512(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage513(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage514(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage515(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage516(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage517(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage518(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage519(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage520(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage521(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage522(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage523(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage524(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage525(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage526(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage527(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage528(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage529(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage530(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage531(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage532(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage533(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage534(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage535(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage536(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage537(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage538(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage539(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage540(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage541(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage542(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage543(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage544(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage545(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage546(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage547(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage548(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage549(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage550(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage551(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage552(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage553(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage554(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage555(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage556(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage557(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage558(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage559(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage560(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage561(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage562(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage563(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage564(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage565(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage566(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage567(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage568(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage569(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage570(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage571(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage572(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage573(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage574(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage575(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage576(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage577(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage578(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage579(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage580(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage581(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage582(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage583(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage584(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage585(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage586(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage587(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage588(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage589(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage590(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage591(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage592(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage593(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage594(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage595(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage596(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage597(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage598(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage599(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-
-	public static function txtLanguage600(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage601(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage602(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage603(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage604(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage605(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage606(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage607(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage608(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage609(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage610(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage611(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage612(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage613(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage614(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage615(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage616(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage617(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage618(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage619(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage620(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage621(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage622(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage623(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage624(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage625(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage626(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage627(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage628(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage629(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage630(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage631(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage632(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage633(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage634(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage635(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage636(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage637(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage638(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage639(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage640(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage641(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage642(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage643(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage644(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage645(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage646(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage647(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage648(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage649(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage650(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage651(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage652(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage653(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage654(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage655(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage656(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage657(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage658(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage659(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage660(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage661(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage662(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage663(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage664(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage665(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage666(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage667(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage668(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage669(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage670(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage671(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage672(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage673(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage674(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage675(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage676(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage677(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage678(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage679(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage680(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage681(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage682(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage683(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage684(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage685(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage686(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage687(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage688(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage689(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage690(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage691(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage692(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage693(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage694(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage695(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage696(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage697(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage698(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage699(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage700(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage701(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage702(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage703(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage704(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage705(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage706(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage707(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage708(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage709(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage710(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage711(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage712(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage713(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage714(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage715(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage716(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage717(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage718(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage719(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage720(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage721(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage722(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage723(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage724(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage725(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage726(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage727(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage728(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage729(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage730(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage731(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage732(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage733(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage734(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage735(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage736(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage737(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage738(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage739(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage740(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage741(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage742(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage743(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage744(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage745(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage746(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage747(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage748(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage749(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage750(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage751(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage752(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage753(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage754(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage755(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage756(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage757(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage758(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage759(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage760(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage761(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage762(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage763(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage764(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage765(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage766(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage767(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage768(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage769(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage770(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage771(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage772(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage773(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage774(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage775(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage776(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage777(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage778(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage779(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage780(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage781(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage782(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage783(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage784(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage785(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage786(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage787(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage788(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage789(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage790(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage791(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage792(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage793(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage794(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage795(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage796(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage797(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage798(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage799(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage800(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage801(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage802(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage803(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage804(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage805(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage806(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage807(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage808(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage809(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage810(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage811(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage812(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage813(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage814(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage815(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage816(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage817(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage818(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage819(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage820(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage821(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage822(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage823(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage824(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage825(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage826(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage827(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage828(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage829(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage830(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage831(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage832(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage833(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage834(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage835(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage836(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage837(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage838(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage839(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage840(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage841(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage842(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage843(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage844(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage845(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage846(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage847(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage848(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage849(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage850(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage851(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage852(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage853(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage854(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage855(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage856(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage857(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage858(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage859(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage860(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage861(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage862(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage863(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage864(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage865(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage866(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage867(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage868(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage869(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage870(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage871(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage872(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage873(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage874(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage875(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage876(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage877(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage878(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage879(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage880(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage881(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage882(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage883(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage884(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage885(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage886(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage887(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage888(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage889(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage890(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage891(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage892(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage893(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage894(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage895(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage896(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage897(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage898(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage899(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage900(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage901(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage902(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage903(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage904(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage905(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage906(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage907(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage908(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage909(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage910(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage911(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage912(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage913(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage914(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage915(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage916(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage917(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage918(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage919(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage920(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage921(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage922(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage923(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage924(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage925(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage926(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage927(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage928(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage929(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage930(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage931(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage932(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage933(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage934(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage935(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage936(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage937(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage938(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage939(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage940(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage941(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage942(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage943(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage944(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage945(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage946(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage947(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage948(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage949(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage950(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage951(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage952(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage953(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage954(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage955(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage956(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage957(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage958(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage959(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage960(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage961(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage962(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage963(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage964(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage965(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage966(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage967(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage968(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage969(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage970(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage971(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage972(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage973(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage974(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage975(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage976(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage977(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage978(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage979(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage980(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage981(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage982(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage983(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage984(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage985(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage986(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage987(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage988(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage989(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage990(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage991(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage992(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage993(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage994(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage995(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage996(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage997(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage998(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage999(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
+	/** @return Lemma */ public static function txt($n){
+		$c = get_called_class();
+		$n = 'txt'.$n;
+		if (method_exists($c,$n))
+			return call_user_func([$c,$n]);
+		else
+			return new Lemma($n);
+	}
+	/** @return Lemma */ protected static function _forward() {
+		$c = get_called_class();
+		list(,$n) = debug_backtrace(false);
+		$n = $n['function'].implode('_',func_get_args());
+		if (method_exists($c,$n))
+			return call_user_func([$c,$n]);
+		else
+			return new Lemma($n);
+	}
 
 
 
-	public static function txtLanguage1000(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1001(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1002(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1003(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1004(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1005(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1006(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1007(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1008(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1009(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1010(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1011(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1012(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1013(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1014(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1015(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1016(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1017(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1018(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1019(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1020(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1021(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1022(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1023(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1024(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1025(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1026(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1027(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1028(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1029(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1030(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1031(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1032(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1033(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1034(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1035(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1036(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1037(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1038(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1039(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1040(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1041(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1042(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1043(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1044(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1045(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1046(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1047(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1048(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1049(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1050(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1051(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1052(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1053(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1054(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1055(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1056(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1057(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1058(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1059(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1060(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1061(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1062(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1063(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1064(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1065(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1066(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1067(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1068(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1069(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1070(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1071(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1072(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1073(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1074(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1075(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1076(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1077(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1078(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1079(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1080(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1081(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1082(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1083(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1084(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1085(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1086(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1087(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1088(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1089(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1090(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1091(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1092(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1093(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1094(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1095(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1096(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1097(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1098(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1099(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1100(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1101(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1102(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1103(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1104(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1105(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1106(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1107(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1108(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1109(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1110(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1111(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1112(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1113(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1114(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1115(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1116(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1117(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1118(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1119(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1120(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1121(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1122(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1123(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1124(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1125(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1126(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1127(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1128(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1129(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1130(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1131(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1132(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1133(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1134(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1135(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1136(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1137(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1138(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1139(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1140(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1141(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1142(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1143(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1144(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1145(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1146(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1147(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1148(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1149(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1150(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1151(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1152(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1153(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1154(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1155(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1156(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1157(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1158(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1159(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1160(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1161(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1162(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1163(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1164(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1165(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1166(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1167(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1168(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1169(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1170(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1171(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1172(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1173(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1174(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1175(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1176(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1177(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1178(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1179(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1180(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1181(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1182(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1183(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1184(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1185(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1186(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1187(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1188(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1189(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1190(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1191(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1192(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1193(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1194(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1195(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1196(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1197(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1198(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1199(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1200(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1201(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1202(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1203(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1204(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1205(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1206(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1207(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1208(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1209(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1210(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1211(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1212(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1213(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1214(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1215(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1216(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1217(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1218(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1219(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1220(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1221(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1222(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1223(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1224(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1225(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1226(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1227(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1228(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1229(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1230(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1231(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1232(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1233(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1234(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1235(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1236(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1237(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1238(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1239(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1240(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1241(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1242(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1243(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1244(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1245(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1246(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1247(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1248(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1249(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1250(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1251(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1252(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1253(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1254(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1255(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1256(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1257(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1258(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1259(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1260(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1261(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1262(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1263(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1264(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1265(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1266(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1267(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1268(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1269(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1270(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1271(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1272(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1273(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1274(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1275(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1276(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1277(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1278(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1279(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1280(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1281(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1282(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1283(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1284(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1285(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1286(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1287(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1288(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1289(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1290(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1291(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1292(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1293(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1294(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1295(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1296(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1297(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1298(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1299(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1300(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1301(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1302(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1303(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1304(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1305(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1306(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1307(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1308(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1309(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1310(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1311(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1312(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1313(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1314(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1315(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1316(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1317(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1318(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1319(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1320(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1321(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1322(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1323(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1324(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1325(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1326(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1327(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1328(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1329(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1330(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1331(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1332(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1333(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1334(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1335(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1336(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1337(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1338(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1339(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1340(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1341(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1342(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1343(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1344(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1345(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1346(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1347(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1348(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1349(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1350(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1351(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1352(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1353(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1354(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1355(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1356(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1357(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1358(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1359(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1360(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1361(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1362(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1363(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1364(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1365(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1366(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1367(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1368(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1369(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1370(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1371(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1372(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1373(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1374(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1375(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1376(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1377(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1378(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1379(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1380(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1381(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1382(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1383(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1384(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1385(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1386(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1387(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1388(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1389(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1390(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1391(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1392(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1393(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1394(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1395(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1396(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1397(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1398(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1399(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1400(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1401(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1402(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1403(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1404(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1405(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1406(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1407(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1408(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1409(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1410(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1411(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1412(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1413(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1414(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1415(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1416(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1417(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1418(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1419(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1420(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1421(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1422(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1423(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1424(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1425(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1426(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1427(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1428(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1429(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1430(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1431(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1432(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1433(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1434(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1435(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1436(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1437(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1438(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1439(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1440(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1441(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1442(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1443(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1444(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1445(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1446(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1447(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1448(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1449(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1450(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1451(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1452(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1453(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1454(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1455(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1456(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1457(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1458(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1459(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1460(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1461(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1462(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1463(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1464(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1465(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1466(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1467(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1468(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1469(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1470(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1471(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1472(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1473(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1474(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1475(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1476(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1477(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1478(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1479(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1480(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1481(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1482(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1483(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1484(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1485(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1486(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1487(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1488(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1489(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1490(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1491(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1492(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1493(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1494(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1495(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1496(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1497(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1498(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1499(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1500(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1501(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1502(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1503(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1504(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1505(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1506(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1507(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1508(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1509(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1510(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1511(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1512(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1513(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1514(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1515(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1516(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1517(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1518(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1519(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1520(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1521(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1522(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1523(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1524(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1525(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1526(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1527(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1528(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1529(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1530(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1531(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1532(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1533(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1534(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1535(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1536(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1537(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1538(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1539(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1540(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1541(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1542(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1543(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1544(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1545(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1546(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1547(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1548(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1549(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1550(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1551(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1552(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1553(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1554(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1555(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1556(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1557(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1558(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1559(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1560(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1561(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1562(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1563(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1564(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1565(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1566(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1567(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1568(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1569(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1570(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1571(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1572(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1573(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1574(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1575(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1576(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1577(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1578(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1579(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1580(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1581(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1582(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1583(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1584(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1585(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1586(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1587(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1588(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1589(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1590(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1591(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1592(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1593(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1594(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1595(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1596(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1597(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1598(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1599(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1600(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1601(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1602(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1603(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1604(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1605(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1606(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1607(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1608(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1609(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1610(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1611(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1612(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1613(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1614(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1615(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1616(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1617(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1618(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1619(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1620(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1621(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1622(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1623(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1624(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1625(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1626(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1627(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1628(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1629(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1630(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1631(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1632(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1633(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1634(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1635(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1636(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1637(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1638(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1639(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1640(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1641(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1642(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1643(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1644(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1645(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1646(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1647(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1648(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1649(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1650(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1651(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1652(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1653(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1654(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1655(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1656(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1657(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1658(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1659(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1660(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1661(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1662(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1663(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1664(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1665(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1666(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1667(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1668(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1669(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1670(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1671(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1672(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1673(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1674(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1675(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1676(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1677(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1678(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1679(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1680(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1681(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1682(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1683(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1684(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1685(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1686(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1687(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1688(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1689(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1690(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1691(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1692(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1693(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1694(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1695(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1696(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1697(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1698(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1699(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1700(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1701(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1702(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1703(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1704(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1705(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1706(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1707(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1708(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1709(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1710(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1711(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1712(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1713(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1714(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1715(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1716(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1717(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1718(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1719(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1720(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1721(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1722(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1723(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1724(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1725(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1726(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1727(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1728(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1729(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1730(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1731(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1732(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1733(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1734(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1735(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1736(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1737(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1738(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1739(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1740(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1741(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1742(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1743(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1744(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1745(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1746(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1747(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1748(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1749(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1750(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1751(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1752(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1753(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1754(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1755(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1756(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1757(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1758(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1759(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1760(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1761(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1762(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1763(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1764(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1765(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1766(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1767(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1768(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1769(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1770(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1771(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1772(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1773(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1774(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1775(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1776(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1777(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1778(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1779(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1780(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1781(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1782(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1783(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1784(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1785(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1786(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1787(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1788(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1789(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1790(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1791(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1792(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1793(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1794(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1795(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1796(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1797(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1798(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1799(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1800(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1801(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1802(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1803(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1804(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1805(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1806(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1807(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1808(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1809(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1810(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1811(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1812(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1813(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1814(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1815(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1816(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1817(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1818(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1819(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1820(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1821(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1822(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1823(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1824(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1825(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1826(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1827(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1828(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1829(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1830(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1831(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1832(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1833(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1834(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1835(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1836(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1837(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1838(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1839(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1840(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1841(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1842(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1843(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1844(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1845(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1846(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1847(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1848(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1849(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1850(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1851(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1852(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1853(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1854(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1855(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1856(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1857(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1858(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1859(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1860(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1861(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1862(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1863(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1864(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1865(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1866(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1867(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1868(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1869(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1870(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1871(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1872(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1873(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1874(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1875(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1876(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1877(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1878(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1879(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1880(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1881(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1882(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1883(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1884(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1885(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1886(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1887(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1888(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1889(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1890(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1891(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1892(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1893(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1894(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1895(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1896(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1897(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1898(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1899(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1900(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1901(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1902(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1903(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1904(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1905(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1906(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1907(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1908(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1909(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1910(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1911(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1912(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1913(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1914(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1915(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1916(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1917(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1918(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1919(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1920(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1921(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1922(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1923(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1924(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1925(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1926(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1927(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1928(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1929(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1930(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1931(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1932(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1933(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1934(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1935(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1936(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1937(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1938(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1939(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1940(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1941(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1942(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1943(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1944(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1945(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1946(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1947(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1948(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1949(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1950(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1951(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1952(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1953(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1954(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1955(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1956(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1957(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1958(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1959(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1960(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1961(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1962(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1963(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1964(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1965(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1966(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1967(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1968(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1969(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1970(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1971(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1972(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1973(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1974(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1975(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1976(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1977(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1978(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1979(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1980(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1981(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1982(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1983(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1984(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1985(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1986(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1987(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1988(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1989(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1990(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1991(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1992(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1993(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1994(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1995(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1996(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1997(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1998(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
-	public static function txtLanguage1999(){ return self::_('en','Language','fr','Langue','el','Γλώσσα'); }
+	public static function txten(){ return new Lemma(__FUNCTION__
+		,'en',"English"
+		,'fr',"Anglais"
+		,'el',"Αγγλικά"
+		);}
+	public static function txtfr(){ return new Lemma(__FUNCTION__
+		,'en',"French"
+		,'fr',"Français"
+		,'el',"Γαλλικά"
+		);}
+	public static function txtel(){ return new Lemma(__FUNCTION__
+		,'en',"Greek"
+		,'fr',"Grec"
+		,'el',"Ελληνικά"
+		);}
+	public static function txt_locale(){ return new Lemma(__FUNCTION__
+		,'en',"en_GB"
+		,'fr',"fr_FR"
+		,'el',"el_GR"
+		);}
+	public static function txt_thousands_separator(){ return new Lemma(__FUNCTION__
+		,'en',","
+		,'fr'," "
+		,'el',"."
+		);}
+	public static function txt_decimal_separator(){ return new Lemma(__FUNCTION__
+		,'en',"."
+		,'fr',","
+		,'el',","
+		);}
 
+	public static function txtLanguage(){ return new Lemma(__FUNCTION__
+		,'en',"Language"
+		,'fr',"Langue"
+		,'el',"Γλώσσα"
+		);}
+	public static function txtName(){ return new Lemma(__FUNCTION__
+		,'en',"Name"
+		,'fr',"Nom"
+		,'el',"Όνομα"
+		);}
+	public static function txtSurname(){ return new Lemma(__FUNCTION__
+		,'en',"Surname"
+		,'fr',"Nom"
+		,'el',"Επίθετο"
+		);}
+	public static function txtFirstName(){ return new Lemma(__FUNCTION__
+		,'en',"Name"
+		,'fr',"Prénom"
+		,'el',"Όνομα"
+		);}
+	public static function txtCompany(){ return new Lemma(__FUNCTION__
+		,'en',"Company"
+		,'fr',"Société"
+		,'el',"Εταιρία"
+		);}
+	public static function txtPosition(){ return new Lemma(__FUNCTION__
+		,'en',"Position"
+		,'fr',"Position"
+		,'el',"Θέση"
+		);}
+	public static function txtGender(){ return new Lemma(__FUNCTION__
+		,'en',"Gender"
+		,'fr',"Sexe"
+		,'el',"Φύλο"
+		);}
+	public static function txtMale(){ return new Lemma(__FUNCTION__
+		,'en',"Male"
+		,'fr',"Homme"
+		,'el',"Άρρεν"
+		);}
+	public static function txtFemale(){ return new Lemma(__FUNCTION__
+		,'en',"Female"
+		,'fr',"Femme"
+		,'el',"Θύλη"
+		);}
+	public static function txtPhone(){ return new Lemma(__FUNCTION__
+		,'en',"Phone"
+		,'fr',"Téléphone"
+		,'el',"Τηλέφωνο"
+		);}
+	public static function txtEmail(){ return new Lemma(__FUNCTION__
+		,'en',"E-mail"
+		,'fr',"E-mail"
+		,'el',"E-mail"
+		);}
+	public static function txtAddress(){ return new Lemma(__FUNCTION__
+		,'en',"Address"
+		,'fr',"Adresse"
+		,'el',"Διεύθυνση"
+		);}
+	public static function txtCity(){ return new Lemma(__FUNCTION__
+		,'en',"City"
+		,'fr',"Ville"
+		,'el',"Πόλη"
+		);}
+	public static function txtZip(){ return new Lemma(__FUNCTION__
+		,'en',"Postal code"
+		,'fr',"Code postal"
+		,'el',"Τ.Κ."
+		);}
+	public static function txtCountry(){ return new Lemma(__FUNCTION__
+		,'en',"Country"
+		,'fr',"Pays"
+		,'el',"Χώρα"
+		);}
+	public static function txtComments(){ return new Lemma(__FUNCTION__
+		,'en',"Comments"
+		,'fr',"Commentaires"
+		,'el',"Σχόλια"
+		);}
+	public static function txtUsername(){ return new Lemma(__FUNCTION__
+		,'en',"Username"
+		,'fr',"Identifiant"
+		,'el',"Username"
+		);}
+	public static function txtPassword(){ return new Lemma(__FUNCTION__
+		,'en',"Password"
+		,'fr',"Mot de passe"
+		,'el',"Κωδικός"
+		);}
+	public static function txtOldPassword(){ return new Lemma(__FUNCTION__
+		,'en',"Old password"
+		,'fr',"Ancien mot de passe"
+		,'el',"Παλιός κωδικός"
+		);}
+	public static function txtNewPassword(){ return new Lemma(__FUNCTION__
+		,'en',"New password"
+		,'fr',"Nouveau mot de passe"
+		,'el',"Νέος κωδικός"
+		);}
+	public static function txtConfirmPassword(){ return new Lemma(__FUNCTION__
+		,'en',"Confirm"
+		,'fr',"Confirmer"
+		,'el',"Επιβεβαίωση"
+		);}
+	public static function txtDateCreated(){ return new Lemma(__FUNCTION__
+		,'en',"Date created"
+		,'fr',"Date de création"
+		,'el',"Ημ.δημιουργίας"
+		);}
+	public static function txtDateModified(){ return new Lemma(__FUNCTION__
+		,'en',"Date modified"
+		,'fr',"Date de modification"
+		,'el',"Ημ.μεταβολής"
+		);}
+	public static function txtEmailRcpt(){ return new Lemma(__FUNCTION__
+		,'en',"To"
+		,'fr',"A"
+		,'el',"Πρoς"
+		);}
+	public static function txtEmailSubject(){ return new Lemma(__FUNCTION__
+		,'en',"Subject"
+		,'fr',"Sujet"
+		,'el',"Θέμα"
+		);}
+	public static function txtEmailBody(){ return new Lemma(__FUNCTION__
+		,'en',"Body"
+		,'fr',"Message"
+		,'el',"Κείμενο"
+		);}
+	public static function txtEmailFrom(){ return new Lemma(__FUNCTION__
+		,'en',"From"
+		,'fr',"De"
+		,'el',"Από"
+		);}
+	public static function txtDateSent(){ return new Lemma(__FUNCTION__
+		,'en',"Date sent"
+		,'fr',"Date d'envoi"
+		,'el',"Ημ.αποστολής"
+		);}
+	public static function txtLockedAccount(){ return new Lemma(__FUNCTION__
+		,'en',"Locked account"
+		,'fr',"Compte bloqué"
+		,'el',"Κλειδωμένος λογαριασμός"
+		);}
+	public static function txtFile(){ return new Lemma(__FUNCTION__
+		,'en',"File"
+		,'fr',"Fichier"
+		,'el',"Αρχείο"
+		);}
+	public static function txtDate(){ return new Lemma(__FUNCTION__
+		,'en',"Date"
+		,'fr',"Date"
+		,'el',"Ημερομηνία"
+		);}
+	public static function txtTime(){ return new Lemma(__FUNCTION__
+		,'en',"Time"
+		,'fr',"Heure"
+		,'el',"Ώρα"
+		);}
+	public static function txtToday(){ return new Lemma(__FUNCTION__
+		,'en',"Today"
+		,'fr',"Aujourd'hui"
+		,'el',"Σήμερα"
+		);}
+	public static function txtTomorrow(){ return new Lemma(__FUNCTION__
+		,'en',"Tomorrow"
+		,'fr',"Demain"
+		,'el',"Αύριο"
+		);}
+	public static function txtYesterday(){ return new Lemma(__FUNCTION__
+		,'en',"Yesterday"
+		,'fr',"Hier"
+		,'el',"Xθες"
+		);}
+	public static function txtNow(){ return new Lemma(__FUNCTION__
+		,'en',"Now"
+		,'fr',"Maintenant"
+		,'el',"Τώρα"
+		);}
+	public static function txtAM(){ return new Lemma(__FUNCTION__
+		,'en',"a.m."
+		,'fr',"avant-midi"
+		,'el',"π.μ."
+		);}
+	public static function txtPM(){ return new Lemma(__FUNCTION__
+		,'en',"p.m."
+		,'fr',"après-midi"
+		,'el',"μ.μ."
+		);}
+	public static function txtXDays(){ return new Lemma(__FUNCTION__
+		,'en',"%s days"
+		,'fr',"%s jours"
+		,'el',"%s ημέρες"
+		);}
+	public static function txtXDaysAgo(){ return new Lemma(__FUNCTION__
+		,'en',"%s days ago"
+		,'fr',"Il y a %s jours"
+		,'el',"Πριν από %s ημέρες"
+		);}
+
+	public static function txtDay(){ return new Lemma(__FUNCTION__
+		,'en',"Day"
+		,'fr',"Jour"
+		,'el',"Ημέρα"
+		);}
+	public static function txtDayOfWeek(){ return new Lemma(__FUNCTION__
+		,'en',"Day of week"
+		,'fr',"Jour de la semaine"
+		,'el',"Ημέρα της εβδομάδας"
+		);}
+	public static function txtNight(){ return new Lemma(__FUNCTION__
+		,'en',"Night"
+		,'fr',"Nuit"
+		,'el',"Νύχτα"
+		);}
+	public static function txtTimeZone(){ return new Lemma(__FUNCTION__
+		,'en',"Time zone"
+		,'fr',"Fuseau horaire"
+		,'el',"Ζώνη ώρας"
+		);}
+
+	public static function txtSubmit(){ return new Lemma(__FUNCTION__
+		,'en',"Submit"
+		,'fr',"Soumettre"
+		,'el',"Αποστολή"
+		);}
+	public static function txtLogin(){ return new Lemma(__FUNCTION__
+		,'en',"Login"
+		,'fr',"Connexion"
+		,'el',"Login"
+		);}
+	public static function txtLogoff(){ return new Lemma(__FUNCTION__
+		,'en',"Logoff"
+		,'fr',"Déconnexion"
+		,'el',"Logoff"
+		);}
+	public static function txtBack(){ return new Lemma(__FUNCTION__
+		,'en',"Back"
+		,'fr',"Retour"
+		,'el',"Επιστροφή"
+		);}
+	public static function txtOK(){ return new Lemma(__FUNCTION__
+		,'en',"OK"
+		,'fr',"OK"
+		,'el',"OK"
+		);}
+	public static function txtApply(){ return new Lemma(__FUNCTION__
+		,'en',"Apply"
+		,'fr',"Appliquer"
+		,'el',"Εφαρμογή"
+		);}
+	public static function txtCancel(){ return new Lemma(__FUNCTION__
+		,'en',"Cancel"
+		,'fr',"Annuler"
+		,'el',"Άκυρο"
+		);}
+	public static function txtSend(){ return new Lemma(__FUNCTION__
+		,'en',"Send"
+		,'fr',"Envoyer"
+		,'el',"Αποστολή"
+		);}
+	public static function txtSave(){ return new Lemma(__FUNCTION__
+		,'en',"Save"
+		,'fr',"Sauvegarder"
+		,'el',"Αποθήκευση"
+		);}
+	public static function txtDelete(){ return new Lemma(__FUNCTION__
+		,'en',"Delete"
+		,'fr',"Supprimer"
+		,'el',"Διαγραφή"
+		);}
+	public static function txtRename(){ return new Lemma(__FUNCTION__
+		,'en',"Rename"
+		,'fr',"Renommer"
+		,'el',"Μετονομασία"
+		);}
+	public static function txtPrint(){ return new Lemma(__FUNCTION__
+		,'en',"Print"
+		,'fr',"Imprimer"
+		,'el',"Εκτύπωση"
+		);}
+	public static function txtClose(){ return new Lemma(__FUNCTION__
+		,'en',"Close"
+		,'fr',"Fermer"
+		,'el',"Κλείσιμο"
+		);}
+	public static function txtAsk(){ return new Lemma(__FUNCTION__
+		,'en',"Ask"
+		,'fr',"Demander"
+		,'el',"Ερώτηση"
+		);}
+	public static function txtUpdate(){ return new Lemma(__FUNCTION__
+		,'en',"Update"
+		,'fr',"Mettre à jour"
+		,'el',"Ανανέωση"
+		);}
+	public static function txtSelect(){ return new Lemma(__FUNCTION__
+		,'en',"Select"
+		,'fr',"Sélectionner"
+		,'el',"Επιλογή"
+		);}
+	public static function txtCompare(){ return new Lemma(__FUNCTION__
+		,'en',"Compare"
+		,'fr',"Comparer"
+		,'el',"Σύγκριση"
+		);}
+	public static function txtSearch(){ return new Lemma(__FUNCTION__
+		,'en',"Search"
+		,'fr',"Rechercher"
+		,'el',"Αναζήτηση"
+		);}
+	public static function txtYes(){ return new Lemma(__FUNCTION__
+		,'en',"Yes"
+		,'fr',"Oui"
+		,'el',"Ναι"
+		);}
+	public static function txtNo(){ return new Lemma(__FUNCTION__
+		,'en',"No"
+		,'fr',"Non"
+		,'el',"Όχι"
+		);}
+	public static function txtNext(){ return new Lemma(__FUNCTION__
+		,'en',"Next"
+		,'fr',"Suivant"
+		,'el',"Επόμενο"
+		);}
+	public static function txtPrevious(){ return new Lemma(__FUNCTION__
+		,'en',"Previous"
+		,'fr',"Précédent"
+		,'el',"Προηγούμενο"
+		);}
+	public static function txtModify(){ return new Lemma(__FUNCTION__
+		,'en',"Modify"
+		,'fr',"Modifier"
+		,'el',"Επεξεργασία"
+		);}
+	public static function txtContinue(){ return new Lemma(__FUNCTION__
+		,'en',"Continue"
+		,'fr',"Continuer"
+		,'el',"Συνέχεια"
+		);}
+
+	public static function txtHome(){ return new Lemma(__FUNCTION__
+		,'en',"Home"
+		,'fr',"Accueil"
+		,'el',"Αρχική"
+		);}
+	public static function txtSettings(){ return new Lemma(__FUNCTION__
+		,'en',"Settings"
+		,'fr',"Paramètres"
+		,'el',"Ρυθμίσεις"
+		);}
+
+	public static function txtJanuary(){ return new Lemma(__FUNCTION__
+		,'en',"January"
+		,'fr',"janvier"
+		,'el',"Ιανουάριος"
+		);}
+	public static function txtFebruary(){ return new Lemma(__FUNCTION__
+		,'en',"February"
+		,'fr',"février"
+		,'el',"Φεβρουάριος"
+		);}
+	public static function txtMarch(){ return new Lemma(__FUNCTION__
+		,'en',"March"
+		,'fr',"mars"
+		,'el',"Μάρτιος"
+		);}
+	public static function txtApril(){ return new Lemma(__FUNCTION__
+		,'en',"April"
+		,'fr',"avril"
+		,'el',"Απρίλιος"
+		);}
+	public static function txtMay(){ return new Lemma(__FUNCTION__
+		,'en',"May"
+		,'fr',"mai"
+		,'el',"Μάιος"
+		);}
+	public static function txtJune(){ return new Lemma(__FUNCTION__
+		,'en',"June"
+		,'fr',"juin"
+		,'el',"Ιούνιος"
+		);}
+	public static function txtJuly(){ return new Lemma(__FUNCTION__
+		,'en',"July"
+		,'fr',"juillet"
+		,'el',"Ιούλιος"
+		);}
+	public static function txtAugust(){ return new Lemma(__FUNCTION__
+		,'en',"August"
+		,'fr',"août"
+		,'el',"Αύγουστος"
+		);}
+	public static function txtSeptember(){ return new Lemma(__FUNCTION__
+		,'en',"September"
+		,'fr',"septembre"
+		,'el',"Σεπτέμβριος"
+		);}
+	public static function txtOctober(){ return new Lemma(__FUNCTION__
+		,'en',"October"
+		,'fr',"octobre"
+		,'el',"Οκτώβριος"
+		);}
+	public static function txtNovember(){ return new Lemma(__FUNCTION__
+		,'en',"November"
+		,'fr',"novembre"
+		,'el',"Νοέμβριος"
+		);}
+	public static function txtDecember(){ return new Lemma(__FUNCTION__
+		,'en',"December"
+		,'fr',"décembre"
+		,'el',"Δεκέμβριος"
+		);}
+
+	public static function txtJan_(){ return new Lemma(__FUNCTION__
+		,'en',"Jan"
+		,'fr',"jan."
+		,'el',"Ιαν."
+		);}
+	public static function txtFeb_(){ return new Lemma(__FUNCTION__
+		,'en',"Feb"
+		,'fr',"fév."
+		,'el',"Φεβ."
+		);}
+	public static function txtMar_(){ return new Lemma(__FUNCTION__
+		,'en',"Mar"
+		,'fr',"mars"
+		,'el',"Μάρ."
+		);}
+	public static function txtApr_(){ return new Lemma(__FUNCTION__
+		,'en',"Apr"
+		,'fr',"avr."
+		,'el',"Απρ."
+		);}
+	public static function txtMay_(){ return new Lemma(__FUNCTION__
+		,'en',"May"
+		,'fr',"mai"
+		,'el',"Μάι."
+		);}
+	public static function txtJun_(){ return new Lemma(__FUNCTION__
+		,'en',"Jun"
+		,'fr',"juin"
+		,'el',"Ιούν."
+		);}
+	public static function txtJul_(){ return new Lemma(__FUNCTION__
+		,'en',"Jul"
+		,'fr',"juil"
+		,'el',"Ιούλ."
+		);}
+	public static function txtAug_(){ return new Lemma(__FUNCTION__
+		,'en',"Aug"
+		,'fr',"août"
+		,'el',"Αύγ."
+		);}
+	public static function txtSep_(){ return new Lemma(__FUNCTION__
+		,'en',"Sep"
+		,'fr',"sep."
+		,'el',"Σεπ."
+		);}
+	public static function txtOct_(){ return new Lemma(__FUNCTION__
+		,'en',"Oct"
+		,'fr',"oct."
+		,'el',"Οκτ."
+		);}
+	public static function txtNov_(){ return new Lemma(__FUNCTION__
+		,'en',"Nov"
+		,'fr',"nov."
+		,'el',"Νοέ."
+		);}
+	public static function txtDec_(){ return new Lemma(__FUNCTION__
+		,'en',"Dec"
+		,'fr',"déc."
+		,'el',"Δεκ."
+		);}
+
+	public static function txtMonday(){ return new Lemma(__FUNCTION__
+		,'en',"Monday"
+		,'fr',"lundi"
+		,'el',"Δευτέρα"
+		);}
+	public static function txtTuesday(){ return new Lemma(__FUNCTION__
+		,'en',"Tuesday"
+		,'fr',"mardi"
+		,'el',"Τρίτη"
+		);}
+	public static function txtWednesday(){ return new Lemma(__FUNCTION__
+		,'en',"Wednesday"
+		,'fr',"mercredi"
+		,'el',"Τετάρτη"
+		);}
+	public static function txtThursday(){ return new Lemma(__FUNCTION__
+		,'en',"Thursday"
+		,'fr',"jeudi"
+		,'el',"Πέμπτη"
+		);}
+	public static function txtFriday(){ return new Lemma(__FUNCTION__
+		,'en',"Friday"
+		,'fr',"vendredi"
+		,'el',"Παρασκευή"
+		);}
+	public static function txtSaturday(){ return new Lemma(__FUNCTION__
+		,'en',"Saturday"
+		,'fr',"samedi"
+		,'el',"Σάββατο"
+		);}
+	public static function txtSunday(){ return new Lemma(__FUNCTION__
+		,'en',"Sunday"
+		,'fr',"dimanche"
+		,'el',"Κυριακή"
+		);}
+
+	public static function txtMon_(){ return new Lemma(__FUNCTION__
+		,'en',"Mon"
+		,'fr',"lun."
+		,'el',"Δευ."
+		);}
+	public static function txtTue_(){ return new Lemma(__FUNCTION__
+		,'en',"Tue"
+		,'fr',"mar."
+		,'el',"Τρί."
+		);}
+	public static function txtWed_(){ return new Lemma(__FUNCTION__
+		,'en',"Wed"
+		,'fr',"mer."
+		,'el',"Τετ."
+		);}
+	public static function txtThu_(){ return new Lemma(__FUNCTION__
+		,'en',"Thu"
+		,'fr',"jeu."
+		,'el',"Πέμ."
+		);}
+	public static function txtFri_(){ return new Lemma(__FUNCTION__
+		,'en',"Fri"
+		,'fr',"ven."
+		,'el',"Παρ."
+		);}
+	public static function txtSat_(){ return new Lemma(__FUNCTION__
+		,'en',"Sat"
+		,'fr',"sam."
+		,'el',"Σάβ."
+		);}
+	public static function txtSun_(){ return new Lemma(__FUNCTION__
+		,'en',"Sun"
+		,'fr',"dim."
+		,'el',"Κυρ."
+		);}
+
+	public static function txtDays(){ return new Lemma(__FUNCTION__
+		,'en',"Days"
+		,'fr',"Jours"
+		,'el',"Ημέρες"
+		);}
+	public static function txtXAgo(){ return new Lemma(__FUNCTION__
+		,'en',"%s ago"
+		,'fr',"Il y a %s"
+		,'el',"Πριν από %s"
+		);}
+
+	public static function txtUser(){ return new Lemma(__FUNCTION__
+		,'en',"User"
+		,'fr',"Utilisateur"
+		,'el',"Χρήστης"
+		);}
+	public static function txtUsers(){ return new Lemma(__FUNCTION__
+		,'en',"Users"
+		,'fr',"Utilisateurs"
+		,'el',"Χρήστες"
+		);}
+	public static function txtChangePassword(){ return new Lemma(__FUNCTION__
+		,'en',"Change password"
+		,'fr',"Mot de passe"
+		,'el',"Αλλαγή κωδικού"
+		);}
+	public static function txtResetPassword(){ return new Lemma(__FUNCTION__
+		,'en',"Reset password"
+		,'fr',"Mot de passe"
+		,'el',"Αλλαγή κωδικού"
+		);}
+	public static function txtResetPasswordLong(){ return new Lemma(__FUNCTION__
+		,'en',"Reset password"
+		,'fr',"Réinitialiser le mot de passe"
+		,'el',"Αλλαγή κωδικού"
+		);}
+	public static function txtReset(){ return new Lemma(__FUNCTION__
+		,'en',"Reset"
+		,'fr',"Réinitialiser"
+		,'el',"Αλλαγή"
+		);}
+	public static function txtChangeProfile(){ return new Lemma(__FUNCTION__
+		,'en',"Change profile"
+		,'fr',"Profil"
+		,'el',"Αλλαγή προφίλ"
+		);}
+	public static function txtModifyProfile(){ return new Lemma(__FUNCTION__
+		,'en',"Modify profile"
+		,'fr',"Modifier profil"
+		,'el',"Αλλαγή προφίλ"
+		);}
+
+	public static function txtError(){ return new Lemma(__FUNCTION__
+		,'en',"Error"
+		,'fr',"Erreur"
+		,'el',"Σφάλμα"
+		);}
+
+	public static function txtActionLogin(){ return new Lemma(__FUNCTION__
+		,'en',"Login"
+		,'fr',"Connexion"
+		,'el',"Login"
+		);}
+	public static function txtActionLogoff(){ return new Lemma(__FUNCTION__
+		,'en',"Logoff"
+		,'fr',"Déconnexion"
+		,'el',"Logoff"
+		);}
+	public static function txtActionChangePassword(){ return new Lemma(__FUNCTION__
+		,'en',"Change password"
+		,'fr',"Mot de passe"
+		,'el',"Αλλαγή κωδικού"
+		);}
+	public static function txtActionChangeProfile(){ return new Lemma(__FUNCTION__
+		,'en',"Change profile"
+		,'fr',"Profil d'utilisateur"
+		,'el',"Προφίλ χρήστη"
+		);}
+	public static function txtActionCreateUser(){ return new Lemma(__FUNCTION__
+		,'en',"Create user"
+		,'fr',"Création d'un utilisateur"
+		,'el',"Δημιουργία χρήστη"
+		);}
+	public static function txtActionForgottenPassword(){ return new Lemma(__FUNCTION__
+		,'en',"Forgotten your password?"
+		,'fr',"Mot de passe oublié ?"
+		,'el',"Υπενθύμιση κωδικού"
+		);}
+
+	public static function txtMsgCannotDisplayWebPage(){ return new Lemma(__FUNCTION__
+		,'en',"Cannot display the web page."
+		,'fr',"La page ne peut pas être affichée."
+		);}
+	public static function txtMsgUnderConstruction(){ return new Lemma(__FUNCTION__
+		,'en',"Under construction."
+		,'fr',"En construction."
+		,'el',"Υπό κατασκευή."
+		);}
+	public static function txtMsgNotImplemented(){ return new Lemma(__FUNCTION__
+		,'en',"Not implemented."
+		,'fr',"Non implémenté."
+		,'el',"Μη υλοποιημένο."
+		);}
+	public static function txtMsgPageNotFound(){ return new Lemma(__FUNCTION__
+		,'en',"Page not found."
+		,'fr',"La page n'était pas trouvée."
+		,'el',"Η σελίδα δεν βρέθηκε."
+		);}
+	public static function txtMsgObjectNotFound(){ return new Lemma(__FUNCTION__
+		,'en',"Object not found."
+		,'fr',"L'objet n'était pas trouvé."
+		,'el',"Το αντικείμενο δεν βρέθηκε."
+		);}
+	public static function txtMsgAccessDenied(){ return new Lemma(__FUNCTION__
+		,'en',"Access denied."
+		,'fr',"Accès refusé."
+		,'el',"Μη επιτρεπτή πρόσβαση."
+		);}
+	public static function txtMsgInvalidUsername(){ return new Lemma(__FUNCTION__
+		,'en',"Unknown user."
+		,'fr',"Utilisateur inconnu."
+		,'el',"Λάθος όνομα χρήστη."
+		);}
+	public static function txtMsgInvalidPassword(){ return new Lemma(__FUNCTION__
+		,'en',"Invalid password."
+		,'fr',"Mot de passe incorrect."
+		,'el',"Λάθος κωδικός πρόσβασης."
+		);}
+	public static function txtMsgInvalidUsernameOrPassword(){ return new Lemma(__FUNCTION__
+		,'en',"Invalid username or password."
+		,'fr',"Utilisateur inconnu ou mot de passe incorrect."
+		,'el',"Λάθος όνομα χρήστη ή λάθος κωδικός πρόσβασης."
+		);}
+	public static function txtMsgMultipleUsersFound(){ return new Lemma(__FUNCTION__
+		,'en',"Multiple users found."
+		,'fr',"Plusieurs utilisateurs trouvés."
+		,'el',"Βρέθηκαν πολλαπλοί χρήστες."
+		);}
+	public static function txtMsgEmailSentSuccessfully(){ return new Lemma(__FUNCTION__
+		,'en',"The e-mail has been sent successfully."
+		,'fr',"Le message e-mail a été bien envoyé."
+		,'el',"Η αποστολή του e-mail έγινε επιτυχώς."
+		);}
+	public static function txtMsgInvalidEmail(){ return new Lemma(__FUNCTION__
+		,'en',"Invalid e-mail address."
+		,'fr',"L'adresse e-mail n'est pas valide."
+		,'el',"Λάθος διεύθυνση e-mail."
+		);}
+	public static function txtMsgInvalidPhone(){ return new Lemma(__FUNCTION__
+		,'en',"Invalid phone number. Please use international format (+123456789)."
+		,'fr',"Le numéro n'est pas valide. Veuillez utilisez le format international (+123456789)."
+		,'el',"Λάθος αριθμός τηλεφώνου. Χρησιμοποιήστε το διεθνές πρότυπο (+123456789)."
+		);}
+	public static function txtMsgInvalidURL(){ return new Lemma(__FUNCTION__
+		,'en',"Invalid address."
+		,'fr',"L'adresse n'est pas valide."
+		,'el',"Λάθος διεύθυνση."
+		);}
+	public static function txtMsgInvalidValue(){ return new Lemma(__FUNCTION__
+		,'en',"Invalid value."
+		,'fr',"Le valeur n'est pas valide."
+		,'el',"Λάθος τιμή."
+		);}
+
+	public static function txtMsgAccountBanned(){ return new Lemma(__FUNCTION__
+		,'en',"User account locked."
+		,'fr',"Compte utilisateur bloqué."
+		,'el',"Kλειδωμένος λογαριασμός χρήστη."
+		);}
+
+	public static function txtMsgPasswordsDoNotMatch(){ return new Lemma(__FUNCTION__
+		,'en',"The passwords do not match."
+		,'fr',"Les deux mots de passe ne sont pas identiques."
+		,'el',"Οι κωδικοί δεν είναι ίδιοι."
+		);}
+
+	public static function txtMsgMandatoryFields(){ return new Lemma(__FUNCTION__
+		,'en',"The fields with * are mandatory."
+		,'fr',"Les champs avec * sont obligatoires."
+		,'el',"Τα πεδία με * είναι υποχρεωτικά."
+		);}
+
+	public static function txtMsgMandatoryField(){ return new Lemma(__FUNCTION__
+		,'en',"This field is mandatory."
+		,'fr',"Ce champ est obligatoire."
+		,'el',"Το πεδίο αυτό είναι υποχρεωτικό."
+		);}
+
+	public static function txtMsgFieldMandatoryInAllLanguages(){ return new Lemma(__FUNCTION__
+		,'en',"This field is mandatory in all languages."
+		,'fr',"Ce champ est obligatoire en toutes les langues."
+		,'el',"Το πεδίο αυτό είναι υποχρεωτικό σε όλες τις γλώσσες."
+		);}
+
+	public static function txtMsgPasswordChanged(){ return new Lemma(__FUNCTION__
+		,'en',"The password has been changed."
+		,'fr',"Le mot de passe a été changé."
+		,'el',"Ο κωδικός πρόσβασης άλλαξε."
+		);}
+
+	public static function txtMsgProfileChanged(){ return new Lemma(__FUNCTION__
+		,'en',"The user profile has been changed."
+		,'fr',"Le profil de l'utilisateur a été changé."
+		,'el',"Το προφίλ χρήστη άλλαξε."
+		);}
+
+	public static function txtMsgUsernameExists(){ return new Lemma(__FUNCTION__
+		,'en',"This username already exists."
+		,'fr',"Cet utilisateur existe déjà."
+		,'el',"Αυτό το όνομα χρήστη υπάρχει ήδη."
+		);}
+
+	public static function txtMsgCannotSendEmail(){ return new Lemma(__FUNCTION__
+		,'en',"Error while sending e-mail."
+		,'fr',"Erreur lors de l'envoi d'e-mail."
+		,'el',"Σφάλμα κατά την αποστολή e-mail."
+		);}
+
+	public static function txtMsgCannotConnectToDatabase(){ return new Lemma(__FUNCTION__
+		,'en',"Error while connecting to the database."
+		,'fr',"Erreur lors de la connexion à la base de données."
+		,'el',"Σφάλμα κατά την σύνδεση με τη βάση δεδομένων."
+		);}
+	public static function txtMsgCannotCreateDatabase(){ return new Lemma(__FUNCTION__
+		,'en',"Error while creating database schema."
+		,'fr',"Erreur lors de la création de la base de données."
+		,'el',"Σφάλμα κατά την δημιουργία νέας βάσης δεδομένων."
+		);}
+
+	public static function txtMsgCannotDeleteCurrentUser(){ return new Lemma(__FUNCTION__
+		,'en',"Cannot delete current user."
+		,'fr',"Il est impossible de supprimer l'utilisateur courant."
+		,'el',"Δεν είναι δυνατό να διαγραφεί ο τρέχον χρήστης."
+		);}
+
+	public static function txtMsgObjectXNotFound(){ return new Lemma(__FUNCTION__
+		,'en',"This object was not found: %s."
+		,'fr',"Objet non trouvé : %s."
+		,'el',"Το αντικείμενο αυτό δεν βρέθηκε: [%s]."
+		);}
+	public static function txtMsgObjectXAlreadyExists(){ return new Lemma(__FUNCTION__
+		,'en',"This object already exists: %s."
+		,'fr',"Cet objet existe déjà : %s."
+		,'el',"Το αντικείμενο αυτό υπάρχει ήδη: %s."
+		);}
+	public static function txtMsgCannotDeleteSystemObject(){ return new Lemma(__FUNCTION__
+		,'en',"This object is used by the system."
+		,'fr',"Cet objet est utilisé par le système."
+		,'el',"Το αντικείμενο είναι απαραίτητο για την ομαλή λειτουργεία του συστήματος."
+		);}
+
+
+	public static function txtMsgXItemNotFound(){ return new Lemma(__FUNCTION__
+		,'en',"This object was not found [%s %s]."
+		,'fr',"Objet non trouvé [%s %s]."
+		,'el',"Το αντικείμενο αυτό δεν βρέθηκε: [%s %s]."
+		);}
+	public static function txtMsgXItemAlreadyExists(){ return new Lemma(__FUNCTION__
+		,'fr',"Cet objet existe déjà: %s."
+		,'en',"This object already exists: %s."
+		,'el',"Το αντικείμενο αυτό υπάρχει ήδη: %s."
+		);}
+
+	public static function txtMsgCancelling(){ return new Lemma(__FUNCTION__
+		,'en',"Cancelling..."
+		,'fr',"Annulation..."
+		,'el',"Ακύρωση..."
+		);}
+	public static function txtMsgProgressCancelled(){ return new Lemma(__FUNCTION__
+		,'en',"The process has been cancelled."
+		,'fr',"Le processus a été annulé."
+		,'el',"Η διαδικασία ακυρώθηκε."
+		);}
+	public static function txtMsgProgressCompleted(){ return new Lemma(__FUNCTION__
+		,'en',"The process is completed."
+		,'fr',"Le processus est terminé."
+		,'el',"Η διαδικασία ολοκληρώθηκε."
+		);}
+	public static function txtMsgNoObjectFound(){ return new Lemma(__FUNCTION__
+		,'en',"No object found."
+		,'fr',"Pas d'objet trouvé."
+		,'el',"Δε βρέθηκε κανένα αντικείμενο."
+		);}
+	public static function txtMsgInvalidAction(){ return new Lemma(__FUNCTION__
+		,'en',"Invalid action."
+		,'fr',"Action invalide."
+		,'el',"Εσφαλμένη εντολή."
+		);}
+
+	public static function txtMsgCannotConnectToLdapServer(){ return new Lemma(__FUNCTION__
+		,'en',"Cannot connect to the database."
+		,'fr',"Erreur à la connexion à la base de données."
+		,'el',"Σφάλμα σύνδεσης με την βάση δεδομένων."
+		);}
+
+
+	public static function txtMsgDevelopmentEnvironment(){ return new Lemma(__FUNCTION__
+		,'en',"You are viewing this message because the application runs in DEVELOPMENT mode."
+		,'fr',"Ce message s'affiche parce que l'application est en mode DEVELOPPEMENT."
+		,'el',"Το μήνυμα αυτό εμφανίζεται γιατί η εφαρμογή τρέχει σε περιβάλλον ανάπτυξης."
+		);}
+	public static function txtMsgAnErrorOccurred(){ return new Lemma(__FUNCTION__
+		,'en',"An unexpected server error has occurred."
+		,'fr',"Il y avait une erreur inattendue."
+		,'el',"Προέκυψε ένα σφάλμα στον διακομιστή."
+		);}
+	public static function txtMsgAnErrorOccurredAndTeamNotified(){ return new Lemma(__FUNCTION__
+		,'en',"An unexpected server error has occurred. The support team has been notified."
+		,'fr',"Il y avait une erreur inattendue. L'équipe de support vient d'en être notifié."
+		,'el',"Προέκυψε ένα σφάλμα στον διακομιστή. Η ομάδα υποστήριξης ειδοποιήθηκε."
+		);}
+
+
+	public static function txtMsgErrorWhileUploadingFile(){ return new Lemma(__FUNCTION__
+		,'en',"An error occurred while uploading file."
+		,'fr',"Erreur pendant l'envoi du fichier."
+		,'el',"Σφάλμα κατά την αποστολή του αρχείου."
+		);}
+
+	public static function txtMsgErrorWhileDownloadingFile(){ return new Lemma(__FUNCTION__
+		,'en',"An error occurred while downloading file."
+		,'fr',"Erreur pendant le téléchargement du fichier."
+		,'el',"Σφάλμα κατά την λήψη του αρχείου."
+		);}
+
+
+
+	public static function txtUnit_byte(){ return new Lemma(__FUNCTION__
+		,'en',"B"
+		,'fr',"o"
+		,'el',"B"
+		);}
+	public static function txtUnit_sec(){ return new Lemma(__FUNCTION__
+		,'en',"sec"
+		,'fr',"sec"
+		,'el',"sec"
+		);}
+	public static function txtUnit_day(){ return new Lemma(__FUNCTION__
+		,'en',"d"
+		,'fr',"j"
+		,'el',"ημ"
+		);}
+	public static function txtUnit_hour(){ return new Lemma(__FUNCTION__
+		,'en',"h"
+		,'fr',"h"
+		,'el',"ώρ"
+		);}
+
+
+	public static function txtLang_($x){ return static::_forward($x); }
+	public static function txtLang_en(){ return new Lemma(__FUNCTION__
+		,'en',"English"
+		,'fr',"Anglais"
+		,'el',"Αγγλικά"
+		);}
+	public static function txtLang_fr(){ return new Lemma(__FUNCTION__
+		,'en',"French"
+		,'fr',"Français"
+		,'el',"Γαλλικά"
+		);}
+	public static function txtLang_el(){ return new Lemma(__FUNCTION__
+		,'en',"Greek"
+		,'fr',"Grec"
+		,'el',"Ελληνικά"
+		);}
+	public static function txtLang_ar(){ return new Lemma(__FUNCTION__
+		,'en',"Arabic"
+		,'fr',"Arabic"
+		);}
+	public static function txtLang_de(){ return new Lemma(__FUNCTION__
+		,'en',"German"
+		,'fr',"Allemand"
+		);}
+	public static function txtLang_es(){ return new Lemma(__FUNCTION__
+		,'en',"Spanish"
+		,'fr',"Espagnol"
+		);}
+	public static function txtLang_it(){ return new Lemma(__FUNCTION__
+		,'en',"Italian"
+		,'fr',"Italien"
+		);}
+	public static function txtLang_fi(){ return new Lemma(__FUNCTION__
+		,'en',"Finnish"
+		,'fr',"Finnois"
+		);}
+	public static function txtLang_ja(){ return new Lemma(__FUNCTION__
+		,'en',"Japanese"
+		,'fr',"Japonais"
+		);}
+	public static function txtLang_ko(){ return new Lemma(__FUNCTION__
+		,'en',"Korean"
+		,'fr',"Coréen"
+		);}
+	public static function txtLang_nl(){ return new Lemma(__FUNCTION__
+		,'en',"Dutch"
+		,'fr',"Néerlandais"
+		);}
+	public static function txtLang_no(){ return new Lemma(__FUNCTION__
+		,'en',"Norwegian"
+		,'fr',"Norvégien"
+		);}
+	public static function txtLang_pl(){ return new Lemma(__FUNCTION__
+		,'en',"Polish"
+		,'fr',"Polonais"
+		);}
+	public static function txtLang_pt(){ return new Lemma(__FUNCTION__
+		,'en',"Portuguese"
+		,'fr',"Portugais"
+		);}
+	public static function txtLang_ru(){ return new Lemma(__FUNCTION__
+		,'en',"Russian"
+		,'fr',"Russe"
+		);}
+	public static function txtLang_sv(){ return new Lemma(__FUNCTION__
+		,'en',"Swedish"
+		,'fr',"Suédois"
+		);}
+	public static function txtLang_zh(){ return new Lemma(__FUNCTION__
+		,'en',"Chinese"
+		,'fr',"Chinois"
+		);}
+
+	public static function txtLang_ab(){ return new Lemma(__FUNCTION__
+		,'en',"Abkhaz"
+		);}
+	public static function txtLang_aa(){ return new Lemma(__FUNCTION__
+		,'en',"Afar"
+		);}
+	public static function txtLang_af(){ return new Lemma(__FUNCTION__
+		,'en',"Afrikaans"
+		);}
+	public static function txtLang_ak(){ return new Lemma(__FUNCTION__
+		,'en',"Akan"
+		);}
+	public static function txtLang_sq(){ return new Lemma(__FUNCTION__
+		,'en',"Albanian"
+		);}
+	public static function txtLang_am(){ return new Lemma(__FUNCTION__
+		,'en',"Amharic"
+		);}
+	public static function txtLang_an(){ return new Lemma(__FUNCTION__
+		,'en',"Aragonese"
+		);}
+	public static function txtLang_hy(){ return new Lemma(__FUNCTION__
+		,'en',"Armenian"
+		);}
+	public static function txtLang_as(){ return new Lemma(__FUNCTION__
+		,'en',"Assamese"
+		);}
+	public static function txtLang_av(){ return new Lemma(__FUNCTION__
+		,'en',"Avaric"
+		);}
+	public static function txtLang_ae(){ return new Lemma(__FUNCTION__
+		,'en',"Avestan"
+		);}
+	public static function txtLang_ay(){ return new Lemma(__FUNCTION__
+		,'en',"Aymara"
+		);}
+	public static function txtLang_az(){ return new Lemma(__FUNCTION__
+		,'en',"Azerbaijani"
+		);}
+	public static function txtLang_bm(){ return new Lemma(__FUNCTION__
+		,'en',"Bambara"
+		);}
+	public static function txtLang_ba(){ return new Lemma(__FUNCTION__
+		,'en',"Bashkir"
+		);}
+	public static function txtLang_eu(){ return new Lemma(__FUNCTION__
+		,'en',"Basque"
+		);}
+	public static function txtLang_be(){ return new Lemma(__FUNCTION__
+		,'en',"Belarusian"
+		);}
+	public static function txtLang_bn(){ return new Lemma(__FUNCTION__
+		,'en',"Bengali"
+		);}
+	public static function txtLang_bh(){ return new Lemma(__FUNCTION__
+		,'en',"Bihari"
+		);}
+	public static function txtLang_bi(){ return new Lemma(__FUNCTION__
+		,'en',"Bislama"
+		);}
+	public static function txtLang_bs(){ return new Lemma(__FUNCTION__
+		,'en',"Bosnian"
+		);}
+	public static function txtLang_br(){ return new Lemma(__FUNCTION__
+		,'en',"Breton"
+		);}
+	public static function txtLang_bg(){ return new Lemma(__FUNCTION__
+		,'en',"Bulgarian"
+		);}
+	public static function txtLang_my(){ return new Lemma(__FUNCTION__
+		,'en',"Burmese"
+		);}
+	public static function txtLang_ca(){ return new Lemma(__FUNCTION__
+		,'en',"Catalan"
+		);}
+	public static function txtLang_ch(){ return new Lemma(__FUNCTION__
+		,'en',"Chamorro"
+		);}
+	public static function txtLang_ce(){ return new Lemma(__FUNCTION__
+		,'en',"Chechen"
+		);}
+	public static function txtLang_ny(){ return new Lemma(__FUNCTION__
+		,'en',"Chichewa"
+		);}
+	public static function txtLang_cv(){ return new Lemma(__FUNCTION__
+		,'en',"Chuvash"
+		);}
+	public static function txtLang_kw(){ return new Lemma(__FUNCTION__
+		,'en',"Cornish"
+		);}
+	public static function txtLang_co(){ return new Lemma(__FUNCTION__
+		,'en',"Corsican"
+		);}
+	public static function txtLang_cr(){ return new Lemma(__FUNCTION__
+		,'en',"Cree"
+		);}
+	public static function txtLang_hr(){ return new Lemma(__FUNCTION__
+		,'en',"Croatian"
+		);}
+	public static function txtLang_cs(){ return new Lemma(__FUNCTION__
+		,'en',"Czech"
+		);}
+	public static function txtLang_da(){ return new Lemma(__FUNCTION__
+		,'en',"Danish"
+		);}
+	public static function txtLang_dv(){ return new Lemma(__FUNCTION__
+		,'en',"Divehi"
+		);}
+	public static function txtLang_dz(){ return new Lemma(__FUNCTION__
+		,'en',"Dzongkha"
+		);}
+	public static function txtLang_eo(){ return new Lemma(__FUNCTION__
+		,'en',"Esperanto"
+		);}
+	public static function txtLang_et(){ return new Lemma(__FUNCTION__
+		,'en',"Estonian"
+		);}
+	public static function txtLang_ee(){ return new Lemma(__FUNCTION__
+		,'en',"Ewe"
+		);}
+	public static function txtLang_fo(){ return new Lemma(__FUNCTION__
+		,'en',"Faroese"
+		);}
+	public static function txtLang_fj(){ return new Lemma(__FUNCTION__
+		,'en',"Fijian"
+		);}
+	public static function txtLang_ff(){ return new Lemma(__FUNCTION__
+		,'en',"Fula"
+		);}
+	public static function txtLang_gl(){ return new Lemma(__FUNCTION__
+		,'en',"Galician"
+		);}
+	public static function txtLang_ka(){ return new Lemma(__FUNCTION__
+		,'en',"Georgian"
+		);}
+	public static function txtLang_gn(){ return new Lemma(__FUNCTION__
+		,'en',"Guaraní"
+		);}
+	public static function txtLang_gu(){ return new Lemma(__FUNCTION__
+		,'en',"Gujarati"
+		);}
+	public static function txtLang_ht(){ return new Lemma(__FUNCTION__
+		,'en',"Haitian"
+		);}
+	public static function txtLang_ha(){ return new Lemma(__FUNCTION__
+		,'en',"Hausa"
+		);}
+	public static function txtLang_he(){ return new Lemma(__FUNCTION__
+		,'en',"Hebrew"
+		);}
+	public static function txtLang_hz(){ return new Lemma(__FUNCTION__
+		,'en',"Herero"
+		);}
+	public static function txtLang_hi(){ return new Lemma(__FUNCTION__
+		,'en',"Hindi"
+		);}
+	public static function txtLang_ho(){ return new Lemma(__FUNCTION__
+		,'en',"Hiri Motu"
+		);}
+	public static function txtLang_hu(){ return new Lemma(__FUNCTION__
+		,'en',"Hungarian"
+		);}
+	public static function txtLang_ia(){ return new Lemma(__FUNCTION__
+		,'en',"Interlingua"
+		);}
+	public static function txtLang_id(){ return new Lemma(__FUNCTION__
+		,'en',"Indonesian"
+		);}
+	public static function txtLang_ie(){ return new Lemma(__FUNCTION__
+		,'en',"Interlingue"
+		);}
+	public static function txtLang_ga(){ return new Lemma(__FUNCTION__
+		,'en',"Irish"
+		);}
+	public static function txtLang_ig(){ return new Lemma(__FUNCTION__
+		,'en',"Igbo"
+		);}
+	public static function txtLang_ik(){ return new Lemma(__FUNCTION__
+		,'en',"Inupiaq"
+		);}
+	public static function txtLang_io(){ return new Lemma(__FUNCTION__
+		,'en',"Ido"
+		);}
+	public static function txtLang_is(){ return new Lemma(__FUNCTION__
+		,'en',"Icelandic"
+		);}
+	public static function txtLang_iu(){ return new Lemma(__FUNCTION__
+		,'en',"Inuktitut"
+		);}
+	public static function txtLang_jv(){ return new Lemma(__FUNCTION__
+		,'en',"Javanese"
+		);}
+	public static function txtLang_kl(){ return new Lemma(__FUNCTION__
+		,'en',"Kalaallisut"
+		);}
+	public static function txtLang_kn(){ return new Lemma(__FUNCTION__
+		,'en',"Kannada"
+		);}
+	public static function txtLang_kr(){ return new Lemma(__FUNCTION__
+		,'en',"Kanuri"
+		);}
+	public static function txtLang_ks(){ return new Lemma(__FUNCTION__
+		,'en',"Kashmiri"
+		);}
+	public static function txtLang_kk(){ return new Lemma(__FUNCTION__
+		,'en',"Kazakh"
+		);}
+	public static function txtLang_km(){ return new Lemma(__FUNCTION__
+		,'en',"Khmer"
+		);}
+	public static function txtLang_ki(){ return new Lemma(__FUNCTION__
+		,'en',"Kikuyu"
+		);}
+	public static function txtLang_rw(){ return new Lemma(__FUNCTION__
+		,'en',"Kinyarwanda"
+		);}
+	public static function txtLang_ky(){ return new Lemma(__FUNCTION__
+		,'en',"Kyrgyz"
+		);}
+	public static function txtLang_kv(){ return new Lemma(__FUNCTION__
+		,'en',"Komi"
+		);}
+	public static function txtLang_kg(){ return new Lemma(__FUNCTION__
+		,'en',"Kongo"
+		);}
+	public static function txtLang_ku(){ return new Lemma(__FUNCTION__
+		,'en',"Kurdish"
+		);}
+	public static function txtLang_kj(){ return new Lemma(__FUNCTION__
+		,'en',"Kwanyama"
+		);}
+	public static function txtLang_la(){ return new Lemma(__FUNCTION__
+		,'en',"Latin"
+		);}
+	public static function txtLang_lb(){ return new Lemma(__FUNCTION__
+		,'en',"Luxembourgish"
+		);}
+	public static function txtLang_lg(){ return new Lemma(__FUNCTION__
+		,'en',"Ganda"
+		);}
+	public static function txtLang_li(){ return new Lemma(__FUNCTION__
+		,'en',"Limburgish"
+		);}
+	public static function txtLang_ln(){ return new Lemma(__FUNCTION__
+		,'en',"Lingala"
+		);}
+	public static function txtLang_lo(){ return new Lemma(__FUNCTION__
+		,'en',"Lao"
+		);}
+	public static function txtLang_lt(){ return new Lemma(__FUNCTION__
+		,'en',"Lithuanian"
+		);}
+	public static function txtLang_lu(){ return new Lemma(__FUNCTION__
+		,'en',"Luba-Katanga"
+		);}
+	public static function txtLang_lv(){ return new Lemma(__FUNCTION__
+		,'en',"Latvian"
+		);}
+	public static function txtLang_gv(){ return new Lemma(__FUNCTION__
+		,'en',"Manx"
+		);}
+	public static function txtLang_mk(){ return new Lemma(__FUNCTION__
+		,'en',"Macedonian"
+		);}
+	public static function txtLang_mg(){ return new Lemma(__FUNCTION__
+		,'en',"Malagasy"
+		);}
+	public static function txtLang_ms(){ return new Lemma(__FUNCTION__
+		,'en',"Malay"
+		);}
+	public static function txtLang_ml(){ return new Lemma(__FUNCTION__
+		,'en',"Malayalam"
+		);}
+	public static function txtLang_mt(){ return new Lemma(__FUNCTION__
+		,'en',"Maltese"
+		);}
+	public static function txtLang_mi(){ return new Lemma(__FUNCTION__
+		,'en',"Māori"
+		);}
+	public static function txtLang_mr(){ return new Lemma(__FUNCTION__
+		,'en',"Marathi"
+		);}
+	public static function txtLang_mh(){ return new Lemma(__FUNCTION__
+		,'en',"Marshallese"
+		);}
+	public static function txtLang_mn(){ return new Lemma(__FUNCTION__
+		,'en',"Mongolian"
+		);}
+	public static function txtLang_na(){ return new Lemma(__FUNCTION__
+		,'en',"Nauru"
+		);}
+	public static function txtLang_nv(){ return new Lemma(__FUNCTION__
+		,'en',"Navajo"
+		);}
+	public static function txtLang_nb(){ return new Lemma(__FUNCTION__
+		,'en',"Norwegian Bokmål"
+		);}
+	public static function txtLang_nd(){ return new Lemma(__FUNCTION__
+		,'en',"North Ndebele"
+		);}
+	public static function txtLang_ne(){ return new Lemma(__FUNCTION__
+		,'en',"Nepali"
+		);}
+	public static function txtLang_ng(){ return new Lemma(__FUNCTION__
+		,'en',"Ndonga"
+		);}
+	public static function txtLang_nn(){ return new Lemma(__FUNCTION__
+		,'en',"Norwegian Nynorsk"
+		);}
+	public static function txtLang_ii(){ return new Lemma(__FUNCTION__
+		,'en',"Nuosu"
+		);}
+	public static function txtLang_nr(){ return new Lemma(__FUNCTION__
+		,'en',"South Ndebele"
+		);}
+	public static function txtLang_oc(){ return new Lemma(__FUNCTION__
+		,'en',"Occitan"
+		);}
+	public static function txtLang_oj(){ return new Lemma(__FUNCTION__
+		,'en',"Ojibwe"
+		);}
+	public static function txtLang_cu(){ return new Lemma(__FUNCTION__
+		,'en',"Old Slavonic"
+		);}
+	public static function txtLang_om(){ return new Lemma(__FUNCTION__
+		,'en',"Oromo"
+		);}
+	public static function txtLang_or(){ return new Lemma(__FUNCTION__
+		,'en',"Oriya"
+		);}
+	public static function txtLang_os(){ return new Lemma(__FUNCTION__
+		,'en',"Ossetian"
+		);}
+	public static function txtLang_pa(){ return new Lemma(__FUNCTION__
+		,'en',"Panjabi"
+		);}
+	public static function txtLang_pi(){ return new Lemma(__FUNCTION__
+		,'en',"Pāli"
+		);}
+	public static function txtLang_fa(){ return new Lemma(__FUNCTION__
+		,'en',"Farsi"
+		);}
+	public static function txtLang_ps(){ return new Lemma(__FUNCTION__
+		,'en',"Pashto"
+		);}
+	public static function txtLang_qu(){ return new Lemma(__FUNCTION__
+		,'en',"Quechua"
+		);}
+	public static function txtLang_rm(){ return new Lemma(__FUNCTION__
+		,'en',"Romansh"
+		);}
+	public static function txtLang_rn(){ return new Lemma(__FUNCTION__
+		,'en',"Kirundi"
+		);}
+	public static function txtLang_ro(){ return new Lemma(__FUNCTION__
+		,'en',"Romanian"
+		);}
+	public static function txtLang_sa(){ return new Lemma(__FUNCTION__
+		,'en',"Sanskrit"
+		);}
+	public static function txtLang_sc(){ return new Lemma(__FUNCTION__
+		,'en',"Sardinian"
+		);}
+	public static function txtLang_sd(){ return new Lemma(__FUNCTION__
+		,'en',"Sindhi"
+		);}
+	public static function txtLang_se(){ return new Lemma(__FUNCTION__
+		,'en',"Northern Sami"
+		);}
+	public static function txtLang_sm(){ return new Lemma(__FUNCTION__
+		,'en',"Samoan"
+		);}
+	public static function txtLang_sg(){ return new Lemma(__FUNCTION__
+		,'en',"Sango"
+		);}
+	public static function txtLang_sr(){ return new Lemma(__FUNCTION__
+		,'en',"Serbian"
+		);}
+	public static function txtLang_gd(){ return new Lemma(__FUNCTION__
+		,'en',"Scottish Gaelic"
+		);}
+	public static function txtLang_sn(){ return new Lemma(__FUNCTION__
+		,'en',"Shona"
+		);}
+	public static function txtLang_si(){ return new Lemma(__FUNCTION__
+		,'en',"Sinhala"
+		);}
+	public static function txtLang_sk(){ return new Lemma(__FUNCTION__
+		,'en',"Slovak"
+		);}
+	public static function txtLang_sl(){ return new Lemma(__FUNCTION__
+		,'en',"Slovene"
+		);}
+	public static function txtLang_so(){ return new Lemma(__FUNCTION__
+		,'en',"Somali"
+		);}
+	public static function txtLang_st(){ return new Lemma(__FUNCTION__
+		,'en',"Southern Sotho"
+		);}
+	public static function txtLang_su(){ return new Lemma(__FUNCTION__
+		,'en',"Sundanese"
+		);}
+	public static function txtLang_sw(){ return new Lemma(__FUNCTION__
+		,'en',"Swahili"
+		);}
+	public static function txtLang_ss(){ return new Lemma(__FUNCTION__
+		,'en',"Swati"
+		);}
+	public static function txtLang_ta(){ return new Lemma(__FUNCTION__
+		,'en',"Tamil"
+		);}
+	public static function txtLang_te(){ return new Lemma(__FUNCTION__
+		,'en',"Telugu"
+		);}
+	public static function txtLang_tg(){ return new Lemma(__FUNCTION__
+		,'en',"Tajik"
+		);}
+	public static function txtLang_th(){ return new Lemma(__FUNCTION__
+		,'en',"Thai"
+		);}
+	public static function txtLang_ti(){ return new Lemma(__FUNCTION__
+		,'en',"Tigrinya"
+		);}
+	public static function txtLang_bo(){ return new Lemma(__FUNCTION__
+		,'en',"Tibetan"
+		);}
+	public static function txtLang_tk(){ return new Lemma(__FUNCTION__
+		,'en',"Turkmen"
+		);}
+	public static function txtLang_tl(){ return new Lemma(__FUNCTION__
+		,'en',"Tagalog"
+		);}
+	public static function txtLang_tn(){ return new Lemma(__FUNCTION__
+		,'en',"Tswana"
+		);}
+	public static function txtLang_to(){ return new Lemma(__FUNCTION__
+		,'en',"Tonga"
+		);}
+	public static function txtLang_tr(){ return new Lemma(__FUNCTION__
+		,'en',"Turkish"
+		);}
+	public static function txtLang_ts(){ return new Lemma(__FUNCTION__
+		,'en',"Tsonga"
+		);}
+	public static function txtLang_tt(){ return new Lemma(__FUNCTION__
+		,'en',"Tatar"
+		);}
+	public static function txtLang_tw(){ return new Lemma(__FUNCTION__
+		,'en',"Twi"
+		);}
+	public static function txtLang_ty(){ return new Lemma(__FUNCTION__
+		,'en',"Tahitian"
+		);}
+	public static function txtLang_ug(){ return new Lemma(__FUNCTION__
+		,'en',"Uyghur"
+		);}
+	public static function txtLang_uk(){ return new Lemma(__FUNCTION__
+		,'en',"Ukrainian"
+		);}
+	public static function txtLang_ur(){ return new Lemma(__FUNCTION__
+		,'en',"Urdu"
+		);}
+	public static function txtLang_uz(){ return new Lemma(__FUNCTION__
+		,'en',"Uzbek"
+		);}
+	public static function txtLang_ve(){ return new Lemma(__FUNCTION__
+		,'en',"Venda"
+		);}
+	public static function txtLang_vi(){ return new Lemma(__FUNCTION__
+		,'en',"Vietnamese"
+		);}
+	public static function txtLang_vo(){ return new Lemma(__FUNCTION__
+		,'en',"Volapük"
+		);}
+	public static function txtLang_wa(){ return new Lemma(__FUNCTION__
+		,'en',"Walloon"
+		);}
+	public static function txtLang_cy(){ return new Lemma(__FUNCTION__
+		,'en',"Welsh"
+		);}
+	public static function txtLang_wo(){ return new Lemma(__FUNCTION__
+		,'en',"Wolof"
+		);}
+	public static function txtLang_fy(){ return new Lemma(__FUNCTION__
+		,'en',"Western Frisian"
+		);}
+	public static function txtLang_xh(){ return new Lemma(__FUNCTION__
+		,'en',"Xhosa"
+		);}
+	public static function txtLang_yi(){ return new Lemma(__FUNCTION__
+		,'en',"Yiddish"
+		);}
+	public static function txtLang_yo(){ return new Lemma(__FUNCTION__
+		,'en',"Yoruba"
+		);}
+	public static function txtLang_za(){ return new Lemma(__FUNCTION__
+		,'en',"Zhuang"
+		);}
+	public static function txtLang_zu(){ return new Lemma(__FUNCTION__
+		,'en',"Zulu"
+		);}
+
+
+
+	public static function txtCountry_($x) { return static::__($x); }
+	public static function txtCountry_AD(){ return new Lemma(__FUNCTION__
+		,'en',"ANDORRA"
+		,'fr',"ANDORRE"
+		);}
+	public static function txtCountry_AE(){ return new Lemma(__FUNCTION__
+		,'en',"UNITED ARAB EMIRATES"
+		,'fr',"ÉMIRATS ARABES UNIS"
+		);}
+	public static function txtCountry_AF(){ return new Lemma(__FUNCTION__
+		,'en',"AFGHANISTAN"
+		,'fr',"AFGHANISTAN"
+		);}
+	public static function txtCountry_AG(){ return new Lemma(__FUNCTION__
+		,'en',"ANTIGUA AND BARBUDA"
+		,'fr',"ANTIGUA-ET-BARBUDA"
+		);}
+	public static function txtCountry_AI(){ return new Lemma(__FUNCTION__
+		,'en',"ANGUILLA"
+		,'fr',"ANGUILLA"
+		);}
+	public static function txtCountry_AL(){ return new Lemma(__FUNCTION__
+		,'en',"ALBANIA"
+		,'fr',"ALBANIE"
+		);}
+	public static function txtCountry_AM(){ return new Lemma(__FUNCTION__
+		,'en',"ARMENIA"
+		,'fr',"ARMÉNIE"
+		);}
+	public static function txtCountry_AO(){ return new Lemma(__FUNCTION__
+		,'en',"ANGOLA"
+		,'fr',"ANGOLA"
+		);}
+	public static function txtCountry_AQ(){ return new Lemma(__FUNCTION__
+		,'en',"ANTARCTICA"
+		,'fr',"ANTARCTIQUE"
+		);}
+	public static function txtCountry_AR(){ return new Lemma(__FUNCTION__
+		,'en',"ARGENTINA"
+		,'fr',"ARGENTINE"
+		);}
+	public static function txtCountry_AS(){ return new Lemma(__FUNCTION__
+		,'en',"AMERICAN SAMOA"
+		,'fr',"SAMOA AMÉRICAINES"
+		);}
+	public static function txtCountry_AT(){ return new Lemma(__FUNCTION__
+		,'en',"AUSTRIA"
+		,'fr',"AUTRICHE"
+		);}
+	public static function txtCountry_AU(){ return new Lemma(__FUNCTION__
+		,'en',"AUSTRALIA"
+		,'fr',"AUSTRALIE"
+		);}
+	public static function txtCountry_AW(){ return new Lemma(__FUNCTION__
+		,'en',"ARUBA"
+		,'fr',"ARUBA"
+		);}
+	public static function txtCountry_AX(){ return new Lemma(__FUNCTION__
+		,'en',"ÅLAND ISLANDS"
+		,'fr',"ÅLAND, ÎLES"
+		);}
+	public static function txtCountry_AZ(){ return new Lemma(__FUNCTION__
+		,'en',"AZERBAIJAN"
+		,'fr',"AZERBAÏDJAN"
+		);}
+	public static function txtCountry_BA(){ return new Lemma(__FUNCTION__
+		,'en',"BOSNIA AND HERZEGOVINA"
+		,'fr',"BOSNIE-HERZÉGOVINE"
+		);}
+	public static function txtCountry_BB(){ return new Lemma(__FUNCTION__
+		,'en',"BARBADOS"
+		,'fr',"BARBADE"
+		);}
+	public static function txtCountry_BD(){ return new Lemma(__FUNCTION__
+		,'en',"BANGLADESH"
+		,'fr',"BANGLADESH"
+		);}
+	public static function txtCountry_BE(){ return new Lemma(__FUNCTION__
+		,'en',"BELGIUM"
+		,'fr',"BELGIQUE"
+		);}
+	public static function txtCountry_BF(){ return new Lemma(__FUNCTION__
+		,'en',"BURKINA FASO"
+		,'fr',"BURKINA FASO"
+		);}
+	public static function txtCountry_BG(){ return new Lemma(__FUNCTION__
+		,'en',"BULGARIA"
+		,'fr',"BULGARIE"
+		);}
+	public static function txtCountry_BH(){ return new Lemma(__FUNCTION__
+		,'en',"BAHRAIN"
+		,'fr',"BAHREÏN"
+		);}
+	public static function txtCountry_BI(){ return new Lemma(__FUNCTION__
+		,'en',"BURUNDI"
+		,'fr',"BURUNDI"
+		);}
+	public static function txtCountry_BJ(){ return new Lemma(__FUNCTION__
+		,'en',"BENIN"
+		,'fr',"BÉNIN"
+		);}
+	public static function txtCountry_BL(){ return new Lemma(__FUNCTION__
+		,'en',"SAINT BARTHÉLEMY"
+		,'fr',"SAINT-BARTHÉLEMY"
+		);}
+	public static function txtCountry_BM(){ return new Lemma(__FUNCTION__
+		,'en',"BERMUDA"
+		,'fr',"BERMUDES"
+		);}
+	public static function txtCountry_BN(){ return new Lemma(__FUNCTION__
+		,'en',"BRUNEI DARUSSALAM"
+		,'fr',"BRUNÉI DARUSSALAM"
+		);}
+	public static function txtCountry_BO(){ return new Lemma(__FUNCTION__
+		,'en',"BOLIVIA, PLURINATIONAL STATE OF"
+		,'fr',"BOLIVIE, L'ÉTAT PLURINATIONAL DE"
+		);}
+	public static function txtCountry_BQ(){ return new Lemma(__FUNCTION__
+		,'en',"BONAIRE, SAINT EUSTATIUS AND SABA"
+		,'fr',"BONAIRE, SAINT-EUSTACHE ET SABA"
+		);}
+	public static function txtCountry_BR(){ return new Lemma(__FUNCTION__
+		,'en',"BRAZIL"
+		,'fr',"BRÉSIL"
+		);}
+	public static function txtCountry_BS(){ return new Lemma(__FUNCTION__
+		,'en',"BAHAMAS"
+		,'fr',"BAHAMAS"
+		);}
+	public static function txtCountry_BT(){ return new Lemma(__FUNCTION__
+		,'en',"BHUTAN"
+		,'fr',"BHOUTAN"
+		);}
+	public static function txtCountry_BV(){ return new Lemma(__FUNCTION__
+		,'en',"BOUVET ISLAND"
+		,'fr',"BOUVET, ÎLE"
+		);}
+	public static function txtCountry_BW(){ return new Lemma(__FUNCTION__
+		,'en',"BOTSWANA"
+		,'fr',"BOTSWANA"
+		);}
+	public static function txtCountry_BY(){ return new Lemma(__FUNCTION__
+		,'en',"BELARUS"
+		,'fr',"BÉLARUS"
+		);}
+	public static function txtCountry_BZ(){ return new Lemma(__FUNCTION__
+		,'en',"BELIZE"
+		,'fr',"BELIZE"
+		);}
+	public static function txtCountry_CA(){ return new Lemma(__FUNCTION__
+		,'en',"CANADA"
+		,'fr',"CANADA"
+		);}
+	public static function txtCountry_CC(){ return new Lemma(__FUNCTION__
+		,'en',"COCOS (KEELING) ISLANDS"
+		,'fr',"COCOS (KEELING), ÎLES"
+		);}
+	public static function txtCountry_CD(){ return new Lemma(__FUNCTION__
+		,'en',"CONGO, THE DEMOCRATIC REPUBLIC OF THE"
+		,'fr',"CONGO, LA RÉPUBLIQUE DÉMOCRATIQUE DU"
+		);}
+	public static function txtCountry_CF(){ return new Lemma(__FUNCTION__
+		,'en',"CENTRAL AFRICAN REPUBLIC"
+		,'fr',"CENTRAFRICAINE, RÉPUBLIQUE"
+		);}
+	public static function txtCountry_CG(){ return new Lemma(__FUNCTION__
+		,'en',"CONGO"
+		,'fr',"CONGO"
+		);}
+	public static function txtCountry_CH(){ return new Lemma(__FUNCTION__
+		,'en',"SWITZERLAND"
+		,'fr',"SUISSE"
+		);}
+	public static function txtCountry_CI(){ return new Lemma(__FUNCTION__
+		,'en',"CÔTE D'IVOIRE"
+		,'fr',"CÔTE D'IVOIRE"
+		);}
+	public static function txtCountry_CK(){ return new Lemma(__FUNCTION__
+		,'en',"COOK ISLANDS"
+		,'fr',"COOK, ÎLES"
+		);}
+	public static function txtCountry_CL(){ return new Lemma(__FUNCTION__
+		,'en',"CHILE"
+		,'fr',"CHILI"
+		);}
+	public static function txtCountry_CM(){ return new Lemma(__FUNCTION__
+		,'en',"CAMEROON"
+		,'fr',"CAMEROUN"
+		);}
+	public static function txtCountry_CN(){ return new Lemma(__FUNCTION__
+		,'en',"CHINA"
+		,'fr',"CHINE"
+		);}
+	public static function txtCountry_CO(){ return new Lemma(__FUNCTION__
+		,'en',"COLOMBIA"
+		,'fr',"COLOMBIE"
+		);}
+	public static function txtCountry_CR(){ return new Lemma(__FUNCTION__
+		,'en',"COSTA RICA"
+		,'fr',"COSTA RICA"
+		);}
+	public static function txtCountry_CU(){ return new Lemma(__FUNCTION__
+		,'en',"CUBA"
+		,'fr',"CUBA"
+		);}
+	public static function txtCountry_CV(){ return new Lemma(__FUNCTION__
+		,'en',"CAPE VERDE"
+		,'fr',"CAP-VERT"
+		);}
+	public static function txtCountry_CW(){ return new Lemma(__FUNCTION__
+		,'en',"CURAÇAO"
+		,'fr',"CURAÇAO"
+		);}
+	public static function txtCountry_CX(){ return new Lemma(__FUNCTION__
+		,'en',"CHRISTMAS ISLAND"
+		,'fr',"CHRISTMAS, ÎLE"
+		);}
+	public static function txtCountry_CY(){ return new Lemma(__FUNCTION__
+		,'en',"CYPRUS"
+		,'fr',"CHYPRE"
+		);}
+	public static function txtCountry_CZ(){ return new Lemma(__FUNCTION__
+		,'en',"CZECH REPUBLIC"
+		,'fr',"TCHÈQUE, RÉPUBLIQUE"
+		);}
+	public static function txtCountry_DE(){ return new Lemma(__FUNCTION__
+		,'en',"GERMANY"
+		,'fr',"ALLEMAGNE"
+		);}
+	public static function txtCountry_DJ(){ return new Lemma(__FUNCTION__
+		,'en',"DJIBOUTI"
+		,'fr',"DJIBOUTI"
+		);}
+	public static function txtCountry_DK(){ return new Lemma(__FUNCTION__
+		,'en',"DENMARK"
+		,'fr',"DANEMARK"
+		);}
+	public static function txtCountry_DM(){ return new Lemma(__FUNCTION__
+		,'en',"DOMINICA"
+		,'fr',"DOMINIQUE"
+		);}
+	public static function txtCountry_DO(){ return new Lemma(__FUNCTION__
+		,'en',"DOMINICAN REPUBLIC"
+		,'fr',"DOMINICAINE, RÉPUBLIQUE"
+		);}
+	public static function txtCountry_DZ(){ return new Lemma(__FUNCTION__
+		,'en',"ALGERIA"
+		,'fr',"ALGÉRIE"
+		);}
+	public static function txtCountry_EC(){ return new Lemma(__FUNCTION__
+		,'en',"ECUADOR"
+		,'fr',"ÉQUATEUR"
+		);}
+	public static function txtCountry_EE(){ return new Lemma(__FUNCTION__
+		,'en',"ESTONIA"
+		,'fr',"ESTONIE"
+		);}
+	public static function txtCountry_EG(){ return new Lemma(__FUNCTION__
+		,'en',"EGYPT"
+		,'fr',"ÉGYPTE"
+		);}
+	public static function txtCountry_EH(){ return new Lemma(__FUNCTION__
+		,'en',"WESTERN SAHARA"
+		,'fr',"SAHARA OCCIDENTAL"
+		);}
+	public static function txtCountry_ER(){ return new Lemma(__FUNCTION__
+		,'en',"ERITREA"
+		,'fr',"ÉRYTHRÉE"
+		);}
+	public static function txtCountry_ES(){ return new Lemma(__FUNCTION__
+		,'en',"SPAIN"
+		,'fr',"ESPAGNE"
+		);}
+	public static function txtCountry_ET(){ return new Lemma(__FUNCTION__
+		,'en',"ETHIOPIA"
+		,'fr',"ÉTHIOPIE"
+		);}
+	public static function txtCountry_FI(){ return new Lemma(__FUNCTION__
+		,'en',"FINLAND"
+		,'fr',"FINLANDE"
+		);}
+	public static function txtCountry_FJ(){ return new Lemma(__FUNCTION__
+		,'en',"FIJI"
+		,'fr',"FIDJI"
+		);}
+	public static function txtCountry_FK(){ return new Lemma(__FUNCTION__
+		,'en',"FALKLAND ISLANDS (MALVINAS)"
+		,'fr',"FALKLAND, ÎLES (MALVINAS)"
+		);}
+	public static function txtCountry_FM(){ return new Lemma(__FUNCTION__
+		,'en',"MICRONESIA, FEDERATED STATES OF"
+		,'fr',"MICRONÉSIE, ÉTATS FÉDÉRÉS DE"
+		);}
+	public static function txtCountry_FO(){ return new Lemma(__FUNCTION__
+		,'en',"FAROE ISLANDS"
+		,'fr',"FÉROÉ, ÎLES"
+		);}
+	public static function txtCountry_FR(){ return new Lemma(__FUNCTION__
+		,'en',"FRANCE"
+		,'fr',"FRANCE"
+		);}
+	public static function txtCountry_GA(){ return new Lemma(__FUNCTION__
+		,'en',"GABON"
+		,'fr',"GABON"
+		);}
+	public static function txtCountry_GB(){ return new Lemma(__FUNCTION__
+		,'en',"UNITED KINGDOM"
+		,'fr',"ROYAUME-UNI"
+		);}
+	public static function txtCountry_GD(){ return new Lemma(__FUNCTION__
+		,'en',"GRENADA"
+		,'fr',"GRENADE"
+		);}
+	public static function txtCountry_GE(){ return new Lemma(__FUNCTION__
+		,'en',"GEORGIA"
+		,'fr',"GÉORGIE"
+		);}
+	public static function txtCountry_GF(){ return new Lemma(__FUNCTION__
+		,'en',"FRENCH GUIANA"
+		,'fr',"GUYANE FRANÇAISE"
+		);}
+	public static function txtCountry_GG(){ return new Lemma(__FUNCTION__
+		,'en',"GUERNSEY"
+		,'fr',"GUERNESEY"
+		);}
+	public static function txtCountry_GH(){ return new Lemma(__FUNCTION__
+		,'en',"GHANA"
+		,'fr',"GHANA"
+		);}
+	public static function txtCountry_GI(){ return new Lemma(__FUNCTION__
+		,'en',"GIBRALTAR"
+		,'fr',"GIBRALTAR"
+		);}
+	public static function txtCountry_GL(){ return new Lemma(__FUNCTION__
+		,'en',"GREENLAND"
+		,'fr',"GROENLAND"
+		);}
+	public static function txtCountry_GM(){ return new Lemma(__FUNCTION__
+		,'en',"GAMBIA"
+		,'fr',"GAMBIE"
+		);}
+	public static function txtCountry_GN(){ return new Lemma(__FUNCTION__
+		,'en',"GUINEA"
+		,'fr',"GUINÉE"
+		);}
+	public static function txtCountry_GP(){ return new Lemma(__FUNCTION__
+		,'en',"GUADELOUPE"
+		,'fr',"GUADELOUPE"
+		);}
+	public static function txtCountry_GQ(){ return new Lemma(__FUNCTION__
+		,'en',"EQUATORIAL GUINEA"
+		,'fr',"GUINÉE ÉQUATORIALE"
+		);}
+	public static function txtCountry_GR(){ return new Lemma(__FUNCTION__
+		,'en',"GREECE"
+		,'fr',"GRÈCE"
+		);}
+	public static function txtCountry_GS(){ return new Lemma(__FUNCTION__
+		,'en',"SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS"
+		,'fr',"GÉORGIE DU SUD ET LES ÎLES SANDWICH DU SUD"
+		);}
+	public static function txtCountry_GT(){ return new Lemma(__FUNCTION__
+		,'en',"GUATEMALA"
+		,'fr',"GUATEMALA"
+		);}
+	public static function txtCountry_GU(){ return new Lemma(__FUNCTION__
+		,'en',"GUAM"
+		,'fr',"GUAM"
+		);}
+	public static function txtCountry_GW(){ return new Lemma(__FUNCTION__
+		,'en',"GUINEA-BISSAU"
+		,'fr',"GUINÉE-BISSAU"
+		);}
+	public static function txtCountry_GY(){ return new Lemma(__FUNCTION__
+		,'en',"GUYANA"
+		,'fr',"GUYANA"
+		);}
+	public static function txtCountry_HK(){ return new Lemma(__FUNCTION__
+		,'en',"HONG KONG"
+		,'fr',"HONG-KONG"
+		);}
+	public static function txtCountry_HM(){ return new Lemma(__FUNCTION__
+		,'en',"HEARD ISLAND AND MCDONALD ISLANDS"
+		,'fr',"HEARD, ÎLE ET MCDONALD, ÎLES"
+		);}
+	public static function txtCountry_HN(){ return new Lemma(__FUNCTION__
+		,'en',"HONDURAS"
+		,'fr',"HONDURAS"
+		);}
+	public static function txtCountry_HR(){ return new Lemma(__FUNCTION__
+		,'en',"CROATIA"
+		,'fr',"CROATIE"
+		);}
+	public static function txtCountry_HT(){ return new Lemma(__FUNCTION__
+		,'en',"HAITI"
+		,'fr',"HAÏTI"
+		);}
+	public static function txtCountry_HU(){ return new Lemma(__FUNCTION__
+		,'en',"HUNGARY"
+		,'fr',"HONGRIE"
+		);}
+	public static function txtCountry_ID(){ return new Lemma(__FUNCTION__
+		,'en',"INDONESIA"
+		,'fr',"INDONÉSIE"
+		);}
+	public static function txtCountry_IE(){ return new Lemma(__FUNCTION__
+		,'en',"IRELAND"
+		,'fr',"IRLANDE"
+		);}
+	public static function txtCountry_IL(){ return new Lemma(__FUNCTION__
+		,'en',"ISRAEL"
+		,'fr',"ISRAËL"
+		);}
+	public static function txtCountry_IM(){ return new Lemma(__FUNCTION__
+		,'en',"ISLE OF MAN"
+		,'fr',"ÎLE DE MAN"
+		);}
+	public static function txtCountry_IN(){ return new Lemma(__FUNCTION__
+		,'en',"INDIA"
+		,'fr',"INDE"
+		);}
+	public static function txtCountry_IO(){ return new Lemma(__FUNCTION__
+		,'en',"BRITISH INDIAN OCEAN TERRITORY"
+		,'fr',"OCÉAN INDIEN, TERRITOIRE BRITANNIQUE DE L"
+		);}
+	public static function txtCountry_IQ(){ return new Lemma(__FUNCTION__
+		,'en',"IRAQ"
+		,'fr',"IRAQ"
+		);}
+	public static function txtCountry_IR(){ return new Lemma(__FUNCTION__
+		,'en',"IRAN, ISLAMIC REPUBLIC OF"
+		,'fr',"IRAN, RÉPUBLIQUE ISLAMIQUE D"
+		);}
+	public static function txtCountry_IS(){ return new Lemma(__FUNCTION__
+		,'en',"ICELAND"
+		,'fr',"ISLANDE"
+		);}
+	public static function txtCountry_IT(){ return new Lemma(__FUNCTION__
+		,'en',"ITALY"
+		,'fr',"ITALIE"
+		);}
+	public static function txtCountry_JE(){ return new Lemma(__FUNCTION__
+		,'en',"JERSEY"
+		,'fr',"JERSEY"
+		);}
+	public static function txtCountry_JM(){ return new Lemma(__FUNCTION__
+		,'en',"JAMAICA"
+		,'fr',"JAMAÏQUE"
+		);}
+	public static function txtCountry_JO(){ return new Lemma(__FUNCTION__
+		,'en',"JORDAN"
+		,'fr',"JORDANIE"
+		);}
+	public static function txtCountry_JP(){ return new Lemma(__FUNCTION__
+		,'en',"JAPAN"
+		,'fr',"JAPON"
+		);}
+	public static function txtCountry_KE(){ return new Lemma(__FUNCTION__
+		,'en',"KENYA"
+		,'fr',"KENYA"
+		);}
+	public static function txtCountry_KG(){ return new Lemma(__FUNCTION__
+		,'en',"KYRGYZSTAN"
+		,'fr',"KIRGHIZISTAN"
+		);}
+	public static function txtCountry_KH(){ return new Lemma(__FUNCTION__
+		,'en',"CAMBODIA"
+		,'fr',"CAMBODGE"
+		);}
+	public static function txtCountry_KI(){ return new Lemma(__FUNCTION__
+		,'en',"KIRIBATI"
+		,'fr',"KIRIBATI"
+		);}
+	public static function txtCountry_KM(){ return new Lemma(__FUNCTION__
+		,'en',"COMOROS"
+		,'fr',"COMORES"
+		);}
+	public static function txtCountry_KN(){ return new Lemma(__FUNCTION__
+		,'en',"SAINT KITTS AND NEVIS"
+		,'fr',"SAINT-KITTS-ET-NEVIS"
+		);}
+	public static function txtCountry_KP(){ return new Lemma(__FUNCTION__
+		,'en',"KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+		,'fr',"CORÉE, RÉPUBLIQUE POPULAIRE DÉMOCRATIQUE DE"
+		);}
+	public static function txtCountry_KR(){ return new Lemma(__FUNCTION__
+		,'en',"KOREA, REPUBLIC OF"
+		,'fr',"CORÉE, RÉPUBLIQUE DE"
+		);}
+	public static function txtCountry_KW(){ return new Lemma(__FUNCTION__
+		,'en',"KUWAIT"
+		,'fr',"KOWEÏT"
+		);}
+	public static function txtCountry_KY(){ return new Lemma(__FUNCTION__
+		,'en',"CAYMAN ISLANDS"
+		,'fr',"CAÏMANES, ÎLES"
+		);}
+	public static function txtCountry_KZ(){ return new Lemma(__FUNCTION__
+		,'en',"KAZAKHSTAN"
+		,'fr',"KAZAKHSTAN"
+		);}
+	public static function txtCountry_LA(){ return new Lemma(__FUNCTION__
+		,'en',"LAO PEOPLE'S DEMOCRATIC REPUBLIC"
+		,'fr',"LAO, RÉPUBLIQUE DÉMOCRATIQUE POPULAIRE"
+		);}
+	public static function txtCountry_LB(){ return new Lemma(__FUNCTION__
+		,'en',"LEBANON"
+		,'fr',"LIBAN"
+		);}
+	public static function txtCountry_LC(){ return new Lemma(__FUNCTION__
+		,'en',"SAINT LUCIA"
+		,'fr',"SAINTE-LUCIE"
+		);}
+	public static function txtCountry_LI(){ return new Lemma(__FUNCTION__
+		,'en',"LIECHTENSTEIN"
+		,'fr',"LIECHTENSTEIN"
+		);}
+	public static function txtCountry_LK(){ return new Lemma(__FUNCTION__
+		,'en',"SRI LANKA"
+		,'fr',"SRI LANKA"
+		);}
+	public static function txtCountry_LR(){ return new Lemma(__FUNCTION__
+		,'en',"LIBERIA"
+		,'fr',"LIBÉRIA"
+		);}
+	public static function txtCountry_LS(){ return new Lemma(__FUNCTION__
+		,'en',"LESOTHO"
+		,'fr',"LESOTHO"
+		);}
+	public static function txtCountry_LT(){ return new Lemma(__FUNCTION__
+		,'en',"LITHUANIA"
+		,'fr',"LITUANIE"
+		);}
+	public static function txtCountry_LU(){ return new Lemma(__FUNCTION__
+		,'en',"LUXEMBOURG"
+		,'fr',"LUXEMBOURG"
+		);}
+	public static function txtCountry_LV(){ return new Lemma(__FUNCTION__
+		,'en',"LATVIA"
+		,'fr',"LETTONIE"
+		);}
+	public static function txtCountry_LY(){ return new Lemma(__FUNCTION__
+		,'en',"LIBYAN ARAB JAMAHIRIYA"
+		,'fr',"LIBYENNE, JAMAHIRIYA ARABE"
+		);}
+	public static function txtCountry_MA(){ return new Lemma(__FUNCTION__
+		,'en',"MOROCCO"
+		,'fr',"MAROC"
+		);}
+	public static function txtCountry_MC(){ return new Lemma(__FUNCTION__
+		,'en',"MONACO"
+		,'fr',"MONACO"
+		);}
+	public static function txtCountry_MD(){ return new Lemma(__FUNCTION__
+		,'en',"MOLDOVA, REPUBLIC OF"
+		,'fr',"MOLDOVA, RÉPUBLIQUE DE"
+		);}
+	public static function txtCountry_ME(){ return new Lemma(__FUNCTION__
+		,'en',"MONTENEGRO"
+		,'fr',"MONTÉNÉGRO"
+		);}
+	public static function txtCountry_MF(){ return new Lemma(__FUNCTION__
+		,'en',"SAINT MARTIN (FRENCH PART)"
+		,'fr',"SAINT-MARTIN(PARTIE FRANÇAISE)"
+		);}
+	public static function txtCountry_MG(){ return new Lemma(__FUNCTION__
+		,'en',"MADAGASCAR"
+		,'fr',"MADAGASCAR"
+		);}
+	public static function txtCountry_MH(){ return new Lemma(__FUNCTION__
+		,'en',"MARSHALL ISLANDS"
+		,'fr',"MARSHALL, ÎLES"
+		);}
+	public static function txtCountry_MK(){ return new Lemma(__FUNCTION__
+		,'en',"MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF"
+		,'fr',"MACÉDOINE, L'EX-RÉPUBLIQUE YOUGOSLAVE DE"
+		);}
+	public static function txtCountry_ML(){ return new Lemma(__FUNCTION__
+		,'en',"MALI"
+		,'fr',"MALI"
+		);}
+	public static function txtCountry_MM(){ return new Lemma(__FUNCTION__
+		,'en',"MYANMAR"
+		,'fr',"MYANMAR"
+		);}
+	public static function txtCountry_MN(){ return new Lemma(__FUNCTION__
+		,'en',"MONGOLIA"
+		,'fr',"MONGOLIE"
+		);}
+	public static function txtCountry_MO(){ return new Lemma(__FUNCTION__
+		,'en',"MACAO"
+		,'fr',"MACAO"
+		);}
+	public static function txtCountry_MP(){ return new Lemma(__FUNCTION__
+		,'en',"NORTHERN MARIANA ISLANDS"
+		,'fr',"MARIANNES DU NORD, ÎLES"
+		);}
+	public static function txtCountry_MQ(){ return new Lemma(__FUNCTION__
+		,'en',"MARTINIQUE"
+		,'fr',"MARTINIQUE"
+		);}
+	public static function txtCountry_MR(){ return new Lemma(__FUNCTION__
+		,'en',"MAURITANIA"
+		,'fr',"MAURITANIE"
+		);}
+	public static function txtCountry_MS(){ return new Lemma(__FUNCTION__
+		,'en',"MONTSERRAT"
+		,'fr',"MONTSERRAT"
+		);}
+	public static function txtCountry_MT(){ return new Lemma(__FUNCTION__
+		,'en',"MALTA"
+		,'fr',"MALTE"
+		);}
+	public static function txtCountry_MU(){ return new Lemma(__FUNCTION__
+		,'en',"MAURITIUS"
+		,'fr',"MAURICE"
+		);}
+	public static function txtCountry_MV(){ return new Lemma(__FUNCTION__
+		,'en',"MALDIVES"
+		,'fr',"MALDIVES"
+		);}
+	public static function txtCountry_MW(){ return new Lemma(__FUNCTION__
+		,'en',"MALAWI"
+		,'fr',"MALAWI"
+		);}
+	public static function txtCountry_MX(){ return new Lemma(__FUNCTION__
+		,'en',"MEXICO"
+		,'fr',"MEXIQUE"
+		);}
+	public static function txtCountry_MY(){ return new Lemma(__FUNCTION__
+		,'en',"MALAYSIA"
+		,'fr',"MALAISIE"
+		);}
+	public static function txtCountry_MZ(){ return new Lemma(__FUNCTION__
+		,'en',"MOZAMBIQUE"
+		,'fr',"MOZAMBIQUE"
+		);}
+	public static function txtCountry_NA(){ return new Lemma(__FUNCTION__
+		,'en',"NAMIBIA"
+		,'fr',"NAMIBIE"
+		);}
+	public static function txtCountry_NC(){ return new Lemma(__FUNCTION__
+		,'en',"NEW CALEDONIA"
+		,'fr',"NOUVELLE-CALÉDONIE"
+		);}
+	public static function txtCountry_NE(){ return new Lemma(__FUNCTION__
+		,'en',"NIGER"
+		,'fr',"NIGER"
+		);}
+	public static function txtCountry_NF(){ return new Lemma(__FUNCTION__
+		,'en',"NORFOLK ISLAND"
+		,'fr',"NORFOLK, ÎLE"
+		);}
+	public static function txtCountry_NG(){ return new Lemma(__FUNCTION__
+		,'en',"NIGERIA"
+		,'fr',"NIGÉRIA"
+		);}
+	public static function txtCountry_NI(){ return new Lemma(__FUNCTION__
+		,'en',"NICARAGUA"
+		,'fr',"NICARAGUA"
+		);}
+	public static function txtCountry_NL(){ return new Lemma(__FUNCTION__
+		,'en',"NETHERLANDS"
+		,'fr',"PAYS-BAS"
+		);}
+	public static function txtCountry_NO(){ return new Lemma(__FUNCTION__
+		,'en',"NORWAY"
+		,'fr',"NORVÈGE"
+		);}
+	public static function txtCountry_NP(){ return new Lemma(__FUNCTION__
+		,'en',"NEPAL"
+		,'fr',"NÉPAL"
+		);}
+	public static function txtCountry_NR(){ return new Lemma(__FUNCTION__
+		,'en',"NAURU"
+		,'fr',"NAURU"
+		);}
+	public static function txtCountry_NU(){ return new Lemma(__FUNCTION__
+		,'en',"NIUE"
+		,'fr',"NIUÉ"
+		);}
+	public static function txtCountry_NZ(){ return new Lemma(__FUNCTION__
+		,'en',"NEW ZEALAND"
+		,'fr',"NOUVELLE-ZÉLANDE"
+		);}
+	public static function txtCountry_OM(){ return new Lemma(__FUNCTION__
+		,'en',"OMAN"
+		,'fr',"OMAN"
+		);}
+	public static function txtCountry_PA(){ return new Lemma(__FUNCTION__
+		,'en',"PANAMA"
+		,'fr',"PANAMA"
+		);}
+	public static function txtCountry_PE(){ return new Lemma(__FUNCTION__
+		,'en',"PERU"
+		,'fr',"PÉROU"
+		);}
+	public static function txtCountry_PF(){ return new Lemma(__FUNCTION__
+		,'en',"FRENCH POLYNESIA"
+		,'fr',"POLYNÉSIE FRANÇAISE"
+		);}
+	public static function txtCountry_PG(){ return new Lemma(__FUNCTION__
+		,'en',"PAPUA NEW GUINEA"
+		,'fr',"PAPOUASIE-NOUVELLE-GUINÉE"
+		);}
+	public static function txtCountry_PH(){ return new Lemma(__FUNCTION__
+		,'en',"PHILIPPINES"
+		,'fr',"PHILIPPINES"
+		);}
+	public static function txtCountry_PK(){ return new Lemma(__FUNCTION__
+		,'en',"PAKISTAN"
+		,'fr',"PAKISTAN"
+		);}
+	public static function txtCountry_PL(){ return new Lemma(__FUNCTION__
+		,'en',"POLAND"
+		,'fr',"POLOGNE"
+		);}
+	public static function txtCountry_PM(){ return new Lemma(__FUNCTION__
+		,'en',"SAINT PIERRE AND MIQUELON"
+		,'fr',"SAINT-PIERRE-ET-MIQUELON"
+		);}
+	public static function txtCountry_PN(){ return new Lemma(__FUNCTION__
+		,'en',"PITCAIRN"
+		,'fr',"PITCAIRN"
+		);}
+	public static function txtCountry_PR(){ return new Lemma(__FUNCTION__
+		,'en',"PUERTO RICO"
+		,'fr',"PORTO RICO"
+		);}
+	public static function txtCountry_PS(){ return new Lemma(__FUNCTION__
+		,'en',"PALESTINIAN TERRITORY, OCCUPIED"
+		,'fr',"PALESTINIEN OCCUPÉ, TERRITOIRE"
+		);}
+	public static function txtCountry_PT(){ return new Lemma(__FUNCTION__
+		,'en',"PORTUGAL"
+		,'fr',"PORTUGAL"
+		);}
+	public static function txtCountry_PW(){ return new Lemma(__FUNCTION__
+		,'en',"PALAU"
+		,'fr',"PALAOS"
+		);}
+	public static function txtCountry_PY(){ return new Lemma(__FUNCTION__
+		,'en',"PARAGUAY"
+		,'fr',"PARAGUAY"
+		);}
+	public static function txtCountry_QA(){ return new Lemma(__FUNCTION__
+		,'en',"QATAR"
+		,'fr',"QATAR"
+		);}
+	public static function txtCountry_RE(){ return new Lemma(__FUNCTION__
+		,'en',"RÉUNION"
+		,'fr',"RÉUNION"
+		);}
+	public static function txtCountry_RO(){ return new Lemma(__FUNCTION__
+		,'en',"ROMANIA"
+		,'fr',"ROUMANIE"
+		);}
+	public static function txtCountry_RS(){ return new Lemma(__FUNCTION__
+		,'en',"SERBIA"
+		,'fr',"SERBIE"
+		);}
+	public static function txtCountry_RU(){ return new Lemma(__FUNCTION__
+		,'en',"RUSSIAN FEDERATION"
+		,'fr',"RUSSIE, FÉDÉRATION DE"
+		);}
+	public static function txtCountry_RW(){ return new Lemma(__FUNCTION__
+		,'en',"RWANDA"
+		,'fr',"RWANDA"
+		);}
+	public static function txtCountry_SA(){ return new Lemma(__FUNCTION__
+		,'en',"SAUDI ARABIA"
+		,'fr',"ARABIE SAOUDITE"
+		);}
+	public static function txtCountry_SB(){ return new Lemma(__FUNCTION__
+		,'en',"SOLOMON ISLANDS"
+		,'fr',"SALOMON, ÎLES"
+		);}
+	public static function txtCountry_SC(){ return new Lemma(__FUNCTION__
+		,'en',"SEYCHELLES"
+		,'fr',"SEYCHELLES"
+		);}
+	public static function txtCountry_SD(){ return new Lemma(__FUNCTION__
+		,'en',"SUDAN"
+		,'fr',"SOUDAN"
+		);}
+	public static function txtCountry_SE(){ return new Lemma(__FUNCTION__
+		,'en',"SWEDEN"
+		,'fr',"SUÈDE"
+		);}
+	public static function txtCountry_SG(){ return new Lemma(__FUNCTION__
+		,'en',"SINGAPORE"
+		,'fr',"SINGAPOUR"
+		);}
+	public static function txtCountry_SH(){ return new Lemma(__FUNCTION__
+		,'en',"SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA"
+		,'fr',"SAINTE-HÉLÈNE, ASCENSION ET TRISTAN DA CUNHA"
+		);}
+	public static function txtCountry_SI(){ return new Lemma(__FUNCTION__
+		,'en',"SLOVENIA"
+		,'fr',"SLOVÉNIE"
+		);}
+	public static function txtCountry_SJ(){ return new Lemma(__FUNCTION__
+		,'en',"SVALBARD AND JAN MAYEN"
+		,'fr',"SVALBARD ET ÎLE JAN MAYEN"
+		);}
+	public static function txtCountry_SK(){ return new Lemma(__FUNCTION__
+		,'en',"SLOVAKIA"
+		,'fr',"SLOVAQUIE"
+		);}
+	public static function txtCountry_SL(){ return new Lemma(__FUNCTION__
+		,'en',"SIERRA LEONE"
+		,'fr',"SIERRA LEONE"
+		);}
+	public static function txtCountry_SM(){ return new Lemma(__FUNCTION__
+		,'en',"SAN MARINO"
+		,'fr',"SAINT-MARIN"
+		);}
+	public static function txtCountry_SN(){ return new Lemma(__FUNCTION__
+		,'en',"SENEGAL"
+		,'fr',"SÉNÉGAL"
+		);}
+	public static function txtCountry_SO(){ return new Lemma(__FUNCTION__
+		,'en',"SOMALIA"
+		,'fr',"SOMALIE"
+		);}
+	public static function txtCountry_SR(){ return new Lemma(__FUNCTION__
+		,'en',"SURINAME"
+		,'fr',"SURINAME"
+		);}
+	public static function txtCountry_ST(){ return new Lemma(__FUNCTION__
+		,'en',"SAO TOME AND PRINCIPE"
+		,'fr',"SAO TOMÉ-ET-PRINCIPE"
+		);}
+	public static function txtCountry_SV(){ return new Lemma(__FUNCTION__
+		,'en',"EL SALVADOR"
+		,'fr',"EL SALVADOR"
+		);}
+	public static function txtCountry_SX(){ return new Lemma(__FUNCTION__
+		,'en',"SINT MAARTEN (DUTCH PART)"
+		,'fr',"SAINT-MARTIN (PARTIE NÉERLANDAISE)"
+		);}
+	public static function txtCountry_SY(){ return new Lemma(__FUNCTION__
+		,'en',"SYRIAN ARAB REPUBLIC"
+		,'fr',"SYRIENNE, RÉPUBLIQUE ARABE"
+		);}
+	public static function txtCountry_SZ(){ return new Lemma(__FUNCTION__
+		,'en',"SWAZILAND"
+		,'fr',"SWAZILAND"
+		);}
+	public static function txtCountry_TC(){ return new Lemma(__FUNCTION__
+		,'en',"TURKS AND CAICOS ISLANDS"
+		,'fr',"TURKS ET CAÏQUES, ÎLES"
+		);}
+	public static function txtCountry_TD(){ return new Lemma(__FUNCTION__
+		,'en',"CHAD"
+		,'fr',"TCHAD"
+		);}
+	public static function txtCountry_TF(){ return new Lemma(__FUNCTION__
+		,'en',"FRENCH SOUTHERN TERRITORIES"
+		,'fr',"TERRES AUSTRALES FRANÇAISES"
+		);}
+	public static function txtCountry_TG(){ return new Lemma(__FUNCTION__
+		,'en',"TOGO"
+		,'fr',"TOGO"
+		);}
+	public static function txtCountry_TH(){ return new Lemma(__FUNCTION__
+		,'en',"THAILAND"
+		,'fr',"THAÏLANDE"
+		);}
+	public static function txtCountry_TJ(){ return new Lemma(__FUNCTION__
+		,'en',"TAJIKISTAN"
+		,'fr',"TADJIKISTAN"
+		);}
+	public static function txtCountry_TK(){ return new Lemma(__FUNCTION__
+		,'en',"TOKELAU"
+		,'fr',"TOKELAU"
+		);}
+	public static function txtCountry_TL(){ return new Lemma(__FUNCTION__
+		,'en',"TIMOR-LESTE"
+		,'fr',"TIMOR-LESTE"
+		);}
+	public static function txtCountry_TM(){ return new Lemma(__FUNCTION__
+		,'en',"TURKMENISTAN"
+		,'fr',"TURKMÉNISTAN"
+		);}
+	public static function txtCountry_TN(){ return new Lemma(__FUNCTION__
+		,'en',"TUNISIA"
+		,'fr',"TUNISIE"
+		);}
+	public static function txtCountry_TO(){ return new Lemma(__FUNCTION__
+		,'en',"TONGA"
+		,'fr',"TONGA"
+		);}
+	public static function txtCountry_TR(){ return new Lemma(__FUNCTION__
+		,'en',"TURKEY"
+		,'fr',"TURQUIE"
+		);}
+	public static function txtCountry_TT(){ return new Lemma(__FUNCTION__
+		,'en',"TRINIDAD AND TOBAGO"
+		,'fr',"TRINITÉ-ET-TOBAGO"
+		);}
+	public static function txtCountry_TV(){ return new Lemma(__FUNCTION__
+		,'en',"TUVALU"
+		,'fr',"TUVALU"
+		);}
+	public static function txtCountry_TW(){ return new Lemma(__FUNCTION__
+		,'en',"TAIWAN, PROVINCE OF CHINA"
+		,'fr',"TAÏWAN, PROVINCE DE CHINE"
+		);}
+	public static function txtCountry_TZ(){ return new Lemma(__FUNCTION__
+		,'en',"TANZANIA, UNITED REPUBLIC OF"
+		,'fr',"TANZANIE, RÉPUBLIQUE-UNIE DE"
+		);}
+	public static function txtCountry_UA(){ return new Lemma(__FUNCTION__
+		,'en',"UKRAINE"
+		,'fr',"UKRAINE"
+		);}
+	public static function txtCountry_UG(){ return new Lemma(__FUNCTION__
+		,'en',"UGANDA"
+		,'fr',"OUGANDA"
+		);}
+	public static function txtCountry_UM(){ return new Lemma(__FUNCTION__
+		,'en',"UNITED STATES MINOR OUTLYING ISLANDS"
+		,'fr',"ÎLES MINEURES ÉLOIGNÉES DES ÉTATS-UNIS"
+		);}
+	public static function txtCountry_US(){ return new Lemma(__FUNCTION__
+		,'en',"UNITED STATES"
+		,'fr',"ÉTATS-UNIS"
+		);}
+	public static function txtCountry_UY(){ return new Lemma(__FUNCTION__
+		,'en',"URUGUAY"
+		,'fr',"URUGUAY"
+		);}
+	public static function txtCountry_UZ(){ return new Lemma(__FUNCTION__
+		,'en',"UZBEKISTAN"
+		,'fr',"OUZBÉKISTAN"
+		);}
+	public static function txtCountry_VA(){ return new Lemma(__FUNCTION__
+		,'en',"HOLY SEE (VATICAN CITY STATE)"
+		,'fr',"SAINT-SIÈGE (ÉTAT DE LA CITÉ DU VATICAN)"
+		);}
+	public static function txtCountry_VC(){ return new Lemma(__FUNCTION__
+		,'en',"SAINT VINCENT AND THE GRENADINES"
+		,'fr',"SAINT-VINCENT-ET-LES GRENADINES"
+		);}
+	public static function txtCountry_VE(){ return new Lemma(__FUNCTION__
+		,'en',"VENEZUELA, BOLIVARIAN REPUBLIC OF"
+		,'fr',"VENEZUELA, RÉPUBLIQUE BOLIVARIENNE DU"
+		);}
+	public static function txtCountry_VG(){ return new Lemma(__FUNCTION__
+		,'en',"VIRGIN ISLANDS, BRITISH"
+		,'fr',"ÎLES VIERGES BRITANNIQUES"
+		);}
+	public static function txtCountry_VI(){ return new Lemma(__FUNCTION__
+		,'en',"VIRGIN ISLANDS, U.S."
+		,'fr',"ÎLES VIERGES DES ÉTATS-UNIS"
+		);}
+	public static function txtCountry_VN(){ return new Lemma(__FUNCTION__
+		,'en',"VIET NAM"
+		,'fr',"VIET NAM"
+		);}
+	public static function txtCountry_VU(){ return new Lemma(__FUNCTION__
+		,'en',"VANUATU"
+		,'fr',"VANUATU"
+		);}
+	public static function txtCountry_WF(){ return new Lemma(__FUNCTION__
+		,'en',"WALLIS AND FUTUNA"
+		,'fr',"WALLIS ET FUTUNA"
+		);}
+	public static function txtCountry_WS(){ return new Lemma(__FUNCTION__
+		,'en',"SAMOA"
+		,'fr',"SAMOA"
+		);}
+	public static function txtCountry_YE(){ return new Lemma(__FUNCTION__
+		,'en',"YEMEN"
+		,'fr',"YÉMEN"
+		);}
+	public static function txtCountry_YT(){ return new Lemma(__FUNCTION__
+		,'en',"MAYOTTE"
+		,'fr',"MAYOTTE"
+		);}
+	public static function txtCountry_ZA(){ return new Lemma(__FUNCTION__
+		,'en',"SOUTH AFRICA"
+		,'fr',"AFRIQUE DU SUD"
+		);}
+	public static function txtCountry_ZM(){ return new Lemma(__FUNCTION__
+		,'en',"ZAMBIA"
+		,'fr',"ZAMBIE"
+		);}
+	public static function txtCountry_ZW(){ return new Lemma(__FUNCTION__
+		,'en',"ZIMBABWE"
+		,'fr',"ZIMBABWE"
+		);}
 
 }
 

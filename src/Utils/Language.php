@@ -8,13 +8,18 @@ final class Language {
 	}
 
 	/** @return string */
+	public static function GetLocale(){
+		$l = oxy::txt_locale();
+		return $l->HasLang() ? $l->Translate() : $l->TranslateTo('en');
+	}
+	/** @return string */
 	public static function GetDecimalSeparator(){
-		$l = Lemma::Pick('_decimal_separator');
+		$l = oxy::txt_decimal_separator();
 		return $l->HasLang() ? $l->Translate() : self::GetDecimalSeparatorInvariant();
 	}
 	/** @return string */
 	public static function GetThousandsSeparator(){
-		$l = Lemma::Pick('_thousands_separator');
+		$l = oxy::txt_thousands_separator();
 		return $l->HasLang() ? $l->Translate() : self::GetThousandsSeparatorInvariant();
 	}
 
@@ -402,6 +407,6 @@ final class Language {
 		);
 
 	public static function Translate($lang) {
-		return Lemma::Pick('Lang_'.$lang);
+		return oxy::txtLang_($lang);
 	}
 }

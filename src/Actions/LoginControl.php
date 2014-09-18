@@ -20,7 +20,7 @@ class LoginControl extends Control {
 		$act = Oxygen::GetAction();
 		if ($act !== null && $act->IsAjaxDialog()) {
 			echo $act->GetFormButtons();
-			echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();');
+			echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
 			echo $act->EndFormButtons();
 		}
 	}
