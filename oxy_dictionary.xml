@@ -383,7 +383,7 @@
 	</lemma>
 	<lemma name="MsgUnsavedChanged">
 		<en>There are unsaved changes.</en>
-		<fr>Il y a de changements qui ne sont pas sauvegardés.</fr>
+		<fr>Il y a des changements qui ne sont pas sauvegardés.</fr>
 		<el>Υπάρχουν μη αποθηκευμένες αλλαγές.</el>
 	</lemma>
 

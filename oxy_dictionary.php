@@ -944,7 +944,7 @@ abstract class _oxy_dictionary {
 		);}
 	public static function txtMsgUnsavedChanges(){ return new Lemma(__FUNCTION__
 		,'en',"There are unsaved changes."
-		,'fr',"Il y a de changements qui ne sont pas sauvegardés."
+		,'fr',"Il y a des changements qui ne sont pas sauvegardés."
 		,'el',"Υπάρχουν μη αποθηκευμένες αλλαγές."
 		);}
 
