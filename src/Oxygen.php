@@ -876,6 +876,7 @@ class Oxygen {
 			echo "  var window_hash=".new Js(Oxygen::HashRandom32()).";";
 			echo "  window.name=window_hash;";
 			echo "  window.location.href=".new Js(__BASE__.Oxygen::MakeHrefPreservingValues(array('wnd'=>'X','wndx'=>Oxygen::$window_hash))) . ".replace('wnd=X','wnd='+window_hash);";
+			echo "  document.write('<style>*{display:none!important;}</style>');"; // crazy bug in opera?
 			echo "}";
 		}
 		// fix for Javascript for non unicode encodings

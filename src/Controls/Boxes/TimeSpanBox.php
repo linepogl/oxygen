@@ -5,6 +5,9 @@ class TimeSpanBox extends Box {
 	private $allow_null = false;
 	public function WithAllowNull($value){ $this->allow_null = $value; return $this; }
 
+	private $allow_negative = false;
+	public function WithAllowNegative($value){ $this->allow_negative = $value; return $this; }
+
 	private $show_days = false;
 	public function WithShowDays($value){ $this->show_days = $value; return $this; }
 
@@ -39,6 +42,7 @@ class TimeSpanBox extends Box {
 		}
 		else {
 			$v = $this->value->GetTotalSeconds();
+			if (!$this->allow_negative && $v < 0) $v = 0;
 			$sign = $v < 0 ? -1 : 1;
 			$v = abs($v);
 			$d = floor($v / (60*60*24)); $v -= $d*60*60*24;
@@ -148,9 +152,9 @@ class TimeSpanBox extends Box {
 			echo "  }";
 			echo " ,get_s : function(){ return jQuery('#$this->name-'+this.pseudo_focus).html().replace(/&nbsp;/g,''); }";
 			echo " ,set_s : function(s){ jQuery('#$this->name-'+this.pseudo_focus).html('&nbsp;'+(s===''?'&nbsp;':s)); this.Update(); }";
-			echo " ,Inv : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : -x ); }";
+			echo " ,Inv : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : ".($this->allow_negative?"-x":"x")."); }";
 			echo " ,Inc : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : x + 1 ); }";
-			echo " ,Dec : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : x - 1 ); }";
+			echo " ,Dec : function(){ var x = parseInt(this.get_s()); this.set_s( ''+x=='NaN' ? '0' : ".($this->allow_negative?"x-1":"Math.max(0,x-1)")." ); }";
 			echo " ,Del : function(s){ this.set_s( '' ); }";
 			echo " ,Press : function(s){ var x = this.get_s(); this.set_s( (x==='0' ? '' : x) + s ); }";
 			echo " ,Backspace : function(s){ var x = this.get_s(); if (x==='') return; this.set_s( x.slice(0,-1) ); }";
