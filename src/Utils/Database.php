@@ -118,7 +118,7 @@ class Database {
 				}
 			}
 			catch (Exception $ex){
-				throw new Exception(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. self::$cx->server.'/'.self::$cx->schema. '<br/>'.$ex->getMessage());
+				throw new Exception('Cannot connect to database '.self::$cx->server.'/'.self::$cx->schema. '.',0,$ex);
 			}
 			if (self::$cx->is_managed){
 				self::Upgrade();
