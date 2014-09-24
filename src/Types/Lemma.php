@@ -126,12 +126,23 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 
 
 
+	/** @var Lemma */
+	private static $empty = null;
+	public static function Init(){ self::$empty = new self(); }
 
 
 	/** @return Lemma */
 	public static function Pick($name) {
 		return oxy::txt($name);
 	}
+	public static function txt($a) {
+		$r = clone self::$empty;
+		$r->name = substr($a[0],3);
+		$r->data = $a;
+		unset($r->data[0]);
+		return $r;
+	}
+
 
 
 
@@ -227,5 +238,4 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 
 
 }
-
-
+Lemma::Init();
