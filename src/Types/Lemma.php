@@ -138,8 +138,8 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	public static function txt($a) {
 		$r = clone self::$empty;
 		$r->name = substr($a[0],3);
+		unset($a[0]);
 		$r->data = $a;
-		unset($r->data[0]);
 		return $r;
 	}
 
