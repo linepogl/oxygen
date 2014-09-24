@@ -33,7 +33,7 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	 */
 	public function __construct(){
 		$a = func_get_args();
-		$z = count($a);
+		$z = func_num_args();
 		if ($z==1 && is_array($a[0])) {
 			$a = $a[0];
 			$z = count($a);
@@ -83,6 +83,10 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	public function __toString(){ return $this->TranslateTo(Oxygen::$lang); }
 
 
+	/** @return string */
+	public function Sprintf(){
+		return vsprintf($this,func_get_args());
+	}
 
 
 
@@ -124,6 +128,11 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 
 
 
+	/** @return Lemma */
+	public static function Pick($name) {
+		return oxy::txt($name);
+	}
+
 
 
 
@@ -132,83 +141,79 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	// Dictionary
 	//
 	//
-	private static $dictionary = null;          // $name => $lemma
-	private static $packed_dictionary = null;   // $name => serialize( $lemma->data )
-
-	/** @return Lemma */
-	public static function Pick($name){
-		if (is_null(self::$dictionary)) self::LoadDictionary();
-		if (isset(self::$dictionary[$name])) return self::$dictionary[$name];
-		return self::Unpack($name);
-	}
-	/** @return Lemma */
-	public static function Retrieve($name){
-		if (is_null(self::$dictionary)) self::LoadDictionary();
-		if (isset(self::$dictionary[$name])) return self::$dictionary[$name];
-		return self::Unpack($name);
-	}
-	/** @return string */
-	public function Sprintf(){
-		return vsprintf($this,func_get_args());
-	}
-	/** @return Lemma */
-	private static function Unpack($name){
-		$l = new Lemma($name);
-		if (isset(self::$packed_dictionary[$name])) {
-			$l->data = unserialize(self::$packed_dictionary[$name]);
-			self::$dictionary[$name] = $l;
-		}
-		return $l;
-	}
-
-
-
-
-	private static function MakeFileList($files){
-		$r = '';
-		foreach ($files as $f) if (file_exists($f)) $r .= $f . strval(filemtime($f));
-		return $r;
-	}
-	private static function IsDictionaryInCache($files){
-		if (!isset(Scope::$APPLICATION['Lemma::packed_dictionary'])) return false;
-		if (!isset(Scope::$APPLICATION['Lemma::dictionary_filelist'])) return false;
-		return self::MakeFileList($files) == Scope::$APPLICATION['Lemma::dictionary_filelist'];
-	}
-	private static function SaveDictionaryInCache($files){
-		Scope::$APPLICATION['Lemma::packed_dictionary'] = self::$packed_dictionary;
-		Scope::$APPLICATION['Lemma::dictionary_filelist'] = self::MakeFileList($files);
-	}
-	public static function LoadDictionary(){
-		$files = Oxygen::GetDictionaryFiles();
-    if (self::IsDictionaryInCache($files)) {
-	    self::$dictionary = array();
-	    self::$packed_dictionary = Scope::$APPLICATION['Lemma::packed_dictionary'];
-    }
-    else {
-	    self::$dictionary = array();
-	    self::$packed_dictionary = array();
-			foreach ($files as $f) {
-				if (!file_exists($f)) continue;
-				$xml = new DOMDocument();
-				$xml->load($f);
-				foreach ($xml->getElementsByTagName('lemma') as $e) {
-					$name = $e->getAttribute('name');
-					if (!array_key_exists($name,self::$dictionary)){
-						$x = new Lemma();
-						$x->name = $name;
-						self::$dictionary[$name] = $x;
-					}
-					$l = self::$dictionary[$name];
-					foreach ($e->getElementsByTagName('*') as $ee){
-						$l->data[$ee->nodeName] = Oxygen::ReadUnicode( $ee->nodeValue );
-					}
-
-					self::$packed_dictionary[$name] = serialize($l->data);
-				}
-			}
-			self::SaveDictionaryInCache($files);
-		}
-	}
+	//private static $dictionary = null;          // $name => $lemma
+	//private static $packed_dictionary = null;   // $name => serialize( $lemma->data )
+	//
+	///** @return Lemma */
+	//public static function Pick($name){
+	//	if (is_null(self::$dictionary)) self::LoadDictionary();
+	//	if (isset(self::$dictionary[$name])) return self::$dictionary[$name];
+	//	return self::Unpack($name);
+	//}
+	///** @return Lemma */
+	//public static function Retrieve($name){
+	//	if (is_null(self::$dictionary)) self::LoadDictionary();
+	//	if (isset(self::$dictionary[$name])) return self::$dictionary[$name];
+	//	return self::Unpack($name);
+	//}
+	///** @return Lemma */
+	//private static function Unpack($name){
+	//	$l = new Lemma($name);
+	//	if (isset(self::$packed_dictionary[$name])) {
+	//		$l->data = unserialize(self::$packed_dictionary[$name]);
+	//		self::$dictionary[$name] = $l;
+	//	}
+	//	return $l;
+	//}
+	//
+	//
+	//
+	//
+	//private static function MakeFileList($files){
+	//	$r = '';
+	//	foreach ($files as $f) if (file_exists($f)) $r .= $f . strval(filemtime($f));
+	//	return $r;
+	//}
+	//private static function IsDictionaryInCache($files){
+	//	if (!isset(Scope::$APPLICATION['Lemma::packed_dictionary'])) return false;
+	//	if (!isset(Scope::$APPLICATION['Lemma::dictionary_filelist'])) return false;
+	//	return self::MakeFileList($files) == Scope::$APPLICATION['Lemma::dictionary_filelist'];
+	//}
+	//private static function SaveDictionaryInCache($files){
+	//	Scope::$APPLICATION['Lemma::packed_dictionary'] = self::$packed_dictionary;
+	//	Scope::$APPLICATION['Lemma::dictionary_filelist'] = self::MakeFileList($files);
+	//}
+	//public static function LoadDictionary(){
+	//	$files = Oxygen::GetDictionaryFiles();
+   // if (self::IsDictionaryInCache($files)) {
+	//    self::$dictionary = array();
+	//    self::$packed_dictionary = Scope::$APPLICATION['Lemma::packed_dictionary'];
+   // }
+   // else {
+	//    self::$dictionary = array();
+	//    self::$packed_dictionary = array();
+	//		foreach ($files as $f) {
+	//			if (!file_exists($f)) continue;
+	//			$xml = new DOMDocument();
+	//			$xml->load($f);
+	//			foreach ($xml->getElementsByTagName('lemma') as $e) {
+	//				$name = $e->getAttribute('name');
+	//				if (!array_key_exists($name,self::$dictionary)){
+	//					$x = new Lemma();
+	//					$x->name = $name;
+	//					self::$dictionary[$name] = $x;
+	//				}
+	//				$l = self::$dictionary[$name];
+	//				foreach ($e->getElementsByTagName('*') as $ee){
+	//					$l->data[$ee->nodeName] = Oxygen::ReadUnicode( $ee->nodeValue );
+	//				}
+	//
+	//				self::$packed_dictionary[$name] = serialize($l->data);
+	//			}
+	//		}
+	//		self::SaveDictionaryInCache($files);
+	//	}
+	//}
 
 
 

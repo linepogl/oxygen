@@ -225,43 +225,64 @@ class Oxygen {
 					Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler ('.$served_as.')');
 			}
 			else {
-				$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
-				echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
-				echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
-				echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background: #739baa; background:linear-gradient(to bottom, #a1b9b6 0%,#739baa 100%);padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
+				$cli = php_sapi_name() === 'cli';
 
-				echo '<div style="color:#ffffff;font:bold 50px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:150px;width:80%;letter-spacing:-2px;">'.Lemma::Pick('MsgCannotDisplayWebPage').'</div>';
-
-
-				if ($ex instanceof ApplicationException) {
-					echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.$Q.$ex->getMessage().$Q.'</div>';
+				if ($cli) {
+					if ($ex instanceof ApplicationException)
+						echo $ex->getMessage()."\n";
+					else {
+						echo Lemma::Pick('MsgAnErrorOccurred'),"\n\n";
+						echo get_class($ex),"\n";
+						echo $ex->getMessage(),"\n\n";
+						echo Debug::GetExceptionTraceAsText($ex),"\n";
+						for ($exx = $ex->getPrevious();!is_null($exx);$exx = $exx->getPrevious()) {
+							echo $exx->getMessage() ,"\n";
+							echo Debug::GetExceptionTraceAsText($exx) ,"\n";
+						}
+						//echo Oxygen::GetInfoAsText(),"\n\n";
+						//echo Debug::GetEntriesAsText(),"\n\n";
+						//echo Database::GetQueriesAsText(),"\n\n";
+					}
 				}
 				else {
-					echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.Lemma::Pick('MsgAnErrorOccurredAndTeamNotified').'</div>';
-					if (Oxygen::IsDevelopment()) {
-						$serial = Debug::RecordExceptionServed($ex,'Global Exception Handler');
-						echo '<div style="color:#f0f0f0;font:12px/14px Courier New,monospace;margin-top:60px;width:70%;"> *'.Lemma::Pick('MsgDevelopmentEnvironment').'<br/>'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
-						echo '<div style="color:#f0f0f0;font:bold 40px/44px Courier New,monospace;margin-top:10px;width:70%;">'.$Q.$ex->getMessage().$Q.'</div>';
-						echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
-						if (!($ex instanceof JavascriptException)) {
-							for ($exx = $ex->getPrevious();!is_null($exx);$exx = $exx->getPrevious()) {
-								echo '<div style="color:#f0f0f0;font:bold 40px/44px Courier New,monospace;margin-top:10px;width:70%;">'.$Q.$exx->getMessage().$Q.'</div>';
-								echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
-							}
-						}
-						echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
-						echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Debug entries</b><br/><br/>'.new Html(Debug::GetEntriesAsText()).'</div>';
-						echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
+					$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
+					echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
+					echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
+					echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background: #739baa; background:linear-gradient(to bottom, #a1b9b6 0%,#739baa 100%);padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
+
+					echo '<div style="color:#ffffff;font:bold 50px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:150px;width:80%;letter-spacing:-2px;">'.Lemma::Pick('MsgCannotDisplayWebPage').'</div>';
+
+
+					if ($ex instanceof ApplicationException) {
+						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.$Q.$ex->getMessage().$Q.'</div>';
 					}
 					else {
-						$serial = Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler');
-						echo '<div style="display:none;">'.$Q.get_class($ex).'/'.$serial.$Q.'</div>';
+						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.Lemma::Pick('MsgAnErrorOccurredAndTeamNotified').'</div>';
+						if (Oxygen::IsDevelopment()) {
+							$serial = Debug::RecordExceptionServed($ex,'Global Exception Handler');
+							echo '<div style="color:#f0f0f0;font:12px/14px Courier New,monospace;margin-top:60px;width:70%;"> *'.Lemma::Pick('MsgDevelopmentEnvironment').'<br/>'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
+							echo '<div style="color:#f0f0f0;font:bold 40px/44px Courier New,monospace;margin-top:10px;width:70%;">'.$Q.$ex->getMessage().$Q.'</div>';
+							echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
+							if (!($ex instanceof JavascriptException)) {
+								for ($exx = $ex->getPrevious();!is_null($exx);$exx = $exx->getPrevious()) {
+									echo '<div style="color:#f0f0f0;font:bold 40px/44px Courier New,monospace;margin-top:10px;width:70%;">'.$Q.$exx->getMessage().$Q.'</div>';
+									echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($exx)).'</div>';
+								}
+							}
+							echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
+							echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Debug entries</b><br/><br/>'.new Html(Debug::GetEntriesAsText()).'</div>';
+							echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
+						}
+						else {
+							$serial = Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler');
+							echo '<div style="display:none;">'.$Q.get_class($ex).'/'.$serial.$Q.'</div>';
+						}
 					}
+					//echo '<div style="font:10px/10px Helvetica,Arial,Liberation Sans,sans-serif;color:#f0f0f0;margin:50px 0 0 5px;">Oxygen</div>';
+					echo '</div>';
+					echo '</div>';
+					echo '</div>';
 				}
-				//echo '<div style="font:10px/10px Helvetica,Arial,Liberation Sans,sans-serif;color:#f0f0f0;margin:50px 0 0 5px;">Oxygen</div>';
-				echo '</div>';
-				echo '</div>';
-				echo '</div>';
 			}
 		}
 		catch (Exception $ex2){

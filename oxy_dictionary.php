@@ -1,44 +1,7 @@
 <?php
 
-abstract class _oxy_dictionary {
-	//protected static function _() { list(,$caller) = debug_backtrace(false); return new Lemma($caller); }
-	///** @return Lemma */ protected static function __($x) { list(,$caller) = debug_backtrace(false); return forward_static_call([get_called_class(),$caller.'_'.$x]); }
+abstract class _oxy_dictionary extends ResourceManager {
 
-	/** @return Lemma */ public static function txt($n){
-		$c = get_called_class();
-		$n = 'txt'.$n;
-		if (method_exists($c,$n))
-			return call_user_func([$c,$n]);
-		else
-			return new Lemma($n);
-	}
-	/** @return Lemma */ protected static function _forward() {
-		$c = get_called_class();
-		list(,$n) = debug_backtrace(false);
-		$n = $n['function'].implode('_',func_get_args());
-		if (method_exists($c,$n))
-			return call_user_func([$c,$n]);
-		else
-			return new Lemma($n);
-	}
-
-
-
-	public static function txten(){ return new Lemma(__FUNCTION__
-		,'en',"English"
-		,'fr',"Anglais"
-		,'el',"Αγγλικά"
-		);}
-	public static function txtfr(){ return new Lemma(__FUNCTION__
-		,'en',"French"
-		,'fr',"Français"
-		,'el',"Γαλλικά"
-		);}
-	public static function txtel(){ return new Lemma(__FUNCTION__
-		,'en',"Greek"
-		,'fr',"Grec"
-		,'el',"Ελληνικά"
-		);}
 	public static function txt_locale(){ return new Lemma(__FUNCTION__
 		,'en',"en_GB"
 		,'fr',"fr_FR"
@@ -1549,7 +1512,7 @@ abstract class _oxy_dictionary {
 
 
 
-	public static function txtCountry_($x) { return static::__($x); }
+	public static function txtCountry_($x) { return static::_forward($x); }
 	public static function txtCountry_AD(){ return new Lemma(__FUNCTION__
 		,'en',"ANDORRA"
 		,'fr',"ANDORRE"

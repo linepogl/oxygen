@@ -28,6 +28,7 @@ require('oxy/src/Oxygen.php');
 require('oxy/src/Utils/Fs.php');
 require('oxy/src/Utils/Scope.php');
 require('oxy/src/Utils/Database.php');
+require('oxy/src/Utils/ResourceManager.php');
 require('oxy/src/Engine/XMeta.php');
 require('oxy/oxy.php');
 

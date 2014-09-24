@@ -1,5 +1,6 @@
 <?php
 require('oxy_dictionary.php');
+if (false) { class oxy extends _oxy {} }
 abstract class _oxy extends _oxy_dictionary {
 
 	//
@@ -184,4 +185,3 @@ abstract class _oxy extends _oxy_dictionary {
 
 }
 Oxygen::RegisterResourceManager('oxy','_oxy');
-if (false) { class oxy extends _oxy {} }
