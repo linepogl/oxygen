@@ -48,7 +48,7 @@ final class Progress {
 
 	}
 	public static function Finish(Message $m=null){
-		self::AddLogEntry(is_null($m) ? new SuccessMessage(Lemma::Pick('MsgProgressCompleted')) : $m);
+		self::AddLogEntry(is_null($m) ? new SuccessMessage(oxy::txtMsgProgressCompleted()) : $m);
 		self::SetProgress(1.0);
 		self::SetFinished(true);
 	}
@@ -69,7 +69,7 @@ final class Progress {
 	private static function CheckCancelled(){
 		if(!self::HasFinished())
 			if (self::IsCancelled())
-				throw new ApplicationException(Lemma::Pick('MsgProgressCancelled'));
+				throw new ApplicationException(oxy::txtMsgProgressCancelled());
 	}
 
 

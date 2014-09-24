@@ -17,7 +17,7 @@ class Ldap {
 		// Test connexion
 		if (!@ldap_bind(self::$cn)) {
 			self::Disconnect();
-			throw new ApplicationException(Lemma::Pick('MsgCannotConnectToLdapServer'));
+			throw new ApplicationException(oxy::txtMsgCannotConnectToLdapServer());
 		}
 
 		ldap_unbind(self::$cn);
@@ -49,15 +49,15 @@ class Ldap {
 		$info	= ldap_get_entries(self::$cn, $search_result);
 
 		if ($info === false || $info['count'] == 0)
-			throw new ApplicationException(Lemma::Pick('MsgInvalidUsername'));
+			throw new ApplicationException(oxy::txtMsgInvalidUsername());
 
 		if ($info['count'] > 1)
-			throw new ApplicationException(Lemma::Pick('MsgMultipleUsersFound'));
+			throw new ApplicationException(oxy::txtMsgMultipleUsersFound());
 
 		$ldap_bind = ldap_bind(self::$cn, $info[0]['dn'], $password);
 
 		if ($ldap_bind === false)
-			throw new ApplicationException(Lemma::Pick('MsgInvalidPassword'));
+			throw new ApplicationException(oxy::txtMsgInvalidPassword());
 
 		return $info[0];
 	}

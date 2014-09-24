@@ -138,23 +138,23 @@ abstract class Action extends XValue {
 				Oxygen::SetResponseCode(404); // not found
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				echo empty($msg) ? Lemma::Pick('MsgPageNotFound') : $msg;
+				echo empty($msg) ? oxy::txtMsgPageNotFound() : $msg;
 			}
 			else {
 				Oxygen::SetContentType('text/html');
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
-					Debug::Write(empty($msg) ? Lemma::Pick('MsgPageNotFound') : $msg);
+					Debug::Write(empty($msg) ? oxy::txtMsgPageNotFound() : $msg);
 				}
 				elseif ($this->IsAjaxDialog()){
-					echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgPageNotFound')) : $ex );
+					echo new MessageControl( empty($msg) ? new ErrorMessage(oxy::txtMsgPageNotFound()) : $ex );
 					echo $this->GetFormButtons();
-					echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
+					echo ButtonBox::Make()->WithValue(oxy::txtClose())->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
 					echo $this->EndFormButtons();
 				}
 				else {
 					echo '<div class="exception">';
-					echo new MessageControl( empty($msg) ? new ErrorMessage(Lemma::Pick('MsgPageNotFound')) : $ex );
+					echo new MessageControl( empty($msg) ? new ErrorMessage(oxy::txtMsgPageNotFound()) : $ex );
 					echo '</div>';
 				}
 			}
@@ -178,7 +178,7 @@ abstract class Action extends XValue {
 				elseif ($this->IsAjaxDialog()){
 					echo new MessageControl($ex);
 					echo $this->GetFormButtons();
-					echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
+					echo ButtonBox::Make()->WithValue(oxy::txtClose())->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
 					echo $this->EndFormButtons();
 				}
 				else {
@@ -197,10 +197,10 @@ abstract class Action extends XValue {
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
 				if (Oxygen::IsDevelopment()) {
-					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
+					echo '['.oxy::txtMsgDevelopmentEnvironment().']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
 				}
 				else {
-					echo Lemma::Pick('MsgAnErrorOccurredAndTeamNotified');
+					echo oxy::txtMsgAnErrorOccurredAndTeamNotified();
 				}
 				$exception_served_as = ' (HTTP 500)';
 			}
@@ -209,10 +209,10 @@ abstract class Action extends XValue {
 				Oxygen::ResetHttpHeaders();
 				if (Debug::IsImmediateFlushingEnabled()) {
 					if (Oxygen::IsDevelopment()) {
-						Debug::Write( '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) );
+						Debug::Write( '['.oxy::txtMsgDevelopmentEnvironment().']' . "\n" . Debug::GetExceptionReportAsText($ex) );
 					}
 					else {
-						Debug::Write( Lemma::Pick('MsgAnErrorOccurredAndTeamNotified') );
+						Debug::Write( oxy::txtMsgAnErrorOccurredAndTeamNotified() );
 					}
 					$exception_served_as = ' (Debug Immediate Flushing)';
 				}
@@ -225,7 +225,7 @@ abstract class Action extends XValue {
 						echo '<td style="padding:15px;">'.new Spacer(1,100).'</td>';
 						echo '<td class="vtop" style="padding:15px;border-left:1px solid #dddddd;text-align:left;">';
 						echo new Spacer(350,12);
-						echo '<div style="font-weight:normal;font-style:italic;color:#cccccc;font-size:90%;">'.Lemma::Pick('MsgDevelopmentEnvironment').'</div><br/>';
+						echo '<div style="font-weight:normal;font-style:italic;color:#cccccc;font-size:90%;">'.oxy::txtMsgDevelopmentEnvironment().'</div><br/>';
 						echo Debug::GetExceptionReportAsHtml($ex);
 						echo new Spacer(350);
 						echo '</td>';
@@ -234,14 +234,14 @@ abstract class Action extends XValue {
 						echo '</td></tr></table>';
 					}
 					elseif ($this->IsAjaxDialog()){
-						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurredAndTeamNotified') ) );
+						echo new MessageControl( new ErrorMessage( oxy::txtMsgAnErrorOccurredAndTeamNotified() ) );
 						echo $this->GetFormButtons();
-						echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
+						echo ButtonBox::Make()->WithValue(oxy::txtClose())->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
 						echo $this->EndFormButtons();
 					}
 					else {
 						echo '<div class="exception">';
-						echo new MessageControl( new ErrorMessage( Lemma::Pick('MsgAnErrorOccurredAndTeamNotified') ) );
+						echo new MessageControl( new ErrorMessage( oxy::txtMsgAnErrorOccurredAndTeamNotified() ) );
 						echo '</div>';
 					}
 					$exception_served_as = '';

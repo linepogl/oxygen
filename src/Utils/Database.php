@@ -99,7 +99,7 @@ class Database {
 
 	private static function RequireConnection(){
 		if (is_null(self::$cn)){
-			if (is_null(self::$cx)) throw new ApplicationException(Lemma::Pick('MsgNoDatabaseConnectionSpecified'));
+			if (is_null(self::$cx)) throw new ApplicationException(oxy::txtMsgNoDatabaseConnectionSpecified());
 			try{
 				switch (self::$cx->type){
 					case self::MYSQL:
@@ -1009,14 +1009,14 @@ class Database {
 			}
 			catch (Exception $ex){
 				self::PopConnection();
-				throw new Exception(Lemma::Pick('MsgCannotConnectToDatabase').'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
+				throw new ApplicationException(oxy::txtMsgCannotConnectToDatabase().'<br/><br/>'. $server. '<br/>'.$ex->getMessage());
 			}
 			try{
 				Database::Execute('CREATE DATABASE '.new SqlIden($schema).' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
 			}
 			catch (Exception $ex){
 				self::PopConnection();
-				throw new ApplicationException(Lemma::Pick('MsgCannotCreateDatabase').'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
+				throw new ApplicationException(oxy::txtMsgCannotCreateDatabase().'<br/><br/>'. $server.'/'.$schema. '<br/>'.$ex->getMessage());
 			}
 			self::PopConnection();
 		}

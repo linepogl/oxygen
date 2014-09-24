@@ -24,7 +24,7 @@ class ActionOxygenUpgrade extends Action {
 		}
 
 		echo '<div class="buttons">';
-		echo ButtonBox::Make()->WithValue(Lemma::Pick('Refresh'))->WithOnClick('window.location.href=window.location.href;');
+		echo ButtonBox::Make()->WithValue(oxy::txtRefresh())->WithOnClick('window.location.href=window.location.href;');
 		echo '</div>';
 
 	}

@@ -124,13 +124,13 @@ The value of the label can be changed with the method <span class="code">WithLab
 
 <p class="code">
 // No call
-$m->Title = XMeta::String();                                                          // label: Lemma::Pick('Title')
+$m->Title = XMeta::String();                                                          // label: oxy::txtTitle()
 
 // Call with one string argument
-$m->Title = XMeta::String->WithLabel('BookTitle');                                  // label: Lemma::Pick('BookTitle')
+$m->Title = XMeta::String->WithLabel('BookTitle');                                  // label: oxy::txtBookTitle()
 
 // Call with one Lemma argument
-$m->Title = XMeta::String()->WithLabel( Lemma::Pick('BookTitle') );               // label: Lemma::Pick('BookTitle')
+$m->Title = XMeta::String()->WithLabel( oxy::txtBookTitle() );               // label: oxy::txtBookTitle()
 $m->Title = XMeta::String()->WithLabel( new Lemma('en','Title','fr','Titre') );       // label: Lemma('en','Title','fr','Titre')
 
 // Call with two or more string arguments

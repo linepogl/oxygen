@@ -11,7 +11,7 @@ class ApplicationException extends Exception {
 		if ($message instanceof Message)
 			$this->inner_message = $message;
 		elseif ($message === null)
-			$this->inner_message = new ErrorMessage(Lemma::Pick('MsgAnErrorOccurred'));
+			$this->inner_message = new ErrorMessage(oxy::txtMsgAnErrorOccurred());
 		else
 			$this->inner_message = new ErrorMessage($message);
 		parent::__construct($this->inner_message->AsString(),$code,$previous);

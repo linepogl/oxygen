@@ -655,7 +655,7 @@ class ReportTableControl extends ValueControl {
 		if ($count_rows == 0){
 			echo '<tr>';
 			if ($this->show_numbers) echo '<th class="number">'.new Spacer().'</th>';
-			$c = new MessageControl( is_null($this->empty_message)?new InfoMessage(Lemma::Pick('MsgNoObjectFound')):$this->empty_message );
+			$c = new MessageControl( is_null($this->empty_message)?new InfoMessage(oxy::txtMsgNoObjectFound()):$this->empty_message );
 			$c->WithShowBorder(false);
 			echo '<td colspan="'.$count_cols.'">'.$c.'</td>';
 			echo '</tr>';

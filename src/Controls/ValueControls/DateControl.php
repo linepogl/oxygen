@@ -89,18 +89,18 @@ class DateControl extends ValueControl {
 		echo "var dyp = new Date(cm.getFullYear(),cm.getMonth(),1).add({years:-1});";
 		echo "var dyn = new Date(cm.getFullYear(),cm.getMonth(),1).add({years:1});";
 
-		echo "var months=new Array(".new Js(Lemma::Pick('Jan_'))
-														.",".new Js(Lemma::Pick('Feb_'))
-														.",".new Js(Lemma::Pick('Mar_'))
-														.",".new Js(Lemma::Pick('Apr_'))
-														.",".new Js(Lemma::Pick('May_'))
-														.",".new Js(Lemma::Pick('Jun_'))
-														.",".new Js(Lemma::Pick('Jul_'))
-														.",".new Js(Lemma::Pick('Aug_'))
-														.",".new Js(Lemma::Pick('Sep_'))
-														.",".new Js(Lemma::Pick('Oct_'))
-														.",".new Js(Lemma::Pick('Nov_'))
-														.",".new Js(Lemma::Pick('Dec_'))
+		echo "var months=new Array(".new Js(oxy::txtJan_())
+														.",".new Js(oxy::txtFeb_())
+														.",".new Js(oxy::txtMar_())
+														.",".new Js(oxy::txtApr_())
+														.",".new Js(oxy::txtMay_())
+														.",".new Js(oxy::txtJun_())
+														.",".new Js(oxy::txtJul_())
+														.",".new Js(oxy::txtAug_())
+														.",".new Js(oxy::txtSep_())
+														.",".new Js(oxy::txtOct_())
+														.",".new Js(oxy::txtNov_())
+														.",".new Js(oxy::txtDec_())
 														.");";
 		echo "s+='<tr>';";
 		echo "s+='<td class=\"monthx\"><a href=\"javascript:".$this->name."ShowMonth(new Date('+dyp.getFullYear()+','+dyp.getMonth()+','+dyp.getDate()+'));\">&laquo;</a></td>';";
@@ -110,13 +110,13 @@ class DateControl extends ValueControl {
 		echo "s+='<td class=\"monthx\"><a href=\"javascript:".$this->name."ShowMonth(new Date('+dyn.getFullYear()+','+dyn.getMonth()+','+dyn.getDate()+'));\">&raquo;</a></td>';";
 		echo "s+='</tr>';";
 
-		echo "var days=new Array(".new Js(substr(Lemma::Pick('Monday'),0,1))
-													.",".new Js(substr(Lemma::Pick('Tuesday'),0,1))
-													.",".new Js(substr(Lemma::Pick('Wednesday'),0,1))
-													.",".new Js(substr(Lemma::Pick('Thursday'),0,1))
-													.",".new Js(substr(Lemma::Pick('Friday'),0,1))
-													.",".new Js(substr(Lemma::Pick('Saturday'),0,1))
-													.",".new Js(substr(Lemma::Pick('Sunday'),0,1))
+		echo "var days=new Array(".new Js(substr(oxy::txtMonday(),0,1))
+													.",".new Js(substr(oxy::txtTuesday(),0,1))
+													.",".new Js(substr(oxy::txtWednesday(),0,1))
+													.",".new Js(substr(oxy::txtThursday(),0,1))
+													.",".new Js(substr(oxy::txtFriday(),0,1))
+													.",".new Js(substr(oxy::txtSaturday(),0,1))
+													.",".new Js(substr(oxy::txtSunday(),0,1))
 													.");";
 
 		echo "s+='<tr>';";

@@ -186,12 +186,12 @@ final class Language {
 	    $r = '';
 
 	    if ($d != 0) {
-		    $r .= $d.Lemma::Pick('Unit_day');
+		    $r .= $d.oxy::txtUnit_day();
 	    }
 
 	    if ($h != 0) {
 		    if ($r !== '') $r .= ' ';
-		    $r .= $h.Lemma::Pick('Unit_hour');
+		    $r .= $h.oxy::txtUnit_hour();
 	    }
 
 	    if ($m != 0) {
@@ -270,19 +270,19 @@ final class Language {
 		elseif ($y1 == $y2 && $m1 == $m2 && $d1 == $d2)
 			return $value->Format('H:i');
 		elseif ($hours < 0 && $hours >= -25)
-			return Lemma::Pick('Tomorrow');
+			return oxy::txtTomorrow();
 		elseif ($hours < -25 && $hours >= -49)
-			return Lemma::Pick('XDays')->Sprintf(2);
+			return oxy::txtXDays()->Sprintf(2);
 		elseif ($hours < -49 && $hours >= -73)
-			return Lemma::Pick('XDays')->Sprintf(3);
+			return oxy::txtXDays()->Sprintf(3);
 		elseif ($hours < -73 && $hours >= -97)
-			return Lemma::Pick('XDays')->Sprintf(4);
+			return oxy::txtXDays()->Sprintf(4);
 		elseif ($hours < -97 && $hours >= -121)
-			return Lemma::Pick('XDays')->Sprintf(5);
+			return oxy::txtXDays()->Sprintf(5);
 		elseif ($hours < -121 && $hours >= -145)
-			return Lemma::Pick('XDays')->Sprintf(6);
+			return oxy::txtXDays()->Sprintf(6);
 		elseif ($hours < -145 && $hours >= -169)
-			return Lemma::Pick('XDays')->Sprintf(7);
+			return oxy::txtXDays()->Sprintf(7);
 		else
 			return $value->GetDay().' '.$value->Format('F');
 	}
@@ -313,21 +313,21 @@ final class Language {
 		if (!($y1 == $y2 || ($y1 - $y2 == 1 && $m1 - $m2 > 0)))
 			return $value->Format('j F Y');
 		elseif ($y1 == $y2 && $m1 == $m2 && $d1 == $d2)
-			return Lemma::Pick('Today');
+			return oxy::txtToday();
 		elseif ($hours < 0 && $hours >= -25)
-			return Lemma::Pick('Tomorrow');
+			return oxy::txtTomorrow();
 		elseif ($hours < -25 && $hours >= -49)
-			return Lemma::Pick('XDays')->Sprintf(2);
+			return oxy::txtXDays()->Sprintf(2);
 		elseif ($hours < -49 && $hours >= -73)
-			return Lemma::Pick('XDays')->Sprintf(3);
+			return oxy::txtXDays()->Sprintf(3);
 		elseif ($hours < -73 && $hours >= -97)
-			return Lemma::Pick('XDays')->Sprintf(4);
+			return oxy::txtXDays()->Sprintf(4);
 		elseif ($hours < -97 && $hours >= -121)
-			return Lemma::Pick('XDays')->Sprintf(5);
+			return oxy::txtXDays()->Sprintf(5);
 		elseif ($hours < -121 && $hours >= -145)
-			return Lemma::Pick('XDays')->Sprintf(6);
+			return oxy::txtXDays()->Sprintf(6);
 		elseif ($hours < -145 && $hours >= -169)
-			return Lemma::Pick('XDays')->Sprintf(7);
+			return oxy::txtXDays()->Sprintf(7);
 		else
 			return $value->GetDay().' '.$value->Format('F');
 	}
@@ -348,18 +348,18 @@ final class Language {
 		$d = $timespan->GetDays();
 
 		if ($d == 0)
-			return Lemma::Pick('Today');
+			return oxy::txtToday();
 
 		if ($d == -1)
-			return Lemma::Pick('Yesterday');
+			return oxy::txtYesterday();
 
 		if ($d == 1)
-			return Lemma::Pick('Tomorrow');
+			return oxy::txtTomorrow();
 
 		if ($d > 0)
-			return Lemma::Pick('InXDays')->Sprintf($d);
+			return oxy::txtInXDays()->Sprintf($d);
 		else
-			return Lemma::Pick('XDaysAgo')->Sprintf(-$d);
+			return oxy::txtXDaysAgo()->Sprintf(-$d);
 	}
 	/** @return string */
 	public static function FormatTimeSpanSince($value,$null_caption = ''){
@@ -372,29 +372,29 @@ final class Language {
 
 		$now = XDateTime::Now();
 		if ($now->CompareTo($value) > 0)
-			return Lemma::Pick('XTimeAgo')->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
+			return oxy::txtXTimeAgo()->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
 		else
-			return Lemma::Pick('InXTime')->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
+			return oxy::txtInXTime()->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
 	}
 
 
 
 
 	public static function FormatBytes($size){
-		$unit = Lemma::Pick('Unit_byte');
-		if ($size >= 1000) { $size /= 1000; $unit = 'K'.Lemma::Pick('Unit_byte'); }
-		if ($size >= 1000) { $size /= 1000; $unit = 'M'.Lemma::Pick('Unit_byte');	}
-		if ($size >= 1000) { $size /= 1000; $unit = 'G'.Lemma::Pick('Unit_byte');	}
-		if ($size >= 1000) { $size /= 1000; $unit = 'T'.Lemma::Pick('Unit_byte');	}
+		$unit = oxy::txtUnit_byte();
+		if ($size >= 1000) { $size /= 1000; $unit = 'K'.oxy::txtUnit_byte(); }
+		if ($size >= 1000) { $size /= 1000; $unit = 'M'.oxy::txtUnit_byte();	}
+		if ($size >= 1000) { $size /= 1000; $unit = 'G'.oxy::txtUnit_byte();	}
+		if ($size >= 1000) { $size /= 1000; $unit = 'T'.oxy::txtUnit_byte();	}
 		$size = round($size,1);
 		return Language::FormatNumber($size).' '.$unit;
 	}
 	public static function FormatSizeBinary($size){
-		$unit = Lemma::Pick('Unit_byte');
-		if ($size >= 1024) { $size /= 1024; $unit = 'Ki'.Lemma::Pick('Unit_byte'); }
-		if ($size >= 1024) { $size /= 1024; $unit = 'Mi'.Lemma::Pick('Unit_byte');	}
-		if ($size >= 1024) { $size /= 1024; $unit = 'Gi'.Lemma::Pick('Unit_byte');	}
-		if ($size >= 1024) { $size /= 1024; $unit = 'Ti'.Lemma::Pick('Unit_byte');	}
+		$unit = oxy::txtUnit_byte();
+		if ($size >= 1024) { $size /= 1024; $unit = 'Ki'.oxy::txtUnit_byte(); }
+		if ($size >= 1024) { $size /= 1024; $unit = 'Mi'.oxy::txtUnit_byte();	}
+		if ($size >= 1024) { $size /= 1024; $unit = 'Gi'.oxy::txtUnit_byte();	}
+		if ($size >= 1024) { $size /= 1024; $unit = 'Ti'.oxy::txtUnit_byte();	}
 		$size = round($size,1);
 		return Language::FormatNumber($size).' '.$unit;
 	}

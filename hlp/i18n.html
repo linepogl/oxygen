@@ -37,7 +37,7 @@ However, in the majority of the cases, the lemma is retrieved by the <span class
 </p>
 
 <p class="code">
-$lemma = Lemma::Pick('Title');    // retrieves a lemma from the dictionaries
+$lemma = oxy::txtTitle();    // retrieves a lemma from the dictionaries
 </p>
 
 <p>
@@ -46,7 +46,7 @@ following code works:
 </p>
 
 <p class="code">
-echo Lemma::Pick('Title');  // Lemma will be converted to a string first. The conversion depends on the current language.
+echo oxy::txtTitle();  // Lemma will be converted to a string first. The conversion depends on the current language.
 </p>
 
 <p>
@@ -105,7 +105,7 @@ The translation of these lemmas should be done with the use of the <span class="
 </p>
 
 <p class="code">
-echo Lemma::Pick( 'MsgNumberOfBooksByAuthor' )->Sprintf( $author , $number_of_books );
+echo oxy::txtMsgNumberOfBooksByAuthor()->Sprintf( $author , $number_of_books );
 </p>
 
 

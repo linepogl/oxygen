@@ -54,7 +54,7 @@ class DateBox extends Box {
 				$null_caption = trim($this->null_caption);
 				echo '<a id="'.$this->name.'-null" class="fleft button" href="javascript:'.$this->name.'.SetDate(null);">'.new Html($null_caption===''?'∅':$null_caption).'</a>';
 			}
-			echo '<a id="'.$this->name.'-today" class="button" href="javascript:'.$this->name.'.SetDate('.new Js(XDate::Today()).');">'.new Html(Lemma::Pick('Today')).'</a>';
+			echo '<a id="'.$this->name.'-today" class="button" href="javascript:'.$this->name.'.SetDate('.new Js(XDate::Today()).');">'.new Html(oxy::txtToday()).'</a>';
 			echo '<div id="'.$this->name.'-month"></div>';
 			echo '<a class="button button-next" href="javascript:'.$this->name.'.ShowNextYear();"></a>';
 			echo '<a class="button button-prev" href="javascript:'.$this->name.'.ShowPrevYear();"></a>';
@@ -183,8 +183,8 @@ class DateBox extends Box {
 			echo "    var dn = this.CloneDate(this.month).add({months:1});";
 			echo "    var dyp = this.CloneDate(this.month).add({years:-1});";
 			echo "    var dyn = this.CloneDate(this.month).add({years:1});";
-			echo "    var months=new Array(".new Js(Lemma::Pick('Jan_')).",".new Js(Lemma::Pick('Feb_')).",".new Js(Lemma::Pick('Mar_')).",".new Js(Lemma::Pick('Apr_')).",".new Js(Lemma::Pick('May_')).",".new Js(Lemma::Pick('Jun_')).",".new Js(Lemma::Pick('Jul_')).",".new Js(Lemma::Pick('Aug_')).",".new Js(Lemma::Pick('Sep_')).",".new Js(Lemma::Pick('Oct_')).",".new Js(Lemma::Pick('Nov_')).",".new Js(Lemma::Pick('Dec_')).");";
-			echo "    var days=new Array(".new Js(substr(Lemma::Pick('Monday'),0,3)).",".new Js(substr(Lemma::Pick('Tuesday'),0,3)).",".new Js(substr(Lemma::Pick('Wednesday'),0,3)).",".new Js(substr(Lemma::Pick('Thursday'),0,3)).",".new Js(substr(Lemma::Pick('Friday'),0,3)).",".new Js(substr(Lemma::Pick('Saturday'),0,3)).",".new Js(substr(Lemma::Pick('Sunday'),0,3)).");";
+			echo "    var months=new Array(".new Js(oxy::txtJan_()).",".new Js(oxy::txtFeb_()).",".new Js(oxy::txtMar_()).",".new Js(oxy::txtApr_()).",".new Js(oxy::txtMay_()).",".new Js(oxy::txtJun_()).",".new Js(oxy::txtJul_()).",".new Js(oxy::txtAug_()).",".new Js(oxy::txtSep_()).",".new Js(oxy::txtOct_()).",".new Js(oxy::txtNov_()).",".new Js(oxy::txtDec_()).");";
+			echo "    var days=new Array(".new Js(substr(oxy::txtMonday(),0,3)).",".new Js(substr(oxy::txtTuesday(),0,3)).",".new Js(substr(oxy::txtWednesday(),0,3)).",".new Js(substr(oxy::txtThursday(),0,3)).",".new Js(substr(oxy::txtFriday(),0,3)).",".new Js(substr(oxy::txtSaturday(),0,3)).",".new Js(substr(oxy::txtSunday(),0,3)).");";
 			echo "    jQuery('#$this->name-month').html(months[cm.getMonth()]+' '+cm.getFullYear());";
 			echo "    var s = '';";
 			echo "    s+='<table class=\"calendar\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">';";

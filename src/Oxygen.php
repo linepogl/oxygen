@@ -143,7 +143,7 @@ class Oxygen {
 		catch (Exception $ex){
 			Debug::RecordExceptionConverted($ex,'Action Initialisation Exception Handler');
 			Oxygen::SetResponseCode(404);
-			self::$action = new ActionOxygenThrowException(new PageNotFoundException(Lemma::Pick('MsgPageNotFound'),0,$ex));
+			self::$action = new ActionOxygenThrowException(new PageNotFoundException(oxy::txtMsgPageNotFound(),0,$ex));
 		}
 
 		self::$action->WithMode(self::$actionmode);
@@ -206,18 +206,18 @@ class Oxygen {
 				Oxygen::SendHttpHeaders();
 				if ($ex instanceof SecurityException) {
 					$msg = $ex->getMessage();
-					echo empty($msg) ? Lemma::Pick('MsgAccessDenied') : $ex->getMessage();
+					echo empty($msg) ? oxy::txtMsgAccessDenied() : $ex->getMessage();
 				}
 				if ($ex instanceof PageNotFoundException) {
 					$msg = $ex->getMessage();
-					echo empty($msg) ? Lemma::Pick('MsgPageNotFound') : $ex->getMessage();
+					echo empty($msg) ? oxy::txtMsgPageNotFound() : $ex->getMessage();
 				}
 				elseif ($ex instanceof ApplicationException)
 					echo $ex->getMessage();
 				elseif (!Oxygen::IsDevelopment())
-					echo Lemma::Pick('MsgAnErrorOccurredAndTeamNotified');
+					echo oxy::txtMsgAnErrorOccurredAndTeamNotified();
 				else
-					echo '['.Lemma::Pick('MsgDevelopmentEnvironment').']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
+					echo '['.oxy::txtMsgDevelopmentEnvironment().']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
 
 				if ($ex instanceof ApplicationException || Oxygen::IsDevelopment())
 					Debug::RecordExceptionServed($ex,'Global Exception Handler ('.$served_as.')');
@@ -231,7 +231,7 @@ class Oxygen {
 					if ($ex instanceof ApplicationException)
 						echo $ex->getMessage()."\n";
 					else {
-						echo Lemma::Pick('MsgAnErrorOccurred'),"\n\n";
+						echo oxy::txtMsgAnErrorOccurred(),"\n\n";
 						echo get_class($ex),"\n";
 						echo $ex->getMessage(),"\n\n";
 						echo Debug::GetExceptionTraceAsText($ex),"\n";
@@ -250,17 +250,17 @@ class Oxygen {
 					echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
 					echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background: #739baa; background:linear-gradient(to bottom, #a1b9b6 0%,#739baa 100%);padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
 
-					echo '<div style="color:#ffffff;font:bold 50px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:150px;width:80%;letter-spacing:-2px;">'.Lemma::Pick('MsgCannotDisplayWebPage').'</div>';
+					echo '<div style="color:#ffffff;font:bold 50px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:150px;width:80%;letter-spacing:-2px;">'.oxy::txtMsgCannotDisplayWebPage().'</div>';
 
 
 					if ($ex instanceof ApplicationException) {
 						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.$Q.$ex->getMessage().$Q.'</div>';
 					}
 					else {
-						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.Lemma::Pick('MsgAnErrorOccurredAndTeamNotified').'</div>';
+						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.oxy::txtMsgAnErrorOccurredAndTeamNotified().'</div>';
 						if (Oxygen::IsDevelopment()) {
 							$serial = Debug::RecordExceptionServed($ex,'Global Exception Handler');
-							echo '<div style="color:#f0f0f0;font:12px/14px Courier New,monospace;margin-top:60px;width:70%;"> *'.Lemma::Pick('MsgDevelopmentEnvironment').'<br/>'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
+							echo '<div style="color:#f0f0f0;font:12px/14px Courier New,monospace;margin-top:60px;width:70%;"> *'.oxy::txtMsgDevelopmentEnvironment().'<br/>'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
 							echo '<div style="color:#f0f0f0;font:bold 40px/44px Courier New,monospace;margin-top:10px;width:70%;">'.$Q.$ex->getMessage().$Q.'</div>';
 							echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
 							if (!($ex instanceof JavascriptException)) {

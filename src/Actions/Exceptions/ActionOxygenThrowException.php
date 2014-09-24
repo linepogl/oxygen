@@ -3,7 +3,7 @@
 class ActionOxygenThrowException extends Action {
 	public function ContentCompromised(){ return true; }
 	public function IsPermitted(){ return true; }
-	public function GetTitle(){ return Lemma::Pick('Error'); }
+	public function GetTitle(){ return oxy::txtError(); }
 
 	private $ex;
 	public function __construct(Exception $ex){ $this->ex = $ex; }

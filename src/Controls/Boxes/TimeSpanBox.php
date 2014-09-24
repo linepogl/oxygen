@@ -68,12 +68,12 @@ class TimeSpanBox extends Box {
 		echo '<div id="'.$this->name.'-box-inner" class="formPaneInnerWrap"><div class="formPane '.($this->readonly?'formLocked':'').' formPaneInner formTimeSpanInner" style="border:0;margin:0;padding:0;">';
 		if ($this->show_days) {
 			echo '<span id="'.$this->name.'-d" style="padding:0 0.2em;">&nbsp;'.$d.'</span>';
-			echo Lemma::Pick('Unit_day');
+			echo oxy::txtUnit_day();
 			echo '&nbsp;&nbsp;';
 		}
 		if ($this->show_hours) {
 			echo '<span id="'.$this->name.'-h" style="padding:0 0.2em;">&nbsp;'.$h.'</span>';
-			echo Lemma::Pick('Unit_hour');
+			echo oxy::txtUnit_hour();
 			echo '&nbsp;&nbsp;';
 		}
 		if ($this->show_minutes) {

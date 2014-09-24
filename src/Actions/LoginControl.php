@@ -12,7 +12,7 @@ class LoginControl extends Control {
 	public function Render(){
 
 		$msg = $this->message;
-		if ($msg === null) $msg = new SecurityMessage(Lemma::Pick('MsgAccessDenied'));
+		if ($msg === null) $msg = new SecurityMessage(oxy::txtMsgAccessDenied());
 		echo '<div class="exception">';
 		echo new MessageControl($msg);
 		echo '</div>';
@@ -20,7 +20,7 @@ class LoginControl extends Control {
 		$act = Oxygen::GetAction();
 		if ($act !== null && $act->IsAjaxDialog()) {
 			echo $act->GetFormButtons();
-			echo ButtonBox::Make()->WithValue(Lemma::Pick('Close'))->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
+			echo ButtonBox::Make()->WithValue(oxy::txtClose())->WithOnClick('Oxygen.HideDialog();')->WithCssClass('flee');
 			echo $act->EndFormButtons();
 		}
 	}

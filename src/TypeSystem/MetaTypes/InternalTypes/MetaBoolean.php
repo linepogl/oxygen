@@ -89,8 +89,8 @@ class MetaBoolean extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportHtmlString($value) {
-		if ($value) return (string)Lemma::Pick('Yes');
-		return (string)Lemma::Pick('No');
+		if ($value) return (string)oxy::txtYes();
+		return (string)oxy::txtNo();
 	}
 
 	/**
@@ -98,8 +98,8 @@ class MetaBoolean extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportTextString($value) {
-		if ($value) return (string)Lemma::Pick('Yes');
-		return (string)Lemma::Pick('No');
+		if ($value) return (string)oxy::txtYes();
+		return (string)oxy::txtNo();
 	}
 
 	/**

@@ -44,11 +44,11 @@ class TimeSpanControl extends ValueControl {
 
 		if ($this->show_days){
 			echo TextBox::Make($this->name.'_days',$d)->WithWidth('4em')->WithCssClass('contentbox hcenter')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
-			echo '&nbsp;'.Lemma::Pick('Unit_day').'&nbsp;';
+			echo '&nbsp;'.oxy::txtUnit_day().'&nbsp;';
 		}
 		if ($this->show_hours){
 			echo TextBox::Make($this->name.'_hours',$h)->WithWidth('3em')->WithCssClass('contentbox hcenter')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);
-			echo '&nbsp;'.Lemma::Pick('Unit_hour').'&nbsp;';
+			echo '&nbsp;'.oxy::txtUnit_hour().'&nbsp;';
 		}
 		if ($this->show_minutes){
 			echo TextBox::Make($this->name.'_minutes',$m)->WithWidth('3em')->WithCssClass('contentbox hcenter')->WithOnChange($this->name."_UpdateTimeSpan();")->WithMode($this->mode)->WithReadonly($this->readonly);

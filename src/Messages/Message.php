@@ -59,8 +59,8 @@ abstract class Message {
 			return $value->GetInnerMessage();
 
 		if ($value instanceof Exception)
-			//return new BugMessage( Oxygen::IsDevelopment() ? Debug::GetExceptionReportAsHtml($value) : Lemma::Pick('MsgAnErrorOccurred') );
-			return new BugMessage( Oxygen::IsDevelopment() ? $value->getMessage() : Lemma::Pick('MsgAnErrorOccurred') );
+			//return new BugMessage( Oxygen::IsDevelopment() ? Debug::GetExceptionReportAsHtml($value) : oxy::txtMsgAnErrorOccurred() );
+			return new BugMessage( Oxygen::IsDevelopment() ? $value->getMessage() : oxy::txtMsgAnErrorOccurred() );
 
 		if (is_array($value))
 			return new MultiMessage($value);

@@ -99,8 +99,8 @@ class MetaBooleanOrNull extends XNullableType {
 	 */
 	public static function ExportHtmlString($value) {
 		if ($value===null) return '';
-		if ($value) return (string)Lemma::Pick('Yes');
-		return (string)Lemma::Pick('No');
+		if ($value) return (string)oxy::txtYes();
+		return (string)oxy::txtNo();
 	}
 
 	/**
@@ -109,8 +109,8 @@ class MetaBooleanOrNull extends XNullableType {
 	 */
 	public static function ExportTextString($value) {
 		if ($value===null) return '';
-		if ($value) return (string)Lemma::Pick('Yes');
-		return (string)Lemma::Pick('No');
+		if ($value) return (string)oxy::txtYes();
+		return (string)oxy::txtNo();
 	}
 
 	/**

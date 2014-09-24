@@ -504,7 +504,7 @@ abstract class XItem extends XValue implements Serializable {
 								->Where($foreign_field->Eq($value))
 								->GetFirst();
 
-							if (is_null($x)) $v[] = new ErrorMessage(sprintf(Lemma::Pick('MsgObjectXNotFound'),XItem::GetClassTitleGeneric($foreign_field->GetMeta()->GetClassName()).' '.$value));
+							if (is_null($x)) $v[] = new ErrorMessage(oxy::txtMsgObjectXNotFound()->Sprintf(XItem::GetClassTitleGeneric($foreign_field->GetMeta()->GetClassName()).' '.$value));
 							$value = is_null($x) ? null : $x->id;
 						}
 					}
@@ -619,11 +619,11 @@ abstract class XItem extends XValue implements Serializable {
 	/** @return static  */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
 	/** @return static  */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return $classname===null ? null : XMeta::Of($classname)->PickItem($id,$dr); }
 
-//	/** @return static|XItem */ public static final function Pick404($id,DBReader $dr=null){ $r = static::Meta()->PickItem($id,$dr); if (is_null($r)) throw new ApplicationException(Lemma::Pick('MsgObjectXNotFound')->Sprintf(static::GetClassTitle().' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
-//	/** @return XItem */ public static final function Pick404Generic($classname,$id,DBReader $dr=null){ $r = XMeta::Of($classname)->PickItem($id,$dr);  if (is_null($r)) throw new ApplicationException(Lemma::Pick('MsgObjectXNotFound')->Sprintf(self::GetClassTitleGeneric($classname).' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
+//	/** @return static|XItem */ public static final function Pick404($id,DBReader $dr=null){ $r = static::Meta()->PickItem($id,$dr); if (is_null($r)) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(static::GetClassTitle().' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
+//	/** @return XItem */ public static final function Pick404Generic($classname,$id,DBReader $dr=null){ $r = XMeta::Of($classname)->PickItem($id,$dr);  if (is_null($r)) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(self::GetClassTitleGeneric($classname).' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
 
-	/** @return static */ public static final function Find($id,DBReader $dr=null){ $r = static::Meta()->PickItem($id,$dr); if (is_null($r)) throw new ApplicationException(Lemma::Pick('MsgObjectXNotFound')->Sprintf(static::GetClassTitle().' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
-	/** @return XItem */ public static final function FindGeneric($classname,$id,DBReader $dr=null){ $r = XMeta::Of($classname)->PickItem($id,$dr);  if (is_null($r)) throw new ApplicationException(Lemma::Pick('MsgObjectXNotFound')->Sprintf(self::GetClassTitleGeneric($classname).' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
+	/** @return static */ public static final function Find($id,DBReader $dr=null){ $r = static::Meta()->PickItem($id,$dr); if (is_null($r)) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(static::GetClassTitle().' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
+	/** @return XItem */ public static final function FindGeneric($classname,$id,DBReader $dr=null){ $r = XMeta::Of($classname)->PickItem($id,$dr);  if (is_null($r)) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(self::GetClassTitleGeneric($classname).' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
 
 
 	/** @return ID */ public static function GetNextPermID(){ return static::Meta()->GetNextPermID(); }

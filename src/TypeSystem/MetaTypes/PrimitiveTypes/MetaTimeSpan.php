@@ -120,8 +120,8 @@ class MetaTimeSpan extends XNullableType {
 		$h = $value->GetHours();
 		$m = $value->GetMinutes();
 		$s = $value->GetSeconds();
-		return ($d==0?'':$d.Lemma::Pick('Unit_day'))
-				 . ($h==0?'':$h.Lemma::Pick('Unit_hour'))
+		return ($d==0?'':$d.oxy::txtUnit_day())
+				 . ($h==0?'':$h.oxy::txtUnit_hour())
 				 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
 				 ;
 	}
@@ -136,8 +136,8 @@ class MetaTimeSpan extends XNullableType {
 		$h = $value->GetHours();
 		$m = $value->GetMinutes();
 		$s = $value->GetSeconds();
-		return ($d==0?'':$d.Lemma::Pick('Unit_day'))
-				 . ($h==0?'':$h.Lemma::Pick('Unit_hour'))
+		return ($d==0?'':$d.oxy::txtUnit_day())
+				 . ($h==0?'':$h.oxy::txtUnit_hour())
 				 . ($m+$s==0?'': ($m==0?'':$m.'\'').($s==0?'':$s.'\'\'') )
 				 ;
 	}

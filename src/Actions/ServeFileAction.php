@@ -26,7 +26,7 @@ abstract class ServeFileAction extends Action  {
 			Oxygen::ServeFile($this->GetFilename(),$this->GetSaveAsName(),$this->GetMimeType(),$this->RequiresCaching(),function($bytes_sent,$seconds)use($self){$self->OnBytesSent($bytes_sent,$seconds);});
 		}
 		catch (Exception $ex){
-			throw new PageNotFoundException(Lemma::Pick('MsgFileNotFound'));
+			throw new PageNotFoundException(oxy::txtMsgFileNotFound());
 		}
 	}
 	public function OnAfterRender(){

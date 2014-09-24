@@ -29,7 +29,7 @@ class ProgressControl extends Control {
 
 		echo '<div id="'.$this->name.'_log" class="overflow" style="height:'.$this->height.'px;border:1px solid #cccccc;padding:2px;margin-bottom:10px;"></div>';
 		echo '<table id="'.$this->name.'_table" width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
-		if ($this->show_cancel_button) echo '<td class="notext nowrap">'.ButtonBox::Make()->WithValue(Lemma::Pick('Cancel'))->WithOnClick($this->name.'_Cancel();').new Spacer(3).'</td>';
+		if ($this->show_cancel_button) echo '<td class="notext nowrap">'.ButtonBox::Make()->WithValue(oxy::txtCancel())->WithOnClick($this->name.'_Cancel();').new Spacer(3).'</td>';
 		echo '<td class="nowrap hcenter" id="'.$this->name.'_clock">0:00</td>';
 		echo '<td class="notext nowrap">'.new Spacer(3).'</td>';
 		echo '<td class="expand notext"><div style="border:solid 1px #999999;'.($this->show_progress_bar?'':'display:none;').'"><div id="'.$this->name.'_progress_bar" class="notext" style="width:0%;background:#dddddd;">'.new Spacer(1,11).'</div></div></td>';
@@ -37,7 +37,7 @@ class ProgressControl extends Control {
 		echo '<td class="nowrap" id="'.$this->name.'_progress" style="'.($this->show_progress_bar?'':'display:none;').'">0%</td>';
 		echo '</tr></table>';
 
-		echo '<div id="'.$this->name.'_cancelling" style="display:none;"><img src="oxy/img/ajax.gif" /> '.Lemma::Pick('MsgCancelling').'</div>';
+		echo '<div id="'.$this->name.'_cancelling" style="display:none;"><img src="oxy/img/ajax.gif" /> '.oxy::txtMsgCancelling().'</div>';
 		echo '<div id="'.$this->name.'_actual" style="display:none;"><img src="oxy/img/ajax.gif" /></div>';
 
 		echo Js::BEGIN;

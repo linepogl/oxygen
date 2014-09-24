@@ -368,7 +368,7 @@ class Fs {
 		catch (Exception $ex){
 			Debug::RecordExceptionConverted($ex);
 			try{ unlink( $destination_filename ); } catch(Exception $ex){}
-			throw new ApplicationException(Lemma::Pick('MsgErrorWhileDownloadingFile'));
+			throw new ApplicationException(oxy::txtMsgErrorWhileDownloadingFile());
 		}
 		return $destination_filename;
 	}
@@ -385,7 +385,7 @@ class Fs {
 		catch (Exception $ex){
 			Debug::RecordExceptionConverted($ex);
 			try{ unlink( $destination_filename ); } catch(Exception $ex){}
-			throw new ApplicationException(Lemma::Pick('MsgErrorWhileUploadingFile'));
+			throw new ApplicationException(oxy::txtMsgErrorWhileUploadingFile());
 		}
 		return $destination_filename;
 	}
@@ -399,7 +399,7 @@ class Fs {
 		catch (Exception $ex){
 			Debug::RecordExceptionConverted($ex);
 			try{ unlink( $destination_filename ); } catch(Exception $ex){}
-			throw new ApplicationException(Lemma::Pick('MsgErrorWhileUploadingFile'));
+			throw new ApplicationException(oxy::txtMsgErrorWhileUploadingFile());
 		}
 		return $destination_filename;
 	}
