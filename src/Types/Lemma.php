@@ -196,11 +196,11 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	//}
 	//public static function LoadDictionary(){
 	//	$files = Oxygen::GetDictionaryFiles();
-   // if (self::IsDictionaryInCache($files)) {
+	// if (self::IsDictionaryInCache($files)) {
 	//    self::$dictionary = array();
 	//    self::$packed_dictionary = Scope::$APPLICATION['Lemma::packed_dictionary'];
-   // }
-   // else {
+	// }
+	// else {
 	//    self::$dictionary = array();
 	//    self::$packed_dictionary = array();
 	//		foreach ($files as $f) {

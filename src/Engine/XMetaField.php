@@ -65,7 +65,7 @@ class XMetaField extends XValue {
 			$a = func_get_args();
       $z = func_num_args();
       if ($z == 1)
-        $this->label = Lemma::Pick($a[0]);
+        $this->label = oxy::txt($a[0]);
       else
 			  $this->label = new Lemma($a);
 		}

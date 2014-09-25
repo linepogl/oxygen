@@ -54,7 +54,7 @@ abstract class Action extends XValue {
 
 	public function GetContentType(){ return Oxygen::GetContentType(); }
 	public function GetCharset(){ return Oxygen::GetCharset(); }
-	public function GetTitle(){ return Lemma::Pick($this->GetName()); }
+	public function GetTitle(){ return oxy::txt($this->GetName()); }
 	public function GetPathTitle(){ return $this->GetTitle(); }
 	public function GetDescription(){ return ''; }
 	/** @return Action */ public function GetParentAction(){ return null; }

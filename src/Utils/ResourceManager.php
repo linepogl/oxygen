@@ -16,23 +16,14 @@ abstract class ResourceManager {
 		Debug::RecordExceptionSilenced( new Exception('The static function '.get_called_class().'::'.$name.' does not exist.') );
 		return '';
 	}
-	/** @return Lemma */ public static final function txt($n){
+	/** @return Lemma */ public static final function txt($name){
 		$c = get_called_class();
-		$n = 'txt'.$n;
-		if (method_exists($c,$n))
-			return call_user_func([$c,$n]);
+		if (strpos($name,'txt')!==0) $name = 'txt'.$name;
+		if (func_num_args()>1) $name .= implode('_',array_slice(func_get_args(),1));
+		if (method_exists($c,$name))
+			return call_user_func([$c,$name]);
 		else
-			return new Lemma($n);
-	}
-	/** @return Lemma */
-	protected static final function _forward() {
-		$c = get_called_class();
-		list(,$n) = debug_backtrace(false);
-		$n = $n['function'].implode('_',func_get_args());
-		if (method_exists($c,$n))
-			return call_user_func([$c,$n]);
-		else
-			return new Lemma($n);
+			return new Lemma($name);
 	}
 	public static final function _export_dictionary() {
 		$esc_txt = function($txt){ $txt = str_replace('"','\"',$txt); if (strpos($txt,"\n")) { $r = '""'; foreach (explode("\n",$txt) as $s) $r .= "\n\"$s\\n\""; return $r; } return '"'.$txt.'"'; };

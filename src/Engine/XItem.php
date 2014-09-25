@@ -30,8 +30,8 @@ abstract class XItem extends XValue implements Serializable {
 	public function GetMenu(){ return new Menu(); }
 
 	public static function GetClassName(){ return get_called_class(); }
-	public static function GetClassTitle(){ return Lemma::Pick(get_called_class()); }
-	public static function GetClassTitlePlural(){ return Lemma::Pick(get_called_class().'s'); }
+	public static function GetClassTitle(){ return oxy::txt(get_called_class()); }
+	public static function GetClassTitlePlural(){ return oxy::txt(get_called_class().'s'); }
 	public static function GetClassTitleGeneric($classname) { return $classname::GetClassTitle(); }
 	public static function GetClassTitlePluralGeneric($classname) { return $classname::GetClassTitlePlural(); }
 

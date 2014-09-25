@@ -937,7 +937,7 @@ abstract class _oxy_dictionary extends ResourceManager {
 		]);}
 
 
-	public static function txtLang_($x){ return static::_forward($x); }
+	public static function txtLang_($x){ return static::txt(__FUNCTION__,$x); }
 	public static function txtLang_en(){ return Lemma::txt([__FUNCTION__
 		,en=>"English"
 		,fr=>"Anglais"
@@ -1514,7 +1514,7 @@ abstract class _oxy_dictionary extends ResourceManager {
 
 
 
-	public static function txtCountry_($x) { return static::_forward($x); }
+	public static function txtCountry_($x) { return static::txt(__FUNCTION__,$x); }
 	public static function txtCountry_AD(){ return Lemma::txt([__FUNCTION__
 		,en=>"ANDORRA"
 		,fr=>"ANDORRE"
