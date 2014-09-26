@@ -787,9 +787,10 @@ msgid "ActionForgottenPassword"
 msgstr "Υπενθύμιση κωδικού"
 
 #. en: "Cannot display the web page."
-#. fr: "Η προβολή της σελίδας δεν είναι δυνατή."
+#. fr: "La page ne peut pas être affichée."
+#. el: "Η προβολή της σελίδας δεν είναι δυνατή."
 msgid "MsgCannotDisplayWebPage"
-msgstr ""
+msgstr "Η προβολή της σελίδας δεν είναι δυνατή."
 
 #. en: "Under construction."
 #. fr: "En construction."

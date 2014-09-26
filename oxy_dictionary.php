@@ -675,7 +675,7 @@ abstract class _oxy_dictionary extends ResourceManager {
 	public static function txtMsgCannotDisplayWebPage(){ return Lemma::txt([__FUNCTION__
 		,en=>"Cannot display the web page."
 		,fr=>"La page ne peut pas être affichée."
-		,fr=>"Η προβολή της σελίδας δεν είναι δυνατή."
+		,el=>"Η προβολή της σελίδας δεν είναι δυνατή."
 		]);}
 	public static function txtMsgUnderConstruction(){ return Lemma::txt([__FUNCTION__
 		,en=>"Under construction."
