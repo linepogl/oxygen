@@ -28,11 +28,21 @@ abstract class ResourceManager {
 	public static final function _export_dictionary() {
 		$esc_txt = function($txt){ $txt = str_replace('"','\"',$txt); if (strpos($txt,"\n")) { $r = '""'; foreach (explode("\n",$txt) as $s) $r .= "\n\"$s\\n\""; return $r; } return '"'.$txt.'"'; };
 		$esc_com = function($txt){ $txt = str_replace('"','\"',$txt); if (strpos($txt,"\n")) { $r = '""'; foreach (explode("\n",$txt) as $s) $r .= "\n#. \"$s\\n\""; return $r; } return '"'.$txt.'"'; };
-		$pot = "\xEF\xBB\xBF";
 		$class_name = get_called_class();
 		$c = new ReflectionClass($class_name);
 		$f = dirname($c->getFileName());
 		$ff = basename($c->getFileName(),'.php');
+		$langs = [];
+
+
+		$pot = '';
+		$pot .= 'msgid ""'."\n";
+		$pot .= 'msgstr ""'."\n";
+		$pot .= '"Project-Id-Version: '.$ff.'\n"'."\n";
+		$pot .= '"MIME-Version: 1.0\n"'."\n";
+		$pot .= '"Content-Type: text/plain; charset=utf-8\n"'."\n";
+		$pot .= '"Content-Transfer-Encoding: 8bit\n"'."\n";
+		$pot .= "\n";
 		/** @var $m ReflectionMethod */
 		foreach ($c->getMethods(ReflectionMethod::IS_STATIC) as $m) {
 			if ($class_name !== $m->getDeclaringClass()->getName()) continue;
@@ -41,13 +51,44 @@ abstract class ResourceManager {
 			$lemma = $m->invoke(null);
 			if ($lemma instanceof Lemma) {
 				$n = substr($m->getName(),3);
+				$v = '';
+				foreach ($lemma as $l => $value) { $pot .= '#. '.$l.': '.$esc_com($value)."\n"; $langs[$l] = $l; }
 				$pot .= 'msgid '.$esc_txt($n)."\n";
-				foreach ($lemma as $lang => $value) $pot .= '#. '.$lang.': '.$esc_com($value)."\n";
-				$pot .= 'msgstr '.$esc_txt('')."\n\n";
+				$pot .= 'msgstr '.$esc_txt($v)."\n\n";
 			}
 		}
+
 		Fs::Ensure("$f/i18");
 		file_put_contents("$f/i18/$ff.pot",$pot);
+
+		foreach ($langs as $lang) {
+			$po = '';
+			$po .= 'msgid ""'."\n";
+			$po .= 'msgstr ""'."\n";
+			$po .= '"Project-Id-Version: '.$ff.'\n"'."\n";
+			$po .= '"MIME-Version: 1.0\n"'."\n";
+			$po .= '"Content-Type: text/plain; charset=utf-8\n"'."\n";
+			$po .= '"Content-Transfer-Encoding: 8bit\n"'."\n";
+			$po .= '"Language: '.$lang.'\n"'."\n";
+			$po .= "\n";
+			/** @var $m ReflectionMethod */
+			foreach ($c->getMethods(ReflectionMethod::IS_STATIC) as $m) {
+				if ($class_name !== $m->getDeclaringClass()->getName()) continue;
+				if ( strpos( $m->getName() , 'txt' ) !== 0) continue;
+				if ( $m->getNumberOfParameters() !== 0) continue;
+				$lemma = $m->invoke(null);
+				if ($lemma instanceof Lemma) {
+					$n = substr($m->getName(),3);
+					$v = $lemma->HasLang($lang) ? $lemma->TranslateTo($lang) : '';
+					foreach ($lemma as $l => $value) { $po .= '#. '.$l.': '.$esc_com($value)."\n"; }
+					$po .= 'msgid '.$esc_txt($n)."\n";
+					$po .= 'msgstr '.$esc_txt($v)."\n\n";
+				}
+			}
+			file_put_contents("$f/i18/$ff.$lang.po",$po);
+		}
+
+
 	}
 
 }

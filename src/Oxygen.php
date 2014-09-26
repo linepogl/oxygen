@@ -709,7 +709,10 @@ class Oxygen {
 	public static function RedirectRaw( $href ) {
 		while (ob_get_level()>0) ob_end_clean();
 		Oxygen::SendHttpHeaders();
-		echo Js::BEGIN."window.location.href=".new Js($href).";".Js::END;
+		echo Js::BEGIN;
+		echo "if(window.Oxygen)window.Oxygen.HideDialog();";
+		echo "window.location.href=".new Js($href).";";
+		echo Js::END;
 		exit();
 	}
 	public static function Redirect(Action $action) {
@@ -733,13 +736,19 @@ class Oxygen {
 	public static function Refresh(){
 		while (ob_get_level()>0) ob_end_clean();
 		Oxygen::SendHttpHeaders();
-		echo Js::BEGIN."window.location.href=window.location.href;".Js::END;
+		echo Js::BEGIN;
+		echo "if(window.Oxygen)window.Oxygen.HideDialog();";
+		echo "window.location.href=window.location.href;";
+		echo Js::END;
 		exit();
 	}
 	public static function RefreshParent(){
 		while (ob_get_level()>0) ob_end_clean();
 		Oxygen::SendHttpHeaders();
-		echo Js::BEGIN."parent.location.href=parent.location.href;".Js::END;
+		echo Js::BEGIN;
+		echo "if(parent.Oxygen)parent.Oxygen.HideDialog();";
+		echo "parent.location.href=parent.location.href;";
+		echo Js::END;
 		exit();
 	}
 	public static function IsLocalhost(){
