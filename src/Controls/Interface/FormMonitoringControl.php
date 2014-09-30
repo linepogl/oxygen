@@ -21,6 +21,7 @@ class FormMonitoringControl extends Control {
 		$ns = $this->name;
 		$message = $this->message === null ? oxy::txtMsgUnsavedChanges() : $this->message;
 
+
 		echo Js::BEGIN;
 		echo "window.$ns = {";
 		echo "  initial_form_serialization:".new Js($this->is_blocked?'!':null);
@@ -39,9 +40,11 @@ class FormMonitoringControl extends Control {
 		echo "    setTimeout(function(){ window.$ns.CheckFormChanged(); },1000);";
 		echo "  }";
 		echo "};";
-		echo "setTimeout(function(){ window.$ns.CheckFormChanged(); },1);";
-		echo "jQuery('#$this->form_name').bind('submit',function() { window.$ns.form_has_changed = false; });";
-		echo "jQuery(window).bind('beforeunload',function() { if (window.$ns.form_has_changed) return ".new Js($message)."; });";
+		if (!Browser::IsIE8() && !Browser::IsIE7()) {
+			echo "setTimeout(function(){ window.$ns.CheckFormChanged(); },1);";
+			echo "jQuery('#$this->form_name').bind('submit',function() { window.$ns.form_has_changed = false; });";
+			echo "jQuery(window).bind('beforeunload',function() { if (window.$ns.form_has_changed) return ".new Js($message)."; });";
+		}
 		echo Js::END;
 
 
