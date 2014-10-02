@@ -13,7 +13,7 @@ class XListIterator implements Iterator {
 		$this->index++;
 		if ($this->index < count($this->xlist)) {
 			$this->current = $this->xlist[$this->index];
-			if (is_null($this->current)) $this->Next();
+			if ($this->current === null) $this->Next();
 		}
 		else $this->current = null;
 	}
@@ -24,9 +24,10 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	/** @var XMeta */
 	protected $meta;
+	/** @var XItem[]|ID[]|null */
 	private $data;
 	public function __construct(XMeta $meta=null,$auto_load = false){
-		$this->meta = is_null($meta) ? XItem::Meta() : $meta;
+		$this->meta = $meta === null ? XItem::Meta() : $meta;
 		$this->data = $auto_load ? null : array();
   }
 
@@ -52,7 +53,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	/** @return XList */
 	public function Evaluate(){
-		if (is_null($this->data)) {
+		if ($this->data === null) {
 			$params = null;
 			$sql = $this->MakeQuery($params);
 			$this->data = array();
@@ -85,7 +86,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			;
 
 		if ($this->is_aggressive) {
-			for ($mm = $this->meta; !is_null($mm); $mm = $mm->GetParent()) {
+			for ($mm = $this->meta; $mm!==null; $mm = $mm->GetParent()) {
 				/** @var $f XMetaField */
 				foreach ($mm->GetDBFields() as $f) {
 					$sql .= ',' . new SqlIden($f);
@@ -98,16 +99,16 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		// FROM
 		//
 		$sql .= ' FROM '.new SqlIden($this->meta->GetDBTableName()).' a';
-		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent())
+		for ($mm = $this->meta->GetParent(); $mm!==null; $mm = $mm->GetParent())
 			$sql .= ','.new SqlIden($mm->GetDBTableName());
 
 
 		//
 		// WHERE
 		//
-		$where = is_null($this->where) ? null : $this->where->ToSql();
-		for ($mm = $this->meta->GetParent(); !is_null($mm); $mm = $mm->GetParent()) {
-			if (!is_null($where)) $where .= ' AND ';
+		$where = $this->where === null ? null : $this->where->ToSql();
+		for ($mm = $this->meta->GetParent(); $mm!==null; $mm = $mm->GetParent()) {
+			if ($where!==null) $where .= ' AND ';
 			$where .= $mm->GetDBTableName().'.'.new SqlIden($mm->id).'=a.'.new SqlIden($this->meta->id);
 		}
 		if (!empty($where)) $sql .= ' WHERE '.$where;
@@ -117,19 +118,19 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		// ORDER BY
 		//
 		$order_by = $this->order_by;
-		if (is_null($order_by)) {
-			for ($mm = $this->meta; !is_null($mm); $mm = $mm->GetParent()) {
-				if (!is_null($mm->GetOrderBy())) {
+		if ($order_by===null) {
+			for ($mm = $this->meta; $mm!==null; $mm = $mm->GetParent()) {
+				if ($mm->GetOrderBy()!==null) {
 					$order_by = $mm->GetOrderBy();
 					break;
 				}
 			}
 		}
-		if (!is_null($order_by)) $sql .= ' ORDER BY '.$order_by->ToSql();
+		if ($order_by!==null) $sql .= ' ORDER BY '.$order_by->ToSql();
 
 
 
-		$params = is_null($this->where) ? array() : $this->where->GetSqlParams();
+		$params = $this->where===null ? array() : $this->where->GetSqlParams();
 
 
 
@@ -137,7 +138,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		// LIMIT
 		//
 		$has_min = $this->skip > 0;
-		$has_max = !is_null($this->take);
+		$has_max = $this->take!==null;
 		if ($has_min || $has_max){
 			if (Database::GetType() == Database::ORACLE){
 				if ($has_min && $has_max){
@@ -184,7 +185,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	/** @return XList */
 	public function LoadAllAggressively(){
-		if (is_null($this->data)){
+		if ($this->data===null){
 			$old = $this->is_aggressive;
 			$this->is_aggressive = true;
 			$this->Evaluate();
@@ -217,10 +218,10 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	/** @return XList|LinqIterator */
 	public function Where( $pred_or_function ){
-		if ( is_null($pred_or_function) )
+		if ( $pred_or_function === null )
 			return $this;
 		elseif ( $pred_or_function instanceof XPred ) {
-			if (is_null($this->where))
+			if ($this->where === null)
 				$this->where = XPred::All($pred_or_function);
 			else
 				$this->where[] = $pred_or_function;
@@ -245,7 +246,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	/** @return XList|LinqIterator */
 	public function OrderBy( $orderby_or_field_or_function , $desc = false ){
-		if (is_null($orderby_or_field_or_function))
+		if ($orderby_or_field_or_function === null)
 			return $this;
 		elseif ( $orderby_or_field_or_function instanceof XOrderBy ) {
 			$this->order_by = $orderby_or_field_or_function;
@@ -263,7 +264,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	private $skip = 0;
 	/** @return XList|LinqIterator */
 	public function Skip( $how_many ){
-		if (is_null($this->data)) {
+		if ($this->data === null) {
 			$this->skip = intval($how_many);
 			if ($this->skip < 0) $this->skip = 0;
 			return $this;
@@ -274,8 +275,8 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	private $take = null;
 	/** @return XList|LinqIterator */
 	public function Take( $how_many ){
-		if (is_null($this->data)) {
-			$this->take = is_null($how_many) ? null : intval($how_many);
+		if ($this->data===null) {
+			$this->take = $how_many===null ? null : intval($how_many);
 			return $this;
 		}
 		return parent::Take( $how_many );
@@ -283,8 +284,8 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
-	/** @return XList */ public function SaveAll(){ foreach ($this as $x) $x->Save(); return $this; }
-	/** @return XList */ public function KillAll(){ foreach ($this as $x) $x->Kill(); return $this; }
+	/** @return XList */ public function SaveAll(){ /** @var $x XItem */ foreach ($this as $x) $x->Save(); return $this; }
+	/** @return XList */ public function KillAll(){ /** @var $x XItem */ foreach ($this as $x) $x->Kill(); return $this; }
 
 	/** @return XList */
 	public function FreeAll(){
@@ -304,11 +305,12 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
+	public function IsEmpty(){ return $this->Count() === 0; }
 
 	private $count = null;
 	public function Count(){
-		if (is_null($this->data)){
-			if (is_null($this->count)) {
+		if ($this->data===null){
+			if ($this->count===null) {
 				$sql = $this->MakeQuery($params);
 				$sql = 'SELECT COUNT(*) FROM ('.$sql.') c';
 				$this->count = Database::ExecuteScalarX($sql,$params)->AsInteger();
@@ -337,7 +339,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 	public function OffsetSet($offset, $value) {
 		$this->Evaluate();
-		if (is_null($offset))
+		if ($offset===null)
 			$this->data[] = $value;
 		else
 			$this->data[$offset] = $value;
@@ -351,7 +353,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 
 	public function IsEvaluated(){
-		return !is_null($this->data);
+		return $this->data!==null;
 	}
 	public function Invalidate() {
 		$this->data = null;
@@ -422,8 +424,8 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	/** @return XList */
 	public function Copy(){
 		$r = clone $this;
-		if (!is_null($r->where)) $r->where = clone $r->where;
-		if (!is_null($r->order_by)) $r->order_by = clone $r->order_by;
+		if ($r->where!==null) $r->where = clone $r->where;
+		if ($r->order_by!==null) $r->order_by = clone $r->order_by;
 		return $r;
 	}
 
@@ -461,6 +463,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	public function Contains($dbitem_or_id){
 		$this->Evaluate();
+		/** @var $xx XItem|ID */
 		foreach ($this->data as $xx)
 			if ($xx->IsEqualTo($dbitem_or_id))
 				return true;
@@ -469,6 +472,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	public function Pick($dbitem_or_id){
 		$this->Evaluate();
+		/** @var $xx XItem|ID */
 		foreach ($this->data as $xx)
 			if ($xx->IsEqualTo($dbitem_or_id))
 				return $xx;
@@ -478,8 +482,9 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	public function Remove($dbitem_or_id){
 		$this->Evaluate();
 		$a = array();
+		/** @var $xx XItem|ID */
 		foreach ($this->data as $key=>$xx)
-			if (!is_null($xx) && $xx->IsEqualTo($dbitem_or_id))
+			if ($xx!==null && $xx->IsEqualTo($dbitem_or_id))
 				$a[] = $key;
 		$a = array_reverse($a);
 		foreach ($a as $key)
@@ -490,8 +495,10 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	public function RemoveMany($traversable){
 		$this->Evaluate();
 		$a = array();
+		/** @var $xx XItem|ID */
 		foreach ($this->data as $key=>$xx)
-			if (!is_null($xx))
+			if ($xx!==null)
+				/** @var $x XItem|ID|int */
 				foreach ($traversable as $x)
 					if ($xx->IsEqualTo($x)) { $a[] = $key; break; }
 		$a = array_reverse($a);
@@ -513,6 +520,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 
 	public function IsEqualTo($list) {
+		/** @var $list XList */
 		if ($this->Count()!=$list->Count()) return false;
 		foreach ($this->data as $xx) if (!$list->Contains($xx)) return false;
 		return true;
