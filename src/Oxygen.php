@@ -166,7 +166,7 @@ class Oxygen {
 
 	public static function OnAutoLoad($class){
 		$f = Oxygen::FindClassFile($class);
-		if (is_null($f)) return;
+		if ($f===null) return;
 		require($f);
 	}
 	public static function OnShutdown() {
