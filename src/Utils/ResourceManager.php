@@ -19,7 +19,11 @@ abstract class ResourceManager {
 	/** @return Lemma */ public static final function txt($name){
 		$c = get_called_class();
 		if (strpos($name,'txt')!==0) $name = 'txt'.$name;
-		if (func_num_args()>1) $name .= implode('_',array_slice(func_get_args(),1));
+		if (func_num_args()>1) {
+			$ext = implode('_',array_slice(func_get_args(),1));
+			if ($ext === '') { list(,$caller)=debug_backtrace(false); if ($caller===$name) return new Lemma($name); } // hack to avoid infinite loops.
+			$name .= $ext;
+		}
 		if (method_exists($c,$name))
 			return call_user_func([$c,$name]);
 		else
