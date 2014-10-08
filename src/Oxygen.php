@@ -746,8 +746,8 @@ class Oxygen {
 		while (ob_get_level()>0) ob_end_clean();
 		Oxygen::SendHttpHeaders();
 		echo Js::BEGIN;
-		echo "if(parent.Oxygen)parent.Oxygen.HideDialog();";
 		echo "parent.location.href=parent.location.href;";
+		echo "if(parent.Oxygen)parent.Oxygen.HideDialog();";
 		echo Js::END;
 		exit();
 	}
