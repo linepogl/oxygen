@@ -17,6 +17,7 @@ class XDate extends XDateTime {
 	}
 
 	public function MetaType(){ return MetaDate::Type(); }
+
 }
 
 

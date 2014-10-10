@@ -48,11 +48,15 @@ class XDateTime extends XValue implements Serializable {
 		return parent::CompareTo($x);
 	}
 
-    public function FromLess( XDateTime $that = null ){ return $that === null ? false : $this->timestamp < $that->timestamp; }
-    public function FromLessEqual( XDateTime $that = null ){ return $that === null ? false : $this->timestamp <= $that->timestamp; }
-    public function TillLess( XDateTime $that = null ){ return $that === null ? true : $this->timestamp < $that->timestamp; }
-    public function TillLessEqual( XDateTime $that = null ){ return $that === null ? true : $this->timestamp <= $that->timestamp; }
+  public function FromLess( XDateTime $that = null ){ return $that === null ? false : $this->timestamp < $that->timestamp; }
+  public function FromLessEqual( XDateTime $that = null ){ return $that === null ? false : $this->timestamp <= $that->timestamp; }
+  public function TillLess( XDateTime $that = null ){ return $that === null ? true : $this->timestamp < $that->timestamp; }
+  public function TillLessEqual( XDateTime $that = null ){ return $that === null ? true : $this->timestamp <= $that->timestamp; }
 
+	/** @return static */ public static function FromMax( XDateTime $x = null, XDateTime $y = null ) { if ($x === null) return $y; if ($y === null) return $x; return $x->CompareTo($y) > 0 ? $x : $y; }
+	/** @return static */ public static function FromMin( XDateTime $x = null, XDateTime $y = null ) { if ($x === null || $y === null) return null; return $x->CompareTo($y) < 0 ? $x : $y; }
+	/** @return static */ public static function TillMax( XDateTime $x = null, XDateTime $y = null ) { if ($x === null || $y === null) return null; return $x->CompareTo($y) > 0 ? $x : $y; }
+	/** @return static */ public static function TillMin( XDateTime $x = null, XDateTime $y = null ) { if ($x === null) return $y; if ($y === null) return $x; return $x->CompareTo($y) < 0 ? $x : $y; }
 
 	/** @return XTimeSpan */
 	public function Diff(XDateTime $value){
