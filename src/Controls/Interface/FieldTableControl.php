@@ -31,9 +31,10 @@ class FieldTableControl extends Control {
 
 
 	private $labels = array();
-	private $contents = array();
+	private $values = array();
 	private $asterisks = array();
 	private $validators = array();
+	private $hide_values = array();
 	private $row_names = array();
 	private $row_css_styles = array();
 	private $row_css_classes = array();
@@ -41,21 +42,22 @@ class FieldTableControl extends Control {
 	public function Add($that){
 		if ($that instanceof XWrapField || $that instanceof XMetaField || $that instanceof XWrapSlave || $that instanceof XMetaSlave){
 			$this->labels[] = $that->GetLabel();
-			$this->contents[] = '';
+			$this->values[] = '';
 		}
 		elseif ($that instanceof ValueControl){
 			$this->labels[] = $that->label;
-			$this->contents[] = $that->GetContent();
+			$this->values[] = $that->GetContent();
 		}
 		else {
 			$this->labels[] = $that;
-			$this->contents[] = '';
+			$this->values[] = '';
 		}
 		$this->asterisks[] = false;
 		$this->validators[] = null;
 		$this->row_names[] = 'tr'.ID::Random()->AsHex();
 		$this->row_css_classes[] = '';
 		$this->row_css_styles[] = '';
+		$this->hide_values[] = false;
 		return $this;
 	}
 
@@ -71,7 +73,7 @@ class FieldTableControl extends Control {
 
 
 	public function Write($that){
-		$this->contents[count($this->contents) - 1] .= $that;
+		$this->values[count($this->values) - 1] .= $that;
 		return $this;
 	}
 
@@ -81,6 +83,10 @@ class FieldTableControl extends Control {
 	}
 	public function WithValidator($validator){
 		$this->validators[count($this->validators) - 1] = $validator;
+		return $this;
+	}
+	public function WithHideValue($hide_value){
+		$this->hide_values[count($this->hide_values) - 1] = $hide_value;
 		return $this;
 	}
 	public function WithRowName($value){
@@ -95,6 +101,7 @@ class FieldTableControl extends Control {
 		$this->row_css_classes[count($this->row_css_classes) - 1] = $value;
 		return $this;
 	}
+
 
 	public function Render(){
 
@@ -111,9 +118,11 @@ class FieldTableControl extends Control {
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
 					echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:15px 1px 1px 1px;">'.$this->labels[$i].($this->asterisks[$i]?oxy::icoAsterisk()->WithCssClass('asterisk'):'').'</td></tr>';
-					echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;">'.$this->contents[$i].'</td></tr>';
-					if (!is_null($vcode) && !$this->hide_validators)
-						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:1px 0 0 0">'.new MessageControl($this->validators[$i]).'</td></tr>';
+					if (!$this->hide_values[$i]) {
+						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;">'.$this->values[$i].'</td></tr>';
+						if (!is_null($vcode) && !$this->hide_validators)
+							echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:1px 0 0 0">'.new MessageControl($this->validators[$i]).'</td></tr>';
+					}
 				}
 			}
 			echo '</table>';
@@ -138,11 +147,13 @@ class FieldTableControl extends Control {
 					echo '<tr id="'.$this->row_names[$i].'" class="'.$vcode.' '.$this->row_css_classes[$i].'" style="'.$this->row_css_styles[$i].'">';
 
 					$asterisk = ($this->asterisks[$i]?oxy::icoAsterisk()->WithCssClass('asterisk'):'');
-					echo '<td class="label" style="'.($this->label_nowrap?'white-space:nowrap;':'').'width:'.$this->label_width.';">'.($this->labels_align!='left'?$asterisk:'').$this->labels[$i].($this->labels_align=='left'?$asterisk:'').'</td>';
-					echo '<td class="value">'.$this->contents[$i];
-					if (!is_null($vcode) && !$this->hide_validators)
-						echo '<div style="padding:2px 0 0 0">'.new MessageControl($this->validators[$i]).'</div>';
-					echo '</td>';
+					echo '<td class="label"'.($this->hide_values[$i]?' colspan="2"':'').' style="'.($this->label_nowrap?'white-space:nowrap;':'').'width:'.$this->label_width.';">'.($this->labels_align!='left'?$asterisk:'').$this->labels[$i].($this->labels_align=='left'?$asterisk:'').'</td>';
+					if (!$this->hide_values[$i]) {
+						echo '<td class="value">'.$this->values[$i];
+						if (!is_null($vcode) && !$this->hide_validators)
+							echo '<div style="padding:2px 0 0 0">'.new MessageControl($this->validators[$i]).'</div>';
+						echo '</td>';
+					}
 					echo '</tr>';
 				}
 			}
