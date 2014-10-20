@@ -635,10 +635,10 @@ class Database {
 		self::Execute($sql);
 	}
 
-	public static function ExecuteDropTable($tablename) {
+	public static function ExecuteDropTable($tablename,$force = false) {
 		switch (self::$type) {
 			case self::ORACLE:
-				$sql = 'DROP TABLE '.new SqlIden($tablename).' PURGE';
+				$sql = 'DROP TABLE '.new SqlIden($tablename).($force?' CASCADE CONSTRAINTS':'').' PURGE';
 				break;
 			default:
 				$sql = 'DROP TABLE '.new SqlIden($tablename);
