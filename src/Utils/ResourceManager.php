@@ -31,7 +31,7 @@ abstract class ResourceManager {
 	}
 	public static final function _export_dictionary() {
 		$esc_txt = function($txt){ $txt = str_replace('"','\"',$txt); if (strpos($txt,"\n")) { $r = '""'; foreach (explode("\n",$txt) as $s) $r .= "\n\"$s\\n\""; return $r; } return '"'.$txt.'"'; };
-		$esc_com = function($txt){ $txt = str_replace('"','\"',$txt); if (strpos($txt,"\n")) { $r = '""'; foreach (explode("\n",$txt) as $s) $r .= "\n#. \"$s\\n\""; return $r; } return '"'.$txt.'"'; };
+		$esc_com = function($txt){ $txt = str_replace("\n","\n#. ",$txt); return '"'.$txt.'"'; };
 		$class_name = get_called_class();
 		$c = new ReflectionClass($class_name);
 		$f = dirname($c->getFileName());
@@ -89,13 +89,11 @@ abstract class ResourceManager {
 					$po .= 'msgstr '.$esc_txt($v)."\n\n";
 				}
 			}
-			file_put_contents("$f/i18/$ff.int.$lang.po",$po);
+			file_put_contents("$f/i18/$ff.$lang.po",$po);
 		}
-
-
 	}
 	public static final function _import_dictionary() {
-		$to_php_str_literal = function($txt){ $txt = str_replace(["\$","\"","\\"],["\\\$","\\\"","\\\\"],$txt); return '"'.$txt.'"';};
+		$to_php_str_literal = function($txt){ $txt = str_replace(["\\","\$","\""],["\\\\","\\\$","\\\""],$txt); return '"'.$txt.'"';};
 		$unesc_txt = function($txt){ $txt = trim($txt); $txt = substr(substr($txt,0,strlen($txt)-1),1); $txt = str_replace('\"','"',$txt); return $txt; };
 		$class_name = get_called_class();
 		$c = new ReflectionClass($class_name);
@@ -115,8 +113,8 @@ abstract class ResourceManager {
 			}
 		}
 
-		foreach (Fs::Browse("$f/i18","$ff.ext.*.po") as $fff) {
-			$lang = Str::TrimStart(basename($fff,".po"),"$ff.ext.");
+		foreach (Fs::Browse("$f/i18","_$ff.*.po") as $fff) {
+			$lang = Str::TrimStart(basename($fff,".po"),"_$ff.");
 			if (strlen($lang) !== 2) continue;
 
 			// read
@@ -160,15 +158,13 @@ abstract class ResourceManager {
 				$s .= "\n\t\t,$lang=>".$to_php_str_literal($str);
 			$s .= "\n\t\t]);}";
 
-			$r = preg_replace('/public\s+static\s+function\s+txt'.$key.'\s*\(\s*\)\s*\{[^\}]*\]\)\;\}/',$s,$r);
+			$p = '/public\s+static\s+function\s+txt'.$key.'\s*\(\s*\)\s*\{[^\}]*\]\)\;\}/';
+			preg_match($p,$r,$matches);
+			if (count($matches)>0) $r = str_replace( $matches[0] , $s , $r );
 		}
-
 
 		file_put_contents($c->getFileName(),$r);
 
-
-
 	}
-
 }
 

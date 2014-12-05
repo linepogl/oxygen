@@ -1022,8 +1022,7 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,en=>"Invalid phone number. Please use international format (+123456789)."
 		,fr=>"Le numéro n'est pas valide. Veuillez utilisez le format international (+123456789)."
 		,el=>"Λάθος αριθμός τηλεφώνου. Χρησιμοποιήστε το διεθνές πρότυπο (+123456789)."
-		,de=>"Ungültige Telefonnummer. Bitte verwenden Sie das internationale Format 
-(+123456789)."
+		,de=>"Ungültige Telefonnummer. Bitte verwenden Sie das internationale Format (+123456789)."
 		,es=>"Teléfono No válido. Por favor, use el formato internacional (+123456789)."
 		]);}
 	public static function txtMsgInvalidURL(){ return Lemma::txt([__FUNCTION__
@@ -1223,10 +1222,8 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,en=>"You are viewing this message because the application runs in DEVELOPMENT mode."
 		,fr=>"Ce message s'affiche parce que l'application est en mode DEVELOPPEMENT."
 		,el=>"Το μήνυμα αυτό εμφανίζεται γιατί η εφαρμογή τρέχει σε περιβάλλον ανάπτυξης."
-		,de=>"Diese Meldung wird angezeigt, weil die Applikation im ENTWICKLUNGSMODUS 
-läuft.\v"
-		,es=>"Está viendo este mensaje porque la aplicación se está ejecutando en modo 
-DESARROLLO."
+		,de=>"Diese Meldung wird angezeigt, weil die Applikation im ENTWICKLUNGSMODUS läuft."
+		,es=>"Está viendo este mensaje porque la aplicación se está ejecutando en modo DESARROLLO."
 		]);}
 	public static function txtMsgAnErrorOccurred(){ return Lemma::txt([__FUNCTION__
 		,en=>"An unexpected server error has occurred."
@@ -1239,10 +1236,8 @@ DESARROLLO."
 		,en=>"An unexpected server error has occurred. The support team has been notified."
 		,fr=>"Il y avait une erreur inattendue. L'équipe de support vient d'en être notifié."
 		,el=>"Προέκυψε ένα σφάλμα στον διακομιστή. Η ομάδα υποστήριξης ειδοποιήθηκε."
-		,de=>"Ein unerwarteter Serverfehler ist aufgetreten und das Support-Team wurde 
-benachrichtigt."
-		,es=>"Ha habido un error inesperado en el servido. El equipo de ayuda ha sido 
-avisado."
+		,de=>"Ein unerwarteter Serverfehler ist aufgetreten und das Support-Team wurde benachrichtigt."
+		,es=>"Ha habido un error inesperado en el servido. El equipo de ayuda ha sido avisado."
 		]);}
 
 
