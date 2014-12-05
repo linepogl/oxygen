@@ -70,6 +70,7 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	/** @return string */
 	public function TranslateTo($lang){
 		if (isset($this->data[$lang])) return $this->data[$lang];
+		if (isset(Oxygen::$default_langs[$lang])) return $this->TranslateTo(Oxygen::$default_langs[$lang]);
 		$r = '['.$this->name.'.'.$lang.']';
 		try {
 			throw new Exception('Undefined lemma: '.$r);

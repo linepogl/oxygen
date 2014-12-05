@@ -300,9 +300,10 @@ class Oxygen {
 	//
 	//
 	public static $langs = array();
+	public static $default_langs = array();
 	public static $lang = null;
 	public static $lang_auto_selection = false;
-	public static function AddLang($lang) { if (!in_array($lang,self::$langs,true)) { self::$langs[] = $lang; if (count(self::$langs)==1) self::$lang = $lang; } }
+	public static function AddLang($lang,$default_lang=null) { if (!in_array($lang,self::$langs,true)) { self::$langs[] = $lang; self::$default_langs[$lang] = $default_lang; if (count(self::$langs)==1) self::$lang = $lang; } }
 	public static function SetLang($lang) { if (Oxygen::HasLang($lang)) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Language::GetLocale()); } }
 	public static function HasLang($lang) { return in_array($lang,self::$langs,true); }
 	public static function HasLangAutoSelection() { return self::$lang_auto_selection; }
