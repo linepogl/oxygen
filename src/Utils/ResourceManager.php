@@ -1,5 +1,9 @@
 <?php
-
+define('en','en');
+define('el','el');
+define('fr','fr');
+define('de','de');
+define('es','es');
 abstract class ResourceManager {
 
 	//protected static function _() { list(,$caller) = debug_backtrace(false); return new Lemma($caller); }

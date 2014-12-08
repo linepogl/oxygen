@@ -1,9 +1,4 @@
 <?php
-define('en','en');
-define('el','el');
-define('fr','fr');
-define('de','de');
-define('es','es');
 abstract class _oxy_dictionary extends ResourceManager {
 
 	public static function txt_locale(){ return Lemma::txt([__FUNCTION__
