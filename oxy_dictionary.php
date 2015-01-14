@@ -1589,8 +1589,7 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,es=>"Teléfono No válido. Por favor, use el formato internacional (+123456789)."
 		,it=>"Numero di telefono non valido. Usa il formato internazionale (+123456789)."
 		,pt=>"Número de telefone inválido. Por favor, use o formato internacional (123456789)."
-		,ru=>"Неправильный номер телефона. Пожалуйста, используйте международный формат 
-(+123456789)."
+		,ru=>"Неправильный номер телефона. Пожалуйста, используйте международный формат (+123456789)."
 		,zh=>"无效电话号码。请使用国际格式（+123456789）。"
 		]);}
 	public static function txtMsgInvalidURL(){ return Lemma::txt([__FUNCTION__
