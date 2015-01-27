@@ -13,6 +13,6 @@ class ActionFavoriteColors extends Action {
 
 
 	public function Render() {
-		echo new Js(oxy::GetFavoriteColors($this->append,$this->remove));
+		echo json_encode(oxy::GetFavoriteColors($this->append,$this->remove));
 	}
 }
