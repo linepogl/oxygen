@@ -365,6 +365,11 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,ru=>"Файл"
 		,zh=>"文件"
 		]);}
+	public static function txtFiles(){ return Lemma::txt([__FUNCTION__
+		,en=>"Files"
+		,fr=>"Fichiers"
+		,el=>"Αρχεία"
+		]);}
 
 
 
