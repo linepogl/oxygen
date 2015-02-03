@@ -402,6 +402,12 @@ msgstr "Κλειδωμένος λογαριασμός"
 msgid "File"
 msgstr "Αρχείο"
 
+#. en: "Files"
+#. fr: "Fichiers"
+#. el: "Αρχεία"
+msgid "Files"
+msgstr "Αρχεία"
+
 #. en: "Date"
 #. fr: "Date"
 #. el: "Ημερομηνία"

@@ -402,6 +402,12 @@ msgstr "Gesperrtes Konto"
 msgid "File"
 msgstr "Datei"
 
+#. en: "Files"
+#. fr: "Fichiers"
+#. el: "Αρχεία"
+msgid "Files"
+msgstr ""
+
 #. en: "Date"
 #. fr: "Date"
 #. el: "Ημερομηνία"

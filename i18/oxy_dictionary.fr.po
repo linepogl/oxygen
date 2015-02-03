@@ -402,6 +402,12 @@ msgstr "Compte bloqué"
 msgid "File"
 msgstr "Fichier"
 
+#. en: "Files"
+#. fr: "Fichiers"
+#. el: "Αρχεία"
+msgid "Files"
+msgstr "Fichiers"
+
 #. en: "Date"
 #. fr: "Date"
 #. el: "Ημερομηνία"
