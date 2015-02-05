@@ -136,6 +136,7 @@ class Oxygen {
 			new ReflectionClass($classname); // <-- this will throw a mere exception if the class is not found, which will prevent a nasty FATAL php error in the next line.
 			/** @noinspection PhpUndefinedMethodInspection */
 			self::$action = $classname::Make();
+			if (!(self::$action instanceof Action)) throw new Exception("$classname::Make() has not returned an action.");
 		}
 		catch (ApplicationException $ex){
 			self::$action = new ActionOxygenThrowException($ex);
