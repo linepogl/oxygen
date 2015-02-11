@@ -983,14 +983,19 @@ class Oxygen {
 	public static function IsMacAddress($that){
 		return mb_ereg("([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})", $that) && $that!="00-00-00-00-00-00";
 	}
-	public static function SendEmail($from_name,$from_email,$rcpt,$subject,$body,$attachements=array()){
+	public static function SendEmail($from_name,$from_email,$rcpt,$subject,$body,$inline_attachments=array(),$attachements=array()){
+		self::SendEmail2($from_name,$from_email,null,null,$rcpt,$subject,$body,$inline_attachments,$attachements);
+	}
+	public static function SendEmail2($from_name,$from_email,$reply_to_name,$reply_to_email,$rcpt,$subject,$body,$inline_attachments=array(),$attachements=array()){
 		set_time_limit(0);
 		ini_set('memory_limit', '512M');
 		$boundary = Oxygen::HashRandom();
-		$headers  = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: multipart/related; boundary="'.$boundary.'"; type="text/html; charset=UTF-8"' . "\r\n";
-		$headers .= 'From: '. $from_name . ' <'. $from_email .'>'."\r\n";
-		$headers .= 'Sender: '. $from_email ."\r\n";
+		$headers  = "MIME-Version: 1.0\r\n";
+		$headers .= "From: $from_name <$from_email>\r\n";
+		$headers .= "Sender: $from_email\r\n";
+		if (!empty($reply_to_email)) $headers .= "Reply-To: $reply_to_name <$reply_to_email>\r\n";
+		$headers .= "Content-type: multipart/related; boundary=$boundary\r\n";
+		$headers .= "\n";
 
 		$body = str_replace("\r\n","\n",$body);
 		$body = str_replace("\r","\n",$body);
@@ -1004,59 +1009,31 @@ class Oxygen {
 		$html .= "\r\n".$body;
 		$html .= "\r\n".'</body></html>';
 
-		$body = "\r\n--$boundary";
-		$body .= "\r\nContent-Type: text/html; charset=UTF-8";
-		$body .= "\r\n";
-		$body .= "\r\n$html";
-		$body .= "\r\n";
+		$body = "--$boundary\n";
+		$body .= "Content-Type: text/html; charset=UTF-8\r\n";
+		$body .= "\n$html\n\n";
+
+		foreach ($inline_attachments as $cid => $filename){
+			$data = chunk_split(base64_encode(file_get_contents($filename)),70,"\r\n");
+			$body .= "--$boundary\n";
+			$body .= "Content-Type: ".Fs::GetMimeType($filename)."; name=\"$cid\"\r\n";
+			$body .= "Content-Disposition: inline; filename=\"$cid\"\r\n";
+			$body .= "Content-Transfer-Encoding: base64\r\n";
+			$body .= "Content-ID: <$cid>\r\n";
+			$body .= "X-Attachment-Id: $cid\r\n";
+			$body .= "\n$data";
+		}
 		foreach ($attachements as $cid => $filename){
 			if (is_int($cid)) $cid = basename($filename);
-			$body .= "\r\n--$boundary";
-			$body .= "\r\nContent-Location: CID:nothing";
-			$body .= "\r\nContent-ID: <$cid>";
-			$body .= "\r\nContent-Type: ".Fs::GetMimeType($filename).'; name='.$cid;
-			$body .= "\r\nContent-Transfer-Encoding: BASE64";
-			$body .= "\r\n";
-			$body .= "\r\n".chunk_split(base64_encode(file_get_contents($filename)),70,"\r\n");
+			$data = chunk_split(base64_encode(file_get_contents($filename)),70,"\r\n");
+			$body .= "--$boundary\n";
+			$body .= "Content-Type: ".Fs::GetMimeType($filename)."; name=\"$cid\"\r\n";
+			$body .= "Content-Disposition: attachment; filename=\"$cid\"\r\n";
+			$body .= "Content-Transfer-Encoding: base64\r\n";
+			$body .= "X-Attachment-Id: $cid\r\n";
+			$body .= "\n$data";
 		}
-		$body .= "\r\n--$boundary--";
-
-		$subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
-		mail($rcpt, $subject, $body, $headers);
-	}
-	public static function SendEmail2($from_name,$from_email,$reply_to_name,$reply_to_email,$rcpt,$subject,$body,$attachements=array()){
-		set_time_limit(0);
-		ini_set('memory_limit', '512M');
-		$boundary = Oxygen::HashRandom();
-		$headers  = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: multipart/related; boundary="'.$boundary.'"; type="text/html; charset=UTF-8"' . "\r\n";
-		$headers .= 'From: '. $from_name . ' <'. $from_email .'>'."\r\n";
-		$headers .= 'Sender: '. $from_email ."\r\n";
-		$headers .= 'Reply-To: '. $reply_to_name . ' <'. $reply_to_email .'>'."\r\n";
-
-		$msg = '<html><head>';
-		$msg .= "\r\n".'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-		$msg .= "\r\n".'<title>'.wordwrap($subject,70).'</title>';
-		$msg .= "\r\n".'</head><body>';
-		$msg .= "\r\n".wordwrap($body,70,"\r\n");
-		$msg .= "\r\n".'</body></html>';
-
-		$body = "\r\n--$boundary";
-		$body .= "\r\nContent-Type: text/html; charset=UTF-8";
-		$body .= "\r\n";
-		$body .= "\r\n$msg";
-		$body .= "\r\n";
-		foreach ($attachements as $cid => $filename){
-			if (is_int($cid)) $cid = basename($filename);
-			$body .= "\r\n--$boundary";
-			$body .= "\r\nContent-Location: CID:nothing";
-			$body .= "\r\nContent-ID: <$cid>";
-			$body .= "\r\nContent-Type: ".Fs::GetMimeType($filename).'; name='.$cid;
-			$body .= "\r\nContent-Transfer-Encoding: BASE64";
-			$body .= "\r\n";
-			$body .= "\r\n".chunk_split(base64_encode(file_get_contents($filename)),70,"\r\n");
-		}
-		$body .= "\r\n--$boundary--";
+		$body .= "--$boundary--";
 
 		$subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
 		mail($rcpt, $subject, $body, $headers);
