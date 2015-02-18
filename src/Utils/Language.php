@@ -374,7 +374,7 @@ final class Language {
 		if ($now->CompareTo($value) > 0)
 			return oxy::txtXTimeAgo()->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
 		else
-			return oxy::txtInXTime()->Sprintf( Language::FormatTimeSpan( $now->Diff( $value ) , false ) );
+			return oxy::txtInXTime()->Sprintf( Language::FormatTimeSpan( $now->Diff( $value )->Invert() , false ) );
 	}
 
 

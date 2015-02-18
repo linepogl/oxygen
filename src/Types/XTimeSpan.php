@@ -62,6 +62,7 @@ class XTimeSpan extends XValue implements Serializable {
 	/** @return XTimeSpan */ public function AddMilliSeconds( $value ){ return new XTimeSpan( $this->value + $value  ); }
 
 	/** @return XTimeSpan */ public function MultiplyBy( $value ){ return new XTimeSpan( $this->value * $value  ); }
+	/** @return XTimeSpan */ public function Invert(){ return new XTimeSpan( -$this->value ); }
 
 
 	/**
