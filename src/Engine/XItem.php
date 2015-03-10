@@ -11,7 +11,7 @@ abstract class XItem extends XValue implements Serializable {
 	 * @param bool $this_is_a_perm_id
 	 */
 	public function __construct($id = null, $this_is_a_perm_id = false){
-		if (is_null($id)) {
+		if ($id===null) {
 			if ($this_is_a_perm_id) throw new Exception('Please provide a perm ID.');
 			$this->id = $this->GetNextTempID();
 		}
@@ -88,7 +88,7 @@ abstract class XItem extends XValue implements Serializable {
 				$this->$key = unserialize($value);
 			}
 			$c = $this->Meta();
-			for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+			for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 				$slaves = $cx->GetDBSlaves();
 				/** @var $sl XMetaSlave */
 				foreach ($slaves as $sl) {
@@ -105,7 +105,7 @@ abstract class XItem extends XValue implements Serializable {
 
 	private function Init(){
 		$c = $this->Meta();
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			$fields = $cx->GetFields();
 			/** @var $f XMetaField */
 			foreach ($fields as $f){
@@ -136,9 +136,9 @@ abstract class XItem extends XValue implements Serializable {
 		//
 		//
 		/** @var $cx XMeta */
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			$fields = $cx->GetDBFields();
-			if (is_null($dr) || $cx !== $c){
+			if ($dr===null || $cx !== $c){
 				$sql = 'SELECT '.new SqlIden($cx->id);
 				if ($cx->id->IsDBAliasComplex()) $sql .= ' AS '.new SqlIden($cx->id->GetName());
 				/** @var $f XMetaField */
@@ -181,7 +181,7 @@ abstract class XItem extends XValue implements Serializable {
 		// Load slaves (lazily)
 		//
 		//
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			$slaves = $cx->GetDBSlaves();
 			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
@@ -214,7 +214,7 @@ abstract class XItem extends XValue implements Serializable {
 		//
 		//
 		/** @var $cx XMeta */
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			$fields = $cx->GetDBFields();
 			if (0==Database::ExecuteScalar('SELECT COUNT('.new SqlIden($cx->id).') FROM '.new SqlIden($cx->GetDBTableName()).' WHERE '.new SqlIden($cx->id).'=?',$this->id)->AsInteger()){
 				$params = array();
@@ -263,7 +263,7 @@ abstract class XItem extends XValue implements Serializable {
 		//
 		//
 		// first delete all removed slaves (in reverse order)
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()) {
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()) {
 			$slaves = $cx->GetDBSlaves();
 			for (end($slaves);key($slaves) !== null;prev($slaves)) { // in reverse order
 				/** @var $sl XMetaSlave */
@@ -282,7 +282,7 @@ abstract class XItem extends XValue implements Serializable {
 			}
 		}
 		// then save all remaining slaves
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			/** @var $sl XMetaSlave */
 			foreach ($cx->GetDBSlaves() as $sl) {
 				$n = $sl->GetName();
@@ -315,7 +315,7 @@ abstract class XItem extends XValue implements Serializable {
 
 		// 1. Delete slaves
 		/** @var $cs = XMeta */
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()) {
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()) {
 			$slaves = $cx->GetDBSlaves();
 			for (end($slaves); key($slaves)!==null; prev($slaves)) { // in reverse order
 				/** @var $sl XMetaSlave */
@@ -336,7 +336,7 @@ abstract class XItem extends XValue implements Serializable {
 
 		// 3. Delete me
 		/** @var $cx XMeta */
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			$sql = 'DELETE FROM '.new SqlIden($cx->GetDBTableName()).' WHERE '.new SqlIden($cx->id).'=?';
 			Database::Execute($sql,$this->id);
 		}
@@ -375,7 +375,7 @@ abstract class XItem extends XValue implements Serializable {
 	protected function CheckBeforeExportXml(){return true;}
 	protected function OnAfterExportXml(DOMNode $e, XmlExportState $st){}
 	public function ExportXml(DOMNode $parent, XmlExportState $st=null, $meta_fields_to_be_ignored=array()){
-		if (is_null($st)) $st = new XmlExportState();
+		if ($st===null) $st = new XmlExportState();
 
 		if (! $this->CheckBeforeExportXml()) return null;
 		$xml = $parent instanceof DOMDocument ? $parent : $parent->ownerDocument;
@@ -387,7 +387,7 @@ abstract class XItem extends XValue implements Serializable {
 
 
 		// Export fields
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			$fields = $cx->GetXmlFields();
 			/** @var $f XMetaField */
 			foreach ($fields as $f){
@@ -398,20 +398,20 @@ abstract class XItem extends XValue implements Serializable {
 				$value = $this->$n;
 
 				$foreign_field = $f->GetXmlForeignField();
-				if (!is_null($foreign_field)) {
+				if ($foreign_field!==null) {
 					$nn = $foreign_field->GetName();
 					$x = $foreign_field->GetMeta()->PickItem($value);
-					$value = is_null($x) ? null : $x->$nn;
+					$value = $x===null ? null : $x->$nn;
 				}
 
 				$enum = $f->GetXmlEnum();
-				if (!is_null($enum)){
+				if ($enum!==null){
 					$value = $enum->AsString($value);
 				}
 
 				/** @var $exporter string */
 				$exporter = $f->GetXmlExporter();
-				if (!is_null($exporter)) $value = $exporter($value,$st);
+				if ($exporter!==null) $value = $exporter($value,$st);
 				$value = trim(strval(new Xml($value)));
 				if ($value == '') continue;
 
@@ -427,7 +427,7 @@ abstract class XItem extends XValue implements Serializable {
 		}
 
 		// Export slaves
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			$slaves = $cx->GetXmlSlaves();
 			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
@@ -451,7 +451,7 @@ abstract class XItem extends XValue implements Serializable {
 	protected function OnAfterImportXml(DOMNode $e, XmlImportState $st, Validator $v){ }
 
 	public function ImportXml(DOMNode $e, XmlImportState $st=null, $meta_fields_to_be_ignored=array() ){
-		if (is_null($st)) $st = new XmlImportState();
+		if ($st===null) $st = new XmlImportState();
 		$v = new Validator();
 
 		$st->Push($this);
@@ -461,7 +461,7 @@ abstract class XItem extends XValue implements Serializable {
 		$c = $this->Meta();
 
 		// ImportValues fields
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			$fields = $cx->GetXmlFields();
 			/** @var $f XMetaField */
 			foreach ($fields as $f){
@@ -486,26 +486,26 @@ abstract class XItem extends XValue implements Serializable {
 				}
 
 				$enum = $f->GetXmlEnum();
-				if (!is_null($enum)){
+				if ($enum!==null){
 					$value = $enum->AsNumber($value);
 				}
 
 				/** @var $importer string */
 				$importer = $f->GetXmlImporter();
-				if (!is_null($importer)) $value = $importer($value,$st,$v);
+				if ($importer!==null) $value = $importer($value,$st,$v);
 				$value = new XmlValue($value);
 
 				$foreign_field = $f->GetXmlForeignField();
-				if (!is_null($foreign_field)) {
-					if (!is_null($value)){
+				if ($foreign_field!==null) {
+					if ($value!==null){
 						$value = $value->CastTo($foreign_field->GetType());
-						if (!is_null($value)) {
+						if ($value!==null) {
 							$x = $foreign_field->GetMeta()->MakeListFromDB()
 								->Where($foreign_field->Eq($value))
 								->GetFirst();
 
-							if (is_null($x)) $v[] = new ErrorMessage(oxy::txtMsgObjectXNotFound()->Sprintf(XItem::GetClassTitleGeneric($foreign_field->GetMeta()->GetClassName()).' '.$value));
-							$value = is_null($x) ? null : $x->id;
+							if ($x===null) $v[] = new ErrorMessage(oxy::txtMsgObjectXNotFound()->Sprintf(XItem::GetClassTitleGeneric($foreign_field->GetMeta()->GetClassName()).' '.$value));
+							$value = $x===null ? null : $x->id;
 						}
 					}
 				}
@@ -514,12 +514,12 @@ abstract class XItem extends XValue implements Serializable {
 				}
 
 				$n = $f->GetName();
-				if (!is_null($value)) $this->$n = $value;
+				if ($value!==null) $this->$n = $value;
 			}
 		}
 
 		// ImportValues slaves
-		for ($cx = $c; !is_null($cx); $cx = $cx->GetParent()){
+		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
 			$slaves = $cx->GetXmlSlaves();
 			/** @var $sl XMetaSlave */
 			foreach ($slaves as $sl) {
@@ -576,7 +576,7 @@ abstract class XItem extends XValue implements Serializable {
 	
 	/** @return XWrap */
 	public final function Wrap($name=null){
-		if (is_null($name)) $name = 'x'.Oxygen::Hash32($this->GetClassName().$this->id->AsHex());
+		if ($name===null) $name = 'x'.Oxygen::Hash32($this->GetClassName().$this->id->AsHex());
 		return new XWrap($this->Meta(),$this,$name);
 	}
 
@@ -619,11 +619,8 @@ abstract class XItem extends XValue implements Serializable {
 	/** @return static  */ public static final function Pick($id,DBReader $dr=null){ return static::Meta()->PickItem($id,$dr); }
 	/** @return static  */ public static final function PickGeneric($classname,$id,DBReader $dr=null){ return $classname===null ? null : XMeta::Of($classname)->PickItem($id,$dr); }
 
-//	/** @return static|XItem */ public static final function Pick404($id,DBReader $dr=null){ $r = static::Meta()->PickItem($id,$dr); if (is_null($r)) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(static::GetClassTitle().' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
-//	/** @return XItem */ public static final function Pick404Generic($classname,$id,DBReader $dr=null){ $r = XMeta::Of($classname)->PickItem($id,$dr);  if (is_null($r)) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(self::GetClassTitleGeneric($classname).' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
-
-	/** @return static */ public static final function Find($id,DBReader $dr=null){ $r = static::Meta()->PickItem($id,$dr); if (is_null($r)) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(static::GetClassTitle().' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
-	/** @return XItem */ public static final function FindGeneric($classname,$id,DBReader $dr=null){ $r = XMeta::Of($classname)->PickItem($id,$dr);  if (is_null($r)) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(self::GetClassTitleGeneric($classname).' '.(is_null($id)?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
+	/** @return static */ public static final function Find($id,DBReader $dr=null){ $r = static::Meta()->PickItem($id,$dr); if ($r===null) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(static::GetClassTitle().' '.($id===null?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
+	/** @return XItem */ public static final function FindGeneric($classname,$id,DBReader $dr=null){ $r = XMeta::Of($classname)->PickItem($id,$dr);  if ($r===null) throw new ApplicationException(oxy::txtMsgObjectXNotFound()->Sprintf(self::GetClassTitleGeneric($classname).' '.($id===null?'':($id instanceof ID?$id->AsInt():strval($id))))); return $r; }
 
 
 	/** @return ID */ public static function GetNextPermID(){ return static::Meta()->GetNextPermID(); }
@@ -651,22 +648,22 @@ abstract class XItem extends XValue implements Serializable {
 			: 'SELECT a.'.new SqlIden($meta_field).' AS id FROM '.new SqlIden($c->GetDBTableName()).' AS a';
 
 		/** @var $cx XMeta */
-		for ($cx = $c->GetParent(); !is_null($cx); $cx = $cx->GetParent())
+		for ($cx = $c->GetParent(); $cx!==null; $cx = $cx->GetParent())
 			$sql .= ','.$cx->GetDBTableName();
 
-		for ($cx = $c->GetParent(); !is_null($cx); $cx = $cx->GetParent()) {
-			if (!is_null($where)) $where .= ' AND ';
+		for ($cx = $c->GetParent(); $cx!==null; $cx = $cx->GetParent()) {
+			if ($where!==null) $where .= ' AND ';
 			$where .= $cx->GetDBTableName().'.'.new SqlIden($cx->id).'='.$c->GetDBTableName().'.'.new SqlIden($c->id);
 		}
 
-		for ($cx = $c->GetParent(); !is_null($cx); $cx = $cx->GetParent()) {
-			if (is_null($cx->GetOrderBy())) continue;
-			if (!is_null($orderby)) $orderby .= ',';
+		for ($cx = $c->GetParent(); $cx!==null; $cx = $cx->GetParent()) {
+			if ($cx->GetOrderBy()===null) continue;
+			if ($orderby!==null) $orderby .= ',';
 			$orderby .= $cx->GetOrderBy();
 		}
 
-		if (!is_null($where)) $sql .= ' WHERE '.$where;
-		if (!is_null($orderby)) $sql .= ' ORDER BY '.$orderby;
+		if ($where!==null) $sql .= ' WHERE '.$where;
+		if ($orderby!==null) $sql .= ' ORDER BY '.$orderby;
 
 		return Database::ExecuteColumnOfX($meta_field->GetType(),$sql,$params);
 	}
