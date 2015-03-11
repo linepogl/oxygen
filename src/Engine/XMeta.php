@@ -12,7 +12,7 @@ class XMeta extends stdClass {
 	private $__db_signature;
 	private $__db_table_name = null;
 	/** @return XMeta */ public function SetDBTableName($value){ $this->__db_table_name = $value; return $this; }
-	public function GetDBTableName(){ return $this->__db_table_name===null ? $this->__classname : $this->__db_table_name; }
+	public function GetDBTableName(){ return $this->__db_table_name; }
 
 	private $__db_sequence = null;
 	/** @return XMeta */ public function SetDBSequence($value){ $this->__db_sequence = $value; return $this; }
@@ -39,13 +39,15 @@ class XMeta extends stdClass {
 
 	private $__abstract_dbfield = null;
 	/** @return XMeta */ public function SetAbstractDBField(XMetaField $value){ $this->__abstract_dbfield = $value; return $this; }
-	/** @return XMetaField|null */ public function GetAbstractDBField(){ return $this->__abstract_dbfield; }
+	/** @return XMetaField|null */public function GetAbstractDBField(){ return $this->__abstract_dbfield; }
 	public function IsAbstract(){ return $this->__abstract_dbfield !== null; }
 
-	private $__parent = null;
-	/** @return XMeta */ public function SetParent(XMeta $parent = null){ $this->__parent = $parent; return $this; }
+	/** @var XMeta|null */ private $__parent = null;
+	/** @var bool  */ private $__share_db_table = false;
+	/** @return XMeta */ public function SetParent(XMeta $parent = null, $share_db_table = false){ $this->__parent = $parent; $this->__share_db_table = $share_db_table; return $this; }
 	/** @return XMeta */ public function GetParent(){ return $this->__parent; }
-	/** @return XMeta */ public function GetRoot(){ return $this->__parent===null ? $this : $this->GetParent()->GetRoot(); }
+	/** @return XMeta */ public function GetRoot(){ return $this->__parent === null ? $this : $this->__parent->GetRoot(); }
+	public function SharesDBTableWithParent(){ return $this->__share_db_table; }
 
 
 
@@ -65,7 +67,7 @@ class XMeta extends stdClass {
 			$is_field = $value instanceof XMetaField;
 			$is_slave = $value instanceof XMetaSlave;
 			if ($is_field || $is_slave) {
-				if ($key === '__abstract_dbfield') continue;
+				if ($key==='__abstract_dbfield') continue;
 				$value->SetMeta($this);
 				$value->SetName($key);
 				if ($value->GetLabel() == null) $value->WithLabel(oxy::txt($key));
@@ -132,7 +134,7 @@ class XMeta extends stdClass {
 
 
 
-	
+
 
 	//
 	//
@@ -183,14 +185,15 @@ class XMeta extends stdClass {
 
 	/** @return ID */
 	public function GetNextPermID(){
-		if ($this->id->IsDBAliasComplex())
-			return $this->GetNextTempID();
-		$sequence = $this->GetDBSequence();
+		$cx = $this->GetRoot();
+		if ($cx->id->IsDBAliasComplex())
+			return $cx->GetNextTempID();
+		$sequence = $cx->GetDBSequence();
 		if ($sequence!==null)
 			return ID::GetNextPermIDFromSequence($sequence);
-		return ID::GetNextPermID($this->GetDBTableName(),$this->id->GetDBName());
+		return ID::GetNextPermID($cx->GetDBTableName(),$cx->id->GetDBName());
 	}
-	/** @return ID */ public function GetNextTempID(){ return ID::GetNextTempID($this->GetDBSequence()); }
+	/** @return ID */ public function GetNextTempID(){ $cx = $this->GetRoot(); return ID::GetNextTempID($cx->GetDBSequence()); }
 
 
 
@@ -222,26 +225,37 @@ class XMeta extends stdClass {
 
 	/** @return XItem */
 	public final function MakeTempItem($id = null){
-		$classname = $this->__classname;
+		$class_name = $this->__classname;
 		if ($id === null)
 			$id = $this->GetNextTempID();
 		elseif (!($id instanceof ID))
 			$id = new ID($id);
-		$r = new $classname($id,false);
+		$r = new $class_name($id,false);
+		$cx = $this->GetRoot();
+		if ($cx->IsAbstract()) {
+			$n = $cx->GetAbstractDBField()->GetName();
+			$r->$n = $class_name;
+		}
 		//$this->SaveInCache($id->AsInt(),$r); // this is under question.
 		return $r;
 	}
 
 	/** @return XItem */
 	public final function MakePermItem($id = null){
-		$classname = $this->__classname;
+		$class_name = $this->__classname;
 		if ($id === null) {
 			if ($this->id->IsDBAliasComplex())
 				$id = $this->GetNextTempID();
 			else
 				$id = $this->GetNextPermID();
 		}
-		$r = new $classname($id,true);
+		if (!$id instanceof ID) $id = new ID($id);
+		$r = new $class_name($id,true);
+		$cx = $this->GetRoot();
+		if ($cx->IsAbstract()) {
+			$n = $cx->GetAbstractDBField()->GetName();
+			$r->$n = $class_name;
+		}
 		if (!$this->id->IsDBAliasComplex()) $this->SaveInCache($id->AsInt(),$r);
 		return $r;
 	}
@@ -257,16 +271,21 @@ class XMeta extends stdClass {
 		if ($r===null) {
 			if ($this->IsAbstract()) {
 				if (!array_key_exists($idi,$this->__item_concrete_meta_cache)) {
-					$this->__item_concrete_meta_cache[$idi] = XMeta::Of( Database::ExecuteScalar('SELECT '.new SqlIden($this->GetAbstractDBField()->GetDBAlias()).' FROM '.$this->GetDBTableName().' WHERE '.new SqlIden($this->id->GetDBName()).'=?',$id)->AsString() );
+					$this->__item_concrete_meta_cache[$idi] = XMeta::Of( Database::ExecuteScalar('SELECT '.new SqlIden($this->GetAbstractDBField()->GetDBAlias()).' FROM '.new SqlIden($this->GetDBTableName()).' WHERE '.new SqlIden($this->id->GetDBName()).'=?',$id)->AsString() );
 				}
 				/** @var $m XMeta */
 				$m = $this->__item_concrete_meta_cache[$idi];
 				$r = $m->PickItem($id);
 			}
 			else {
-				$classname = $this->__classname;
-				$r = new $classname($id,true);
+				$class_name = $this->__classname;
+				$r = new $class_name($id,true);
 				if (!$r->Load($dr)) $r = null;
+				$cx = $this->GetRoot();
+				if ($cx->IsAbstract()) {
+					$n = $cx->GetAbstractDBField()->GetName();
+					if ($r->$n !== $class_name) $r = null;
+				}
 			}
 			$this->SaveInCache($idi,$r);
 		}
@@ -398,13 +417,13 @@ class XMeta extends stdClass {
 		$xml = $parent->ownerDocument;
 		$x = $parent;
 		$xx = $x->firstChild;
-		if ($xx===null || $xx->tagName !== 'xs:complexType'){
+		if ($xx===null || $xx->tagName != 'xs:complexType'){
 			$xxx = $xml->createElementNS(Xml::XS,'xs:complexType');
 			$xx = $xx===null ? $x->appendChild($xxx) : $x->insertBefore($xxx,$xx);
 		}
 		$x = $xx;
 		$xx = $x->firstChild;
-		if ($xx===null || $xx->tagName !== 'xs:choice'){
+		if ($xx===null || $xx->tagName != 'xs:choice'){
 			$xxx = $xml->createElementNS(Xml::XS,'xs:choice');
 			$xx = $xx===null ? $x->appendChild($xxx) : $x->insertBefore($xxx,$xx);
 			$xx->setAttribute('minOccurs','0');

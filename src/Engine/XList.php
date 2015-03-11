@@ -76,6 +76,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 	
 	private function MakeQuery(&$params){
+		$params = $this->where===null ? array() : $this->where->GetSqlParams();
 
 		//
 		// SELECT
@@ -98,18 +99,38 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 		//
 		// FROM
 		//
-		$sql .= ' FROM '.new SqlIden($this->meta->GetDBTableName()).' a';
-		for ($mm = $this->meta->GetParent(); $mm!==null; $mm = $mm->GetParent())
-			$sql .= ','.new SqlIden($mm->GetDBTableName());
+		$sql .= ' FROM ';
+		$found = false;
+		for ($mm = $this->meta; $mm!==null; $mm = $mm->GetParent()) {
+			if ($mm->SharesDBTableWithParent()) continue;
+			if ($found)
+				$sql .= ','.new SqlIden($mm->GetDBTableName());
+			else
+				$sql .= new SqlIden($mm->GetDBTableName()).' a';
+			$found = true;
+		}
 
 
 		//
 		// WHERE
 		//
 		$where = $this->where === null ? null : $this->where->ToSql();
-		for ($mm = $this->meta->GetParent(); $mm!==null; $mm = $mm->GetParent()) {
-			if ($where!==null) $where .= ' AND ';
-			$where .= $mm->GetDBTableName().'.'.new SqlIden($mm->id).'=a.'.new SqlIden($this->meta->id);
+		for ($mm = $this->meta; $mm!==null; $mm = $mm->GetParent()) if (!$mm->SharesDBTableWithParent()) break;
+		if ($mm !== null) {
+			for ($mx = $mm->GetParent(); $mx !== null; $mx = $mx->GetParent()) {
+				if ($mx->SharesDBTableWithParent()) continue;
+				if ($where !== null) $where .= ' AND ';
+				$where .= new SqlIden($mx->GetDBTableName()).'.'.new SqlIden($mx->id).'=a.'.new SqlIden($this->meta->id);
+			}
+		}
+		$found = false;
+		for ($mm = $this->meta; $mm !== null; $mm = $mm->GetParent()) {
+			if ($mm->SharesDBTableWithParent()) { $found = true; continue; }
+			if (!$found) break;
+			if (!$mm->IsAbstract()) break;
+			if ($where !== null) $where .= ' AND ';
+			$where .= 'a.'.new SqlIden($mm->GetAbstractDBField()).'=?';
+			$params[] = $this->meta->GetClassName();
 		}
 		if (!empty($where)) $sql .= ' WHERE '.$where;
 
@@ -130,7 +151,6 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 
-		$params = $this->where===null ? array() : $this->where->GetSqlParams();
 
 
 

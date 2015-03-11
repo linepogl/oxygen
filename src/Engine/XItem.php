@@ -135,9 +135,15 @@ abstract class XItem extends XValue implements Serializable {
 		// Load Fields
 		//
 		//
+		$fields = null;
 		/** @var $cx XMeta */
 		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
-			$fields = $cx->GetDBFields();
+			if ($fields === null)
+				$fields = $cx->GetDBFields();
+			else
+				$fields = array_merge($fields,$cx->GetDBFields());
+			if ($cx->SharesDBTableWithParent()) continue;
+
 			if ($dr===null || $cx !== $c){
 				$sql = 'SELECT '.new SqlIden($cx->id);
 				if ($cx->id->IsDBAliasComplex()) $sql .= ' AS '.new SqlIden($cx->id->GetName());
@@ -173,6 +179,7 @@ abstract class XItem extends XValue implements Serializable {
 					$this->$n = $v->CastTo($f->GetType());
 				}
 			}
+			$fields = null;
 		}
 
 
@@ -213,9 +220,14 @@ abstract class XItem extends XValue implements Serializable {
 		// Save fields
 		//
 		//
+		$fields = null;
 		/** @var $cx XMeta */
 		for ($cx = $c; $cx!==null; $cx = $cx->GetParent()){
-			$fields = $cx->GetDBFields();
+			if ($fields === null)
+				$fields = $cx->GetDBFields();
+			else
+				$fields = array_merge($fields,$cx->GetDBFields());
+			if ($cx->SharesDBTableWithParent()) continue;
 			if (0==Database::ExecuteScalar('SELECT COUNT('.new SqlIden($cx->id).') FROM '.new SqlIden($cx->GetDBTableName()).' WHERE '.new SqlIden($cx->id).'=?',$this->id)->AsInteger()){
 				$params = array();
 				$sql = 'INSERT INTO '.new SqlIden($cx->GetDBTableName()).'(';
@@ -254,6 +266,7 @@ abstract class XItem extends XValue implements Serializable {
 				$params[] =& $this->id;
 				Database::ExecuteX($sql,$params);
 			}
+			$fields = null;
 		}
 		$c->SaveInCache($this->id->AsInt(),$this);
 
@@ -573,7 +586,7 @@ abstract class XItem extends XValue implements Serializable {
 
 
 
-	
+
 	/** @return XWrap */
 	public final function Wrap($name=null){
 		if ($name===null) $name = 'x'.Oxygen::Hash32($this->GetClassName().$this->id->AsHex());
@@ -649,7 +662,7 @@ abstract class XItem extends XValue implements Serializable {
 
 		/** @var $cx XMeta */
 		for ($cx = $c->GetParent(); $cx!==null; $cx = $cx->GetParent())
-			$sql .= ','.$cx->GetDBTableName();
+			$sql .= ','.new SqlIden($cx->GetDBTableName());
 
 		for ($cx = $c->GetParent(); $cx!==null; $cx = $cx->GetParent()) {
 			if ($where!==null) $where .= ' AND ';
