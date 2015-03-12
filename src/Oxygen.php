@@ -124,6 +124,13 @@ class Oxygen {
 			die;
 		}
 
+		if (RESET) {
+			Scope::ResetAllWeak();
+			if (RESET === 'hard') {
+				Scope::ResetAllHard();
+				Oxygen::ClearTempFolders();
+			}
+		}
 	}
 
 

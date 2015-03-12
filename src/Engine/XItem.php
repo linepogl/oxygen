@@ -127,15 +127,9 @@ abstract class XItem extends XValue implements Serializable {
 		// Load Fields
 		//
 		//
-		$fields = null;
 		/** @var $mm XMeta */
-		for ($mm = $m; $mm!==null; $mm = $mm->GetParent()){
-			if ($fields === null)
-				$fields = $mm->GetDBFields(false);
-			else
-				$fields = array_merge($fields,$mm->GetDBFields(false));
-			if ($mm->SharesDBTableWithParent()) continue;
-
+		for ($mm = $m; $mm!==null; $mm = $mm->GetDBParent()){
+			$fields = $mm->GetDBFields(true);
 			if ($dr===null || $mm !== $m){
 				$sql = 'SELECT '.new SqlIden($mm->id);
 				if ($mm->id->IsDBAliasComplex()) $sql .= ' AS '.new SqlIden($mm->id->GetName());
@@ -209,14 +203,9 @@ abstract class XItem extends XValue implements Serializable {
 		// Save fields
 		//
 		//
-		$fields = null;
 		/** @var $mm XMeta */
-		for ($mm = $m; $mm!==null; $mm = $mm->GetParent()){
-			if ($fields === null)
-				$fields = $mm->GetDBFields(false);
-			else
-				$fields = array_merge($fields,$mm->GetDBFields(false));
-			if ($mm->SharesDBTableWithParent()) continue;
+		for ($mm = $m; $mm!==null; $mm = $mm->GetDBParent()){
+			$fields = $mm->GetDBFields(true);
 			if (0==Database::ExecuteScalar('SELECT COUNT('.new SqlIden($mm->id).') FROM '.new SqlIden($mm->GetDBTableName()).' WHERE '.new SqlIden($mm->id).'=?',$this->id)->AsInteger()){
 				$params = array();
 				$sql = 'INSERT INTO '.new SqlIden($mm->GetDBTableName()).'(';

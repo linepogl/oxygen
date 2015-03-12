@@ -37,21 +37,35 @@ class XMeta extends stdClass {
 	/** @return XOrderBy|null */
 	public function GetOrderBy(){ return $this->__order_by; }
 
-	private $__abstract_dbfield = null;
-	/** @return XMeta */ public function SetAbstractDBField(XMetaField $value){ $this->__abstract_dbfield = $value; return $this; }
-	/** @return XMetaField|null */public function GetAbstractDBField(){ return $this->__abstract_dbfield; }
-	public function IsAbstract(){ return $this->__abstract_dbfield !== null; }
+	/** @var XMetaField|null */ private $__class_name_db_field = null;
+	/** @return XMetaField|null */public function GetClassNameDBField(){ return $this->__class_name_db_field; }
+	/** @return XMeta */
+	public function SetClassNameDBField(XMetaField $value){
+		if ($this->__class_name_db_field !== null) throw new Exception('Cannot inherit a second class name db field.');
+		$this->__class_name_db_field = $value;
+		return $this;
+	}
 
 	/** @var XMeta|null */ private $__parent = null;
-	/** @var bool     */ private $__share_db_table = false;
-	/** @return bool  */ public function SharesDBTableWithParent(){ return $this->__share_db_table; }
+	/** @var bool     */ private $__shares_db_table = false;
+	/** @var bool     */ private $__shares_class_name_db_field = false;
+	/** @return bool  */ public function SharesDBTableWithParent(){ return $this->__shares_db_table; }
+	/** @return bool  */ public function SharesClassNameDBFieldWithRoot(){ return $this->__shares_class_name_db_field; }
 	/** @return XMeta */ public function GetParent(){ return $this->__parent; }
 	/** @return XMeta */ public function GetRoot(){ return $this->__parent === null ? $this : $this->__parent->GetRoot(); }
+	/** @return XMeta */ public function GetDBParent(){ return $this->__shares_db_table && $this->__parent !== null ? $this->__parent->GetDBParent() : $this->__parent; }
+	/** @return XMeta */ public function GetDBRoot(){ return $this->__parent === null || $this->__parent->__class_name_db_field === null ? $this : $this->__parent->GetDBRoot(); }
+
 	/** @return XMeta */
 	public function Inherit(XMeta $parent, $share_db_table = false){
 		if ($this->__parent !== null) throw new Exception('Cannot inherit a second meta class.');
 		$this->__parent = $parent;
-		$this->__share_db_table = $share_db_table;
+		$this->__class_name_db_field = $parent->__class_name_db_field;
+		$this->__shares_db_table = $share_db_table;
+		if ($share_db_table) {
+			$this->__db_table_name = $parent->__db_table_name;
+			$this->__shares_class_name_db_field = $parent->__shares_class_name_db_field;
+		}
 		$this->Merge($parent);
 		return $this;
 	}
@@ -73,38 +87,37 @@ class XMeta extends stdClass {
 
 	public function Compile(){
 		$this->__fields = array();
-		$this->__dbfields = array();
-		$this->__my_dbfields = array();
-		$this->__xmlfields = array();
+		$this->__db_fields = array();
+		$this->__my_db_fields = array();
+		$this->__xml_fields = array();
 		$this->__slaves = array();
-		$this->__dbslaves = array();
-		$this->__xmlslaves = array();
-		$parent_fields = $this->__parent === null ? array() : $this->__parent->GetFields();
+		$this->__db_slaves = array();
+		$this->__xml_slaves = array();
+		$db_parent = $this->GetDBParent();
+		$parent_fields = $db_parent === null ? null : $this->__parent->GetFields();
+		/** @var $value XMetaField|XMetaSlave */
 		foreach ($this as $key=>$value){
 			$is_field = $value instanceof XMetaField;
 			$is_slave = $value instanceof XMetaSlave;
-			if ($is_field || $is_slave) {
-				if ($key==='__abstract_dbfield') continue;
-				$value->SetMeta($this);
-				$value->SetName($key);
-				if ($value->GetLabel() == null) $value->WithLabel(oxy::txt($key));
-
-
-				if ($is_field) {
-					if ($key !== 'id') {
-						$this->__fields[$key] = $value;
-						if ($value->IsDBBound()) {
-							$this->__dbfields[$key] = $value;
-							if (!isset($parent_fields[$key])) $this->__my_db_fields[$key] = $value;
-						}
-						if ($value->IsXmlBound()) $this->__xmlfields[$key] = $value;
+			if (!$is_field && !$is_slave) continue;
+			if ($key==='__class_name_db_field') continue;
+			$value->SetMeta($this);
+			$value->SetName($key);
+			if ($value->GetLabel() == null) $value->WithLabel(oxy::txt($key));
+			if ($is_field) {
+				if ($key !== 'id') {
+					$this->__fields[$key] = $value;
+					if ($value->IsDBBound()) {
+						$this->__db_fields[$key] = $value;
+						if ($parent_fields === null || !isset($parent_fields[$key])) $this->__my_db_fields[$key] = $value;
 					}
+					if ($value->IsXmlBound()) $this->__xml_fields[$key] = $value;
 				}
-				else {
-					$this->__slaves[$key] = $value;
-					if ($value->IsDBBound()) $this->__dbslaves[$key] = $value;
-					if ($value->IsXmlBound()) $this->__xmlslaves[$key] = $value;
-				}
+			}
+			else {
+				$this->__slaves[$key] = $value;
+				if ($value->IsDBBound()) $this->__db_slaves[$key] = $value;
+				if ($value->IsXmlBound()) $this->__xml_slaves[$key] = $value;
 			}
 		}
 		$s = '';
@@ -123,7 +136,7 @@ class XMeta extends stdClass {
 
 	private $__db_fields;
 	private $__my_db_fields;
-	public function GetDBFields($include_inherited = true){ return $include_inherited ? $this->__db_fields : $this->__my_db_fields; }
+	public function GetDBFields($same_table_only = false){ return $same_table_only ? $this->__db_fields : $this->__my_db_fields; }
 
 	private $__xml_fields;
 	public function GetXmlFields(){ return $this->__xml_fields; }
@@ -139,7 +152,7 @@ class XMeta extends stdClass {
 
 
 	public function IsEqualTo(XMeta $c){
-		return $this->__class_name == $c->GetClassName();
+		return $this->__class_name === $c->GetClassName();
 	}
 
 
@@ -253,9 +266,9 @@ class XMeta extends stdClass {
 		elseif (!($id instanceof ID))
 			$id = new ID($id);
 		$r = new $class_name($id,false);
-		$cx = $this->GetRoot();
-		if ($cx->IsAbstract()) {
-			$n = $cx->GetAbstractDBField()->GetName();
+		$class_name_db_field = $this->GetClassNameDBField();
+		if ($class_name_db_field !== null) {
+			$n = $class_name_db_field->GetName();
 			$r->$n = $class_name;
 		}
 		//$this->SaveInCache($id->AsInt(),$r); // this is under question.
@@ -273,9 +286,9 @@ class XMeta extends stdClass {
 		}
 		if (!$id instanceof ID) $id = new ID($id);
 		$r = new $class_name($id,true);
-		$cx = $this->GetRoot();
-		if ($cx->IsAbstract()) {
-			$n = $cx->GetAbstractDBField()->GetName();
+		$class_name_db_field = $this->GetClassNameDBField();
+		if ($class_name_db_field !== null) {
+			$n = $class_name_db_field->GetName();
 			$r->$n = $class_name;
 		}
 		if (!$this->id->IsDBAliasComplex()) $this->SaveInCache($id->AsInt(),$r);
@@ -291,21 +304,34 @@ class XMeta extends stdClass {
 		/** @var $r XItem */
 		$r = $this->PickFromRemoteCache($idi);
 		if ($r===null) {
-			if ($this->IsAbstract()) {
+			$meta = $this;
+			if ($this->__class_name_db_field !== null) {
 				if (!array_key_exists($idi,$this->__item_concrete_meta_cache)) {
-					$this->__item_concrete_meta_cache[$idi] = XMeta::Of( Database::ExecuteScalar('SELECT '.new SqlIden($this->GetAbstractDBField()->GetDBAlias()).' FROM '.new SqlIden($this->GetDBTableName()).' WHERE '.new SqlIden($this->id->GetDBName()).'=?',$id)->AsString() );
+					$class_name = null;
+					if ($this->__shares_class_name_db_field) {
+						$n = $this->__class_name_db_field->GetDBAlias();
+						if ($dr->OffsetExists($n)) $this->__item_concrete_meta_cache[$idi] = $dr[$n]->AsStringOrNull();
+					}
+					if ($class_name === null) {
+						$class_name = Database::ExecuteScalar('SELECT '.new SqlIden($this->__class_name_db_field->GetDBAlias()).' FROM '.new SqlIden($this->GetDBRoot()->GetDBTableName()).' WHERE '.new SqlIden($this->id->GetDBName()).'=?',$id)->AsStringOrNull();
+					}
+					$this->__item_concrete_meta_cache[$idi] = $class_name===null ? null : XMeta::Of( $class_name );
 				}
 				/** @var $m XMeta */
-				$m = $this->__item_concrete_meta_cache[$idi];
-				$r = $m->PickItem($id);
+				$meta = $this->__item_concrete_meta_cache[$idi];
+				if ($meta === null) $meta = $this;
+			}
+
+			if ($meta !== $this) {
+				$r = $meta->PickItem($id);
 			}
 			else {
 				$class_name = $this->__class_name;
 				$r = new $class_name($id,true);
-				if (!$r->Load($dr)) $r = null;
-				$cx = $this->GetRoot();
-				if ($cx->IsAbstract()) {
-					$n = $cx->GetAbstractDBField()->GetName();
+				if (!$r->Load($dr))
+					$r = null;
+				elseif ($this->__class_name_db_field !== null) {
+					$n = $this->__class_name_db_field->GetName();
 					if ($r->$n !== $class_name) $r = null;
 				}
 			}

@@ -121,13 +121,10 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 				$where .= new SqlIden($mx->GetDBTableName()).'.'.new SqlIden($mx->id).'=a.'.new SqlIden($this->meta->id);
 			}
 		}
-		$found = false;
-		for ($mm = $this->meta; $mm !== null; $mm = $mm->GetParent()) {
-			if ($mm->SharesDBTableWithParent()) { $found = true; continue; }
-			if (!$found) break;
-			if (!$mm->IsAbstract()) break;
+		$class_name_db_field = $this->meta->GetClassNameDBField();
+		if ($class_name_db_field !== null) {
 			if ($where !== null) $where .= ' AND ';
-			$where .= 'a.'.new SqlIden($mm->GetAbstractDBField()).'=?';
+			$where .= 'a.'.new SqlIden($mm->GetClassNameDBField()).'=?';
 			$params[] = $this->meta->GetClassName();
 		}
 		if (!empty($where)) $sql .= ' WHERE '.$where;
