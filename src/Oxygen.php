@@ -113,6 +113,14 @@ class Oxygen {
 			self::SetUrlPin('action',self::$actionname);
 		}
 
+		if (RESET) {
+			Scope::ResetAllWeak();
+			if (RESET === 'hard') {
+				Scope::ResetAllHard();
+				Oxygen::ClearTempFolders();
+			}
+		}
+
 		$logger = new MultiMessage();
 		$logger = $logger->WithOnAdd(function(Message $m){
 			Debug::EnableImmediateFlushing();
@@ -124,13 +132,6 @@ class Oxygen {
 			die;
 		}
 
-		if (RESET) {
-			Scope::ResetAllWeak();
-			if (RESET === 'hard') {
-				Scope::ResetAllHard();
-				Oxygen::ClearTempFolders();
-			}
-		}
 	}
 
 
