@@ -512,11 +512,15 @@ class Oxygen {
 	// Log folder
 	//
 	//
-	private static $log_folder = 'log';
-	public static function GetLogFolder($ensure = false){ if ($ensure) Oxygen::EnsureLogFolder(); return self::$log_folder; }
-	public static function SetLogFolder($value) { self::$log_folder = $value; }
-	public static function HasLogFolder(){ return is_dir(self::$log_folder); }
-	public static function EnsureLogFolder(){ Fs::Ensure(self::$log_folder); }
+	private static $logs_folder = 'log';
+	public static function GetLogFolder($ensure = false){ if ($ensure) Oxygen::EnsureLogFolder(); return self::$logs_folder; }
+	public static function SetLogFolder($value) { self::$logs_folder = $value; }
+	public static function HasLogFolder(){ return is_dir(self::$logs_folder); }
+	public static function EnsureLogFolder(){ Fs::Ensure(self::$logs_folder); }
+	public static function GetLogsFolder($ensure = false){ if ($ensure) Oxygen::EnsureLogsFolder(); return self::$logs_folder; }
+	public static function SetLogsFolder($value) { self::$logs_folder = $value; }
+	public static function HasLogsFolder(){ return is_dir(self::$logs_folder); }
+	public static function EnsureLogsFolder(){ Fs::Ensure(self::$logs_folder); }
 
 
 
