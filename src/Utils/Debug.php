@@ -133,11 +133,11 @@ class Debug {
 		if ($value instanceof XList) {
 			$value->Evaluate();
 			$r = '{XList:'.count($value).':';
-			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
+			if ($detail!==null&&!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
 				$r .= "\n" . str_repeat(' ',($level+1)*2);
-				if ($i++>=$detail[$level]) { $r .= '...}'; return $r; }
+				if ($detail!==null&&$i++>=$detail[$level]) { $r .= '...}'; return $r; }
 				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
 				$r .= self::GetVariableAsString($v,$detail,$level+1);
 			}
@@ -146,11 +146,11 @@ class Debug {
 		}
 		if (is_array($value)) {
 			$r = '{array:'.count($value).':';
-			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
+			if ($detail!==null&&!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
 				$r .= "\n" . str_repeat(' ',($level+1)*2);
-				if ($i++>=$detail[$level]) { $r .= '...}'; return $r; }
+				if ($detail!==null&&$i++>=$detail[$level]) { $r .= '...}'; return $r; }
 				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
 				$r .= self::GetVariableAsString($v,$detail,$level+1);
 			}
@@ -159,11 +159,11 @@ class Debug {
 		}
 		if ($value instanceof Traversable) {
 			$r = '{'.get_class($value).':';
-			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
+			if ($detail!==null&&!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
 				$r .= "\n" . str_repeat(' ',($level+1)*2);
-				if ($i++>=$detail[$level]) { $r .= '...}'; return $r; }
+				if ($detail!==null&&$i++>=$detail[$level]) { $r .= '...}'; return $r; }
 				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
 				$r .= self::GetVariableAsString($v,$detail,$level+1);
 			}
@@ -172,7 +172,7 @@ class Debug {
 		}
 		if (is_object($value)) {
 			$r = '{'.get_class($value).':';
-			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
+			if ($detail!==null&&!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			if ($value instanceof stdClass) {
 				foreach ((array)$value as $p=>$v){

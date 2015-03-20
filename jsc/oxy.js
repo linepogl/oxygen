@@ -354,16 +354,4 @@ var Oxygen = {
 };
 Oxygen.HideAjaxDialog=Oxygen.HideDialog;//BC
 
-
-
-function dump2(x,level){
-	var s = typeof x+': ';
-	switch (typeof x){
-		case 'string':s+='"'+x+'"';break;
-		case 'number':s+=x;break;
-		case 'boolean':s+=x?'true':'false';break;
-		case 'object':for(var p in x){s+='\n  ';for(var i=0;i<level;i++)s+='  ';s+=p+': '+dump2(x[p],level+1);}break;
-	}
-	return s;
-}
-function dump(x){alert(dump2(x,0));}
+function dump(x){console.log(x);}
