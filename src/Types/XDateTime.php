@@ -30,7 +30,7 @@ class XDateTime extends XValue implements Serializable {
 	public function GetTime() { return new XTime($this->timestamp); }
 	public function AsDate() { return new XDate($this->timestamp); }
 	public function AsTime() { return new XTime($this->timestamp); }
-	public function AsInt()  { return $this->timestamp; }
+	public function AsInt()  { return intval($this->timestamp); }
 
 	public function IsDate(){ return $this->Format('His') === '000000'; }
 
