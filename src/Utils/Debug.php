@@ -130,6 +130,7 @@ class Debug {
 		if ($value instanceof XDate) return '{XDate:'.$value->Format('Y-m-d').'}';
 		if ($value instanceof XTime) return '{XTime:'.$value->Format('H:i:s').'}';
 		if ($value instanceof XDateTime) return '{XDateTime:'.$value->Format('Y-m-d H:i:s').'}';
+		if ($value instanceof XTimeSpan) return '{XTimeSpan:'.$value->AsInt().'|'.Language::FormatTimeSpan($value,true,true).'}';
 		if ($value instanceof XList) {
 			$value->Evaluate();
 			$r = '{XList:'.count($value).':';
