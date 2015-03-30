@@ -6,6 +6,7 @@ class XTimeSpan extends XValue implements Serializable {
 	public static function Make($days,$hours,$minutes,$seconds=0,$milliseconds=0,$sign=1){
 		return new XTimeSpan($sign * ($days*self::MILLISECONDS_IN_DAY + $hours*self::MILLISECONDS_IN_HOUR + $minutes * self::MILLISECONDS_IN_MINUTE + $seconds * self::MILLISECONDS_IN_SECOND + $milliseconds));
 	}
+	public function VarExport() { return '(new '.get_called_class().'('.$this->value.'))'; }
 	public function __construct($total_milliseconds=0){
 		$this->value = $total_milliseconds;
 	}

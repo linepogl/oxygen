@@ -388,6 +388,18 @@ class Database {
 		return $r;
 	}
 
+	public static function ExecuteTableOf($types=array(),$sql){ return self::ExecuteTableOfX($types,$sql,array_slice(func_get_args(),2)); }
+	public static function ExecuteTableOfX($types,$sql,$params=array()){
+		$dr = self::ExecuteX($sql,$params);
+		$r = array();
+		while ($dr->Read()) {
+			$l = array();
+			foreach ($types as $i => $type) $l[] = $dr->Get($i)->CastTo($type);
+			$r[] = $l;
+		}
+		$dr->Close();
+		return $r;
+	}
 
 
 	/**
@@ -993,6 +1005,26 @@ class Database {
 	public static function ExecuteDropPrimaryKey($tablename){
 		self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP PRIMARY KEY');
 	}
+
+
+
+	public static function ExecuteMetaForeignKeys_Oracle($tablename) {
+		$r = array();
+		$dr = Database::Execute('SELECT b.COLUMN_NAME F,c.TABLE_NAME TT,c.COLUMN_NAME FF FROM ALL_CONSTRAINTS a,ALL_CONS_COLUMNS b,ALL_CONS_COLUMNS c WHERE a.CONSTRAINT_TYPE=? AND b.TABLE_NAME=? AND a.CONSTRAINT_NAME=b.CONSTRAINT_NAME and a.R_CONSTRAINT_NAME=c.CONSTRAINT_NAME','R',$tablename);
+		while($dr->Read())
+			$r[] = array('F'=>$dr['F']->AsString(),'TT'=>$dr['TT']->AsString(),'FF'=>$dr['FF']->AsString());
+		$dr->Close();
+		return $r;
+	}
+	public static function ExecuteMetaInverseForeignKeys_Oracle($tablename) {
+		$r = array();
+		$dr = Database::Execute('SELECT c.COLUMN_NAME F,b.TABLE_NAME TT,b.COLUMN_NAME FF FROM ALL_CONSTRAINTS a,ALL_CONS_COLUMNS b,ALL_CONS_COLUMNS c WHERE a.CONSTRAINT_TYPE=? AND c.TABLE_NAME=? AND a.CONSTRAINT_NAME=b.CONSTRAINT_NAME and a.R_CONSTRAINT_NAME=c.CONSTRAINT_NAME','R',$tablename);
+		while($dr->Read())
+			$r[] = array('F'=>$dr['F']->AsString(),'TT'=>$dr['TT']->AsString(),'FF'=>$dr['FF']->AsString());
+		$dr->Close();
+		return $r;
+	}
+
 
 
 
