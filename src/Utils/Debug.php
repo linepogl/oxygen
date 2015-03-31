@@ -75,8 +75,13 @@ class Debug {
  		self::$entries[] = $e;
 		if (self::$immediate){
 			while(ob_get_level()!=0) ob_end_clean();
-			echo self::GetEntryAsHtml();
-			echo "<script>window.scrollBy(0,50);</script>";
+			if (CLI) {
+				echo self::GetEntryAsText();
+			}
+			else {
+				echo self::GetEntryAsHtml();
+				echo "<script>window.scrollBy(0,50);</script>";
+			}
 			flush();
 			ob_start();
 		}

@@ -99,7 +99,7 @@ class Database {
 
 	private static function RequireConnection(){
 		if (is_null(self::$cn)){
-			if (is_null(self::$cx)) throw new ApplicationException(oxy::txtMsgNoDatabaseConnectionSpecified());
+			if (is_null(self::$cx)) throw new Exception('No database connection specified.');
 			try{
 				switch (self::$cx->type){
 					case self::MYSQL:
@@ -482,7 +482,7 @@ class Database {
 		catch (Exception $ex){
 			$r = true;
 		}
-		if ($r) self::WriteToPatchingSystem('<b>Installing module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
+		if ($r) self::WriteToPatchingSystem('Installing module {'.self::$patching_system_name.'} in database '.Database::GetSchema().'@'.Database::GetServer().'.');
 		return $r;
 	}
 	public static function WriteToPatchingSystem($message) {
@@ -498,7 +498,7 @@ class Database {
 	public static function BeginPatch($patcher,$patch,$description=null){
 		if (!self::HasPatch($patcher,$patch)) {
 			if (!self::IsPatchingSystemDirty()){
-				self::WriteToPatchingSystem('<b>Upgrading module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
+				self::WriteToPatchingSystem('Upgrading module {'.self::$patching_system_name.'} in database '.Database::GetSchema().'@'.Database::GetServer().'.');
 			}
 			self::WriteToPatchingSystem('Applying patch {'.$patcher.':'.$patch.'}'.($description===null?'':': '.$description).'...');
 			self::$patching_system_open_patcher = $patcher;
