@@ -56,8 +56,11 @@ class Fs {
 	}
 
 	public static function Unlink($path) {
-		if (file_exists($path)) {
-			if (is_dir($path) && !is_link($path)) {
+		if (is_link($path)) {
+			unlink($path);
+		}
+		elseif (file_exists($path)) {
+			if (is_dir($path)) {
 				$messages = array();
 				$dh = opendir($path);
 				if ($dh !== false) {
