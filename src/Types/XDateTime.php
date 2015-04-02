@@ -5,6 +5,7 @@ class XDateTime extends XValue implements Serializable {
 	public static function Make($year,$month,$day,$hours=0,$minutes=0,$seconds=0){
 		return new static(mktime($hours,$minutes,$seconds,$month,$day,$year));
 	}
+	public function VarExport() { return '(new '.get_called_class().'('.$this->timestamp.'))'; }
 	public function __construct($timestamp = null){
 		if ($timestamp instanceof DateTime) $timestamp = $timestamp->getTimestamp();
 		$this->timestamp = is_null($timestamp) ? microtime(true) : $timestamp;
@@ -30,7 +31,7 @@ class XDateTime extends XValue implements Serializable {
 	public function GetTime() { return new XTime($this->timestamp); }
 	public function AsDate() { return new XDate($this->timestamp); }
 	public function AsTime() { return new XTime($this->timestamp); }
-	public function AsInt()  { return $this->timestamp; }
+	public function AsInt()  { return intval($this->timestamp); }
 
 	public function IsDate(){ return $this->Format('His') === '000000'; }
 

@@ -513,7 +513,7 @@ class HybridScope extends Scope {
 	/** @var HddScope */ private $hdd_scope;
 	/** @var MemcachedScope */ private $memcached_scope;
 
-	protected function __construct( HddScope $hdd_scope , ApcScope $apc_scope , MemcachedScope $memcached_scope ){
+	public function __construct( HddScope $hdd_scope , ApcScope $apc_scope , MemcachedScope $memcached_scope ){
 		parent::__construct($hdd_scope->prefix);
 		$this->HARD = $hdd_scope;
 		$this->hdd_scope = $hdd_scope;
@@ -581,65 +581,65 @@ class HybridScope extends Scope {
 
 class ApplicationApcScope extends ApcScope  {
 	private $q;
-	public function __construct(){ parent::__construct('app'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . ']'; }
+	public function __construct(){ parent::__construct('app'); $this->q = $this->prefix . '[' . self::$base . ']'; }
 	protected function Hash($name){ return $this->q.$name; }
 }
 class ApplicationMemcachedScope extends MemcachedScope  {
 	private $q;
-	public function __construct(){ parent::__construct('app'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base . ']'; }
+	public function __construct(){ parent::__construct('app'); $this->q = $this->prefix . '[' . self::$base . ']'; }
 	protected function Hash($name){ return $this->q.$name; }
 }
 class ApplicationHddScope extends HddScope  {
 	private $q;
-	public function __construct(){ parent::__construct('app'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '_'; }
+	public function __construct(){ parent::__construct('app'); $this->q = $this->prefix . '_'; }
 	protected function Hash($name){ return $this->q.Oxygen::Hash32(self::$base.$name); }
 }
 
 class DatabaseApcScope extends ApcScope  {
 	private $q;
-	public function __construct(){ parent::__construct('dat'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '['; }
+	public function __construct(){ parent::__construct('dat'); $this->q = $this->prefix . '['; }
 	protected function Hash($name){ return $this->q.Database::GetServer().'/'.Database::GetSchema().']'.$name; }
 }
 class DatabaseMemcachedScope extends MemcachedScope  {
 	private $q;
-	public function __construct(){ parent::__construct('dat'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '['; }
+	public function __construct(){ parent::__construct('dat'); $this->q = $this->prefix . '['; }
 	protected function Hash($name){ return $this->q.Database::GetServer().'/'.Database::GetSchema().']'.$name; }
 }
 class DatabaseHddScope extends HddScope  {
 	private $q;
-	public function __construct(){ parent::__construct('dat'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '_'; }
+	public function __construct(){ parent::__construct('dat'); $this->q = $this->prefix . '_'; }
 	protected function Hash($name){ return $this->q.Oxygen::Hash32($name.Database::GetServer().Database::GetSchema()); }
 }
 
 class SessionApcScope extends ApcScope {
 	private $q;
-	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base; }
+	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . '[' . self::$base; }
 	protected function Hash($name){ return $this->q.Oxygen::GetSessionHash().']'.$name; }
 }
 class SessionMemcachedScope extends MemcachedScope {
 	private $q;
-	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base; }
+	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . '[' . self::$base; }
 	protected function Hash($name){ return $this->q.Oxygen::GetSessionHash().']'.$name; }
 }
 class SessionHddScope extends HddScope {
 	private $q;
-	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '_'; }
+	public function __construct(){ parent::__construct('ses'); $this->q = $this->prefix . '_'; }
 	protected function Hash($name){ return $this->q.Oxygen::Hash32(self::$base.$name.Oxygen::GetSessionHash()); }
 }
 
 class WindowApcScope extends LinkedListApcScope {
 	private $q;
-	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base; }
+	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . '[' . self::$base; }
 	protected function Hash($name){ return $this->q.Oxygen::GetWindowHash().']'.$name; }
 }
 class WindowMemcachedScope extends LinkedListMemcachedScope {
 	private $q;
-	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '[' . self::$base; }
+	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . '[' . self::$base; }
 	protected function Hash($name){ return $this->q.Oxygen::GetWindowHash().']'.$name; }
 }
 class WindowHddScope extends LinkedListHddScope {
 	private $q;
-	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . (IS_IGBINARY_AVAILABLE?'+ig':'') . '_'; }
+	public function __construct(){ parent::__construct('win'); $this->q = $this->prefix . '_'; }
 	protected function Hash($name){ return $this->q.Oxygen::Hash32(self::$base.$name.Oxygen::GetWindowHash() ); }
 }
 

@@ -76,8 +76,11 @@ class Oxygen {
 
 		// set the current language
 		$lang = '';
-		if (count(self::$langs)==0) self::$langs[] = 'en';
-		if (count(self::$langs)==1) {
+		if (count(self::$langs)==0) {
+			$lang = 'en';
+			self::$langs[] = $lang;
+		}
+		elseif (count(self::$langs)==1) {
 			$lang = self::$langs[0];
 		}
 		else {
@@ -128,7 +131,7 @@ class Oxygen {
 		});
 		Database::Upgrade(false,$logger);
 		if (!$logger->IsEmpty()){
-			echo '<br/><pre>Please refresh.</pre>';
+			if (!CLI) echo '<br/><pre>Please refresh.</pre>';
 			die;
 		}
 
@@ -315,7 +318,7 @@ class Oxygen {
 	//
 	public static $langs = array();
 	public static $default_langs = array();
-	public static $lang = null;
+	public static $lang = 'en';
 	public static $lang_auto_selection = false;
 	public static function AddLang($lang,$default_lang=null) { if (!in_array($lang,self::$langs,true)) { self::$langs[] = $lang; self::$default_langs[$lang] = $default_lang; if (count(self::$langs)==1) self::$lang = $lang; } }
 	public static function SetLang($lang) { if (Oxygen::HasLang($lang)) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Language::GetLocale()); } }
@@ -356,6 +359,7 @@ class Oxygen {
 	}
 	public static function AddHttpHeader($value){ self::$http_headers[] = $value; }
 	public static function SendHttpHeaders(){
+		if (CLI) return;
 		if (self::$http_headers_sent) return;
 		foreach (self::$http_headers as $h)
 			header($h);
@@ -771,14 +775,14 @@ class Oxygen {
 		exit();
 	}
 	public static function IsLocalhost(){
-		return $_SERVER["SERVER_NAME"] == 'localhost';
+		return @$_SERVER["SERVER_NAME"] == 'localhost';
 	}
 	public static function IsHttps(){
 		return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 	}
 	public static function GetApplicationName(){
-		$r = $_SERVER["SERVER_NAME"];
-		$s = $_SERVER['SCRIPT_NAME'];
+		$r = @$_SERVER["SERVER_NAME"];
+		$s = @$_SERVER['SCRIPT_NAME'];
 		$r .= substr($s,0,strrpos($s,'/'));
 		return $r;
 	}
@@ -1219,12 +1223,11 @@ class Oxygen {
 		$r['ORM caching'] = Oxygen::IsItemCacheEnabled() ? 'Enabled' : 'Disabled';
 		$r['APC available'] = IS_APC_AVAILABLE ? 'Yes' : 'No';
 		$r['MEMCACHED available'] = IS_MEMCACHED_AVAILABLE ? 'Yes' : 'No';
-		$r['IGBINARY available'] = IS_IGBINARY_AVAILABLE ? 'Yes' : 'No';
 
-		$r['Application scoping'] = Scope::$APPLICATION->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'');
-		$r['Database scoping'] = Scope::$DATABASE->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'');
-		$r['Session scoping'] = Scope::$SESSION->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'') . ' - ' . Oxygen::GetSessionHash() . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scoping is disabled ***');
-		$r['Window scoping'] = Scope::$WINDOW->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'') . ' - ' . Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scoping is disabled ***');
+		$r['Application scoping'] = Scope::$APPLICATION->GetModeTranslated();
+		$r['Database scoping'] = Scope::$DATABASE->GetModeTranslated() ;
+		$r['Session scoping'] = Scope::$SESSION->GetModeTranslated() . ' - ' . Oxygen::GetSessionHash() . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scoping is disabled ***');
+		$r['Window scoping'] = Scope::$WINDOW->GetModeTranslated() . ' - ' . Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scoping is disabled ***');
 
 		$rr[] = $r;
 

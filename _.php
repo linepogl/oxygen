@@ -2,22 +2,21 @@
 
 $f = getcwd(); while(!is_dir("$f/oxy")) { $f.='/..'; if (!is_dir($f)) die("Cannot find directory oxy."); }
 define('__ROOT__',realpath($f));
-//define('__ROOT__',substr(__FILE__,0,-10));  // 10==strlen('/oxy/_.php')
 define('__BASE__',substr($_SERVER['SCRIPT_NAME'],0,1-(strlen(realpath($_SERVER['SCRIPT_FILENAME']))-strlen(__ROOT__))));
 define('__OFFSET__',substr($_SERVER['SCRIPT_NAME'],strlen(__BASE__),strrpos($_SERVER['SCRIPT_NAME'],'/')-strlen(__BASE__)+1));
 
 chdir(__ROOT__);
 
-
+define('CLI',php_sapi_name() === 'cli');
 define('DEBUG',array_key_exists('debug',$_GET));
 define('PROFILE',array_key_exists('profile',$_GET));
 define('RESET',array_key_exists('reset',$_GET) ? ($_GET['reset']==='hard'?'hard':'soft') : null);
 define('LOCALHOST',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
 
-//define('IS_IGBINARY_AVAILABLE',function_exists('igbinary_serialize'));
-define('IS_IGBINARY_AVAILABLE',false);
 define('IS_APC_AVAILABLE',function_exists('apc_exists'));
 define('IS_MEMCACHED_AVAILABLE',class_exists('Memcached'));
+
+
 
 
 if (PROFILE) { require('oxy/src/Utils/Profiler.php'); Profiler::Start(); }

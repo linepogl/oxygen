@@ -75,8 +75,13 @@ class Debug {
  		self::$entries[] = $e;
 		if (self::$immediate){
 			while(ob_get_level()!=0) ob_end_clean();
-			echo self::GetEntryAsHtml();
-			echo "<script>window.scrollBy(0,50);</script>";
+			if (CLI) {
+				echo self::GetEntryAsText();
+			}
+			else {
+				echo self::GetEntryAsHtml();
+				echo "<script>window.scrollBy(0,50);</script>";
+			}
 			flush();
 			ob_start();
 		}
@@ -130,6 +135,7 @@ class Debug {
 		if ($value instanceof XDate) return '{XDate:'.$value->Format('Y-m-d').'}';
 		if ($value instanceof XTime) return '{XTime:'.$value->Format('H:i:s').'}';
 		if ($value instanceof XDateTime) return '{XDateTime:'.$value->Format('Y-m-d H:i:s').'}';
+		if ($value instanceof XTimeSpan) return '{XTimeSpan:'.$value->AsInt().'|'.Language::FormatTimeSpan($value,true,true).'}';
 		if ($value instanceof XList) {
 			$value->Evaluate();
 			$r = '{XList:'.count($value).':';
