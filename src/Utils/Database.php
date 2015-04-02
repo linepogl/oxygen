@@ -23,6 +23,7 @@ class DatabaseConnection {
 class Database {
 	const MYSQL = 'mysql';
 	const ORACLE = 'oracle';
+	const SQLSERVER = 'sqlserver';
 
 	/** @var DatabaseConnection|null */
 	private static $cx = null;

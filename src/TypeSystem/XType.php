@@ -225,6 +225,7 @@ abstract class XType implements _XType {
 			default:
 			case Database::MYSQL:   return '`'.str_replace(array( "`"  ,"/" ,"\\" ,"." ),array( "``" ,""  ,""   ,""  ),$string).'`';
 			case Database::ORACLE:  return '"'.str_replace('"','""',$string).'"';
+			case Database::SQLSERVER:  return '['.$string.']';
 		}
 	}
 
