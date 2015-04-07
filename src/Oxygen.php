@@ -206,46 +206,25 @@ class Oxygen {
 			if (Oxygen::IsActionModeRaw()) {
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				if ($ex instanceof SecurityException) {
-					Oxygen::SetResponseCode(403); // forbidden
-					$served_as = 'HTTP 403';
-				}
-				elseif ($ex instanceof PageNotFoundException) {
-					Oxygen::SetResponseCode(404); // not found
-					$served_as = 'HTTP 404';
-				}
-				elseif ($ex instanceof AccessHaltedException) {
-					Oxygen::SetResponseCode(503); // unavailable
-					$served_as = 'HTTP 503';
-				}
-				elseif ($ex instanceof ApplicationException) {
-					Oxygen::SetResponseCode(405); // not allowed
-					$served_as = 'HTTP 405';
-				}
-				else {
-					Oxygen::SetResponseCode(500); // internal server error
-					$served_as = 'HTTP 500';
-				}
+				if     ($ex instanceof SecurityException)     { Oxygen::SetResponseCode(403); $served_as = 'HTTP 403'; } // forbidden
+				elseif ($ex instanceof PageNotFoundException) { Oxygen::SetResponseCode(404); $served_as = 'HTTP 404'; } // not found
+				elseif ($ex instanceof AccessHaltedException) { Oxygen::SetResponseCode(503); $served_as = 'HTTP 503'; } // unavailable
+				elseif ($ex instanceof ApplicationException)  { Oxygen::SetResponseCode(405); $served_as = 'HTTP 405'; } // not allowed
+				else                                          { Oxygen::SetResponseCode(500); $served_as = 'HTTP 500'; } // internal server error
 				Oxygen::SendHttpHeaders();
-				if ($ex instanceof SecurityException) {
-					$msg = $ex->getMessage();
-					echo empty($msg) ? oxy::txtMsgAccessDenied() : $ex->getMessage();
-				}
-				if ($ex instanceof PageNotFoundException) {
-					$msg = $ex->getMessage();
-					echo empty($msg) ? oxy::txtMsgPageNotFound() : $ex->getMessage();
-				}
-				elseif ($ex instanceof ApplicationException)
-					echo $ex->getMessage();
-				elseif (!Oxygen::IsDevelopment())
-					echo oxy::txtMsgAnErrorOccurredAndTeamNotified();
-				else
-					echo '['.oxy::txtMsgDevelopmentEnvironment().']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
+				if     ($ex instanceof SecurityException)     echo empty($ex->getMessage()) ? oxy::txtMsgAccessDenied() : $ex->getMessage();
+				elseif ($ex instanceof PageNotFoundException) echo empty($ex->getMessage()) ? oxy::txtMsgPageNotFound() : $ex->getMessage();
+				elseif ($ex instanceof AccessHaltedException) echo empty($ex->getMessage()) ? oxy::txtMsgAccessHalted() : $ex->getMessage();
+				elseif ($ex instanceof ApplicationException)  echo $ex->getMessage();
+				elseif (!Oxygen::IsDevelopment())             echo oxy::txtMsgAnErrorOccurredAndTeamNotified();
+				else                                          echo '['.oxy::txtMsgDevelopmentEnvironment().']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
 
-				if ($ex instanceof ApplicationException || Oxygen::IsDevelopment())
-					Debug::RecordExceptionServed($ex,'Global Exception Handler ('.$served_as.')');
-				else
-					Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler ('.$served_as.')');
+				if (!($ex instanceof ApplicationException)) {
+					if (Oxygen::IsDevelopment())
+						Debug::RecordExceptionServed($ex,'Global Exception Handler ('.$served_as.')');
+					else
+						Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler ('.$served_as.')');
+				}
 			}
 			else {
 				$cli = php_sapi_name() === 'cli';
@@ -275,7 +254,7 @@ class Oxygen {
 					echo ".oxygen-error-page a { color:#f0f0f0; text-decoration:underline; }";
 					echo ".oxygen-error-page a:hover { color:#ffffff; text-decoration:underline; }";
 					echo Css::END;
-					echo '<div class="oxygen-error-page" style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background: #739baa; background:linear-gradient(to bottom, #a1b9b6 0%,#739baa 100%); background:url(oxy/img/bg.jpg) 50% 50% no-repeat; background-size:100% 100%; padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
+					echo '<div class="oxygen-error-page" style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background:#739baa url('.__BASE__.'oxy/img/bg.jpg) 50% 50% no-repeat; background-size:100% 100%;padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
 
 					echo '<div style="color:#ffffff;font:bold 50px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:150px;width:80%;letter-spacing:-2px;">'.oxy::txtMsgCannotDisplayWebPage().'</div>';
 

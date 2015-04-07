@@ -682,11 +682,11 @@ class Database {
 		$a = func_get_args();
 		$z = func_num_args();
 		$sql = 'INSERT INTO '.new SqlIden($tablename_dst).' (';
-		for ($i = 2; $i < $z; $i+=2)
-			$sql .= ($i>2?',':'').new SqlIden($a[$i]);
-		$sql.= ') SELECT ';
 		for ($i = 3; $i < $z; $i+=2)
 			$sql .= ($i>3?',':'').new SqlIden($a[$i]);
+		$sql.= ') SELECT ';
+		for ($i = 4; $i < $z; $i+=2)
+			$sql .= ($i>4?',':'').new SqlIden($a[$i]);
 		$sql.= ' FROM '.new SqlIden($tablename_src);
 		if (!is_null($where)) $sql .=' WHERE '.$where;
 		self::Execute($sql);
