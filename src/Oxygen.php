@@ -116,12 +116,16 @@ class Oxygen {
 			self::SetUrlPin('action',self::$actionname);
 		}
 
-		if (self::IsHalted()) {
+		if (array_key_exists('oxy_halt',$_GET)) {
+			Oxygen::HaltWeb( $_GET['oxy_halt']!=='false' && $_GET['oxy_halt']!=='off' );
+		}
+		elseif (self::IsHalted()) {
 			throw new AccessHaltedException();
 		}
-		if (RESET) {
+
+		if (array_key_exists('oxy_reset',$_GET)) {
 			Scope::ResetAllWeak();
-			if (RESET === 'hard') {
+			if ($_GET['oxy_reset']==='hard') {
 				Scope::ResetAllHard();
 				Oxygen::ClearTempFolders();
 			}
@@ -646,8 +650,20 @@ class Oxygen {
 	}
 
 	public static function IsHalted() { return !CLI && Scope::$DATABASE['Oxygen::HaltWeb']; }
-	public static function HaltWeb() { Scope::$DATABASE->HARD['Oxygen::HaltWeb'] = true; sleep(5); }
-	public static function FreeWeb() { Scope::$DATABASE->HARD['Oxygen::HaltWeb'] = null; }
+	public static function HaltWeb($v=true) {
+		$was_halted = Scope::$DATABASE['Oxygen::HaltWeb'];
+		if ($was_halted) {
+			if (!$v) {
+				Scope::$DATABASE->HARD['Oxygen::HaltWeb'] = null;
+			}
+		}
+		else {
+			if ($v) {
+				Scope::$DATABASE->HARD['Oxygen::HaltWeb'] = true;
+				sleep(5);
+			}
+		}
+	}
 
 
 

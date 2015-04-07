@@ -63,6 +63,7 @@ class Database {
 	public static function Upgrade($force=false,MultiMessage $logger = null){
 		if (self::$upgrade_running) return;
 		if (is_null(self::$cx)) return;
+		if (array_key_exists('oxy_upgrade',$_GET)) { $force = true; }
 		if (!$force && !self::$cx->is_managed) return;
 		self::$upgrade_running = true;
 
@@ -228,7 +229,6 @@ class Database {
 	public static function ConnectLazilyManaged($server,$schema,$username,$password,$type=self::MYSQL){
 		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
 		$c->is_managed = true;
-		$c->is_managed_slave = true;
 		self::PushConnection();
 		self::SetConnection( $c );
 		self::ResetCaches();

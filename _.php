@@ -10,7 +10,6 @@ chdir(__ROOT__);
 define('CLI',php_sapi_name() === 'cli');
 define('DEBUG',array_key_exists('debug',$_GET));
 define('PROFILE',array_key_exists('profile',$_GET));
-define('RESET',array_key_exists('reset',$_GET) ? ($_GET['reset']==='hard'?'hard':'soft') : null);
 define('LOCALHOST',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
 
 define('IS_APC_AVAILABLE',function_exists('apc_exists'));
