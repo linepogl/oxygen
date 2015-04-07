@@ -33,8 +33,8 @@ class Oxygen {
 			self::$session_hash = Oxygen::HashRandom();
 		}
 
-		if (DEBUG) { if ($_GET['debug']=='pin') Oxygen::SetUrlPin('debug','pin'); }
-		if (PROFILE) { if ($_GET['profile']=='pin') Oxygen::SetUrlPin('profile','pin'); }
+		if (DEBUG) { if ($_GET['oxy_debug']=='pin') Oxygen::SetUrlPin('oxy_debug','pin'); }
+		if (PROFILE) { if ($_GET['oxy_profile']=='pin') Oxygen::SetUrlPin('oxy_profile','pin'); }
 		Oxygen::EnsureTempFolder();
 		Oxygen::EnsureSharedTempFolder();
 		Oxygen::ClearTempFoldersFromOldFiles();

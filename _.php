@@ -8,8 +8,8 @@ define('__OFFSET__',substr($_SERVER['SCRIPT_NAME'],strlen(__BASE__),strrpos($_SE
 chdir(__ROOT__);
 
 define('CLI',php_sapi_name() === 'cli');
-define('DEBUG',array_key_exists('debug',$_GET));
-define('PROFILE',array_key_exists('profile',$_GET));
+define('DEBUG',array_key_exists('oxy_debug',$_GET));
+define('PROFILE',array_key_exists('oxy_profile',$_GET));
 define('LOCALHOST',!isset($_SERVER["SERVER_NAME"]) || $_SERVER["SERVER_NAME"] == 'localhost');
 
 define('IS_APC_AVAILABLE',function_exists('apc_exists'));
