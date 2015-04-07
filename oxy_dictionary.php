@@ -1509,6 +1509,10 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,ru=>"Объект не найден."
 		,zh=>"未找到对象。"
 		]);}
+	public static function txtMsgAccessHalted(){ return Lemma::txt([__FUNCTION__
+		,en=>"We are upgrading the server. Please wait a few minutes..."
+		,fr=>"Une mise à jour est en train d'exécuter sur le serveur. Veuillez attendez quelques instants..."
+	]);}
 	public static function txtMsgAccessDenied(){ return Lemma::txt([__FUNCTION__
 		,en=>"Access denied."
 		,fr=>"Accès refusé."

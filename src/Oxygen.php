@@ -116,6 +116,9 @@ class Oxygen {
 			self::SetUrlPin('action',self::$actionname);
 		}
 
+		if (self::IsHalted()) {
+			throw new AccessHaltedException();
+		}
 		if (RESET) {
 			Scope::ResetAllWeak();
 			if (RESET === 'hard') {
@@ -207,6 +210,10 @@ class Oxygen {
 					Oxygen::SetResponseCode(404); // not found
 					$served_as = 'HTTP 404';
 				}
+				elseif ($ex instanceof AccessHaltedException) {
+					Oxygen::SetResponseCode(503); // unavailable
+					$served_as = 'HTTP 503';
+				}
 				elseif ($ex instanceof ApplicationException) {
 					Oxygen::SetResponseCode(405); // not allowed
 					$served_as = 'HTTP 405';
@@ -264,7 +271,7 @@ class Oxygen {
 					echo ".oxygen-error-page a { color:#f0f0f0; text-decoration:underline; }";
 					echo ".oxygen-error-page a:hover { color:#ffffff; text-decoration:underline; }";
 					echo Css::END;
-					echo '<div class="oxygen-error-page" style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background: #739baa; background:linear-gradient(to bottom, #a1b9b6 0%,#739baa 100%);padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
+					echo '<div class="oxygen-error-page" style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background: #739baa; background:linear-gradient(to bottom, #a1b9b6 0%,#739baa 100%); background:url(oxy/img/bg.jpg) 50% 50% no-repeat; background-size:100% 100%; padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
 
 					echo '<div style="color:#ffffff;font:bold 50px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:150px;width:80%;letter-spacing:-2px;">'.oxy::txtMsgCannotDisplayWebPage().'</div>';
 
@@ -638,6 +645,9 @@ class Oxygen {
 		Scope::ResetAllWeak();
 	}
 
+	public static function IsHalted() { return !CLI && Scope::$DATABASE['Oxygen::HaltWeb']; }
+	public static function HaltWeb() { Scope::$DATABASE->HARD['Oxygen::HaltWeb'] = true; sleep(5); }
+	public static function FreeWeb() { Scope::$DATABASE->HARD['Oxygen::HaltWeb'] = null; }
 
 
 
@@ -845,6 +855,9 @@ class Oxygen {
 	public static function SetDatabaseManaged($server,$schema,$username,$password,$type=Database::MYSQL) {
 		Database::ConnectLazilyManaged($server,$schema,$username,$password,$type);
 	}
+	public static function SetDatabaseManagedSlave($server,$schema,$username,$password,$type=Database::MYSQL,$waiting_in_seconds=0) {
+		Database::ConnectLazilyManagedSlave($server,$schema,$username,$password,$type,$waiting_in_seconds);
+	}
 
 	public static function SetMemcachedServer( $server ){
 		Scope::SetMemcachedServer( $server );
@@ -873,6 +886,7 @@ class Oxygen {
 		Scope::$WINDOW->SetMode($mode);
 		Oxygen::SetWindowScopingEnabled( $enabled );
 	}
+
 
 
 

@@ -9,13 +9,14 @@ class DatabaseConnection {
 	public $password = null;
 	public $type = null;
 	public $is_managed = false;
-	public function __construct($server,$schema,$username,$password,$type,$is_managed){
+	public $is_managed_slave = false;
+	public $managed_slave_wait_in_seconds = 0;
+	public function __construct($server,$schema,$username,$password,$type){
 		$this->server = $server;
 		$this->schema = $schema;
 		$this->username = $username;
 		$this->password = $password;
 		$this->type = $type;
-		$this->is_managed = $is_managed;
 	}
 }
 
@@ -68,6 +69,7 @@ class Database {
 		$needs_refresh = false;
 		if ($force || self::NeedsUpgrade()) {
 			Database::SetPatchingSystemLogger($logger);
+			Database::SetPatchingSystemSlave(!$force && self::$cx->is_managed_slave);
 			$lock_filename = Oxygen::GetSharedTempFolder(true) .'/database.upgrade.lock';
 			$f = fopen($lock_filename,'w');
 			if (flock($f,LOCK_EX)){
@@ -76,16 +78,39 @@ class Database {
 					Database::RequireConnection();
 					Database::ClearPatchingSystem();
 					foreach (Oxygen::GetDatabaseUpgradeFiles() as $filename){
-						require($filename);
-						$key = 'Database::upgrade_time_of_'. $filename;
-						Scope::$DATABASE[$key] = time();
+						if (!Database::IsPatchingSystemSlave()) {
+							require($filename);
+							$key = 'Database::upgrade_time_of_'.$filename;
+							Scope::$DATABASE[$key] = time();
+						}
+						else {
+							try {
+								require($filename);
+								$key = 'Database::upgrade_time_of_'. $filename;
+								Scope::$DATABASE[$key] = time();
+							}
+							catch (Exception $ex) {
+								if (self::$cx->managed_slave_wait_in_seconds > 0) {
+									sleep(self::$cx->managed_slave_wait_in_seconds);
+									try {
+										require($filename);
+										$key = 'Database::upgrade_time_of_'. $filename;
+										Scope::$DATABASE[$key] = time();
+									}
+									catch (Exception $ex) {
+										throw new AccessHaltedException();
+									}
+								}
+								else throw new AccessHaltedException();
+							}
+						}
 					}
 					if (Database::IsPatchingSystemDirty()) $needs_refresh = true;
 				}
-                // try { unlink($lock_filename); } catch(Exception $ex){}
-                flock($f,LOCK_UN);
-            }
-            fclose($f);
+        // try { unlink($lock_filename); } catch(Exception $ex){}
+        flock($f,LOCK_UN);
+      }
+      fclose($f);
 		}
 		if ($needs_refresh){
 			self::ResetCaches();
@@ -139,9 +164,10 @@ class Database {
 	 * @param string $type int Possible values Database::MYSQL or Database::ORACLE
 	 * @return void
 	 */
-	public static function ConnectManaged($server,$schema,$username,$password,$type=self::MYSQL){
-		while(self::IsConnected()) self::Disconnect();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,true) );
+	public static function Connect($server,$schema,$username,$password,$type=self::MYSQL){
+		self::PushConnection();
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		self::SetConnection( $c );
 		try {
 			self::RequireConnection();
 		}
@@ -151,7 +177,6 @@ class Database {
 		}
 		self::ResetCaches();
 	}
-
 	/**
 	 * @api Since 1.3
 	 * @param $server string
@@ -161,9 +186,27 @@ class Database {
 	 * @param string $type int Possible values Database::MYSQL or Database::ORACLE
 	 * @return void
 	 */
-	public static function Connect($server,$schema,$username,$password,$type=self::MYSQL){
-		self::PushConnection();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
+	public static function ConnectManaged($server,$schema,$username,$password,$type=self::MYSQL){
+		while(self::IsConnected()) self::Disconnect();
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		$c->is_managed = true;
+		self::SetConnection( $c );
+		try {
+			self::RequireConnection();
+		}
+		catch (Exception $ex){
+			self::PopConnection();
+			throw $ex;
+		}
+		self::ResetCaches();
+	}
+	public static function ConnectManagedSlave($server,$schema,$username,$password,$type=self::MYSQL,$waiting_in_seconds = 0){
+		while(self::IsConnected()) self::Disconnect();
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		$c->is_managed = true;
+		$c->is_managed_slave = true;
+		$c->managed_slave_wait_in_seconds = $waiting_in_seconds;
+		self::SetConnection( $c );
 		try {
 			self::RequireConnection();
 		}
@@ -174,16 +217,29 @@ class Database {
 		self::ResetCaches();
 	}
 
+
 	public static function ConnectLazily($server,$schema,$username,$password,$type=self::MYSQL){
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
 		self::PushConnection();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
+		self::SetConnection( $c );
 		self::ResetCaches();
 	}
 
 	public static function ConnectLazilyManaged($server,$schema,$username,$password,$type=self::MYSQL){
-		while(self::IsConnected()) self::Disconnect();
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		$c->is_managed = true;
+		$c->is_managed_slave = true;
 		self::PushConnection();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,true) );
+		self::SetConnection( $c );
+		self::ResetCaches();
+	}
+	public static function ConnectLazilyManagedSlave($server,$schema,$username,$password,$type=self::MYSQL,$waiting_in_seconds = 0){
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		$c->is_managed = true;
+		$c->is_managed_slave = true;
+		$c->managed_slave_wait_in_seconds = $waiting_in_seconds;
+		self::PushConnection();
+		self::SetConnection( $c );
 		self::ResetCaches();
 	}
 
@@ -439,7 +495,9 @@ class Database {
 	private static $patching_system_open_patcher = null;
 	private static $patching_system_open_patch = null;
 	private static $patching_system_is_dirty = false;
+	private static $patching_system_is_slave = false;
 	private static function SetPatchingSystemLogger(MultiMessage $logger = null){ self::$patching_system_logger = $logger; }
+	private static function SetPatchingSystemSlave($v = true){ self::$patching_system_is_slave = $v; }
 	public static function ClearPatchingSystem(){
 		self::$patching_system_name = null;
 		self::$patching_system_tablename = null;
@@ -451,6 +509,9 @@ class Database {
 	}
 	public static function IsPatchingSystemDirty(){
 		return self::$patching_system_is_dirty;
+	}
+	public static function IsPatchingSystemSlave(){
+		return self::$patching_system_is_slave;
 	}
 	public static function SetPatchingSystem($name,$tablename){
 		self::ClearPatchingSystem();
@@ -487,6 +548,7 @@ class Database {
 		return $r;
 	}
 	public static function WriteToPatchingSystem($message) {
+		if (self::$patching_system_is_slave) throw new AccessHaltedException();
 		self::$patching_system_is_dirty = true;
 		if (self::$patching_system_logger === null) self::$patching_system_logger = new MultiMessage();
 		if (!($message instanceof Message)) $message = new InfoMessage($message);
