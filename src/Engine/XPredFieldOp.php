@@ -78,30 +78,36 @@ class XPredFieldOp extends XPred {
 				return new SqlIden($this->field1) . ' NOT LIKE ?';
 
 			case self::OP_IN:
-				$a = $this->field2_or_value;
-				if ($a instanceof XList)
-					$a = $a->AsIDList();
-				elseif ($a instanceof Iterator)
-					$a = iterator_to_array($a,false);
-				elseif ($a instanceof IteratorAggregate)
-					$a = iterator_to_array($a,false);
-
-				if (!is_array($a)) return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
-				$r = ''; foreach (array_chunk($a,500) as $aa) $r .= ($r===''?'':' OR ') . new SqlIden($this->field1) . ' IN '. new Sql($aa);
-				return '('.$r.')';
+				return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
 
 			case self::OP_NOT_IN:
-				$a = $this->field2_or_value;
-				if ($a instanceof XList)
-					$a = $a->AsIDList();
-				elseif ($a instanceof Iterator)
-					$a = iterator_to_array($a,false);
-				elseif ($a instanceof IteratorAggregate)
-					$a = iterator_to_array($a,false);
+				return new SqlIden($this->field1) . ' NOT IN '. new Sql($this->field2_or_value);
 
-				if (!is_array($a)) return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
-				$r = ''; foreach (array_chunk($a,500) as $aa) $r .= ($r===''?'':' AND ') . new SqlIden($this->field1) . ' NOT IN '. new Sql($aa);
-				return '('.$r.')';
+//			case self::OP_IN:
+//				$a = $this->field2_or_value;
+//				if ($a instanceof XList)
+//					$a = $a->AsIDList();
+//				elseif ($a instanceof Iterator)
+//					$a = iterator_to_array($a,false);
+//				elseif ($a instanceof IteratorAggregate)
+//					$a = iterator_to_array($a,false);
+//
+//				if (!is_array($a)) return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
+//				$r = ''; foreach (array_chunk($a,500) as $aa) $r .= ($r===''?'':' OR ') . new SqlIden($this->field1) . ' IN '. new Sql($aa);
+//				return '('.$r.')';
+//
+//			case self::OP_NOT_IN:
+//				$a = $this->field2_or_value;
+//				if ($a instanceof XList)
+//					$a = $a->AsIDList();
+//				elseif ($a instanceof Iterator)
+//					$a = iterator_to_array($a,false);
+//				elseif ($a instanceof IteratorAggregate)
+//					$a = iterator_to_array($a,false);
+//
+//				if (!is_array($a)) return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
+//				$r = ''; foreach (array_chunk($a,500) as $aa) $r .= ($r===''?'':' AND ') . new SqlIden($this->field1) . ' NOT IN '. new Sql($aa);
+//				return '('.$r.')';
 
 		}
 		throw new InvalidArgumentException('Unsupported field comparison filter operator: ' . $this->op );
