@@ -85,12 +85,9 @@ class XPredFieldOp extends XPred {
 					$a = iterator_to_array($a,false);
 				elseif ($a instanceof IteratorAggregate)
 					$a = iterator_to_array($a,false);
-				elseif (!is_array($a))
-					return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
 
-				$r = '';
-				foreach (array_chunk($a,500) as $aa)
-					$r .= ($r===''?'':' OR ') . new SqlIden($this->field1) . ' IN '. new Sql($aa);
+				if (!is_array($a)) return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
+				$r = ''; foreach (array_chunk($a,500) as $aa) $r .= ($r===''?'':' OR ') . new SqlIden($this->field1) . ' IN '. new Sql($aa);
 				return '('.$r.')';
 
 			case self::OP_NOT_IN:
@@ -101,12 +98,9 @@ class XPredFieldOp extends XPred {
 					$a = iterator_to_array($a,false);
 				elseif ($a instanceof IteratorAggregate)
 					$a = iterator_to_array($a,false);
-				elseif (!is_array($a))
-					return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
 
-				$r = '';
-				foreach (array_chunk($a,500) as $aa)
-					$r .= ($r===''?'':' AND ') . new SqlIden($this->field1) . ' NOT IN '. new Sql($aa);
+				if (!is_array($a)) return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
+				$r = ''; foreach (array_chunk($a,500) as $aa) $r .= ($r===''?'':' AND ') . new SqlIden($this->field1) . ' NOT IN '. new Sql($aa);
 				return '('.$r.')';
 
 		}
