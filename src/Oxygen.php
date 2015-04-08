@@ -136,7 +136,7 @@ class Oxygen {
 			Debug::EnableImmediateFlushing();
 			Debug::Write($m->AsString());
 		});
-		Database::Upgrade(false,$logger);
+		Database::Upgrade( array_key_exists('oxy_upgrade',$_GET) ,$logger);
 		if (!$logger->IsEmpty()){
 			if (!CLI) echo '<br/><pre>Please refresh.</pre>';
 			die;

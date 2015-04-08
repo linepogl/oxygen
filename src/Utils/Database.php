@@ -63,7 +63,6 @@ class Database {
 	public static function Upgrade($force=false,MultiMessage $logger = null){
 		if (self::$upgrade_running) return;
 		if (is_null(self::$cx)) return;
-		if (array_key_exists('oxy_upgrade',$_GET)) { $force = true; }
 		if (!$force && !self::$cx->is_managed) return;
 		self::$upgrade_running = true;
 
