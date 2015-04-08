@@ -127,7 +127,7 @@ class Console {
 		/** @var $act ConsoleAction */
 		foreach (new ConsoleMenu() as $act){
 			if ($i++ == 0) continue;
-			echo '<a href="'.new Html($act->GetHref(array('debug'=>null,'profile'=>null))).'">';
+			echo '<a href="'.new Html($act->GetHref(array('oxy_debug'=>null,'oxy_profile'=>null))).'">';
 			$b = $act->GetBadgeText(); if (!empty($b)) echo '<div class="badge">'.$b.'</div>';
 			echo '<img src="'.$act->GetNormalTabIconSrc().'" />';
 			echo '<br/>';

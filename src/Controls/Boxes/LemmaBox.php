@@ -9,27 +9,41 @@ class LemmaBox extends Box {
 	private $langs = null;
 	public function WithLangs($value){ $this->langs = $value; return $this; }
 
+	private $default_lang = null;
+	public function WithDefaultLang($value){ $this->default_lang = $value; return $this; }
+
+	private $rows = 1;
+	public function WithRows($value){ $this->rows = $value; return $this; }
+
+	private $new_line_for_flags = false;
+	public function WithFlagsOnNewLine($value){ $this->new_line_for_flags = $value; return $this; }
+
 	public function Render(){
+		$default_lang = $this->default_lang === null ? Oxygen::$lang : $this->default_lang;
 		$langs = is_null($this->langs) ? Oxygen::$langs : $this->langs;
 
 		echo HiddenBox::Make($this->name,$this->value instanceof Lemma ? $this->value->Encode() : '');
-		echo '<table class="formPane" style="width:'.$this->width.'" cellspacing="0" cellpadding="0" border="0"><tr>';
-		echo '<td class="expand" class="formPane" style="border:0;border-right-width:1px;">';
+		echo '<table class="formPane" style="width:'.$this->width.';padding:0!important;" cellspacing="0" cellpadding="0" border="0"><tr>';
+		echo '<td class="expand" colspan="'.(count($langs)+1).'" class="formPane" style="border:0!important;padding:0!important;">';
 		foreach ($langs as $lang){
 			TextBox::Make($this->name.'_'.$lang,$this->value[$lang])
 				->WithWidth('100%')
 				->WithReadonly($this->readonly)
 				->WithOnChange("window.$this->name.OnChange();")
-				->WithCssStyle('border:0;'.($lang==Oxygen::$lang?'':'display:none;') )
+				->WithRows($this->rows)
+				->WithMode($this->mode)
+				->WithCssStyle('border:0!important;'.($lang===$default_lang?'':'display:none;') )
 				->Render();
 		}
 		echo '</td>';
 
+		if ($this->new_line_for_flags) echo '</tr><tr>';
+
 		foreach ($langs as $lang){
-			echo '<td class="nowrap">';
-			echo '<a id="'.$this->name.'_'.$lang.'_anchor" href="javascript:'.$this->name.'.ChangeLang('.new Js($lang).');" style="display:block;background:'.($lang==Oxygen::$lang?'#dddddd':'#f4f4f4').';">';
+			echo '<td class="nowrap" style="border:0!important;padding:0!important;">';
+			echo '<a id="'.$this->name.'_'.$lang.'_anchor" href="javascript:'.$this->name.'.ChangeLang('.new Js($lang).');" style="display:block;background:'.($lang===$default_lang?'#dddddd':'#f4f4f4').';">';
 			echo new Spacer(7,20);
-			echo '<img id="'.$this->name.'_'.$lang.'_flag" src="oxy/lng/'.$lang.($lang==Oxygen::$lang?'':'-').'.gif" />';
+			echo '<img id="'.$this->name.'_'.$lang.'_flag" src="oxy/lng/'.$lang.($lang===$default_lang?'':'-').'.gif" />';
 			echo new Spacer(3,20);
 			$ok = ''!=trim($this->value[$lang]);
 			echo '<span id="'.$this->name.'_'.$lang.'_check_suc"'.($ok?'':' style="display:none;"').'>'.oxy::icoSuccess()->WithSize(8).'</span>';
@@ -38,6 +52,7 @@ class LemmaBox extends Box {
 			echo '</a>';
 			echo '</td>';
 		}
+		if ($this->new_line_for_flags) echo '<td class="expand" style="border:0!important;padding:0!important;background:#f4f4f4;"></td>';
 
 		echo '</tr></table>';
 

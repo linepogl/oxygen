@@ -9,7 +9,7 @@ class XMetaField extends XValue {
 
 	private $name = null;  // will be auto-set on compile
 	public function GetName(){ return $this->name; }
-	public function SetName($value){ $this->name = $value; if (is_null($this->db_alias)) $this->db_alias = $value; if (is_null($this->xml_alias)) $this->xml_alias = $value; }
+	public function SetName($value){ $this->name = $value; if ($this->db_alias===null) $this->db_alias = $value; if ($this->xml_alias===null) $this->xml_alias = $value; }
 
 	/** @var XType */
 	private $type = null;  // will be auto-set on construct
@@ -17,7 +17,7 @@ class XMetaField extends XValue {
 	/** @return XType */
 	public function GetType(){ return $this->type; }
 	public function GetXsdType(){
-		return is_null($this->xml_foreign_field)
+		return $this->xml_foreign_field===null
 			? $this->type->GetXsdType()
 			: $this->xml_foreign_field->type->GetXsdType()
 			;

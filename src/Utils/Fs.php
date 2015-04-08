@@ -56,8 +56,11 @@ class Fs {
 	}
 
 	public static function Unlink($path) {
-		if (file_exists($path)) {
-			if (is_dir($path) && !is_link($path)) {
+		if (is_link($path)) {
+			unlink($path);
+		}
+		elseif (file_exists($path)) {
+			if (is_dir($path)) {
 				$messages = array();
 				$dh = opendir($path);
 				if ($dh !== false) {
@@ -411,20 +414,63 @@ class Fs {
 		else
 			$width = $height = 0;
 	}
-	public static function FitImageDimensions($filename,$max_width,$max_height,&$width,&$height) {
-		if ($max_width <= 0 || $max_height <= 0) { $width = $height = 0; return; }
-		self::GetImageDimensions($filename,$width,$height);
-		if ($width <= 0 || $height <= 0) { $width = $height = 0; return; }
-		$width_ratio = $width / $max_width;
-		$height_ratio = $height / $max_height;
+	public static function FitImageDimensions($filename,$max_width,$max_height,&$new_width,&$new_height) {
+		if ($max_width <= 0 || $max_height <= 0) { $new_width = $new_height = 0; return; }
+		self::GetImageDimensions($filename,$new_width,$new_height);
+		if ($new_width <= 0 || $new_height <= 0) { $new_width = $new_height = 0; return; }
+		$width_ratio = $new_width / $max_width;
+		$height_ratio = $new_height / $max_height;
 		if ($width_ratio > $height_ratio) {
-			$width = $max_width;
-			$height = floor($height / $width_ratio);
+			$new_width = $max_width;
+			$new_height = floor($new_height / $width_ratio);
 		}
 		else {
-			$height = $max_height;
-			$width = floor($width / $height_ratio);
+			$new_height = $max_height;
+			$new_width = floor($new_width / $height_ratio);
 		}
+	}
+
+	public static function FitImageIn($filename,$max_width,$max_height) {
+		$img_info = getimagesize( $filename );
+		if (is_null($img_info)) throw new Exception('Cannot read image.');
+		$cur_width = $img_info[0];
+		$cur_height = $img_info[1];
+		$mime = $img_info["mime"];
+		ini_set('memory_limit', '1024M');
+		$src = null;
+		switch($mime){
+			case "image/jpeg": $src = imagecreatefromjpeg($filename); break;
+			case "image/gif": $src = imagecreatefromgif($filename); break;
+			case "image/png": $src = imagecreatefrompng($filename); break;
+			default: throw new Exception('Unknown image mime type.');
+		}
+
+		if ($max_width <= 0 || $max_height <= 0)
+			throw new Exception('Width and height error.');
+		if ($cur_width <= 0 || $cur_height <= 0)
+			throw new Exception('Width and height error.');
+
+		$width_ratio = $cur_width / $max_width;
+		$height_ratio = $cur_height / $max_height;
+		if ($width_ratio > $height_ratio) {
+			$new_width = $max_width;
+			$new_height = floor($cur_height / $width_ratio);
+		}
+		else {
+			$new_height = $max_height;
+			$new_width = floor($cur_width / $height_ratio);
+		}
+
+		$dst = imagecreatetruecolor($new_width, $new_height);
+		imagecopyresized($dst, $src, 0, 0, 0, 0, $new_width, $new_height, $cur_width, $cur_height);
+		switch($mime){
+			case "image/jpeg": imagejpeg($dst,$filename); break;
+			case "image/gif": imagegif($dst,$filename); break;
+			case "image/png": imagepng($dst,$filename); break;
+			default: throw new Exception('Unknown image mime type.');
+		}
+		imagedestroy($src);
+		imagedestroy($dst);
 	}
 
 

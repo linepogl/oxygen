@@ -12,7 +12,7 @@ class LoginControl extends Control {
 	public function Render(){
 
 		$msg = $this->message;
-		if ($msg === null) $msg = new SecurityMessage(oxy::txtMsgAccessDenied());
+		if ($msg === null || $msg->AsString()==='') $msg = new SecurityMessage(oxy::txtMsgAccessDenied());
 		echo '<div class="exception">';
 		echo new MessageControl($msg);
 		echo '</div>';

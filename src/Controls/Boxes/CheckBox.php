@@ -89,7 +89,6 @@ class CheckBox extends Box {
 		static $total = 0;
 		$inst++;
 		$total += strlen($r);
-		error_log('CheckBox #'.$inst.':'.$total);
 
 	}
 }

@@ -75,8 +75,13 @@ class Debug {
  		self::$entries[] = $e;
 		if (self::$immediate){
 			while(ob_get_level()!=0) ob_end_clean();
-			echo self::GetEntryAsHtml();
-			echo "<script>window.scrollBy(0,50);</script>";
+			if (CLI) {
+				echo self::GetEntryAsText();
+			}
+			else {
+				echo self::GetEntryAsHtml();
+				echo "<script>window.scrollBy(0,50);</script>";
+			}
 			flush();
 			ob_start();
 		}
@@ -130,14 +135,15 @@ class Debug {
 		if ($value instanceof XDate) return '{XDate:'.$value->Format('Y-m-d').'}';
 		if ($value instanceof XTime) return '{XTime:'.$value->Format('H:i:s').'}';
 		if ($value instanceof XDateTime) return '{XDateTime:'.$value->Format('Y-m-d H:i:s').'}';
+		if ($value instanceof XTimeSpan) return '{XTimeSpan:'.$value->AsInt().'|'.Language::FormatTimeSpan($value,true,true).'}';
 		if ($value instanceof XList) {
 			$value->Evaluate();
 			$r = '{XList:'.count($value).':';
-			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
+			if ($detail!==null&&!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
 				$r .= "\n" . str_repeat(' ',($level+1)*2);
-				if ($i++>=$detail[$level]) { $r .= '...}'; return $r; }
+				if ($detail!==null&&$i++>=$detail[$level]) { $r .= '...}'; return $r; }
 				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
 				$r .= self::GetVariableAsString($v,$detail,$level+1);
 			}
@@ -146,11 +152,11 @@ class Debug {
 		}
 		if (is_array($value)) {
 			$r = '{array:'.count($value).':';
-			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
+			if ($detail!==null&&!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
 				$r .= "\n" . str_repeat(' ',($level+1)*2);
-				if ($i++>=$detail[$level]) { $r .= '...}'; return $r; }
+				if ($detail!==null&&$i++>=$detail[$level]) { $r .= '...}'; return $r; }
 				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
 				$r .= self::GetVariableAsString($v,$detail,$level+1);
 			}
@@ -159,11 +165,11 @@ class Debug {
 		}
 		if ($value instanceof Traversable) {
 			$r = '{'.get_class($value).':';
-			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
+			if ($detail!==null&&!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			foreach ($value as $k=>$v) {
 				$r .= "\n" . str_repeat(' ',($level+1)*2);
-				if ($i++>=$detail[$level]) { $r .= '...}'; return $r; }
+				if ($detail!==null&&$i++>=$detail[$level]) { $r .= '...}'; return $r; }
 				$r .= '['.(is_string($k)?'\''.$k.'\'':$k).'] = ';
 				$r .= self::GetVariableAsString($v,$detail,$level+1);
 			}
@@ -172,7 +178,7 @@ class Debug {
 		}
 		if (is_object($value)) {
 			$r = '{'.get_class($value).':';
-			if (!isset($detail[$level])) { $r .= '...}'; return $r; }
+			if ($detail!==null&&!isset($detail[$level])) { $r .= '...}'; return $r; }
 			$i = 0;
 			if ($value instanceof stdClass) {
 				foreach ((array)$value as $p=>$v){

@@ -2,17 +2,17 @@
 
 class XMeta extends stdClass {
 	public $id;
-	private $__classname;
-	private function __construct($classname){
-		$this->__classname=$classname;
+	private $__class_name;
+	private function __construct($class_name){
+		$this->__class_name=$class_name;
 		$this->id = XMeta::ID();
 	}
-	public function GetClassName(){ return $this->__classname; }
+	public function GetClassName(){ return $this->__class_name; }
 
 	private $__db_signature;
 	private $__db_table_name = null;
 	/** @return XMeta */ public function SetDBTableName($value){ $this->__db_table_name = $value; return $this; }
-	public function GetDBTableName(){ return is_null($this->__db_table_name) ? $this->__classname : $this->__db_table_name; }
+	public function GetDBTableName(){ return $this->__db_table_name; }
 
 	private $__db_sequence = null;
 	/** @return XMeta */ public function SetDBSequence($value){ $this->__db_sequence = $value; return $this; }
@@ -20,7 +20,7 @@ class XMeta extends stdClass {
 
 	private $__xml_tag_name = null;
 	/** @return XMeta */ public function SetXmlTagName($value){ $this->__xml_tag_name = $value; return $this;}
-	public function GetXmlTagName(){ return is_null($this->__xml_tag_name) ? $this->__classname : $this->__xml_tag_name; }
+	public function GetXmlTagName(){ return $this->__xml_tag_name===null ? $this->__class_name : $this->__xml_tag_name; }
 
 	/** @var XOrderBy */
 	private $__order_by = null;
@@ -37,15 +37,46 @@ class XMeta extends stdClass {
 	/** @return XOrderBy|null */
 	public function GetOrderBy(){ return $this->__order_by; }
 
-	private $__abstract_dbfield_name = null;
-	/** @return XMeta */ public function SetAbstractDBFieldName($value){ $this->__abstract_dbfield_name = $value; return $this; }
-	public function GetAbstractDBFieldName(){ return $this->__abstract_dbfield_name; }
-	public function IsAbstract(){ return !is_null($this->__abstract_dbfield_name); }
+	/** @var XMetaField|null */ private $__class_name_db_field = null;
+	/** @return XMetaField|null */public function GetClassNameDBField(){ return $this->__class_name_db_field; }
+	/** @return XMeta */
+	public function SetClassNameDBField(XMetaField $value){
+		if ($this->__class_name_db_field !== null) throw new Exception('Cannot inherit a second class name db field.');
+		$this->__class_name_db_field = $value;
+		return $this;
+	}
 
-	private $__parent = null;
-	/** @return XMeta */ public function SetParent(XMeta $parent = null){ $this->__parent = $parent; return $this; }
+	/** @var XMeta|null */ private $__parent = null;
+	/** @var bool     */ private $__shares_db_table = false;
+	/** @var bool     */ private $__shares_class_name_db_field = false;
+	/** @return bool  */ public function SharesDBTableWithParent(){ return $this->__shares_db_table; }
+	/** @return bool  */ public function SharesClassNameDBFieldWithRoot(){ return $this->__shares_class_name_db_field; }
 	/** @return XMeta */ public function GetParent(){ return $this->__parent; }
-	/** @return XMeta */ public function GetRoot(){ return is_null($this->__parent) ? $this : $this->GetParent()->GetRoot(); }
+	/** @return XMeta */ public function GetRoot(){ return $this->__parent === null ? $this : $this->__parent->GetRoot(); }
+	/** @return XMeta */ public function GetDBParent(){ return $this->__shares_db_table && $this->__parent !== null ? $this->__parent->GetDBParent() : $this->__parent; }
+	/** @return XMeta */ public function GetDBRoot(){ return $this->__parent === null || $this->__parent->__class_name_db_field === null ? $this : $this->__parent->GetDBRoot(); }
+
+	/** @return XMeta */
+	public function Inherit(XMeta $parent, $share_db_table = false){
+		if ($this->__parent !== null) throw new Exception('Cannot inherit a second meta class.');
+		$this->__parent = $parent;
+		$this->__class_name_db_field = $parent->__class_name_db_field;
+		$this->__shares_db_table = $share_db_table;
+		if ($share_db_table) {
+			$this->__db_table_name = $parent->__db_table_name;
+			$this->__shares_class_name_db_field = $parent->__shares_class_name_db_field;
+		}
+		$this->Merge($parent);
+		return $this;
+	}
+
+	/** @return XMeta */
+	public function Merge(XMeta $trait){
+		foreach ($trait->GetFields() as $key=>$field)
+			if (!property_exists($this,$key))
+				$this->$key = clone $field;
+		return $this;
+	}
 
 
 
@@ -56,65 +87,72 @@ class XMeta extends stdClass {
 
 	public function Compile(){
 		$this->__fields = array();
-		$this->__dbfields = array();
-		$this->__xmlfields = array();
+		$this->__db_fields = array();
+		$this->__my_db_fields = array();
+		$this->__xml_fields = array();
 		$this->__slaves = array();
-		$this->__dbslaves = array();
-		$this->__xmlslaves = array();
+		$this->__db_slaves = array();
+		$this->__xml_slaves = array();
+		$db_parent = $this->GetDBParent();
+		$parent_fields = $db_parent === null ? null : $this->__parent->GetFields();
+		/** @var $value XMetaField|XMetaSlave */
 		foreach ($this as $key=>$value){
 			$is_field = $value instanceof XMetaField;
 			$is_slave = $value instanceof XMetaSlave;
-			if ($is_field || $is_slave) {
-				$value->SetMeta($this);
-				$value->SetName($key);
-				if ($value->GetLabel() == null) $value->WithLabel(oxy::txt($key));
-
-				if ($is_field) {
-					if ($key !== 'id') {
-						$this->__fields[$key] = $value;
-						if ($value->IsDBBound()) $this->__dbfields[$key] = $value;
-						if ($value->IsXmlBound()) $this->__xmlfields[$key] = $value;
+			if (!$is_field && !$is_slave) continue;
+			if ($key==='__class_name_db_field') continue;
+			$value->SetMeta($this);
+			$value->SetName($key);
+			if ($value->GetLabel() == null) $value->WithLabel(oxy::txt($key));
+			if ($is_field) {
+				if ($key !== 'id') {
+					$this->__fields[$key] = $value;
+					if ($value->IsDBBound()) {
+						$this->__db_fields[$key] = $value;
+						if ($parent_fields === null || !isset($parent_fields[$key])) $this->__my_db_fields[$key] = $value;
 					}
+					if ($value->IsXmlBound()) $this->__xml_fields[$key] = $value;
 				}
-				else {
-					$this->__slaves[$key] = $value;
-					if ($value->IsDBBound()) $this->__dbslaves[$key] = $value;
-					if ($value->IsXmlBound()) $this->__xmlslaves[$key] = $value;
-				}
+			}
+			else {
+				$this->__slaves[$key] = $value;
+				if ($value->IsDBBound()) $this->__db_slaves[$key] = $value;
+				if ($value->IsXmlBound()) $this->__xml_slaves[$key] = $value;
 			}
 		}
 		$s = '';
-		for ($m = $this; !is_null($m); $m = $m->GetParent()){
-			$s .= $m->__classname;
+		for ($m = $this; $m!==null; $m = $m->GetParent()){
+			$s .= $m->__class_name;
 			$s .= '|';
 			$s .= $m->__db_table_name;
 		}
 		$this->__db_signature = Oxygen::Hash32($s);
 		$g = $this->__dependency;
-		if (!is_null($g)) $this->__depends_on = $g();
+		if ($g!==null) $this->__depends_on = $g();
 	}
 
 	private $__fields;
 	public function GetFields(){ return $this->__fields; }
 
-	private $__dbfields;
-	public function GetDBFields(){ return $this->__dbfields; }
+	private $__db_fields;
+	private $__my_db_fields;
+	public function GetDBFields($same_table_only = false){ return $same_table_only ? $this->__db_fields : $this->__my_db_fields; }
 
-	private $__xmlfields;
-	public function GetXmlFields(){ return $this->__xmlfields; }
+	private $__xml_fields;
+	public function GetXmlFields(){ return $this->__xml_fields; }
 
 	private $__slaves;
 	public function GetSlaves(){ return $this->__slaves; }
 
-	private $__dbslaves;
-	public function GetDBSlaves(){ return $this->__dbslaves; }
+	private $__db_slaves;
+	public function GetDBSlaves(){ return $this->__db_slaves; }
 
-	private $__xmlslaves;
-	public function GetXmlSlaves(){ return $this->__xmlslaves; }
+	private $__xml_slaves;
+	public function GetXmlSlaves(){ return $this->__xml_slaves; }
 
 
 	public function IsEqualTo(XMeta $c){
-		return $this->__classname == $c->GetClassName();
+		return $this->__class_name === $c->GetClassName();
 	}
 
 
@@ -131,47 +169,47 @@ class XMeta extends stdClass {
 
 
 
-	
+
 
 	//
 	//
 	// Singleton
 	//
 	//
-	private static $__cache_all = array(); // $classname.$depends_on => XMeta
-	private static $__cache_last_used = array(); // $classname => XMeta;
+	private static $__cache_all = array(); // $class_name.$depends_on => XMeta
+	private static $__cache_last_used = array(); // $class_name => XMeta;
 	/** @return XMeta */
-	public static function Of($classname){
+	public static function Of($class_name){
 		/** @var $r XMeta */
 		$r = null;
-		if (isset(self::$__cache_last_used[$classname])) {
-			$r = self::$__cache_last_used[$classname];
+		if (isset(self::$__cache_last_used[$class_name])) {
+			$r = self::$__cache_last_used[$class_name];
 			$g = $r->__dependency;
-			if (is_null($g)) return $r;
+			if ($g===null) return $r;
 			$depends_on = $g();
 			if ($depends_on == $r->__depends_on) return $r;
-			$key = $classname . $depends_on;
+			$key = $class_name . $depends_on;
 			if (isset(self::$__cache_all[$key])) {
 				$r = self::$__cache_all[$key];
-				self::$__cache_last_used[$classname] = $r;
+				self::$__cache_last_used[$class_name] = $r;
 				return $r;
 			}
 		}
 		$propagate_source = $r;
 
-		$r = new XMeta($classname);
-		$m = new ReflectionMethod($classname,'FillMeta');
+		$r = new XMeta($class_name);
+		$m = new ReflectionMethod($class_name,'FillMeta');
 		$m->invoke(null,$r);
 		$r->Compile();
 
-		if (!is_null($propagate_source)) {
+		if ($propagate_source!==null) {
 			$r->__remote_cache_is_trusted = $propagate_source->__remote_cache_is_trusted;
 		}
 
-		$key = $classname;
-		if (!is_null($r->__depends_on)) $key .= $r->__depends_on;
+		$key = $class_name;
+		if ($r->__depends_on!==null) $key .= $r->__depends_on;
 		self::$__cache_all[$key] = $r;
-		self::$__cache_last_used[$classname] = $r;
+		self::$__cache_last_used[$class_name] = $r;
 		return $r;
 	}
 
@@ -182,14 +220,15 @@ class XMeta extends stdClass {
 
 	/** @return ID */
 	public function GetNextPermID(){
-		if ($this->id->IsDBAliasComplex())
-			return $this->GetNextTempID();
-		$sequence = $this->GetDBSequence();
-		if (!is_null($sequence))
+		$cx = $this->GetRoot();
+		if ($cx->id->IsDBAliasComplex())
+			return $cx->GetNextTempID();
+		$sequence = $cx->GetDBSequence();
+		if ($sequence!==null)
 			return ID::GetNextPermIDFromSequence($sequence);
-		return ID::GetNextPermID($this->GetDBTableName(),$this->id->GetDBName());
+		return ID::GetNextPermID($cx->GetDBTableName(),$cx->id->GetDBName());
 	}
-	/** @return ID */ public function GetNextTempID(){ return ID::GetNextTempID($this->GetDBSequence()); }
+	/** @return ID */ public function GetNextTempID(){ $cx = $this->GetRoot(); return ID::GetNextTempID($cx->GetDBSequence()); }
 
 
 
@@ -221,51 +260,80 @@ class XMeta extends stdClass {
 
 	/** @return XItem */
 	public final function MakeTempItem($id = null){
-		$classname = $this->__classname;
+		$class_name = $this->__class_name;
 		if ($id === null)
 			$id = $this->GetNextTempID();
 		elseif (!($id instanceof ID))
 			$id = new ID($id);
-		$r = new $classname($id,false);
+		$r = new $class_name($id,false);
+		$class_name_db_field = $this->GetClassNameDBField();
+		if ($class_name_db_field !== null) {
+			$n = $class_name_db_field->GetName();
+			$r->$n = $class_name;
+		}
 		//$this->SaveInCache($id->AsInt(),$r); // this is under question.
 		return $r;
 	}
 
 	/** @return XItem */
 	public final function MakePermItem($id = null){
-		$classname = $this->__classname;
+		$class_name = $this->__class_name;
 		if ($id === null) {
 			if ($this->id->IsDBAliasComplex())
 				$id = $this->GetNextTempID();
 			else
 				$id = $this->GetNextPermID();
 		}
-		$r = new $classname($id,true);
+		if (!$id instanceof ID) $id = new ID($id);
+		$r = new $class_name($id,true);
+		$class_name_db_field = $this->GetClassNameDBField();
+		if ($class_name_db_field !== null) {
+			$n = $class_name_db_field->GetName();
+			$r->$n = $class_name;
+		}
 		if (!$this->id->IsDBAliasComplex()) $this->SaveInCache($id->AsInt(),$r);
 		return $r;
 	}
 
 	/** @return XItem|null */
 	public final function PickItem($id,DBReader $dr=null) {
-		if (is_null($id)) return null;
+		if ($id===null) return null;
 		if (!($id instanceof ID)) $id = new ID($id);
 		$idi = $id->AsInt();
 		if ($this->ExistsInLocalCache($idi)) return $this->PickFromLocalCache($idi);
 		/** @var $r XItem */
 		$r = $this->PickFromRemoteCache($idi);
-		if (is_null($r)) {
-			if ($this->IsAbstract()) {
+		if ($r===null) {
+			$meta = $this;
+			if ($this->__class_name_db_field !== null) {
 				if (!array_key_exists($idi,$this->__item_concrete_meta_cache)) {
-					$this->__item_concrete_meta_cache[$idi] = XMeta::Of( Database::ExecuteScalar('SELECT '.$this->GetAbstractDBFieldName().' FROM '.$this->GetDBTableName().' WHERE '.$this->id->GetDBName().'=?',$id)->AsString() );
+					$class_name = null;
+					if ($this->__shares_class_name_db_field) {
+						$n = $this->__class_name_db_field->GetDBAlias();
+						if ($dr->OffsetExists($n)) $this->__item_concrete_meta_cache[$idi] = $dr[$n]->AsStringOrNull();
+					}
+					if ($class_name === null) {
+						$class_name = Database::ExecuteScalar('SELECT '.new SqlIden($this->__class_name_db_field->GetDBAlias()).' FROM '.new SqlIden($this->GetDBRoot()->GetDBTableName()).' WHERE '.new SqlIden($this->id->GetDBName()).'=?',$id)->AsStringOrNull();
+					}
+					$this->__item_concrete_meta_cache[$idi] = $class_name===null ? null : XMeta::Of( $class_name );
 				}
 				/** @var $m XMeta */
-				$m = $this->__item_concrete_meta_cache[$idi];
-				$r = $m->PickItem($id);
+				$meta = $this->__item_concrete_meta_cache[$idi];
+				if ($meta === null) $meta = $this;
+			}
+
+			if ($meta !== $this) {
+				$r = $meta->PickItem($id);
 			}
 			else {
-				$classname = $this->__classname;
-				$r = new $classname($id,true);
-				if (!$r->Load($dr)) $r = null;
+				$class_name = $this->__class_name;
+				$r = new $class_name($id,true);
+				if (!$r->Load($dr))
+					$r = null;
+				elseif ($this->__class_name_db_field !== null) {
+					$n = $this->__class_name_db_field->GetName();
+					if ($r->$n !== $class_name) $r = null;
+				}
 			}
 			$this->SaveInCache($idi,$r);
 		}
@@ -283,7 +351,7 @@ class XMeta extends stdClass {
 			else
 				$r->id = new ID($id);
 		}
-		if (!is_null($slave_hook_field)) {
+		if ($slave_hook_field!==null) {
 			$n = $slave_hook_field->GetName();
 			$r->$n = $slave_hook_id;
 		}
@@ -307,7 +375,7 @@ class XMeta extends stdClass {
 			}
 
 			// 2. Clone slaves
-			for ($mx = $this; !is_null($mx); $mx = $mx->GetParent()){
+			for ($mx = $this; $mx!==null; $mx = $mx->GetParent()){
 				$slaves = $mx->GetSlaves();
 				/** @var $sl XMetaSlave */
 				foreach ($slaves as $sl) {
@@ -359,16 +427,16 @@ class XMeta extends stdClass {
 	/** @return XItem */
 	private function PickFromRemoteCache($idi) {
 		$r = null;
-		if ($this->__remote_cache_is_trusted && Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__classname.$this->__db_signature.'::'.$idi)) {
-			$r = Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi];
-			if (is_null($r) || $r instanceof XItem) $this->__item_cache[$idi] = $r; else $r = null;
+		if ($this->__remote_cache_is_trusted && Oxygen::IsItemCacheEnabled() && Scope::$DATABASE->Contains($this->__class_name.$this->__db_signature.'::'.$idi)) {
+			$r = Scope::$DATABASE[$this->__class_name.$this->__db_signature.'::'.$idi];
+			if ($r===null || $r instanceof XItem) $this->__item_cache[$idi] = $r; else $r = null;
 		}
 		return $r;
 	}
 	public function SetIsRemoteCacheTrusted($value){ $this->__remote_cache_is_trusted = $value; return $this; }
 	public function IsRemoteCacheTrusted(){ return $this->__remote_cache_is_trusted; }
-	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if ((is_null($item) || !$item->IsTemporary()) && Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = $item; }
-	public function RemoveFromCache($idi) { unset($this->__item_cache[$idi]);  if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__classname.$this->__db_signature.'::'.$idi] = null; }
+	public function SaveInCache($idi,$item)   { $this->__item_cache[$idi] = $item; if (($item===null || !$item->IsTemporary()) && Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__class_name.$this->__db_signature.'::'.$idi] = $item; }
+	public function RemoveFromCache($idi) { unset($this->__item_cache[$idi]);  if (Oxygen::IsItemCacheEnabled()) Scope::$DATABASE[$this->__class_name.$this->__db_signature.'::'.$idi] = null; }
 	public function RemoveFromLocalCache($idi) { unset($this->__item_cache[$idi]); }
 
 
@@ -397,15 +465,15 @@ class XMeta extends stdClass {
 		$xml = $parent->ownerDocument;
 		$x = $parent;
 		$xx = $x->firstChild;
-		if (is_null($xx) || $xx->tagName != 'xs:complexType'){
+		if ($xx===null || $xx->tagName != 'xs:complexType'){
 			$xxx = $xml->createElementNS(Xml::XS,'xs:complexType');
-			$xx = is_null($xx) ? $x->appendChild($xxx) : $x->insertBefore($xxx,$xx);
+			$xx = $xx===null ? $x->appendChild($xxx) : $x->insertBefore($xxx,$xx);
 		}
 		$x = $xx;
 		$xx = $x->firstChild;
-		if (is_null($xx) || $xx->tagName != 'xs:choice'){
+		if ($xx===null || $xx->tagName != 'xs:choice'){
 			$xxx = $xml->createElementNS(Xml::XS,'xs:choice');
-			$xx = is_null($xx) ? $x->appendChild($xxx) : $x->insertBefore($xxx,$xx);
+			$xx = $xx===null ? $x->appendChild($xxx) : $x->insertBefore($xxx,$xx);
 			$xx->setAttribute('minOccurs','0');
 			$xx->setAttribute('maxOccurs','unbounded');
 		}
@@ -413,8 +481,8 @@ class XMeta extends stdClass {
 	}
 	private function get_exported_already(DOMElement $parent,$name){
 		$x = $parent;
-		$x = $x->firstChild; if (is_null($x) || $x->tagName != 'xs:complexType') return null;
-		$x = $x->firstChild; if (is_null($x) || $x->tagName != 'xs:choice') return null;
+		$x = $x->firstChild; if ($x===null || $x->tagName != 'xs:complexType') return null;
+		$x = $x->firstChild; if ($x===null || $x->tagName != 'xs:choice') return null;
 		foreach ($x->childNodes as $xx){
 			if ($xx->nodeType != XML_ELEMENT_NODE) continue;
 			if ($xx->nodeName != 'xs:element') continue;
@@ -424,7 +492,7 @@ class XMeta extends stdClass {
 	}
 	public function ExportXsd(DOMElement $parent,$meta_fields_to_be_ignored=array()){
 		$r = $this->get_exported_already($parent,$this->GetXmlTagName());
-		if (!is_null($r)) return $r;
+		if ($r!==null) return $r;
 		$xml = $parent->ownerDocument;
 		$parent_choice = $this->get_choise_element($parent);
 		/** @var $r DOMElement */
@@ -451,7 +519,7 @@ class XMeta extends stdClass {
 				$x->setAttribute('name',$f->GetXmlName());
 			}
 			$enum = $f->GetXmlEnum();
-			if (is_null($enum))
+			if ($enum===null)
 				$x->setAttribute('type',$f->GetXsdType());
 			else {
 				$x = $x->appendChild($xml->createElementNS(Xml::XS,'xs:simpleType'));

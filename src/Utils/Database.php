@@ -9,13 +9,14 @@ class DatabaseConnection {
 	public $password = null;
 	public $type = null;
 	public $is_managed = false;
-	public function __construct($server,$schema,$username,$password,$type,$is_managed){
+	public $is_managed_slave = false;
+	public $managed_slave_wait_in_seconds = 0;
+	public function __construct($server,$schema,$username,$password,$type){
 		$this->server = $server;
 		$this->schema = $schema;
 		$this->username = $username;
 		$this->password = $password;
 		$this->type = $type;
-		$this->is_managed = $is_managed;
 	}
 }
 
@@ -23,6 +24,7 @@ class DatabaseConnection {
 class Database {
 	const MYSQL = 'mysql';
 	const ORACLE = 'oracle';
+	const SQLSERVER = 'sqlserver';
 
 	/** @var DatabaseConnection|null */
 	private static $cx = null;
@@ -61,12 +63,14 @@ class Database {
 	public static function Upgrade($force=false,MultiMessage $logger = null){
 		if (self::$upgrade_running) return;
 		if (is_null(self::$cx)) return;
+		if (array_key_exists('oxy_upgrade',$_GET)) { $force = true; }
 		if (!$force && !self::$cx->is_managed) return;
 		self::$upgrade_running = true;
 
 		$needs_refresh = false;
 		if ($force || self::NeedsUpgrade()) {
 			Database::SetPatchingSystemLogger($logger);
+			Database::SetPatchingSystemSlave(!$force && self::$cx->is_managed_slave);
 			$lock_filename = Oxygen::GetSharedTempFolder(true) .'/database.upgrade.lock';
 			$f = fopen($lock_filename,'w');
 			if (flock($f,LOCK_EX)){
@@ -75,16 +79,39 @@ class Database {
 					Database::RequireConnection();
 					Database::ClearPatchingSystem();
 					foreach (Oxygen::GetDatabaseUpgradeFiles() as $filename){
-						require($filename);
-						$key = 'Database::upgrade_time_of_'. $filename;
-						Scope::$DATABASE[$key] = time();
+						if (!Database::IsPatchingSystemSlave()) {
+							require($filename);
+							$key = 'Database::upgrade_time_of_'.$filename;
+							Scope::$DATABASE[$key] = time();
+						}
+						else {
+							try {
+								require($filename);
+								$key = 'Database::upgrade_time_of_'. $filename;
+								Scope::$DATABASE[$key] = time();
+							}
+							catch (Exception $ex) {
+								if (self::$cx->managed_slave_wait_in_seconds > 0) {
+									sleep(self::$cx->managed_slave_wait_in_seconds);
+									try {
+										require($filename);
+										$key = 'Database::upgrade_time_of_'. $filename;
+										Scope::$DATABASE[$key] = time();
+									}
+									catch (Exception $ex) {
+										throw new AccessHaltedException();
+									}
+								}
+								else throw new AccessHaltedException();
+							}
+						}
 					}
 					if (Database::IsPatchingSystemDirty()) $needs_refresh = true;
 				}
-                // try { unlink($lock_filename); } catch(Exception $ex){}
-                flock($f,LOCK_UN);
-            }
-            fclose($f);
+        // try { unlink($lock_filename); } catch(Exception $ex){}
+        flock($f,LOCK_UN);
+      }
+      fclose($f);
 		}
 		if ($needs_refresh){
 			self::ResetCaches();
@@ -99,7 +126,7 @@ class Database {
 
 	private static function RequireConnection(){
 		if (is_null(self::$cn)){
-			if (is_null(self::$cx)) throw new ApplicationException(oxy::txtMsgNoDatabaseConnectionSpecified());
+			if (is_null(self::$cx)) throw new Exception('No database connection specified.');
 			try{
 				switch (self::$cx->type){
 					case self::MYSQL:
@@ -138,9 +165,10 @@ class Database {
 	 * @param string $type int Possible values Database::MYSQL or Database::ORACLE
 	 * @return void
 	 */
-	public static function ConnectManaged($server,$schema,$username,$password,$type=self::MYSQL){
-		while(self::IsConnected()) self::Disconnect();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,true) );
+	public static function Connect($server,$schema,$username,$password,$type=self::MYSQL){
+		self::PushConnection();
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		self::SetConnection( $c );
 		try {
 			self::RequireConnection();
 		}
@@ -150,7 +178,6 @@ class Database {
 		}
 		self::ResetCaches();
 	}
-
 	/**
 	 * @api Since 1.3
 	 * @param $server string
@@ -160,9 +187,27 @@ class Database {
 	 * @param string $type int Possible values Database::MYSQL or Database::ORACLE
 	 * @return void
 	 */
-	public static function Connect($server,$schema,$username,$password,$type=self::MYSQL){
-		self::PushConnection();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
+	public static function ConnectManaged($server,$schema,$username,$password,$type=self::MYSQL){
+		while(self::IsConnected()) self::Disconnect();
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		$c->is_managed = true;
+		self::SetConnection( $c );
+		try {
+			self::RequireConnection();
+		}
+		catch (Exception $ex){
+			self::PopConnection();
+			throw $ex;
+		}
+		self::ResetCaches();
+	}
+	public static function ConnectManagedSlave($server,$schema,$username,$password,$type=self::MYSQL,$waiting_in_seconds = 0){
+		while(self::IsConnected()) self::Disconnect();
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		$c->is_managed = true;
+		$c->is_managed_slave = true;
+		$c->managed_slave_wait_in_seconds = $waiting_in_seconds;
+		self::SetConnection( $c );
 		try {
 			self::RequireConnection();
 		}
@@ -173,16 +218,28 @@ class Database {
 		self::ResetCaches();
 	}
 
+
 	public static function ConnectLazily($server,$schema,$username,$password,$type=self::MYSQL){
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
 		self::PushConnection();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,false) );
+		self::SetConnection( $c );
 		self::ResetCaches();
 	}
 
 	public static function ConnectLazilyManaged($server,$schema,$username,$password,$type=self::MYSQL){
-		while(self::IsConnected()) self::Disconnect();
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		$c->is_managed = true;
 		self::PushConnection();
-		self::SetConnection( new DatabaseConnection($server,$schema,$username,$password,$type,true) );
+		self::SetConnection( $c );
+		self::ResetCaches();
+	}
+	public static function ConnectLazilyManagedSlave($server,$schema,$username,$password,$type=self::MYSQL,$waiting_in_seconds = 0){
+		$c = new DatabaseConnection($server,$schema,$username,$password,$type);
+		$c->is_managed = true;
+		$c->is_managed_slave = true;
+		$c->managed_slave_wait_in_seconds = $waiting_in_seconds;
+		self::PushConnection();
+		self::SetConnection( $c );
 		self::ResetCaches();
 	}
 
@@ -388,6 +445,18 @@ class Database {
 		return $r;
 	}
 
+	public static function ExecuteTableOf($types=array(),$sql){ return self::ExecuteTableOfX($types,$sql,array_slice(func_get_args(),2)); }
+	public static function ExecuteTableOfX($types,$sql,$params=array()){
+		$dr = self::ExecuteX($sql,$params);
+		$r = array();
+		while ($dr->Read()) {
+			$l = array();
+			foreach ($types as $i => $type) $l[] = $dr->Get($i)->CastTo($type);
+			$r[] = $l;
+		}
+		$dr->Close();
+		return $r;
+	}
 
 
 	/**
@@ -426,7 +495,9 @@ class Database {
 	private static $patching_system_open_patcher = null;
 	private static $patching_system_open_patch = null;
 	private static $patching_system_is_dirty = false;
+	private static $patching_system_is_slave = false;
 	private static function SetPatchingSystemLogger(MultiMessage $logger = null){ self::$patching_system_logger = $logger; }
+	private static function SetPatchingSystemSlave($v = true){ self::$patching_system_is_slave = $v; }
 	public static function ClearPatchingSystem(){
 		self::$patching_system_name = null;
 		self::$patching_system_tablename = null;
@@ -438,6 +509,9 @@ class Database {
 	}
 	public static function IsPatchingSystemDirty(){
 		return self::$patching_system_is_dirty;
+	}
+	public static function IsPatchingSystemSlave(){
+		return self::$patching_system_is_slave;
 	}
 	public static function SetPatchingSystem($name,$tablename){
 		self::ClearPatchingSystem();
@@ -470,10 +544,11 @@ class Database {
 		catch (Exception $ex){
 			$r = true;
 		}
-		if ($r) self::WriteToPatchingSystem('<b>Installing module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
+		if ($r) self::WriteToPatchingSystem('Installing module {'.self::$patching_system_name.'} in database '.Database::GetSchema().'@'.Database::GetServer().'.');
 		return $r;
 	}
 	public static function WriteToPatchingSystem($message) {
+		if (self::$patching_system_is_slave) throw new AccessHaltedException();
 		self::$patching_system_is_dirty = true;
 		if (self::$patching_system_logger === null) self::$patching_system_logger = new MultiMessage();
 		if (!($message instanceof Message)) $message = new InfoMessage($message);
@@ -486,7 +561,7 @@ class Database {
 	public static function BeginPatch($patcher,$patch,$description=null){
 		if (!self::HasPatch($patcher,$patch)) {
 			if (!self::IsPatchingSystemDirty()){
-				self::WriteToPatchingSystem('<b>Upgrading module &lsaquo;'.self::$patching_system_name.'&rsaquo; in database '.Database::GetSchema().'@'.Database::GetServer().'.</b>');
+				self::WriteToPatchingSystem('Upgrading module {'.self::$patching_system_name.'} in database '.Database::GetSchema().'@'.Database::GetServer().'.');
 			}
 			self::WriteToPatchingSystem('Applying patch {'.$patcher.':'.$patch.'}'.($description===null?'':': '.$description).'...');
 			self::$patching_system_open_patcher = $patcher;
@@ -588,6 +663,36 @@ class Database {
 		if (!is_null($where)) $sql .=' WHERE '.$where;
 		self::Execute($sql);
 	}
+
+
+	public static function ExecuteCopyAll($tablename_dst, $tablename_src) {
+		$a = func_get_args();
+		$z = func_num_args();
+		$sql = 'INSERT INTO '.new SqlIden($tablename_dst).' (';
+		for ($i = 2; $i < $z; $i+=2)
+			$sql .= ($i>2?',':'').new SqlIden($a[$i]);
+		$sql.= ') SELECT ';
+		for ($i = 3; $i < $z; $i+=2)
+			$sql .= ($i>3?',':'').new SqlIden($a[$i]);
+		$sql.= ' FROM '.new SqlIden($tablename_src);
+		self::Execute($sql);
+	}
+
+	public static function ExecuteCopy($tablename_dst, $tablename_src, $where) {
+		$a = func_get_args();
+		$z = func_num_args();
+		$sql = 'INSERT INTO '.new SqlIden($tablename_dst).' (';
+		for ($i = 3; $i < $z; $i+=2)
+			$sql .= ($i>3?',':'').new SqlIden($a[$i]);
+		$sql.= ') SELECT ';
+		for ($i = 4; $i < $z; $i+=2)
+			$sql .= ($i>4?',':'').new SqlIden($a[$i]);
+		$sql.= ' FROM '.new SqlIden($tablename_src);
+		if (!is_null($where)) $sql .=' WHERE '.$where;
+		self::Execute($sql);
+	}
+
+
 
 	/** @return DBReader */
 	public static function ExecuteSelect($tablename,$where){
@@ -993,6 +1098,26 @@ class Database {
 	public static function ExecuteDropPrimaryKey($tablename){
 		self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP PRIMARY KEY');
 	}
+
+
+
+	public static function ExecuteMetaForeignKeys_Oracle($tablename) {
+		$r = array();
+		$dr = Database::Execute('SELECT b.COLUMN_NAME F,c.TABLE_NAME TT,c.COLUMN_NAME FF FROM ALL_CONSTRAINTS a,ALL_CONS_COLUMNS b,ALL_CONS_COLUMNS c WHERE a.CONSTRAINT_TYPE=? AND b.TABLE_NAME=? AND a.CONSTRAINT_NAME=b.CONSTRAINT_NAME and a.R_CONSTRAINT_NAME=c.CONSTRAINT_NAME','R',$tablename);
+		while($dr->Read())
+			$r[] = array('F'=>$dr['F']->AsString(),'TT'=>$dr['TT']->AsString(),'FF'=>$dr['FF']->AsString());
+		$dr->Close();
+		return $r;
+	}
+	public static function ExecuteMetaInverseForeignKeys_Oracle($tablename) {
+		$r = array();
+		$dr = Database::Execute('SELECT c.COLUMN_NAME F,b.TABLE_NAME TT,b.COLUMN_NAME FF FROM ALL_CONSTRAINTS a,ALL_CONS_COLUMNS b,ALL_CONS_COLUMNS c WHERE a.CONSTRAINT_TYPE=? AND c.TABLE_NAME=? AND a.CONSTRAINT_NAME=b.CONSTRAINT_NAME and a.R_CONSTRAINT_NAME=c.CONSTRAINT_NAME','R',$tablename);
+		while($dr->Read())
+			$r[] = array('F'=>$dr['F']->AsString(),'TT'=>$dr['TT']->AsString(),'FF'=>$dr['FF']->AsString());
+		$dr->Close();
+		return $r;
+	}
+
 
 
 

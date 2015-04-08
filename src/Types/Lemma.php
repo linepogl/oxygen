@@ -67,6 +67,7 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	}
 
 
+
 	/** @return string */
 	public function TranslateTo($lang){
 		if (isset($this->data[$lang])) return $this->data[$lang];

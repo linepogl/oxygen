@@ -4,6 +4,10 @@ define('el','el');
 define('fr','fr');
 define('de','de');
 define('es','es');
+define('it','it');
+define('pt','pt');
+define('ru','ru');
+define('zh','zh');
 abstract class ResourceManager {
 
 	//protected static function _() { list(,$caller) = debug_backtrace(false); return new Lemma($caller); }

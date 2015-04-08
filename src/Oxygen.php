@@ -33,8 +33,8 @@ class Oxygen {
 			self::$session_hash = Oxygen::HashRandom();
 		}
 
-		if (DEBUG) { if ($_GET['debug']=='pin') Oxygen::SetUrlPin('debug','pin'); }
-		if (PROFILE) { if ($_GET['profile']=='pin') Oxygen::SetUrlPin('profile','pin'); }
+		if (DEBUG) { if ($_GET['oxy_debug']=='pin') Oxygen::SetUrlPin('oxy_debug','pin'); }
+		if (PROFILE) { if ($_GET['oxy_profile']=='pin') Oxygen::SetUrlPin('oxy_profile','pin'); }
 		Oxygen::EnsureTempFolder();
 		Oxygen::EnsureSharedTempFolder();
 		Oxygen::ClearTempFoldersFromOldFiles();
@@ -76,8 +76,11 @@ class Oxygen {
 
 		// set the current language
 		$lang = '';
-		if (count(self::$langs)==0) self::$langs[] = 'en';
-		if (count(self::$langs)==1) {
+		if (count(self::$langs)==0) {
+			$lang = 'en';
+			self::$langs[] = $lang;
+		}
+		elseif (count(self::$langs)==1) {
 			$lang = self::$langs[0];
 		}
 		else {
@@ -113,6 +116,21 @@ class Oxygen {
 			self::SetUrlPin('action',self::$actionname);
 		}
 
+		if (array_key_exists('oxy_halt',$_GET)) {
+			Oxygen::HaltWeb( $_GET['oxy_halt']!=='false' && $_GET['oxy_halt']!=='off' );
+		}
+		elseif (self::IsHalted()) {
+			throw new AccessHaltedException();
+		}
+
+		if (array_key_exists('oxy_reset',$_GET)) {
+			Scope::ResetAllWeak();
+			if ($_GET['oxy_reset']==='hard') {
+				Scope::ResetAllHard();
+				Oxygen::ClearTempFolders();
+			}
+		}
+
 		$logger = new MultiMessage();
 		$logger = $logger->WithOnAdd(function(Message $m){
 			Debug::EnableImmediateFlushing();
@@ -120,7 +138,7 @@ class Oxygen {
 		});
 		Database::Upgrade(false,$logger);
 		if (!$logger->IsEmpty()){
-			echo '<br/><pre>Please refresh.</pre>';
+			if (!CLI) echo '<br/><pre>Please refresh.</pre>';
 			die;
 		}
 
@@ -136,6 +154,7 @@ class Oxygen {
 			new ReflectionClass($classname); // <-- this will throw a mere exception if the class is not found, which will prevent a nasty FATAL php error in the next line.
 			/** @noinspection PhpUndefinedMethodInspection */
 			self::$action = $classname::Make();
+			if (!(self::$action instanceof Action)) throw new Exception("$classname::Make() has not returned an action.");
 		}
 		catch (ApplicationException $ex){
 			self::$action = new ActionOxygenThrowException($ex);
@@ -187,42 +206,25 @@ class Oxygen {
 			if (Oxygen::IsActionModeRaw()) {
 				Oxygen::SetContentType('text/plain');
 				Oxygen::ResetHttpHeaders();
-				if ($ex instanceof SecurityException) {
-					Oxygen::SetResponseCode(403); // forbidden
-					$served_as = 'HTTP 403';
-				}
-				elseif ($ex instanceof PageNotFoundException) {
-					Oxygen::SetResponseCode(404); // not found
-					$served_as = 'HTTP 404';
-				}
-				elseif ($ex instanceof ApplicationException) {
-					Oxygen::SetResponseCode(405); // not allowed
-					$served_as = 'HTTP 405';
-				}
-				else {
-					Oxygen::SetResponseCode(500); // internal server error
-					$served_as = 'HTTP 500';
-				}
+				if     ($ex instanceof SecurityException)     { Oxygen::SetResponseCode(403); $served_as = 'HTTP 403'; } // forbidden
+				elseif ($ex instanceof PageNotFoundException) { Oxygen::SetResponseCode(404); $served_as = 'HTTP 404'; } // not found
+				elseif ($ex instanceof AccessHaltedException) { Oxygen::SetResponseCode(503); $served_as = 'HTTP 503'; } // unavailable
+				elseif ($ex instanceof ApplicationException)  { Oxygen::SetResponseCode(405); $served_as = 'HTTP 405'; } // not allowed
+				else                                          { Oxygen::SetResponseCode(500); $served_as = 'HTTP 500'; } // internal server error
 				Oxygen::SendHttpHeaders();
-				if ($ex instanceof SecurityException) {
-					$msg = $ex->getMessage();
-					echo empty($msg) ? oxy::txtMsgAccessDenied() : $ex->getMessage();
-				}
-				if ($ex instanceof PageNotFoundException) {
-					$msg = $ex->getMessage();
-					echo empty($msg) ? oxy::txtMsgPageNotFound() : $ex->getMessage();
-				}
-				elseif ($ex instanceof ApplicationException)
-					echo $ex->getMessage();
-				elseif (!Oxygen::IsDevelopment())
-					echo oxy::txtMsgAnErrorOccurredAndTeamNotified();
-				else
-					echo '['.oxy::txtMsgDevelopmentEnvironment().']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
+				if     ($ex instanceof SecurityException)     echo empty($ex->getMessage()) ? oxy::txtMsgAccessDenied() : $ex->getMessage();
+				elseif ($ex instanceof PageNotFoundException) echo empty($ex->getMessage()) ? oxy::txtMsgPageNotFound() : $ex->getMessage();
+				elseif ($ex instanceof AccessHaltedException) echo empty($ex->getMessage()) ? oxy::txtMsgAccessHalted() : $ex->getMessage();
+				elseif ($ex instanceof ApplicationException)  echo $ex->getMessage();
+				elseif (!Oxygen::IsDevelopment())             echo oxy::txtMsgAnErrorOccurredAndTeamNotified();
+				else                                          echo '['.oxy::txtMsgDevelopmentEnvironment().']' . "\n" . Debug::GetExceptionReportAsText($ex) ;
 
-				if ($ex instanceof ApplicationException || Oxygen::IsDevelopment())
-					Debug::RecordExceptionServed($ex,'Global Exception Handler ('.$served_as.')');
-				else
-					Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler ('.$served_as.')');
+				if (!($ex instanceof ApplicationException)) {
+					if (Oxygen::IsDevelopment())
+						Debug::RecordExceptionServed($ex,'Global Exception Handler ('.$served_as.')');
+					else
+						Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler ('.$served_as.')');
+				}
 			}
 			else {
 				$cli = php_sapi_name() === 'cli';
@@ -248,7 +250,11 @@ class Oxygen {
 					$Q = "<!--\n\n\n\n\n\nEXCEPTION\n-->";
 					echo '</textarea></select></button></script></textarea></select></button></table></table></table></table></table></div></div></div></div></div></div></div></div></div></div></div></div></div></div>'; // <-- dirty HTML cleanup if content has already been sent.
 					echo '<meta http-equiv="Content-type" content="'.Oxygen::GetContentType().';charset='.Oxygen::GetCharset().'" />';
-					echo '<div style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background: #739baa; background:linear-gradient(to bottom, #a1b9b6 0%,#739baa 100%);padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
+					echo Css::BEGIN;
+					echo ".oxygen-error-page a { color:#f0f0f0; text-decoration:underline; }";
+					echo ".oxygen-error-page a:hover { color:#ffffff; text-decoration:underline; }";
+					echo Css::END;
+					echo '<div class="oxygen-error-page" style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background:#739baa url('.__BASE__.'oxy/img/bg.jpg) 50% 50% no-repeat; background-size:100% 100%;padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
 
 					echo '<div style="color:#ffffff;font:bold 50px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:150px;width:80%;letter-spacing:-2px;">'.oxy::txtMsgCannotDisplayWebPage().'</div>';
 
@@ -258,6 +264,7 @@ class Oxygen {
 					}
 					else {
 						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.oxy::txtMsgAnErrorOccurredAndTeamNotified().'</div>';
+						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.oxy::GetErrorPageExtraMessage().'</div>';
 						if (Oxygen::IsDevelopment()) {
 							$serial = Debug::RecordExceptionServed($ex,'Global Exception Handler');
 							echo '<div style="color:#f0f0f0;font:12px/14px Courier New,monospace;margin-top:60px;width:70%;"> *'.oxy::txtMsgDevelopmentEnvironment().'<br/>'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
@@ -301,7 +308,7 @@ class Oxygen {
 	//
 	public static $langs = array();
 	public static $default_langs = array();
-	public static $lang = null;
+	public static $lang = 'en';
 	public static $lang_auto_selection = false;
 	public static function AddLang($lang,$default_lang=null) { if (!in_array($lang,self::$langs,true)) { self::$langs[] = $lang; self::$default_langs[$lang] = $default_lang; if (count(self::$langs)==1) self::$lang = $lang; } }
 	public static function SetLang($lang) { if (Oxygen::HasLang($lang)) { self::$lang = $lang; Oxygen::SetUrlPin('lang',$lang); setlocale(LC_ALL,Language::GetLocale()); } }
@@ -342,6 +349,7 @@ class Oxygen {
 	}
 	public static function AddHttpHeader($value){ self::$http_headers[] = $value; }
 	public static function SendHttpHeaders(){
+		if (CLI) return;
 		if (self::$http_headers_sent) return;
 		foreach (self::$http_headers as $h)
 			header($h);
@@ -498,11 +506,15 @@ class Oxygen {
 	// Log folder
 	//
 	//
-	private static $log_folder = 'log';
-	public static function GetLogFolder($ensure = false){ if ($ensure) Oxygen::EnsureLogFolder(); return self::$log_folder; }
-	public static function SetLogFolder($value) { self::$log_folder = $value; }
-	public static function HasLogFolder(){ return is_dir(self::$log_folder); }
-	public static function EnsureLogFolder(){ Fs::Ensure(self::$log_folder); }
+	private static $logs_folder = 'log';
+	public static function GetLogFolder($ensure = false){ if ($ensure) Oxygen::EnsureLogFolder(); return self::$logs_folder; }
+	public static function SetLogFolder($value) { self::$logs_folder = $value; }
+	public static function HasLogFolder(){ return is_dir(self::$logs_folder); }
+	public static function EnsureLogFolder(){ Fs::Ensure(self::$logs_folder); }
+	public static function GetLogsFolder($ensure = false){ if ($ensure) Oxygen::EnsureLogsFolder(); return self::$logs_folder; }
+	public static function SetLogsFolder($value) { self::$logs_folder = $value; }
+	public static function HasLogsFolder(){ return is_dir(self::$logs_folder); }
+	public static function EnsureLogsFolder(){ Fs::Ensure(self::$logs_folder); }
 
 
 
@@ -616,6 +628,21 @@ class Oxygen {
 		Scope::ResetAllWeak();
 	}
 
+	public static function IsHalted() { return !CLI && Scope::$DATABASE['Oxygen::HaltWeb']; }
+	public static function HaltWeb($v=true) {
+		$was_halted = Scope::$DATABASE['Oxygen::HaltWeb'];
+		if ($was_halted) {
+			if (!$v) {
+				Scope::$DATABASE->HARD['Oxygen::HaltWeb'] = null;
+			}
+		}
+		else {
+			if ($v) {
+				Scope::$DATABASE->HARD['Oxygen::HaltWeb'] = true;
+				sleep(5);
+			}
+		}
+	}
 
 
 
@@ -753,14 +780,14 @@ class Oxygen {
 		exit();
 	}
 	public static function IsLocalhost(){
-		return $_SERVER["SERVER_NAME"] == 'localhost';
+		return @$_SERVER["SERVER_NAME"] == 'localhost';
 	}
 	public static function IsHttps(){
 		return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 	}
 	public static function GetApplicationName(){
-		$r = $_SERVER["SERVER_NAME"];
-		$s = $_SERVER['SCRIPT_NAME'];
+		$r = @$_SERVER["SERVER_NAME"];
+		$s = @$_SERVER['SCRIPT_NAME'];
 		$r .= substr($s,0,strrpos($s,'/'));
 		return $r;
 	}
@@ -823,6 +850,9 @@ class Oxygen {
 	public static function SetDatabaseManaged($server,$schema,$username,$password,$type=Database::MYSQL) {
 		Database::ConnectLazilyManaged($server,$schema,$username,$password,$type);
 	}
+	public static function SetDatabaseManagedSlave($server,$schema,$username,$password,$type=Database::MYSQL,$waiting_in_seconds=0) {
+		Database::ConnectLazilyManagedSlave($server,$schema,$username,$password,$type,$waiting_in_seconds);
+	}
 
 	public static function SetMemcachedServer( $server ){
 		Scope::SetMemcachedServer( $server );
@@ -851,6 +881,7 @@ class Oxygen {
 		Scope::$WINDOW->SetMode($mode);
 		Oxygen::SetWindowScopingEnabled( $enabled );
 	}
+
 
 
 
@@ -977,14 +1008,19 @@ class Oxygen {
 	public static function IsMacAddress($that){
 		return mb_ereg("([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})-([[:xdigit:]]{2})", $that) && $that!="00-00-00-00-00-00";
 	}
-	public static function SendEmail($from_name,$from_email,$rcpt,$subject,$body,$attachements=array()){
+	public static function SendEmail($from_name,$from_email,$rcpt,$subject,$body,$inline_attachments=array(),$attachements=array()){
+		self::SendEmail2($from_name,$from_email,null,null,$rcpt,$subject,$body,$inline_attachments,$attachements);
+	}
+	public static function SendEmail2($from_name,$from_email,$reply_to_name,$reply_to_email,$rcpt,$subject,$body,$inline_attachments=array(),$attachements=array()){
 		set_time_limit(0);
 		ini_set('memory_limit', '512M');
 		$boundary = Oxygen::HashRandom();
-		$headers  = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: multipart/related; boundary="'.$boundary.'"; type="text/html; charset=UTF-8"' . "\r\n";
-		$headers .= 'From: '. $from_name . ' <'. $from_email .'>'."\r\n";
-		$headers .= 'Sender: '. $from_email ."\r\n";
+		$headers  = "MIME-Version: 1.0\r\n";
+		$headers .= "From: $from_name <$from_email>\r\n";
+		$headers .= "Sender: $from_email\r\n";
+		if (!empty($reply_to_email)) $headers .= "Reply-To: $reply_to_name <$reply_to_email>\r\n";
+		$headers .= "Content-type: multipart/related; boundary=$boundary\r\n";
+		$headers .= "\n";
 
 		$body = str_replace("\r\n","\n",$body);
 		$body = str_replace("\r","\n",$body);
@@ -998,59 +1034,31 @@ class Oxygen {
 		$html .= "\r\n".$body;
 		$html .= "\r\n".'</body></html>';
 
-		$body = "\r\n--$boundary";
-		$body .= "\r\nContent-Type: text/html; charset=UTF-8";
-		$body .= "\r\n";
-		$body .= "\r\n$html";
-		$body .= "\r\n";
+		$body = "--$boundary\n";
+		$body .= "Content-Type: text/html; charset=UTF-8\r\n";
+		$body .= "\n$html\n\n";
+
+		foreach ($inline_attachments as $cid => $filename){
+			$data = chunk_split(base64_encode(file_get_contents($filename)),70,"\r\n");
+			$body .= "--$boundary\n";
+			$body .= "Content-Type: ".Fs::GetMimeType($filename)."; name=\"$cid\"\r\n";
+			$body .= "Content-Disposition: inline; filename=\"$cid\"\r\n";
+			$body .= "Content-Transfer-Encoding: base64\r\n";
+			$body .= "Content-ID: <$cid>\r\n";
+			$body .= "X-Attachment-Id: $cid\r\n";
+			$body .= "\n$data";
+		}
 		foreach ($attachements as $cid => $filename){
 			if (is_int($cid)) $cid = basename($filename);
-			$body .= "\r\n--$boundary";
-			$body .= "\r\nContent-Location: CID:nothing";
-			$body .= "\r\nContent-ID: <$cid>";
-			$body .= "\r\nContent-Type: ".Fs::GetMimeType($filename).'; name='.$cid;
-			$body .= "\r\nContent-Transfer-Encoding: BASE64";
-			$body .= "\r\n";
-			$body .= "\r\n".chunk_split(base64_encode(file_get_contents($filename)),70,"\r\n");
+			$data = chunk_split(base64_encode(file_get_contents($filename)),70,"\r\n");
+			$body .= "--$boundary\n";
+			$body .= "Content-Type: ".Fs::GetMimeType($filename)."; name=\"$cid\"\r\n";
+			$body .= "Content-Disposition: attachment; filename=\"$cid\"\r\n";
+			$body .= "Content-Transfer-Encoding: base64\r\n";
+			$body .= "X-Attachment-Id: $cid\r\n";
+			$body .= "\n$data";
 		}
-		$body .= "\r\n--$boundary--";
-
-		$subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
-		mail($rcpt, $subject, $body, $headers);
-	}
-	public static function SendEmail2($from_name,$from_email,$reply_to_name,$reply_to_email,$rcpt,$subject,$body,$attachements=array()){
-		set_time_limit(0);
-		ini_set('memory_limit', '512M');
-		$boundary = Oxygen::HashRandom();
-		$headers  = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: multipart/related; boundary="'.$boundary.'"; type="text/html; charset=UTF-8"' . "\r\n";
-		$headers .= 'From: '. $from_name . ' <'. $from_email .'>'."\r\n";
-		$headers .= 'Sender: '. $from_email ."\r\n";
-		$headers .= 'Reply-To: '. $reply_to_name . ' <'. $reply_to_email .'>'."\r\n";
-
-		$msg = '<html><head>';
-		$msg .= "\r\n".'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-		$msg .= "\r\n".'<title>'.wordwrap($subject,70).'</title>';
-		$msg .= "\r\n".'</head><body>';
-		$msg .= "\r\n".wordwrap($body,70,"\r\n");
-		$msg .= "\r\n".'</body></html>';
-
-		$body = "\r\n--$boundary";
-		$body .= "\r\nContent-Type: text/html; charset=UTF-8";
-		$body .= "\r\n";
-		$body .= "\r\n$msg";
-		$body .= "\r\n";
-		foreach ($attachements as $cid => $filename){
-			if (is_int($cid)) $cid = basename($filename);
-			$body .= "\r\n--$boundary";
-			$body .= "\r\nContent-Location: CID:nothing";
-			$body .= "\r\nContent-ID: <$cid>";
-			$body .= "\r\nContent-Type: ".Fs::GetMimeType($filename).'; name='.$cid;
-			$body .= "\r\nContent-Transfer-Encoding: BASE64";
-			$body .= "\r\n";
-			$body .= "\r\n".chunk_split(base64_encode(file_get_contents($filename)),70,"\r\n");
-		}
-		$body .= "\r\n--$boundary--";
+		$body .= "--$boundary--";
 
 		$subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
 		mail($rcpt, $subject, $body, $headers);
@@ -1224,12 +1232,11 @@ class Oxygen {
 		$r['ORM caching'] = Oxygen::IsItemCacheEnabled() ? 'Enabled' : 'Disabled';
 		$r['APC available'] = IS_APC_AVAILABLE ? 'Yes' : 'No';
 		$r['MEMCACHED available'] = IS_MEMCACHED_AVAILABLE ? 'Yes' : 'No';
-		$r['IGBINARY available'] = IS_IGBINARY_AVAILABLE ? 'Yes' : 'No';
 
-		$r['Application scoping'] = Scope::$APPLICATION->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'');
-		$r['Database scoping'] = Scope::$DATABASE->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'');
-		$r['Session scoping'] = Scope::$SESSION->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'') . ' - ' . Oxygen::GetSessionHash() . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scoping is disabled ***');
-		$r['Window scoping'] = Scope::$WINDOW->GetModeTranslated() . (IS_IGBINARY_AVAILABLE?'+IGBINARY':'') . ' - ' . Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scoping is disabled ***');
+		$r['Application scoping'] = Scope::$APPLICATION->GetModeTranslated();
+		$r['Database scoping'] = Scope::$DATABASE->GetModeTranslated() ;
+		$r['Session scoping'] = Scope::$SESSION->GetModeTranslated() . ' - ' . Oxygen::GetSessionHash() . (Oxygen::IsSessionScopingEnabled() ? '' : ' *** Session scoping is disabled ***');
+		$r['Window scoping'] = Scope::$WINDOW->GetModeTranslated() . ' - ' . Oxygen::GetWindowHash() . (Oxygen::IsWindowScopingEnabled() ? '' : ' *** Window scoping is disabled ***');
 
 		$rr[] = $r;
 
