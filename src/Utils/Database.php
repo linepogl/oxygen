@@ -995,6 +995,7 @@ class Database {
 
 	private static function hash_sequence($tablename,$field='id'){ return 'seq_' . substr($tablename,0,15) . '_' . Oxygen::Hash32($tablename.'+'.$field); }
 	private static function hash_foreign_key($tablename,$field){ return 'fk_' . Oxygen::Hash32($tablename.'+'.$field); }
+	private static function hash_unique_key($tablename,$field){ return 'uq_' . Oxygen::Hash32($tablename.'+'.$field); }
 	private static function hash_index($tablename,$field){ return 'idx_' . Oxygen::Hash32($tablename.'+'.$field); }
 	public static function ExecuteAddForeignKeys($tablename){
 		$a = func_get_args();
@@ -1023,6 +1024,34 @@ class Database {
 				self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP FOREIGN KEY '.new SqlIden(self::hash_foreign_key($tablename,$a[$i])));
 		}
 	}
+
+	public static function ExecuteAddComplexForeignKey($tablename_src,$tablename_dst){
+		$a = func_get_args();
+		$z = func_num_args();
+		$q1 = array(); for($i=2;$i<$z;$i+=2) $q1[] = $a[$i];
+		$q2 = array(); for($i=3;$i<$z;$i+=2) $q2[] = $a[$i];
+		$key = self::hash_foreign_key($tablename_src, implode('+',$q1));
+		$sql_fields_src = implode(',',array_map(function($x){return new SqlIden($x);},$q1));
+		$sql_fields_dst = implode(',',array_map(function($x){return new SqlIden($x);},$q2));
+		try { call_user_func_array('Database::ExecuteAddIndex',array_merge(array($tablename_src),$q1)); } catch (Exception $ex){}
+		try { call_user_func_array('Database::ExecuteAddUniqueKey',array_merge(array($tablename_dst),$q2)); } catch (Exception $ex){}
+		self::Execute('ALTER TABLE '.new SqlIden($tablename_src).' ADD CONSTRAINT '.new SqlIden( $key ).' FOREIGN KEY ('.$sql_fields_src.') REFERENCES '.new SqlIden($tablename_dst).' ('.$sql_fields_dst.')');
+	}
+	public static function ExecuteAddUniqueKey($tablename){
+		$a = func_get_args();
+		$key = self::hash_unique_key($tablename, implode('+',array_slice($a,1)));
+		$sql_fields = implode(',',array_map(function($x){return new SqlIden($x);},array_slice($a,1)));
+		self::Execute('ALTER TABLE '.new SqlIden($tablename).' ADD CONSTRAINT '.new SqlIden( $key ).' UNIQUE ('.$sql_fields.')');
+	}
+	public static function ExecuteAddUniqueKeys($tablename){
+		$a = func_get_args();
+		$z = func_num_args();
+		for($i=1;$i<$z;$i++){
+			self::Execute('ALTER TABLE '.new SqlIden($tablename).' ADD CONSTRAINT '.new SqlIden( self::hash_unique_key($tablename,$a[$i]) ).' UNIQUE ('.new SqlIden($a[$i]).')');
+		}
+	}
+
+
 	public static function ExecuteAddIndices($tablename){
 		$a = func_get_args();
 		$z = func_num_args();
