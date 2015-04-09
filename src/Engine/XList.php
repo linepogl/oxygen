@@ -255,6 +255,8 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	public function WhereAllX( $preds ) { return $this->Where(XPred::AllX($preds)); }
 
 
+	/** @return XList|LinqIterator */
+	public function Apply( $function ){ parent::Apply($function); return $this; }
 
 	/** @var XOrderBy */
 	private $order_by = null;

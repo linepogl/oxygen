@@ -1789,6 +1789,10 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,ru=>"Этот объект уже существует: %s."
 		,zh=>"已经存在该对象：%s。"
 		]);}
+	public static function txtMsgObjectXIsUsed(){ return Lemma::txt([__FUNCTION__
+		,en=>"This object is used: %s."
+		,fr=>"Cet objet est utilisé : %s."
+		]);}
 	public static function txtMsgCannotDeleteSystemObject(){ return Lemma::txt([__FUNCTION__
 		,en=>"This object is used by the system."
 		,fr=>"Cet objet est utilisé par le système."
