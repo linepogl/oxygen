@@ -141,6 +141,10 @@ class Database {
 						self::$cn = self::$cx->cn;
 						self::$cn->exec('ALTER SESSION SET NLS_LANGUAGE=\'AMERICAN\' NLS_TERRITORY=\'AMERICA\' NLS_CURRENCY=\'$\' NLS_ISO_CURRENCY=\'AMERICA\' NLS_NUMERIC_CHARACTERS=\'.,\' NLS_CALENDAR=\'GREGORIAN\' NLS_DATE_FORMAT=\'YYYY-MM-DD HH24:MI:SS\' NLS_DATE_LANGUAGE=\'AMERICAN\' NLS_SORT=\'BINARY_AI\' NLS_COMP=\'LINGUISTIC\'');
 						break;
+					case self::SQLSERVER:
+						self::$cx->cn = new PDO("sqlsrv:Server=".self::$cx->server.";Database=".self::$cx->schema, self::$cx->username, self::$cx->password, array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+						self::$cn = self::$cx->cn;
+						break;
 				}
 			}
 			catch (Exception $ex){

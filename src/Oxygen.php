@@ -255,20 +255,25 @@ class Oxygen {
 					echo ".oxygen-error-page a { color:#f0f0f0; text-decoration:underline; }";
 					echo ".oxygen-error-page a:hover { color:#ffffff; text-decoration:underline; }";
 					echo Css::END;
-					echo '<div class="oxygen-error-page" style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background:#739baa url('.__BASE__.'oxy/img/bg.jpg) 50% 50% no-repeat; background-size:100% 100%;padding:40px;overflow:auto;-webkit-overflow-scrolling:touch;">';
+					echo '<div class="oxygen-error-page" style="position:fixed;top:0;bottom:0;left:0;right:0;z-index:2147483647;background:#282d2b url('.__BASE__.'oxy/img/bg.jpg) 50% 50% no-repeat; background-size:100% 100%;overflow:auto;-webkit-overflow-scrolling:touch;">';
 
-					echo '<div style="color:#ffffff;font:bold 50px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:150px;width:80%;letter-spacing:-2px;">'.oxy::txtMsgCannotDisplayWebPage().'</div>';
+					echo '<div style="color:#f0f0f0;font:15px/20px Helvetica,Arial,Liberation Sans,sans-serif;letter-spacing:0.5px;min-height:100px;max-width:300px;margin:0 auto;padding-top:100px;text-align:center;">'.oxy::GetErrorPageHead().'</div>';
+					echo '<div style="color:#ffffff;font:300 35px/55px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:30px;padding:20px;letter-spacing:-1px;text-transform:uppercase;text-align:center;">'.oxy::txtMsgCannotDisplayWebPage().'</div>';
 
 
 					if ($ex instanceof ApplicationException) {
-						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.$Q.$ex->getMessage().$Q.'</div>';
+						echo '<div style="color:#f0f0f0;font:18px/25px Helvetica,Arial,Liberation Sans,sans-serif;letter-spacing:0.5px;max-width:500px;margin:0 auto;padding-top:40px;text-align:center;">'.$Q.$ex->getMessage().$Q.'</div>';
+						echo '<div style="color:#f0f0f0;font:15px/20px Helvetica,Arial,Liberation Sans,sans-serif;letter-spacing:0.5px;max-width:300px;margin:0 auto;padding-top:70px;text-align:center;">'.oxy::GetErrorPageFoot().'</div>';
 					}
 					else {
-						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.oxy::txtMsgAnErrorOccurredAndTeamNotified().'</div>';
-						echo '<div style="color:#f0f0f0;font:22px/25px Helvetica,Arial,Liberation Sans,sans-serif;margin-top:20px;width:70%;letter-spacing:0.5px;">'.oxy::GetErrorPageExtraMessage().'</div>';
+						echo '<div style="color:#f0f0f0;font:18px/25px Helvetica,Arial,Liberation Sans,sans-serif;letter-spacing:0.5px;max-width:500px;margin:0 auto;padding-top:40px;text-align:center;">'.oxy::txtMsgAnErrorOccurredAndTeamNotified().'</div>';
+						echo '<div style="color:#f0f0f0;font:15px/20px Helvetica,Arial,Liberation Sans,sans-serif;letter-spacing:0.5px;max-width:300px;margin:0 auto;padding-top:70px;text-align:center;">'.oxy::GetErrorPageFoot().'</div>';
 						if (Oxygen::IsDevelopment()) {
 							$serial = Debug::RecordExceptionServed($ex,'Global Exception Handler');
-							echo '<div style="color:#f0f0f0;font:12px/14px Courier New,monospace;margin-top:60px;width:70%;"> *'.oxy::txtMsgDevelopmentEnvironment().'<br/>'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
+
+							echo '<div style="border-top:1px dotted #f0f0f0;margin-top:200px;padding:40px;background:rgba(255,255,255,0.05);">';
+							echo '<div style="color:rgba(255,255,255,0.2);font:12px/14px Courier New,monospace;"> *'.oxy::txtMsgDevelopmentEnvironment().'</div>';
+							echo '<div style="color:#f0f0f0;font:12px/14px Courier New,monospace;padding-top:10px;padding-bottom:10px;">'.$Q.get_class($ex).' '.$serial.$Q.'</div>';
 							echo '<div style="color:#f0f0f0;font:bold 40px/44px Courier New,monospace;margin-top:10px;width:70%;">'.$Q.$ex->getMessage().$Q.'</div>';
 							echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Exception stack trace</b><br/><br/>'.new Html(Debug::GetExceptionTraceAsText($ex)).'</div>';
 							if (!($ex instanceof JavascriptException)) {
@@ -280,6 +285,7 @@ class Oxygen {
 							echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Oxygen info</b><br/><br/>'.new Html(Oxygen::GetInfoAsText()).'</div>';
 							echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Debug entries</b><br/><br/>'.new Html(Debug::GetEntriesAsText()).'</div>';
 							echo '<div style="color:#f0f0f0;font:11px/13px Courier New,monospace;white-space:pre;border-left:1px solid #f0f0f0;margin-left:3px;margin-top:20px;padding:10px;"><b>Database queries</b><br/><br/>'.new Html(Database::GetQueriesAsText()).'</div>';
+							echo '</div>';
 						}
 						else {
 							$serial = Debug::RecordExceptionServedGeneric($ex,'Global Exception Handler');

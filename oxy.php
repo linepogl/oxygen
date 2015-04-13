@@ -185,7 +185,8 @@ abstract class _oxy extends _oxy_dictionary {
 	public static function GetFavoriteColors(array $append = array(), array $remove = array()){ return null; }
 
 
-	public static function GetErrorPageExtraMessage(){ return ''; }
+	public static function GetErrorPageHead(){ return ''; }
+	public static function GetErrorPageFoot(){ return ''; }
 
 }
 Oxygen::RegisterResourceManager('oxy','_oxy');
