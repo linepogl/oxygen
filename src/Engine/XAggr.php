@@ -20,7 +20,7 @@ class XAggr extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	private $data;
 	public function __construct(XMeta $meta,$selectors){
 		$this->meta = is_null($meta) ? XItem::Meta() : $meta;
-		$this->selectors = $selectors instanceof XMetaField ? [$selectors] : $selectors;
+		$this->selectors = $selectors;
   }
 
 
