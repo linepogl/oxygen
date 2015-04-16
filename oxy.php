@@ -131,6 +131,18 @@ abstract class _oxy extends _oxy_dictionary {
 	public static function icoVolume                (){ return new Glyph('oxy-icon',0xE911); }
 	public static function icoNoVolume              (){ return new Glyph('oxy-icon',0xE912); }
 
+	public static function icoWiFiLevel1       (){ return new Glyph('oxy-icon',0xE913); }
+	public static function icoWiFiLevel2       (){ return new Glyph('oxy-icon',0xE914); }
+	public static function icoWiFiLevel3       (){ return new Glyph('oxy-icon',0xE915); }
+	public static function icoWiFiLevel4       (){ return new Glyph('oxy-icon',0xE916); }
+	/** @return Glyph */
+	public static function icoWiFiLevel($decibel){
+		if ($decibel > -50) return self::icoWiFiLevel4()->WithTitle($decibel.' dBm')->WithCssClass('help');
+		if ($decibel > -60) return self::icoWiFiLevel3()->WithTitle($decibel.' dBm')->WithCssClass('help');
+		if ($decibel > -70) return self::icoWiFiLevel2()->WithTitle($decibel.' dBm')->WithCssClass('help');
+		return self::icoWiFiLevel1()->WithTitle($decibel.' dBm')->WithCssClass('help');
+	}
+
 	public static function icoBoxUnchecked          (){ return new Glyph('oxy-icon',0xE9A0); }
 	public static function icoBoxChecked            (){ return new Glyph('oxy-icon',0xE9A1); }
 	public static function icoBoxDirty              (){ return new Glyph('oxy-icon',0xE9A3); }
