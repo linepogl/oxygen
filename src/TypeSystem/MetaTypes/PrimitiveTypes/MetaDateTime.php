@@ -40,14 +40,11 @@ class MetaDateTime extends XNullableType {
 	 */
 	public static function ExportPdoValue($value, $platform) {
 		if ($value===null) return null;
-		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   $r = date('Y-m-d H:i:s',$value->AsInt()); break;
-			case Database::ORACLE:  $r = date('Y-m-d H:i:s',$value->AsInt()); break;
+			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); }); break;
+			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); }); break;
 		}
-		Oxygen::UseClientTimeZone();
-		return $r;
 	}
 
 	/**
@@ -57,14 +54,11 @@ class MetaDateTime extends XNullableType {
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
 		if ($value===null) return Sql::Null;
-		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   $r = '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; break;
-			case Database::ORACLE:  $r = '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; break;
+			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; }); break;
+			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; }); break;
 		}
-		Oxygen::UseClientTimeZone();
-		return $r;
 	}
 
 	/**
@@ -137,7 +131,7 @@ class MetaDateTime extends XNullableType {
 	public static function ImportDBValue($value) {
 		if ($value===null) return null;
 		if ($value == '0000-00-00 00:00:00') return null;
-		return XDateTime::Parse($value,'Y-m-d H:i:s');
+		return Oxygen::WithServerTimeZone(function()use($value){ return XDateTime::Parse($value,'Y-m-d H:i:s'); });
 	}
 
 	/**

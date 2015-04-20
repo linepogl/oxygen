@@ -560,6 +560,10 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,ru=>"За %s"
 		,zh=>"在 %s 内"
 		]);}
+	public static function txtChangeTimeZone(){ return Lemma::txt([__FUNCTION__
+		,en=>"Change time zone"
+		,fr=>"Changer le fuseau horaire"
+		]);}
 	public static function txtTimeZone(){ return Lemma::txt([__FUNCTION__
 		,en=>"Time zone"
 		,fr=>"Fuseau horaire"
@@ -1512,7 +1516,7 @@ abstract class _oxy_dictionary extends ResourceManager {
 	public static function txtMsgAccessHalted(){ return Lemma::txt([__FUNCTION__
 		,en=>"We are upgrading the server. Please wait a few minutes..."
 		,fr=>"Une mise à jour est en train d'exécuter sur le serveur. Veuillez attendez quelques instants..."
-	]);}
+		]);}
 	public static function txtMsgAccessDenied(){ return Lemma::txt([__FUNCTION__
 		,en=>"Access denied."
 		,fr=>"Accès refusé."

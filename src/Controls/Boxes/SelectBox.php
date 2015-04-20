@@ -103,14 +103,14 @@ class SelectBox extends Box {
 	/** @return static */
 	public function WithGroupCaptions($group_captions_or_group_caption_map){
 		if (!is_string($group_captions_or_group_caption_map) && !is_array($group_captions_or_group_caption_map) && is_callable($group_captions_or_group_caption_map)) {
-			for ($i = $this->last_index_from; $i < count($this->list_group_groups); $i++)
-				$this->list_group_groups[ $i ] = strval($group_captions_or_group_caption_map($this->list_values[$i]));
+			for ($i = $this->last_index_from; $i < count($this->list_group_captions); $i++)
+				$this->list_group_captions[ $i ] = strval($group_captions_or_group_caption_map($this->list_values[$i]));
 		}
 		else {
 			$i = $this->last_index_from;
 			foreach ($group_captions_or_group_caption_map as $value)
-				if ($i < count($this->list_group_groups))
-					$this->list_group_groups[ $i++ ] = strval($value);
+				if ($i < count($this->list_group_captions))
+					$this->list_group_captions[ $i++ ] = strval($value);
 		}
 		return $this;
 	}

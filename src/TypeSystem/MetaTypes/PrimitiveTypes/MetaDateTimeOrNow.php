@@ -38,14 +38,11 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   $r = date('Y-m-d H:i:s',$value->AsInt()); break;
-			case Database::ORACLE:  $r = date('Y-m-d H:i:s',$value->AsInt()); break;
+			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
+			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
 		}
-		Oxygen::UseClientTimeZone();
-		return $r;
 	}
 
 	/**
@@ -54,14 +51,11 @@ class MetaDateTimeOrNow extends XConcreteType {
 	 * @return string
 	 */
 	public static function ExportSqlLiteral($value, $platform) {
-		Oxygen::UseServerTimeZone();
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   $r = '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; break;
-			case Database::ORACLE:  $r = '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; break;
+			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
+			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
 		}
-		Oxygen::UseClientTimeZone();
-		return $r;
 	}
 
 	/**

@@ -622,6 +622,25 @@ class Oxygen {
 		self::$client_time_zone = self::$server_time_zone===$time_zone ? null : $time_zone;
 		Oxygen::SetUrlPin('zone',self::$client_time_zone);
 	}
+	public static function GetCurrentTimeZone(){ return date_default_timezone_get(); }
+	public static function WithServerTimeZone( $function ) {
+		if (self::$client_time_zone === null) {
+			return $function();
+		}
+		else {
+			$old_time_zone = date_default_timezone_get();
+			date_default_timezone_set(self::$server_time_zone);
+			try {
+				$r = $function();
+			}
+			catch (Exception $ex) {
+				date_default_timezone_set($old_time_zone);
+				throw $ex;
+			}
+			date_default_timezone_set($old_time_zone);
+			return $r;
+		}
+	}
 
 
 

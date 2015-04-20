@@ -136,6 +136,24 @@ class XDateTime extends XValue implements Serializable {
 	}
 
 
+
+
+	/** @return static */
+	public function ToServerTimeZone() { return $this->ToTimeZone(Oxygen::GetServerTimeZone()); }
+
+	/** @return static */
+	public function ToTimeZone($timezone) {
+		if ($timezone === null) return $this;
+		$current_timezone = Oxygen::GetClientTimeZone();
+		if ($timezone === $current_timezone) return $this;
+		$z1 = new DateTimeZone($current_timezone);
+		$z2 = new DateTimeZone($timezone);
+		$d = new DateTime('@'.$this->timestamp);
+		$o1 = $z1->getOffset($d);
+		$o2 = $z2->getOffset($d);
+		return new static( $this->timestamp - $o1 + $o2 );
+	}
+
 	/**
 	* @param string $value
 	* @param string $format  --see date()
@@ -180,7 +198,7 @@ class XDateTime extends XValue implements Serializable {
 
 
 	public static function GetTimeZones(){
-		return timezone_identifiers_list();
+		return array_filter( timezone_identifiers_list() , function($x){ return $x !== 'UTC'; } );
 	}
 
 }
