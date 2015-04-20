@@ -31,4 +31,12 @@ class Arr {
 	}
 
 
+	public static function ToCsv( $a ){
+    ob_start();
+    $f = fopen( "php://output" , 'w' );
+		foreach ($a as $aa) fputcsv( $f , $aa , "\t" );
+    fclose( $f );
+		return chr( 255 ) . chr( 254 ) . mb_convert_encoding( ob_get_clean() , 'UTF-16LE' , 'UTF-8' );
+	}
+
 }
