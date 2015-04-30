@@ -51,6 +51,23 @@ class Sql extends ExportValue {
 			Sql::Decimal_38_20 => 'DECIMAL(38,20)',
 			Sql::Text => 'TEXT'
 			),
+		Database::SQLSERVER => array (
+			Sql::ID => 'INT',
+			Sql::Integer => 'INT',
+			Sql::Boolean => 'BIT',
+			Sql::DateTime => 'DATETIME',
+			Sql::Time => 'DATETIME',
+			Sql::TimeSpan => 'DECIMAL(15,6)',
+			Sql::String1 => 'NCHAR(1)',
+			Sql::String2 => 'NCHAR(2)',
+			Sql::String20 => 'NVARCHAR(20)',
+			Sql::String100 => 'NVARCHAR(100)',
+			Sql::String255 => 'NVARCHAR(255)',
+			Sql::Decimal_18_5 => 'DECIMAL(18,5)',
+			Sql::Decimal_38_5 => 'DECIMAL(38,5)',
+			Sql::Decimal_38_20 => 'DECIMAL(38,20)',
+			Sql::Text => 'NTEXT'
+			),
 		Database::ORACLE => array (
 			Sql::ID => 'NUMBER(10,0)',
 			Sql::Integer => 'NUMBER(10,0)',

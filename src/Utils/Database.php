@@ -135,15 +135,15 @@ class Database {
 						self::$cx->cn = new PDO('mysql:host='.$a[0].(count($a)>1?';port='.$a[1]:'').';dbname='.self::$cx->schema.';charset='.$charset, self::$cx->username, self::$cx->password, array(PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) );
 						self::$cn = self::$cx->cn;
 						break;
+					case self::SQLSERVER:
+						self::$cx->cn = new PDO("sqlsrv:Server=".self::$cx->server.";Database=".self::$cx->schema, self::$cx->username, self::$cx->password, array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+						self::$cn = self::$cx->cn;
+						break;
 					case self::ORACLE:
 						$a = explode(':',self::$cx->server);
 						self::$cx->cn = new PDO('oci:dbname=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST='.$a[0].')(PORT='.(count($a)>1?$a[1]:'1521').')))(CONNECT_DATA=(SERVICE_NAME='.self::$cx->schema.')))',self::$cx->username,self::$cx->password, array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 						self::$cn = self::$cx->cn;
 						self::$cn->exec('ALTER SESSION SET NLS_LANGUAGE=\'AMERICAN\' NLS_TERRITORY=\'AMERICA\' NLS_CURRENCY=\'$\' NLS_ISO_CURRENCY=\'AMERICA\' NLS_NUMERIC_CHARACTERS=\'.,\' NLS_CALENDAR=\'GREGORIAN\' NLS_DATE_FORMAT=\'YYYY-MM-DD HH24:MI:SS\' NLS_DATE_LANGUAGE=\'AMERICAN\' NLS_SORT=\'BINARY_AI\' NLS_COMP=\'LINGUISTIC\'');
-						break;
-					case self::SQLSERVER:
-						self::$cx->cn = new PDO("sqlsrv:Server=".self::$cx->server.";Database=".self::$cx->schema, self::$cx->username, self::$cx->password, array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-						self::$cn = self::$cx->cn;
 						break;
 				}
 			}
@@ -165,7 +165,7 @@ class Database {
 	 * @param $schema string
 	 * @param $username string
 	 * @param $password string
-	 * @param string $type int Possible values Database::MYSQL or Database::ORACLE
+	 * @param string $type int Possible values Database::MYSQL, Database::SQLSERVER or Database::ORACLE
 	 * @return void
 	 */
 	public static function Connect($server,$schema,$username,$password,$type=self::MYSQL){
@@ -187,7 +187,7 @@ class Database {
 	 * @param $schema string
 	 * @param $username string
 	 * @param $password string
-	 * @param string $type int Possible values Database::MYSQL or Database::ORACLE
+	 * @param string $type int Possible values Database::MYSQL, Database::SQLSERVER or Database::ORACLE
 	 * @return void
 	 */
 	public static function ConnectManaged($server,$schema,$username,$password,$type=self::MYSQL){
@@ -745,11 +745,12 @@ class Database {
 
 	public static function ExecuteDropTable($tablename,$force = false) {
 		switch (self::$type) {
+			case self::MYSQL:
+			case self::SQLSERVER:
+				$sql = 'DROP TABLE '.new SqlIden($tablename);
+				break;
 			case self::ORACLE:
 				$sql = 'DROP TABLE '.new SqlIden($tablename).($force?' CASCADE CONSTRAINTS':'').' PURGE';
-				break;
-			default:
-				$sql = 'DROP TABLE '.new SqlIden($tablename);
 				break;
 		}
 		self::Execute($sql);
@@ -821,6 +822,7 @@ class Database {
 					self::Execute($sql);
 				}
 				break;
+			case self::SQLSERVER:
 			case self::ORACLE:
 				for($i=1;$i<$z;$i+=2){
 					$sql = 'ALTER TABLE '.new SqlIden($tablename).' ADD '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]);
@@ -835,6 +837,7 @@ class Database {
 		$z = func_num_args();
 		switch (self::$type){
 			case self::MYSQL:
+			case self::SQLSERVER:
 				for($i=1;$i<$z;$i+=3){
 					$sql = 'ALTER TABLE '.new SqlIden($tablename).' CHANGE '.new SqlIden($a[$i]).' '.new SqlIden($a[$i+1]).' '.Sql::GetDataType(self::$type,$a[$i+2]);
 					self::Execute($sql);
@@ -861,14 +864,22 @@ class Database {
 			self::ExecuteDropFields($tablename,$tmp);
 		}
 	}
+	public static function ExecuteNotNullFields($tablename) {
+		$a = func_get_args();
+		$z = func_num_args();
+		for ($i = 1;$i < $z;$i += 2) {
+			self::Execute('ALTER TABLE '.new SqlIden($tablename).' ALTER COLUMN '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]).' NOT NULL');
+		}
+	}
 
 	public static function ExecuteRenameTable($tablename, $newName){
 		switch(self::$type) {
+			case self::MYSQL:
+			case self::SQLSERVER:
+				self::Execute('RENAME TABLE '.new SqlIden($tablename).' TO '.new SqlIden($newName));
+				break;
 			case self::ORACLE:
 				self::Execute('RENAME '.new SqlIden($tablename).' TO '.new SqlIden($newName));
-				break;
-			default:
-				self::Execute('RENAME TABLE '.new SqlIden($tablename).' TO '.new SqlIden($newName));
 				break;
 		}
 	}
@@ -878,10 +889,13 @@ class Database {
 	}
   public static function ExecuteCreateSequence($sequence_name,$from=0) {
 		switch(self::$type) {
+			case self::MYSQL:
+			case self::SQLSERVER:
+				break;
 			case self::ORACLE:
 				$sql = 'CREATE SEQUENCE '.new SqlIden($sequence_name).' INCREMENT BY 1 START WITH '.$from.' NOMAXVALUE MINVALUE '.min(0,$from).' NOCYCLE NOCACHE';
 				self::Execute($sql);
-			break;
+				break;
 		}
   }
 	public static function ExecuteDropStandardSequence($tablename) {
@@ -889,10 +903,13 @@ class Database {
 	}
   public static function ExecuteDropSequence($sequence_name) {
 		switch(self::$type) {
+			case self::MYSQL:
+			case self::SQLSERVER:
+				break;
 			case self::ORACLE:
 				$sql = 'DROP SEQUENCE '.new SqlIden($sequence_name);
 				self::Execute($sql);
-			break;
+				break;
 		}
   }
 
@@ -921,18 +938,32 @@ class Database {
 		switch (self::$type) {
 			default:
 			case self::MYSQL:
-				self::Execute('LOCK TABLES oxy_ids WRITE,'.$tablename.' WRITE');
-				$id = self::ExecuteScalar('SELECT LastID FROM oxy_ids WHERE TableName=?',$tablename)->AsID();
+				self::Execute('LOCK TABLES `oxy_ids` WRITE,`'.$tablename.'` WRITE');
+				$id = self::ExecuteScalar('SELECT `LastID` FROM `oxy_ids` WHERE `TableName`=?',$tablename)->AsID();
 				if ($id===null){
-					$id = self::ExecuteScalar('SELECT MAX('.$primarykey.') FROM '.$tablename)->AsID();
+					$id = self::ExecuteScalar('SELECT MAX(`'.$primarykey.'`) FROM `'.$tablename.'`')->AsID();
 					$id = $id===null ? new ID(0) : new ID($id->AsInt() + 1);
-					self::Execute('INSERT INTO oxy_ids (TableName,LastID) VALUES (?,?)',$tablename,$id);
+					self::Execute('INSERT INTO `oxy_ids` (`TableName`,`LastID`) VALUES (?,?)',$tablename,$id);
 				}
 				else {
 					$id = new ID($id->AsInt() + 1);
-					self::Execute('UPDATE oxy_ids SET LastID=? WHERE TableName=?',$id,$tablename);
+					self::Execute('UPDATE `oxy_ids` SET `LastID`=? WHERE `TableName`=?',$id,$tablename);
 				}
 				self::Execute('UNLOCK TABLES');
+				break;
+			case self::SQLSERVER:
+				self::TransactionBegin();
+				$id = self::ExecuteScalar('SELECT [LastID] FROM [oxy_ids] WITH (TABLOCK, HOLDLOCK) WHERE [TableName]=?',$tablename)->AsID();
+				if ($id===null){
+					$id = self::ExecuteScalar('SELECT MAX(['.$primarykey.']) FROM ['.$tablename.'] WITH (TABLOCK, HOLDLOCK)')->AsID();
+					$id = $id===null ? new ID(0) : new ID($id->AsInt() + 1);
+					self::Execute('INSERT INTO [oxy_ids] ([TableName],[LastID]) VALUES (?,?)',$tablename,$id);
+				}
+				else {
+					$id = new ID($id->AsInt() + 1);
+					self::Execute('UPDATE [oxy_ids] SET [LastID]=? WHERE [TableName]=?',$id,$tablename);
+				}
+				self::TransactionCommit();
 				break;
 			case self::ORACLE:
 				try {
@@ -955,20 +986,36 @@ class Database {
 		switch (self::$type) {
 			default:
 			case self::MYSQL:
-				self::Execute('LOCK TABLES oxy_ids WRITE,'.$table_name.' WRITE');
-				$id = self::ExecuteScalar('SELECT LastID FROM oxy_ids WHERE TableName=?',$table_name)->AsID();
+				self::Execute('LOCK TABLES `oxy_ids` WRITE,`'.$table_name.'` WRITE');
+				$id = self::ExecuteScalar('SELECT `LastID` FROM `oxy_ids` WHERE `TableName`=?',$table_name)->AsID();
 				if ($id===null){
-					$id = self::ExecuteScalar('SELECT MAX('.$primarykey.') FROM '.$table_name)->AsID();
+					$id = self::ExecuteScalar('SELECT MAX(`'.$primarykey.'`) FROM `'.$table_name.'`')->AsID();
 					if ($id===null || $id->AsInt() < $next_iid) {
 						$id = new ID($next_iid - 1);
-						self::Execute('INSERT INTO oxy_ids (TableName,LastID) VALUES (?,?)',$table_name,$id);
+						self::Execute('INSERT INTO `oxy_ids` (`TableName`,`LastID`) VALUES (?,?)',$table_name,$id);
 					}
 				}
 				elseif ($id->AsInt() < $next_iid-1) {
 					$id = new ID($next_iid-1);
-					self::Execute('UPDATE oxy_ids SET LastID=? WHERE TableName=?',$id,$table_name);
+					self::Execute('UPDATE `oxy_ids` SET `LastID`=? WHERE `TableName`=?',$id,$table_name);
 				}
 				self::Execute('UNLOCK TABLES');
+				break;
+			case self::SQLSERVER:
+				self::TransactionBegin();
+				$id = self::ExecuteScalar('SELECT [LastID] FROM [oxy_ids] WITH (TABLOCK, HOLDLOCK) WHERE [TableName]=?',$table_name)->AsID();
+				if ($id===null){
+					$id = self::ExecuteScalar('SELECT MAX(['.$primarykey.']) FROM ['.$table_name.'] WITH (TABLOCK, HOLDLOCK)')->AsID();
+					if ($id===null || $id->AsInt() < $next_iid) {
+						$id = new ID($next_iid - 1);
+						self::Execute('INSERT INTO [oxy_ids] ([TableName],[LastID]) VALUES (?,?)',$table_name,$id);
+					}
+				}
+				elseif ($id->AsInt() < $next_iid-1) {
+					$id = new ID($next_iid-1);
+					self::Execute('UPDATE [oxy_ids] SET [LastID]=? WHERE [TableName]=?',$id,$table_name);
+				}
+				self::TransactionCommit();
 				break;
 			case self::ORACLE:
 				$seq = self::hash_sequence($table_name,$primarykey);
@@ -1022,10 +1069,15 @@ class Database {
 		$z = func_num_args();
 		for($i=1;$i<$z;$i++){
 			try { self::ExecuteDropIndices($tablename,$a[$i]);  } catch (Exception $ex){}
-			if (self::$type == self::ORACLE)
-				self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP CONSTRAINT '.new SqlIden(self::hash_foreign_key($tablename,$a[$i])));
-			else
-				self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP FOREIGN KEY '.new SqlIden(self::hash_foreign_key($tablename,$a[$i])));
+			switch (self::$type) {
+				case self::MYSQL:
+				case self::SQLSERVER:
+					self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP FOREIGN KEY '.new SqlIden(self::hash_foreign_key($tablename,$a[$i])));
+					break;
+				case self::ORACLE:
+					self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP CONSTRAINT '.new SqlIden(self::hash_foreign_key($tablename,$a[$i])));
+					break;
+			}
 		}
 	}
 
@@ -1091,6 +1143,9 @@ class Database {
 				case self::MYSQL:
 					self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])));
 					break;
+				case self::SQLSERVER:
+					self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])));
+					break;
 				case self::ORACLE:
 					self::Execute('DROP INDEX '.new SqlIden(self::hash_index($tablename,$a[$i])));
 					break;
@@ -1102,9 +1157,11 @@ class Database {
 		//$z = func_num_args();
 		$key = self::hash_index($tablename, implode('+',array_slice($a,1)));
 		switch (self::$type) {
-			default:
 			case self::MYSQL:
-			self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden($key));
+				self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden($key));
+				break;
+			case self::SQLSERVER:
+				self::Execute('ALTER TABLE '.new SqlIden($tablename).' DROP INDEX '.new SqlIden($key));
 				break;
 			case self::ORACLE:
 				self::Execute('DROP INDEX '.new SqlIden($key));
@@ -1135,9 +1192,14 @@ class Database {
 
 	public static function ExecuteMetaForeignKeys_Oracle($tablename) {
 		$r = array();
-		$dr = Database::Execute('SELECT b.COLUMN_NAME F,c.TABLE_NAME TT,c.COLUMN_NAME FF FROM ALL_CONSTRAINTS a,ALL_CONS_COLUMNS b,ALL_CONS_COLUMNS c WHERE a.CONSTRAINT_TYPE=? AND b.TABLE_NAME=? AND a.CONSTRAINT_NAME=b.CONSTRAINT_NAME and a.R_CONSTRAINT_NAME=c.CONSTRAINT_NAME','R',$tablename);
-		while($dr->Read())
-			$r[] = array('F'=>$dr['F']->AsString(),'TT'=>$dr['TT']->AsString(),'FF'=>$dr['FF']->AsString());
+		$dr = Database::Execute('SELECT a.CONSTRAINT_NAME C,b.POSITION I,b.COLUMN_NAME F,c.TABLE_NAME TT,c.COLUMN_NAME FF FROM ALL_CONSTRAINTS a,ALL_CONS_COLUMNS b,ALL_CONS_COLUMNS c WHERE a.CONSTRAINT_TYPE=? AND b.TABLE_NAME=? AND a.CONSTRAINT_NAME=b.CONSTRAINT_NAME AND a.R_CONSTRAINT_NAME=c.CONSTRAINT_NAME AND b.POSITION=c.POSITION ORDER BY a.CONSTRAINT_NAME,b.POSITION','R',$tablename);
+		while($dr->Read()) {
+			$c = $dr['C']->AsString();
+			if (array_key_exists($c,$r))
+				$r[$c][$dr['F']->AsString()] = $dr['FF']->AsString();
+			else
+				$r[$c] = array('' => $dr['TT']->AsString(),$dr['F']->AsString()=>$dr['FF']->AsString());
+		}
 		$dr->Close();
 		return $r;
 	}

@@ -14,6 +14,7 @@ if (Database::BeginPatchingSystem()) {
 }
 if (Database::BeginPatch('v',1,'Initial tables')) {
 	Database::ExecuteCreateTable('oxy_ids','TableName',Sql::String100 ,'LastID',Sql::ID);
+	Database::ExecuteNotNullFields('oxy_ids','TableName',Sql::String100);
 	Database::ExecuteAddPrimaryKey('oxy_ids','TableName');
 	Database::ApplyPatch();
 }

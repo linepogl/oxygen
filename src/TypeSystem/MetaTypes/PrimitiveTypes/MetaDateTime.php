@@ -42,8 +42,9 @@ class MetaDateTime extends XNullableType {
 		if ($value===null) return null;
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); }); break;
-			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); }); break;
+			case Database::MYSQL:      return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); }); break;
+			case Database::SQLSERVER:  return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); }); break;
+			case Database::ORACLE:     return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); }); break;
 		}
 	}
 
@@ -56,8 +57,9 @@ class MetaDateTime extends XNullableType {
 		if ($value===null) return Sql::Null;
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; }); break;
-			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; }); break;
+			case Database::MYSQL:      return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; }); break;
+			case Database::SQLSERVER:  return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; }); break;
+			case Database::ORACLE:     return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; }); break;
 		}
 	}
 
@@ -131,7 +133,7 @@ class MetaDateTime extends XNullableType {
 	public static function ImportDBValue($value) {
 		if ($value===null) return null;
 		if ($value == '0000-00-00 00:00:00') return null;
-		return Oxygen::WithServerTimeZone(function()use($value){ return XDateTime::Parse($value,'Y-m-d H:i:s'); });
+		return Oxygen::WithServerTimeZone(function()use($value){ return XDateTime::Parse($value,'Y-m-d H:i:s+'); });
 	}
 
 	/**

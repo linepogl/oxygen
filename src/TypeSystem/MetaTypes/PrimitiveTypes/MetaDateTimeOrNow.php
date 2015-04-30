@@ -40,8 +40,9 @@ class MetaDateTimeOrNow extends XConcreteType {
 	public static function ExportPdoValue($value, $platform) {
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
-			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
+			case Database::MYSQL:      return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
+			case Database::SQLSERVER:  return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
+			case Database::ORACLE:     return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
 		}
 	}
 
@@ -53,8 +54,9 @@ class MetaDateTimeOrNow extends XConcreteType {
 	public static function ExportSqlLiteral($value, $platform) {
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
-			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
+			case Database::MYSQL:      return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
+			case Database::SQLSERVER:  return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
+			case Database::ORACLE:     return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
 		}
 	}
 
@@ -122,7 +124,7 @@ class MetaDateTimeOrNow extends XConcreteType {
 	public static function ImportDBValue($value) {
 		if ($value===null) return self::GetDefaultValue();
 		if ($value == '0000-00-00 00:00:00') return self::GetDefaultValue();
-		return XDateTime::Parse($value,'Y-m-d H:i:s');
+		return XDateTime::Parse($value,'Y-m-d H:i:s+');
 	}
 
 	/**

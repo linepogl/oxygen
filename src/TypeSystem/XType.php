@@ -208,8 +208,9 @@ abstract class XType implements _XType {
 	protected static function EncodeAsSqlStringLiteral($string,$platform){
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   return '\''.str_replace('\'','\\\'',str_replace('\\','\\\\',$string)).'\'';
-			case Database::ORACLE:  return '\''.str_replace('\'','\'\'',$string).'\'';
+			case Database::MYSQL:      return '\''.str_replace('\'','\\\'',str_replace('\\','\\\\',$string)).'\'';
+			case Database::ORACLE:     return '\''.str_replace('\'','\'\'',$string).'\'';
+			case Database::SQLSERVER:  return '\''.str_replace('\'','\'\'',$string).'\'';
 		}
 	}
 

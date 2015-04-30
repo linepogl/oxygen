@@ -42,8 +42,9 @@ class MetaTime extends XNullableType {
 		if ($value===null) return null;
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
-			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
+			case Database::MYSQL:      return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
+			case Database::SQLSERVER:  return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
+			case Database::ORACLE:     return Oxygen::WithServerTimeZone(function()use($value){ return date('Y-m-d H:i:s',$value->AsInt()); });
 		}
 	}
 
@@ -56,8 +57,9 @@ class MetaTime extends XNullableType {
 		if ($value===null) return Sql::Null;
 		switch ($platform) {
 			default:
-			case Database::MYSQL:   return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
-			case Database::ORACLE:  return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
+			case Database::MYSQL:      return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
+			case Database::SQLSERVER:  return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
+			case Database::ORACLE:     return Oxygen::WithServerTimeZone(function()use($value){ return '\''.date('Y-m-d H:i:s',$value->AsInt()).'\''; });
 		}
 	}
 
@@ -131,7 +133,7 @@ class MetaTime extends XNullableType {
 	public static function ImportDBValue($value) {
 		if ($value===null) return null;
 		if ($value == '0000-00-00 00:00:00') return null;
-		return XTime::Parse($value,'Y-m-d H:i:s');
+		return XTime::Parse($value,'Y-m-d H:i:s+');
 	}
 
 	/**
