@@ -654,9 +654,9 @@ class Oxygen {
 		Scope::ResetAllWeak();
 	}
 
-	public static function IsHalted() { return !CLI && Scope::$DATABASE['Oxygen::HaltWeb']; }
+	public static function IsHalted() { return !CLI && Scope::$DATABASE->HARD['Oxygen::HaltWeb']; }
 	public static function HaltWeb($v=true) {
-		$was_halted = Scope::$DATABASE['Oxygen::HaltWeb'];
+		$was_halted = Scope::$DATABASE->HARD['Oxygen::HaltWeb'];
 		if ($was_halted) {
 			if (!$v) {
 				Scope::$DATABASE->HARD['Oxygen::HaltWeb'] = null;
