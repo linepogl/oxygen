@@ -337,20 +337,27 @@ var Oxygen = {
 	};for(var key in opt)r[key]=opt[key];window[ns]=r;return r;}
 
 	,CheckBox:function(opt){var ns=opt.ns;var r={ns:ns
-		,ico_checked:'',ico_unchecked:'',ico_dirty:''
+		,ico_checked:'',ico_unchecked:'',ico_dirty:'',ico_checked_false:''
 		,is_dirty:false
 		,list_ns:[]
 		,list_value:''
+		,optgroup_ns:null
+		,allow_null:false
 		,on_change:function(){}
-		,SetValue:function(value){var old = this.GetValue();jQuery('#'+ns).val(value?'true':'false');this.Update();if(old!=value)this.OnChange();}
-		,GetValue:function(){return jQuery('#'+ns).val()==='true';}
+		,SetValue:function(value){var old = this.GetValue(); if(value!==true&&value!==false)value=this.allow_null?null:false; jQuery('#'+ns).val(value===true?'true':(value===false?'false':'')); this.Update(); if(old!==value)this.OnChange(); }
+		,Check:function(){this.SetValue(true);}
+		,GetValue:function(){ var s=jQuery('#'+ns).val(); if (s==='true') return true; if (s==='false') return false; return this.allow_null?null:false; }
 		,GetListValue:function(){return this.list_value;}
-		,Update:function(){jQuery('#'+ns+'-box').html(this.is_dirty?this.ico_dirty:this.GetValue()?this.ico_checked:this.ico_unchecked);}
+		,Update:function(){ var v = this.GetValue(); jQuery('#'+ns+'-box').html(this.is_dirty ? this.ico_dirty : (this.allow_null ? (v===true?this.ico_checked:(v===false?this.ico_checked_false:this.ico_unchecked)) : (v?this.ico_checked:this.ico_unchecked) )); }
 		,IsDirty:function(){return this.is_dirty;}
 		,SetDirty:function(dirty){this.is_dirty=dirty;this.Update();}
-		,Toggle:function(){this.SetValue(jQuery('#'+ns).val()!=='true');}
-		,OnChange:function(){for(var i=0;i<this.list_ns.length;i++)window[this.list_ns[i]].OnChangeOne();this.on_change();jQuery('#'+ns).trigger('change');}
-	};for(var key in opt)r[key]=opt[key];window[ns]=r;return r;}
+		,Toggle:function(){ var v = this.GetValue(); this.SetValue( this.allow_null ? (v===true?false:(v===false?null:true)) : !v ); }
+		,OnChange:function(){ var i;
+			for(i=0;i<this.list_ns.length;i++)window[this.list_ns[i]].OnChangeOne();
+			if(this.optgroup_ns!==null && this.GetValue()===true) window[this.optgroup_ns].SetValue(this.list_value);
+			this.on_change();jQuery('#'+ns).trigger('change');
+		}};for(var key in opt)r[key]=opt[key];window[ns]=r;return r;
+	}
 };
 Oxygen.HideAjaxDialog=Oxygen.HideDialog;//BC
 

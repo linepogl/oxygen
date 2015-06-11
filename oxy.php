@@ -111,10 +111,14 @@ abstract class _oxy extends _oxy_dictionary {
 	public static function icoPlayPrevSymbol        (){ return new Glyph('oxy-icon',0xE613); }
 	public static function icoPlayNext              (){ return new Glyph('oxy-icon',0xE514); }
 	public static function icoPlayNextSymbol        (){ return new Glyph('oxy-icon',0xE614); }
-	public static function icoZoomIn                (){ return new Glyph('oxy-icon',0xE515); }
-	public static function icoZoomInSymbol          (){ return new Glyph('oxy-icon',0xE615); }
-	public static function icoZoomOut               (){ return new Glyph('oxy-icon',0xE516); }
-	public static function icoZoomOutSymbol         (){ return new Glyph('oxy-icon',0xE616); }
+	public static function icoFastBackward          (){ return new Glyph('oxy-icon',0xE515); }
+	public static function icoFastBackwardSymbol    (){ return new Glyph('oxy-icon',0xE615); }
+	public static function icoFastForward           (){ return new Glyph('oxy-icon',0xE516); }
+	public static function icoFastForwardSymbol     (){ return new Glyph('oxy-icon',0xE616); }
+	public static function icoZoomIn                (){ return new Glyph('oxy-icon',0xE517); }
+	public static function icoZoomInSymbol          (){ return new Glyph('oxy-icon',0xE617); }
+	public static function icoZoomOut               (){ return new Glyph('oxy-icon',0xE518); }
+	public static function icoZoomOutSymbol         (){ return new Glyph('oxy-icon',0xE618); }
 
 	// 900 - Interface
 	public static function icoContextMenuAnchor     (){ return new Glyph('oxy-icon',0xE900); }
@@ -149,13 +153,22 @@ abstract class _oxy extends _oxy_dictionary {
 	public static function icoTreePlus              (){ return new Glyph('oxy-icon',0xE9A2); }
 	public static function icoTreeMinus             (){ return new Glyph('oxy-icon',0xE9A3); }
 	public static function icoTreeDot               (){ return new Glyph('oxy-icon',0xE9A4); }
+	public static function icoBoxCheckedFalse       (){ return new Glyph('oxy-icon',0xE9A5); }
+
 	public static function icoBoxUncheckedLocked    (){ return new Glyph('oxy-icon',0xE9B0); }
 	public static function icoBoxCheckedLocked      (){ return new Glyph('oxy-icon',0xE9B1); }
 	public static function icoBoxDirtyLocked        (){ return new Glyph('oxy-icon',0xE9B3); }
 	public static function icoTreePlusLocked        (){ return new Glyph('oxy-icon',0xE9B2); }
 	public static function icoTreeMinusLocked       (){ return new Glyph('oxy-icon',0xE9B3); }
 	public static function icoTreeDotLocked         (){ return new Glyph('oxy-icon',0xE9B4); }
+	public static function icoBoxCheckedFalseLocked (){ return new Glyph('oxy-icon',0xE9B5); }
 
+	public static function icoOptionUnchecked       (){ return new Glyph('oxy-icon',0xE9C0); }
+	public static function icoOptionChecked         (){ return new Glyph('oxy-icon',0xE9C1); }
+	public static function icoOptionDirty           (){ return new Glyph('oxy-icon',0xE9C2); }
+	public static function icoOptionUncheckedLocked (){ return new Glyph('oxy-icon',0xE9D0); }
+	public static function icoOptionCheckedLocked   (){ return new Glyph('oxy-icon',0xE9D1); }
+	public static function icoOptionDirtyLocked     (){ return new Glyph('oxy-icon',0xE9D2); }
 
 
 
