@@ -341,7 +341,7 @@ var Oxygen = {
 		,is_dirty:false
 		,list_ns:[]
 		,list_value:''
-		,optgroup_ns:null
+		,radio_ns:null
 		,allow_null:false
 		,on_change:function(){}
 		,SetValue:function(value){var old = this.GetValue(); if(value!==true&&value!==false)value=this.allow_null?null:false; jQuery('#'+ns).val(value===true?'true':(value===false?'false':'')); this.Update(); if(old!==value)this.OnChange(); }
@@ -354,7 +354,7 @@ var Oxygen = {
 		,Toggle:function(){ var v = this.GetValue(); this.SetValue( this.allow_null ? (v===true?false:(v===false?null:true)) : !v ); }
 		,OnChange:function(){ var i;
 			for(i=0;i<this.list_ns.length;i++)window[this.list_ns[i]].OnChangeOne();
-			if(this.optgroup_ns!==null && this.GetValue()===true) window[this.optgroup_ns].SetValue(this.list_value);
+			if(this.radio_ns!==null && this.GetValue()===true) window[this.radio_ns].SetValue(this.list_value);
 			this.on_change();jQuery('#'+ns).trigger('change');
 		}};for(var key in opt)r[key]=opt[key];window[ns]=r;return r;
 	}

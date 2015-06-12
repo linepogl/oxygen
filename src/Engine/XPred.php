@@ -21,6 +21,9 @@ abstract class XPred {
 	/** @return XPredList */ public static function AllX($preds){ return new XPredList($preds,XPredList::OP_AND); }
 	/** @return XPredList */ public static function Any(){ return new XPredList(func_get_args(),XPredList::OP_OR); }
 	/** @return XPredList */ public static function AnyX($preds){ return new XPredList($preds,XPredList::OP_OR); }
+	/** @return XPredList */ public static function None(){ return new XPredList(func_get_args(),XPredList::OP_NAND); }
+	/** @return XPredList */ public static function NoneX($preds){ return new XPredList($preds,XPredList::OP_NAND); }
+	/** @return XPredList */ public static function Not(XPred $pred){ return new XPredList([$pred],XPredList::OP_NAND); }
 
 
 

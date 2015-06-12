@@ -4,6 +4,7 @@ class XPredList extends XPred implements ArrayAccess,Countable,IteratorAggregate
 
 	const OP_AND = 0;
 	const OP_OR = 1;
+	const OP_NAND = 2;
 
 	private $preds;
 	private $op;
@@ -23,25 +24,32 @@ class XPredList extends XPred implements ArrayAccess,Countable,IteratorAggregate
 
 
 	public function ToSql(){
-		if ($this->op  == self::OP_AND){
-			if (0 == count($this->preds))
-				return '1=1';
-			$r = '';
-			foreach ($this->preds as $pred) {
-				if ($r != '') $r .= ' AND ';
-				$r .= '(' . $pred->ToSql() . ')';
-			}
-			return $r;
-		}
-		else {
-			if (0 == count($this->preds))
-				return '0=1';
-			$r = '';
-			foreach ($this->preds as $pred) {
-				if ($r != '') $r .= ' OR ';
-				$r .= '(' . $pred->ToSql() . ')';
-			}
-			return $r;
+		switch ($this->op) {
+			default:
+			case self::OP_AND:
+				if (0 == count($this->preds)) return '1=1';
+				$r = '';
+				foreach ($this->preds as $pred) {
+					if ($r != '') $r .= ' AND ';
+					$r .= '('.$pred->ToSql().')';
+				}
+				return $r;
+			case self::OP_OR:
+				if (0 == count($this->preds)) return '0=1';
+				$r = '';
+				foreach ($this->preds as $pred) {
+					if ($r != '') $r .= ' OR ';
+					$r .= '('.$pred->ToSql().')';
+				}
+				return $r;
+			case self::OP_NAND:
+				if (0 == count($this->preds)) return '1=1';
+				$r = '';
+				foreach ($this->preds as $pred) {
+					if ($r != '') $r .= ' AND ';
+					$r .= 'NOT ('.$pred->ToSql().')';
+				}
+				return $r;
 		}
 	}
 

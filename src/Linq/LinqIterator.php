@@ -20,6 +20,11 @@ class LinqIterator implements Iterator, Countable {
 	}
 
 	/** Lazy O(n) @return LinqIterator */
+	public function WhereNot($function_where){
+		return new LinqWhereNotIterator($this,$function_where);
+	}
+
+	/** Lazy O(n) @return LinqIterator */
 	public function WhereNotNull(){
 		return new LinqWhereIterator($this,function($x){return !is_null($x);});
 	}

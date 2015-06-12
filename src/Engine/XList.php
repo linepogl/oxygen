@@ -246,13 +246,31 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 			return parent::Where($pred_or_function);
 	}
 	/** @return XList|LinqIterator */
-	public function WhereAny( /* ... */ ) { return $this->WhereAnyX( func_get_args() ); }
+	public function WhereNot( $pred_or_function ){
+		if ( $pred_or_function === null )
+			return $this;
+		elseif ( $pred_or_function instanceof XPred ) {
+			if ($this->where === null)
+				$this->where = XPred::All(XPred::Not($pred_or_function));
+			else
+				$this->where[] = XPred::Not($pred_or_function);
+			return $this;
+		}
+		else
+			return parent::WhereNot($pred_or_function);
+	}
+	/** @return XList|LinqIterator */
+	public function WhereAny( /* ... */ ) { return $this->WhereAnyX(XPred::AnyX(func_get_args())); }
 	/** @return XList|LinqIterator */
 	public function WhereAnyX( $preds ) { return $this->Where(XPred::AnyX($preds)); }
 	/** @return XList|LinqIterator */
-	public function WhereAll( /* ... */ ) { return $this->WhereAllX( func_get_args() ); }
+	public function WhereAll( /* ... */ ) { return $this->Where(XPred::AllX(func_get_args())); }
 	/** @return XList|LinqIterator */
 	public function WhereAllX( $preds ) { return $this->Where(XPred::AllX($preds)); }
+	/** @return XList|LinqIterator */
+	public function WhereNone( /* ... */ ) { return $this->Where(XPred::NoneX(func_get_args())); }
+	/** @return XList|LinqIterator */
+	public function WhereNoneX( $preds ) { return $this->Where(XPred::NoneX($preds)); }
 
 
 	/** @return XList|LinqIterator */

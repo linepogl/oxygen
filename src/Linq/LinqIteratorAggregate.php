@@ -12,6 +12,11 @@ abstract class LinqIteratorAggregate implements IteratorAggregate,Countable {
 	}
 
 	/** Lazy O(n) @return LinqIterator */
+	public function WhereNot($function_where){
+		return new LinqWhereNotIterator($this->getIterator(),$function_where);
+	}
+
+	/** Lazy O(n) @return LinqIterator */
 	public function WhereNotNull(){
 		return new LinqWhereIterator($this->getIterator(),function($x){return !is_null($x);});
 	}

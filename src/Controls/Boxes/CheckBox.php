@@ -32,9 +32,9 @@ class CheckBox extends Box {
 	private $list_value = null;
 	public function WithListValue($value){ $this->list_value = $value; return $this; }
 
-	private $optgroup_name = null;
-	public function WithOptGroup($value){ $this->optgroup_name = $value instanceof Control ? $value->name : strval($value); return $this; }
-	public function WithOptGroupName($value){ $this->optgroup_name = $value instanceof Control ? $value->name : strval($value); return $this; }
+	private $radio_group_name = null;
+	public function WithRadioGroup($value){ $this->radio_group_name = $value instanceof Control ? $value->name : strval($value); return $this; }
+	public function WithRadioListName($value){ $this->radio_group_name = $value instanceof Control ? $value->name : strval($value); return $this; }
 
 
 	public function Render(){
@@ -42,10 +42,10 @@ class CheckBox extends Box {
 		ob_start();
 
 		$readonly = $this->readonly || $this->mode != UIMode::Edit;
-		$allow_null = $this->allow_null && $this->optgroup_name === null; // cannot have both !
+		$allow_null = $this->allow_null && $this->radio_group_name === null; // cannot have both !
 
 		$list_css_classes = implode(' ',array_map(function($x){return'list-'.$x;},$this->list_names));
-		echo HiddenBox::Make($ns,$this->value)->WithHttpName($readonly?null:$this->http_name)->WithCssClass($list_css_classes.($this->optgroup_name===null?'':' optgroup-'.$this->optgroup_name));
+		echo HiddenBox::Make($ns,$this->value)->WithHttpName($readonly?null:$this->http_name)->WithCssClass($list_css_classes.($this->radio_group_name===null?'':' radio_group-'.$this->radio_group_name));
 
 
 
@@ -60,7 +60,7 @@ class CheckBox extends Box {
 				$ico = $this->value === true ? oxy::icoYes() : oxy::icoNo();
 		}
 		elseif ($this->readonly) {
-			if ($this->optgroup_name !== null) {
+			if ($this->radio_group_name !== null) {
 				if ($this->is_dirty)
 					$ico = oxy::icoOptionDirtyLocked();
 				else
@@ -78,7 +78,7 @@ class CheckBox extends Box {
 			}
 		}
 		else {
-			if ($this->optgroup_name !== null) {
+			if ($this->radio_group_name !== null) {
 				if ($this->is_dirty)
 					$ico = oxy::icoOptionDirty();
 				else
@@ -112,7 +112,7 @@ class CheckBox extends Box {
 		}
 		else {
 			if ($this->is_button) {
-				echo ButtonBox::Make()->WithCssClass(' '.$this->css_class)->WithCssStyle($this->css_style)->WithIsRich(true)->WithOnClick('window.'.$ns.($this->optgroup_name===null?'.Toggle()':'.Check()').';')
+				echo ButtonBox::Make()->WithCssClass(' '.$this->css_class)->WithCssStyle($this->css_style)->WithIsRich(true)->WithOnClick('window.'.$ns.($this->radio_group_name===null?'.Toggle()':'.Check()').';')
 					->WithValue(
 						'<span class="checkbox checkbox-anchor">'
 						.'<span id="'.$ns.'-box">'.$ico.'</span>'
@@ -123,7 +123,7 @@ class CheckBox extends Box {
 			else {
 				$class='checkbox checkbox-anchor'.($this->css_class==''?'':' '.$this->css_class); if($class!='')$class=' class="'.$class.'"';
 				$style=$this->css_style; if($style!='')$style=' style="'.$style.'"';
-				echo '<a'.$class.$style.' href="javascript:window.'.$ns.($this->optgroup_name===null?'.Toggle()':'.Check()').';">';
+				echo '<a'.$class.$style.' href="javascript:window.'.$ns.($this->radio_group_name===null?'.Toggle()':'.Check()').';">';
 				echo '<span id="'.$ns.'-box">'.$ico.'</span>';
 				if ($this->show_label) echo $this->is_rich?$this->label:'<span class="text spacer2">'.new Html($this->label).'</span>';
 				echo '</a>';
@@ -132,7 +132,7 @@ class CheckBox extends Box {
 			echo Js::BEGIN;
 			$list_value = strval(new Val($this->list_value));
 			echo "Oxygen.CheckBox({ns:".new Js($ns);
-			if ($this->optgroup_name === null) {
+			if ($this->radio_group_name === null) {
 				echo ",ico_checked:".new Js(oxy::icoBoxChecked());
 				echo ",ico_checked_false:".new Js(oxy::icoBoxCheckedFalse());
 				echo ",ico_unchecked:".new Js(oxy::icoBoxUnchecked());
@@ -144,7 +144,7 @@ class CheckBox extends Box {
 				echo ",ico_dirty:".new Js(oxy::icoOptionDirty());
 			}
 			if($this->allow_null) echo ",allow_null:".new Js($this->allow_null);
-			if($this->optgroup_name!==null) echo ",optgroup_ns:".new Js($this->optgroup_name);
+			if($this->radio_group_name!==null) echo ",radio_group_ns:".new Js($this->radio_group_name);
 			if($this->is_dirty) echo ",is_dirty:".new Js($this->is_dirty);
 			if(!empty($this->list_names)) echo ",list_ns:".new Js($this->list_names);
 			if($list_value!='') echo ",list_value:".new Js($list_value);
