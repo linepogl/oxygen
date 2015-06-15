@@ -75,7 +75,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 
 
 	
-	private function MakeQuery(&$params){
+	public function MakeQuery(&$params){
 		$params = $this->where===null ? array() : $this->where->GetSqlParams();
 
 		//
@@ -374,6 +374,7 @@ class XList extends LinqIteratorAggregate implements ArrayAccess,Countable {
 	}
 	public function OffsetSet($offset, $value) {
 		$this->Evaluate();
+		if (!($value instanceof XItem) && !($value instanceof ID)) $value = id($value);
 		if ($offset===null)
 			$this->data[] = $value;
 		else
