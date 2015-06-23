@@ -35,6 +35,7 @@ class FieldTableControl extends Control {
 	private $asterisks = array();
 	private $validators = array();
 	private $hide_values = array();
+	private $hide_labels = array();
 	private $row_names = array();
 	private $row_css_styles = array();
 	private $row_css_classes = array();
@@ -58,6 +59,7 @@ class FieldTableControl extends Control {
 		$this->row_css_classes[] = '';
 		$this->row_css_styles[] = '';
 		$this->hide_values[] = false;
+		$this->hide_labels[] = false;
 		return $this;
 	}
 
@@ -89,6 +91,10 @@ class FieldTableControl extends Control {
 		$this->hide_values[count($this->hide_values) - 1] = $hide_value;
 		return $this;
 	}
+	public function WithHideLabel($hide_label){
+		$this->hide_labels[count($this->hide_labels) - 1] = $hide_label;
+		return $this;
+	}
 	public function WithRowName($value){
 		$this->row_names[count($this->row_names) - 1] = $value;
 		return $this;
@@ -117,7 +123,9 @@ class FieldTableControl extends Control {
 				}
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
-					echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:15px 1px 1px 1px;">'.$this->labels[$i].($this->asterisks[$i]?oxy::icoAsterisk()->WithCssClass('asterisk'):'').'</td></tr>';
+					if (!$this->hide_labels[$i]) {
+						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:15px 1px 1px 1px;">'.$this->labels[$i].($this->asterisks[$i]?oxy::icoAsterisk()->WithCssClass('asterisk'):'').'</td></tr>';
+					}
 					if (!$this->hide_values[$i]) {
 						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;">'.$this->values[$i].'</td></tr>';
 						if (!is_null($vcode) && !$this->hide_validators)
@@ -147,9 +155,11 @@ class FieldTableControl extends Control {
 					echo '<tr id="'.$this->row_names[$i].'" class="'.$vcode.' '.$this->row_css_classes[$i].'" style="'.$this->row_css_styles[$i].'">';
 
 					$asterisk = ($this->asterisks[$i]?oxy::icoAsterisk()->WithCssClass('asterisk'):'');
-					echo '<td class="label"'.($this->hide_values[$i]?' colspan="2"':'').' style="'.($this->label_nowrap?'white-space:nowrap;':'').'width:'.$this->label_width.';">'.($this->labels_align!='left'?$asterisk:'').$this->labels[$i].($this->labels_align=='left'?$asterisk:'').'</td>';
+					if (!$this->hide_labels[$i]) {
+						echo '<td class="label"'.($this->hide_values[$i]?' colspan="2"':'').' style="'.($this->label_nowrap?'white-space:nowrap;':'').'width:'.$this->label_width.';">'.($this->labels_align != 'left'?$asterisk:'').$this->labels[$i].($this->labels_align == 'left'?$asterisk:'').'</td>';
+					}
 					if (!$this->hide_values[$i]) {
-						echo '<td class="value">'.$this->values[$i];
+						echo '<td class="value"'.($this->hide_labels[$i]?' colspan="2"':'').'>'.$this->values[$i];
 						if (!is_null($vcode) && !$this->hide_validators)
 							echo '<div style="padding:2px 0 0 0">'.new MessageControl($this->validators[$i]).'</div>';
 						echo '</td>';

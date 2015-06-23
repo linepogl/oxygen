@@ -324,6 +324,13 @@ var Oxygen = {
 	}
 	,AjaxUpdater:function(e,act,opt) { var o={method:'get',encoding:Oxygen.Encoding,evalScripts:true}; if(opt)for(var key in opt)o[key]=opt[key]; return new Ajax.Updater(e,act,o); }
 	,AjaxRequest:function(act,opt) { var o={method:'get',encoding:Oxygen.Encoding,evalScripts:true}; if(opt)for(var key in opt)o[key]=opt[key]; return new Ajax.Request(act,o); }
+
+	,FitIn:function(max_width,max_height,img_width,img_height) {
+	  return max_width/max_height < img_width/img_height
+			? {width:max_width,height:Math.floor(img_height*(max_width/img_width))}
+			: {width:Math.floor(img_width*(max_height/img_height)),height:max_height}
+		  ;
+	 }
 	,RollerBox:function(opt){var ns=opt.ns;var r={ns:ns
 		,is_readonly:false
 		,values:[]
