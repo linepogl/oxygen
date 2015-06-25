@@ -25,6 +25,7 @@ class FormMonitoringControl extends Control {
 		echo Js::BEGIN;
 		echo "window.$ns = {";
 		echo "  initial_form_serialization:".new Js($this->is_blocked?'!':null);
+		echo " ,is_submitting:false";
 		echo " ,form_has_changed:false";
 		echo " ,CheckFormChanged:function(){";
 		echo "    var s = jQuery('#$this->form_name').serialize();";
@@ -41,9 +42,9 @@ class FormMonitoringControl extends Control {
 		echo "  }";
 		echo "};";
 		echo "setTimeout(function(){ window.$ns.CheckFormChanged(); },1);";
-		echo "jQuery('#$this->form_name').bind('submit',function() { window.$ns.form_has_changed = false; });";
+		echo "jQuery('#$this->form_name').bind('submit',function() { if (window.$ns.is_submitting) ev.preventDefault(); window.$ns.is_submitting = true; });";
 		if (!Browser::IsIE8() && !Browser::IsIE7()) {
-			echo "jQuery(window).bind('beforeunload',function() { if (window.$ns.form_has_changed) return ".new Js($message)."; });";
+			echo "jQuery(window).bind('beforeunload',function() { if (!window.$ns.is_submitting && window.$ns.form_has_changed) return ".new Js($message)."; });";
 		}
 		echo Js::END;
 
