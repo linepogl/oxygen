@@ -113,7 +113,7 @@ class CheckBox extends Box {
 		}
 		else {
 			if ($this->is_button) {
-				echo ButtonBox::Make()->WithCssClass(' '.$this->css_class)->WithCssStyle($this->css_style)->WithIsRich(true)->WithOnClick('window.'.$ns.($this->radio_name===null?'.Toggle()':'.Check()').';')
+				echo ButtonBox::Make()->WithCssClass(' '.$this->css_class)->WithCssStyle($this->css_style)->WithIsRich(true)->WithOnClick('window.'.$ns.'.OnClick();')
 					->WithValue(
 						'<span class="checkbox checkbox-anchor">'
 						.'<span id="'.$ns.'-box">'.$ico.'</span>'
@@ -124,7 +124,7 @@ class CheckBox extends Box {
 			else {
 				$class='checkbox checkbox-anchor'.($this->css_class==''?'':' '.$this->css_class); if($class!='')$class=' class="'.$class.'"';
 				$style=$this->css_style; if($style!='')$style=' style="'.$style.'"';
-				echo '<a'.$class.$style.' href="javascript:window.'.$ns.($this->radio_name===null?'.Toggle()':'.Check()').';">';
+				echo '<a'.$class.$style.' href="javascript:;" onclick="window.'.$ns.'.OnClick();">';
 				echo '<span id="'.$ns.'-box">'.$ico.'</span>';
 				if ($this->show_label) echo $this->is_rich?$this->label:'<span class="text spacer2">'.new Html($this->label).'</span>';
 				echo '</a>';

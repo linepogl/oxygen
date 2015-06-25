@@ -359,6 +359,16 @@ var Oxygen = {
 		,IsDirty:function(){return this.is_dirty;}
 		,SetDirty:function(dirty){this.is_dirty=dirty;this.Update();}
 		,Toggle:function(){ var v = this.GetValue(); this.SetValue( this.allow_null ? (v===true?false:(v===false?null:true)) : !v ); }
+		,OnClick:function() {
+			if(this.radio_ns!==null) { this.Check(); return; }
+			if (this.list_ns.length > 0) {
+				var ev = window.event || arguments.callee.caller.arguments[0];
+				var ls = window[this.list_ns[0]];
+				if (ev.shiftKey) if (ls.Cascade(ns)) return;
+				ls.SetLastClicked(ns);
+			}
+			this.Toggle();
+		}
 		,OnChange:function(){ var i;
 			for(i=0;i<this.list_ns.length;i++)window[this.list_ns[i]].OnChangeOne();
 			if(this.radio_ns!==null && this.GetValue()===true) window[this.radio_ns].SetValue(this.list_value);
