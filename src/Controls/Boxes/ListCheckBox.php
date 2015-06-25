@@ -124,7 +124,7 @@ class ListCheckBox extends Box {
 		echo "    if (this.last_clicked_id===null) return false;";
 		echo "    var xa = window[this.last_clicked_id]; if(!xa.GetListValue)return false;";
 		echo "    var xb = window[id]; if(!xb.GetListValue)return false;";
-		echo "    if (this.running) return true;";
+		echo "    if (xa===xb) return true;";
 		echo "    this.running = true;";
 		echo "    var v = xa.GetValue();";
 		echo "    var on = false;";
