@@ -120,8 +120,8 @@ class ListCheckBox extends Box {
 		echo "    this.running = false;";
 		echo "  }";
 		echo " ,last_clicked_id:null";
-		echo " ,SetLastClicked(id){ this.last_clicked_id=id; }";
-		echo " ,Cascade(id){";
+		echo " ,SetLastClicked:function(id){ this.last_clicked_id=id; }";
+		echo " ,Cascade:function(id){";
 		echo "    if (this.last_clicked_id===null) return false;";
 		echo "    var xa = window[this.last_clicked_id]; if(!xa.GetListValue)return false;";
 		echo "    var xb = window[id]; if(!xb.GetListValue)return false;";
