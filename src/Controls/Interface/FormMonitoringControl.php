@@ -42,7 +42,7 @@ class FormMonitoringControl extends Control {
 		echo "  }";
 		echo "};";
 		echo "setTimeout(function(){ window.$ns.CheckFormChanged(); },1);";
-		echo "jQuery('#$this->form_name').bind('submit',function() { if (window.$ns.is_submitting) ev.preventDefault(); window.$ns.is_submitting = true; });";
+		echo "jQuery('#$this->form_name').bind('submit',function(ev) { if (window.$ns.is_submitting) ev.preventDefault(); window.$ns.is_submitting = true; });";
 		if (!Browser::IsIE8() && !Browser::IsIE7()) {
 			echo "jQuery(window).bind('beforeunload',function() { if (!window.$ns.is_submitting && window.$ns.form_has_changed) return ".new Js($message)."; });";
 		}
