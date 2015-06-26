@@ -44,6 +44,7 @@ class ListCheckBox extends Box {
 		echo " ,CountSelected:function(){ return this.selected_values.length; }";
 		echo " ,GetAllValues:function(){return this.all_values;}";
 		echo " ,GetSelectedValues:function(){return this.selected_values;}";
+		echo " ,SetSelectedValues:function(a){return this.selected_values=a;this.Update();}";
 		echo " ,Invalidate : function(){";
 		echo "    if (!this.all_values_are_fixed) this.all_values = null;";
 		echo "    if(this.running) return;";
