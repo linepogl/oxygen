@@ -100,7 +100,10 @@ class XPredFieldOp extends XPred {
 
 				if (!is_array($a)) return new SqlIden($this->field1) . ' IN '. new Sql($this->field2_or_value);
 				$r = ''; foreach (array_chunk($a,500) as $aa) $r .= ($r===''?'':' AND ') . new SqlIden($this->field1) . ' NOT IN '. new Sql($aa);
-				return '('.($r==='' ?'1=1':$r).')';
+				return $r === ''
+					? '1=1'
+					: '(('.$r.') OR '.new SqlIden($this->field1).' IS NULL)'
+					;
 
 		}
 		throw new InvalidArgumentException('Unsupported field comparison filter operator: ' . $this->op );
