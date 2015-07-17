@@ -14,7 +14,7 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 	}
 
 	public function Add(Message $m=null){
-		if (is_null($m))
+		if ($m===null)
 			return;
 		elseif ($m instanceof MultiMessage){
 			foreach ($m as $mm)
@@ -27,6 +27,26 @@ class MultiMessage extends Message implements IteratorAggregate,ArrayAccess,Coun
 			$this->value .= $m->AsString();
 			$this->messages[] = $m;
 			if (is_callable($this->on_add)) {  $f = $this->on_add; $f($m); }
+		}
+	}
+	public function AddNewOnly(Message $m=null) {
+		if ($m===null)
+			return;
+		elseif ($m instanceof MultiMessage) {
+			foreach ($m as $mm)
+				$this->AddNewOnly($mm);
+		}
+		else {
+			$s = $m->AsString();
+			$found = false;
+			/** @var $mm Message */
+			foreach ($this->messages as $mm) {
+				if ($mm->AsString() === $s) {
+					$found = true;
+					break;
+				}
+			}
+			if (!$found) $this->Add($m);
 		}
 	}
 	public function GetCode(){ return $this->dominant->GetCode(); }

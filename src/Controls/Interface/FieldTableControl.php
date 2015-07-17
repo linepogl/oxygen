@@ -124,12 +124,12 @@ class FieldTableControl extends Control {
 				else{
 					$vcode = null; if ($this->validators[$i] != null) if (count($this->validators[$i])>0) $vcode = $this->validators[$i]->GetCode();
 					if (!$this->hide_labels[$i]) {
-						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:15px 1px 1px 1px;">'.$this->labels[$i].($this->asterisks[$i]?oxy::icoAsterisk()->WithCssClass('asterisk'):'').'</td></tr>';
+						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'" style="'.$this->row_css_styles[$i].'"><td style="text-align:left;padding:15px 1px 1px 1px;">'.$this->labels[$i].($this->asterisks[$i]?oxy::icoAsterisk()->WithCssClass('asterisk'):'').'</td></tr>';
 					}
 					if (!$this->hide_values[$i]) {
-						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;">'.$this->values[$i].'</td></tr>';
+						echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'" style="'.$this->row_css_styles[$i].'"><td style="text-align:left;">'.$this->values[$i].'</td></tr>';
 						if (!is_null($vcode) && !$this->hide_validators)
-							echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'"><td style="text-align:left;padding:1px 0 0 0">'.new MessageControl($this->validators[$i]).'</td></tr>';
+							echo '<tr class="'.$vcode.' '.$this->row_css_classes[$i].'" style="'.$this->row_css_styles[$i].'"><td style="text-align:left;padding:1px 0 0 0">'.new MessageControl($this->validators[$i]).'</td></tr>';
 					}
 				}
 			}
