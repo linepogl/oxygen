@@ -566,6 +566,13 @@ class XMeta extends stdClass {
 	/** @return XMetaField */ public static function Lemma()          { return new XMetaField( MetaLemma::Type() ); }
 	/** @return XMetaField */ public static function LemmaOrEmpty()   { return new XMetaField( MetaLemmaOrEmpty::Type() ); }
 
+	/** @return XMetaField */ public static function IntegerArray()        { return new XMetaField( MetaIntegerArray::Type() ); }
+	/** @return XMetaField */ public static function IntegerArrayOrNull()  { return new XMetaField( MetaIntegerArrayOrNull::Type() ); }
+	/** @return XMetaField */ public static function StringArray()         { return new XMetaField( MetaStringArray::Type() ); }
+	/** @return XMetaField */ public static function StringArrayOrNull()   { return new XMetaField( MetaStringArrayOrNull::Type() ); }
+	/** @return XMetaField */ public static function IDArray()             { return new XMetaField( MetaIDArray::Type() ); }
+	/** @return XMetaField */ public static function IDArrayOrNull()       { return new XMetaField( MetaIDArrayOrNull::Type() ); }
+
 	/** @return XMetaSlave */ public static function Slave(XMetaField $hook_meta_field){ return new XMetaSlave($hook_meta_field); }
 }
 

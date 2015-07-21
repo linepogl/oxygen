@@ -30,7 +30,9 @@ abstract class ImportValue {
 	/** @return float           */ public final function AsDecimal()        { return $this->CastTo(MetaDecimal::Type()); }
 	/** @return float|null      */ public final function AsDecimalOrNull()  { return $this->CastTo(MetaDecimalOrNull::Type()); }
 
-
+	/** @return array           */ public function AsStringArray()          { return $this->CastTo(MetaStringArray::Type()); }
+	/** @return array           */ public function AsIntegerArray()         { return $this->CastTo(MetaIntegerArray::Type()); }
+	/** @return array           */ public function AsIDArray()              { return $this->CastTo(MetaIDArray::Type()); }
 
 	/** @return Lemma|null      */ public function AsLemma()                { return $this->CastTo(MetaLemma::Type()); }
 	/** @return Lemma           */ public function AsLemmaOrEmpty()         { return $this->CastTo(MetaLemmaOrEmpty::Type() ); }
@@ -38,7 +40,7 @@ abstract class ImportValue {
   /** @return XItem|null      */ public function AsGenericXItem()         { $r = $this->AsGenericID(); return is_null($r) ? $r : $r->ToXItem(); }
 
 
-  public abstract function CastTo(XType $type);
+	public abstract function CastTo(XType $type);
 
 
 }
