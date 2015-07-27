@@ -82,7 +82,7 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 		return $r;
 	}
 	public function Translate(){ return $this->TranslateTo(Oxygen::$lang); }
-	public function __toString(){ return $this->TranslateTo(Oxygen::$lang); }
+	public function __toString(){ return strval($this->TranslateTo(Oxygen::$lang)); }
 
 
 	/** @return string */
