@@ -41,7 +41,7 @@ class CheckBox extends Box {
 		$ns = $this->name;
 		ob_start();
 
-		$readonly = $this->readonly || $this->mode != UIMode::Edit;
+		$readonly = $this->readonly || $this->mode !== UIMode::Edit;
 		$allow_null = $this->allow_null && $this->radio_name === null; // cannot have both !
 
 		$list_css_classes = implode(' ',array_map(function($x){return'list-'.$x;},$this->list_names));
