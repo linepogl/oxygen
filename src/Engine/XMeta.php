@@ -178,6 +178,8 @@ class XMeta extends stdClass {
 	//
 	private static $__cache_all = array(); // $class_name.$depends_on => XMeta
 	private static $__cache_last_used = array(); // $class_name => XMeta;
+	public static function FreeAllMemory() { /** @var $m XMeta */ foreach (self::$__cache_all as $m) $m->FreeMemory(); }
+
 	/** @return XMeta */
 	public static function Of($class_name){
 		/** @var $r XMeta */
@@ -213,7 +215,6 @@ class XMeta extends stdClass {
 		return $r;
 	}
 
-	public static function SoftResetItemCaches() { /** @var $m XMeta */ foreach (self::$__cache_all as $m) $m->SoftResetItemCache(); }
 
 
 
@@ -421,7 +422,7 @@ class XMeta extends stdClass {
 	private $__remote_cache_is_trusted = true;
 	private $__item_cache = array();
 	private $__item_concrete_meta_cache = array();
-	private function SoftResetItemCache(){ $this->__item_cache = array(); $this->__item_concrete_meta_cache = array(); }
+	public function FreeMemory(){ $this->__item_cache = array(); $this->__item_concrete_meta_cache = array(); }
 	private function ExistsInLocalCache($idi)  { return array_key_exists($idi,$this->__item_cache); }
 	/** @return XItem */ private function PickFromLocalCache($idi)  { return $this->__item_cache[$idi]; }
 	/** @return XItem */

@@ -287,8 +287,8 @@ class Database {
 		self::SetConnection( array_pop(self::$stack) );
 	}
 	private static function ResetCaches(){
-		XMeta::SoftResetItemCaches();
-		Scope::$DATABASE->SoftReset();
+		XMeta::FreeAllMemory();
+		Scope::$DATABASE->FreeMemory();
 	}
 
 	public static function IsConnected(){ return !is_null(self::$cx); }

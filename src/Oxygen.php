@@ -58,10 +58,10 @@ class Oxygen {
 					$new_window_hash = self::$window_hash;
 					self::$window_hash = $old_window_hash;
 					$hard = from(Scope::$WINDOW->HARD)->AsArray();
-					$weak = from(Scope::$WINDOW->WEAK)->AsArray();
+					$weak = from(Scope::$WINDOW->SOFT)->AsArray();
 					self::$window_hash = $new_window_hash;
 					foreach ($hard as $key=>$value) Scope::$WINDOW->HARD[$key] = $value;
-					foreach ($weak as $key=>$value) Scope::$WINDOW->WEAK[$key] = $value;
+					foreach ($weak as $key=>$value) Scope::$WINDOW->SOFT[$key] = $value;
 					Oxygen::RedirectRaw( __BASE__ . Oxygen::MakeHrefPreservingValues(array('wndx'=>null)) );
 				}
 			}
@@ -124,7 +124,7 @@ class Oxygen {
 		}
 
 		if (array_key_exists('oxy_reset',$_GET)) {
-			Scope::ResetAllWeak();
+			Scope::ResetAllSoft();
 			if ($_GET['oxy_reset']==='hard') {
 				Scope::ResetAllHard();
 				Oxygen::ClearTempFolders();
@@ -646,12 +646,16 @@ class Oxygen {
 
 
 	public static function ResetHard(){
-		Scope::ResetAllWeak();
+		Scope::ResetAllSoft();
 		Scope::ResetAllHard();
 		Oxygen::ClearTempFolders();
 	}
 	public static function ResetSoft(){
-		Scope::ResetAllWeak();
+		Scope::ResetAllSoft();
+	}
+	public static function FreeMemory() {
+		XMeta::FreeAllMemory();
+		Scope::FreeAllMemory();
 	}
 
 	public static function IsHalted() { return !CLI && Scope::$DATABASE->HARD['Oxygen::HaltWeb']; }

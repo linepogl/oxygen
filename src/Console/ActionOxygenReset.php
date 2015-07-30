@@ -10,7 +10,7 @@ class ActionOxygenReset extends Action {
 	}
 
 	public function Render(){
-		Scope::ResetAllWeak();
+		Scope::ResetAllSoft();
 		Scope::ResetAllHard();
 		Oxygen::ClearTempFolders();
 		Oxygen::Refresh();

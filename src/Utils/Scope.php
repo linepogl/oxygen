@@ -52,11 +52,11 @@ abstract class Scope implements ArrayAccess,IteratorAggregate {
 		Scope::$REQUEST     = new RequestScope();
 	}
 
-	public static function ResetAllWeak(){
-		Scope::$APPLICATION->WEAK->Reset();
-		Scope::$DATABASE->WEAK->Reset();
-		Scope::$SESSION->WEAK->Reset();
-		Scope::$WINDOW->WEAK->Reset();
+	public static function ResetAllSoft(){
+		Scope::$APPLICATION->SOFT->Reset();
+		Scope::$DATABASE->SOFT->Reset();
+		Scope::$SESSION->SOFT->Reset();
+		Scope::$WINDOW->SOFT->Reset();
 		Scope::$REQUEST->Reset();
 	}
 	public static function ResetAllHard(){
@@ -66,6 +66,17 @@ abstract class Scope implements ArrayAccess,IteratorAggregate {
 		Scope::$WINDOW->HARD->Reset();
 		Scope::$REQUEST->Reset();
 	}
+	public static function FreeAllMemory() {
+		Scope::$APPLICATION->SOFT->FreeMemory();
+		Scope::$DATABASE->SOFT->FreeMemory();
+		Scope::$SESSION->SOFT->FreeMemory();
+		Scope::$WINDOW->SOFT->FreeMemory();
+		Scope::$APPLICATION->HARD->FreeMemory();
+		Scope::$DATABASE->HARD->FreeMemory();
+		Scope::$SESSION->HARD->FreeMemory();
+		Scope::$WINDOW->HARD->FreeMemory();
+		Scope::$REQUEST->FreeMemory();
+	}
 
 
 	protected $prefix;
@@ -74,7 +85,7 @@ abstract class Scope implements ArrayAccess,IteratorAggregate {
 	public abstract function ForceGet($offset);
 	public function Contains($key){ return $this->offsetExists($key); }
 
-	public abstract function SoftReset();
+	public abstract function FreeMemory();
 	public abstract function Reset();
 
 
@@ -147,8 +158,7 @@ class ScopeIterator implements Iterator {
 abstract class MemoryScope extends Scope {
 	protected $data = array();
 	protected abstract function Hash($name);
-	public function SoftReset() { $this->data = array(); }
-	public function Reset() { $this->SoftReset(); }
+	public function Reset() { $this->data = array(); }
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
 		return array_key_exists($key,$this->data);
@@ -194,6 +204,7 @@ abstract class ApcScope extends MemoryScope {
 		}
 		parent::Reset();
 	}
+	public function FreeMemory() { $this->data = array(); }
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
 		if (array_key_exists($key,$this->data))
@@ -284,6 +295,7 @@ abstract class MemcachedScope extends MemoryScope {
 		}
 		parent::Reset();
 	}
+	public function FreeMemory() { $this->data = array(); }
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
 		if (array_key_exists($key,$this->data))
@@ -382,7 +394,7 @@ abstract class HddScope extends MemoryScope {
 	public function GetFolder(){ return $this->shared ? Oxygen::GetSharedTempFolder() : Oxygen::GetTempFolder(); }
 	public function SetIsShared($value){
 		$this->shared = $value;
-		$this->SoftReset();
+		$this->FreeMemory();
 	}
 	public function Reset(){
 		if ($this->use_hdd_storage){
@@ -435,6 +447,7 @@ abstract class HddScope extends MemoryScope {
 		}
 		return $r;
 	}
+	public function FreeMemory() { $this->data = array(); }
 	public function OffsetExists($offset) {
 		$key = $this->Hash($offset);
 		if (array_key_exists($key,$this->data))
@@ -506,7 +519,7 @@ abstract class LinkedListHddScope extends HddScope {
 
 class HybridScope extends Scope {
 	private $mode;
-	/** @var Scope */ public $WEAK;
+	/** @var Scope */ public $SOFT;
 	/** @var Scope */ public $HARD;
 
 	/** @var ApcScope */ private $apc_scope;
@@ -540,39 +553,39 @@ class HybridScope extends Scope {
 	public function SetMode( $value = Scope::APC ) {
 		if ($value == Scope::APC && IS_APC_AVAILABLE) {
 			$this->mode = $value;
-			$this->WEAK = $this->apc_scope;
+			$this->SOFT = $this->apc_scope;
 			$this->HARD->SetIsShared( false );
 		}
 		elseif (($value == Scope::MEMCACHED || $value == Scope::MEMCACHED_SHARED) && IS_MEMCACHED_AVAILABLE) {
 			Scope::InitMemcached();
 			$this->mode = $value;
-			$this->WEAK = $this->memcached_scope;
+			$this->SOFT = $this->memcached_scope;
 			$this->HARD->SetIsShared( $value == Scope::MEMCACHED_SHARED );
 		}
 		elseif ($value == Scope::HDD_SHARED || $value == Scope::MEMCACHED_SHARED) {
 			$this->mode = Scope::HDD_SHARED;
-			$this->WEAK = $this->hdd_scope;
+			$this->SOFT = $this->hdd_scope;
 			$this->HARD->SetIsShared( true );
 		}
 		else {
 			$this->mode = Scope::HDD;
-			$this->WEAK = $this->hdd_scope;
+			$this->SOFT = $this->hdd_scope;
 			$this->HARD->SetIsShared( false );
 		}
 	}
 
-	public function GetIterator(){ return new ScopeIterator($this->WEAK); }
+	public function GetIterator(){ return new ScopeIterator($this->SOFT); }
 
-	public function OffsetExists($offset)      { return $this->WEAK->offsetExists($offset); }
-	public function OffsetGet($offset)         { return $this->WEAK->offsetGet($offset); }
-	public function OffsetSet($offset, $value) { $this->WEAK->offsetSet($offset, $value); }
-	public function OffsetUnset($offset)       { $this->WEAK->offsetUnset($offset); }
+	public function OffsetExists($offset)      { return $this->SOFT->offsetExists($offset); }
+	public function OffsetGet($offset)         { return $this->SOFT->offsetGet($offset); }
+	public function OffsetSet($offset, $value) { $this->SOFT->offsetSet($offset, $value); }
+	public function OffsetUnset($offset)       { $this->SOFT->offsetUnset($offset); }
 
-	public function Hash($name)       { return $this->WEAK->Hash($name); }
-	public function ForceGet($offset) { return $this->WEAK->ForceGet($offset); }
+	public function Hash($name)       { return $this->SOFT->Hash($name); }
+	public function ForceGet($offset) { return $this->SOFT->ForceGet($offset); }
 
-	public function SoftReset(){ $this->WEAK->SoftReset(); }
-	public function Reset() { $this->WEAK->Reset(); }
+	public function FreeMemory() { $this->SOFT->FreeMemory(); }
+	public function Reset() { $this->SOFT->Reset(); }
 }
 
 
@@ -646,6 +659,7 @@ class WindowHddScope extends LinkedListHddScope {
 class RequestScope extends MemoryScope {
 	public function __construct(){ parent::__construct('req'); }
 	protected function Hash($name){ return 'req['.self::$base.']'.$name; }
+	public function FreeMemory(){ }
 }
 
 Scope::InitScopes();

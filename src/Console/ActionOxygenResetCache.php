@@ -10,7 +10,7 @@ class ActionOxygenResetCache extends Action {
 	}
 
 	public function Render(){
-		Scope::ResetAllWeak();
+		Scope::ResetAllSoft();
 		Oxygen::Refresh();
 	}
 
