@@ -19,11 +19,13 @@ class TabControl extends Control {
 		$this->pages[$name] = $title;
 		$this->content[$name] = '';
 		$this->current_page_name = $name;
+		return $this;
 	}
 
 	public function Write($that){
 		if ($that instanceof Control){ ob_start(); $that->Render(); $that = ob_get_clean(); }
 		$this->content[$this->current_page_name] .= $that;
+		return $this;
 	}
 
 	public function Render(){
