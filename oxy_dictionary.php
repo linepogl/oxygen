@@ -244,6 +244,11 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,ru=>"Старый пароль"
 		,zh=>"旧密码"
 		]);}
+	public static function txtNewEmail(){ return Lemma::txt([__FUNCTION__
+		,en=>"New e-mail address"
+		,fr=>"Nouvelle adresse e-mail"
+		,el=>"Νέα διεύθυνση e-mail"
+		]);}
 	public static function txtNewPassword(){ return Lemma::txt([__FUNCTION__
 		,en=>"New password"
 		,fr=>"Nouveau mot de passe"
@@ -1322,6 +1327,11 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,pt=>"Alterar senha"
 		,ru=>"Изменить пароль"
 		,zh=>"更改密码"
+		]);}
+	public static function txtChangeEmail(){ return Lemma::txt([__FUNCTION__
+		,en=>"Change e-mail address"
+		,fr=>"Changer mon adresse e-mail"
+		,el=>"Αλλαγή διεύθυνσης e-mail"
 		]);}
 	public static function txtResetPassword(){ return Lemma::txt([__FUNCTION__
 		,en=>"Reset password"
