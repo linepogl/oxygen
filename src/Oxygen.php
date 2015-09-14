@@ -658,7 +658,9 @@ class Oxygen {
 		Scope::FreeAllMemory();
 	}
 
-	public static function IsHalted() { return !CLI && Scope::$DATABASE->HARD['Oxygen::HaltWeb']; }
+	private static $halted = false;
+	public static function SetHalted($value){ self::$halted = $value; }
+	public static function IsHalted() { return !CLI && (Scope::$DATABASE->HARD['Oxygen::HaltWeb'] || self::$halted); }
 	public static function HaltWeb($v=true) {
 		$was_halted = Scope::$DATABASE->HARD['Oxygen::HaltWeb'];
 		if ($was_halted) {
