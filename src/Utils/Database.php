@@ -49,6 +49,7 @@ class Database {
 
 
 	private static function NeedsUpgrade(){
+		return false;
 		foreach (Oxygen::GetDatabaseUpgradeFiles() as $filename){
 			$key = 'Database::upgrade_time_of_'. $filename;
 			$time = Scope::$DATABASE[$key];
