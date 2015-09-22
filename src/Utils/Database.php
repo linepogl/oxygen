@@ -49,7 +49,6 @@ class Database {
 
 
 	private static function NeedsUpgrade(){
-		return false;
 		foreach (Oxygen::GetDatabaseUpgradeFiles() as $filename){
 			$key = 'Database::upgrade_time_of_'. $filename;
 			$time = Scope::$DATABASE[$key];
@@ -145,6 +144,7 @@ class Database {
 						self::$cx->cn = new PDO('oci:dbname=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST='.$a[0].')(PORT='.(count($a)>1?$a[1]:'1521').')))(CONNECT_DATA=(SERVICE_NAME='.self::$cx->schema.')))',self::$cx->username,self::$cx->password, array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 						self::$cn = self::$cx->cn;
 						self::$cn->exec('ALTER SESSION SET NLS_LANGUAGE=\'AMERICAN\' NLS_TERRITORY=\'AMERICA\' NLS_CURRENCY=\'$\' NLS_ISO_CURRENCY=\'AMERICA\' NLS_NUMERIC_CHARACTERS=\'.,\' NLS_CALENDAR=\'GREGORIAN\' NLS_DATE_FORMAT=\'YYYY-MM-DD HH24:MI:SS\' NLS_DATE_LANGUAGE=\'AMERICAN\' NLS_SORT=\'BINARY_AI\' NLS_COMP=\'LINGUISTIC\'');
+						self::$cn->exec('ALTER SESSION SET DDL_LOCK_TIMEOUT=120');
 						break;
 				}
 			}
