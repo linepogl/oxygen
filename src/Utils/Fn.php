@@ -9,7 +9,7 @@ class Fn {
 				return $function();
 			}
 			catch (Exception $ex) {
-				if ($times > 0) if (++$i === $times) throw $ex;
+				if ($times > 0) if (++$i >= $times) throw $ex;
 				if ($sleep > 0) sleep($sleep);
 			}
 		}
