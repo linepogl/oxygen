@@ -6,6 +6,16 @@ class Debug {
 	private static $entries = array();
 	private static $immediate = false;
 
+	/** @var callable */
+	private static $on_add = null;
+	public static function OnAdd(callable $function) {
+		if (self::$on_add !== null) {
+			$old_function = self::$on_add;
+			$function = function($msg)use($old_function,$function){ $old_function($msg); $function(); };
+		}
+		self::$on_add = $function;
+	}
+
 	public static function Render($entries = null){
 		if (is_null($entries)) $entries = self::$entries;
 		for ($i = 0; $i<count($entries); $i++)
@@ -64,15 +74,21 @@ class Debug {
 		self::$first = microtime(true);
 		if (DEBUG) self::Add('Start');
 	}
-  private static function Add($message) {
-  	$time = microtime(true);
+	private static function Add($message) {
+		$time = microtime(true);
 		if (is_null(self::$first)) {
-  		self::$first = $time;
-  		$e = array(0,$message);
+			self::$first = $time;
+			$e = array(0,$message);
 		}
 		else $e = array($time - self::$first,$message);
 
- 		self::$entries[] = $e;
+		self::$entries[] = $e;
+
+		if (is_callable(self::$on_add)) {
+			$f = self::$on_add;
+			$f($message);
+		}
+
 		if (self::$immediate){
 			while(ob_get_level()!=0) ob_end_clean();
 			if (CLI) {
@@ -106,7 +122,7 @@ class Debug {
 
 
 
-  public static function Write($message){ self::Add($message); }
+	public static function Write($message){ self::Add($message); }
 	public static function Dump($var){ ob_start(); var_dump($var); $s = ob_get_clean(); self::Add($s); }
 	public static function Tick(){ self::Write('&bull;'); }
 
@@ -192,7 +208,7 @@ class Debug {
 					$filter = $i++==0
 						? ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC
 						: ReflectionProperty::IS_PRIVATE
-						;
+					;
 					foreach ($c->getProperties( $filter ) as $p){
 						if ($p->isStatic()) continue;
 						$r .= "\n" . str_repeat(' ',($level+1)*2);
@@ -386,7 +402,7 @@ class Debug {
 							$value = Debug::GetVariableAsString($value);
 							$s .= "\n#   " . str_replace("\n","\n#   ",$value);
 						}
-					$s .= "\n# ";
+						$s .= "\n# ";
 					}
 				}
 				if (array_key_exists('function',$t)) $s .= ')';
@@ -450,9 +466,9 @@ class Debug {
 		if (is_callable($external_recorder)) {
 			try {
 				$continue = $external_recorder($ex,array('serial' => $serial
-					,'way_handled_message' => $way_handled_message
-					,'extra_developer_message' => $extra_developer_message
-					,'report'=> self::GetExceptionReportAsText($ex)
+				,'way_handled_message' => $way_handled_message
+				,'extra_developer_message' => $extra_developer_message
+				,'report'=> self::GetExceptionReportAsText($ex)
 				));
 				if ($continue === false) return $serial.' (exception sent to external recorder)';
 			}
@@ -536,17 +552,17 @@ class Debug {
 			if ($must_initiate_accumulator) { // initiate the accumulator
 				try {
 					Http::Fire(Oxygen::GetHrefBaseFull('http',80).'oxy/record.php','POST',array( // TODO: this is troublesome! We should not change to http, but Fire has a problem with https...
-						 'serial' => $serial
-						,'exception_recorded' => $exception_recorded?'true':'false'
-						,'acc_filename' => $acc_filename
-						,'lck_filename' => $lck_filename
-						,'err_filename' => $err_filename
-						,'app_name' => Oxygen::GetApplicationName()
-						,'emails' => serialize(Oxygen::GetDeveloperEmails())
-						,'subject' => $subject
-						,'head' => serialize($head)
-						,'body' => $body
-						));
+						'serial' => $serial
+					,'exception_recorded' => $exception_recorded?'true':'false'
+					,'acc_filename' => $acc_filename
+					,'lck_filename' => $lck_filename
+					,'err_filename' => $err_filename
+					,'app_name' => Oxygen::GetApplicationName()
+					,'emails' => serialize(Oxygen::GetDeveloperEmails())
+					,'subject' => $subject
+					,'head' => serialize($head)
+					,'body' => $body
+					));
 				}
 				catch (Exception $ex) {}
 			}
