@@ -52,6 +52,7 @@ abstract class _oxy extends _oxy_dictionary {
 	public static function icoLogin                 (){ return new Glyph('oxy-icon',0xE206); }
 	public static function icoLogoff                (){ return new Glyph('oxy-icon',0xE207); }
 	public static function icoSelect                (){ return new Glyph('oxy-icon',0xE208); }
+	public static function icoReset                 (){ return new Glyph('oxy-icon',0xE203); }
 	public static function icoFavoritize            (){ return new Glyph('oxy-icon',0xE00A); }
 	public static function icoUnfavoritize          (){ return new Glyph('oxy-icon',0xE00B); }
 
