@@ -253,6 +253,7 @@ class ReportTableControl extends ValueControl {
 
 
 	public function Render(){
+		$ns = $this->name;
 		$count_rows = count($this->rows);
 		$count_cols = 0; foreach ($this->cells as $a){ $x = count($a); if ($x > $count_cols) $count_cols = $x; }
 		$has_values = false; foreach ($this->row_has_value as $b) if ($b) { $has_values = true; break; }
@@ -303,16 +304,16 @@ class ReportTableControl extends ValueControl {
 		//
 		//
 		echo Js::BEGIN;
-		echo "window.".$this->name . " = {";
+		echo "window.$ns = {";
 		echo "  event_running : false";
 		$s = ''; foreach ($row_indices as $i) $s .= ($s==''?'':',') . $this->row_js[$i];
 		echo " ,rows : [" . $s . "]";
 
 		echo " ,OnMouseOver : function(ev,i){";
-		echo "    $('".$this->name."_tr_'+i).addClassName('hover');";
+		echo "    $('{$ns}_tr_'+i).addClassName('hover');";
 		echo "  }";
 		echo " ,OnMouseOut : function(ev,i){";
-		echo "    $('".$this->name."_tr_'+i).removeClassName('hover');";
+		echo "    $('{$ns}_tr_'+i).removeClassName('hover');";
 		echo "  }";
 
 		echo " ,OnRowClick : function(ev,i){";
@@ -403,11 +404,10 @@ class ReportTableControl extends ValueControl {
 		echo "  }";
 
 		echo " ,IsVisible : function(i){";
-		echo "    return jQuery('#{$this->name}_tr_'+i).is(':visible');";
+		echo "    return jQuery('#{$ns}_tr_'+i).is(':visible');";
 		echo "  }";
 		echo " ,IsChecked : function(i){";
-		echo "    var x = ".new Js($this->name)." + '_check_' + i;";
-		echo "    return \$F(x)=='true';";
+		echo "    return \$F('{$ns}_check_' + i)=='true';";
 		echo "  }";
 		echo " ,AreAllVisibleChecked : function(){";
 		echo "    var r = true"; foreach ($row_with_values_indices as $i) echo "&&(!this.IsVisible(".new Js($i).")||this.IsChecked(".new Js($i)."))"; echo ";";
@@ -425,9 +425,9 @@ class ReportTableControl extends ValueControl {
 		echo "    return r;";
 		echo "  }";
 		echo " ,SetCheck : function(i,v){";
-		echo "    var x = ".new Js($this->name)." + '_check_' + i;";
-		echo "    if (v) eval(x+'.SetValue(true);'); else eval(x+'.SetValue(false);');";
-		echo "    var tr = $('".$this->name."_tr_'+i);";
+		echo "    var x = window['{$ns}_check_' + i];";
+		echo "    if (v) x.SetValue(true); else x.SetValue(false);";
+		echo "    var tr = $('{$ns}_tr_'+i);";
 		echo "    if (tr != null) {";
 		echo "      if (v) tr.addClassName('selected'); else tr.removeClassName('selected');";
 		echo "    }";
@@ -454,11 +454,11 @@ class ReportTableControl extends ValueControl {
 		echo "    var rows = [];";
 		echo "    var a = [" . implode(',',$row_with_values_indices) ."];";
 		echo "    for (var i = 0; i < a.length; i++) if(this.IsChecked(a[i])) rows.push(this.rows[a[i]]);";
-		echo "    \$(".new Js($this->name).").value = s;";
+		echo "    \$('$ns').value = s;";
 		echo "    if (IsPageLoaded()) {";
-		echo "      if (rows.length == 0) " . $this->name . ".OnNoneSelected();";
-		echo "      else if (rows.length == 1) " . $this->name . ".OnRowSelected(rows[0]);";
-		echo "      else " . $this->name . ".OnManyRowsSelected(rows);";
+		echo "      if (rows.length == 0) window.$ns.OnNoneSelected();";
+		echo "      else if (rows.length == 1) windiw.$ns.OnRowSelected(rows[0]);";
+		echo "      else window.$ns.OnManyRowsSelected(rows);";
 		echo "    }";
 		echo "  }";
 		echo " ,OnNoneSelected : function() {";
@@ -484,7 +484,7 @@ class ReportTableControl extends ValueControl {
 			echo "    this.sorted_asc = j===this.sorted_by_column ? !this.sorted_asc : true;";
 			echo "    this.sorted_by_column = j;";
 
-			echo "    var a = jQuery('#{$this->name}_div tr.normal');";
+			echo "    var a = jQuery('#{$ns}_div tr.normal');";
 			echo "    var b = [];";
 			echo "    for(i = 0; i < a.length; i++){";
 			echo "      var tds = jQuery(a[i]).children('th,td');";
@@ -501,7 +501,7 @@ class ReportTableControl extends ValueControl {
 			echo "      }";
 			echo "    }";
 
-			echo "    a.detach().appendTo('#{$this->name}_div');";
+			echo "    a.detach().appendTo('#{$ns}_div');";
 			echo "    for(i = 0; i < a.length; i++){";
 			echo "      if (i%2===0) jQuery(a[i]).removeClass('alt'); else jQuery(a[i]).addClass('alt')";
 			echo "    }";
@@ -510,12 +510,12 @@ class ReportTableControl extends ValueControl {
 
 		if (!is_null($this->menu_panel)){
 			echo " ,HideMenuPanel : function(){";
-			echo "    \$(".new Js($this->name.'_menu_panel_1').").hide();";
-			echo "    \$(".new Js($this->name.'_menu_panel_2').").hide();";
+			echo "    \$('{$ns}_menu_panel_1').hide();";
+			echo "    \$('{$ns}_menu_panel_2').hide();";
 			echo "  }";
 			echo " ,ShowMenuPanel : function(rows){";
-			echo "    var x1 = \$(".new Js($this->name.'_menu_panel_1').");";
-			echo "    var x2 = \$(".new Js($this->name.'_menu_panel_2').");";
+			echo "    var x1 = \$('{$ns}_menu_panel_1');";
+			echo "    var x2 = \$('{$ns}_menu_panel_2');";
 			echo "    x1.update('<img src=\"oxy/img/ajax.gif\" width=\"22\" />').show();";
 			echo "    x2.update('<img src=\"oxy/img/ajax.gif\" width=\"22\" />').show();";
 			echo "    var a = {};";
@@ -573,9 +573,9 @@ class ReportTableControl extends ValueControl {
 
 
 
-		echo new HiddenBox($this->name,$this->value);
-		echo '<div id="'.$this->name.'_menu_panel_1" class="group reportmenupanel" style="display:none;margin:0 1px 1px 0;"></div>';
-		echo '<table id="'.$this->name.'_div" class="'.$this->css_class.'" width="100%" style="'.$this->css_style.'" cellspacing="0" cellpadding="0" border="0">';
+		echo new HiddenBox($ns,$this->value);
+		echo '<div id="'.$ns.'_menu_panel_1" class="group reportmenupanel" style="display:none;margin:0 1px 1px 0;"></div>';
+		echo '<table id="'.$ns.'_div" class="'.$this->css_class.'" width="100%" style="'.$this->css_style.'" cellspacing="0" cellpadding="0" border="0">';
 
 
 
@@ -591,10 +591,10 @@ class ReportTableControl extends ValueControl {
 		if ($this->use_check_boxes && $has_values){
 			if ($this->is_multiple) {
 				echo '<th class="contract checkbox" style="cursor:pointer;"';
-				echo ' onclick="window.'.$this->name.'.OnCheckThClick(event)"';
+				echo ' onclick="window.'.$ns.'.OnCheckThClick(event)"';
 				echo ' >';
-				CheckBox::Make($this->name.'_check_all',false)
-					->WithOnChange($this->name.'.OnCheckAllChange();')
+				CheckBox::Make($ns.'_check_all',false)
+					->WithOnChange("window.$ns.OnCheckAllChange();")
 					->Render();
 				echo '</th>';
 			}
@@ -607,7 +607,7 @@ class ReportTableControl extends ValueControl {
 
 
 		for ($j = 0; $j < $count_cols; $j++){
-			$onclick = $this->enable_javascript_sort ? 'window.'.$this->name.'.SortByColumn('.$j.');' : '';
+			$onclick = $this->enable_javascript_sort ? "window.$ns.SortByColumn($j);" : '';
 			$css_style = '';
 			if ($j < count($this->cells[0])){
 				$onclick .= $this->cell_onclick[0][$j];
@@ -678,17 +678,17 @@ class ReportTableControl extends ValueControl {
 				$css_style .= 'cursor:pointer;';
 			}
 
-			echo '<tr id="'.$this->name.'_tr_'.$i.'" class="'.$css_class.'" style="'.$css_style.'"';
+			echo '<tr id="'.$ns.'_tr_'.$i.'" class="'.$css_class.'" style="'.$css_style.'"';
 			if ($this->row_mode[$i] == self::ROW_NORMAL){
-				echo ' onmouseover="window.'.$this->name.'.OnMouseOver(event,'.$i.')"';
-				echo ' onmouseout="window.'.$this->name.'.OnMouseOut(event,'.$i.')"';
+				echo ' onmouseover="window.'.$ns.'.OnMouseOver(event,'.$i.')"';
+				echo ' onmouseout="window.'.$ns.'.OnMouseOut(event,'.$i.')"';
 				if ($this->IsClickable($i)){
-					echo ' onclick="window.'.$this->name.'.OnRowClick(event,'.$i.')"';
+					echo ' onclick="window.'.$ns.'.OnRowClick(event,'.$i.')"';
 				}
 			}
 			elseif ($this->row_mode[$i] == self::ROW_GROUP){
 				if ($this->IsClickable($i)){
-					echo ' onclick="window.'.$this->name.'.OnGroupRowClick(event,'.$i.')"';
+					echo ' onclick="window.'.$ns.'.OnGroupRowClick(event,'.$i.')"';
 				}
 			}
 			echo '>';
@@ -705,16 +705,16 @@ class ReportTableControl extends ValueControl {
 			if ($has_values && $this->use_check_boxes){
 				if ($this->IsClickable($i)){
 					if ($this->row_mode[$i] == self::ROW_NORMAL) {
-						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="window.'.$this->name.'.OnCheckTdClick(event,'.$i.')">';
-							CheckBox::Make($this->name.'_check_'.$i,$selected)
-								->WithOnChange($this->name.'.OnCheckChange('.$i.');')
+						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="window.'.$ns.'.OnCheckTdClick(event,'.$i.')">';
+							CheckBox::Make($ns.'_check_'.$i,$selected)
+								->WithOnChange("window.$ns.OnCheckChange($i);")
 								->Render();
 						echo '</td>';
 					}
 					elseif ($this->row_mode[$i] == self::ROW_GROUP){
-						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="window.'.$this->name.'.OnGroupCheckTdClick(event,'.$i.')">';
-							CheckBox::Make($this->name.'_check_'.$i,$selected)
-								->WithOnChange($this->name.'.OnGroupCheckChange('.$i.');')
+						echo '<td class="contract checkbox" style="cursor:pointer;" onclick="window.'.$ns.'.OnGroupCheckTdClick(event,'.$i.')">';
+							CheckBox::Make($ns.'_check_'.$i,$selected)
+								->WithOnChange("window.$ns.OnGroupCheckChange($i);")
 								->Render();
 						echo '</td>';
 					}
@@ -754,7 +754,7 @@ class ReportTableControl extends ValueControl {
 		echo '</table>';
 
 
-		echo '<div id="'.$this->name.'_menu_panel_2" class="group reportmenupanel" style="display:none;margin:0 1px 0 0;"></div>';
+		echo '<div id="'.$ns.'_menu_panel_2" class="group reportmenupanel" style="display:none;margin:0 1px 0 0;"></div>';
 
 
 
@@ -764,8 +764,8 @@ class ReportTableControl extends ValueControl {
 
 
 		echo Js::BEGIN;
-		if ($this->is_multiple && $has_values) echo $this->name . ".SetCheck('all',".$this->name.".AreAllVisibleChecked());";
-		echo $this->name.".UpdateValue();";
+		if ($this->is_multiple && $has_values) echo "window.$ns.SetCheck('all',window.$ns.AreAllVisibleChecked());";
+		echo "window.$ns.UpdateValue();";
 		echo Js::END;
 	}
 }
