@@ -457,7 +457,7 @@ class ReportTableControl extends ValueControl {
 		echo "    \$('$ns').value = s;";
 		echo "    if (IsPageLoaded()) {";
 		echo "      if (rows.length == 0) window.$ns.OnNoneSelected();";
-		echo "      else if (rows.length == 1) windiw.$ns.OnRowSelected(rows[0]);";
+		echo "      else if (rows.length == 1) window.$ns.OnRowSelected(rows[0]);";
 		echo "      else window.$ns.OnManyRowsSelected(rows);";
 		echo "    }";
 		echo "  }";
