@@ -72,7 +72,7 @@ class TextBox extends Box {
 		if ($this->nowrap && $this->rows != 1 && !$this->is_password)
 			echo ' wrap="off"';
 
-		if (!$this->autocomplete) echo ' autocomplete="off"';
+		if (!$this->autocomplete) echo ' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"';
 
 		if (!is_null($this->on_change)){
 			echo ' onchange="'.$this->on_change.'"';
