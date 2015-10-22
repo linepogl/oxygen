@@ -364,6 +364,7 @@ class Database {
 		}
 		$r = null;
 		if ($q->columnCount() > 0) $r = new DBReader($q);
+		else $r = $q->rowCount();
 //		$t = microtime(true) - $t;
 //		if ($t>2) Debug::RecordExceptionSilenced(new Exception('Long query: '.$t.'sec.'),'Execute timer');
 		return $r;
@@ -394,6 +395,7 @@ class Database {
 		}
 		$r = null;
 		if ($q->columnCount() > 0) $r = new DBReader($q);
+		else $r = $q->rowCount();
 //		$t = microtime(true) - $t;
 //		if ($t>2) Debug::RecordExceptionSilenced(new Exception('Long query: '.$t.'sec.'),'Execute timer');
 		return $r;
