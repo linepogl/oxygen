@@ -21,6 +21,9 @@ class Str {
 		else
 			return false;
 	}
+	public static function Contains($str,$tok) {
+		return false !== mb_strpos($str,$tok);
+	}
 
 	public static function Limit($str,$number_of_chars){
 		return mb_strlen($str)>$number_of_chars ? mb_substr($str,0,$number_of_chars) : $str;

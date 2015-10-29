@@ -43,7 +43,7 @@ class MetaArray extends XConcreteType {
 	 * @return mixed
 	 */
 	public static function ExportPdoValue($value, $platform) {
-		throw new ConvertionException();
+		return implode(',',$value);
 	}
 
 	/**
