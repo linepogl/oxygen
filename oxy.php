@@ -188,6 +188,9 @@ abstract class _oxy extends _oxy_dictionary {
 	public static function FormatDateTimeRelatively( XDateTime $date = null ){		return Language::FormatDateTimeRelatively( $date );	}
 	public static function FormatBytes( $bytes ) {		return Language::FormatBytes($bytes);	}
 	public static function FormatTimeZone( $timezone ) { return str_replace(['/','_'],[' / ',' '],ltrim($timezone,'/')); }
+	public static function FormatNumber( $number , $decimals = -1 ) { return  Language::FormatNumber($number,$decimals); }
+	public static function FormatNumberInvariant( $number , $decimals = -1 ) { return  Language::FormatNumberInvariant($number,$decimals); }
+	public static function FormatNumberSI( $number , $decimals = -1 ) { return  Language::FormatNumberSI($number,$decimals); }
 
 	public static function FormatDateTimeTZInvariant( XDateTime $date = null ){ return Oxygen::WithServerTimeZone(function()use($date){ return oxy::FormatDateTime($date); }); }
 
