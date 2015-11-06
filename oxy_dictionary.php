@@ -35,6 +35,11 @@ abstract class _oxy_dictionary extends ResourceManager {
 		,zh=>"."
 		]);}
 
+	public static function txtLanguages(){ return Lemma::txt([__FUNCTION__
+		,en=>"Languages"
+		,fr=>"Langues"
+		,el=>"Γλώσσες"
+		]);}
 	public static function txtLanguage(){ return Lemma::txt([__FUNCTION__
 		,en=>"Language"
 		,fr=>"Langue"

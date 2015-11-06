@@ -17,6 +17,8 @@ class Validator extends MultiMessage {
 			return $this->Check(trim($that) != '', is_null($message) ? oxy::txtMsgMandatoryField() : $message);
 		if ($that instanceof Lemma)
 			return $this->Check(!$that->IsEmpty(), is_null($message) ? oxy::txtMsgMandatoryField() : $message);
+		if (is_array($that))
+			return $this->Check(!empty($that), is_null($message) ? oxy::txtMsgMandatoryField() : $message);
 		return true;
 	}
 
