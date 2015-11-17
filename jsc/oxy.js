@@ -388,6 +388,16 @@ var Oxygen = {
 		}};for(var key in opt)if(opt.hasOwnProperty(key))r[key]=opt[key];window[ns]=r;return r;
 	}
 
+	,AdjustFormPaneAnchorIcon:function(ns) {
+		var f=function(){
+			var x=jQuery('#'+ns+'-box');
+			jQuery('#'+ns+'-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});
+			jQuery('#'+ns+'-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});
+			jQuery('#'+ns+'-span .formPaneInner').css({'height':x.height()+'px','line-height':x.height()+'px'});
+		};
+		jQuery(document).ready(f);f();
+	}
+
 	,DateBox:function(opt){var ns=opt.ns;var r={ns:ns
 		,date : null
 		,allow_null : false
@@ -525,7 +535,10 @@ var Oxygen = {
 		  jQuery('#'+ns+'-y').css({'text-decoration':this.pseudo_focus==='y'?'underline':'none'});
 		}
 		,HidePseudoFocus : function(){ jQuery('#'+ns+'-d,#'+ns+'-m,#'+ns+'-y').css({'text-decoration':'none'}); }
-		};for(var key in opt)if(opt.hasOwnProperty(key))r[key]=opt[key];window[ns]=r;return r;
+		};for(var key in opt)if(opt.hasOwnProperty(key))r[key]=opt[key];window[ns]=r;
+		jQuery('#'+ns+'-box,#'+ns+'-anchor,#'+ns+'-box-date,#'+ns+'-box-null').click(function(e){window[ns].OnClick();}).keydown(function(e){window[ns].OnKeyDown(e);}).blur(function(e){window[ns].OnBlur(e);}).focus(function(e){window[ns].ShowPseudoFocus();});
+		jQuery('#'+ns+'-dropdown').mousedown(function(e){ window[ns].KeepFocus(); });
+		return r;
 	}
 
 	,TimeBox:function(opt){var ns=opt.ns;var r={ns:ns
@@ -661,7 +674,10 @@ var Oxygen = {
 		,HidePseudoFocus : function(){
 	    jQuery('#'+ns+'-box-h,#'+ns+'-box-m,#'+ns+'-box-s').css({'text-decoration':'none'});
 	  }
-		};for(var key in opt)if(opt.hasOwnProperty(key))r[key]=opt[key];window[ns]=r;return r;
+		};for(var key in opt)if(opt.hasOwnProperty(key))r[key]=opt[key];window[ns]=r;
+		jQuery('#'+ns+'-box,#'+ns+'-anchor,#'+ns+'-box-time,#'+ns+'-box-null').click(function(e){window[ns].OnClick();}).keydown(function(e){window[ns].OnKeyDown(e);}).blur(function(e){window[ns].OnBlur(e);}).focus(function(e){window[ns].ShowPseudoFocus();});
+		jQuery('#'+ns+'-dropdown').mousedown(function(e){window[ns].KeepFocus();});
+		return r;
 	}
 
 };

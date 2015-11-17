@@ -126,16 +126,8 @@ class TimeBox extends Box {
 			echo '</span>';
 
 			echo Js::BEGIN;
-			echo "var f=function(){";
-			echo "var x=jQuery('#$ns-box');";
-			echo "jQuery('#$ns-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
-			echo "jQuery('#$ns-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
-			echo "jQuery('#$ns-span .formPaneInner').css({'height':x.height()+'px','line-height':x.height()+'px'});";
-			echo "};";
-			echo "jQuery(document).ready(f);f();";
+			echo "Oxygen.AdjustFormPaneAnchorIcon('$ns');";
 			if (!$this->readonly){
-				echo "jQuery('#$ns-box,#$ns-anchor,#$ns-box-time,#$ns-box-null').click(function(e){{$ns}.OnClick();}).keydown(function(e){{$ns}.OnKeyDown(e);}).blur(function(e){{$ns}.OnBlur(e);}).focus(function(e){{$ns}.ShowPseudoFocus();});";
-				echo "jQuery('#$ns-dropdown').mousedown(function(e){window.$ns.KeepFocus();});";
 				echo "Oxygen.TimeBox({ns:".new Js($ns);
 				echo ",h:".new Js(is_null($this->value) ? null : $this->value->Format('H'));
 				echo ",m:".new Js(is_null($this->value) ? null : $this->value->Format('i'));

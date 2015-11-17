@@ -87,17 +87,9 @@ class DateBox extends Box {
 
 		echo Js::BEGIN;
 		if ($this->show_value) {
-			echo "var f=function(){";
-			echo "var x=jQuery('#$ns-box');";
-			echo "jQuery('#$ns-anchor').css({'margin-top':x.css('border-top-width'),'margin-right':x.css('border-right-width'),'padding-top':x.css('padding-top'),'padding-right':x.css('padding-right')});";
-			echo "jQuery('#$ns-span .formPaneInnerWrap').css({'margin-top':x.css('border-top-width'),'margin-left':x.css('border-left-width'),'padding-top':x.css('padding-top'),'padding-left':x.css('padding-left')});";
-			echo "jQuery('#$ns-span .formPaneInner').css({'height':x.height()+'px','line-height':x.height()+'px'});";
-			echo "};";
-			echo "jQuery(document).ready(f);f();";
+			echo "Oxygen.AdjustFormPaneAnchorIcon('$ns');";
 		}
 		if (!$this->readonly){
-			echo "jQuery('#$ns-box,#$ns-anchor,#$ns-box-date,#$ns-box-null').click(function(e){{$ns}.OnClick();}).keydown(function(e){{$ns}.OnKeyDown(e);}).blur(function(e){{$ns}.OnBlur(e);}).focus(function(e){{$ns}.ShowPseudoFocus();});";
-			echo "jQuery('#$ns-dropdown').mousedown(function(e){ window.$ns.KeepFocus(); });";
 			echo "Oxygen.DateBox({ns:".new Js($ns);
 			echo ",date:".new Js($this->value);
 			echo ",month_labels:[".new Js(oxy::txtJan_()).",".new Js(oxy::txtFeb_()).",".new Js(oxy::txtMar_()).",".new Js(oxy::txtApr_()).",".new Js(oxy::txtMay_()).",".new Js(oxy::txtJun_()).",".new Js(oxy::txtJul_()).",".new Js(oxy::txtAug_()).",".new Js(oxy::txtSep_()).",".new Js(oxy::txtOct_()).",".new Js(oxy::txtNov_()).",".new Js(oxy::txtDec_())."]";
