@@ -32,6 +32,7 @@ abstract class _oxy extends _oxy_dictionary {
 	public static function icoDocument              (){ return new Glyph('oxy-icon',0xE013); }
 	public static function icoFile                  (){ return new Glyph('oxy-icon',0xE013); }
 	public static function icoAttachment            (){ return new Glyph('oxy-icon',0xE014); }
+	public static function icoSupport               (){ return new Glyph('oxy-icon',0xE015); }
 
 	// 100 - Messages
 	public static function icoInfo                  (){ return new Glyph('oxy-icon',0xE100); }
