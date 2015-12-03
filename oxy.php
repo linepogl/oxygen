@@ -173,6 +173,15 @@ abstract class _oxy extends _oxy_dictionary {
 	public static function icoOptionDirtyLocked     (){ return new Glyph('oxy-icon',0xE9D2); }
 
 
+	public static function icoFillTopLeft       (){ return new Glyph('oxy-icon',0xE9E1); }
+	public static function icoFillLeft          (){ return new Glyph('oxy-icon',0xE9E2); }
+	public static function icoFillBottomLeft    (){ return new Glyph('oxy-icon',0xE9E3); }
+	public static function icoFillTop           (){ return new Glyph('oxy-icon',0xE9E4); }
+	public static function icoFillFull          (){ return new Glyph('oxy-icon',0xE9E5); }
+	public static function icoFillBottom        (){ return new Glyph('oxy-icon',0xE9E6); }
+	public static function icoFillTopRight      (){ return new Glyph('oxy-icon',0xE9E7); }
+	public static function icoFillRight         (){ return new Glyph('oxy-icon',0xE9E8); }
+	public static function icoFillBottomRight   (){ return new Glyph('oxy-icon',0xE9E9); }
 
 	//
 	//
