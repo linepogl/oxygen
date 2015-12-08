@@ -945,6 +945,12 @@ class Oxygen {
 	/** @return string */ public static function GetBody(){ return self::$content; }
 	/** @return int    */ public static function GetActionMode(){ return self::$actionmode; }
 
+	/** @return Action */
+	public static function GetDefaultAction() {
+		$classname = 'Action'.self::$default_actionname;
+		new ReflectionClass($classname); // <-- this will throw a mere exception if the class is not found, which will prevent a nasty FATAL php error in the next line.
+		return new $classname();
+	}
 	public static function IsActionModeContent()      { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_CONTENT; }
 	public static function IsActionModeBlank()        { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_BLANK; }
 	public static function IsActionModeAjaxDialog()   { return (self::$actionmode & Action::MASK_DEST) == Action::FLAG_DEST_AJAX_DIALOG; }
