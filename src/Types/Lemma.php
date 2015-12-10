@@ -24,7 +24,7 @@ class Lemma extends XValue implements ArrayAccess,IteratorAggregate,Serializable
 	public function HasName(){ return $this->name !== self::DEFAULT_NAME; }
 	public function GetName(){ return $this->name; }
 
-	public function __set_state($array) {
+	public static function __set_state($array) {
 		$r = new Lemma();
 		foreach ($array as $key=>$value) $r->$key = $value;
 		return $r;
