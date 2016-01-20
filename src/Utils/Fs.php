@@ -473,6 +473,21 @@ class Fs {
 		imagedestroy($dst);
 	}
 
+	public static function Copy($src,$dst) {
+		if (!file_exists($src)) return;
+		if (is_dir($src)) {
+			Fs::Ensure($dst);
+			foreach (Fs::BrowseRecursively($src) as $f) {
+				if (is_dir("$src/$f"))
+					Fs::Ensure("$dst/$f");
+				else
+					copy("$src/$f","$dst/$f");
+			}
+		}
+		else {
+			copy($src,$dst);
+		}
+	}
 
 
 }
