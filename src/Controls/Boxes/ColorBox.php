@@ -90,11 +90,11 @@ class ColorBox extends Box {
 			echo " ,SetColor:function(x,keep_open){";
 			echo "    if (x==null){";
 			echo "      jQuery('#$ns-box').css({background:'url(oxy/img/checkers.gif) 50% 50% repeat'});";
-			echo "      jQuery('#$ns').val('');";
+			echo "      jQuery('#$ns').val('').change();";
 			echo "    }";
 			echo "    else {";
 			echo "      jQuery('#$ns-box').css({background:x});";
-			echo "      jQuery('#$ns').val(x);";
+			echo "      jQuery('#$ns').val(x).change();";
 			echo "    }";
 			if ($favorites!==null) echo "this.UpdateFavs();";
 			echo $this->on_change;
