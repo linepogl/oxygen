@@ -31,7 +31,8 @@ class Sql extends ExportValue {
 	const String20      = 12;
 	const String100     = 13;
 	const String255     = 14;
-	const Text          = 15;
+	const String1024    = 15;
+	const Text          = 16;
 
 	private static $data_types = array(
 		Database::MYSQL => array (
@@ -46,6 +47,7 @@ class Sql extends ExportValue {
 			Sql::String20 => 'VARCHAR(20)',
 			Sql::String100 => 'VARCHAR(100)',
 			Sql::String255 => 'VARCHAR(255)',
+			Sql::String1024 => 'VARCHAR(1024)',
 			Sql::Decimal_18_5 => 'DECIMAL(18,5)',
 			Sql::Decimal_38_5 => 'DECIMAL(38,5)',
 			Sql::Decimal_38_20 => 'DECIMAL(38,20)',
@@ -63,6 +65,7 @@ class Sql extends ExportValue {
 			Sql::String20 => 'NVARCHAR(20)',
 			Sql::String100 => 'NVARCHAR(100)',
 			Sql::String255 => 'NVARCHAR(255)',
+			Sql::String1024 => 'NVARCHAR(1024)',
 			Sql::Decimal_18_5 => 'DECIMAL(18,5)',
 			Sql::Decimal_38_5 => 'DECIMAL(38,5)',
 			Sql::Decimal_38_20 => 'DECIMAL(38,20)',
@@ -80,6 +83,7 @@ class Sql extends ExportValue {
 			Sql::String20 => 'VARCHAR2(20)',
 			Sql::String100 => 'VARCHAR2(100)',
 			Sql::String255 => 'VARCHAR2(255)',
+			Sql::String1024 => 'VARCHAR2(1024)',
 			Sql::Decimal_18_5 => 'DECIMAL(18,5)',
 			Sql::Decimal_38_5 => 'DECIMAL(38,5)',
 			Sql::Decimal_38_20 => 'DECIMAL(38,20)',

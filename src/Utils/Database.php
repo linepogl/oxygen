@@ -870,9 +870,21 @@ class Database {
 	public static function ExecuteNotNullFields($tablename) {
 		$a = func_get_args();
 		$z = func_num_args();
-		for ($i = 1;$i < $z;$i += 2) {
-			self::Execute('ALTER TABLE '.new SqlIden($tablename).' ALTER COLUMN '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]).' NOT NULL');
+
+		switch(self::$type) {
+			case self::MYSQL:
+				for ($i = 1;$i < $z;$i += 2) {
+					self::Execute('ALTER TABLE '.new SqlIden($tablename).' MODIFY '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]).' NOT NULL');
+				}
+				break;
+			case self::SQLSERVER:
+			case self::ORACLE:
+				for ($i = 1;$i < $z;$i += 2) {
+					self::Execute('ALTER TABLE '.new SqlIden($tablename).' ALTER COLUMN '.new SqlIden($a[$i]).' '.Sql::GetDataType(self::$type,$a[$i+1]).' NOT NULL');
+				}
+				break;
 		}
+
 	}
 
 	public static function ExecuteRenameTable($tablename, $newName){
