@@ -1,4 +1,7 @@
 <?php
+mb_internal_encoding("UTF-8");
+mb_regex_encoding('UTF-8');
+
 require('oxy_dictionary.php');
 if (false) { class oxy extends _oxy {} }
 abstract class _oxy extends _oxy_dictionary {
